@@ -127,6 +127,8 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -1073,30 +1075,51 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void handleLicencesManagementRequest() {
-		Logging.info(this, "handleLicencesManagementRequest called");
-		persistenceController.retrieveOpsiModules();
 
-		if (persistenceController.isWithLicenceManagement()) {
-			toggleLicencesFrame();
-		} else {
-			FOpsiLicenseMissingText
-					.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+		// show Loading pane only when something needs to be loaded from server
+		if (persistenceController.isWithLicenceManagement() && licencesFrame == null) {
+			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licences.Loading"));
 		}
+		new Thread() {
+
+			@Override
+			public void run() {
+				Logging.info(this, "handleLicencesManagementRequest called");
+				persistenceController.retrieveOpsiModules();
+
+				if (persistenceController.isWithLicenceManagement()) {
+					toggleLicencesFrame();
+				} else {
+					FOpsiLicenseMissingText
+							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+				}
+
+				if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
+						OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
+						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
+					// Starting JavaFX-Thread by creating a new JFXPanel, but not
+					// using it since it is not needed.
+
+					new JFXPanel();
+
+					Platform.runLater(mainFrame::startLicenceDisplayer);
+				}
+
+				mainFrame.disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	public void toggleLicencesFrame() {
 		if (licencesFrame == null) {
 			initLicencesFrame();
 			allFrames.add(licencesFrame);
-			licencesFrame.setSize(licencesInitDimension);
-			licencesFrame.setVisible(true);
-			mainFrame.visualizeLicencesFramesActive(true);
-			return;
 		}
 
 		Logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
+		licencesFrame.setLocationRelativeTo(mainFrame);
 		licencesFrame.setVisible(true);
-		mainFrame.visualizeLicencesFramesActive(licencesFrame.isVisible());
+		mainFrame.visualizeLicencesFramesActive(true);
 	}
 
 	public void setEditingTarget(EditingTarget t) {
@@ -1430,9 +1453,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame start ");
 
-		// TODO why does the pane not work?
-		mainFrame.activateLoadingPane();
-
 		// general
 
 		licencesFrame = new LicencesFrame(this);
@@ -1554,11 +1574,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "set size and location of licencesFrame");
 
 		licencesFrame.setSize(licencesInitDimension);
-
-		// Center on mainFrame
-		licencesFrame.setLocationRelativeTo(mainFrame);
-
-		mainFrame.disactivateLoadingPane();
 
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));

@@ -135,8 +135,6 @@ import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import utils.PopupMouseListener;
 
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
@@ -3365,16 +3363,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
-					OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-					OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
-				// Starting JavaFX-Thread by creating a new JFXPanel, but not
-				// using it since it is not needed.
-
-				new JFXPanel();
-
-				Platform.runLater(this::startLicenceDisplayer);
-			}
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
 
@@ -3390,7 +3378,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void startLicenceDisplayer() {
+	public void startLicenceDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
