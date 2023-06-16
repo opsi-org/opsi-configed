@@ -118,7 +118,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 				} else {
 					// it is not there and we have to copy it
 
-					rootFrame.activateLoadingPane();
+					rootFrame.activateLoadingCursor();
 
 					try {
 						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
@@ -131,13 +131,13 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
 					FileUtils.copyFileToDirectory(opsiPackagePathToHandle, opsiWorkBenchDirectory);
-					rootFrame.disactivateLoadingPane();
+					rootFrame.disactivateLoadingCursor();
 					return true;
 				}
 			}
 
 		} catch (IOException ex) {
-			rootFrame.disactivateLoadingPane();
+			rootFrame.disactivateLoadingCursor();
 
 			Logging.error("path problem ", ex);
 		}
@@ -184,10 +184,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		if (installProductFromWorkbench()) {
 			produceServerPath();
-			rootFrame.activateLoadingPane();
+			rootFrame.activateLoadingCursor();
 			persistenceController.setRights(opsiPackageServerPathS);
 			boolean result = persistenceController.installPackage(opsiPackageServerPathS);
-			rootFrame.disactivateLoadingPane();
+			rootFrame.disactivateLoadingCursor();
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);
 

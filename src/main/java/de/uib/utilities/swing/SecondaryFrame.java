@@ -58,12 +58,12 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		setVisible(false);
 	}
 
-	public void activateLoadingPane() {
-		glassPane.activate(true);
+	public void activateLoadingCursor() {
+		glassPane.activateLoadingCursor();
 	}
 
-	public void disactivateLoadingPane() {
-		glassPane.activate(false);
+	public void disactivateLoadingCursor() {
+		glassPane.disactivateLoadingCursor();
 	}
 
 	@Override

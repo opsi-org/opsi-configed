@@ -308,7 +308,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private void execute() {
 
-		rootFrame.activateLoadingPane();
+		rootFrame.activateLoadingCursor();
 
 		try {
 			File targetDirectory = null;
@@ -333,7 +333,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 					+ "/" + SmbConnect.DIRECTORY_PE);
 			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
 					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			rootFrame.disactivateLoadingPane();
+			rootFrame.disactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
@@ -370,16 +370,16 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
-					rootFrame.activateLoadingPane();
+					rootFrame.activateLoadingCursor();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
 					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
-					rootFrame.disactivateLoadingPane();
+					rootFrame.disactivateLoadingCursor();
 				}
 			}
 
 		} catch (Exception ex) {
-			rootFrame.disactivateLoadingPane();
+			rootFrame.disactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
 		}
 	}

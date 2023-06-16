@@ -113,6 +113,14 @@ public class GlassPane extends JPanel implements KeyListener {
 		}
 	}
 
+	public void activateLoadingCursor() {
+		setCursor(GlassPane.WAIT_CURSOR);
+	}
+
+	public void disactivateLoadingCursor() {
+		setCursor(null);
+	}
+
 	@Override
 	public Cursor getCursor() {
 		return this.isVisible() ? GlassPane.WAIT_CURSOR : null;

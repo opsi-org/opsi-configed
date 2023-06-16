@@ -689,7 +689,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
 					Configed.getResourceValue("PanelDriverUpload.execute.running"));
 			waiter.startWaiting();
-			rootFrame.activateLoadingPane();
+			rootFrame.activateLoadingCursor();
 
 			try {
 				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
@@ -706,7 +706,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 							FileUtils.copyFileToDirectory(driverPath, targetPath);
 						}
 					} catch (IOException iox) {
-						rootFrame.disactivateLoadingPane();
+						rootFrame.disactivateLoadingCursor();
 						Logging.error("copy error:\n" + iox, iox);
 					}
 				} else {
@@ -720,11 +720,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					persistenceController.setRights(driverDir);
 				}
 
-				rootFrame.disactivateLoadingPane();
+				rootFrame.disactivateLoadingCursor();
 
 				waiter.setReady();
 			} catch (Exception ex) {
-				rootFrame.disactivateLoadingPane();
+				rootFrame.disactivateLoadingCursor();
 				Logging.error("error in uploading :\n" + ex, ex);
 			}
 		}
