@@ -86,19 +86,20 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorizeTableCellThemeLight(Component component, boolean isSelected, boolean isRowEven) {
-		component.setForeground(Globals.opsiForegroundLight);
 
 		if (!isSelected) {
+			component.setForeground(Globals.opsiForegroundLight);
 			if (isRowEven) {
 				component.setBackground(Globals.opsiLightGrey);
 			} else {
 				component.setBackground(Globals.opsiBackgroundLight);
 			}
 		} else {
+			component.setForeground(Globals.opsiForegroundDark);
 			if (isRowEven) {
-				component.setBackground(Globals.opsiLightBlue);
+				component.setBackground(Globals.opsiDarkBlue);
 			} else {
-				component.setBackground(Globals.opsiLighterBlue);
+				component.setBackground(Globals.opsiBlue);
 			}
 		}
 	}

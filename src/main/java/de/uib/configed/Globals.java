@@ -79,7 +79,6 @@ public final class Globals {
 	// New colors
 
 	public static final Color opsiDarkGrey = new Color(63, 63, 62);
-	public static final Color opsiDarkGrey2 = new Color(75, 75, 73);
 
 	public static final Color opsiGrey = new Color(178, 178, 178);
 	public static final Color opsiLightGrey = new Color(228, 228, 227);
@@ -88,8 +87,6 @@ public final class Globals {
 
 	public static final Color opsiBlue = new Color(63, 90, 166);
 	public static final Color opsiDarkBlue = new Color(45, 65, 120);
-	public static final Color opsiLightBlue = new Color(99, 140, 210);
-	public static final Color opsiLighterBlue = new Color(117, 175, 255);
 
 	public static final Color opsiBackgroundLight = new Color(255, 255, 255);
 	public static final Color opsiBackgroundDark = new Color(31, 31, 31);
