@@ -1331,7 +1331,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", " ");
 
-		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSetGroup"),
+		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);

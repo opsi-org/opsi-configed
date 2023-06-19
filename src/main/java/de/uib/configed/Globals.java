@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.net.URL;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -524,11 +525,11 @@ public final class Globals {
 		return result.toString();
 	}
 
-	public static java.net.URL getImageResourceURL(String relPath) {
+	public static URL getImageResourceURL(String relPath) {
 		String resourceS = IMAGE_BASE + relPath;
 
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		java.net.URL imgURL = cl.getResource(resourceS);
+		URL imgURL = cl.getResource(resourceS);
 		if (imgURL != null) {
 			return imgURL;
 		} else {
@@ -542,7 +543,7 @@ public final class Globals {
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		// based on MainFrame
 
-		java.net.URL imgURL = cl.getResource(xPath);
+		URL imgURL = cl.getResource(xPath);
 
 		// should have the same result (but seems not to have)
 

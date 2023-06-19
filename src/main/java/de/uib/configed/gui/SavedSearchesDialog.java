@@ -52,7 +52,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	private void initDialog() {
-		setTitle(Configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
+		setTitle(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		setModal(false);
 		setLeaveOnCommit(false);
 		manager = new SelectionManager(null);
