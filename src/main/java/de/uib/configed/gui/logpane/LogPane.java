@@ -61,8 +61,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private static final int MAX_LEVEL = 9;
 
 	private JTextPane jTextPane;
-	private JScrollPane scrollpane;
-	private JPanel commandpane;
 	private JLabel labelSearch;
 
 	private JComboBox<String> jComboBoxSearch;
@@ -174,7 +172,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void initComponents(String defaultText) {
-		scrollpane = new JScrollPane();
+		JScrollPane scrollpane = new JScrollPane();
 		jTextPane = new JTextPane() {
 			@Override
 			public Dimension getPreferredSize() {
@@ -265,7 +263,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setLayout() {
-		commandpane = new JPanel();
+		JPanel commandpane = new JPanel();
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
@@ -614,56 +612,59 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				+ maxExistingLevel);
 
 		if (!oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+			rebuildDocumentWithNewLevel();
+		}
+	}
 
-			int caretPosition = jTextPane.getCaretPosition();
+	private void rebuildDocumentWithNewLevel() {
+		int caretPosition = jTextPane.getCaretPosition();
 
-			int startPosition = 0;
-			int oldStartPosition = 0;
-			int offset = 0;
-			Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
+		int startPosition = 0;
+		int oldStartPosition = 0;
+		int offset = 0;
+		Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
 
-			while (startPosition < caretPosition && linestartIterator.hasNext()) {
-				offset = caretPosition - startPosition;
-				oldStartPosition = startPosition;
-				startPosition = linestartIterator.next();
+		while (startPosition < caretPosition && linestartIterator.hasNext()) {
+			offset = caretPosition - startPosition;
+			oldStartPosition = startPosition;
+			startPosition = linestartIterator.next();
+		}
+
+		int lineNo = 0;
+		if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
+			lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
+		}
+
+		buildDocument();
+
+		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
+			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
+
+		} else {
+			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
+			int nextLineNo = 0;
+
+			if (linesIterator.hasNext()) {
+				nextLineNo = linesIterator.next();
 			}
 
-			int lineNo = 0;
-			if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
-				lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
+			while (linesIterator.hasNext() && nextLineNo < lineNo) {
+				nextLineNo = linesIterator.next();
 			}
 
-			buildDocument();
+			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
 
-			if (lineCount2docLinestartPosition.containsKey(lineNo)) {
-				startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
+		}
 
-			} else {
-				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-				int nextLineNo = 0;
+		try {
+			jTextPane.setCaretPosition(startPosition);
 
-				if (linesIterator.hasNext()) {
-					nextLineNo = linesIterator.next();
-				}
-
-				while (linesIterator.hasNext() && nextLineNo < lineNo) {
-					nextLineNo = linesIterator.next();
-				}
-
-				startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-
-			}
-
-			try {
-				jTextPane.setCaretPosition(startPosition);
-
-				jTextPane.scrollRectToVisible(jTextPane
-						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-				jTextPane.getCaret().setVisible(true);
-				highlighter.removeAllHighlights();
-			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
-			}
+			jTextPane.scrollRectToVisible(jTextPane
+					.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
+			jTextPane.getCaret().setVisible(true);
+			highlighter.removeAllHighlights();
+		} catch (BadLocationException e) {
+			Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
 		}
 	}
 

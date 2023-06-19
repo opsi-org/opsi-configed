@@ -193,7 +193,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
-	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
 	protected List<String> selectedDepotsV = new ArrayList<>();
@@ -203,8 +202,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
 
-	protected boolean changeListByToggleShowSelection;
-	protected boolean hostgroupChanged;
 	private String appTitle = Globals.APPNAME;
 
 	private FTextArea fAskSaveChangedText;

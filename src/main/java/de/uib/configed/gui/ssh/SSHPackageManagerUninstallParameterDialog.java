@@ -31,7 +31,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
-import de.uib.configed.gui.GlassPane;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -59,8 +58,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	private JTextField textFieldSelectedDepots;
 
 	private JButton jButtonDepotSelection;
-
-	private GlassPane glassPane;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
