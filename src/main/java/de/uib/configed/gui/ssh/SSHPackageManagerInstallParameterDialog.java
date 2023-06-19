@@ -26,7 +26,6 @@ import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.thread.WaitCursor;
 
 public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerParameterDialog {
 	private JPanel mainPanel = new JPanel();
@@ -54,8 +53,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		super(Globals.APPNAME + "  "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
 
-		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
-		main = m;
+		configedMain = m;
 		fromMakeProductfile = fullPathToPackage;
 		super.initButtons(this);
 		installLocalPanel = new SSHPMInstallLocalPanel();
@@ -71,7 +69,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		super.setSize(new Dimension(frameWidth, frameHeight));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setVisible(true);
-		waitCursor.stop();
 	}
 
 	private void initInstances() {

@@ -13,8 +13,6 @@ public class UncaughtConfigedExceptionHandler implements Thread.UncaughtExceptio
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 
-		de.uib.utilities.thread.WaitCursor.stopAll();
-
 		if (e instanceof Exception) {
 			Exception ex = (Exception) e;
 			Logging.warning("Error in thread " + t, ex);

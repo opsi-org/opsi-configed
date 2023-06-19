@@ -40,9 +40,10 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
+import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper {
+public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
 			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));

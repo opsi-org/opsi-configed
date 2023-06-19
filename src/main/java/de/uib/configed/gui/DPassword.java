@@ -39,13 +39,13 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
-import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
@@ -60,7 +60,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	private ConfigedMain configedMain;
 	private OpsiserviceNOMPersistenceController persistenceController;
 
-	private WaitCursor waitCursor;
+	private GlassPane glassPane;
 
 	private WaitingWorker waitingWorker;
 
@@ -77,9 +77,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	private JLabel jLabelHost = new JLabel();
 	private JComboBox<String> fieldHost = new JComboBox<>();
-
-	private JProgressBar jProgressBar = new JProgressBar();
-	private JLabel waitingLabel = new JLabel();
 
 	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
@@ -110,6 +107,14 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		initGuiElements();
 		setupLayout();
 		finishAndMakeVisible();
+
+		initGlassPane();
+	}
+
+	private void initGlassPane() {
+		glassPane = new GlassPane();
+
+		setGlassPane(glassPane);
 	}
 
 	public void setHost(String host) {
@@ -145,13 +150,12 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	private void setActivated(boolean active) {
 		Logging.info(this, "activate");
 
-		jProgressBar.setVisible(!active);
-		jProgressBar.setValue(0);
+		glassPane.activate(!active);
 
 		if (active) {
-			waitingLabel.setText("");
+			glassPane.setInfoText(null);
 		} else {
-			waitingLabel.setText(Configed.getResourceValue("DPassword.WaitInfo.label"));
+			glassPane.setInfoText(Configed.getResourceValue("DPassword.WaitInfo.label"));
 		}
 
 		fieldHost.setEnabled(active);
@@ -193,15 +197,13 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
 		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
-		jProgressBar.putClientProperty("Nimbus.Overrides", defaults);
-		jProgressBar.setVisible(false);
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
-		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
+		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
+		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
 
 		jLabelTitle.setText(Globals.APPNAME);
 		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
@@ -244,12 +246,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
 
-				.addGap(2).addComponent(waitingLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-
-				.addComponent(jProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
-						Globals.PROGRESS_BAR_HEIGHT)
-
-				.addGap(Globals.LINE_HEIGHT / 2)
+				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
 				.addGroup(groupLayout.createParallelGroup()
 						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -287,11 +284,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 								Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE))
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-						.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-
-				.addComponent(jProgressBar)
-
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
 						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
@@ -327,9 +319,10 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	@Override
 	public void actAfterWaiting() {
-		waitCursor.stop();
 
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
+			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
+
 			// we can finish
 			Logging.info(this, "connected with persis " + persistenceController);
 			configedMain.setPersistenceController(persistenceController);
@@ -378,12 +371,12 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	@Override
 	public JProgressBar getProgressBar() {
-		return jProgressBar;
+		return new JProgressBar();
 	}
 
 	@Override
 	public JLabel getLabel() {
-		return waitingLabel;
+		return new JLabel();
 	}
 
 	@Override
@@ -403,7 +396,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return waitingLabel.getText();
+		return "";
 	}
 
 	@Override
@@ -420,23 +413,13 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	private void okAction() {
 		Logging.info(this, "ok_action");
 
-		// we make first a waitCursor and a waitInfo window
-
-		if (waitCursor != null) {
-			// we want only one running instance
-			waitCursor.stop();
-		}
-
 		// correctly
-
 		tryConnecting();
 	}
 
 	public void tryConnecting() {
 		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
-
-		waitCursor = new WaitCursor(this, "ok_action");
 
 		ConfigedMain.host = (String) fieldHost.getSelectedItem();
 		ConfigedMain.user = fieldUser.getText();
@@ -452,67 +435,33 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 		Logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		Logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
-		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
-		Logging.info(this, "is local app  " + localApp);
-		if (localApp) {
-			Logging.info(this, "start WaitingWorker");
-			waitingWorker = new WaitingWorker(this);
-			waitingWorker.execute();
+		Logging.info(this, "start WaitingWorker");
+		waitingWorker = new WaitingWorker(this);
+		waitingWorker.execute();
 
-			new Thread() {
-				@Override
-				public void run() {
-					Logging.info(this, "get persis");
-					persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
-							String.valueOf(passwordField.getPassword()));
+		new Thread() {
+			@Override
+			public void run() {
+				Logging.info(this, "get persis");
+				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
+						(String) fieldHost.getSelectedItem(), fieldUser.getText(),
+						String.valueOf(passwordField.getPassword()));
 
-					Logging.info(this, "got persis, == null " + (persistenceController == null));
+				Logging.info(this, "got persis, == null " + (persistenceController == null));
 
-					Logging.info(this, "waitingTask can be set to ready");
-					waitingWorker.setReady();
-
-				}
-			}.start();
-		} else {
-			persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-					(String) fieldHost.getSelectedItem(), fieldUser.getText(),
-					String.valueOf(passwordField.getPassword()));
-
-			long interval = 2000;
-			long waited = 0;
-
-			while (PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined
-					&& waited < TIMEOUT_MS) {
-				Globals.threadSleep(this, interval);
-				waited = waited + interval;
+				Logging.info(this, "waitingTask can be set to ready");
+				waitingWorker.setReady();
 			}
+		}.start();
 
-			if (waited >= TIMEOUT_MS) {
-				Logging.error(" no connection");
-			}
-		}
+		SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
 
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
-
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance()
-				.setPassw(String.valueOf(passwordField.getPassword()));
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
-	}
-
-	private void jButtonCommitActionPerformed(ActionEvent e) {
-		okAction();
+		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
+		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
 	private void endProgram() {
 		configedMain.finishApp(false, 0);
-	}
-
-	private void jButtonCancelActionPerformed(ActionEvent e) {
-		if (waitCursor != null) {
-			waitCursor.stop();
-		}
-		endProgram();
 	}
 
 	@Override

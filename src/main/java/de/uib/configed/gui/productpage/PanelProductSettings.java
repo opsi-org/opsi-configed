@@ -671,10 +671,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void reloadAction() {
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 
 		mainController.requestReloadStatesAndActions();
 		mainController.resetView(mainController.getViewIndex());
 		mainController.setDataChanged(false);
+
+		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	protected void saveAndExecuteAction() {

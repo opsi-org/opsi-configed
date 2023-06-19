@@ -92,8 +92,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataLoadingObservable;
-import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
@@ -108,7 +106,7 @@ import de.uib.utilities.table.ListCellOptions;
  * responses. There are several classes which implement the Executioner methods
  * in different ways dependent on the used means and protocols
  */
-public class OpsiserviceNOMPersistenceController implements DataRefreshedObservable, DataLoadingObservable {
+public class OpsiserviceNOMPersistenceController implements DataRefreshedObservable {
 	private static final String EMPTYFIELD = "-";
 	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
@@ -289,9 +287,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private List<DataRefreshedObserver> dataRefreshedObservers;
 
 	public AbstractExecutioner exec;
-
-	// offer observing of data loading
-	private List<DataLoadingObserver> dataLoadingObservers;
 
 	/* data for checking permissions */
 	private boolean globalReadOnly;
@@ -527,32 +522,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		for (DataRefreshedObserver ob : dataRefreshedObservers) {
-			ob.gotNotification(mesg);
-		}
-	}
-
-	@Override
-	public void registerDataLoadingObserver(DataLoadingObserver ob) {
-		if (dataLoadingObservers == null) {
-			dataLoadingObservers = new ArrayList<>();
-		}
-		dataLoadingObservers.add(ob);
-	}
-
-	@Override
-	public void unregisterDataLoadingObserver(DataLoadingObserver ob) {
-		if (dataLoadingObservers != null) {
-			dataLoadingObservers.remove(ob);
-		}
-	}
-
-	@Override
-	public void notifyDataLoadingObservers(Object mesg) {
-		if (dataLoadingObservers == null) {
-			return;
-		}
-
-		for (DataLoadingObserver ob : dataLoadingObservers) {
 			ob.gotNotification(mesg);
 		}
 	}
@@ -8218,11 +8187,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public List<Map<String, Object>> checkHealth() {
-		if (healthData == null) {
+		if (!isHealthDataAlreadyLoaded()) {
 			healthData = dataStub.checkHealth();
 		}
 
 		return healthData;
+	}
+
+	public boolean isHealthDataAlreadyLoaded() {
+		return healthData != null;
 	}
 
 	public Map<String, Object> getDiagnosticData() {

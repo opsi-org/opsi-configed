@@ -76,7 +76,6 @@ import de.uib.utilities.table.TableCellRendererCurrency;
 import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
-import de.uib.utilities.thread.WaitCursor;
 import utils.PopupMouseListener;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
@@ -521,12 +520,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void reload() {
+		getParent().setCursor(Globals.WAIT_CURSOR);
+		Logging.devel(getParent().toString());
+
 		Logging.info(this, "in PanelGenEditTable reload()");
-		WaitCursor waitCursor = new WaitCursor(this);
 		tableModel.requestReload();
 		tableModel.reset();
 		setDataChanged(false);
-		waitCursor.stop();
+
+		getParent().setCursor(null);
 	}
 
 	public void setTitle(String title) {
