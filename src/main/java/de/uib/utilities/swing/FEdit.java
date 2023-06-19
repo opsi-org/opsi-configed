@@ -106,7 +106,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
-
 	}
 
 	private void initComponents() {

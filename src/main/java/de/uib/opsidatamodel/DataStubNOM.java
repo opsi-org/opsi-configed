@@ -189,9 +189,6 @@ public class DataStubNOM {
 
 			Map<String, Object> callFilter = new HashMap<>();
 
-			persistenceController
-					.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " product");
-
 			List<Map<String, Object>> retrievedList = persistenceController.retrieveListOfMapsNOM(callAttributes,
 					callFilter, "product_getObjects");
 
@@ -265,8 +262,7 @@ public class DataStubNOM {
 					+ (depot2LocalbootProducts == null));
 			Logging.info(this, "retrieveProductsAllDepots, reload productRows == null " + (productRows == null));
 			Logging.info(this, "retrieveProductsAllDepots, reload depot2Packages == null " + (depot2Packages == null));
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " productOnDepot");
+
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 
@@ -369,9 +365,6 @@ public class DataStubNOM {
 		if (depot2Product2PropertyDefinitions == null) {
 			depot2Product2PropertyDefinitions = new HashMap<>();
 
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " product property");
-
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 
@@ -440,9 +433,6 @@ public class DataStubNOM {
 
 		if (depot2product2dependencyInfos == null) {
 			depot2product2dependencyInfos = new HashMap<>();
-
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " product dependency");
 
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
@@ -572,8 +562,6 @@ public class DataStubNOM {
 		} else {
 			hosts.addAll(newClients);
 
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 			callFilter.put("objectId", AbstractExecutioner.jsonArray(newClients));
@@ -657,8 +645,6 @@ public class DataStubNOM {
 
 	private void retrieveInstalledSoftwareInformation() {
 		if (installedSoftwareInformation == null || name2SWIdents == null) {
-			persistenceController
-					.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
 					// element
@@ -843,7 +829,6 @@ public class DataStubNOM {
 		final int STEP_SIZE = 100;
 
 		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
-			int step = 1;
 			while (!newClients.isEmpty()) {
 				List<String> clientListForCall = new ArrayList<>();
 
@@ -860,9 +845,6 @@ public class DataStubNOM {
 				if (softwareIdent2clients == null) {
 					softwareIdent2clients = new HashMap<>();
 				}
-
-				persistenceController.notifyDataLoadingObservers(
-						Configed.getResourceValue("LoadingObserver.loadtable") + " software config, step " + step);
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 
@@ -906,7 +888,6 @@ public class DataStubNOM {
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 
-				step++;
 			}
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
@@ -932,9 +913,6 @@ public class DataStubNOM {
 		}
 
 		Logging.info(this, "retrieveAuditSoftwareXLicencePool");
-
-		persistenceController.notifyDataLoadingObservers(
-				Configed.getResourceValue("LoadingObserver.loadtable") + " AUDIT_SOFTWARE_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(
 				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap<>(), // callFilter
@@ -965,9 +943,6 @@ public class DataStubNOM {
 		}
 
 		Logging.info(this, "retrieveHostConfigs classCounter:" + classCounter);
-
-		persistenceController
-				.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " config state");
 
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
 		timeCheck.start();
@@ -1025,9 +1000,6 @@ public class DataStubNOM {
 		if (persistenceController.isWithLicenceManagement()) {
 			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
 
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " licence pool");
-
 			List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(attributes,
 					new HashMap<>(), "licensePool_getObjects");
 
@@ -1075,8 +1047,6 @@ public class DataStubNOM {
 		contractsExpired = new TreeMap<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
 			List<Map<String, Object>> retrieved = persistenceController
 					.retrieveListOfMapsNOM("licenseContract_getObjects");
@@ -1126,8 +1096,6 @@ public class DataStubNOM {
 		licences = new HashMap<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
 			List<Map<String, Object>> retrieved = persistenceController
 					.retrieveListOfMapsNOM("softwareLicense_getObjects");
@@ -1158,8 +1126,6 @@ public class DataStubNOM {
 		licenceUsabilities = new ArrayList<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " software_license_TO_license_pool");
 
 			List<Map<String, Object>> retrieved = persistenceController
 					.retrieveListOfMapsNOM("softwareLicenseToLicensePool_getObjects");
@@ -1191,8 +1157,6 @@ public class DataStubNOM {
 		licenceUsages = new ArrayList<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
-			persistenceController.notifyDataLoadingObservers(
-					Configed.getResourceValue("LoadingObserver.loadtable") + " license_on_client");
 
 			List<Map<String, Object>> retrieved = persistenceController
 					.retrieveListOfMapsNOM("licenseOnClient_getObjects");
@@ -1222,9 +1186,6 @@ public class DataStubNOM {
 		}
 
 		Logging.info(this, "retrieveLicencePoolXOpsiProduct");
-
-		persistenceController.notifyDataLoadingObservers(
-				Configed.getResourceValue("LoadingObserver.loadtable") + " PRODUCT_ID_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(
 				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap<>(), // callFilter

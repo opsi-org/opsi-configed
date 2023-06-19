@@ -135,9 +135,6 @@ import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.thread.WaitCursor;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import utils.PopupMouseListener;
 
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
@@ -425,6 +422,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JTextEditorField ipAddressField;
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
+
+	private GlassPane glassPane;
 
 	private boolean multidepot;
 
@@ -972,7 +971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
-		if (Configed.sshConnectOnStart) {
+		if (Configed.isSSHConnectionOnStart()) {
 			factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 		}
 
@@ -1304,11 +1303,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
-			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
-					ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
-			showHealthDataAction();
-		});
+		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 
 		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
@@ -1336,7 +1331,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", " ");
 
-		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSetGroup"),
+		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
@@ -2600,6 +2595,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
+
 		pack();
 	}
 
@@ -2806,12 +2804,33 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void reloadAction() {
+		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		configedMain.reload();
 	}
 
+	public void activateLoadingPane() {
+		glassPane.activate(true);
+	}
+
+	public void activateLoadingPane(String infoText) {
+		glassPane.activate(true);
+		glassPane.setInfoText(infoText);
+	}
+
+	public void disactivateLoadingPane() {
+		glassPane.activate(false);
+	}
+
 	public void reloadLicensesAction() {
-		configedMain.reloadLicensesData();
-		configedMain.licencesFrame.setVisible(true);
+		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
+		new Thread() {
+			@Override
+			public void run() {
+				configedMain.reloadLicensesData();
+				configedMain.licencesFrame.setVisible(true);
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	public void checkMenuItemsDisabling() {
@@ -2980,10 +2999,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		info.setVisible(true);
 	}
 
-	private static void showHealthDataAction() {
-		HealthCheckDialog dialog = new HealthCheckDialog();
-		dialog.setupLayout();
-		dialog.setVisible(true);
+	private void showHealthDataAction() {
+
+		// Only show loading when health data are not yet loaded
+		if (!persistenceController.isHealthDataAlreadyLoaded()) {
+			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
+						ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
+
+				HealthCheckDialog dialog = new HealthCheckDialog();
+				dialog.setupLayout();
+				dialog.setVisible(true);
+
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	private void saveToFile(String fileName, ByteBuffer data) {
@@ -3335,16 +3370,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
-					OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-					OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
-				// Starting JavaFX-Thread by creating a new JFXPanel, but not
-				// using it since it is not needed.
-
-				new JFXPanel();
-
-				Platform.runLater(this::startLicenceDisplayer);
-			}
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
 
@@ -3360,7 +3385,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void startLicenceDisplayer() {
+	public void startLicenceDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
@@ -3371,6 +3396,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			licenseDisplayer.display();
 		}
+
 	}
 
 	public void enableAfterLoading() {
@@ -3700,7 +3726,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			super.paint(g);
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
-			WaitCursor.stopAll();
 		}
 	}
 }

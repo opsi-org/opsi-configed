@@ -76,7 +76,6 @@ import de.uib.utilities.table.TableCellRendererCurrency;
 import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
-import de.uib.utilities.thread.WaitCursor;
 import utils.PopupMouseListener;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
@@ -129,8 +128,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemDeleteRelation;
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
-
-	private Comparator<?>[] comparators;
 
 	private JScrollPane scrollpane;
 	protected JTable theTable;
@@ -523,12 +520,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void reload() {
+		getParent().setCursor(Globals.WAIT_CURSOR);
+
 		Logging.info(this, "in PanelGenEditTable reload()");
-		WaitCursor waitCursor = new WaitCursor(this);
 		tableModel.requestReload();
 		tableModel.reset();
 		setDataChanged(false);
-		waitCursor.stop();
+
+		getParent().setCursor(null);
 	}
 
 	public void setTitle(String title) {
@@ -869,21 +868,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		};
 
-		if (sorter instanceof DefaultRowSorter) {
-			// is always the case since TableRowSorter extends DefaultRowSorter
+		for (int j = 0; j < tableModel.getColumnCount(); j++) {
 
-			for (int j = 0; j < tableModel.getColumnCount(); j++) {
+			// TODO check if this is ever used
+			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-				if (comparators[j] != null) {
-					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
-					// restore previously explicitly assigned comparator
-					((DefaultRowSorter<?, ?>) sorter).setComparator(j, comparators[j]);
-				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
-
-					((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
-				} else {
-					Logging.warning(this, "cannot set comparator...");
-				}
+				((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
 			}
 		}
 
@@ -904,8 +894,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setModel(m);
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
-
-		comparators = new Comparator[m.getColumnCount()];
 
 		setSorter();
 

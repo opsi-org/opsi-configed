@@ -46,7 +46,6 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.swing.ActivityPanel;
 import net.sf.sevenzipjbinding.SevenZipException;
 import utils.ExtractorUtil;
 
@@ -284,10 +283,6 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		setupIcons();
 
-		ActivityPanel activity = new ActivityPanel();
-		new Thread(activity).start();
-		activity.setToolTipText("activity indicator");
-
 		JPanel iconPane = new JPanel();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
@@ -303,8 +298,6 @@ public class LogFrame extends JFrame implements WindowListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(activity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -318,9 +311,7 @@ public class LogFrame extends JFrame implements WindowListener {
 								.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutIconPane1.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
+										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		setupMenuFile();

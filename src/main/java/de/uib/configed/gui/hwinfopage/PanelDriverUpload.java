@@ -19,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,7 +46,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -180,9 +179,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, SecondaryFrame root) {
 		this.main = main;
 		this.rootFrame = root;
 		server = main.getConfigserver();
@@ -690,7 +689,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
 					Configed.getResourceValue("PanelDriverUpload.execute.running"));
 			waiter.startWaiting();
-			final WaitCursor waitCursor = new WaitCursor(rootFrame);
+			rootFrame.activateLoadingCursor();
 
 			try {
 				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
@@ -707,7 +706,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 							FileUtils.copyFileToDirectory(driverPath, targetPath);
 						}
 					} catch (IOException iox) {
-						waitCursor.stop();
+						rootFrame.disactivateLoadingCursor();
 						Logging.error("copy error:\n" + iox, iox);
 					}
 				} else {
@@ -721,11 +720,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					persistenceController.setRights(driverDir);
 				}
 
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 
 				waiter.setReady();
 			} catch (Exception ex) {
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 				Logging.error("error in uploading :\n" + ex, ex);
 			}
 		}

@@ -19,12 +19,12 @@ import de.uib.utilities.swing.SecondaryFrame;
 
 public class FProductActions extends SecondaryFrame {
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public FProductActions(ConfigedMain main) {
+	public FProductActions(ConfigedMain configedMain) {
 		super();
 
-		this.main = main;
+		this.configedMain = configedMain;
 
 		define();
 
@@ -33,11 +33,11 @@ public class FProductActions extends SecondaryFrame {
 	}
 
 	private void define() {
-		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, this);
+		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(configedMain, this);
 
 		JPanel imageActionPanel = new JPanel();
 
-		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(main, this);
+		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(configedMain, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);

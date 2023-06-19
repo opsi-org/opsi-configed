@@ -30,8 +30,10 @@ import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.IntComparatorForObjects;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -183,7 +185,7 @@ public class ControllerHWinfoColumnConfiguration {
 		sortDescriptor.put(KEY_COL, SortOrder.ASCENDING);
 		panel.setSortOrder(sortDescriptor);
 
-		panel.setComparator(COL_LINE_NO, new de.uib.utilities.IntComparatorForObjects());
+		panel.setComparator(COL_LINE_NO, new IntComparatorForObjects());
 
 		// now sorted
 		panel.reload();
@@ -200,8 +202,7 @@ public class ControllerHWinfoColumnConfiguration {
 		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
 		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
-		col.setCellRenderer(
-				new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
+		col.setCellRenderer(new BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
 
 		JCheckBox useCheck = new JCheckBox(iconEmpty);
 

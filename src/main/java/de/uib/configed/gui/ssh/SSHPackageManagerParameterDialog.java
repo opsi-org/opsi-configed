@@ -35,7 +35,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
 
-	protected ConfigedMain main;
+	protected ConfigedMain configedMain;
 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
@@ -99,7 +99,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly())) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
-				main.reload();
+				configedMain.reload();
 				consolidate();
 			});
 		}
@@ -117,7 +117,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void consolidate() {
-		main.reload();
+		configedMain.reload();
 	}
 
 	private void doActionHelp(final SSHPackageManagerParameterDialog caller) {

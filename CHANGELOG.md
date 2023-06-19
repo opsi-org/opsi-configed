@@ -1,10 +1,17 @@
 # Changelog
 
-## [unversioned] - 2023-06-01
+## [4.2.22.3] - 2023-06-19
+### Changed
+- Reworking the loading animation when waiting for Data from the server
+
+## [4.2.22.2] - 2023-06-15
 
 ### Fixed
 - Opening zip-files with the opsi-logviewer works
+- Client selection remains after reload
 
+### Changed
+- Login Frame is now not always in foreground and has icon
 ## [4.2.22.1] - 2023-06-01
 
 ### Added

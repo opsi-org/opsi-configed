@@ -77,9 +77,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			if (columnName.equals(latestChange)) {
-				if (!Main.THEMES) {
-					jc.setBackground(Globals.CHECK_COLOR);
-				}
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 					if (!Main.THEMES) {
@@ -110,7 +107,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
-					Logging.warning(this, "unexpected state " + state);
+					if (!Main.THEMES) {
+						jc.setBackground(Globals.CHECK_COLOR);
+					}
 				}
 			}
 

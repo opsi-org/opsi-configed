@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -121,9 +120,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public ClientSelectionDialog(ConfigedMain main, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null,
-				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
-						+ ")",
+		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
 				false,
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
@@ -280,7 +277,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			Logging.info(this, "actionPerformed");
 			buttonRestart.setEnabled(false);
 			buttonReload.setEnabled(false);
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 			SwingUtilities.invokeLater(() -> {
 				setReloadRequested();
@@ -436,14 +432,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		Logging.info(this, "actionPerformed");
 		buttonReload.setEnabled(false);
 		buttonRestart.setEnabled(false);
-		Cursor saveCursor = getCursor();
-		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			setReloadRequested();
 
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
-			setCursor(saveCursor);
+			setCursor(null);
 		});
 	}
 

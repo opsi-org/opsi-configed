@@ -7,7 +7,6 @@
 package de.uib.configed.gui.logpane;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -542,7 +541,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void buildDocument() {
 		Logging.debug(this, "building document");
-		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		setCursor(Globals.WAIT_CURSOR);
 		// Switch to an blank document temporarily to avoid repaints
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
@@ -582,7 +581,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
-		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
+		SwingUtilities.invokeLater(() -> setCursor(null));
 	}
 
 	private void setLevelWithoutAction(Object l) {
