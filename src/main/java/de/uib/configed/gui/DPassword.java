@@ -78,8 +78,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	private JLabel jLabelHost = new JLabel();
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
-	private JLabel waitingLabel = new JLabel();
-
 	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
 
@@ -115,7 +113,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	private void initGlassPane() {
 		glassPane = new GlassPane();
-		glassPane.add(waitingLabel);
 
 		setGlassPane(glassPane);
 	}
@@ -156,9 +153,9 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		glassPane.activate(!active);
 
 		if (active) {
-			waitingLabel.setText("");
+			glassPane.setInfoText(null);
 		} else {
-			waitingLabel.setText(Configed.getResourceValue("DPassword.WaitInfo.label"));
+			glassPane.setInfoText(Configed.getResourceValue("DPassword.WaitInfo.label"));
 		}
 
 		fieldHost.setEnabled(active);
@@ -251,8 +248,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
-				//.addGap(2).addComponent(waitingLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-
 				.addGroup(groupLayout.createParallelGroup()
 						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -288,9 +283,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 						.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE))
-
-				/*.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-						.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))*/
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
@@ -329,6 +321,8 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	public void actAfterWaiting() {
 
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
+			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
+
 			// we can finish
 			Logging.info(this, "connected with persis " + persistenceController);
 			configedMain.setPersistenceController(persistenceController);
@@ -382,7 +376,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	@Override
 	public JLabel getLabel() {
-		return glassPane.getJLabelInfo();
+		return new JLabel();
 	}
 
 	@Override
@@ -402,7 +396,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return waitingLabel.getText();
+		return "";
 	}
 
 	@Override
@@ -457,7 +451,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 
 				Logging.info(this, "waitingTask can be set to ready");
 				waitingWorker.setReady();
-
 			}
 		}.start();
 

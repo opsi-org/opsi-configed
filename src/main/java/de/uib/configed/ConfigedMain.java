@@ -150,8 +150,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
-	private static GuiStrategyForLoadingData strategyForLoadingData;
-
 	private static MainFrame mainFrame;
 	public static DPassword dPassword;
 
@@ -422,9 +420,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			if (strategyForLoadingData != null) {
-				strategyForLoadingData.actAfterWaiting();
-			}
+			dPassword.setVisible(false);
 		});
 
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
@@ -730,10 +726,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// too early, raises a NPE, if the user entry does not exist
 
-		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
-
-		strategyForLoadingData.startWaiting();
-
 		new Thread() {
 			@Override
 			public void run() {
@@ -741,8 +733,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				checkErrorList();
 
-				strategyForLoadingData.setReady();
-				strategyForLoadingData.actAfterWaiting();
+				dPassword.setVisible(false);
 
 				mainFrame.toFront();
 				mainFrame.disactivateLoadingPane();
@@ -3193,17 +3184,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return false;
 		}
 
-	}
-
-	public static void setProgressComponentStopWaiting() {
-		if (strategyForLoadingData != null) {
-			try {
-				strategyForLoadingData.stopWaiting();
-				strategyForLoadingData = null;
-			} catch (Exception ex) {
-				Logging.debug("Exception " + ex);
-			}
-		}
 	}
 
 	private void checkHwInfo() {

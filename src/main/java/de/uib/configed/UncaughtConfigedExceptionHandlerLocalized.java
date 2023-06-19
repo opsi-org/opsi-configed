@@ -14,8 +14,6 @@ public class UncaughtConfigedExceptionHandlerLocalized extends UncaughtConfigedE
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 
-		ConfigedMain.setProgressComponentStopWaiting();
-
 		if (e instanceof Exception) {
 			Logging.warning("Error in thread " + t, e);
 
