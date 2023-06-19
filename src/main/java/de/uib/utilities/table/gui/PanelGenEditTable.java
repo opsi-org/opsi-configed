@@ -520,10 +520,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void reload() {
+		getParent().setCursor(Globals.WAIT_CURSOR);
+		Logging.devel(getParent().toString());
+
 		Logging.info(this, "in PanelGenEditTable reload()");
 		tableModel.requestReload();
 		tableModel.reset();
 		setDataChanged(false);
+
+		getParent().setCursor(null);
 	}
 
 	public void setTitle(String title) {

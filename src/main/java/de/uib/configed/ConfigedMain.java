@@ -4649,12 +4649,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void reloadHosts() {
+		mainFrame.setCursor(Globals.WAIT_CURSOR);;
 		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
 		persistenceController.hostConfigsRequestRefresh();
 		persistenceController.hostGroupsRequestRefresh();
 		persistenceController.fObject2GroupsRequestRefresh();
 		persistenceController.fGroup2MembersRequestRefresh();
 		refreshClientListKeepingGroup();
+
+		mainFrame.setCursor(null);
 	}
 
 	public void createClients(List<List<Object>> clients) {

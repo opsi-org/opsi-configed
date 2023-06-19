@@ -404,6 +404,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	@Override
 	protected void reload() {
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		// partial reload
 		buildUserConfig();
 
@@ -411,6 +412,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		persistenceController.configOptionsRequestRefresh();
 		super.reload();
 
+		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	private void addUser() {
