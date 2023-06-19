@@ -6,7 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -315,12 +314,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
 
-		final Cursor initialCursor = getCursor();
-		final JTree theTree = this;
-
-		theTree.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		configedMain.treeClientsMouseAction(e);
-		theTree.setCursor(initialCursor);
+		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	@Override

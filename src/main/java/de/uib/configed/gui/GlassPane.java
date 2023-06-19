@@ -28,8 +28,6 @@ import de.uib.configed.Globals;
 
 public class GlassPane extends JPanel implements KeyListener {
 
-	private static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-
 	private JXBusyLabel wheel;
 	private JLabel jLabelInfo;
 
@@ -114,7 +112,7 @@ public class GlassPane extends JPanel implements KeyListener {
 	}
 
 	public void activateLoadingCursor() {
-		setCursor(GlassPane.WAIT_CURSOR);
+		setCursor(Globals.WAIT_CURSOR);
 	}
 
 	public void disactivateLoadingCursor() {
@@ -123,7 +121,7 @@ public class GlassPane extends JPanel implements KeyListener {
 
 	@Override
 	public Cursor getCursor() {
-		return this.isVisible() ? GlassPane.WAIT_CURSOR : null;
+		return this.isVisible() ? Globals.WAIT_CURSOR : null;
 	}
 
 	/*

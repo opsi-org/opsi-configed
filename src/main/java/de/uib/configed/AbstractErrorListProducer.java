@@ -6,7 +6,6 @@
 
 package de.uib.configed;
 
-import java.awt.Cursor;
 import java.util.List;
 
 import de.uib.Main;
@@ -32,8 +31,7 @@ public abstract class AbstractErrorListProducer extends Thread {
 		}
 		fListFeedback.setMessage("");
 		fListFeedback.setButtonsEnabled(true);
-		Cursor oldCursor = fListFeedback.getCursor();
-		fListFeedback.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		fListFeedback.setCursor(Globals.WAIT_CURSOR);
 		fListFeedback.setVisible(true);
 		fListFeedback.glassTransparency(true, 800, 200, 0.04F);
 
@@ -41,7 +39,7 @@ public abstract class AbstractErrorListProducer extends Thread {
 
 		if (!errors.isEmpty()) {
 			fListFeedback.setLines(errors);
-			fListFeedback.setCursor(oldCursor);
+			fListFeedback.setCursor(null);
 			fListFeedback.setButtonsEnabled(true);
 
 			fListFeedback.setVisible(true);

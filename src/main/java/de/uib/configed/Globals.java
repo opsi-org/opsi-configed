@@ -7,6 +7,7 @@
 package de.uib.configed;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -290,6 +291,8 @@ public final class Globals {
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
 
 	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
+
+	public static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
