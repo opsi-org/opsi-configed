@@ -198,7 +198,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	public void addMetaData(Map<String, String> metaData) {
+	private void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
@@ -230,7 +230,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		xHeaderTop = 555;
 	}
 
-	public static Paragraph addEmptyLines(int number) {
+	private static Paragraph addEmptyLines(int number) {
 		Paragraph content = new Paragraph();
 		for (int i = 0; i < number; i++) {
 			content.add(new Paragraph(" "));
@@ -238,7 +238,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		return content;
 	}
 
-	public static Paragraph addTitleLines(Map<String, String> metaData) {
+	private static Paragraph addTitleLines(Map<String, String> metaData) {
 		// TODO timezone
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
@@ -430,7 +430,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	public static Image createElement(URL imageSource, float posx, float posy)
+	private static Image createElement(URL imageSource, float posx, float posy)
 			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
 			throws DocumentException {
 		Image img = null;

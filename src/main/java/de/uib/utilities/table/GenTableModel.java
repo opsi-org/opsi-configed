@@ -26,7 +26,7 @@ import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel {
 
-	public static final String DEFAULT_FILTER_NAME = "default";
+	private static final String DEFAULT_FILTER_NAME = "default";
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
@@ -584,7 +584,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	public void addRow(List<Object> rowV) {
+	private void addRow(List<Object> rowV) {
 		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);

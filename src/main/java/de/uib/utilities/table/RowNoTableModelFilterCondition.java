@@ -64,5 +64,4 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 	public String toString() {
 		return getClass().getName() + " ( selectionInfo == null? ) " + (selectionInfo == null);
 	}
-
 }

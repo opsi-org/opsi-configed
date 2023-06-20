@@ -13,7 +13,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,23 +23,18 @@ import de.uib.utilities.logging.Logging;
 public class ExporterToCSV extends AbstractExportTable {
 
 	private static final String CSV_SEPARATOR = ";";
-	public static final Character STRING_DELIMITER = '"';
+	private static final Character STRING_DELIMITER = '"';
 	private static final String THIS_EXTENSION = ".csv";
 
 	private DecimalFormat f = new DecimalFormat("#0.00");
 
-	public ExporterToCSV(JTable table, List<String> classNames) {
-		super(table, classNames);
+	public ExporterToCSV(JTable table) {
+		super(table, null);
+
 		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
 		defaultExportFilename = "export.csv";
 		extension = THIS_EXTENSION;
-
-	}
-
-	public ExporterToCSV(JTable table) {
-		this(table, null);
-
 	}
 
 	private static String removeStringDelimiter(Object value) {
@@ -189,7 +183,5 @@ public class ExporterToCSV extends AbstractExportTable {
 				Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
 			}
 		}
-
 	}
-
 }
