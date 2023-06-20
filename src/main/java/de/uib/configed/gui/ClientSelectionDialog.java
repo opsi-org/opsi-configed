@@ -7,12 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayDeque;
@@ -22,6 +20,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -76,6 +75,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.swing.AbstractValueChangeListener;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
@@ -84,6 +84,8 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
+
+	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
 
 	private static final int FRAME_WIDTH = 750;
 	private static final int FRAME_HEIGHT = 650;
@@ -118,9 +120,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public ClientSelectionDialog(ConfigedMain main, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null,
-				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
-						+ ")",
+		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
 				false,
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
@@ -263,25 +263,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		final ClientSelectionDialog dialog = this;
-		buttonReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed");
-				buttonReload.setEnabled(false);
-				buttonRestart.setEnabled(false);
-				Cursor saveCursor = dialog.getCursor();
-				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-				SwingUtilities.invokeLater(() -> {
-					setReloadRequested();
-
-					buttonReload.setEnabled(true);
-					buttonRestart.setEnabled(true);
-					dialog.setCursor(saveCursor);
-
-				});
-			}
-		});
+		buttonReload.addActionListener((ActionEvent e) -> reload());
 
 		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
@@ -291,21 +273,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		buttonRestart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed");
-				buttonRestart.setEnabled(false);
-				buttonReload.setEnabled(false);
-				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		buttonRestart.addActionListener((ActionEvent e) -> {
+			Logging.info(this, "actionPerformed");
+			buttonRestart.setEnabled(false);
+			buttonReload.setEnabled(false);
 
-				SwingUtilities.invokeLater(() -> {
-					setReloadRequested();
+			SwingUtilities.invokeLater(() -> {
+				setReloadRequested();
 
-					main.callNewClientSelectionDialog();
-					// we lose all components of this dialog, there is nothing to reset
-				});
-			}
+				main.callNewClientSelectionDialog();
+				// we lose all components of this dialog, there is nothing to reset
+			});
 		});
 
 		GroupLayout.SequentialGroup saveHGroup = additionalLayout.createSequentialGroup();
@@ -450,6 +428,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		scrollpane.getViewport().add(contentPane);
 	}
 
+	private void reload() {
+		Logging.info(this, "actionPerformed");
+		buttonReload.setEnabled(false);
+		buttonRestart.setEnabled(false);
+		setCursor(Globals.WAIT_CURSOR);
+		SwingUtilities.invokeLater(() -> {
+			setReloadRequested();
+
+			buttonReload.setEnabled(true);
+			buttonRestart.setEnabled(true);
+			setCursor(null);
+		});
+	}
+
 	/* This creates one line with element, operation, data, ... */
 	private SimpleGroup createSimpleGroup(AbstractSelectElement element) {
 		SimpleGroup result = new SimpleGroup();
@@ -530,6 +522,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);
+		} else {
+			// Do nothing with no operations
 		}
 
 		return result;
@@ -941,6 +935,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				} else {
 					complex.closeParenthesis.setActivated(false);
 				}
+			} else {
+				// Do nothing when no parenthesis is activated
 			}
 		}
 
@@ -959,80 +955,29 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
 		case TEXT_TYPE:
-			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
-			fieldText.setEditable(true);
-			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldText.setToolTipText(
-					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldText;
+			addTextTypeComponent(sourceGroup);
 			break;
+
 		case DOUBLE_TYPE:
-
-			TextInputField fieldDouble = new TextInputField("");
-			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldDouble.setToolTipText(
-					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldDouble;
+			addDoubleTypeComponent(sourceGroup);
 			break;
+
 		case ENUM_TYPE:
-
-			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
-			box.setEditable(true);
-			box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			box.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = box;
+			addEnumTypeComponent(sourceGroup);
 			break;
+
 		case DATE_TYPE:
-			TextInputField fieldDate = new TextInputField(null);
-			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldDate.setToolTipText("yyyy-mm-dd");
-			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldDate;
+			addDateTypeComponent(sourceGroup);
 			break;
 
 		case INTEGER_TYPE:
-			JSpinner spinner = new JSpinner();
-			spinner.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = spinner;
+			addIntegerTypeComponent(sourceGroup);
 			break;
-		case BIG_INTEGER_TYPE:
-			SpinnerWithExtension swx = new SpinnerWithExtension();
-			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
 
-			sourceGroup.dataComponent = swx;
+		case BIG_INTEGER_TYPE:
+			addBigIntegerTypeComponent(sourceGroup);
 			break;
+
 		case NONE_TYPE:
 			return;
 		}
@@ -1042,6 +987,84 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
 				minHeight);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
+	}
+
+	private void addTextTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
+		fieldText.setEditable(true);
+		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldText.setToolTipText(
+				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldText.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldText;
+	}
+
+	private void addEnumTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
+		box.setEditable(true);
+		box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		box.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = box;
+	}
+
+	private void addDateTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldDate = new TextInputField(null);
+		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldDate.setToolTipText("yyyy-mm-dd");
+		fieldDate.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldDate;
+	}
+
+	private void addIntegerTypeComponent(SimpleGroup sourceGroup) {
+		JSpinner spinner = new JSpinner();
+		spinner.addChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = spinner;
+	}
+
+	private void addBigIntegerTypeComponent(SimpleGroup sourceGroup) {
+		SpinnerWithExtension swx = new SpinnerWithExtension();
+		swx.addChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+
+		sourceGroup.dataComponent = swx;
+	}
+
+	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldDouble = new TextInputField("");
+		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldDouble.setToolTipText(
+				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldDouble.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldDouble;
 	}
 
 	/*
@@ -1227,6 +1250,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			((SpinnerWithExtension) component).setValue((Long) data.getData());
 		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			((JSpinner) component).setValue(data.getData());
+		} else {
+			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
 		}
 	}
 
@@ -1372,6 +1397,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			index = ((JComboBox<?>) source).getSelectedIndex();
 		} else if (source instanceof JLabel) {
 			index = 0;
+		} else {
+			Logging.warning(this, "unexpected source in selectOperation: " + source);
 		}
 		addDataComponent(sourceGroup, index);
 
@@ -1405,17 +1432,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
 					JOptionPane.OK_OPTION);
 			toFront();
-
-			return;
-		} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
+		} else if (searchNamePattern.matcher(text).matches()) {
+			collectData();
+			manager.saveSearch(text, saveDescriptionField.getText());
+			savedSearchesDialog.reloadAction();
+		} else {
 			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
-
-			return;
 		}
-
-		collectData();
-		manager.saveSearch(text, saveDescriptionField.getText());
-		savedSearchesDialog.reloadAction();
 	}
 }

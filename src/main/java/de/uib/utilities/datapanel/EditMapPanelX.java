@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * (c) uib, www.uib.de, 2009-2017
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.awt.BorderLayout;
@@ -56,6 +49,7 @@ import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.ListModelProducer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
+import utils.PopupMouseListener;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
@@ -173,7 +167,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		super.logPopupElements();
 
-		MouseListener popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -250,6 +244,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = defaultPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in deleteEntry");
 		}
 	}
 
@@ -266,6 +262,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = removingSpecificValuesPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in deleteSpecificEntry");
 		}
 	}
 
@@ -283,6 +281,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = settingDefaultValuesPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in removeDefaultAsSpecificEntry");
 		}
 	}
 
@@ -298,10 +298,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				public void action(int p) {
 					super.action(p);
 					if (p == PopupMenuTrait.POPUP_RELOAD) {
+						ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 						actor.reloadData();
+						ConfigedMain.getMainFrame().setCursor(null);
 					}
 				}
-
 			};
 		}
 
@@ -647,7 +648,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			popupmenuAtRow = popupNoEditOptions;
 		}
 
-		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+		MouseListener popupListener = new PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}

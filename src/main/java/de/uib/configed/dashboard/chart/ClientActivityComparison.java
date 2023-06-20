@@ -49,8 +49,8 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		clientActivityComparisonPieChart.setTitle(Configed.getResourceValue("Dashboard.clientActivityTitle"));
 
 		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-		List<String> activeClients = ClientData.getActiveClients();
-		List<String> inactiveClients = ClientData.getInactiveClients();
+		List<String> activeClients = ClientData.getReachableClients();
+		List<String> inactiveClients = ClientData.getUnreachableClients();
 
 		if (activeClients.isEmpty() && inactiveClients.isEmpty()) {
 			clientsActivityNoDataText.setVisible(true);

@@ -238,12 +238,9 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private void initListeners() {
-		connectionKeyListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "interrupt with btn ");
-				exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
-			}
+		connectionKeyListener = (ActionEvent e) -> {
+			Logging.info(this, "interrupt with btn ");
+			exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
 		};
 		inputKeyListener = new KeyListener() {
 			@Override
@@ -283,6 +280,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				} else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_KP_DOWN) {
 					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
+				} else {
+					// Do nothing with other keys
 				}
 			}
 		};

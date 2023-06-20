@@ -6,7 +6,7 @@
     <groupId>configed</groupId>
     <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.2.22.1</version>
+    <version>4.2.22.3</version>
 
     <properties>
         <!-- use java 11 for backwards compatibility-->
@@ -282,6 +282,13 @@
             <version>3.20.0</version>
         </dependency>
         
+        <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms -->
+        <dependency>
+            <groupId>net.sf.sevenzipjbinding</groupId>
+            <artifactId>sevenzipjbinding-all-platforms</artifactId>
+            <version>16.02-2.01</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding -->
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>

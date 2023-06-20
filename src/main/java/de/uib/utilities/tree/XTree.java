@@ -37,25 +37,18 @@ public class XTree extends JTree {
 
 		MouseMotionListener ml = new MouseAdapter() {
 			Cursor infoCursor = new Cursor(Cursor.HAND_CURSOR);
-			Cursor defaultCursor = getCursor();
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				TreePath currentPath = getPathForLocation(e.getX(), e.getY());
-				if (currentPath == null || getModel() == null) {
-					setCursor(defaultCursor);
-					return;
-				}
-
-				if (getModel().isLeaf(currentPath.getLastPathComponent())) {
+				if (currentPath != null && getModel() != null
+						&& getModel().isLeaf(currentPath.getLastPathComponent())) {
 					setCursor(infoCursor);
 					setSelectionPath(currentPath);
 				} else {
-					setCursor(defaultCursor);
-
+					setCursor(null);
 				}
 			}
-
 		};
 		addMouseMotionListener(ml);
 

@@ -191,12 +191,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		JPanel panel = new JPanel();
-		GroupLayout gpl = new GroupLayout(panel);
-		panel.setLayout(gpl);
-		if (!Main.THEMES) {
-			panel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
@@ -270,7 +264,6 @@ public final class NewClientDialog extends FGeneralDialog {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				/* Not needed */}
-
 		});
 
 		jTextNotes.addKeyListener(this);
@@ -380,6 +373,13 @@ public final class NewClientDialog extends FGeneralDialog {
 		if (!persistenceController.isWithWAN()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
+		}
+
+		JPanel panel = new JPanel();
+		GroupLayout gpl = new GroupLayout(panel);
+		panel.setLayout(gpl);
+		if (!Main.THEMES) {
+			panel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
@@ -701,17 +701,28 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
-		boolean goOn = true;
 
+		if (!areValuesValid(hostname, selectedDomain)) {
+			return false;
+		}
+
+		if (!checkOpsiHostKey(hostname + "." + selectedDomain)) {
+			return false;
+		}
+
+		return checkHostname(hostname);
+	}
+
+	private static boolean areValuesValid(String hostname, String selectedDomain) {
 		if (hostname == null || hostname.isEmpty()) {
-			goOn = false;
-		}
-		if (selectedDomain == null || selectedDomain.isEmpty()) {
-			goOn = false;
+			return false;
 		}
 
-		String opsiHostKey = "" + hostname + "." + selectedDomain;
-		if (goOn && existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
+		return selectedDomain != null && !selectedDomain.isEmpty();
+	}
+
+	private boolean checkOpsiHostKey(String opsiHostKey) {
+		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
 
 			if (depots.contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
@@ -719,7 +730,7 @@ public final class NewClientDialog extends FGeneralDialog {
 						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
 								+ ")",
 						JOptionPane.WARNING_MESSAGE);
-				goOn = false;
+				return false;
 			}
 
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
@@ -739,11 +750,15 @@ public final class NewClientDialog extends FGeneralDialog {
 			fQuestion.setVisible(true);
 
 			if (fQuestion.getResult() == 1) {
-				goOn = false;
+				return false;
 			}
 		}
 
-		if (goOn && hostname.length() > 15) {
+		return true;
+	}
+
+	private boolean checkHostname(String hostname) {
+		if (hostname.length() > 15) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
@@ -757,20 +772,20 @@ public final class NewClientDialog extends FGeneralDialog {
 			fQuestion.setVisible(true);
 
 			if (fQuestion.getResult() == 1) {
-				goOn = false;
+				return false;
 			}
 		}
 
 		boolean onlyNumbers = true;
 		int i = 0;
-		while (onlyNumbers && hostname != null && i < hostname.length()) {
+		while (onlyNumbers && i < hostname.length()) {
 			if (!Character.isDigit(hostname.charAt(i))) {
 				onlyNumbers = false;
 			}
 			i++;
 		}
 
-		if (goOn && onlyNumbers) {
+		if (onlyNumbers) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
@@ -785,11 +800,11 @@ public final class NewClientDialog extends FGeneralDialog {
 			fQuestion.setVisible(true);
 
 			if (fQuestion.getResult() == 1) {
-				goOn = false;
+				return false;
 			}
 		}
 
-		return goOn;
+		return true;
 	}
 
 	private void importCSV() {

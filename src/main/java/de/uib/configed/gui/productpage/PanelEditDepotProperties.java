@@ -420,8 +420,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		} else if (e.getSource() == buttonSelectAll) {
 			listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
 			saveSelectedDepots();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
-
 	}
 
 	private void selectDepotsWithEqualProperties() {

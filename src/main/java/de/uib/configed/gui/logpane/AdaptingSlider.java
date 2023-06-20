@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.logpane;
 
-import java.awt.Cursor;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.Hashtable;
@@ -54,19 +53,18 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 		if (getValueIsAdjusting()) {
 			return;
 		}
+		setCursor(Globals.WAIT_CURSOR);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				Logging.debug(this, "activateShowLevel call");
-				Cursor startingCursor = getCursor();
-				setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				try {
 					logPane.activateShowLevel();
 				} catch (Exception ex) {
 					Logging.debug(this, "Exception in activateShowLevel " + ex);
 				}
-				setCursor(startingCursor);
+				setCursor(null);
 			}
 		});
 	}
@@ -83,6 +81,8 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			newIndex = getMaximum() - 1;
 		} else if (newIndex < 0) {
 			newIndex = 0;
+		} else {
+			// Do nothing when newIndex is inside valid Values
 		}
 
 		Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);

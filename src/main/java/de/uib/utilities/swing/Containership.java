@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* class Containership
-   Author Rupert Roeder 1999
-   By the Reflection API, this class establishes und helps to use the
-   relationship between some container and the contained components
-*/
-
 package de.uib.utilities.swing;
 
 import java.awt.Component;
@@ -19,6 +13,10 @@ import java.lang.reflect.Method;
 
 import de.uib.utilities.logging.Logging;
 
+/* class Containership  
+ * By the Reflection API, this class establishes und helps to use the
+ * relationship between some container and the contained components
+*/
 public class Containership {
 
 	private Container theContainer;
@@ -75,7 +73,6 @@ public class Containership {
 				} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 						| InvocationTargetException ex) {
 					Logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
-
 				}
 
 			}

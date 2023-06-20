@@ -163,7 +163,10 @@ public class ExporterToPDF extends AbstractExportTable {
 						event.setHeader(metaData.get("header"));
 					} else if (metaData.containsKey("title")) {
 						event.setHeader(metaData.get("title"));
+					} else {
+						Logging.warning(this, "metadata contain neither header nor title");
 					}
+
 					writer.setPageEvent(event);
 				} catch (Exception ex) {
 					Logging.error("Error PdfWriter --- " + ex);
@@ -411,10 +414,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
-			} catch (MalformedURLException ex) {
-				Logging.error("malformed URL --- " + ex);
-			} catch (IOException e) { // getInstannce
-				Logging.error("Error document add footer image --- " + e);
 			}
 		}
 
@@ -433,10 +432,19 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	public static Image createElement(URL imageSource, float posx, float posy)
 			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
-			throws DocumentException, IOException {
-		Image img = Image.getInstance(imageSource);
-		// no scaling
-		img.setAbsolutePosition(posx, posy);
+			throws DocumentException {
+		Image img = null;
+
+		try {
+			img = Image.getInstance(imageSource);
+			// no scaling
+			img.setAbsolutePosition(posx, posy);
+		} catch (MalformedURLException ex) {
+			Logging.error("malformed URL --- " + ex);
+		} catch (IOException e) { // getInstannce
+			Logging.error("Error document add footer image --- " + e);
+		}
+
 		return img;
 	}
 }

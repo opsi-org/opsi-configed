@@ -1,12 +1,25 @@
 # Changelog
 
-## [unversioned] - undated
+## [4.2.22.3] - 2023-06-19
+### Changed
+- Reworking the loading animation when waiting for Data from the server
+
+## [4.2.22.2] - 2023-06-15
+
+### Fixed
+- Opening zip-files with the opsi-logviewer works
+- Client selection remains after reload
+
+### Changed
+- Login Frame is now not always in foreground and has icon
+## [4.2.22.1] - 2023-06-01
 
 ### Added
 - opsi-logviewer is now part of opsi-configed
 
 ### Changed
 - Were using now Messagepack for datatransfer with server -> performance boost
+- Property for language removed, since language changes in configed will be saved for user
 
 ### Fixed
 - You cannot make on-demand actions when in readonly mode

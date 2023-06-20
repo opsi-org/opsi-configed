@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * (c) uib, www.uib.de, 2016
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.awt.Component;

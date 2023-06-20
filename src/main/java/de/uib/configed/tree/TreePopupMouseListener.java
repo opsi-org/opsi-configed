@@ -177,6 +177,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		} else if (!(((GroupNode) parentNode).isFixed())) {
 			menuItemDeleteNode.setVisible(true);
 			numberVisibleItems++;
+		} else {
+			// Do nothing since no item visible
 		}
 
 		return numberVisibleItems > 0;

@@ -337,6 +337,8 @@ public class SelectionManager {
 			orConnections.add(andConnections.get(0));
 		} else if (!andConnections.isEmpty()) {
 			orConnections.add(new AndOperation(andConnections));
+		} else {
+			// continue because there is nothing to do
 		}
 
 		if (orConnections.size() == 1) {
@@ -431,7 +433,10 @@ public class SelectionManager {
 			hasHardware = true;
 		} else if (operation instanceof SwAuditOperation) {
 			hasSwAudit = true;
+		} else {
+			// nothing to do for other operations
 		}
+
 		if (operation instanceof AbstractSelectGroupOperation) {
 			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations()) {
 				checkForGroupSearches(child);

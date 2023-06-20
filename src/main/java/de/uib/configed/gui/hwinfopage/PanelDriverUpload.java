@@ -6,11 +6,8 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -50,7 +46,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -183,9 +179,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, SecondaryFrame root) {
 		this.main = main;
 		this.rootFrame = root;
 		server = main.getConfigserver();
@@ -399,15 +395,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		for (final RadioButtonIntegrationType button : radioButtons) {
 			buttonGroup.add(button);
-			button.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						Logging.debug(this, " " + e);
-						driverDirectory = button.getSubdir();
+			button.addItemListener((ItemEvent e) -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					Logging.debug(this, " " + e);
+					driverDirectory = button.getSubdir();
 
-						produceTarget();
-					}
+					produceTarget();
 				}
 			});
 		}
@@ -475,21 +468,16 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener(new ActionListener() {
+		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
+			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
+					+ fieldServerPath.getText());
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
-						+ fieldServerPath.getText());
-				final Color saveColor = buttonUploadDrivers.getBackground();
-
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-				}
-				execute();
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(saveColor);
-				}
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+			}
+			execute();
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(buttonUploadDrivers.getBackground());
 			}
 		});
 
@@ -701,7 +689,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
 					Configed.getResourceValue("PanelDriverUpload.execute.running"));
 			waiter.startWaiting();
-			final WaitCursor waitCursor = new WaitCursor(rootFrame);
+			rootFrame.activateLoadingCursor();
 
 			try {
 				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
@@ -718,7 +706,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 							FileUtils.copyFileToDirectory(driverPath, targetPath);
 						}
 					} catch (IOException iox) {
-						waitCursor.stop();
+						rootFrame.disactivateLoadingCursor();
 						Logging.error("copy error:\n" + iox, iox);
 					}
 				} else {
@@ -732,11 +720,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					persistenceController.setRights(driverDir);
 				}
 
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 
 				waiter.setReady();
 			} catch (Exception ex) {
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 				Logging.error("error in uploading :\n" + ex, ex);
 			}
 		}

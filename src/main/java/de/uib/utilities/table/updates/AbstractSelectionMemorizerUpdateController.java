@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * SelectionMemorizerUpdateController.java
- *
- * By uib, www.uib.de, 2009
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.table.updates;
 
 import javax.swing.JOptionPane;
@@ -20,10 +12,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.thread.WaitCursor;
 
-public abstract class AbstractSelectionMemorizerUpdateController
-		implements de.uib.utilities.table.updates.UpdateController {
+public abstract class AbstractSelectionMemorizerUpdateController implements UpdateController {
 	private PanelGenEditTable keysPanel;
 	private int keyCol;
 	private PanelGenEditTable panel;
@@ -40,11 +30,8 @@ public abstract class AbstractSelectionMemorizerUpdateController
 	@Override
 	public boolean saveChanges() {
 
-		WaitCursor waitCursor = new WaitCursor();
-
 		Logging.debug(this, "keysPanel is null " + (keysPanel == null));
 		if (keysPanel.getSelectedRow() < 0) {
-			waitCursor.stop();
 			Logging.info(this, "no row selected");
 
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
@@ -61,8 +48,6 @@ public abstract class AbstractSelectionMemorizerUpdateController
 		String keyValue = keysPanel.getValueAt(keysPanel.getSelectedRow(), keyCol).toString();
 
 		boolean success = updater.sendUpdate(keyValue, panel.getSelectedKeys());
-
-		waitCursor.stop();
 
 		Logging.checkErrorList(null);
 

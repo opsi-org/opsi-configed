@@ -8,7 +8,6 @@ package de.uib.configed.gui.licences;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -208,25 +207,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			buttonSupplementSimilar.setFont(Globals.defaultFont);
 		}
 
-		buttonSupplementSimilar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				if (!fSoftwarename2LicencePool.isVisible()) {
-					fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
-				}
-
-				Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
-						+ panelRadiobuttonsPreselectionForName2Pool.getValue());
-				fSoftwarename2LicencePool.setPreselectionForName2Pool(
-						(FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
-								.getValue());
-
-				fSoftwarename2LicencePool.setVisible(true);
-
-				panelRegisteredSoftware.callName2Pool(panelRegisteredSoftware.getTableModel().getCursorRow());
-			}
-		});
+		buttonSupplementSimilar.addActionListener((ActionEvent e) -> buttonSupplementSimilarAction());
 
 		labelSimilarEntriesExist = new JLabel();
 		labelSimilarEntriesExist.setVisible(true);
@@ -569,6 +550,23 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	private void buttonSupplementSimilarAction() {
+
+		if (!fSoftwarename2LicencePool.isVisible()) {
+			fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
+		}
+
+		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
+				+ panelRadiobuttonsPreselectionForName2Pool.getValue());
+		fSoftwarename2LicencePool.setPreselectionForName2Pool(
+				(FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
+						.getValue());
+
+		fSoftwarename2LicencePool.setVisible(true);
+
+		panelRegisteredSoftware.callName2Pool(panelRegisteredSoftware.getTableModel().getCursorRow());
 	}
 
 	public void setDisplaySimilarExist(boolean b) {

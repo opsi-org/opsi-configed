@@ -512,6 +512,8 @@ public final class LicensingInfoMap {
 					} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
 						moduleInfo.put(STATE, STATE_DAYS_OVER);
 						currentTimeOverModuleList.add(currentModule);
+					} else {
+						// no warnings to add
 					}
 
 					String futureCheck = checkFuture(moduleInfo, currentModule, key);
@@ -523,6 +525,8 @@ public final class LicensingInfoMap {
 							futureOverLimitModuleList.add(currentModule);
 						} else if (futureCheck.equals(STATE_CLOSE_TO_LIMIT)) {
 							futureCloseToLimitModuleList.add(currentModule);
+						} else {
+							// Not close to limit, so nothing to do
 						}
 					} else {
 						moduleInfo.put(FUTURE_STATE, "null");
@@ -556,7 +560,7 @@ public final class LicensingInfoMap {
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
+		classNames.add("java.lang.Boolean");
 
 		try {
 
@@ -740,22 +744,26 @@ public final class LicensingInfoMap {
 				Integer futureNum = Integer.parseInt(fNum);
 				Integer clientNum = Integer.parseInt(cNum);
 
-				Integer diff = futureNum - clientNum;
-
-				if (diff < 0) {
-					return STATE_OVER_LIMIT;
-				}
-
-				if (diff <= absolutClientLimitWarning
-						|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
-					return STATE_CLOSE_TO_LIMIT;
-				}
-
-				return STATE_FUTURE_OKAY;
+				return calculateStateForNumbers(clientNum, futureNum);
 			}
 		}
 
 		return null;
+	}
+
+	private String calculateStateForNumbers(int clientNum, int futureNum) {
+		Integer diff = futureNum - clientNum;
+
+		if (diff < 0) {
+			return STATE_OVER_LIMIT;
+		}
+
+		if (diff <= absolutClientLimitWarning
+				|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
+			return STATE_CLOSE_TO_LIMIT;
+		}
+
+		return STATE_FUTURE_OKAY;
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(

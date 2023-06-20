@@ -156,8 +156,8 @@ public final class Messages {
 				}
 
 			} else {
-				Logging.info(
-						"Bad format for locale, use <language>_<country> or <language>, each component consisting of two chars, or just a two char <language>");
+				Logging.info("Bad format for locale, use <language>_<country> or <language>"
+						+ ", each component consisting of two chars, or just a two char <language>");
 			}
 
 		}

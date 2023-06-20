@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
-*	TextInputField.java
-*	(c) uib 2012
-*	GPL licensed
-*   Author Rupert Röder
-*/
-
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;

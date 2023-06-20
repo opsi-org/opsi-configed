@@ -4,15 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
-*	PanelStateSwitch.java
-*	for a given enum, this class builds a panel 
-*	with radio buttons to switch between the Enums
-*
-* By uib, www.uib.de, 2017
-* Author: Rupert Röder
-*/
-
 package de.uib.utilities.swing;
 
 import java.awt.Font;
@@ -40,6 +31,11 @@ import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
+/*
+*	PanelStateSwitch.java
+*	for a given enum, this class builds a panel 
+*	with radio buttons to switch between the Enums
+*/
 public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	private Enum<E> producedValue;

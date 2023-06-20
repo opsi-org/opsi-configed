@@ -6,9 +6,7 @@
 
 package de.uib.configed.productaction;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,7 +40,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataRefreshedObserver;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObserver, NameProducer {
 
@@ -79,11 +76,11 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain main, JFrame root) {
+	public PanelCompleteWinProducts(ConfigedMain main, SecondaryFrame rootFrame) {
 		this.configedMain = main;
-		this.rootFrame = root;
+		this.rootFrame = rootFrame;
 		server = main.getConfigserver();
 
 		defineChoosers();
@@ -92,7 +89,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare(this, root) {
+		panelMountShare = new PanelMountShare(this, rootFrame) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
@@ -290,25 +287,20 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		buttonCallExecute.setEnabled(false);
 
-		buttonCallExecute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this,
-						"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
-								+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
-								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
+		buttonCallExecute.addActionListener((ActionEvent e) -> {
+			Logging.debug(this,
+					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
+							+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
+							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 
-				final Color saveColor = buttonCallExecute.getBackground();
+			if (!Main.THEMES) {
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+			}
 
-				if (!Main.THEMES) {
-					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-				}
+			execute();
 
-				execute();
-
-				if (!Main.THEMES) {
-					buttonCallExecute.setBackground(saveColor);
-				}
+			if (!Main.THEMES) {
+				buttonCallExecute.setBackground(buttonCallExecute.getBackground());
 			}
 		});
 
@@ -316,7 +308,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private void execute() {
 
-		WaitCursor waitCursor = new WaitCursor(rootFrame);
+		rootFrame.activateLoadingCursor();
 
 		try {
 			File targetDirectory = null;
@@ -341,7 +333,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 					+ "/" + SmbConnect.DIRECTORY_PE);
 			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
 					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			waitCursor.stop();
+			rootFrame.disactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
@@ -378,16 +370,16 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
-					waitCursor = new WaitCursor(rootFrame);
+					rootFrame.activateLoadingCursor();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
 					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
-					waitCursor.stop();
+					rootFrame.disactivateLoadingCursor();
 				}
 			}
 
 		} catch (Exception ex) {
-			waitCursor.stop();
+			rootFrame.disactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
 		}
 	}

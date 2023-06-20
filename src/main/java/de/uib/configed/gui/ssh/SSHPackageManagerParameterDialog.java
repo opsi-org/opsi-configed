@@ -35,7 +35,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
 
-	protected ConfigedMain main;
+	protected ConfigedMain configedMain;
 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
@@ -85,6 +85,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction3();
 				} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
 					((SSHPackageManagerInstallParameterDialog) caller).doAction3();
+				} else {
+					Logging.warning(this, "caller has unexpected class " + caller.getClass());
 				}
 			});
 		}
@@ -97,7 +99,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly())) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
-				main.reload();
+				configedMain.reload();
 				consolidate();
 			});
 		}
@@ -115,15 +117,17 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void consolidate() {
-		main.reload();
+		configedMain.reload();
 	}
 
-	private static void doActionHelp(final SSHPackageManagerParameterDialog caller) {
+	private void doActionHelp(final SSHPackageManagerParameterDialog caller) {
 		SSHConnectionExecDialog dia = null;
 		if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 			dia = new CommandOpsiPackageManagerUninstall().startHelpDialog();
 		} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
 			dia = new CommandOpsiPackageManagerInstall().startHelpDialog();
+		} else {
+			Logging.warning(this, "caller has unexpected class " + caller.getClass());
 		}
 
 		if (dia != null) {

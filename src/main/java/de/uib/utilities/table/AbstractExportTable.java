@@ -154,6 +154,8 @@ public abstract class AbstractExportTable {
 					result = true;
 				} else if (answer == 2) {
 					result = false;
+				} else {
+					Logging.warning(this, "unexpected answer " + answer);
 				}
 			}
 		}

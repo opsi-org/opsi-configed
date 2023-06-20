@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * SearchTargetModelFromTable.java
- *
- * By uib, www.uib.de, 2017
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.table.gui;
 
 import java.util.Arrays;

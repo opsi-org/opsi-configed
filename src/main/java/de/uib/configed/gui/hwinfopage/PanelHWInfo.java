@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -161,9 +162,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap / 2, vGap / 2, vGap / 2)
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-		);
+				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 
@@ -181,26 +180,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
-						Logging.info(this, "create report");
-						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
-						HashMap<String, String> metaData = new HashMap<>();
-						metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-						title = "";
-						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-							title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
-						}
-						if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-							title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
-						}
-						metaData.put("title", title);
-						metaData.put("keywords", "hardware infos");
-
-						ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
-						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4Landscape();
-						// create pdf // no filename, onlyselectedRows=false
-						pdfExportTable.execute(null, false);
-
+						exportPDF();
 						break;
 
 					default:
@@ -213,6 +193,28 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
 
+	}
+
+	private void exportPDF() {
+		Logging.info(this, "create report");
+		// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
+		HashMap<String, String> metaData = new HashMap<>();
+		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
+		title = "";
+		if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
+		}
+		if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
+		}
+		metaData.put("title", title);
+		metaData.put("keywords", "hardware infos");
+
+		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		// create pdf // no filename, onlyselectedRows=false
+		pdfExportTable.execute(null, false);
 	}
 
 	/** overwrite in subclasses */
@@ -288,8 +290,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
 		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
+		} else {
+			return value + " " + unit;
 		}
-		return value + " " + unit;
 	}
 
 	private void expandRows(List<Integer> rows) {
@@ -304,32 +307,28 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return getDataForNode(node, false);
 	}
 
-	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
-
-		if (node == null || !node.isLeaf()) {
-			return new ArrayList<>();
+	private boolean hasData(IconNode node, boolean reduceScanToByAuditClasses) {
+		if (node == null || !node.isLeaf() || node.getPath().length < 3) {
+			return false;
 		}
 
 		TreeNode[] path = node.getPath();
-		if (path.length < 3) {
-			return new ArrayList<>();
-		}
 
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass)) {
-			return new ArrayList<>();
+			return false;
 		}
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
 		Map<String, Object> deviceInfo = node.getDeviceInfo();
-		if (devices == null || deviceInfo == null) {
-			return new ArrayList<>();
-		}
 
+		return devices != null && deviceInfo != null;
+	}
+
+	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
-
 		for (int j = 0; j < hwConfig.size(); j++) {
 
 			Map<String, List<Map<String, Object>>> whc = hwConfig.get(j);
@@ -343,34 +342,48 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				Logging.error(this, "hwConfig.get(" + j + ") is null");
 			}
 		}
+
+		return values;
+	}
+
+	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+
+		if (!hasData(node, reduceScanToByAuditClasses)) {
+			return new ArrayList<>();
+		}
+
+		TreeNode[] path = node.getPath();
+
+		String hwClassUI = path[1].toString();
+		String hwClass = (String) hwClassMapping.get(hwClassUI);
+
+		Map<String, Object> deviceInfo = node.getDeviceInfo();
+
+		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
+
 		List<String[]> data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> v = values.get(j);
-				String opsi = (String) v.get("Opsi");
+				Map<String, Object> value = values.get(j);
+				String opsi = (String) value.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
 
 				// table row keys //no encoding needed
-				String ui = encodeString((String) v.get("UI"));
+				String ui = encodeString((String) value.get("UI"));
 				String unit = null;
-				if (v.containsKey("Unit")) {
-					unit = (String) v.get("Unit");
+				if (value.containsKey("Unit")) {
+					unit = (String) value.get("Unit");
 					Logging.debug(this, "unit  " + unit);
 				}
-				Iterator<String> iter = deviceInfo.keySet().iterator();
-				while (iter.hasNext()) {
-					String key = iter.next();
-					if (key.equalsIgnoreCase(opsi)) {
+
+				for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
+					if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
 						String cv = "";
 
-						if (deviceInfo.get(key) == null) {
-							continue;
-						}
-
-						if (deviceInfo.get(key) instanceof String) {
-							cv = (String) deviceInfo.get(key);
+						if (deviceInfoEntry.getValue() instanceof String) {
+							cv = (String) deviceInfoEntry.getValue();
 						} else {
-							cv = "" + deviceInfo.get(key);
+							cv = "" + deviceInfoEntry.getValue();
 						}
 
 						if (reduceScanToByAuditClasses && hwClass != null) {
@@ -383,6 +396,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
 									modelString = cv;
 
+								} else {
+									// Not needed, since other values not used for Description on top
 								}
 							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
@@ -390,8 +405,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
-
+								} else {
+									// Not needed, since other values not used for Description on top
 								}
+							} else {
+								Logging.warning(this, "unexpected value for hwclass: " + hwClass);
 							}
 						}
 
@@ -460,7 +478,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				panelByAuditInfo.setByAuditFields(vendorStringComputerSystem, vendorStringBaseBoard, modelString,
 						productString);
 			}
-
 		}
 	}
 

@@ -28,7 +28,6 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
-import de.uib.utilities.thread.WaitCursor;
 
 // tab new licence
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
@@ -55,7 +54,9 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	}
 
 	public void saveNewLicence(Map<String, String> m) {
-		WaitCursor waitCursor = new WaitCursor(Globals.frame1, configedMain.licencesFrame.getCursor());
+
+		configedMain.licencesFrame.activateLoadingCursor();
+
 		persistenceController.editSoftwareLicence(m.get(LicenceEntry.ID_KEY),
 				m.get(LicenceEntry.LICENCE_CONTRACT_ID_KEY), m.get(LicenceEntry.TYPE_KEY),
 				m.get(LicenceEntry.MAX_INSTALLATIONS_KEY), m.get(LicenceEntry.BOUND_TO_HOST_KEY),
@@ -70,7 +71,9 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencekeys.reset();
 		thePanel.panelKeys.setDataChanged(false);
 		thePanel.panelKeys.moveToKeyValue(keyValue);
-		waitCursor.stop();
+
+		configedMain.licencesFrame.disactivateLoadingCursor();
+
 		configedMain.checkErrorList();
 	}
 

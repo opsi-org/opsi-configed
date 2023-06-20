@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,7 +30,6 @@ import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.thread.WaitCursor;
 
 public class SavedSearchesDialog extends FEditStringList {
 	private SelectionManager manager;
@@ -40,6 +38,8 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	private JTableSelectionPanel selectionPanel;
 	private ConfigedMain configedMain;
+
+	private GlassPane glassPane;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -52,7 +52,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	private void initDialog() {
-		setTitle(Configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
+		setTitle(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		setModal(false);
 		setLeaveOnCommit(false);
 		manager = new SelectionManager(null);
@@ -67,6 +67,9 @@ public class SavedSearchesDialog extends FEditStringList {
 		buttonAdd.setVisible(true);
 		buttonRemove.setVisible(false);
 		extraField.setVisible(false);
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
 	}
 
 	public void start() {
@@ -93,23 +96,17 @@ public class SavedSearchesDialog extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonRemove.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed");
-				removeSelectedEntry();
-			}
+		buttonRemove.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed");
+			removeSelectedEntry();
 		});
 
 		buttonRemove.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		buttonAdd.setEnabled(true);
-		buttonAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed on buttonAdd ");
-				addElement();
-			}
+		buttonAdd.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed on buttonAdd ");
+			addElement();
 		});
 
 		JMenuItem reload = new JMenuItemFormatted();
@@ -120,12 +117,9 @@ public class SavedSearchesDialog extends FEditStringList {
 		if (!Main.FONT) {
 			reload.setFont(Globals.defaultFont);
 		}
-		reload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "reload action");
-				reloadAction();
-			}
+		reload.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "reload action");
+			reloadAction();
 		});
 		popup.add(reload);
 
@@ -187,12 +181,12 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	@Override
 	protected void commit() {
-		result = new LinkedList<>();
+		glassPane.activate(true);
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
 
-		WaitCursor waitCursor = new WaitCursor(this, "SavedSearchesDialog.commit");
+		result = new LinkedList<>();
 
 		try {
 
@@ -208,7 +202,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		} finally {
 			buttonCommit.setEnabled(true);
 			buttonCancel.setEnabled(true);
-			waitCursor.stop();
 		}
 
 		Logging.info(this, "commit result == null " + (result == null));
@@ -216,6 +209,8 @@ public class SavedSearchesDialog extends FEditStringList {
 			Logging.info(this, "result size " + result.size());
 			selectionPanel.setSelectedValues(result);
 		}
+
+		glassPane.activate(false);
 	}
 
 	@Override

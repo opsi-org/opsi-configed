@@ -81,6 +81,8 @@ public class PanelHostConfig extends JPanel {
 				if (!"{}".equals(user)) {
 					handleUserInPropertyClass(PROPERTY_CLASS_USER, user);
 				}
+			} else {
+				// Do nothing when it's not a user or a userrole
 			}
 		}
 	}

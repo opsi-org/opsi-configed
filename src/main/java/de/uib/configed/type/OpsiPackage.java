@@ -85,9 +85,9 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public OpsiPackage(Map<String, Object> m) {
 		this("" + m.get(DB_KEY_PRODUCT_ID), "" + m.get(SERVICE_KEY_PRODUCT_VERSION),
 				"" + m.get(SERVICE_KEY_PACKAGE_VERSION), "" + m.get(SERVICE_KEY_PRODUCT_TYPE),
-				Globals.interpretAsBoolean(m.get(SERVICE_KEY_LOCKED)));
-		Logging.debug(this, "built from " + m);
+				Boolean.TRUE.equals(m.get(SERVICE_KEY_LOCKED)));
 
+		Logging.debug(this, "built from " + m);
 	}
 
 	public String getProductId() {

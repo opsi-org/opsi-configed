@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * (c) uib, www.uib.de, 2013
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.util.ArrayList;
@@ -39,6 +32,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.Logging;
@@ -118,6 +112,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					reload();
 				} else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
+				} else {
+					Logging.warning(this, "unexpected action " + p);
 				}
 			}
 		};
@@ -141,6 +137,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				private void reload() {
+					ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
@@ -152,6 +149,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 						tree.setSelectionInterval(row, row);
 						tree.scrollRowToVisible(row);
 					}
+
+					ConfigedMain.getMainFrame().setCursor(null);
 				}
 
 				@Override

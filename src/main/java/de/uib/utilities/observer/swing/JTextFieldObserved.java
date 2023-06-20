@@ -36,8 +36,9 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 			setCaretPosition(startText.length());
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			transferFocus();
+		} else {
+			// Do nothing on other keys
 		}
-
 	}
 
 	@Override

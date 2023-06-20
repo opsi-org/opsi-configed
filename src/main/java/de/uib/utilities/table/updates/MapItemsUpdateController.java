@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * MapItemsUpdateController.java
- *
- * By uib, www.uib.de, 2009
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.table.updates;
 
 import java.util.ArrayList;
@@ -21,9 +13,8 @@ import java.util.List;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.thread.WaitCursor;
 
-public class MapItemsUpdateController implements de.uib.utilities.table.updates.UpdateController {
+public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
 	private PanelGenEditTable panel;
 	private MapBasedUpdater updater;
@@ -40,8 +31,6 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	@Override
 	public boolean saveChanges() {
 		Logging.debug(this, "saveChanges");
-
-		WaitCursor waitCursor = new WaitCursor();
 
 		// true until failure
 		boolean success = true;
@@ -96,8 +85,6 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 			Logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
 			panel.moveToKeyValue(lastKeyValue);
-
-			waitCursor.stop();
 		} else {
 			if (!successfullInsertsWithNewKeys.isEmpty()) {
 				// we have to remove all update items ...
@@ -116,7 +103,6 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 				success = true;
 			}
 
-			waitCursor.stop();
 			Logging.checkErrorList(null);
 
 		}

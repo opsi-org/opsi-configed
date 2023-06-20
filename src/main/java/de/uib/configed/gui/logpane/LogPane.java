@@ -7,7 +7,6 @@
 package de.uib.configed.gui.logpane;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -62,8 +61,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private static final int MAX_LEVEL = 9;
 
 	private JTextPane jTextPane;
-	private JScrollPane scrollpane;
-	private JPanel commandpane;
 	private JLabel labelSearch;
 
 	private JComboBox<String> jComboBoxSearch;
@@ -112,19 +109,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
+
+		// Set variables
 		Logging.info(this, "initializing");
 		title = "";
 		info = "";
-
-		scrollpane = new JScrollPane();
-		jTextPane = new JTextPane() {
-			@Override
-			public Dimension getPreferredSize() {
-				return getUI().getMinimumSize(this);
-			}
-		};
-		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
-		jTextPane.getCaret().setBlinkRate(0);
 
 		styleContext = new StyleContext() {
 			@Override
@@ -132,7 +121,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				return monospacedFont;
 			}
 		};
+
 		logLevelStyles = new Style[10];
+		setLoglevelStyles();
+
+		initComponents(defaultText);
+
+		setLayout();
+
+		if (withPopup) {
+			initPopupMenu();
+		}
+	}
+
+	private void setLoglevelStyles() {
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
 		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
@@ -167,6 +169,19 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
 		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret);
+	}
+
+	private void initComponents(String defaultText) {
+		JScrollPane scrollpane = new JScrollPane();
+		jTextPane = new JTextPane() {
+			@Override
+			public Dimension getPreferredSize() {
+				return getUI().getMinimumSize(this);
+			}
+		};
+
+		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
+		jTextPane.getCaret().setBlinkRate(0);
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
@@ -185,6 +200,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		if (!Main.FONT) {
 			jTextPane.setFont(Globals.defaultFont);
 		}
+
 		jTextPane.addKeyListener(this);
 
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -214,11 +230,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jCheckBoxCaseSensitive.addActionListener(this);
 
 		buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
-		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
+		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(this);
 
 		buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
-		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
+		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
@@ -244,8 +260,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEditable(false);
 
 		comboType.addActionListener(actionEvent -> applyType());
+	}
 
-		commandpane = new JPanel();
+	private void setLayout() {
+		JPanel commandpane = new JPanel();
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
@@ -299,10 +317,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		super.add(commandpane, BorderLayout.SOUTH);
-
-		if (withPopup) {
-			initPopupMenu();
-		}
 	}
 
 	private void applyType() {
@@ -338,35 +352,39 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
 			@Override
 			public void action(int p) {
-				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
-					save();
-					break;
-				case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-					saveAsZip();
-					break;
-				case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
-					saveAllAsZip(false);
-					break;
-				case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-					saveAllAsZip(true);
-					break;
-				case PopupMenuTrait.POPUP_FLOATINGCOPY:
-					floatExternal();
-					break;
-
-				default:
-					Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-					break;
-				}
+				treatPopupAction(p);
 			}
 		};
 
 		popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
+	}
+
+	public void treatPopupAction(int p) {
+		switch (p) {
+		case PopupMenuTrait.POPUP_RELOAD:
+			reload();
+			break;
+
+		case PopupMenuTrait.POPUP_SAVE:
+			save();
+			break;
+		case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
+			saveAsZip();
+			break;
+		case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
+			saveAllAsZip(false);
+			break;
+		case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
+			saveAllAsZip(true);
+			break;
+		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+			floatExternal();
+			break;
+
+		default:
+			Logging.warning(this, "no case found for popupMenuTrait in LogPane");
+			break;
+		}
 	}
 
 	public Integer getMaxExistingLevel() {
@@ -445,10 +463,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.debug(this, "save action");
 	}
 
-	public void close() {
-		Logging.debug(this, "close action");
-	}
-
 	protected void saveAsZip() {
 		Logging.debug(this, "save as zip action");
 	}
@@ -525,7 +539,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void buildDocument() {
 		Logging.debug(this, "building document");
-		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		setCursor(Globals.WAIT_CURSOR);
 		// Switch to an blank document temporarily to avoid repaints
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
@@ -565,7 +579,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
-		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
+		SwingUtilities.invokeLater(() -> setCursor(null));
 	}
 
 	private void setLevelWithoutAction(Object l) {
@@ -598,59 +612,60 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				+ maxExistingLevel);
 
 		if (!oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+			rebuildDocumentWithNewLevel();
+		}
+	}
 
-			int caretPosition = jTextPane.getCaretPosition();
+	private void rebuildDocumentWithNewLevel() {
+		int caretPosition = jTextPane.getCaretPosition();
 
-			int startPosition = 0;
-			int oldStartPosition = 0;
-			int offset = 0;
-			Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
+		int startPosition = 0;
+		int oldStartPosition = 0;
+		int offset = 0;
+		Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
 
-			while (startPosition < caretPosition && linestartIterator.hasNext()) {
-				offset = caretPosition - startPosition;
-				oldStartPosition = startPosition;
-				startPosition = linestartIterator.next();
+		while (startPosition < caretPosition && linestartIterator.hasNext()) {
+			offset = caretPosition - startPosition;
+			oldStartPosition = startPosition;
+			startPosition = linestartIterator.next();
+		}
+
+		int lineNo = 0;
+		if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
+			lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
+		}
+
+		buildDocument();
+
+		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
+			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
+
+		} else {
+			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
+			int nextLineNo = 0;
+
+			if (linesIterator.hasNext()) {
+				nextLineNo = linesIterator.next();
 			}
 
-			int lineNo = 0;
-			if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
-				lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
+			while (linesIterator.hasNext() && nextLineNo < lineNo) {
+				nextLineNo = linesIterator.next();
 			}
 
-			buildDocument();
-
-			if (lineCount2docLinestartPosition.containsKey(lineNo)) {
-				startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-
-			} else {
-				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-				int nextLineNo = 0;
-
-				if (linesIterator.hasNext()) {
-					nextLineNo = linesIterator.next();
-				}
-
-				while (linesIterator.hasNext() && nextLineNo < lineNo) {
-					nextLineNo = linesIterator.next();
-				}
-
-				startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-
-			}
-
-			try {
-				jTextPane.setCaretPosition(startPosition);
-
-				jTextPane.scrollRectToVisible(jTextPane
-						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-				jTextPane.getCaret().setVisible(true);
-				highlighter.removeAllHighlights();
-			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
-			}
+			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
 
 		}
 
+		try {
+			jTextPane.setCaretPosition(startPosition);
+
+			jTextPane.scrollRectToVisible(jTextPane
+					.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
+			jTextPane.getCaret().setVisible(true);
+			highlighter.removeAllHighlights();
+		} catch (BadLocationException e) {
+			Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
+		}
 	}
 
 	private Style getStyleByLevelNo(int lev) {
@@ -880,6 +895,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "KeyEvent " + e);
+
 		if (e.getSource() == buttonSearch) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
@@ -887,15 +903,19 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && e.getKeyChar() == '+'
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Plus");
 				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyChar() == '-'
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
+			} else {
+				// Do nothing on other keys on jComboBoxSearch and jTextPane
 			}
+		} else {
+			Logging.warning(this, "unexpected keyevent on source " + e.getSource());
 		}
 	}
 
@@ -935,6 +955,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			increaseFontSize();
 		} else if (e.getSource() == buttonFontMinus) {
 			reduceFontSize();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
 	}
 }

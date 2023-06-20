@@ -68,6 +68,8 @@ import de.uib.utilities.table.gui.TablesearchPane;
 
 public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
 
+	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+
 	private static final int MIN_HEIGHT = 200;
 
 	private JScrollPane scrollpane;
@@ -81,8 +83,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private CheckedLabel checkmarkSearch;
 
+	private JLabel labelSearch;
 	private JTextField fieldSearch;
+
+	private JButton buttonMarkAll;
+	private JButton buttonInvertSelection;
 	private JComboBox<String> comboSearch;
+
+	private JLabel labelSearchMode;
 	private JComboBoxToolTip comboSearchMode;
 
 	private TablesearchPane.SearchMode searchMode;
@@ -96,10 +104,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	public JTableSelectionPanel(ConfigedMain main) {
 		super();
 		this.main = main;
-		init();
+		initComponents();
+		setupLayout();
 	}
 
-	private void init() {
+	private void initComponents() {
 		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 
 		scrollpane = new JScrollPane();
@@ -121,7 +130,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 					return "";
 				}
 			}
-
 		};
 
 		table.setDragEnabled(true);
@@ -153,9 +161,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		scrollpane.getViewport().add(table);
 
-		JPanel topPane = new JPanel();
-
-		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
+		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		if (!Main.FONT) {
 			labelSearch.setFont(Globals.defaultFont);
 		}
@@ -217,16 +223,16 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
-		JButton buttonMarkAll = new JButton("", markAllIcon);
+		buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		JButton buttonInvertSelection = new JButton("", invertSelectionIcon);
+		buttonInvertSelection = new JButton("", invertSelectionIcon);
 		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
 		buttonInvertSelection.addActionListener((ActionEvent e) -> main.invertClientselection());
 
-		JLabel labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
+		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
 
 		comboSearchMode = new JComboBoxToolTip();
 
@@ -255,7 +261,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		comboSearch = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
 		comboSearch.setPreferredSize(Globals.buttonDimension);
+	}
 
+	private void setupLayout() {
+		JPanel topPane = new JPanel();
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
@@ -318,43 +327,42 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table;
 	}
 
-	// interface MissingDataPanel
-	public void setMissingDataPanel(boolean b) {
-		if (b) {
-			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
+	public void setDataPanel() {
+		scrollpane.getViewport().setView(table);
+	}
 
-			JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-			if (!Main.FONT) {
-				missingData1.setFont(Globals.defaultFontTitle);
-			}
+	public void setMissingDataPanel() {
+		JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
 
-			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
-
-			JPanel mdPanel = new JPanel();
-			if (!Main.THEMES) {
-				mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			}
-
-			GroupLayout mdLayout = new GroupLayout(mdPanel);
-			mdPanel.setLayout(mdLayout);
-
-			mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-					.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
-					.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
-			mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-					.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE))
-					.addGap(10, 10, Short.MAX_VALUE));
-
-			scrollpane.getViewport().setView(mdPanel);
-		} else {
-			scrollpane.getViewport().setView(table);
+		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
+		if (!Main.FONT) {
+			missingData1.setFont(Globals.defaultFontTitle);
 		}
+
+		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
+
+		JPanel mdPanel = new JPanel();
+		if (!Main.THEMES) {
+			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
+		GroupLayout mdLayout = new GroupLayout(mdPanel);
+		mdPanel.setLayout(mdLayout);
+
+		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+				.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
+				.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
+		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(10, 10, Short.MAX_VALUE));
+
+		scrollpane.getViewport().setView(mdPanel);
 	}
 
 	@Override
@@ -679,7 +687,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
-		String[] splitted = line.split("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+		String[] splitted = sPlusPattern.split(line);
 		for (String s : splitted) {
 			if (!" ".equals(s)) {
 				result.add(s);
@@ -715,11 +723,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
 		if (searchMode == TablesearchPane.SearchMode.REGEX_SEARCHING) {
-			try {
-				if (fulltext) {
-					val = ".*" + val + ".*";
-				}
 
+			if (fulltext) {
+				val = ".*" + val + ".*";
+			}
+			try {
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
 				Logging.error(this, "pattern problem " + ex);
@@ -753,16 +761,15 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 					switch (searchMode) {
 					case REGEX_SEARCHING:
 
-						found = pattern.matcher(compareVal).matches();
+						if (pattern != null) {
+							found = pattern.matcher(compareVal).matches();
+						}
+
 						break;
 
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
-						for (String word : alternativeWords) {
-
-							found = compareVal.indexOf(word) >= 0;
-							if (found) {
-								break;
-							}
+						if (fullTextSearchingWithAlternatives(alternativeWords, compareVal)) {
+							found = true;
 						}
 						break;
 
@@ -792,6 +799,16 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return -1;
+	}
+
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean moveToValue(Object value, int col) {
@@ -880,11 +897,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void searchTheRow(int startrow, boolean addSelection) {
-		String value = fieldSearch.getText();
-
-		if (value.length() > 10 && "http".equalsIgnoreCase(value.substring(0, 4)) && value.indexOf("host=") > 0) {
-			value = value.substring(value.indexOf("host=") + ("host=").length());
-		}
 
 		HashSet<Integer> selectedCols = null;
 
@@ -909,7 +921,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			break;
 		}
 
-		foundrow = findViewRowFromValue(startrow, value, selectedCols, searchMode);
+		foundrow = findViewRowFromValue(startrow, fieldSearch.getText(), selectedCols, searchMode);
 
 		if (foundrow > -1) {
 			if (addSelection) {
@@ -996,6 +1008,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
+		} else {
+			// Do nothing on other keyPress events
 		}
 	}
 
