@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	protected String myKey;
 
 	private ListModelProducer<String> modelProducer;
-	private List<Object> forbiddenValues;
 
 	private boolean usingListEditor;
 
@@ -78,10 +76,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	public void reInit() {
 		listeditor.init();
-	}
-
-	public void setForbiddenValues(List<Object> forbidden) {
-		forbiddenValues = forbidden;
 	}
 
 	public void setModelProducer(ListModelProducer<String> producer) {
@@ -188,15 +182,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		if (listeditor.getValue() instanceof List) {
 			List<?> list = (List<?>) listeditor.getValue();
-
-			if (forbiddenValues != null) {
-				Iterator<Object> iter = forbiddenValues.iterator();
-				while (iter.hasNext()) {
-					Object element = iter.next();
-
-					list.remove(element);
-				}
-			}
 
 			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 

@@ -39,9 +39,6 @@ public class MapTableModel extends AbstractTableModel {
 	private Collection<Map<String, Object>> storeData;
 	private boolean datachanged;
 
-	// values set cannot be set for any key
-	private List<Object> showOnlyValues;
-
 	// keys which identify readonly entries
 	private Set<String> keysOfReadOnlyEntries;
 
@@ -170,24 +167,12 @@ public class MapTableModel extends AbstractTableModel {
 		this.updateCollection = updateCollection;
 	}
 
-	public Collection getUpdateCollection() {
-		return updateCollection;
-	}
-
 	public void setReadOnlyEntries(Set<String> keys) {
 		keysOfReadOnlyEntries = keys;
 	}
 
 	public void setEditDenier(Function<String, Boolean> disallow) {
 		editDenier = disallow;
-	}
-
-	public void setShowOnlyValues(List<Object> showOnly) {
-		showOnlyValues = showOnly;
-	}
-
-	public List<Object> getShowOnlyValues() {
-		return showOnlyValues;
 	}
 
 	public void addEntry(String key, Object newval, boolean toStore) {
@@ -206,17 +191,6 @@ public class MapTableModel extends AbstractTableModel {
 		addEntry(key, newval, true);
 	}
 
-	public void addEntry(String key) {
-		List<Object> newval = new ArrayList<>();
-		data.put(key, newval);
-		oridata.put(key, newval);
-
-		keys = new ArrayList<>(data.keySet());
-
-		putEntryIntoStoredMaps(key, newval);
-		fireTableDataChanged();
-	}
-
 	public void removeEntry(String key) {
 		data.remove(key);
 		oridata.remove(key);
@@ -226,10 +200,6 @@ public class MapTableModel extends AbstractTableModel {
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();
 
-	}
-
-	public boolean hasEntryFor(String key) {
-		return data.containsKey(key);
 	}
 
 	// table model
@@ -502,12 +472,11 @@ public class MapTableModel extends AbstractTableModel {
 		this.observers = observers;
 	}
 
-	public void notifyChange() {
+	private void notifyChange() {
 
 		Logging.debug(this, "notifyChange, notify observers " + observers.size());
 		for (int i = 0; i < observers.size(); i++) {
 			(observers.get(i)).dataHaveChanged(this);
 		}
-
 	}
 }

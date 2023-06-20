@@ -55,7 +55,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	private TableProvider tableProvider;
 	private TableUpdateItemInterface itemFactory;
-	private int saveUpdatesSize;
 
 	private final ChainedTableModelFilter chainedFilter;
 	private TableModelFilter workingFilter;
@@ -370,11 +369,6 @@ public class GenTableModel extends AbstractTableModel {
 	private void clearUpdates() {
 		addedRows.clear();
 		updatedRows.clear();
-		if (updates == null) {
-			saveUpdatesSize = 0;
-		} else {
-			saveUpdatesSize = updates.size();
-		}
 	}
 
 	/**
@@ -720,8 +714,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		Logging.debug(this, "deleted row " + oldValues);
 	}
-
-	// interface TableModelFunctions
 
 	@Override
 	public String toString() {

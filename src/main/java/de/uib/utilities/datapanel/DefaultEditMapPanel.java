@@ -242,10 +242,6 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setReadOnlyEntries(keys);
 	}
 
-	public void setShowOnlyValues(List<Object> showOnly) {
-		mapTableModel.setShowOnlyValues(showOnly);
-	}
-
 	public void setEditDenier(Function<String, Boolean> disallow) {
 		mapTableModel.setEditDenier(disallow);
 	}

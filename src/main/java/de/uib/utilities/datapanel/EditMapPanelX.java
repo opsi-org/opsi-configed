@@ -470,8 +470,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			((SensitiveCellEditor) theCellEditor).setModelProducer(modelProducer);
 
-			((SensitiveCellEditor) theCellEditor).setForbiddenValues(mapTableModel.getShowOnlyValues());
-
 			((SensitiveCellEditor) theCellEditor).reInit();
 		}
 
