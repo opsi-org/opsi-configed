@@ -10,9 +10,7 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
@@ -32,7 +30,6 @@ import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
 
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
-	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
 
 	private JTextField field;
 
@@ -57,21 +54,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		// true has undesired effects in the interaction of the CellEditor and the FEditList
 		listeditor.setModal(false);
 		listeditor.init();
-	}
-
-	public static synchronized SensitiveCellEditor getInstance(Object key) {
-
-		// Zu key gehörige Instanz aus Map holen
-		return instances.computeIfAbsent(key, (Object arg) -> {
-
-			SensitiveCellEditor newInstance = new SensitiveCellEditor();
-
-			newInstance.myKey = "" + key;
-			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
-					+ " ; size of instances " + instances.size());
-
-			return newInstance;
-		});
 	}
 
 	public void reInit() {
