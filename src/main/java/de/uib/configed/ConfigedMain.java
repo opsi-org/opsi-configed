@@ -4644,7 +4644,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void reloadHosts() {
-		mainFrame.setCursor(Globals.WAIT_CURSOR);;
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
 		persistenceController.hostConfigsRequestRefresh();
 		persistenceController.hostGroupsRequestRefresh();

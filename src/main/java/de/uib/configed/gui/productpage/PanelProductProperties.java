@@ -134,9 +134,9 @@ public class PanelProductProperties extends JSplitPane {
 
 			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
 				infoPane.clearEditing();
-				infoPane.setInactive();;
+				infoPane.setInactive();
 			} else {
-				infoPane.setActive();;
+				infoPane.setActive();
 			}
 
 			// otherweise selectedRowChanged() works
