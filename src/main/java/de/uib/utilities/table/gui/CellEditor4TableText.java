@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -58,14 +57,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	public CellEditor4TableText() {
 		this(null, null);
-	}
-
-	// interface
-	// ActionListener
-	public void actionPerformed(EventObject e) {
-		if (e.getSource() == editorContent) {
-			fireEditingStopped();
-		}
 	}
 
 	// interface

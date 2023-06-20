@@ -30,7 +30,6 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 		cc.setRenderer(new ColoredListCellRenderer());
-
 	}
 
 	@Override

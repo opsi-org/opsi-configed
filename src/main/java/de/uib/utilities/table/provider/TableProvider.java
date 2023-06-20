@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface TableProvider {
 
-	void setTableSource(TableSource source);
-
 	List<String> getColumnNames();
 
 	List<String> getClassNames();
