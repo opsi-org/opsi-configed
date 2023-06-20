@@ -28,7 +28,7 @@ public class SavedStates {
 		try (FileInputStream in = new FileInputStream(propertiesFile)) {
 			properties.load(in);
 		} catch (FileNotFoundException e) {
-			Logging.error(this, "saved states file not found", e);
+			Logging.warning(this, "saved states file not found", e);
 		}
 	}
 
