@@ -38,7 +38,6 @@ public class ControllerHWinfoMultiClients {
 
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
-	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;

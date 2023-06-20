@@ -198,7 +198,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	private void addMetaData(Map<String, String> metaData) {
+	private static void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
