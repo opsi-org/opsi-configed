@@ -202,10 +202,6 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setWrite();
 	}
 
-	public MapTableModel getTableModel() {
-		return mapTableModel;
-	}
-
 	public List<String> getNames() {
 		return mapTableModel.getKeys();
 	}

@@ -18,10 +18,6 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 		super();
 	}
 
-	public StringValuedRelationElement(StringValuedRelationElement rowmap) {
-		super(rowmap);
-	}
-
 	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
 		this();
 

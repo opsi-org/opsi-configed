@@ -64,7 +64,6 @@ public class MapTableModel extends AbstractTableModel {
 
 	public MapTableModel() {
 		observers = new ArrayList<>();
-
 	}
 
 	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
@@ -75,10 +74,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
-	}
-
-	public Map<String, ListCellOptions> getOptionsMap() {
-		return optionsMap;
 	}
 
 	public void setMap(Map<String, Object> data) {
@@ -151,10 +146,6 @@ public class MapTableModel extends AbstractTableModel {
 		setNew();
 		storeData = data;
 		resetModifiedKey();
-	}
-
-	public Collection<Map<String, Object>> getStoreData() {
-		return storeData;
 	}
 
 	/**

@@ -37,9 +37,4 @@ public class RelationElement<S, O> extends HashMap<S, O> {
 			return super.get(key);
 		}
 	}
-
-	public List<S> getAllowedAttributes() {
-		return allowedAttributes;
-	}
-
 }

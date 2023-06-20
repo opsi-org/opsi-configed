@@ -12,6 +12,7 @@ import java.util.Map;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.configed.type.HostGroupRelation;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
@@ -113,7 +114,7 @@ public class SavedSearchQuery {
 			Main.endApp(5);
 		}
 
-		List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
+		List<String> groupAttributes = new HostGroupRelation().getAttributes();
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 

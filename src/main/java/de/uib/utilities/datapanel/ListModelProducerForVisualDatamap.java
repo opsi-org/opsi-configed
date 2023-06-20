@@ -145,5 +145,4 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 		return originalTypes.get(key);
 	}
-
 }

@@ -90,7 +90,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 		return m;
 	}
 
-	@Override
 	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
@@ -102,5 +101,4 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 		return rowmap;
 	}
-
 }
