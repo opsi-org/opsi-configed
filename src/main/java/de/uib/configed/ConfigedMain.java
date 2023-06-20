@@ -133,8 +133,6 @@ import javafx.embed.swing.JFXPanel;
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
-	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
-
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -3199,13 +3197,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		try {
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"));
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			} else if (getSelectedClients().length > 1) {
-				if (MULTI_HW_PANEL_ACTIVATED) {
-					mainFrame.setHardwareInfoNotPossible(
-							Configed.getResourceValue("MainFrame.hardwareInfoMultiClientsNotAvailable"));
-				} else {
+				if (persistenceController.canCallMySQL()) {
 					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				} else {
+					mainFrame.setHardwareInfoNotPossible(
+							Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 				}
 			} else {
 				checkHwInfo();
