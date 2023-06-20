@@ -271,8 +271,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 
-	protected Map<String, List<Object>> wanConfiguration;
-	protected Map<String, List<Object>> notWanConfiguration;
+	private Map<String, List<Object>> wanConfiguration;
+	private Map<String, List<Object>> notWanConfiguration;
 
 	/**
 	 * This creation method constructs a new Controller instance and lets a
@@ -368,7 +368,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private List<String> hostColumnNames;
 	private List<String> client2HwRowsColumnNames;
 	private List<String> client2HwRowsJavaclassNames;
-	protected List<String> hwInfoClassNames;
+	private List<String> hwInfoClassNames;
 
 	private Map<String, Map<String, String>> productGroups;
 
@@ -407,8 +407,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private boolean withLicenceManagement;
 	private boolean withLocalImaging;
 
-	// TODO make private again
-	protected boolean withMySQL;
+	private boolean withMySQL;
 	private boolean withUEFI;
 	private boolean withWAN;
 
@@ -441,7 +440,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private List<Map<String, Object>> healthData;
 	private Map<String, Object> diagnosticData;
 
-	protected DataStubNOM dataStub;
+	private DataStubNOM dataStub;
 
 	private Boolean acceptMySQL;
 
@@ -4354,7 +4353,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// lazy initializing
-	// TODO why do I need this?
 	public List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {
 			List<Object> methodsList = exec.getListResult(new OpsiMethodCall("backend_getInterface", new Object[] {}));
@@ -4642,7 +4640,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return savedSearches;
 	}
 
-	protected boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
+	private boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
 		Logging.info(this, "setHostBooleanConfigValue " + hostName + " configId " + configId + " val " + val);
 
 		List<Object> values = new ArrayList<>();

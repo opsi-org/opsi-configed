@@ -64,9 +64,9 @@ public class DataStubNOM {
 	static {
 		linuxSubversionMarkers.add("lin:");
 	}
-	protected static Integer classCounter = 0;
+	private static Integer classCounter = 0;
 
-	protected OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiserviceNOMPersistenceController persistenceController;
 
 	private Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
@@ -97,17 +97,17 @@ public class DataStubNOM {
 	private NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
 
 	// List of idents of software
-	protected List<String> softwareList;
+	private List<String> softwareList;
 
 	// the same with a numbering index
 	private NavigableMap<String, Integer> software2Number;
 
-	protected Map<String, List<SWAuditClientEntry>> client2software;
-	protected Map<String, Set<String>> softwareIdent2clients;
+	private Map<String, List<SWAuditClientEntry>> client2software;
+	private Map<String, Set<String>> softwareIdent2clients;
 
 	private AuditSoftwareXLicencePool auditSoftwareXLicencePool;
 
-	protected Map<String, Map<String, Object>> hostConfigs;
+	private Map<String, Map<String, Object>> hostConfigs;
 
 	private NavigableMap<String, LicencepoolEntry> licencepools;
 
@@ -124,7 +124,7 @@ public class DataStubNOM {
 
 	private LicencePoolXOpsiProduct licencePoolXOpsiProduct;
 
-	protected Map<String, Map<String, Object>> client2HwRows;
+	private Map<String, Map<String, Object>> client2HwRows;
 
 	private List<Map<String, Object>> healthData;
 
@@ -543,7 +543,7 @@ public class DataStubNOM {
 		}
 	}
 
-	protected void retrieveProductPropertyStates() {
+	private void retrieveProductPropertyStates() {
 		produceProductPropertyStates((Collection<String>) null, hostsWithProductProperties);
 	}
 
@@ -559,7 +559,7 @@ public class DataStubNOM {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
+	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			Set<String> hosts) {
 		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 		List<String> newClients = null;
@@ -664,7 +664,7 @@ public class DataStubNOM {
 		return name2SWIdents;
 	}
 
-	protected void retrieveInstalledSoftwareInformation() {
+	private void retrieveInstalledSoftwareInformation() {
 		if (installedSoftwareInformation == null || name2SWIdents == null) {
 
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
@@ -828,7 +828,7 @@ public class DataStubNOM {
 		retrieveSoftwareAuditOnClients(clients);
 	}
 
-	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
+	private void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
@@ -958,7 +958,7 @@ public class DataStubNOM {
 		return hostConfigs;
 	}
 
-	protected void retrieveHostConfigs() {
+	private void retrieveHostConfigs() {
 		if (hostConfigs != null) {
 			return;
 		}
@@ -1225,7 +1225,7 @@ public class DataStubNOM {
 		client2HwRows = null;
 	}
 
-	protected void retrieveClient2HwRows(String[] hosts) {
+	private void retrieveClient2HwRows(String[] hosts) {
 		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
 
 		if (client2HwRows != null) {
