@@ -2998,8 +2998,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 				Logging.info(this,
 						"saveHwColumnConfig, old configOption for key" + " " + hwAuditDeviceClass.getHostConfigKey()
-								+ " " + configOptions.get(hwAuditDeviceClass.getHostConfigKey()) + " "
-								+ configOptions.get(hwAuditDeviceClass.getHostConfigKey()).getClass());
+								+ " " + configOptions.get(hwAuditDeviceClass.getHostConfigKey()));
 
 				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
@@ -3042,8 +3041,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				Logging.info(this,
 						"saveHwColumnConfig, we had configOption for key" + " "
 								+ hwAuditDeviceClass.getHwItemConfigKey() + " "
-								+ configOptions.get(hwAuditDeviceClass.getHwItemConfigKey()) + " "
-								+ configOptions.get(hwAuditDeviceClass.getHwItemConfigKey()).getClass());
+								+ configOptions.get(hwAuditDeviceClass.getHwItemConfigKey()));
 
 				ConfigOption configOption = new ConfigOption(configItem);
 
