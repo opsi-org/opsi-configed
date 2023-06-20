@@ -94,6 +94,27 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	public final void init() {
 		updateCollection = new ArrayList<TableEditItem>();
 
+		initPanels();
+
+		// combo clients
+		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
+			@Override
+			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
+				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
+						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
+						.keySet());
+
+				choicesAllHosts.set(0, "");
+
+				Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
+
+				return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
+			}
+		});
+
+	}
+
+	private void initPanels() {
 		List<String> columnNames;
 		List<String> classNames;
 
@@ -133,6 +154,29 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText());
 
 		// updates
+		setPanelUsageUpdateController();
+
+		// --- panelLicencepools
+		columnNames = new ArrayList<>();
+		columnNames.add("licensePoolId");
+		columnNames.add("description");
+		classNames = new ArrayList<>();
+		classNames.add("java.lang.String");
+		classNames.add("java.lang.String");
+		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
+				columnNames, classNames, 0);
+		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
+				thePanel.panelLicencepools, updateCollection);
+		updateItemFactoryLicencepools.setSource(modelLicencepools);
+
+		tableModels.add(modelLicencepools);
+		tablePanes.add(thePanel.panelLicencepools);
+
+		modelLicencepools.reset();
+		thePanel.panelLicencepools.setTableModel(modelLicencepools);
+	}
+
+	private void setPanelUsageUpdateController() {
 		thePanel.panelUsage.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					@Override
@@ -155,41 +199,5 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));
 					}
 				}, updateCollection));
-
-		// --- panelLicencepools
-		columnNames = new ArrayList<>();
-		columnNames.add("licensePoolId");
-		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
-		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
-				thePanel.panelLicencepools, updateCollection);
-		updateItemFactoryLicencepools.setSource(modelLicencepools);
-
-		tableModels.add(modelLicencepools);
-		tablePanes.add(thePanel.panelLicencepools);
-
-		modelLicencepools.reset();
-		thePanel.panelLicencepools.setTableModel(modelLicencepools);
-
-		// combo clients
-		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
-			@Override
-			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
-						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
-						.keySet());
-
-				choicesAllHosts.set(0, "");
-
-				Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
-
-				return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
-			}
-		});
-
 	}
 }

@@ -3916,9 +3916,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
 					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
-			properties.put((String) map.get("propertyId"), new JSONArray((List) map.get("values")).toList());
+			properties.put((String) map.get("propertyId"), new JSONArray((List<?>) map.get("values")).toList());
 			properties.getRetrieved().put((String) map.get("propertyId"),
-					new JSONArray((List) map.get("values")).toList());
+					new JSONArray((List<?>) map.get("values")).toList());
 
 			Logging.debug(this,
 					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
@@ -4921,7 +4921,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 					configForUpdate.put("ident", state.get("configId"));
 					configForUpdate.put("type", configOption.getRetrieved().get("type"));
-					configForUpdate.put("defaultValues", AbstractExecutioner.jsonArray((List) state.get("values")));
+					configForUpdate.put("defaultValues", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
 
 					List<Object> possibleValues = (List<Object>) configOption.get("possibleValues");
 					for (Object item : (List<?>) state.get("values")) {

@@ -86,6 +86,15 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	public final void init() {
 		updateCollection = new ArrayList<TableEditItem>();
 
+		initPanels();
+		initPopupMenu();
+		// special treatment of columns
+		initTreatmentOfColumns();
+		// updates
+		setPanelLicenceContractsUpdateController();
+	}
+
+	private void initPanels() {
 		List<String> columnNames;
 		List<String> classNames;
 
@@ -112,22 +121,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencekeys.setEditableColumns(new int[] { 2 });
 		thePanel.panelKeys.setEmphasizedColumns(new int[] { 2 });
 
-		thePanel.panelKeys.setUpdateController(
-				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
-					@Override
-					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.editRelationSoftwareL2LPool(
-								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
-								(String) rowmap.get("licenseKey"));
-					}
-
-					@Override
-					public boolean sendDelete(Map<String, Object> rowmap) {
-						modelLicencekeys.requestReload();
-						return persistenceController.deleteRelationSoftwareL2LPool(
-								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
-					}
-				}, updateCollection));
+		setPanelKeysUpdateController();
 
 		// panelLicencepools
 		columnNames = new ArrayList<>();
@@ -177,6 +171,9 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 		thePanel.panelLicencecontracts.setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
 
+	}
+
+	private void initPopupMenu() {
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
@@ -184,7 +181,9 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 		thePanel.panelLicencecontracts.addPopupItem(menuItemAddContract);
 
-		// special treatment of columns
+	}
+
+	private void initTreatmentOfColumns() {
 		TableColumn col;
 
 		col = thePanel.panelLicencecontracts.getColumnModel().getColumn(2);
@@ -227,8 +226,28 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);
+	}
 
-		// updates
+	private void setPanelKeysUpdateController() {
+		thePanel.panelKeys.setUpdateController(
+				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
+					public String sendUpdate(Map<String, Object> rowmap) {
+						return persistenceController.editRelationSoftwareL2LPool(
+								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
+								(String) rowmap.get("licenseKey"));
+					}
+
+					@Override
+					public boolean sendDelete(Map<String, Object> rowmap) {
+						modelLicencekeys.requestReload();
+						return persistenceController.deleteRelationSoftwareL2LPool(
+								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
+					}
+				}, updateCollection));
+	}
+
+	private void setPanelLicenceContractsUpdateController() {
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
 					@Override
@@ -245,7 +264,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 						return persistenceController.deleteLicenceContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));
-
 	}
 
 	private void addContract() {

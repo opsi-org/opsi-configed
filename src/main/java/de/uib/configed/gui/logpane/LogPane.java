@@ -172,7 +172,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void initComponents(String defaultText) {
-		JScrollPane scrollpane = new JScrollPane();
 		jTextPane = new JTextPane() {
 			@Override
 			public Dimension getPreferredSize() {
@@ -203,6 +202,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		jTextPane.addKeyListener(this);
 
+		JScrollPane scrollpane = new JScrollPane();
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpane.getVerticalScrollBar().setUnitIncrement(20);
 		scrollpane.getViewport().add(jTextPane);
