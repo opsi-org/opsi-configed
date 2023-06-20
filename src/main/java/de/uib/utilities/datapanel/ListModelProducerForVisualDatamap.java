@@ -31,7 +31,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	private Map<Integer, ListModel> listmodels = new HashMap<>();
 
 	private Map<String, ListCellOptions> optionsMap;
-	private Map<String, List> currentData;
+	private Map<String, List<O>> currentData;
 	private Map<String, Class<?>> originalTypes;
 	private JTable table;
 
@@ -89,7 +89,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		Logging.info(this, "getListModel key " + key + " options  " + options);
 
 		DefaultListModel<Object> model = new DefaultListModel<>();
-		Iterator<Object> iter = values.iterator();
+		Iterator<? extends Object> iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
@@ -109,7 +109,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public List getSelectedValues(int row, int column) {
+	public List<O> getSelectedValues(int row, int column) {
 
 		String key = (String) table.getValueAt(row, 0);
 		return currentData.get(key);

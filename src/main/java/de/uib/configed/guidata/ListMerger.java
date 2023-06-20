@@ -12,7 +12,7 @@ import java.util.List;
 
 import de.uib.configed.Globals;
 
-public class ListMerger extends ArrayList {
+public class ListMerger extends ArrayList<Object> {
 
 	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
@@ -25,9 +25,9 @@ public class ListMerger extends ArrayList {
 
 	// building the merger:
 
-	private List listValue;
+	private List<?> listValue;
 
-	public ListMerger(List list) {
+	public ListMerger(List<?> list) {
 		super(list);
 		listValue = list;
 		this.havingCommonValue = true;
@@ -37,7 +37,7 @@ public class ListMerger extends ArrayList {
 		havingCommonValue = false;
 	}
 
-	private static boolean equals(List list1, List list2) {
+	private static boolean equals(List<?> list1, List<?> list2) {
 
 		if (list1 == null && list2 == null) {
 			return true;
@@ -50,7 +50,7 @@ public class ListMerger extends ArrayList {
 		return list1.containsAll(list2) && list2.containsAll(list1);
 	}
 
-	public ListMerger merge(List listToMergeIn) {
+	public ListMerger merge(List<?> listToMergeIn) {
 		if (havingCommonValue && !equals(listValue, listToMergeIn)) {
 			havingCommonValue = false;
 
@@ -68,11 +68,13 @@ public class ListMerger extends ArrayList {
 		return havingCommonValue;
 	}
 
-	public List getValue() {
+	@SuppressWarnings("java:S1452")
+	public List<?> getValue() {
 		return listValue;
 	}
 
-	public static List getMergedList(List li) {
+	@SuppressWarnings("java:S1452")
+	public static List<?> getMergedList(List<?> li) {
 		if (li instanceof ListMerger) {
 			return ((ListMerger) li).getValue();
 		} else {

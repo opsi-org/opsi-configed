@@ -222,7 +222,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		for (String key : keys) {
 			String property = "";
 
-			List listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
+			List<?> listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
 			if (!listelem.isEmpty()) {
 				property = listelem.get(0).toString();
 			}
