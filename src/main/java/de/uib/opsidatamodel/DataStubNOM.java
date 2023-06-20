@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -41,6 +42,8 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
 import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -61,9 +64,9 @@ public class DataStubNOM {
 	static {
 		linuxSubversionMarkers.add("lin:");
 	}
-	private static Integer classCounter = 0;
+	protected static Integer classCounter = 0;
 
-	private OpsiserviceNOMPersistenceController persistenceController;
+	protected OpsiserviceNOMPersistenceController persistenceController;
 
 	private Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
@@ -94,17 +97,17 @@ public class DataStubNOM {
 	private NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
 
 	// List of idents of software
-	private List<String> softwareList;
+	protected List<String> softwareList;
 
 	// the same with a numbering index
 	private NavigableMap<String, Integer> software2Number;
 
-	private Map<String, List<SWAuditClientEntry>> client2software;
-	private Map<String, Set<String>> softwareIdent2clients;
+	protected Map<String, List<SWAuditClientEntry>> client2software;
+	protected Map<String, Set<String>> softwareIdent2clients;
 
 	private AuditSoftwareXLicencePool auditSoftwareXLicencePool;
 
-	private Map<String, Map<String, Object>> hostConfigs;
+	protected Map<String, Map<String, Object>> hostConfigs;
 
 	private NavigableMap<String, LicencepoolEntry> licencepools;
 
@@ -121,7 +124,7 @@ public class DataStubNOM {
 
 	private LicencePoolXOpsiProduct licencePoolXOpsiProduct;
 
-	private Map<String, Map<String, Object>> client2HwRows;
+	protected Map<String, Map<String, Object>> client2HwRows;
 
 	private List<Map<String, Object>> healthData;
 
@@ -149,7 +152,25 @@ public class DataStubNOM {
 
 	// can only return true if overriden in a subclass
 	public boolean canCallMySQL() {
-		return false;
+
+		// we cannot call MySQL if version before 4.3
+		if (JSONthroughHTTPS.isOpsi43()) {
+			return false;
+		}
+
+		boolean result = false;
+
+		// test if we can access any table
+
+		String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME + " LIMIT 1 ";
+
+		Logging.info(this, "test, query " + query);
+
+		result = persistenceController.exec.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
+
+		Logging.info(this, "test result " + result);
+
+		return result;
 	}
 
 	public void product2versionInfoRequestRefresh() {
@@ -522,7 +543,7 @@ public class DataStubNOM {
 		}
 	}
 
-	private void retrieveProductPropertyStates() {
+	protected void retrieveProductPropertyStates() {
 		produceProductPropertyStates((Collection<String>) null, hostsWithProductProperties);
 	}
 
@@ -538,7 +559,7 @@ public class DataStubNOM {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
+	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			Set<String> hosts) {
 		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 		List<String> newClients = null;
@@ -643,7 +664,7 @@ public class DataStubNOM {
 		return name2SWIdents;
 	}
 
-	private void retrieveInstalledSoftwareInformation() {
+	protected void retrieveInstalledSoftwareInformation() {
 		if (installedSoftwareInformation == null || name2SWIdents == null) {
 
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
@@ -807,7 +828,7 @@ public class DataStubNOM {
 		retrieveSoftwareAuditOnClients(clients);
 	}
 
-	private void retrieveSoftwareAuditOnClients(final List<String> clients) {
+	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
@@ -937,7 +958,7 @@ public class DataStubNOM {
 		return hostConfigs;
 	}
 
-	private void retrieveHostConfigs() {
+	protected void retrieveHostConfigs() {
 		if (hostConfigs != null) {
 			return;
 		}
@@ -1204,14 +1225,257 @@ public class DataStubNOM {
 		client2HwRows = null;
 	}
 
-	private void retrieveClient2HwRows() {
-		if (client2HwRows == null) {
-			client2HwRows = new HashMap<>();
+	protected void retrieveClient2HwRows(String[] hosts) {
+		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
+
+		if (client2HwRows != null) {
+			Logging.info(this, "retrieveClient2HwRows client2HwRows.size() " + client2HwRows.size());
+			return;
 		}
+
+		client2HwRows = new HashMap<>();
+
+		// set default rows
+		for (String host : persistenceController.getHostInfoCollections().getOpsiHostNames()) {
+			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
+			nearlyEmptyHwRow.put("HOST.hostId", host);
+
+			String hostDescription = "";
+			String macAddress = "";
+			if (persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host) != null) {
+				hostDescription = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host)
+						.getDescription();
+				macAddress = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host)
+						.getMacAddress();
+			}
+			nearlyEmptyHwRow.put("HOST.description", hostDescription);
+			nearlyEmptyHwRow.put("HOST.hardwareAdress", macAddress);
+
+			client2HwRows.put(host, nearlyEmptyHwRow);
+		}
+
+		TimeCheck timeCheck = new TimeCheck(this, " retrieveClient2HwRows all ");
+		timeCheck.start();
+
+		for (String hwClass : persistenceController.getHwInfoClassNames()) {
+			Logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
+
+			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
+
+			if (!client2ClassInfos.isEmpty()) {
+				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
+					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
+					// find max lastseen time as last scan time
+
+					String lastseen1 = (String) allInfosForAClient
+							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen2 = (String) client2ClassInfo.getValue()
+							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					if (lastseen1 != null && lastseen2 != null) {
+						client2ClassInfo.getValue().put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
+								maxTime(lastseen1, lastseen2));
+					}
+
+					allInfosForAClient.putAll(client2ClassInfo.getValue());
+				}
+			}
+		}
+
+		Logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
+
+		timeCheck.stop();
+		Logging.info(this, "retrieveClient2HwRows finished  ");
+		persistenceController.notifyDataRefreshedObservers("client2HwRows");
+
 	}
 
-	public Map<String, Map<String, Object>> getClient2HwRows() {
-		retrieveClient2HwRows();
+	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
+		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
+
+		if (client2HwRows == null) {
+			return new HashMap<>();
+		}
+
+		// z.B. hwClass is DISK_PARTITION
+
+		List<String> specificColumns = new ArrayList<>();
+		specificColumns.add("HOST.hostId");
+
+		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
+		StringBuilder cols = new StringBuilder("");
+
+		String configTable = OpsiserviceNOMPersistenceController.HW_INFO_CONFIG + hwClass;
+
+		String lastseenCol = configTable + "." + "lastseen";
+		specificColumns.add(lastseenCol);
+		buf.append(lastseenCol);
+		buf.append(", ");
+
+		boolean foundAnEntry = false;
+
+		// build and collect database columnnames
+		for (String hwInfoCol : persistenceController.getClient2HwRowsColumnNames()) {
+			if (hwInfoCol.startsWith("HOST.")
+					|| hwInfoCol.equals(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
+				continue;
+			}
+
+			Logging.info(this,
+					"hwInfoCol " + hwInfoCol + " look for " + OpsiserviceNOMPersistenceController.HW_INFO_DEVICE
+							+ " as well as " + OpsiserviceNOMPersistenceController.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_DEVICE.length());
+
+			boolean colFound = false;
+			// check if colname is from a CONFIG or a DEVICE table
+			if (hwInfoCol.startsWith(hwClass, part0.length())) {
+				colFound = true;
+				// we found a DEVICE column name
+			} else {
+				part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_CONFIG.length());
+
+				if (hwInfoCol.startsWith(hwClass, part0.length())) {
+					colFound = true;
+					// we found a CONFIG column name
+				}
+
+			}
+
+			if (colFound) {
+				cols.append(" ");
+				cols.append(hwInfoCol);
+				cols.append(",");
+				specificColumns.add(hwInfoCol);
+				foundAnEntry = true;
+			}
+		}
+
+		if (!foundAnEntry) {
+			Logging.info(this, "no columns found for hwClass " + hwClass);
+			return new HashMap<>();
+		}
+
+		String deviceTable = OpsiserviceNOMPersistenceController.HW_INFO_DEVICE + hwClass;
+
+		String colsS = cols.toString();
+		buf.append(colsS.substring(0, colsS.length() - 1));
+
+		buf.append(" \nfrom HOST ");
+
+		buf.append(", ");
+		buf.append(deviceTable);
+		buf.append(", ");
+		buf.append(configTable);
+
+		buf.append("\n where ");
+
+		buf.append("HOST.hostId");
+		buf.append(" = ");
+		buf.append(configTable);
+		buf.append(".hostId");
+
+		buf.append("\nAND ");
+		buf.append(configTable);
+		buf.append(".hardware_id");
+		buf.append(" = ");
+		buf.append(deviceTable);
+		buf.append(".hardware_id");
+
+		buf.append("\nAND ");
+		buf.append(configTable);
+		buf.append(".state = 1 ");
+
+		String query = buf.toString();
+
+		Logging.info(this, "retrieveClient2HwRows, query " + query);
+
+		List<List<String>> rows = persistenceController.exec
+				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
+
+				);
+		Logging.info(this, "retrieveClient2HwRows, finished a request");
+		Logging.info(this, "retrieveClient2HwRows, got rows for class " + hwClass);
+		Logging.info(this, "retrieveClient2HwRows, got rows,  size  " + rows.size());
+
+		// shrink to one line per client
+
+		Map<String, Map<String, Object>> clientInfo = new HashMap<>();
+
+		for (List<String> row : rows) {
+			Map<String, Object> rowMap = clientInfo.get(row.get(0));
+			if (rowMap == null) {
+				rowMap = new HashMap<>();
+				clientInfo.put(row.get(0), rowMap);
+			}
+
+			for (int i = 1; i < specificColumns.size(); i++) {
+				Object value = rowMap.get(specificColumns.get(i));
+				String valInRow = row.get(i);
+				if (valInRow == null || valInRow.equals("null")) {
+					valInRow = "";
+				}
+
+				if (value == null) {
+					value = valInRow;
+				} else {
+					value = value + "|" + valInRow;
+				}
+
+				if (specificColumns.get(i).equals(lastseenCol)) {
+					String timeS = maxTime((String) value, row.get(i));
+					rowMap.put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
+				} else {
+					rowMap.put(specificColumns.get(i), value);
+				}
+
+			}
+
+		}
+
+		Logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
+		return clientInfo;
+
+		/*
+		 * example
+		 * SELECT HOST.hostId,
+		 * HARDWARE_DEVICE_DISK_PARTITION.name,
+		 * HARDWARE_DEVICE_DISK_PARTITION.description
+		 * 
+		 * from HOST, HARDWARE_DEVICE_DISK_PARTITION, HARDWARE_CONFIG_DISK_PARTITION
+		 * where
+		 * HOST.hostId = "vbrupertwin7-64.uib.local" and
+		 * HARDWARE_DEVICE_DISK_PARTITION.hardware_id =
+		 * HARDWARE_CONFIG_DISK_PARTITION.hardware_id
+		 * 
+		 * and HOST.hostId = HARDWARE_CONFIG_DISK_PARTITION.hostId
+		 * 
+		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1 
+		 * 
+		 */
+
+	}
+
+	private static String maxTime(String time0, String time1) {
+		if (time0 == null && time1 == null) {
+			return null;
+		}
+
+		if (time0 == null || time0.equals("")) {
+			return time1;
+		}
+
+		if (time1 == null || time1.equals("")) {
+			return time0;
+		}
+
+		if (time0.compareTo(time1) < 0) {
+			return time1;
+		}
+
+		return time0;
+	}
+
+	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
+		retrieveClient2HwRows(hosts);
 		return client2HwRows;
 	}
 

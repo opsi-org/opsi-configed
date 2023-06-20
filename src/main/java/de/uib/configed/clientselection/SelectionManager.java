@@ -181,7 +181,7 @@ public class SelectionManager {
 
 		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
-		boolean withMySQL = controller.isWithMySQL()
+		boolean withMySQL = controller.canCallMySQL()
 				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 

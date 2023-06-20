@@ -116,6 +116,7 @@ public class ControllerHWinfoMultiClients {
 
 		List<String> columnNames = persistenceController.getClient2HwRowsColumnNames();
 		List<String> classNames = persistenceController.getClient2HwRowsJavaclassNames();
+
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 

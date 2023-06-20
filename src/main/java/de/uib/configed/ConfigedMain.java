@@ -3201,7 +3201,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"));
 			} else if (getSelectedClients().length > 1) {
-				if (!MULTI_HW_PANEL_ACTIVATED) {
+				if (MULTI_HW_PANEL_ACTIVATED) {
 					mainFrame.setHardwareInfoNotPossible(
 							Configed.getResourceValue("MainFrame.hardwareInfoMultiClientsNotAvailable"));
 				} else {

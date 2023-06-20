@@ -40,6 +40,8 @@ public final class PersistenceControllerFactory {
 
 		OpsiserviceNOMPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user,
 				password);
+		Logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
+
 		Logging.info("a PersistenceController initiated, got null? " + (persistControl == null));
 
 		boolean connected = persistControl.makeConnection();
@@ -50,6 +52,7 @@ public final class PersistenceControllerFactory {
 
 		try {
 			if (connected) {
+
 				persistControl.checkMultiFactorAuthentication();
 				Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
 				persistControl.checkConfiguration();

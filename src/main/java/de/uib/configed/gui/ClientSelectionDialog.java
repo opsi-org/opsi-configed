@@ -128,7 +128,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				FRAME_WIDTH, FRAME_HEIGHT);
 
 		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		this.withMySQL = controller.isWithMySQL()
+		this.withMySQL = controller.canCallMySQL()
 				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 

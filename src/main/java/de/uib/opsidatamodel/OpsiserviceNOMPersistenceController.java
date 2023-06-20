@@ -368,6 +368,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private List<String> hostColumnNames;
 	private List<String> client2HwRowsColumnNames;
 	private List<String> client2HwRowsJavaclassNames;
+	protected List<String> hwInfoClassNames;
 
 	private Map<String, Map<String, String>> productGroups;
 
@@ -406,7 +407,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private boolean withLicenceManagement;
 	private boolean withLocalImaging;
 
-	private boolean withMySQL;
+	// TODO make private again
+	protected boolean withMySQL;
 	private boolean withUEFI;
 	private boolean withWAN;
 
@@ -439,7 +441,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private List<Map<String, Object>> healthData;
 	private Map<String, Object> diagnosticData;
 
-	private DataStubNOM dataStub;
+	protected DataStubNOM dataStub;
 
 	private Boolean acceptMySQL;
 
@@ -2463,6 +2465,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		hwAuditConf.clear();
 		hwAuditDeviceClasses = null;
 		client2HwRowsColumnNames = null;
+		hwInfoClassNames = null;
 
 		if (opsiHwClassNames != null) {
 			opsiHwClassNames.clear();
@@ -2837,7 +2840,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
 				+ (client2HwRowsColumnNames == null));
-		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null) {
+		if (client2HwRowsColumnNames == null || hwInfoClassNames == null || client2HwRowsJavaclassNames == null) {
 			hostColumnNames = new ArrayList<>();
 
 			// todo make static variables
@@ -2879,7 +2882,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					hwInfoClasses.add(className);
 				}
 			}
+
+			hwInfoClassNames = new ArrayList<>(hwInfoClasses);
+
+			Logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
+
 		}
+	}
+
+	public List<String> getHwInfoClassNames() {
+		retrieveClient2HwRowsColumnNames();
+		Logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
+		return hwInfoClassNames;
 	}
 
 	public void client2HwRowsRequestRefresh() {
@@ -2889,7 +2903,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
-		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows();
+		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows(hosts);
 
 		for (String host : hosts) {
 			Logging.info(this, "getClient2HwRows host " + host);
@@ -7531,7 +7545,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
 		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
 
-		withMySQL = opsiModules.get("mysql_backend") != null && opsiModules.get("mysql_backend") && canCallMySQL();
+		withMySQL = canCallMySQL();
 		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
 		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
 		withUserRoles = opsiModules.get("userroles") != null && opsiModules.get("userroles");
@@ -7795,7 +7809,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
 		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
 
-		withMySQL = opsiModules.get("mysql_backend") != null && opsiModules.get("mysql_backend");
+		withMySQL = canCallMySQL();
 		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
 		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
 		withUserRoles = opsiModules.get("userroles") != null && opsiModules.get("userroles");
@@ -8061,7 +8075,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				&& opsiModules.get("license_management");
 		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
 
-		withMySQL = (opsiModules.get("mysql_backend") != null) && opsiModules.get("mysql_backend");
+		withMySQL = canCallMySQL();
 		withUEFI = (opsiModules.get("uefi") != null) && opsiModules.get("uefi");
 		withWAN = (opsiModules.get("vpn") != null) && opsiModules.get("vpn");
 		withUserRoles = (opsiModules.get("userroles") != null) && opsiModules.get("userroles");
@@ -8094,10 +8108,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public boolean isWithLocalImaging() {
 		retrieveOpsiModules();
 		return withLocalImaging;
-	}
-
-	public boolean isWithMySQL() {
-		return withMySQL;
 	}
 
 	public boolean isWithUEFI() {
