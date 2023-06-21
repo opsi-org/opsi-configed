@@ -28,9 +28,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
-	private Color uniformColor;
-	private Color uniformSelectedColor;
-
 	private Color selectedEven = Globals.defaultTableSelectedRowDark;
 	private Color selectedUneven = Globals.defaultTableSelectedRowBright;
 	private Color unselectedEven = Globals.defaultTableCellBgColor2;
@@ -61,18 +58,8 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 		JComponent jc = (JComponent) c;
 
-		if (uniformColor == null) {
-			CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
-					unselectedEven, unselectedUneven);
-		} else {
-			if (!Main.THEMES) {
-				if (isSelected) {
-					jc.setBackground(uniformSelectedColor);
-				} else {
-					jc.setBackground(uniformColor);
-				}
-			}
-		}
+		CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
+				unselectedEven, unselectedUneven);
 
 		if (!Main.FONT) {
 			jc.setFont(Globals.defaultFont);
@@ -83,13 +70,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		return jc;
-	}
-
-	public void setUniformColors(Color c, Color cSelected) {
-		// ignore the inherited alterna
-
-		uniformColor = c;
-		uniformSelectedColor = cSelected;
 	}
 
 	public void setAlternatingColors(Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,

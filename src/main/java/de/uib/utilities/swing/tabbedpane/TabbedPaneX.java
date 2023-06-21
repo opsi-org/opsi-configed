@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -69,30 +68,6 @@ public class TabbedPaneX extends JPanel {
 
 		add(jTabbedPaneMain, BorderLayout.CENTER);
 
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMain, with an icon and a tooltip
-	 */
-	public void addTab(LicencesTabStatus s, Component c, Icon icon, String tip) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), icon, c, tip);
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMain, with an icon
-	 */
-	public void addTab(LicencesTabStatus s, Component c, Icon icon) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), icon, c);
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMainprivate
-	 */
-	public void addTab(LicencesTabStatus s, Component c) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), c);
 	}
 
 	/**

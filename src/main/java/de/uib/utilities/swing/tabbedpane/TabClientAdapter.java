@@ -28,5 +28,4 @@ public class TabClientAdapter extends JPanel implements TabClient {
 		Logging.debug(this, "TabClientAdapter.mayLeave() " + result);
 		return result;
 	}
-
 }
