@@ -288,8 +288,7 @@ public final class SSHCommandFactory {
 				List<String> commandCommands = new LinkedList<>(
 						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
 						}));
-				commandCommands.add("echo ... ");
-				commandCommands.add("echo READY");
+
 				com.setCommands(commandCommands);
 			}
 			listKnownMenus.add(com.getMenuText());
