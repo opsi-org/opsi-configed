@@ -12,16 +12,11 @@ import java.awt.Component;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class XCellEditor extends DefaultCellEditor {
-
-	public XCellEditor(JTextField textfield) {
-		super(textfield);
-	}
 
 	public XCellEditor(JComboBox<?> combo) {
 		super(combo);

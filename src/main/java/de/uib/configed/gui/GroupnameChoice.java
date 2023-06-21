@@ -90,9 +90,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		panelExistingGroups.add(labelExistingGroups);
 		panelExistingGroups.add(new JLabel(""));
 
-		allpane.add(
-
-				new VerticalPositioner(new SurroundPanel(groupnameField), panelExistingGroups), BorderLayout.NORTH);
+		allpane.add(new VerticalPositioner(new SurroundPanel(groupnameField), panelExistingGroups), BorderLayout.NORTH);
 
 		scrollpane.getViewport().add(groups);
 

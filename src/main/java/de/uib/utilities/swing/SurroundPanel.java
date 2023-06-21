@@ -12,15 +12,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class SurroundPanel extends JPanel {
-	public SurroundPanel() {
-		super();
-		super.setOpaque(false);
-		super.setLayout(new FlowLayout(FlowLayout.CENTER));
-	}
 
 	public SurroundPanel(JComponent c) {
-		this();
+		super.setOpaque(false);
+		super.setLayout(new FlowLayout(FlowLayout.CENTER));
 		super.add(c);
 	}
-
 }
