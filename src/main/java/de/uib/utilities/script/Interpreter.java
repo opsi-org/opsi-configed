@@ -80,10 +80,6 @@ public class Interpreter {
 		return result;
 	}
 
-	public static String[] splitToStringArr(String cmd) {
-		return splitToList(cmd).toArray(new String[] {});
-	}
-
 	private void initSpecialValues(String[] specials) {
 		specialValues = new LinkedHashMap<>();
 		for (int i = 0; i < specials.length; i++) {
