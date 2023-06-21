@@ -59,7 +59,7 @@ public class ExtendedInteger implements Comparable<Integer> {
 		return number;
 	}
 
-	public String getString() {
+	private String getString() {
 		return value;
 	}
 
@@ -123,5 +123,4 @@ public class ExtendedInteger implements Comparable<Integer> {
 	public String toString() {
 		return getString();
 	}
-
 }
