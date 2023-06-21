@@ -31,15 +31,11 @@ public class JTextHideField extends JPanel {
 	private boolean hiddenMode;
 	private boolean multiValue;
 
-	private static class FixedDocument extends PlainDocument {
+	private static final class FixedDocument extends PlainDocument {
 
 		private String fixed = "xxx";
 
-		FixedDocument() {
-			super();
-		}
-
-		void setFixed(String s) {
+		private void setFixed(String s) {
 			fixed = s;
 		}
 
@@ -101,7 +97,7 @@ public class JTextHideField extends JPanel {
 
 	}
 
-	public void setHidden() {
+	private void setHidden() {
 		if (!hiddenMode) {
 			toggleHidden();
 		}
@@ -123,7 +119,7 @@ public class JTextHideField extends JPanel {
 		}
 	}
 
-	public void toggleHidden() {
+	private void toggleHidden() {
 		hiddenMode = !hiddenMode;
 		visibleField.setVisible(!hiddenMode);
 		invisibleField.setVisible(hiddenMode);

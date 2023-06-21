@@ -66,10 +66,6 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		observingMesg = startMessage;
 	}
 
-	public void stopWaiting() {
-		worker.stop();
-	}
-
 	private void createGUI(Component owner) {
 		setIconImage(Globals.mainIcon);
 
