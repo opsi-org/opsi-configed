@@ -51,11 +51,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	private boolean nullable;
 
 	public FEditList() {
-		this(null);
-	}
-
-	public FEditList(JTextComponent tracker) {
-		this(tracker, null);
+		this(null, null);
 	}
 
 	public FEditList(JTextComponent tracker, SensitiveCellEditor celleditor) {
@@ -240,7 +236,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 			}
 
 			if (leaveOnCommit) {
-				leave();
+				setVisible(false);
 			}
 		}
 	}

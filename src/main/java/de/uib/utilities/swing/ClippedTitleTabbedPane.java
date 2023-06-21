@@ -88,7 +88,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 		initTabWidth();
 	}
 
-	public void initTabWidth() {
+	private void initTabWidth() {
 		Insets tabInsets = getTabInsets();
 		Insets tabAreaInsets = getTabAreaInsets();
 		Insets insets = getInsets();

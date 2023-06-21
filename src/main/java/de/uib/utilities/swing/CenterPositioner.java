@@ -17,5 +17,4 @@ public class CenterPositioner extends JPanel {
 		super.setLayout(new FlowLayout());
 		super.add(comp);
 	}
-
 }

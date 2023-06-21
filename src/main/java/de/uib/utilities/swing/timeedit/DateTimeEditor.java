@@ -8,9 +8,9 @@ package de.uib.utilities.swing.timeedit;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,10 +39,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	private Calendar calendar;
 	private boolean withMovingSelectionDate = true;
 	private boolean withTime = true;
-
-	public DateTimeEditor() {
-		this(true);
-	}
 
 	public DateTimeEditor(boolean withTime) {
 		super();
@@ -201,14 +197,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	}
 
-	public void setHour(int h) {
-		timeSetter.setHour(h);
-	}
-
-	public void setMin(int m) {
-		timeSetter.setMin(m);
-	}
-
 	public void setSelectionDate(Date d) {
 		Logging.debug(this, " setSelectionDate " + d);
 		if (d != null) {
@@ -222,19 +210,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	}
 
-	public int getHour() {
-		return timeSetter.getHour();
-	}
-
-	public int getMin() {
-		return timeSetter.getHour();
-	}
-
-	public Date getSelectionDate() {
-		return monthView.getFirstSelectionDate();
-	}
-
-	public java.sql.Timestamp getSelectedSqlTime() {
+	public Timestamp getSelectedSqlTime() {
 		if (monthView.getFirstSelectionDate() == null) {
 			return null;
 		}
@@ -242,15 +218,11 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		calendar.setTime(monthView.getFirstSelectionDate());
 		calendar.add(Calendar.HOUR, timeSetter.getHour());
 		calendar.add(Calendar.MINUTE, timeSetter.getMin());
-		return new java.sql.Timestamp(calendar.getTimeInMillis());
+		return new Timestamp(calendar.getTimeInMillis());
 	}
 
 	public void addDateSelectionListener(org.jdesktop.swingx.event.DateSelectionListener listener) {
 		monthView.getSelectionModel().addDateSelectionListener(listener);
-	}
-
-	public void addActionListener(ActionListener listener) {
-		monthView.addActionListener(listener);
 	}
 
 	@Override
