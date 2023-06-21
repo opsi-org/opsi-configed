@@ -8,6 +8,7 @@ package de.uib.opsicommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -156,5 +157,28 @@ public class OpsiMethodCall {
 		}
 
 		return result;
+	}
+
+	public Map<String, Object> getMessagepack() {
+		Map<String, Object> map = new HashMap<>();
+		List<Object> params = new ArrayList<>();
+
+		for (int i = 0; i < parameters.length; i++) {
+			if (parameters[i] instanceof Object[]) {
+				List<Object> list = Arrays.asList((Object[]) parameters[i]);
+
+				params.add(list);
+			} else if (parameters[i] instanceof Map) {
+				params.add(parameters[i]);
+			} else {
+				params.add(parameters[i]);
+			}
+		}
+
+		map.put("id", DEFAULT_JSON_ID);
+		map.put("method", methodname);
+		map.put("params", params);
+
+		return map;
 	}
 }

@@ -171,6 +171,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return omc != null ? omc.getJsonString() : "";
 	}
 
+	private static Map<String, Object> produceMessagepack(OpsiMethodCall omc) {
+		return omc != null ? omc.getMessagepack() : new HashMap<>();
+	}
+
 	/**
 	 * Retrieves response from the server.
 	 * <p>
@@ -255,6 +259,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		try (OutputStreamWriter writer = getOutputStreamWriterForConnection(connection);
 				BufferedWriter out = new BufferedWriter(writer)) {
 			String json = produceJSONstring(omc);
+
+			Logging.devel(json);
+			Logging.devel(produceMessagepack(omc).toString());
+			Logging.devel("");
 
 			Logging.debug(this, "(POST) sending: " + json);
 			out.write(json);
@@ -379,8 +387,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
 			Logging.debug(this, "lz4compressed " + lz4compressed);
-		} else {
-			Logging.devel("no conteent-encodeing");
 		}
 
 		InputStream stream = null;
