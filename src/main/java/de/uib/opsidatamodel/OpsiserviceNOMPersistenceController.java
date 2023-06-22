@@ -264,8 +264,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// opsi module information
-	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
-	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+	private static final int CLIENT_COUNT_WARNING_LIMIT = 10;
+	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
@@ -509,6 +509,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		dataRefreshedObservers.add(ob);
 	}
 
+	// TODO remove this because never used?
 	@Override
 	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers != null) {
@@ -796,7 +797,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		isMultiFactorAuthenticationEnabled = JSONthroughHTTPS.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
 	}
 
-	public String getOTPSecret(String userId) {
+	private String getOTPSecret(String userId) {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", userId);
@@ -888,7 +889,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return fullPermission;
 	}
 
-	public void checkPermissions() {
+	private void checkPermissions() {
 		UserOpsipermission.ActionPrivilege serverActionPermission;
 
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
@@ -1031,14 +1032,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public boolean installPackage(String filename) {
-		return installPackage(filename, true);
-	}
-
-	public boolean installPackage(String filename, boolean force) {
 		String method = "depot_installPackage";
 
 		Logging.notice(this, method);
-		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, force }));
+		// TODO is "true" necessary?
+		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, true }));
 		Logging.info(this, "installPackage result " + result);
 
 		return result;
@@ -1906,7 +1904,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				});
 	}
 
-	public Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin() {
+	private Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin() {
 		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
 
 		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable()) {
@@ -2487,7 +2485,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf() {
+	private List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf() {
 		if (hwAuditConf == null) {
 			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
 			return new ArrayList<>();
@@ -3616,7 +3614,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
+	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
 		if (globalReadOnly) {
 			return false;
 		}
@@ -3932,7 +3930,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	 *
 	 * @param clientNames -
 	 */
-	public void retrieveProductProperties(final Set<String> clientNames) {
+	private void retrieveProductProperties(final Set<String> clientNames) {
 
 		boolean existing = true;
 
@@ -4073,7 +4071,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// collect productPropertyState updates and deletions
-	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
+	private void setProductProperties(String pcname, String productname, Map<?, ?> properties,
 			List<JSONObject> updateCollection, List<JSONObject> deleteCollection) {
 		if (!(properties instanceof ConfigName2ConfigValue)) {
 			Logging.warning(this, "! properties instanceof ConfigName2ConfigValue ");
@@ -4149,7 +4147,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// send productPropertyState updates and clear the collections
-	public void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
+	private void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
@@ -4353,7 +4351,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// lazy initializing
-	public List<String> getMethodSignature(String methodname) {
+	private List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {
 			List<Object> methodsList = exec.getListResult(new OpsiMethodCall("backend_getInterface", new Object[] {}));
 
@@ -8097,7 +8095,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return withLicenceManagement;
 	}
 
-	public boolean applyUserSpecializedConfig() {
+	private boolean applyUserSpecializedConfig() {
 		if (applyUserSpecializedConfig != null) {
 			return applyUserSpecializedConfig;
 		}
@@ -8212,7 +8210,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	 * @param jsonObjects to do sth
 	 * @return result true if everything is ok
 	 */
-	public boolean doActionSSHCommand(String method, List<Object> jsonObjects) {
+	private boolean doActionSSHCommand(String method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
 		if (globalReadOnly) {
 			return false;

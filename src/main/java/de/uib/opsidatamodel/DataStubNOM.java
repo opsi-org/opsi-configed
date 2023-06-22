@@ -113,7 +113,6 @@ public class DataStubNOM {
 
 	private Map<String, LicenceContractEntry> licenceContracts;
 
-	private NavigableMap<String, NavigableSet<String>> contractsExpired;
 	// date in sql time format, contrad ID
 	private NavigableMap<String, NavigableSet<String>> contractsToNotify;
 	// date in sql time format, contrad ID
@@ -1035,19 +1034,12 @@ public class DataStubNOM {
 		Logging.info(this, "licenceContractsRequestRefresh");
 
 		licenceContracts = null;
-		contractsExpired = null;
 		contractsToNotify = null;
 	}
 
 	public Map<String, LicenceContractEntry> getLicenceContracts() {
 		retrieveLicenceContracts();
 		return licenceContracts;
-	}
-
-	// date in sql time format, contract ID
-	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		retrieveLicenceContracts();
-		return contractsExpired;
 	}
 
 	// date in sql time format, contract ID
@@ -1065,7 +1057,6 @@ public class DataStubNOM {
 		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		licenceContracts = new HashMap<>();
 		contractsToNotify = new TreeMap<>();
-		contractsExpired = new TreeMap<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
 
@@ -1083,18 +1074,9 @@ public class DataStubNOM {
 
 					contractSet.add(entry.getId());
 				}
-
-				String expireDate = entry.get(TableLicenceContracts.EXPIRATION_DATE_KEY);
-				if (expireDate != null && expireDate.trim().length() > 0 && expireDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsExpired.computeIfAbsent(expireDate,
-							s -> new TreeSet<>());
-
-					contractSet.add(entry.getId());
-				}
 			}
 
 			Logging.info(this, "contractsToNotify " + contractsToNotify);
-			Logging.info(this, "contractsExpired " + contractsExpired);
 		}
 	}
 

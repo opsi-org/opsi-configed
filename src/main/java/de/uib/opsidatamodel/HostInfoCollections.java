@@ -496,10 +496,6 @@ public class HostInfoCollections {
 		opsiHostNames.remove(name);
 	}
 
-	public void removeOpsiHostNames(String[] names) {
-		opsiHostNames.removeAll(Arrays.asList(names));
-	}
-
 	// for table
 	public void updateLocalHostInfo(String hostId, String property, Object value) {
 		if (mapPCInfomap != null && mapPCInfomap.get(hostId) != null) {
