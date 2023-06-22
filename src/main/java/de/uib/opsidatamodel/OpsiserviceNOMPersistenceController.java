@@ -4825,7 +4825,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// send config updates and clear the collection
-	public void setAdditionalConfiguration(boolean determineConfigOptions) {
+	public void setAdditionalConfiguration() {
 		if (globalReadOnly) {
 			return;
 		}
@@ -4912,27 +4912,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			List<JSONObject> callsConfigCollection = new ArrayList<>();
 
 			for (Map<String, Object> state : configStateCollection) {
-				if (determineConfigOptions) {
-					ConfigOption configOption = configOptions.get(state.get("configId"));
-
-					Map<String, Object> configForUpdate = new HashMap<>();
-
-					configForUpdate.put("ident", state.get("configId"));
-					configForUpdate.put("type", configOption.getRetrieved().get("type"));
-					configForUpdate.put("defaultValues", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
-
-					List<Object> possibleValues = (List<Object>) configOption.get("possibleValues");
-					for (Object item : (List<?>) state.get("values")) {
-						if (possibleValues.indexOf(item) == -1) {
-							possibleValues.add(item);
-						}
-					}
-					configForUpdate.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-
-					// mapping to JSON
-					Logging.debug(this, "setAdditionalConfiguation " + configForUpdate);
-					callsConfigCollection.add(AbstractExecutioner.jsonMap(configForUpdate));
-				}
 
 				state.put("values", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
 				callsConfigName2ConfigValueCollection.add(AbstractExecutioner.jsonMap(state));

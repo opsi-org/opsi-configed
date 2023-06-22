@@ -65,12 +65,6 @@ public final class LicensingInfoMap {
 	public static final String STATE_OKAY = "state_okay";
 	public static final String CLIENT_NUMBER = "client_number";
 	public static final String UNLIMITED_NUMBER = "999999999";
-	public static final String CURRENT_OVER_LIMIT = "current_over_limit";
-	public static final String CURRENT_CLOSE_TO_LIMIT = "current_close_to_limit";
-	public static final String CURRENT_TIME_WARNINGS = "current_time_warnings";
-	public static final String CURRENT_TIME_OVER = "current_time_over";
-	public static final String FUTURE_OVER_LIMIT = "future_over_limit";
-	public static final String FUTURE_CLOSE_TO_LIMIT = "future_close_to_limit";
 	public static final String FUTURE_STATE = "future_state";
 	public static final String CONFIG = "config";
 	public static final String DISABLE_WARNING_FOR_MODULES = "disable_warning_for_modules";
@@ -789,75 +783,8 @@ public final class LicensingInfoMap {
 
 	}
 
-	public void setWarningLevelViaConfig(Map<String, List<Object>> configs) {
-		String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_ABSOLUTE;
-		if (configs.get(key) != null) {
-			absolutClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-		}
-
-		key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
-		if (configs.get(key) != null) {
-			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-		}
-
-	}
-
-	public List<String> getCloseToLimitModuleList() {
-		return currentCloseToLimitModuleList;
-	}
-
 	public List<String> getCurrentOverLimitModuleList() {
 		return currentOverLimitModuleList;
-	}
-
-	public List<String> getCurrentDaysWarningModuleList() {
-		return currentTimeWarningModuleList;
-	}
-
-	public List<String> getCurrentDaysOverModuleList() {
-		return currentTimeOverModuleList;
-	}
-
-	/**
-	 * @return list of modules for every possible warning state (4)
-	 */
-	public Map<String, List<String>> getWarnings() {
-		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
-				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
-				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
-			return new HashMap<>();
-		}
-
-		Map<String, List<String>> result = new HashMap<>();
-
-		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
-		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);
-		result.put(CURRENT_TIME_WARNINGS, currentTimeWarningModuleList);
-		result.put(CURRENT_TIME_OVER, currentTimeOverModuleList);
-		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
-		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
-
-		return result;
-	}
-
-	public boolean warningExists() {
-		Logging.info(this, "warning exists? ");
-
-		boolean result = false;
-
-		Logging.info(this, "warnings currentOverLimitModuleList? " + currentOverLimitModuleList.size());
-		Logging.info(this, "warnings currentCloseToLimitModuleList? " + currentCloseToLimitModuleList.size());
-		Logging.info(this, "warnings currentTimeWarningModuleList? " + currentTimeWarningModuleList.size());
-		Logging.info(this, "warnings currentTimeOverModuleList? " + currentTimeOverModuleList.size());
-		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
-		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
-
-		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
-				|| !currentTimeWarningModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty();
-
-		Logging.info(this, "warning exists " + result);
-
-		return result;
 	}
 
 	public String getWarningLevel() {
@@ -872,28 +799,12 @@ public final class LicensingInfoMap {
 		return STATE_OKAY;
 	}
 
-	public Set<String> getModulesListWithCloseToLimitWarnings() {
-		return allCloseToLimitModules;
-	}
-
-	public Set<String> getModulesListWithOverLimitWarnings() {
-		return allOverLimitModules;
-	}
-
 	public String getLatestDate() {
 		return latestDateString;
 	}
 
 	public Map<String, Object> getClientNumbersMap() {
 		return clientNumbersMap;
-	}
-
-	public List<List<String>> getClientNumbersList() {
-		return clientNumbersList;
-	}
-
-	public Set<String> getCustomerIDSet() {
-		return customerIDs;
 	}
 
 	public Set<String> getCustomerNamesSet() {
