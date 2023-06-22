@@ -139,5 +139,4 @@ public class ModulePermissionValue {
 	public String toString() {
 		return "  :" + getBoolean() + " maxClients: " + getMaxClients() + ";  expires  " + getExpires();
 	}
-
 }

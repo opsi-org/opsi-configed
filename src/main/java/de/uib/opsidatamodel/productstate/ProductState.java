@@ -8,7 +8,6 @@ package de.uib.opsidatamodel.productstate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,29 +18,9 @@ public class ProductState extends HashMap<String, String> {
 
 	private static ProductState defaultProductState;
 
-	public static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
+	private static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
 			"packageVersion", "targetConfiguration", "lastAction", "installationStatus", "actionRequest",
 			"actionProgress", "actionResult", "priority", "actionSequence");
-
-	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
-	static {
-		DB_COLUMNS.put("productId", "VARCHAR(50)");
-		DB_COLUMNS.put("productVersion", "VARCHAR(32)");
-		DB_COLUMNS.put("packageVersion", "VARCHAR(16)");
-
-		DB_COLUMNS.put("targetConfiguration", "VARCHAR(16)");
-		DB_COLUMNS.put("lastAction", "VARCHAR(16)");
-		DB_COLUMNS.put("installationStatus", "VARCHAR(16)");
-		DB_COLUMNS.put("actionRequest", "VARCHAR(16)");
-		DB_COLUMNS.put("actionProgress", "VARCHAR(255)");
-		DB_COLUMNS.put("actionResult", "VARCHAR(16)");
-
-		DB_COLUMNS.put("modificationTime", "TIMESTAMP");
-	}
-
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>(DB_COLUMNS.keySet());
-
-	public static final int COLUMN_INDEX_LAST_STATE_CHANGE = DB_COLUMN_NAMES.indexOf("modificationTime");
 
 	// directly taken values
 	public static final String KEY_LAST_STATE_CHANGE = "stateChange";

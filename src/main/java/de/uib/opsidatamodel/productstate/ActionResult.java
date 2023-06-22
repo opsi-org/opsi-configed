@@ -13,7 +13,7 @@ import java.util.Map;
 
 import de.uib.configed.Globals;
 
-public class ActionResult {
+public final class ActionResult {
 	public static final String KEY = "actionResult";
 
 	// conflicting entries from several clients
@@ -41,11 +41,7 @@ public class ActionResult {
 	// instance variable
 	private int state = INVALID;
 
-	// constructor
-	public ActionResult() {
-	}
-
-	public ActionResult(int t) {
+	private ActionResult(int t) {
 		if (existsState(t)) {
 			state = t;
 		} else {
@@ -114,13 +110,13 @@ public class ActionResult {
 		return label2displayLabel;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -142,7 +138,7 @@ public class ActionResult {
 		return labels;
 	}
 
-	public static Integer getVal(String label) {
+	private static Integer getVal(String label) {
 		checkCollections();
 
 		if (label == null || label.isEmpty()) {
@@ -168,18 +164,9 @@ public class ActionResult {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static ActionResult produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionResult produceFromLabel(String label) {

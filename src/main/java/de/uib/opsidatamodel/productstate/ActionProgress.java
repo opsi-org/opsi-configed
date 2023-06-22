@@ -41,18 +41,6 @@ public class ActionProgress {
 	// instance variable
 	private int state = INVALID;
 
-	// constructor
-	public ActionProgress() {
-	}
-
-	public ActionProgress(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
-	}
-
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -115,19 +103,13 @@ public class ActionProgress {
 		return label2displayLabel;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
-		checkCollections();
-
-		return labels.contains(label);
-	}
-
-	public static String getLabel(int state) {
+	private static String getLabel(int state) {
 		checkCollections();
 
 		if (!existsState(state)) {
@@ -137,63 +119,14 @@ public class ActionProgress {
 		return state2label.get(state);
 	}
 
-	public static List<String> getLabels() {
-		checkCollections();
-
-		return labels;
-	}
-
-	public static Integer getVal(String label) {
-		checkCollections();
-
-		if (label == null || label.isEmpty()) {
-			return NONE;
-		}
-
-		if (!existsLabel(label)) {
-			return null;
-		}
-
-		return label2state.get(label);
-	}
-
 	public static String getDisplayLabel(int state) {
 		checkCollections();
 
 		return label2displayLabel.get(getLabel(state));
 	}
 
-	// instance methods
-
-	public int getVal() {
-		return state;
-	}
-
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static ActionProgress produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
-	}
-
-	public static ActionProgress produceFromLabel(String label) {
-		checkCollections();
-
-		if (label == null) {
-			return new ActionProgress(NOT_AVAILABLE);
-		}
-
-		if (!labels.contains(label)) {
-			return new ActionProgress(INVALID);
-		}
-
-		return new ActionProgress(getVal(label));
 	}
 }

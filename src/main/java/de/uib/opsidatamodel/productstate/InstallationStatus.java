@@ -14,7 +14,7 @@ import java.util.Map;
 
 import de.uib.configed.Globals;
 
-public class InstallationStatus {
+public final class InstallationStatus {
 	public static final String KEY = "installationStatus";
 
 	public static final String KEY_NOT_INSTALLED = "not_installed";
@@ -49,11 +49,7 @@ public class InstallationStatus {
 	// instance variable
 	private int state = INVALID;
 
-	// constructor
-	public InstallationStatus() {
-	}
-
-	public InstallationStatus(int t) {
+	private InstallationStatus(int t) {
 		if (existsState(t)) {
 			state = t;
 		} else {
@@ -144,13 +140,13 @@ public class InstallationStatus {
 		return label2textColor;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -205,18 +201,9 @@ public class InstallationStatus {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static InstallationStatus produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static InstallationStatus produceFromLabel(String label) {

@@ -39,11 +39,9 @@ public class ActionRequest {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
 	private static List<Integer> states;
-	private static List<Integer> possibleRequests;
 	private static List<String> labels;
 	private static String[] choiceLabels;
 	private static List<String> serviceValues;
@@ -53,10 +51,6 @@ public class ActionRequest {
 
 	// instance variable
 	private int state = INVALID;
-
-	// constructor
-	public ActionRequest() {
-	}
 
 	public ActionRequest(int t) {
 		if (existsState(t)) {
@@ -82,14 +76,6 @@ public class ActionRequest {
 		states.add(ALWAYS);
 		states.add(ONCE);
 		states.add(CUSTOM);
-
-		possibleRequests = new ArrayList<>();
-		possibleRequests.add(SETUP);
-		possibleRequests.add(UPDATE);
-		possibleRequests.add(UNINSTALL);
-		possibleRequests.add(ALWAYS);
-		possibleRequests.add(ONCE);
-		possibleRequests.add(CUSTOM);
 
 		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -158,18 +144,6 @@ public class ActionRequest {
 		label2displayLabel.put("once", "once");
 		label2displayLabel.put("custom", "custom");
 
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("none", "none");
-		displayLabel2label.put("setup", "setup");
-		displayLabel2label.put("update", "update");
-		displayLabel2label.put("uninstall", "uninstall");
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("once", "once");
-		displayLabel2label.put("custom", "custom");
-
 		choiceLabels = new String[] { label2displayLabel.get("none"), label2displayLabel.get("setup"),
 				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
 				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
@@ -183,16 +157,6 @@ public class ActionRequest {
 		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
 		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
 
-	}
-
-	public static List<Integer> getPossibleRequests() {
-		checkCollections();
-		return possibleRequests;
-	}
-
-	public static List<String> getServiceValues() {
-		checkCollections();
-		return serviceValues;
 	}
 
 	public static List<String> getScriptKeys() {
@@ -222,13 +186,13 @@ public class ActionRequest {
 		return label2textColor;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -270,16 +234,6 @@ public class ActionRequest {
 		return label2displayLabel.get(getLabel(state));
 	}
 
-	public static String getStaticString(String label) {
-		Integer state = label2state.get(label);
-
-		if (state == null) {
-			return null;
-		}
-
-		return state2label.get(state);
-	}
-
 	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
@@ -292,18 +246,9 @@ public class ActionRequest {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static ActionRequest produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionRequest produceFromLabel(String label) {
