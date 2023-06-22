@@ -3962,18 +3962,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			productsWithProductPropertyStates.add((String) map.get("productId"));
 
-			Map<String, Map<String, Object>> productproperties1Client = productPropertiesRetrieved.get(host);
+			Map<String, Map<String, Object>> productproperties1Client = productPropertiesRetrieved.computeIfAbsent(host,
+					s -> new HashMap<>());
 
-			if (productproperties1Client == null) {
-				productproperties1Client = new HashMap<>();
-				productPropertiesRetrieved.put(host, productproperties1Client);
-			}
-
-			Map<String, Object> properties = productproperties1Client.get(map.get("productId"));
-			if (properties == null) {
-				properties = new HashMap<>();
-				productproperties1Client.put((String) map.get("productId"), properties);
-			}
+			Map<String, Object> properties = productproperties1Client.computeIfAbsent((String) map.get("productId"),
+					s -> new HashMap<>());
 
 			properties.put((String) map.get("propertyId"),
 					POJOReMapper.remap(map.get("values"), new TypeReference<List<Object>>() {
@@ -5608,11 +5601,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
 					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
 					// found
-					List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList.get(licencePoolKEY);
-					if (unknownSoftwareIds == null) {
-						unknownSoftwareIds = new ArrayList<>();
-						fLicencePool2UnknownSoftwareList.put(licencePoolKEY, unknownSoftwareIds);
-					}
+					List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList.computeIfAbsent(licencePoolKEY,
+							s -> new ArrayList<>());
 					unknownSoftwareIds.add(swKEY);
 				} else {
 					softwareIds.add(swKEY);
@@ -5994,18 +5984,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				String licencePoolId = fSoftware2LicencePool.get(softwareIdent);
 
 				if (licencePoolId != null) {
-					List<String> listOfUsingClients = licencePool2listOfUsingClientsSWInvent.get(licencePoolId);
-					Set<String> setOfUsingClients = licencePool2setOfUsingClientsSWInvent.get(licencePoolId);
-
-					if (listOfUsingClients == null) {
-						listOfUsingClients = new ArrayList<>();
-						licencePool2listOfUsingClientsSWInvent.put(licencePoolId, listOfUsingClients);
-					}
-
-					if (setOfUsingClients == null) {
-						setOfUsingClients = new HashSet<>();
-						licencePool2setOfUsingClientsSWInvent.put(licencePoolId, setOfUsingClients);
-					}
+					List<String> listOfUsingClients = licencePool2listOfUsingClientsSWInvent
+							.computeIfAbsent(licencePoolId, s -> new ArrayList<>());
+					Set<String> setOfUsingClients = licencePool2setOfUsingClientsSWInvent.computeIfAbsent(licencePoolId,
+							s -> new HashSet<>());
 
 					Logging.debug(this,
 							"software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
@@ -6090,18 +6072,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		for (LicenceUsageEntry licenceUsage : licenceUsages) {
 			String pool = licenceUsage.getLicencepool();
-			Integer usageCount = pool2opsiUsagesCount.get(pool);
-			Set<String> usingClients = pool2opsiUsages.get(pool);
-
-			if (usingClients == null) {
-				usingClients = new TreeSet<>();
-				pool2opsiUsages.put(pool, usingClients);
-			}
-
-			if (usageCount == null) {
-				usageCount = Integer.valueOf(0);
-				pool2opsiUsagesCount.put(pool, usageCount);
-			}
+			Integer usageCount = pool2opsiUsagesCount.computeIfAbsent(pool, s -> Integer.valueOf(0));
+			Set<String> usingClients = pool2opsiUsages.computeIfAbsent(pool, s -> new TreeSet<>());
 
 			String clientId = licenceUsage.getClientId();
 
@@ -6128,12 +6100,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
 			String pool = swXpool.get(LicencepoolEntry.ID_SERVICE_KEY);
 
-			TreeSet<String> clientsServedByPool = pool2clients.get(pool);
-
-			if (clientsServedByPool == null) {
-				clientsServedByPool = new TreeSet<>();
-				pool2clients.put(pool, clientsServedByPool);
-			}
+			TreeSet<String> clientsServedByPool = pool2clients.computeIfAbsent(pool, s -> new TreeSet<>());
 
 			String swIdent = swXpool.get(AuditSoftwareXLicencePool.SW_ID);
 
@@ -6222,12 +6189,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		for (LicenceUsageEntry m : dataStub.getLicenceUsages()) {
 			rowsLicencesUsage.put(m.getPseudoKey(), m);
 
-			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.get(m.getClientId());
-
-			if (licencesUsagesForClient == null) {
-				licencesUsagesForClient = new ArrayList<>();
-				fClient2LicencesUsageList.put(m.getClientId(), licencesUsagesForClient);
-			}
+			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.computeIfAbsent(m.getClientId(),
+					s -> new ArrayList<>());
 			licencesUsagesForClient.add(m);
 		}
 	}

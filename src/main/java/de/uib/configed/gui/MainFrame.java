@@ -3131,7 +3131,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
-
 	}
 
 	// ComponentListener implementation

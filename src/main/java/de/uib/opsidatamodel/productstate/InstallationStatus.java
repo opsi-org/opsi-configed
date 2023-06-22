@@ -189,7 +189,7 @@ public final class InstallationStatus {
 		return label2displayLabel.get(getLabel(state));
 	}
 
-	public static final String[] getDisplayLabelsForChoice() {
+	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
 		return choiceLabels;

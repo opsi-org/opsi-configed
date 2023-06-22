@@ -316,18 +316,12 @@ public class DataStubNOM {
 					Logging.warning(this, "unexpected product type " + p.toString());
 				}
 
-				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());
-				if (versionInfo2Depots == null) {
-					versionInfo2Depots = new HashMap<>();
-					product2VersionInfo2Depots.put(p.getProductId(), versionInfo2Depots);
-				}
+				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots
+						.computeIfAbsent(p.getProductId(), s -> new HashMap<>());
 
-				List<String> depotsWithThisVersion = versionInfo2Depots.get(p.getVersionInfo());
+				List<String> depotsWithThisVersion = versionInfo2Depots.computeIfAbsent(p.getVersionInfo(),
+						s -> new ArrayList<>());
 
-				if (depotsWithThisVersion == null) {
-					depotsWithThisVersion = new ArrayList<>();
-					versionInfo2Depots.put(p.getVersionInfo(), depotsWithThisVersion);
-				}
 				depotsWithThisVersion.add(depot);
 
 				TreeSet<OpsiPackage> depotpackages = depot2Packages.computeIfAbsent(depot, s -> new TreeSet<>());
@@ -1383,11 +1377,7 @@ public class DataStubNOM {
 		Map<String, Map<String, Object>> clientInfo = new HashMap<>();
 
 		for (List<String> row : rows) {
-			Map<String, Object> rowMap = clientInfo.get(row.get(0));
-			if (rowMap == null) {
-				rowMap = new HashMap<>();
-				clientInfo.put(row.get(0), rowMap);
-			}
+			Map<String, Object> rowMap = clientInfo.computeIfAbsent(row.get(0), s -> new HashMap<>());
 
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));

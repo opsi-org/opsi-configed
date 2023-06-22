@@ -95,8 +95,6 @@ public final class LicensingInfoMap {
 	private Map<String, Object> jOResult;
 	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
-	private List<List<String>> clientNumbersList;
-	private Set<String> customerIDs;
 	private Set<String> customerNames;
 	private Map<String, Map<String, Object>> licenses;
 	private List<String> availableModules;
@@ -134,7 +132,6 @@ public final class LicensingInfoMap {
 		produceConfigs();
 		checksum = produceChecksum();
 		clientNumbersMap = produceClientNumbersMap();
-		clientNumbersList = produceListFromClientNumbersMap();
 		licenses = produceLicenses();
 		obsoleteModules = produceObsoleteModules();
 		availableModules = produceAvailableModules();
@@ -145,7 +142,6 @@ public final class LicensingInfoMap {
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap(datesMap);
-		customerIDs = produceCustomerIDSet();
 		customerNames = produceCustomerNameSet();
 
 		instance = this;
@@ -199,24 +195,6 @@ public final class LicensingInfoMap {
 		});
 	}
 
-	private List<List<String>> produceListFromClientNumbersMap() {
-		List<List<String>> result = new ArrayList<>();
-
-		for (Map.Entry<String, Object> entry : clientNumbersMap.entrySet()) {
-			List<String> line = new ArrayList<>();
-			line.add(entry.getKey());
-			line.add(entry.getValue().toString());
-
-			result.add(line);
-		}
-		List<String> line1 = new ArrayList<>();
-		line1.add(CHECKSUM_ID);
-		line1.add(checksum);
-		result.add(line1);
-
-		return result;
-	}
-
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
@@ -237,23 +215,6 @@ public final class LicensingInfoMap {
 			result.put(originalMap.get(ID).toString(), tmp);
 		}
 		return result;
-	}
-
-	private Set<String> produceCustomerIDSet() {
-		Set<String> producedCustomerIDs = new LinkedHashSet<>();
-
-		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
-				new TypeReference<List<Object>>() {
-				});
-
-		for (Object producedLicence : producedLicences) {
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
-					new TypeReference<Map<String, Object>>() {
-					});
-			producedCustomerIDs.add(String.valueOf(originalMap.get(CUSTOMER_ID)));
-		}
-
-		return producedCustomerIDs;
 	}
 
 	private Set<String> produceCustomerNameSet() {
