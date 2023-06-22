@@ -100,7 +100,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JCheckBox need Sudo instance **/
 	private JCheckBox jComboBoxNeedSudo = new JCheckBox("");
 	/** JTextPane commands instance **/
-	private JTextPane jTextPaneommands = new JTextPane();
+	private JTextPane jTextPaneCommands = new JTextPane();
 
 	/** MainFrame instance **/
 	private JFrame main;
@@ -209,7 +209,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				String.valueOf(SSHCommandFactory.POSITION_DEFAULT), 1);
 		labelNeedSudo = new JLabel();
 		labelCommands = new JLabel();
-		jTextPaneommands = new JTextPane();
+		jTextPaneCommands = new JTextPane();
 
 		buttonTestCommand = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
@@ -238,7 +238,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		jTextFieldPriority.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
 		jComboBoxNeedSudo.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.needSudo.tooltip"));
 		labelCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
-		jTextPaneommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextPaneCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
 
 		labelMenuText.setPreferredSize(dimensionJTextField);
 		labelParentMenuText.setPreferredSize(dimensionJTextField);
@@ -252,7 +252,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 		labelNeedSudo.setPreferredSize(dimensionJTextField);
 		jComboBoxNeedSudo.setPreferredSize(dimensionButton);
-		jTextPaneommands.setPreferredSize(dimensionJTextFieldLong);
+		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
 		// btn_changeHelpPanelStatus.setPreferredSize(new
 
 		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
@@ -308,7 +308,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		});
 
 		jComboBoxNeedSudo.addItemListener(itemEvent -> checkAllTexts());
-		jTextPaneommands.getDocument().addDocumentListener(new DocumentListener() {
+		jTextPaneCommands.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkAllTexts();
@@ -339,7 +339,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly())) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
-							.doActionParamAdd(jTextPaneommands));
+							.doActionParamAdd(jTextPaneCommands));
 		}
 
 		updateLists(true);
@@ -388,8 +388,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		jTextFieldPriority.setEnabled(value);
 		jTextFieldPriority.setEditable(value);
 
-		jTextPaneommands.setEnabled(value);
-		jTextPaneommands.setEditable(value);
+		jTextPaneCommands.setEnabled(value);
+		jTextPaneCommands.setEditable(value);
 
 		buttonDelete.setEnabled(value);
 		buttonTestCommand.setEnabled(value);
@@ -408,7 +408,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 
-								).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneommands,
+								).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneCommands,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE * 3));
 		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
@@ -421,8 +421,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 
-				).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jTextPaneommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneCommands, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE * 1));
 
 		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
@@ -562,6 +562,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 						combuf.append(rawCommand).append("\n");
 					}
 				}
+
 				updateComponents(thiscommand.getParentMenuText(), thiscommand.getToolTipText(),
 						thiscommand.getPriority(), thiscommand.needSudo(), combuf.toString());
 			}
@@ -589,7 +590,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		jTextFieldTooltipText.setText(tooltip);
 		jTextFieldPriority.setText(String.valueOf(prio));
 		jComboBoxNeedSudo.setSelected(ns);
-		jTextPaneommands.setText(coms);
+		jTextPaneCommands.setText(coms);
 	}
 
 	/* This method is called when button 2 (save) is pressed */
@@ -685,7 +686,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 			Logging.warning("Cannot get value from priority field Exception: " + e);
 		}
 		List<String> coms = new LinkedList<>();
-		for (String c : jTextPaneommands.getText().split("\n")) {
+		for (String c : jTextPaneCommands.getText().split("\n")) {
 			if (!(c == null || c.trim().isEmpty())) {
 				coms.add(c);
 			}
@@ -695,6 +696,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				jTextFieldTooltipText.getText(), prio, jComboBoxNeedSudo.isSelected(), coms);
 		Logging.debug(this, "getCommandNow command: " + tempCommand);
+
 		return tempCommand;
 	}
 
