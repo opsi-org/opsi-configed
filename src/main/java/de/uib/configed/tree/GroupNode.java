@@ -56,5 +56,4 @@ public class GroupNode extends IconNode {
 	public boolean isFixed() {
 		return fixed;
 	}
-
 }

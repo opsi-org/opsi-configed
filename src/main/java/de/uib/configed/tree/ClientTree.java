@@ -517,12 +517,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return clientPath;
 	}
 
-	public void produceClients(Object[] x, DefaultMutableTreeNode parent) {
+	private void produceClients(Object[] x, DefaultMutableTreeNode parent) {
 		produceClients(x, parent, false);
 	}
 
 	// expects Strings as Objects
-	public void produceClients(Object[] x, DefaultMutableTreeNode parent, boolean register) {
+	private void produceClients(Object[] x, DefaultMutableTreeNode parent, boolean register) {
 		for (int i = 0; i < x.length; i++) {
 			String clientId = (String) x[i];
 			IconNode node = produceClientNode(clientId);
@@ -944,7 +944,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return configedMain.removeHostGroupElements(groupEntries);
 	}
 
-	public void removeClientInternally(String clientID, GroupNode parentNode) {
+	private void removeClientInternally(String clientID, GroupNode parentNode) {
 
 		Logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
 
@@ -1047,7 +1047,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
-	public void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
+	private void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
@@ -1190,17 +1190,17 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeDirectory;
 	}
 
-	public boolean isInDIRECTORY(DefaultMutableTreeNode node) {
+	private boolean isInDIRECTORY(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
 		return path.length >= 2 && path[1] == groupNodeDirectory;
 	}
 
-	public boolean isInGROUPS(DefaultMutableTreeNode node) {
+	private boolean isInGROUPS(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
 		return path.length >= 2 && path[1] == groupNodeGroups;
 	}
 
-	public void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {
+	private void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {
 		if (node == null || parent == null) {
 			return;
 		}
@@ -1326,7 +1326,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return collectParentIDs(nodeID);
 	}
 
-	public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
+	private List<SimpleTreePath> getSimpleTreePaths(String leafname) {
 		return leafname2AllItsPaths.getSimpleTreePaths(leafname);
 	}
 
@@ -1357,23 +1357,23 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return configedMain.getGroupPathActivatedByTree();
 	}
 
-	public boolean addObject2PersistentGroup(String objectId, String groupId) {
+	private boolean addObject2PersistentGroup(String objectId, String groupId) {
 		return configedMain.addObject2Group(objectId, groupId);
 	}
 
-	public boolean removeObject2Group(String objectId, String groupId) {
+	private boolean removeObject2Group(String objectId, String groupId) {
 		return configedMain.removeObject2Group(objectId, groupId);
 	}
 
-	public boolean addGroup(StringValuedRelationElement newGroup) {
+	private boolean addGroup(StringValuedRelationElement newGroup) {
 		return configedMain.addGroup(newGroup);
 	}
 
-	public boolean updateGroup(String groupId, Map<String, String> groupInfo) {
+	private boolean updateGroup(String groupId, Map<String, String> groupInfo) {
 		return configedMain.updateGroup(groupId, groupInfo);
 	}
 
-	public boolean deleteGroup(String groupId) {
+	private boolean deleteGroup(String groupId) {
 		return configedMain.deleteGroup(groupId);
 	}
 
@@ -1422,9 +1422,5 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
 		}
-	}
-
-	public void remove(String leafname, SimpleTreePath clientPath) {
-		leafname2AllItsPaths.remove(leafname, clientPath);
 	}
 }
