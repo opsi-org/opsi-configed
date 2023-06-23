@@ -46,7 +46,6 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.swing.ActivityPanel;
 import net.sf.sevenzipjbinding.SevenZipException;
 import utils.ExtractorUtil;
 
@@ -109,27 +108,22 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		jMenuFileOpen.setText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
 		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
-		jMenuFileClose.addActionListener((ActionEvent e) -> {
-			logPane.close();
-			setTitle(null);
-		});
+		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
 
 		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
+		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.save());
 
 		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
-		jMenuFileReload.addActionListener((ActionEvent e) -> {
-			if (fileName != null) {
-				logPane.reload();
-				setTitle(fileName);
-			}
-		});
+		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
+		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		JMenu jMenuTheme = createJMenuTheme();
-
 		JMenu jMenuLanguage = createJMenuLanguage();
 
 		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
@@ -264,11 +258,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		iconButtonReload = new IconButton(Configed.getResourceValue("LogFrame.buttonReload"), "images/reload16.png",
 				"images/images/reload16.png", "");
-		iconButtonReload.addActionListener((ActionEvent e) -> {
-			if (fileName != null) {
-				logPane.reload();
-			}
-		});
+		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		iconButtonSave = new IconButton(Configed.getResourceValue("PopupMenuTrait.save"), "images/save.png",
 				"images/images/save.png", "");
@@ -293,10 +283,6 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		setupIcons();
 
-		ActivityPanel activity = new ActivityPanel();
-		new Thread(activity).start();
-		activity.setToolTipText("activity indicator");
-
 		JPanel iconPane = new JPanel();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
@@ -312,8 +298,6 @@ public class LogFrame extends JFrame implements WindowListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(activity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -327,9 +311,7 @@ public class LogFrame extends JFrame implements WindowListener {
 								.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutIconPane1.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
+										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		setupMenuFile();
@@ -518,6 +500,18 @@ public class LogFrame extends JFrame implements WindowListener {
 			logPane.setTitle(fileName);
 			setTitle(fileName);
 			logPane.removeAllHighlights();
+		}
+	}
+
+	private void closeFile() {
+		logPane.close();
+		setTitle(null);
+	}
+
+	private void reloadFile() {
+		if (fileName != null) {
+			logPane.reload();
+			setTitle(fileName);
 		}
 	}
 

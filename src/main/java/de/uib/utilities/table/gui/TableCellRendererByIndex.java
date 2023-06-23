@@ -24,10 +24,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 	private Map<String, ImageIcon> mapOfImages;
 	private boolean showOnlyIcon = true;
 
-	public TableCellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
-		this(mapOfStringValues, imagesBase, false, "");
-	}
-
 	public TableCellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
 			String tooltipPrefix) {
 		super(tooltipPrefix);

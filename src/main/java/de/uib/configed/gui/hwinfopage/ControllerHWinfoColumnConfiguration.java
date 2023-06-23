@@ -30,8 +30,10 @@ import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.IntComparatorForObjects;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -75,7 +77,6 @@ public class ControllerHWinfoColumnConfiguration {
 		initPanel();
 		initModel();
 		updateItems = new HashMap<>();
-
 	}
 
 	private void initPanel() {
@@ -147,13 +148,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// tableProvider
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
-				KEY_COL, new int[] { KEY_COL },
-
-				// table model listener
-				panel,
-
-				// ArrayList<TableEditItem> updates
-				updateCollection) {
+				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				boolean result = super.isCellEditable(row, col);
@@ -190,7 +185,7 @@ public class ControllerHWinfoColumnConfiguration {
 		sortDescriptor.put(KEY_COL, SortOrder.ASCENDING);
 		panel.setSortOrder(sortDescriptor);
 
-		panel.setComparator(COL_LINE_NO, new de.uib.utilities.IntComparatorForObjects());
+		panel.setComparator(COL_LINE_NO, new IntComparatorForObjects());
 
 		// now sorted
 		panel.reload();
@@ -207,8 +202,7 @@ public class ControllerHWinfoColumnConfiguration {
 		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
 		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
-		col.setCellRenderer(
-				new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
+		col.setCellRenderer(new BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
 
 		JCheckBox useCheck = new JCheckBox(iconEmpty);
 
@@ -244,16 +238,13 @@ public class ControllerHWinfoColumnConfiguration {
 	private void buildUpdateItem(ColumnIdent col, Boolean use) {
 		Logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);
 
-		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.getConfigIdent());
+		Map<String, Boolean> tableConfigUpdates = updateItems.computeIfAbsent(col.getConfigIdent(),
+				s -> new HashMap<>());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
-		if (tableConfigUpdates == null) {
-			tableConfigUpdates = new HashMap<>();
-			updateItems.put(col.getConfigIdent(), tableConfigUpdates);
-		}
 		tableConfigUpdates.put(col.getDBColumnName(), use);
 	}
 

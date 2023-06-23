@@ -37,6 +37,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private JXPanel bottomComponent;
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
+	private JLabel jLabelLabelProductVersion;
 	private JLabel jLabelProductName;
 
 	private JLabel dependenciesTextLabel;
@@ -49,7 +50,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
+	private JScrollPane jScrollPaneProductInfo;
 	private TextMarkdownPane jTextAreaProductAdvice;
+
+	private JScrollPane jScrollPaneProductAdvice;
 	private TextMarkdownPane jTextAreaProductInfo;
 
 	private String productName = "";
@@ -63,18 +67,19 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		super(JSplitPane.VERTICAL_SPLIT);
 		this.panelEditProperties = panelEditProperties;
 		initComponents();
+		setupLayout();
 	}
 
 	private void initComponents() {
 		jLabelProductName = new JLabel();
 		jLabelProductID = new JTextField();
 		jLabelProductVersion = new JTextField();
-		JLabel jLabelLabelProductVersion = new JLabel();
+		jLabelLabelProductVersion = new JLabel();
 
-		JScrollPane jScrollPaneProductInfo = new JScrollPane();
+		jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();
 
-		JScrollPane jScrollPaneProductAdvice = new JScrollPane();
+		jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesActivateButton = new JButton();
@@ -171,7 +176,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton.addActionListener(this);
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
+	}
 
+	private void setupLayout() {
 		productDescriptionsPanel = new JXPanel();
 
 		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
@@ -339,15 +346,15 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductName.setText(s);
 	}
 
-	public void setGrey(boolean grey) {
+	public void setActive() {
+		setGrey(1F);
+	}
 
-		float alpha;
+	public void setInactive() {
+		setGrey(0.1F);
+	}
 
-		if (grey) {
-			alpha = 0.1F;
-		} else {
-			alpha = 1;
-		}
+	private void setGrey(float alpha) {
 
 		if (productDescriptionsPanel != null) {
 			productDescriptionsPanel.setAlpha(alpha);
@@ -364,7 +371,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 	public void setEditValues(String productId, String productVersion, String packageVersion, String depotId) {
 
-		setGrey(false);
+		setActive();
 		setProductId(productId);
 		setProductVersion(productVersion + "-" + packageVersion);
 
@@ -382,7 +389,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 	public void clearEditing() {
 
-		setGrey(false);
+		setActive();
 		setProductId("");
 		setProductVersion("");
 

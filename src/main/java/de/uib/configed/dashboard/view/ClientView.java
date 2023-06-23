@@ -143,8 +143,8 @@ public class ClientView implements View {
 
 	private void loadData() {
 		List<Client> clients = ClientData.getClients();
-		List<String> activeClients = ClientData.getActiveClients();
-		List<String> inactiveClients = ClientData.getInactiveClients();
+		List<String> activeClients = ClientData.getReachableClients();
+		List<String> inactiveClients = ClientData.getUnreachableClients();
 		Map<String, Integer> lastSeenData = ClientData.getLastSeenData();
 
 		clientsNumberLabel.setText(String.valueOf(clients.size()));

@@ -12,13 +12,9 @@ import java.util.List;
 import javax.swing.JTable;
 
 public class ExporterToTerminal extends AbstractExportTable {
-	public ExporterToTerminal(JTable table, List<String> classNames) {
-		super(table, classNames);
-	}
 
 	public ExporterToTerminal(JTable table) {
-		this(table, null);
-
+		super(table, null);
 	}
 
 	@SuppressWarnings("java:S106")

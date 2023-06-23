@@ -9,7 +9,6 @@ package de.uib.configed.gui.swinfopage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 
 import javax.swing.GroupLayout;
@@ -47,10 +46,6 @@ public class PanelSWMultiClientReport extends JPanel {
 	private JFileChooser chooserDirectory;
 	private JTextShowField fieldExportDirectory;
 	private JTextShowField fieldFilenamePrefix;
-
-	private JCheckBox checkWithMsUpdates;
-	private JCheckBox checkWithMsUpdates2;
-	private JCheckBox checkAskForOverwrite;
 
 	public PanelSWMultiClientReport() {
 		setupPanel();
@@ -135,14 +130,11 @@ public class PanelSWMultiClientReport extends JPanel {
 		if (!Main.FONT) {
 			labelAskForOverwrite.setFont(Globals.defaultFont);
 		}
-		checkAskForOverwrite = new JCheckBox("", askForOverwrite);
+		JCheckBox checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
-		checkAskForOverwrite.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				askForOverwrite = checkAskForOverwrite.isSelected();
-				Logging.info(this, "askForOverwrite new value : " + askForOverwrite);
-			}
+		checkAskForOverwrite.addItemListener((ItemEvent e) -> {
+			askForOverwrite = checkAskForOverwrite.isSelected();
+			Logging.info(this, "askForOverwrite new value : " + askForOverwrite);
 		});
 
 		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
@@ -181,8 +173,6 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
 
-		final JPanel panel = this;
-
 		JLabel labelExportDirectory = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
@@ -193,29 +183,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		buttonCallSelectExportDirectory
 				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
-		buttonCallSelectExportDirectory.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				chooserDirectory.setCurrentDirectory(exportDirectory);
-
-				int returnVal = chooserDirectory.showOpenDialog(panel);
-
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					exportDirectory = chooserDirectory.getSelectedFile();
-					Logging.info(this, "selected directory " + exportDirectory);
-
-					if (exportDirectory != null) {
-						exportDirectoryS = exportDirectory.toString();
-					}
-
-					fieldExportDirectory.setText(exportDirectoryS);
-
-					Configed.savedStates.setProperty("swaudit_export_dir", exportDirectoryS);
-
-				}
-
-			}
-		});
+		buttonCallSelectExportDirectory.addActionListener((ActionEvent e) -> buttonCallSelectExportDirectory());
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
 		if (!Main.FONT) {
@@ -226,22 +194,16 @@ public class PanelSWMultiClientReport extends JPanel {
 			labelWithMsUpdates2.setFont(Globals.defaultFont);
 		}
 
-		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		checkWithMsUpdates.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				withMsUpdates = checkWithMsUpdates.isSelected();
-				Logging.info(this, "withMsUpdates new value : " + withMsUpdates);
-			}
+		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);
+		checkWithMsUpdates.addItemListener((ItemEvent e) -> {
+			withMsUpdates = checkWithMsUpdates.isSelected();
+			Logging.info(this, "withMsUpdates new value : " + withMsUpdates);
 		});
 
-		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		checkWithMsUpdates2.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				withMsUpdates2 = checkWithMsUpdates2.isSelected();
-				Logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);
-			}
+		JCheckBox checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
+		checkWithMsUpdates2.addItemListener((ItemEvent e) -> {
+			withMsUpdates2 = checkWithMsUpdates2.isSelected();
+			Logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);
 		});
 
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
@@ -418,5 +380,24 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
+	}
+
+	private void buttonCallSelectExportDirectory() {
+		chooserDirectory.setCurrentDirectory(exportDirectory);
+
+		int returnVal = chooserDirectory.showOpenDialog(this);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			exportDirectory = chooserDirectory.getSelectedFile();
+			Logging.info(this, "selected directory " + exportDirectory);
+
+			if (exportDirectory != null) {
+				exportDirectoryS = exportDirectory.toString();
+			}
+
+			fieldExportDirectory.setText(exportDirectoryS);
+
+			Configed.savedStates.setProperty("swaudit_export_dir", exportDirectoryS);
+		}
 	}
 }

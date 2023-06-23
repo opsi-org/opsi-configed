@@ -25,8 +25,8 @@ import de.uib.utilities.logging.Logging;
 
 public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
-	private static Map<String, List<String>> activeClients = new HashMap<>();
-	private static Map<String, List<String>> inactiveClients = new HashMap<>();
+	private static Map<String, List<String>> reachableClients = new HashMap<>();
+	private static Map<String, List<String>> unreachableClients = new HashMap<>();
 	private static Map<String, Map<String, Integer>> clientLastSeen = new HashMap<>();
 
 	private static String selectedDepot;
@@ -67,7 +67,7 @@ public final class ClientData {
 					Client client = new Client();
 					client.setHostname(hostInfo.getName());
 					client.setLastSeen(hostInfo.getLastSeen());
-					client.setReachable(activeClients.get(depot).contains(hostInfo.getName()));
+					client.setReachable(reachableClients.get(depot).contains(hostInfo.getName()));
 					clientsList.add(client);
 				}
 			}
@@ -79,29 +79,29 @@ public final class ClientData {
 		clients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
-	public static List<String> getActiveClients() {
-		if (activeClients.isEmpty() || !activeClients.containsKey(selectedDepot)) {
+	public static List<String> getReachableClients() {
+		if (reachableClients.isEmpty() || !reachableClients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(activeClients.get(selectedDepot));
+		return new ArrayList<>(reachableClients.get(selectedDepot));
 	}
 
-	public static List<String> getInactiveClients() {
-		if (inactiveClients.isEmpty() || !inactiveClients.containsKey(selectedDepot)) {
+	public static List<String> getUnreachableClients() {
+		if (unreachableClients.isEmpty() || !unreachableClients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(inactiveClients.get(selectedDepot));
+		return new ArrayList<>(unreachableClients.get(selectedDepot));
 	}
 
 	private static void retrieveClientActivityState() {
-		if (!activeClients.isEmpty() && !inactiveClients.isEmpty()) {
+		if (!reachableClients.isEmpty() && !unreachableClients.isEmpty()) {
 			return;
 		}
 
-		activeClients.clear();
-		inactiveClients.clear();
+		reachableClients.clear();
+		unreachableClients.clear();
 
 		Map<String, Object> reachableInfo = persistenceController.reachableInfo(null);
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
@@ -111,30 +111,35 @@ public final class ClientData {
 					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
 					.collect(Collectors.toList());
 
-			List<String> activeClientsList = new ArrayList<>();
-			List<String> inactiveClientsList = new ArrayList<>();
+			List<String> reachableClientsList = new ArrayList<>();
+			List<String> unreachableClientsList = new ArrayList<>();
 
 			if (!clients.isEmpty()) {
-				for (String client : clients) {
-					if (reachableInfo.containsKey(client)) {
-						if (Boolean.TRUE.equals(reachableInfo.get(client))) {
-							activeClientsList.add(client);
-						} else {
-							inactiveClientsList.add(client);
-						}
-					}
-				}
+				addClientsToReachableLists(clients, reachableClientsList, unreachableClientsList, reachableInfo);
 			}
 
-			activeClients.put(depot, activeClientsList);
-			inactiveClients.put(depot, inactiveClientsList);
+			reachableClients.put(depot, reachableClientsList);
+			unreachableClients.put(depot, unreachableClientsList);
 		}
 
-		List<String> allActiveClients = Helper.combineListsFromMap(activeClients);
-		activeClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
+		List<String> allActiveClients = Helper.combineListsFromMap(reachableClients);
+		reachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
 
-		List<String> allInactiveClients = Helper.combineListsFromMap(inactiveClients);
-		inactiveClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
+		List<String> allInactiveClients = Helper.combineListsFromMap(unreachableClients);
+		unreachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
+	}
+
+	private static void addClientsToReachableLists(List<String> clients, List<String> reachableClientsList,
+			List<String> unreachableClientsList, Map<String, Object> reachableInfo) {
+		for (String client : clients) {
+			if (reachableInfo.containsKey(client)) {
+				if (Boolean.TRUE.equals(reachableInfo.get(client))) {
+					reachableClientsList.add(client);
+				} else {
+					unreachableClientsList.add(client);
+				}
+			}
+		}
 	}
 
 	public static Map<String, Integer> getLastSeenData() {
@@ -207,8 +212,8 @@ public final class ClientData {
 
 	public static void clear() {
 		clients.clear();
-		activeClients.clear();
-		inactiveClients.clear();
+		reachableClients.clear();
+		unreachableClients.clear();
 		clientLastSeen.clear();
 	}
 

@@ -7,12 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayDeque;
@@ -122,9 +120,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public ClientSelectionDialog(ConfigedMain main, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null,
-				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
-						+ ")",
+		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
 				false,
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
@@ -132,7 +128,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				FRAME_WIDTH, FRAME_HEIGHT);
 
 		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		this.withMySQL = controller.isWithMySQL()
+		this.withMySQL = controller.canCallMySQL()
 				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
@@ -267,25 +263,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		final ClientSelectionDialog dialog = this;
-		buttonReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed");
-				buttonReload.setEnabled(false);
-				buttonRestart.setEnabled(false);
-				Cursor saveCursor = dialog.getCursor();
-				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-				SwingUtilities.invokeLater(() -> {
-					setReloadRequested();
-
-					buttonReload.setEnabled(true);
-					buttonRestart.setEnabled(true);
-					dialog.setCursor(saveCursor);
-
-				});
-			}
-		});
+		buttonReload.addActionListener((ActionEvent e) -> reload());
 
 		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
@@ -295,21 +273,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		buttonRestart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed");
-				buttonRestart.setEnabled(false);
-				buttonReload.setEnabled(false);
-				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		buttonRestart.addActionListener((ActionEvent e) -> {
+			Logging.info(this, "actionPerformed");
+			buttonRestart.setEnabled(false);
+			buttonReload.setEnabled(false);
 
-				SwingUtilities.invokeLater(() -> {
-					setReloadRequested();
+			SwingUtilities.invokeLater(() -> {
+				setReloadRequested();
 
-					main.callNewClientSelectionDialog();
-					// we lose all components of this dialog, there is nothing to reset
-				});
-			}
+				main.callNewClientSelectionDialog();
+				// we lose all components of this dialog, there is nothing to reset
+			});
 		});
 
 		GroupLayout.SequentialGroup saveHGroup = additionalLayout.createSequentialGroup();
@@ -452,6 +426,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		complexElements.add(createSoftwareGroup());
 		complexElements.getLast().connectionType.setVisible(false);
 		scrollpane.getViewport().add(contentPane);
+	}
+
+	private void reload() {
+		Logging.info(this, "actionPerformed");
+		buttonReload.setEnabled(false);
+		buttonRestart.setEnabled(false);
+		setCursor(Globals.WAIT_CURSOR);
+		SwingUtilities.invokeLater(() -> {
+			setReloadRequested();
+
+			buttonReload.setEnabled(true);
+			buttonRestart.setEnabled(true);
+			setCursor(null);
+		});
 	}
 
 	/* This creates one line with element, operation, data, ... */

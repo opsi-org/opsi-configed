@@ -42,9 +42,7 @@ public class ImagePlusTextLabel extends JPanel {
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(2)
 						.addComponent(imagefield, imageWidth, imageWidth, imageWidth).addGap(2)
-						.addComponent(textlabel, 10, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(2)))
-
-		;
+						.addComponent(textlabel, 10, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(2)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 

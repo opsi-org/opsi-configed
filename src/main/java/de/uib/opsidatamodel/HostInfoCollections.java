@@ -473,7 +473,7 @@ public class HostInfoCollections {
 			persistenceController.setAdditionalConfiguration(clients[i], config);
 		}
 		// send data
-		persistenceController.setAdditionalConfiguration(false);
+		persistenceController.setAdditionalConfiguration();
 
 		// change transitory data
 		for (int i = 0; i < clients.length; i++) {
@@ -494,10 +494,6 @@ public class HostInfoCollections {
 
 	public void removeOpsiHostName(String name) {
 		opsiHostNames.remove(name);
-	}
-
-	public void removeOpsiHostNames(String[] names) {
-		opsiHostNames.removeAll(Arrays.asList(names));
 	}
 
 	// for table

@@ -94,7 +94,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 			}
 		} else {
-			caller.foundError();
 			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
 			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 			if (withGui) {

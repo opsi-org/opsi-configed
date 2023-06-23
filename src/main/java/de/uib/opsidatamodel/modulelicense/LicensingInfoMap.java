@@ -65,12 +65,6 @@ public final class LicensingInfoMap {
 	public static final String STATE_OKAY = "state_okay";
 	public static final String CLIENT_NUMBER = "client_number";
 	public static final String UNLIMITED_NUMBER = "999999999";
-	public static final String CURRENT_OVER_LIMIT = "current_over_limit";
-	public static final String CURRENT_CLOSE_TO_LIMIT = "current_close_to_limit";
-	public static final String CURRENT_TIME_WARNINGS = "current_time_warnings";
-	public static final String CURRENT_TIME_OVER = "current_time_over";
-	public static final String FUTURE_OVER_LIMIT = "future_over_limit";
-	public static final String FUTURE_CLOSE_TO_LIMIT = "future_close_to_limit";
 	public static final String FUTURE_STATE = "future_state";
 	public static final String CONFIG = "config";
 	public static final String DISABLE_WARNING_FOR_MODULES = "disable_warning_for_modules";
@@ -101,8 +95,6 @@ public final class LicensingInfoMap {
 	private Map<String, Object> jOResult;
 	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
-	private List<List<String>> clientNumbersList;
-	private Set<String> customerIDs;
 	private Set<String> customerNames;
 	private Map<String, Map<String, Object>> licenses;
 	private List<String> availableModules;
@@ -140,7 +132,6 @@ public final class LicensingInfoMap {
 		produceConfigs();
 		checksum = produceChecksum();
 		clientNumbersMap = produceClientNumbersMap();
-		clientNumbersList = produceListFromClientNumbersMap();
 		licenses = produceLicenses();
 		obsoleteModules = produceObsoleteModules();
 		availableModules = produceAvailableModules();
@@ -151,7 +142,6 @@ public final class LicensingInfoMap {
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap(datesMap);
-		customerIDs = produceCustomerIDSet();
 		customerNames = produceCustomerNameSet();
 
 		instance = this;
@@ -205,24 +195,6 @@ public final class LicensingInfoMap {
 		});
 	}
 
-	private List<List<String>> produceListFromClientNumbersMap() {
-		List<List<String>> result = new ArrayList<>();
-
-		for (Map.Entry<String, Object> entry : clientNumbersMap.entrySet()) {
-			List<String> line = new ArrayList<>();
-			line.add(entry.getKey());
-			line.add(entry.getValue().toString());
-
-			result.add(line);
-		}
-		List<String> line1 = new ArrayList<>();
-		line1.add(CHECKSUM_ID);
-		line1.add(checksum);
-		result.add(line1);
-
-		return result;
-	}
-
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
@@ -243,23 +215,6 @@ public final class LicensingInfoMap {
 			result.put(originalMap.get(ID).toString(), tmp);
 		}
 		return result;
-	}
-
-	private Set<String> produceCustomerIDSet() {
-		Set<String> producedCustomerIDs = new LinkedHashSet<>();
-
-		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
-				new TypeReference<List<Object>>() {
-				});
-
-		for (Object producedLicence : producedLicences) {
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
-					new TypeReference<Map<String, Object>>() {
-					});
-			producedCustomerIDs.add(String.valueOf(originalMap.get(CUSTOMER_ID)));
-		}
-
-		return producedCustomerIDs;
 	}
 
 	private Set<String> produceCustomerNameSet() {
@@ -560,7 +515,7 @@ public final class LicensingInfoMap {
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
+		classNames.add("java.lang.Boolean");
 
 		try {
 
@@ -744,22 +699,26 @@ public final class LicensingInfoMap {
 				Integer futureNum = Integer.parseInt(fNum);
 				Integer clientNum = Integer.parseInt(cNum);
 
-				Integer diff = futureNum - clientNum;
-
-				if (diff < 0) {
-					return STATE_OVER_LIMIT;
-				}
-
-				if (diff <= absolutClientLimitWarning
-						|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
-					return STATE_CLOSE_TO_LIMIT;
-				}
-
-				return STATE_FUTURE_OKAY;
+				return calculateStateForNumbers(clientNum, futureNum);
 			}
 		}
 
 		return null;
+	}
+
+	private String calculateStateForNumbers(int clientNum, int futureNum) {
+		Integer diff = futureNum - clientNum;
+
+		if (diff < 0) {
+			return STATE_OVER_LIMIT;
+		}
+
+		if (diff <= absolutClientLimitWarning
+				|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
+			return STATE_CLOSE_TO_LIMIT;
+		}
+
+		return STATE_FUTURE_OKAY;
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
@@ -785,75 +744,8 @@ public final class LicensingInfoMap {
 
 	}
 
-	public void setWarningLevelViaConfig(Map<String, List<Object>> configs) {
-		String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_ABSOLUTE;
-		if (configs.get(key) != null) {
-			absolutClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-		}
-
-		key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
-		if (configs.get(key) != null) {
-			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-		}
-
-	}
-
-	public List<String> getCloseToLimitModuleList() {
-		return currentCloseToLimitModuleList;
-	}
-
 	public List<String> getCurrentOverLimitModuleList() {
 		return currentOverLimitModuleList;
-	}
-
-	public List<String> getCurrentDaysWarningModuleList() {
-		return currentTimeWarningModuleList;
-	}
-
-	public List<String> getCurrentDaysOverModuleList() {
-		return currentTimeOverModuleList;
-	}
-
-	/**
-	 * @return list of modules for every possible warning state (4)
-	 */
-	public Map<String, List<String>> getWarnings() {
-		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
-				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
-				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
-			return new HashMap<>();
-		}
-
-		Map<String, List<String>> result = new HashMap<>();
-
-		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
-		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);
-		result.put(CURRENT_TIME_WARNINGS, currentTimeWarningModuleList);
-		result.put(CURRENT_TIME_OVER, currentTimeOverModuleList);
-		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
-		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
-
-		return result;
-	}
-
-	public boolean warningExists() {
-		Logging.info(this, "warning exists? ");
-
-		boolean result = false;
-
-		Logging.info(this, "warnings currentOverLimitModuleList? " + currentOverLimitModuleList.size());
-		Logging.info(this, "warnings currentCloseToLimitModuleList? " + currentCloseToLimitModuleList.size());
-		Logging.info(this, "warnings currentTimeWarningModuleList? " + currentTimeWarningModuleList.size());
-		Logging.info(this, "warnings currentTimeOverModuleList? " + currentTimeOverModuleList.size());
-		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
-		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
-
-		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
-				|| !currentTimeWarningModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty();
-
-		Logging.info(this, "warning exists " + result);
-
-		return result;
 	}
 
 	public String getWarningLevel() {
@@ -868,28 +760,12 @@ public final class LicensingInfoMap {
 		return STATE_OKAY;
 	}
 
-	public Set<String> getModulesListWithCloseToLimitWarnings() {
-		return allCloseToLimitModules;
-	}
-
-	public Set<String> getModulesListWithOverLimitWarnings() {
-		return allOverLimitModules;
-	}
-
 	public String getLatestDate() {
 		return latestDateString;
 	}
 
 	public Map<String, Object> getClientNumbersMap() {
 		return clientNumbersMap;
-	}
-
-	public List<List<String>> getClientNumbersList() {
-		return clientNumbersList;
-	}
-
-	public Set<String> getCustomerIDSet() {
-		return customerIDs;
 	}
 
 	public Set<String> getCustomerNamesSet() {

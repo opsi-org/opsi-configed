@@ -49,6 +49,7 @@ import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.ListModelProducer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
+import utils.PopupMouseListener;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
@@ -114,18 +115,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	private boolean markDeviation = true;
 
-	public EditMapPanelX() {
-		this(null);
-	}
-
-	public EditMapPanelX(TableCellRenderer tableCellRenderer) {
-		this(tableCellRenderer, false);
-	}
-
-	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible) {
-		this(tableCellRenderer, keylistExtendible, true);
-	}
-
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable) {
 		this(tableCellRenderer, keylistExtendible, entryRemovable, false);
 	}
@@ -166,7 +155,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		super.logPopupElements();
 
-		MouseListener popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -297,10 +286,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				public void action(int p) {
 					super.action(p);
 					if (p == PopupMenuTrait.POPUP_RELOAD) {
+						ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 						actor.reloadData();
+						ConfigedMain.getMainFrame().setCursor(null);
 					}
 				}
-
 			};
 		}
 
@@ -468,8 +458,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			((SensitiveCellEditor) theCellEditor).setModelProducer(modelProducer);
 
-			((SensitiveCellEditor) theCellEditor).setForbiddenValues(mapTableModel.getShowOnlyValues());
-
 			((SensitiveCellEditor) theCellEditor).reInit();
 		}
 
@@ -545,7 +533,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		fed.setVisible(true);
 	}
 
-	public void addEmptyProperty(String key) {
+	private void addEmptyProperty(String key) {
 		List<String> val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
@@ -554,7 +542,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
 	}
 
-	public void addEmptyPropertyMultiSelection(String key) {
+	private void addEmptyPropertyMultiSelection(String key) {
 		List<String> val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
@@ -563,7 +551,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
 	}
 
-	public void addBooleanProperty(String key) {
+	private void addBooleanProperty(String key) {
 		List<Object> val = new ArrayList<>();
 		val.add(false);
 		addProperty(key, val);
@@ -605,7 +593,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	}
 
-	public void stopEditing() {
+	private void stopEditing() {
 		// we prefer not to cancel cell editing
 		if (table.isEditing()) {
 			table.getCellEditor().stopCellEditing();
@@ -646,7 +634,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			popupmenuAtRow = popupNoEditOptions;
 		}
 
-		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+		MouseListener popupListener = new PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}

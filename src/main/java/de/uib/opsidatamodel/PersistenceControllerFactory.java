@@ -38,22 +38,26 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		OpsiserviceNOMPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user,
-				password);
-		Logging.info("a PersistenceController initiated, got null? " + (persistControl == null));
+		OpsiserviceNOMPersistenceController persistenceController = new OpsiserviceNOMPersistenceController(server,
+				user, password);
+		Logging.info(
+				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
 
-		boolean connected = persistControl.makeConnection();
+		Logging.info("a PersistenceController initiated, got null? " + (persistenceController == null));
 
-		while (persistControl.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			connected = persistControl.makeConnection();
+		boolean connected = persistenceController.makeConnection();
+
+		while (persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
+			connected = persistenceController.makeConnection();
 		}
 
 		try {
 			if (connected) {
-				persistControl.checkMultiFactorAuthentication();
-				Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
-				persistControl.checkConfiguration();
-				persistControl.retrieveOpsiModules();
+
+				persistenceController.checkMultiFactorAuthentication();
+				Globals.isMultiFactorAuthenticationEnabled = persistenceController.usesMultiFactorAuthentication();
+				persistenceController.checkConfiguration();
+				persistenceController.retrieveOpsiModules();
 			}
 		} catch (Exception ex) {
 			Logging.error("Error", ex);
@@ -68,9 +72,9 @@ public final class PersistenceControllerFactory {
 			return null;
 		}
 
-		staticPersistControl = persistControl;
+		staticPersistControl = persistenceController;
 
-		if (persistControl.getConnectionState().getState() == ConnectionState.CONNECTED
+		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& !Globals.disableCertificateVerification) {
 			CertificateManager.updateCertificate();
 		}

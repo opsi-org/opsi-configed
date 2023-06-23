@@ -21,10 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -50,7 +48,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -83,8 +80,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private CheckedLabel checkmarkSearch;
 
+	private JLabel labelSearch;
 	private JTextField fieldSearch;
+
+	private JButton buttonMarkAll;
+	private JButton buttonInvertSelection;
 	private JComboBox<String> comboSearch;
+
+	private JLabel labelSearchMode;
 	private JComboBoxToolTip comboSearchMode;
 
 	private TablesearchPane.SearchMode searchMode;
@@ -93,15 +96,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private int lastCountOfSearchWords;
 
-	private NavigableMap<String, Integer> rowIndexMap;
-
 	public JTableSelectionPanel(ConfigedMain main) {
 		super();
 		this.main = main;
-		init();
+		initComponents();
+		setupLayout();
 	}
 
-	private void init() {
+	private void initComponents() {
 		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 
 		scrollpane = new JScrollPane();
@@ -123,7 +125,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 					return "";
 				}
 			}
-
 		};
 
 		table.setDragEnabled(true);
@@ -155,9 +156,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		scrollpane.getViewport().add(table);
 
-		JPanel topPane = new JPanel();
-
-		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
+		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		if (!Main.FONT) {
 			labelSearch.setFont(Globals.defaultFont);
 		}
@@ -219,16 +218,16 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
-		JButton buttonMarkAll = new JButton("", markAllIcon);
+		buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		JButton buttonInvertSelection = new JButton("", invertSelectionIcon);
+		buttonInvertSelection = new JButton("", invertSelectionIcon);
 		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
 		buttonInvertSelection.addActionListener((ActionEvent e) -> main.invertClientselection());
 
-		JLabel labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
+		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
 
 		comboSearchMode = new JComboBoxToolTip();
 
@@ -257,7 +256,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		comboSearch = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
 		comboSearch.setPreferredSize(Globals.buttonDimension);
+	}
 
+	private void setupLayout() {
+		JPanel topPane = new JPanel();
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
@@ -320,58 +322,48 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table;
 	}
 
-	// interface MissingDataPanel
-	public void setMissingDataPanel(boolean b) {
-		if (b) {
-			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
+	public void setDataPanel() {
+		scrollpane.getViewport().setView(table);
+	}
 
-			JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-			if (!Main.FONT) {
-				missingData1.setFont(Globals.defaultFontTitle);
-			}
+	public void setMissingDataPanel() {
+		JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
 
-			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
-
-			JPanel mdPanel = new JPanel();
-			if (!Main.THEMES) {
-				mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			}
-
-			GroupLayout mdLayout = new GroupLayout(mdPanel);
-			mdPanel.setLayout(mdLayout);
-
-			mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-					.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
-					.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
-			mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-					.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE))
-					.addGap(10, 10, Short.MAX_VALUE));
-
-			scrollpane.getViewport().setView(mdPanel);
-		} else {
-			scrollpane.getViewport().setView(table);
+		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
+		if (!Main.FONT) {
+			missingData1.setFont(Globals.defaultFontTitle);
 		}
+
+		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
+
+		JPanel mdPanel = new JPanel();
+		if (!Main.THEMES) {
+			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
+		GroupLayout mdLayout = new GroupLayout(mdPanel);
+		mdPanel.setLayout(mdLayout);
+
+		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+				.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
+				.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
+		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(10, 10, Short.MAX_VALUE));
+
+		scrollpane.getViewport().setView(mdPanel);
 	}
 
 	@Override
 	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
 		table.addMouseListener(l);
-	}
-
-	public int convertRowIndexToModel(int i) {
-
-		return table.convertRowIndexToModel(i);
-	}
-
-	public int convertRowIndexToView(int i) {
-		return table.convertRowIndexToView(i);
 	}
 
 	public boolean isSelectionEmpty() {
@@ -386,7 +378,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table.getCellRect(row, col, includeSpacing);
 	}
 
-	public Map<Integer, Integer> getSelectionMap() {
+	private Map<Integer, Integer> getSelectionMap() {
 		Map<Integer, Integer> selectionMap = new HashMap<>();
 		int selectedKeysCount = 0;
 
@@ -398,7 +390,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return selectionMap;
-
 	}
 
 	public Set<String> getSelectedSet() {
@@ -541,10 +532,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		setSelectedValues(valueSet);
 	}
 
-	public void selectAll() {
-		selectionmodel.setSelectionInterval(0, table.getRowCount());
-	}
-
 	public void initSortKeys() {
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
@@ -555,20 +542,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	public void setSortKeys(List<? extends RowSorter.SortKey> orderingKeys) {
 		table.getRowSorter().setSortKeys(orderingKeys);
-	}
-
-	public void buildRowIndexByCol(int i) {
-		int row = 0;
-
-		rowIndexMap = new TreeMap<>();
-
-		while (row < getTableModel().getRowCount()) {
-			rowIndexMap.put((String) getTableModel().getValueAt(row, i), row);
-		}
-	}
-
-	public void setValueForKey(Object value, String key, int colInModelTerms) {
-		getTableModel().setValueAt(value, rowIndexMap.get(key), colInModelTerms);
 	}
 
 	public Set<String> getColumnValues(int col) {
@@ -621,14 +594,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	public TableColumnModel getColumnModel() {
 		return table.getColumnModel();
-	}
-
-	public ListSelectionModel getListSelectionModel() {
-		return table.getSelectionModel();
-	}
-
-	public void listvalueChanged(ListSelectionEvent e) {
-		main.valueChanged(e);
 	}
 
 	public void addListSelectionListener(ListSelectionListener lisel) {
@@ -819,7 +784,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
-
 	}
 
 	public void addSelectedRow(int row) {
@@ -846,7 +810,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setRowSelectionInterval(row, row);
 
 		scrollRowToVisible(row);
-
 	}
 
 	private void searchTheNextRow() {
@@ -891,11 +854,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void searchTheRow(int startrow, boolean addSelection) {
-		String value = fieldSearch.getText();
-
-		if (value.length() > 10 && "http".equalsIgnoreCase(value.substring(0, 4)) && value.indexOf("host=") > 0) {
-			value = value.substring(value.indexOf("host=") + ("host=").length());
-		}
 
 		HashSet<Integer> selectedCols = null;
 
@@ -920,7 +878,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			break;
 		}
 
-		foundrow = findViewRowFromValue(startrow, value, selectedCols, searchMode);
+		foundrow = findViewRowFromValue(startrow, fieldSearch.getText(), selectedCols, searchMode);
 
 		if (foundrow > -1) {
 			if (addSelection) {
@@ -929,10 +887,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				setSelectedRow(foundrow);
 			}
 		}
-	}
-
-	public TableCellRenderer getDefaultRenderer(Class<?> columnClass) {
-		return table.getDefaultRenderer(columnClass);
 	}
 
 	private void searchOnDocumentChange() {

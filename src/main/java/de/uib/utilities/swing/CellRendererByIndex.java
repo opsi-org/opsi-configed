@@ -31,10 +31,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	private Map<String, String> mapOfTooltips;
 	private Map<String, ImageIcon> mapOfImages;
 
-	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
-		this(mapOfStringValues, imagesBase, IMAGE_DEFAULT_WIDTH);
-	}
-
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
 
@@ -67,22 +63,13 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	}
 
-	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase, int imageWidth) {
-		this(mapOfStringValues, mapOfStringValues, imagesBase, imageWidth);
-	}
-
-	public CellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions) {
-		this(mapOfStringValues, mapOfDescriptions, null, 0);
-	}
-
-	public CellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String imagesBase, int imageWidth) {
-		super(imageWidth);
+	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
+		super(IMAGE_DEFAULT_WIDTH);
 
 		super.setOpaque(true);
 
 		mapOfStrings = mapOfStringValues;
-		mapOfTooltips = mapOfDescriptions;
+		mapOfTooltips = mapOfStringValues;
 		mapOfImages = new HashMap<>();
 
 		// Load the item images
@@ -177,5 +164,4 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		return this;
 	}
-
 }

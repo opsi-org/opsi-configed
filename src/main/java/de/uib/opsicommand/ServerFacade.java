@@ -6,7 +6,6 @@
 
 package de.uib.opsicommand;
 
-import java.awt.Cursor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +35,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream;
 
@@ -68,7 +66,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private int portHTTPS = 4447;
 
 	private boolean background;
-	private WaitCursor waitCursor;
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
@@ -191,11 +188,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		background = false;
 		Logging.info(this, "retrieveResponse started");
-		waitCursor = null;
 
-		if (omc != null && !omc.isBackgroundDefault()) {
-			waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
-		} else {
+		if (omc == null || omc.isBackgroundDefault())  {
 			background = true;
 		}
 
@@ -206,7 +200,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		enableFeaturesBasedOnServerVersion();
 
-		stopWaitCursor();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties());
 		HttpsURLConnection connection = handler.establishConnection(true);
@@ -236,19 +229,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				}
 			} catch (IOException ex) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
 				Logging.error(this, "Exception while data reading", ex);
 			}
 		}
 
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveResponse ready");
-		if (waitCursor != null) {
-			waitCursor.stop();
-		}
 		return result;
 	}
 
@@ -327,7 +313,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
 					+ Globals.isMultiFactorAuthenticationEnabled);
 			if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
-				stopWaitCursor();
 				ConnectionErrorObserver.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				retrieveResponse(omc);
 			}
@@ -412,14 +397,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return stream;
 	}
 
-	private void stopWaitCursor() {
-		if (!background) {
-			if (waitCursor != null) {
-				waitCursor.stop();
-			}
-			WaitCursor.stopAll();
-		}
-	}
+	
 
 	/**
 	 * Retrieve used username by the connection.

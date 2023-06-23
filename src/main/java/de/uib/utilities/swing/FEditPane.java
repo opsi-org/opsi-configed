@@ -205,7 +205,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		if (searcher.getMarkedLine(textpane.viewToModel2D(p)) != null) {
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		} else {
-			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			textpane.setCursor(null);
 		}
 	}
 }

@@ -114,16 +114,6 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 
 	protected abstract void first();
 
-	public void setHasNext(boolean b) {
-		nextButton.setEnabled(b);
-		lastButton.setEnabled(b);
-	}
-
-	public void setHasPrevious(boolean b) {
-		previousButton.setEnabled(b);
-		firstButton.setEnabled(b);
-	}
-
 	// interface
 	// ActionListener
 	@Override

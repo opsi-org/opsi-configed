@@ -44,10 +44,6 @@ public class TableModelFilter {
 		inUse = b;
 	}
 
-	public void setInverted(boolean b) {
-		inverted = b;
-	}
-
 	public boolean test(List<Object> row) {
 		if (!inUse || condition == null) {
 			return true;

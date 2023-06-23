@@ -63,7 +63,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected IconButton buttonRemove;
 
 	protected boolean editable = true;
-	private boolean finished;
 
 	protected JTextField extraField;
 	private JLabel extraLabel;
@@ -126,7 +125,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		extraLabel = new JLabel("");
 		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraLabel.setVisible(false);
-
 	}
 
 	public void setDividerLocation(double loc) {
@@ -285,19 +283,11 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		setDataChanged(false);
 		buttonAdd.setEnabled(false);
 		buttonRemove.setEnabled(false);
-		initExtraField();
+		extraField.setText("");
 	}
 
 	public boolean init() {
 		return init(areaDimension);
-	}
-
-	public boolean isFinished() {
-		return finished;
-	}
-
-	protected void initExtraField() {
-		extraField.setText("");
 	}
 
 	public void setExtraLabel(String s) {
@@ -307,17 +297,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	public void enter() {
 		Logging.debug(this, "enter");
-
-	}
-
-	public void deactivate() {
-		leave();
-	}
-
-	protected void leave() {
-
-		setVisible(false);
-		finished = true;
 
 	}
 
@@ -352,7 +331,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		} else {
 			setStartValue(getValue());
 			if (leaveOnCommit) {
-				leave();
+				setVisible(false);
 			}
 		}
 	}
@@ -360,7 +339,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected void cancel() {
 
 		setStartValue(initialValue);
-		leave();
+		setVisible(false);
 	}
 
 	// -------------

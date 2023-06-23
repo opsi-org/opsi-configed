@@ -382,11 +382,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						cancelSelectionKeys.add(key);
 					} else {
 						// or delete the assignment to the licence pool
-						List<String> removeKeys = removeKeysFromOtherLicencePool.get(otherPool);
-						if (removeKeys == null) {
-							removeKeys = new ArrayList<>();
-							removeKeysFromOtherLicencePool.put(otherPool, removeKeys);
-						}
+						List<String> removeKeys = removeKeysFromOtherLicencePool.computeIfAbsent(otherPool,
+								s -> new ArrayList<>());
 						removeKeys.add(key);
 					}
 				}

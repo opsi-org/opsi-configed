@@ -25,11 +25,10 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FLoadingWaiter extends JFrame implements DataLoadingObserver, WaitingSleeper {
+public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
@@ -39,7 +38,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 	private JProgressBar progressBar;
 	private JLabel infoLabel;
 
-	private Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
+	private String observingMesg = Configed.getResourceValue("LoadingObserver.start");
 
 	private WaitingWorker worker;
 
@@ -65,16 +64,6 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		createGUI(owner);
 		observingMesg = startMessage;
-	}
-
-	public void stopWaiting() {
-		worker.stop();
-	}
-
-	// DataLoadingObserver
-	@Override
-	public void gotNotification(Object mesg) {
-		observingMesg = mesg;
 	}
 
 	private void createGUI(Component owner) {
@@ -175,8 +164,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 		Logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 
 		// produces strings with ascii null
-		return observingMesg + " ... ";
-
+		return observingMesg;
 	}
 
 }

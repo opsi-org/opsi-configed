@@ -64,18 +64,6 @@ public class CheckedLabel extends JPanel implements FocusListener {
 		}
 	}
 
-	public CheckedLabel(boolean selected) {
-		this("", selected);
-	}
-
-	public CheckedLabel(Icon icon, boolean selected) {
-		this("", icon, icon, selected);
-	}
-
-	public CheckedLabel(String text, boolean selected) {
-		this(text, (Icon) null, (Icon) null, selected);
-	}
-
 	public CheckedLabel(String text, Icon selectedIcon, Icon unselectedIcon, boolean selected) {
 		this(text, selectedIcon, unselectedIcon, (Icon) null, selected);
 	}
@@ -266,14 +254,6 @@ public class CheckedLabel extends JPanel implements FocusListener {
 
 	public void addActionListener(ActionListener al) {
 		myListeners.add(al);
-	}
-
-	public List<ActionListener> getActionListeners() {
-		return myListeners;
-	}
-
-	public void removeActionListener(ActionListener al) {
-		myListeners.remove(al);
 	}
 
 	public void removeAllActionListeners() {

@@ -29,7 +29,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	/** String unique menu text **/
 	private String menuText;
 	/** LinkedList<SSHCommand> ssh_command **/
-	private List<SSHCommand> sshCommand = new LinkedList<>();
+	private List<SSHCommand> sshCommands = new LinkedList<>();
 	private List<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	/** boolean needSudo state **/
 	private boolean needSudo;
@@ -67,6 +67,22 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 */
 	public SSHCommandTemplate(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
 		position = SSHCommandFactory.POSITION_DEFAULT;
+
+		initValues(id, c, mt, ns, pmt, ttt, p);
+	}
+
+	public SSHCommandTemplate(SSHCommand orig, List<String> commandlist) {
+		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
+				orig.getToolTipText(), orig.getPriority());
+	}
+
+	public SSHCommandTemplate(SSHCommandTemplate orig) {
+		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
+				orig.getToolTipText(), orig.getPriority());
+	}
+
+	private void initValues(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
+
 		setId(id);
 		setMenuText(mt);
 		setNeedSudo(ns);
@@ -74,20 +90,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		setTooltipText(ttt);
 		setPriority(p);
 		setCommands(c);
-		Logging.debug(this, "SSHCommand_Template this " + this.toString());
-		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
-	}
-
-	public SSHCommandTemplate(SSHCommand orig, List<String> commandlist) {
-		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
-				orig.getToolTipText(), orig.getPriority());
-		Logging.debug(this, "SSHCommand_Template this " + this.toString());
-		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
-	}
-
-	public SSHCommandTemplate(SSHCommandTemplate orig) {
-		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
-				orig.getToolTipText(), orig.getPriority());
 		Logging.debug(this, "SSHCommand_Template this " + this.toString());
 		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
@@ -125,10 +127,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	public void setCommands(List<String> cList) {
 		if (cList != null) {
+			sshCommands.clear();
 			for (String c : cList) {
 
 				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
-				sshCommand.add(sshc);
+				sshCommands.add(sshc);
 				if (firstInitCommands) {
 					sshCommandOriginal.add(sshc);
 				}
@@ -152,7 +155,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @param sshc: SSHCommand
 	 **/
 	public void addCommand(SSHCommand sshc) {
-		sshCommand.add(sshc);
+		sshCommands.add(sshc);
 		sshCommandOriginal.add(sshc);
 	}
 
@@ -276,7 +279,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	@Override
 	public List<SSHCommand> getCommands() {
-		return sshCommand;
+		return sshCommands;
 	}
 
 	public List<SSHCommand> getOriginalCommands() {
@@ -317,7 +320,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	@Override
 	public List<String> getCommandsRaw() {
 		List<String> commandsStringList = new LinkedList<>();
-		for (SSHCommand c : sshCommand) {
+		for (SSHCommand c : sshCommands) {
 			String comstr = c.getCommandRaw();
 			if (!(comstr == null || comstr.trim().isEmpty())) {
 				commandsStringList.add(c.getCommandRaw());

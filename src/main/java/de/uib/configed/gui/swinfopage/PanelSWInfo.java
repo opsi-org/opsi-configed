@@ -61,6 +61,9 @@ public class PanelSWInfo extends JPanel {
 
 	private JPanel subPanelTitle;
 
+	private JLabel labelWithMSUpdates;
+	private JLabel labelWithMSUpdates2;
+
 	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	private GenTableModel modelSWInfo;
 
@@ -137,12 +140,13 @@ public class PanelSWInfo extends JPanel {
 		this.withPopup = withPopup;
 		this.mainController = mainController;
 
-		initTable();
+		initTableComponents();
+		setupTableLayout();
 
 		buildPanel();
 	}
 
-	private void initTable() {
+	private void initTableComponents() {
 
 		labelSuperTitle = new JLabel();
 
@@ -228,13 +232,15 @@ public class PanelSWInfo extends JPanel {
 
 		subPanelTitle = new JPanel();
 
-		JLabel labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
-		JLabel labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
+		labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
+		labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
 		if (!Main.THEMES) {
 			subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
+	}
 
+	private void setupTableLayout() {
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
@@ -279,7 +285,6 @@ public class PanelSWInfo extends JPanel {
 		panelTable.getColumnModel().getColumn(2).setPreferredWidth(100);
 
 		csvExportTable = new ExporterToCSV(panelTable.getTheTable());
-
 	}
 
 	private void buildPanel() {

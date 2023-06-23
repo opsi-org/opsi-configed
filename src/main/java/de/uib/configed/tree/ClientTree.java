@@ -6,7 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -54,7 +53,6 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
-import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
@@ -316,12 +314,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
 
-		final Cursor initialCursor = getCursor();
-		final JTree theTree = this;
-
-		theTree.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		configedMain.treeClientsMouseAction(e);
-		theTree.setCursor(initialCursor);
+		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	@Override
@@ -1095,11 +1090,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private void checkDIRECTORY(String clientID, GroupNode selectedNode) {
-		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.get(clientID);
-		if (groupsInDIRECTORY == null) {
-			groupsInDIRECTORY = new TreeSet<>(new NodeComparator());
-			locationsInDIRECTORY.put(clientID, groupsInDIRECTORY);
-		}
+		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.computeIfAbsent(clientID,
+				s -> new TreeSet<>(new NodeComparator()));
 
 		if (groupsInDIRECTORY.size() <= 1) {
 			return;
@@ -1429,7 +1421,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			super.paint(g);
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
-			WaitCursor.stopAll();
 		}
 	}
 

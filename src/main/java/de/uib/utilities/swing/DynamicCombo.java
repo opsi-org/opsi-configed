@@ -36,13 +36,8 @@ public class DynamicCombo extends JPanel {
 
 	private TableColumn col;
 
-	public DynamicCombo(ComboBoxModeller modelsource) {
-		this.modelsource = modelsource;
-		initComponents();
-	}
-
 	public DynamicCombo() {
-		this(null);
+		initComponents();
 	}
 
 	private void initComponents() {
@@ -109,5 +104,4 @@ public class DynamicCombo extends JPanel {
 	public Object getSelectedItem() {
 		return table.getValueAt(0, 0);
 	}
-
 }

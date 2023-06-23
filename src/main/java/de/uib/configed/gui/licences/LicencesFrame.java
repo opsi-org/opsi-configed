@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.swing.tabbedpane;
+package de.uib.configed.gui.licences;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -13,12 +13,14 @@ import java.util.Map;
 
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 import de.uib.utilities.swing.SecondaryFrame;
+import de.uib.utilities.swing.tabbedpane.TabController;
+import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
 
-//adapting TabbedPaneX to a JFrame
-public class TabbedFrame extends SecondaryFrame {
+public class LicencesFrame extends SecondaryFrame {
+
 	private TabbedPaneX panel;
 
-	public TabbedFrame(TabController controller) {
+	public LicencesFrame(TabController controller) {
 		super();
 		panel = new TabbedPaneX(controller);
 		init();
@@ -33,6 +35,7 @@ public class TabbedFrame extends SecondaryFrame {
 
 	private void init() {
 		add(panel);
+
 		pack();
 	}
 
@@ -59,5 +62,4 @@ public class TabbedFrame extends SecondaryFrame {
 	public void removeTab(LicencesTabStatus s) {
 		panel.removeTab(s);
 	}
-
 }

@@ -7,9 +7,11 @@
 package de.uib.configed;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.net.URL;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-06-01";
+	public static final String VERDATE = "2023-06-23";
 
 	public static final String VERHASHTAG = "";
 
@@ -290,6 +292,8 @@ public final class Globals {
 
 	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
 
+	public static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
@@ -475,57 +479,6 @@ public final class Globals {
 		info.setVisible(true);
 	}
 
-	public static boolean interpretAsBoolean(Object value) {
-
-		if (value == null) {
-			return false;
-		}
-
-		if (value instanceof Boolean) {
-			return (Boolean) value;
-		}
-
-		if (value instanceof Integer) {
-			int val = (Integer) value;
-			if (val == 1) {
-				return true;
-			} else if (val == 0) {
-				return false;
-			} else {
-				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
-			}
-		}
-
-		if (value instanceof String) {
-
-			String val = ((String) value).toLowerCase(Locale.ROOT);
-
-			if (val.isEmpty()) {
-				return false;
-			}
-
-			if ("true".equals(val)) {
-				return true;
-			}
-
-			if ("false".equals(val)) {
-				return false;
-			}
-
-			if ("1".equals(val)) {
-				return true;
-			}
-
-			if ("0".equals(val)) {
-				return false;
-			}
-
-			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-		}
-
-		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-	}
-
 	public static int getMaxLogSize(int index) {
 		if (index < 0 || index >= maxLogSizes.length) {
 			Logging.warning("error with index for maxLogSizes");
@@ -575,11 +528,11 @@ public final class Globals {
 		return result.toString();
 	}
 
-	public static java.net.URL getImageResourceURL(String relPath) {
+	public static URL getImageResourceURL(String relPath) {
 		String resourceS = IMAGE_BASE + relPath;
 
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		java.net.URL imgURL = cl.getResource(resourceS);
+		URL imgURL = cl.getResource(resourceS);
 		if (imgURL != null) {
 			return imgURL;
 		} else {
@@ -593,7 +546,7 @@ public final class Globals {
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		// based on MainFrame
 
-		java.net.URL imgURL = cl.getResource(xPath);
+		URL imgURL = cl.getResource(xPath);
 
 		// should have the same result (but seems not to have)
 

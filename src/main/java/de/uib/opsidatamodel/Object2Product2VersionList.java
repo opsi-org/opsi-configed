@@ -14,11 +14,7 @@ import de.uib.utilities.logging.Logging;
 
 public class Object2Product2VersionList extends HashMap<String, HashMap<String, List<String>>> {
 	public void addPackage(String depot, String productName, String versionInfo) {
-		HashMap<String, List<String>> pVersions = get(depot);
-		if (pVersions == null) {
-			pVersions = new HashMap<>();
-			put(depot, pVersions);
-		}
+		HashMap<String, List<String>> pVersions = computeIfAbsent(depot, s -> new HashMap<>());
 
 		List<String> versions = pVersions.computeIfAbsent(productName, arg -> new ArrayList<>());
 

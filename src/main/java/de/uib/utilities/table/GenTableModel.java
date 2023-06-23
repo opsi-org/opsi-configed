@@ -26,7 +26,7 @@ import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel {
 
-	public static final String DEFAULT_FILTER_NAME = "default";
+	private static final String DEFAULT_FILTER_NAME = "default";
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
@@ -55,7 +55,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	private TableProvider tableProvider;
 	private TableUpdateItemInterface itemFactory;
-	private int saveUpdatesSize;
 
 	private final ChainedTableModelFilter chainedFilter;
 	private TableModelFilter workingFilter;
@@ -116,26 +115,6 @@ public class GenTableModel extends AbstractTableModel {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
 
-	public void clear() {
-		colsLength = 0;
-		rowsLength = 0;
-		colEditable = new boolean[0];
-		if (columnNames != null) {
-			columnNames.clear();
-		}
-
-		if (classNames != null) {
-			classNames.clear();
-		}
-
-		if (rows != null) {
-			rows.clear();
-		}
-
-		clearUpdates();
-		fireTableStructureChanged();
-	}
-
 	private void initColumns() {
 		columnNames = tableProvider.getColumnNames();
 		Logging.info(this, "initColumns " + columnNames);
@@ -165,10 +144,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	public int getKeyCol() {
 		return keyCol;
-	}
-
-	public void setKeyCol(int keyCol) {
-		this.keyCol = keyCol;
 	}
 
 	public List<Integer> getFinalCols() {
@@ -201,16 +176,6 @@ public class GenTableModel extends AbstractTableModel {
 		invalidate();
 	}
 
-	public void removeUpdates() {
-		int newSize = updates.size();
-		for (int i = newSize - 1; i >= saveUpdatesSize; i--) {
-
-			updates.remove(i);
-		}
-		updatedRows.clear();
-		invalidate();
-	}
-
 	private void setFilter(TableModelFilter filter) {
 		Logging.info(this, "setFilter " + filter);
 		workingFilter = filter;
@@ -225,13 +190,6 @@ public class GenTableModel extends AbstractTableModel {
 		chainedFilter.set(DEFAULT_FILTER_NAME, new TableModelFilter(cond));
 
 		// TableModelFilter
-	}
-
-	/**
-	 * tell if some filter is working
-	 */
-	public boolean isFiltered() {
-		return workingFilter != null && workingFilter.isInUse();
 	}
 
 	public void clearFilter() {
@@ -408,18 +366,9 @@ public class GenTableModel extends AbstractTableModel {
 
 	}
 
-	public void toggleFilter(String name) {
-		setUsingFilter(name, !isUsingFilter(name));
-	}
-
 	private void clearUpdates() {
 		addedRows.clear();
 		updatedRows.clear();
-		if (updates == null) {
-			saveUpdatesSize = 0;
-		} else {
-			saveUpdatesSize = updates.size();
-		}
 	}
 
 	/**
@@ -485,55 +434,6 @@ public class GenTableModel extends AbstractTableModel {
 		} else {
 			markCursorRow = false;
 		}
-	}
-
-	public List<Object> getRow(int row) {
-		return rows.get(row);
-	}
-
-	public RowStringMap getRowStringMap(int row) {
-		RowStringMap result = new RowStringMap();
-
-		for (int col = 0; col < getColumnNames().size(); col++) {
-			result.put(getColumnName(col), "" + getValueAt(row, col));
-		}
-
-		return result;
-	}
-
-	public RowMap<String, Object> getRowMap(int row) {
-		RowMap<String, Object> result = new RowMap<>();
-
-		for (int col = 0; col < getColumnNames().size(); col++) {
-			Object value = getValueAt(row, col);
-			if (value == null) {
-				value = "";
-			} else {
-				value = "" + value;
-			}
-
-			result.put(getColumnName(col), value);
-		}
-
-		return result;
-	}
-
-	public List<Object> getColumn(int col) {
-		List<Object> result = new ArrayList<>();
-		for (int row = 0; row < rowsLength; row++) {
-			result.add(getValueAt(row, col));
-		}
-
-		return result;
-	}
-
-	public List<String> getOrderedColumn(int col) {
-		TreeSet<String> set = new TreeSet<>();
-		for (int row = 0; row < rowsLength; row++) {
-			set.add((String) getValueAt(row, col));
-		}
-
-		return new ArrayList<>(set);
 	}
 
 	@Override
@@ -684,19 +584,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	public void setRow(int row, Object[] a) {
-		int col = 0;
-		if (colsLength != a.length) {
-			Logging.info("update row values less than than row elements");
-		}
-
-		while (col < colsLength && col < a.length) {
-			setValueAt(a[col], row, col);
-			col++;
-		}
-	}
-
-	public void addRow(List<Object> rowV) {
+	private void addRow(List<Object> rowV) {
 		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
@@ -727,23 +615,6 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		addRow(rowV);
-	}
-
-	public List<Object> produceValueRowFromSomeEntries(RowMap entries) {
-		Logging.debug(this, "produceValueRowFromSomeEntries " + entries);
-
-		List<Object> result = new ArrayList<>();
-
-		for (String col : columnNames) {
-
-			if (entries.get(col) != null) {
-				result.add(entries.get(col));
-			} else {
-				result.add(null);
-			}
-		}
-
-		return result;
 	}
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
@@ -843,58 +714,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		Logging.debug(this, "deleted row " + oldValues);
 	}
-
-	public boolean isRowAdded(int rowNum) {
-		return addedRows.indexOf(rowNum) > -1;
-	}
-
-	public boolean someRowAdded(int[] rowNums) {
-		boolean result = false;
-		if (rowNums != null) {
-			int i = 0;
-			while (!result && i < rowNums.length) {
-				if (addedRows.indexOf(rowNums[i]) > -1) {
-					result = true;
-				}
-
-				i++;
-			}
-		}
-		return result;
-	}
-
-	public boolean existsStringValueInCol(String value, int col) {
-		boolean found = false;
-		int i = 0;
-		while (!found && i < getRowCount()) {
-			String compValue = "" + getValueAt(i, col);
-
-			if (compValue.equals(value)) {
-				found = true;
-			} else {
-				i++;
-			}
-
-		}
-		return found;
-	}
-
-	public boolean existsValueInCol(Object value, int col) {
-		boolean found = false;
-		int i = 0;
-		while (!found && i < getRowCount()) {
-			Object compValue = getValueAt(i, col);
-
-			if (compValue.equals(value)) {
-				found = true;
-			} else {
-				i++;
-			}
-		}
-		return found;
-	}
-
-	// interface TableModelFunctions
 
 	@Override
 	public String toString() {

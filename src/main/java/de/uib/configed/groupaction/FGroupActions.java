@@ -24,6 +24,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GlassPane;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
@@ -31,9 +32,10 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
-import de.uib.utilities.thread.WaitCursor;
 
 public class FGroupActions extends SecondaryFrame {
+
+	private GlassPane glassPane;
 
 	private JTextField fieldGroupname;
 	private JTextField fieldInvolvedClientsCount;
@@ -58,6 +60,9 @@ public class FGroupActions extends SecondaryFrame {
 
 		super.setGlobals(Globals.getMap());
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
+
+		glassPane = new GlassPane();
+		super.setGlassPane(glassPane);
 	}
 
 	private void setGroupLabelling(String label, String clientCount) {
@@ -103,7 +108,7 @@ public class FGroupActions extends SecondaryFrame {
 		// selected from common product property values
 		values.add(image);
 
-		WaitCursor waitCursor = new WaitCursor(this);
+		glassPane.activate(true);
 
 		persistenceController.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
@@ -116,7 +121,7 @@ public class FGroupActions extends SecondaryFrame {
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 
-		waitCursor.stop();
+		glassPane.activate(false);
 	}
 
 	private void define() {

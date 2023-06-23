@@ -6,11 +6,8 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -45,12 +41,11 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -183,9 +178,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, SecondaryFrame root) {
 		this.main = main;
 		this.rootFrame = root;
 		server = main.getConfigserver();
@@ -375,19 +370,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
 
 		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.standard"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS));
+				Configed.getResourceValue("PanelDriverUpload.type.standard"), getLocalsystemPath(DIRECTORY_DRIVERS));
 		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
 		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
 		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
+				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
 
 		radioButtons.add(buttonStandard);
 		radioButtons.add(buttonPreferred);
@@ -399,15 +393,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		for (final RadioButtonIntegrationType button : radioButtons) {
 			buttonGroup.add(button);
-			button.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						Logging.debug(this, " " + e);
-						driverDirectory = button.getSubdir();
+			button.addItemListener((ItemEvent e) -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					Logging.debug(this, " " + e);
+					driverDirectory = button.getSubdir();
 
-						produceTarget();
-					}
+					produceTarget();
 				}
 			});
 		}
@@ -475,21 +466,16 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener(new ActionListener() {
+		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
+			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
+					+ fieldServerPath.getText());
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
-						+ fieldServerPath.getText());
-				final Color saveColor = buttonUploadDrivers.getBackground();
-
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-				}
-				execute();
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(saveColor);
-				}
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+			}
+			execute();
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(buttonUploadDrivers.getBackground());
 			}
 		});
 
@@ -701,7 +687,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
 					Configed.getResourceValue("PanelDriverUpload.execute.running"));
 			waiter.startWaiting();
-			final WaitCursor waitCursor = new WaitCursor(rootFrame);
+			rootFrame.activateLoadingCursor();
 
 			try {
 				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
@@ -718,7 +704,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 							FileUtils.copyFileToDirectory(driverPath, targetPath);
 						}
 					} catch (IOException iox) {
-						waitCursor.stop();
+						rootFrame.disactivateLoadingCursor();
 						Logging.error("copy error:\n" + iox, iox);
 					}
 				} else {
@@ -732,11 +718,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					persistenceController.setRights(driverDir);
 				}
 
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 
 				waiter.setReady();
 			} catch (Exception ex) {
-				waitCursor.stop();
+				rootFrame.disactivateLoadingCursor();
 				Logging.error("error in uploading :\n" + ex, ex);
 			}
 		}
@@ -811,5 +797,19 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String getDefaultName() {
 		return byAuditPath;
+	}
+
+	private static String getLocalsystemPath(String[] parts) {
+		if (parts == null || parts.length == 0) {
+			return "";
+		}
+
+		StringBuilder result = new StringBuilder(parts[0]);
+
+		for (int i = 1; i < parts.length; i++) {
+			result.append(File.separator + parts[i]);
+		}
+
+		return result.toString();
 	}
 }

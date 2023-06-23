@@ -81,7 +81,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
@@ -136,9 +135,7 @@ import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.thread.WaitCursor;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
+import utils.PopupMouseListener;
 
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
 		ComponentListener, RunningInstancesObserver<JDialog> {
@@ -425,6 +422,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JTextEditorField ipAddressField;
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
+
+	private GlassPane glassPane;
 
 	private boolean multidepot;
 
@@ -972,7 +971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
-		if (Configed.sshConnectOnStart) {
+		if (Configed.isSSHConnectionOnStart()) {
 			factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 		}
 
@@ -1029,26 +1028,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					jMenuItem.setText(com.getMenuText());
 					Logging.info(this, "ssh command menuitem text " + com.getMenuText());
 					jMenuItem.setToolTipText(com.getToolTipText());
-					jMenuItem.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
-								Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message")
-										+ " " + factory.getConnectionState());
-							} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-								Logging.error(this,
-										Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
-							} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
-								Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message")
-										+ " " + factory.getConnectionState());
-							} else {
-								// Create new instance of the same command, so that further
-								// modifications would not affect the original command.
-								final SSHCommandTemplate c = new SSHCommandTemplate(com);
-								remoteSSHExecAction(c);
-							}
-						}
-					});
+					jMenuItem.addActionListener((ActionEvent e) -> jMenuItemAction(factory, com));
 
 					if (parentMenuName.equals(SSHCommandFactory.PARENT_NULL)) {
 						jMenuServer.add(jMenuItem);
@@ -1084,23 +1064,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
-			jMenuOpsiCommand.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
-						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-								+ factory.getConnectionState());
-					} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-						Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
-					} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
-						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-								+ factory.getConnectionState());
-					} else {
-						remoteSSHExecAction(command);
-					}
-				}
-			});
+			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
 			if (!jMenuServer.isMenuComponent(menuOpsi)) {
 				jMenuServer.add(menuOpsi);
 			}
@@ -1130,6 +1094,37 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuServer.setEnabled(userConfigExists && !isReadOnly
 
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
+	}
+
+	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {
+		if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
+					+ factory.getConnectionState());
+		} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
+		} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
+					+ factory.getConnectionState());
+		} else {
+			// Create new instance of the same command, so that further
+			// modifications would not affect the original command.
+			final SSHCommandTemplate c = new SSHCommandTemplate(com);
+			remoteSSHExecAction(c);
+		}
+	}
+
+	private void jMenuOptionCommandAction(SSHCommandFactory factory, SSHCommand command) {
+		if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
+					+ factory.getConnectionState());
+		} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
+		} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
+			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
+					+ factory.getConnectionState());
+		} else {
+			remoteSSHExecAction(command);
+		}
 	}
 
 	private void setupMenuGrouping() {
@@ -1211,12 +1206,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
-		jMenuFrameShowDialogs.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed");
-				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-			}
+		jMenuFrameShowDialogs.addActionListener((ActionEvent e) -> {
+			Logging.info(this, "actionPerformed");
+			executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
 		});
 
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
@@ -1311,11 +1303,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
-			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
-					ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
-			showHealthDataAction();
-		});
+		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 
 		if (ServerFacade.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
@@ -1343,7 +1331,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", " ");
 
-		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSetGroup"),
+		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
@@ -2411,32 +2399,29 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// tab panes
 
-		jTabbedPaneConfigPanes.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// report state change request to
-				int visualIndex = jTabbedPaneConfigPanes.getSelectedIndex();
+		jTabbedPaneConfigPanes.addChangeListener((ChangeEvent e) -> {
+			// report state change request to
+			int visualIndex = jTabbedPaneConfigPanes.getSelectedIndex();
 
-				// report state change request to controller
+			// report state change request to controller
 
-				Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
-				configedMain.setViewIndex(visualIndex);
+			Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
+			configedMain.setViewIndex(visualIndex);
 
-				// retrieve the state index finally produced by main
-				int newStateIndex = configedMain.getViewIndex();
+			// retrieve the state index finally produced by main
+			int newStateIndex = configedMain.getViewIndex();
 
-				// if the controller did not accept the new index set it back
-				// observe that we get a recursion since we initiate another state change
-				// the recursion breaks since main.setViewIndex does not yield a different value
-				if (visualIndex != newStateIndex) {
-					jTabbedPaneConfigPanes.setSelectedIndex(newStateIndex);
-				}
+			// if the controller did not accept the new index set it back
+			// observe that we get a recursion since we initiate another state change
+			// the recursion breaks since main.setViewIndex does not yield a different value
+			if (visualIndex != newStateIndex) {
+				jTabbedPaneConfigPanes.setSelectedIndex(newStateIndex);
 			}
 		});
 
 		// --- panel_Clientselection
 
-		panelClientlist.addMouseListener(new utils.PopupMouseListener(popupClients));
+		panelClientlist.addMouseListener(new PopupMouseListener(popupClients));
 
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
@@ -2542,19 +2527,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
-		showLogfiles.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
+		showLogfiles.addChangeListener((ChangeEvent e) -> {
 
-				Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
+			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
 
-				String logtype = Globals.getLogType(showLogfiles.getSelectedIndex());
+			String logtype = Globals.getLogType(showLogfiles.getSelectedIndex());
 
-				// logfile empty?
-				if (!configedMain.logfileExists(logtype)) {
-					setUpdatedLogfilePanel(logtype);
-				}
-
+			// logfile empty?
+			if (!configedMain.logfileExists(logtype)) {
+				setUpdatedLogfilePanel(logtype);
 			}
 		});
 
@@ -2613,6 +2594,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
 			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
 
 		pack();
 	}
@@ -2820,12 +2804,33 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void reloadAction() {
+		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		configedMain.reload();
 	}
 
+	public void activateLoadingPane() {
+		glassPane.activate(true);
+	}
+
+	public void activateLoadingPane(String infoText) {
+		glassPane.activate(true);
+		glassPane.setInfoText(infoText);
+	}
+
+	public void disactivateLoadingPane() {
+		glassPane.activate(false);
+	}
+
 	public void reloadLicensesAction() {
-		configedMain.reloadLicensesData();
-		configedMain.licencesFrame.setVisible(true);
+		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
+		new Thread() {
+			@Override
+			public void run() {
+				configedMain.reloadLicensesData();
+				configedMain.licencesFrame.setVisible(true);
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	public void checkMenuItemsDisabling() {
@@ -2994,10 +2999,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		info.setVisible(true);
 	}
 
-	private static void showHealthDataAction() {
-		HealthCheckDialog dialog = new HealthCheckDialog();
-		dialog.setupLayout();
-		dialog.setVisible(true);
+	private void showHealthDataAction() {
+
+		// Only show loading when health data are not yet loaded
+		if (!persistenceController.isHealthDataAlreadyLoaded()) {
+			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
+						ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
+
+				HealthCheckDialog dialog = new HealthCheckDialog();
+				dialog.setupLayout();
+				dialog.setVisible(true);
+
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	private void saveToFile(String fileName, ByteBuffer data) {
@@ -3110,7 +3131,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
-
 	}
 
 	// ComponentListener implementation
@@ -3349,16 +3369,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
-					OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-					OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
-				// Starting JavaFX-Thread by creating a new JFXPanel, but not
-				// using it since it is not needed.
-
-				new JFXPanel();
-
-				Platform.runLater(this::startLicenceDisplayer);
-			}
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
 
@@ -3374,7 +3384,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void startLicenceDisplayer() {
+	public void startLicenceDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
@@ -3385,6 +3395,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			licenseDisplayer.display();
 		}
+
 	}
 
 	public void enableAfterLoading() {
@@ -3714,7 +3725,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			super.paint(g);
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
-			WaitCursor.stopAll();
 		}
 	}
 }

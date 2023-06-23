@@ -20,7 +20,6 @@ public class ExtendedDate {
 
 	public ExtendedDate(Object value) {
 		interpretAsTimestamp(value);
-
 	}
 
 	private void setFromDate(Date d) {
@@ -74,31 +73,5 @@ public class ExtendedDate {
 
 	public Date getDate() {
 		return date;
-	}
-
-	public int compareTo(Date compareDate) {
-		if (equals(INFINITE)) {
-			return 1;
-		} else if (getDate().equals(compareDate)) {
-			return 0;
-		} else if (getDate().after(compareDate)) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
-
-	public int compareTo(ExtendedDate compareValue) {
-		if (equals(compareValue)) {
-			return 0;
-		} else if (equals(INFINITE)) {
-			return 1;
-		} else if (compareValue.equals(INFINITE)) {
-			return -1;
-		} else if (getDate().after(compareValue.getDate())) {
-			return 1;
-		} else {
-			return -1;
-		}
 	}
 }

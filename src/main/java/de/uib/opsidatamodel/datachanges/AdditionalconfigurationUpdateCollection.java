@@ -22,15 +22,13 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	private String[] objectIds;
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private boolean determineConfigOptions;
+
 	private boolean masterConfig;
 
 	public AdditionalconfigurationUpdateCollection(String[] objectIds) {
 		super(new ArrayList<>(0));
 		this.objectIds = objectIds;
 	}
-
-	
 
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
@@ -87,21 +85,12 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		if (masterConfig) {
 			persistenceController.setConfig();
 		} else {
-			persistenceController.setAdditionalConfiguration(determineConfigOptions);
+			persistenceController.setAdditionalConfiguration();
 		}
 		clear();
-	}
-
-	public void setDetermineConfigOptions(boolean b) {
-		determineConfigOptions = b;
 	}
 
 	public void setMasterConfig(boolean b) {
 		masterConfig = b;
 	}
-
-	public boolean isMasterConfig() {
-		return masterConfig;
-	}
-
 }

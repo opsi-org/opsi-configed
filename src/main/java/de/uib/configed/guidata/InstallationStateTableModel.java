@@ -855,12 +855,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 
-		Set<String> aSetOfClients = product2setOfClientsWithNewAction.get(product);
-
-		if (aSetOfClients == null) {
-			aSetOfClients = new HashSet<>();
-			product2setOfClientsWithNewAction.put(product, aSetOfClients);
-		}
+		Set<String> aSetOfClients = product2setOfClientsWithNewAction.computeIfAbsent(product, s -> new HashSet<>());
 
 		aSetOfClients.add(clientId);
 

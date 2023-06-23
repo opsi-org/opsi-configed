@@ -122,6 +122,21 @@ public class SWAuditClientEntry {
 
 	}
 
+	public SWAuditClientEntry(final List<String> keys, final List<String> values) {
+
+		data = new HashMap<>();
+
+		data.put(SWAuditEntry.ID, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
+		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
+
+		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
+		swIdent = produceSWident(keys, values);
+		this.software = persistenceController.getSoftwareList();
+		this.software2Number = persistenceController.getSoftware2Number();
+
+		produceSWid();
+	}
+
 	public static String produceSWident(List<String> keys, List<String> values) {
 		// from db columns
 
