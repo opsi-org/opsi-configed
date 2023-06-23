@@ -19,7 +19,6 @@ import java.util.TreeSet;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
@@ -204,8 +203,8 @@ public class UserConfigProducing {
 
 			item.put("description",
 					"the primary value setting is an empty selection list, but all existing items as option");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(selectedValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(listOptions));
+			item.put("defaultValues", selectedValues);
+			item.put("possibleValues", listOptions);
 
 			readyObjects.add(item);
 		}
