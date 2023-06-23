@@ -39,7 +39,6 @@ public final class InstallationStatus {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
 	private static List<Integer> states;
@@ -107,15 +106,6 @@ public final class InstallationStatus {
 
 		label2displayLabel.put("unknown", "unknown");
 
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("undefined", "undefined");
-		displayLabel2label.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
-		displayLabel2label.put(InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-
-		displayLabel2label.put("unknown", "unknown");
-
 		choiceLabels = new String[] { label2displayLabel.get(InstallationStatus.KEY_NOT_INSTALLED),
 				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("unknown")
 
@@ -125,7 +115,6 @@ public final class InstallationStatus {
 		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
 		label2textColor.put(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
 		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
-
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {

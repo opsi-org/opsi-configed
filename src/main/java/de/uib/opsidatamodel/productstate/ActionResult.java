@@ -33,7 +33,6 @@ public final class ActionResult {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 
 	private static List<Integer> states;
 	private static List<String> labels;
@@ -93,15 +92,6 @@ public final class ActionResult {
 		label2displayLabel.put("none", "none");
 		label2displayLabel.put("failed", "failed");
 		label2displayLabel.put("successful", "success");
-
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("none", "none");
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("failed", "failed");
-		displayLabel2label.put("success", "successful");
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {

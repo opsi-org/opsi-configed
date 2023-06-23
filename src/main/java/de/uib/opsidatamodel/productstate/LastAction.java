@@ -36,7 +36,6 @@ public class LastAction {
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
-	private static Map<String, String> displayLabel2label;
 
 	private static List<Integer> states;
 	private static List<String> labels;
@@ -104,18 +103,6 @@ public class LastAction {
 		label2state.put("always", ALWAYS);
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
-
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("none", "none");
-		displayLabel2label.put("setup", "setup");
-		displayLabel2label.put("update", "update");
-		displayLabel2label.put("uninstall", "uninstall");
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("once", "once");
-		displayLabel2label.put("custom", "custom");
 	}
 
 	private static boolean existsState(int state) {

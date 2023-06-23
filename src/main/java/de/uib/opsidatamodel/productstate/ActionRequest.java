@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.uib.configed.Globals;
 
@@ -44,7 +45,6 @@ public class ActionRequest {
 	private static List<Integer> states;
 	private static List<String> labels;
 	private static String[] choiceLabels;
-	private static List<String> serviceValues;
 	private static List<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
@@ -109,15 +109,14 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new ArrayList<>(serviceValue2state.keySet());
 		scriptKeys = new ArrayList<>();
 
 		scriptKey2label = new HashMap<>();
 
-		for (String request : serviceValues) {
-			scriptKeys.add(request + "Script");
+		for (Entry<String, Integer> stateEntry : serviceValue2state.entrySet()) {
+			scriptKeys.add(stateEntry.getKey() + "Script");
 
-			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
+			scriptKey2label.put(stateEntry.getKey() + "Script", state2label.get(stateEntry.getValue()));
 		}
 
 		label2state = new HashMap<>();
