@@ -26,7 +26,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -487,8 +486,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		} else {
 
 			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(newData) });
+				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { newData });
 
 				persistenceController.exec.doCall(omc);
 			}

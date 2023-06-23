@@ -265,7 +265,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			writer.write(mapper.writeValueAsBytes(jsonMap));
 			writer.flush();
 
-			Logging.debug(this, "(POST) sending: " + json);
+			Logging.debug(this, "(POST) sending: ");
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request " + iox);
 		}

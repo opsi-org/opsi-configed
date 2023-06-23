@@ -728,10 +728,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, keyUserRegisterValue,
 					"without given values the primary value setting is false");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		}
@@ -748,8 +747,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			if (!readyConfigObjects.isEmpty()) {
 
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(readyConfigObjects) });
+				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyConfigObjects });
 
 				exec.doCall(omc);
 			}
@@ -1186,30 +1184,30 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	private static List<Object> buildWANConfigOptions(List<Object> readyObjects) {
+	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
 				"meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
 				true, "meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION, false,
 				"meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER,
 				false, "meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		return readyObjects;
 	}
@@ -3002,7 +3000,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(configItem));
+				readyObjects.add(configItem);
 
 				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
@@ -3044,7 +3042,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(configItem));
+				readyObjects.add(configItem);
 
 				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
@@ -3070,8 +3068,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		Logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		return exec.doCall(omc);
 
@@ -4930,7 +4927,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			// build calls
 
 			List<JSONObject> callsConfigName2ConfigValueCollection = new ArrayList<>();
-			List<JSONObject> callsConfigCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigCollection = new ArrayList<>();
 
 			for (Map<String, Object> state : configStateCollection) {
 				if (determineConfigOptions) {
@@ -4952,7 +4949,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 					// mapping to JSON
 					Logging.debug(this, "setAdditionalConfiguation " + configForUpdate);
-					callsConfigCollection.add(AbstractExecutioner.jsonMap(configForUpdate));
+					callsConfigCollection.add(configForUpdate);
 				}
 
 				state.put("values", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
@@ -4961,8 +4958,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
 			if (!callsConfigCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(callsConfigCollection) }));
+				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigCollection }));
 			}
 
 			// do call
@@ -5103,7 +5099,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			}
 
 			// remap to JSON types
-			List<JSONObject> callsConfigUpdateCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigUpdateCollection = new ArrayList<>();
 			List<JSONObject> callsConfigDeleteCollection = new ArrayList<>();
 
 			for (Map<String, Object> callConfig : configCollection) {
@@ -5120,7 +5116,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 								AbstractExecutioner.jsonArray((List<?>) callConfig.get("defaultValues")));
 						callConfig.put("possibleValues",
 								AbstractExecutioner.jsonArray((List<?>) callConfig.get("possibleValues")));
-						callsConfigUpdateCollection.add(AbstractExecutioner.jsonMap(callConfig));
+						callsConfigUpdateCollection.add(callConfig);
 					}
 				}
 			}
@@ -5138,8 +5134,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigUpdateCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(callsConfigUpdateCollection) }));
+				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigUpdateCollection }));
 				configOptionsRequestRefresh();
 			}
 
@@ -5234,16 +5229,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		item.put("ident", key);
 		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(domains));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(domains));
+		item.put("defaultValues", domains);
+		item.put("possibleValues", domains);
 		item.put("editable", true);
 		item.put("multiValue", true);
 
-		List<Object> readyObjects = new ArrayList<>();
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
+		readyObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -6455,15 +6449,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
 		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
 		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", false);
 		item.put("multiValue", true);
 
 		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6481,7 +6474,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	private void addRoleAndUserConfig(String configkey, String rolename) {
-		List<Object> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		String role = rolename;
 
 		if (role == null) {
@@ -6495,10 +6488,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				ConfigOption.TYPE.UNICODE_CONFIG, configkey, "which role should determine this configuration", false,
 				false, selectedValuesRole, selectedValuesRole);
 
-		readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
+		readyObjects.add(itemRole);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -6642,8 +6634,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				SavedSearch.CONFIG_KEY + "." + ob.getName() + "." + SavedSearch.DESCRIPTION_KEY, ob.getDescription(),
 				"", true));
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 	}
@@ -6685,15 +6676,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
 		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
 		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", false);
 		item.put("multiValue", true);
 
 		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6782,13 +6772,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Map<String, Object> item = createNOMitem("UnicodeConfig");
 			item.put("ident", KEY_HOST_DISPLAYFIELDS);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonMap(item) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 			exec.doCall(omc);
 		} else {
@@ -6841,11 +6830,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	private static Object produceConfigEntry(String nomType, String key, Object value, String description) {
+	private static Map<String, Object> produceConfigEntry(String nomType, String key, Object value,
+			String description) {
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private static Object produceConfigEntry(String nomType, String key, Object value, String description,
+	private static Map<String, Object> produceConfigEntry(String nomType, String key, Object value, String description,
 			boolean editable) {
 		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(value);
@@ -6860,12 +6850,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		item = createNOMitem(nomType);
 		item.put("ident", key);
 		item.put("description", description);
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", editable);
 		item.put("multiValue", false);
 
-		return AbstractExecutioner.jsonMap(item);
+		return item;
 	}
 
 	private boolean checkStandardConfigs() {
@@ -6880,7 +6870,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		List<Object> possibleValues;
 		Map<String, Object> item;
 		String key;
-		List<Object> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
 		// list of domains for new clients
 		key = CONFIGED_GIVEN_DOMAINS_KEY;
@@ -6898,12 +6888,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -6918,7 +6908,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item = createJSONBoolConfig(key, DEFAULTVALUE_SEARCH_BY_SQL,
 					"Use SQL calls for search if SQL backend is active");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// global value for install_by_shutdown
@@ -6932,7 +6922,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item = createJSONBoolConfig(key, DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 					"Use install by shutdown if possible");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// product_sort_algorithm
@@ -6957,13 +6947,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				item = createNOMitem("UnicodeConfig");
 				item.put("ident", key);
 				item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-				item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+				item.put("defaultValues", defaultValues);
 
-				item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+				item.put("possibleValues", possibleValues);
 				item.put("editable", false);
 				item.put("multiValue", false);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(item);
 			}
 		}
 
@@ -6992,13 +6982,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item.put("ident", key);
 			item.put("description",
 					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// remote controls
@@ -7165,13 +7155,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		key = KEY_SSH_DEFAULTWINUSER;
@@ -7226,13 +7216,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// for warnings for opsi licences
@@ -7253,12 +7243,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7279,12 +7269,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7305,12 +7295,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7329,12 +7319,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7345,8 +7335,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		} else {
