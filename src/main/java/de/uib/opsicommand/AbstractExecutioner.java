@@ -9,9 +9,6 @@ package de.uib.opsicommand;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public abstract class AbstractExecutioner {
 
 	private static AbstractExecutioner nonExecutioner;
@@ -25,22 +22,6 @@ public abstract class AbstractExecutioner {
 	public abstract Map<String, Object> getResponses(Map<String, Object> retrieved);
 
 	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
-
-	public static JSONObject jsonMap(Map<String, ? extends Object> m) {
-		return new JSONObject(m);
-	}
-
-	public static JSONArray jsonArray(List<?> l) {
-		JSONArray result = null;
-
-		if (l == null) {
-			result = new JSONArray();
-		} else {
-			result = new JSONArray(l);
-		}
-
-		return result;
-	}
 
 	public abstract List<Object> getListResult(OpsiMethodCall omc);
 
