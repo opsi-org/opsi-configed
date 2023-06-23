@@ -180,7 +180,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		}
 	}
 
-	public void execute() {
+	private void execute() {
 
 		if (installProductFromWorkbench()) {
 			produceServerPath();
