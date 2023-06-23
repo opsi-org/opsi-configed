@@ -8,11 +8,10 @@ package de.uib.opsicommand;
 
 import java.awt.Cursor;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -137,6 +136,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
 		requestProperties.put("Accept", "application/msgpack");
 
+		requestProperties.put("Content-Type", "application/msgpack");
+
 		if (versionRetriever.isServerVersionAtLeast("4.2")) {
 			requestProperties.put("Content-Encoding", "lz4");
 		} else {
@@ -256,31 +257,27 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return;
 		}
 
-		try (OutputStreamWriter writer = getOutputStreamWriterForConnection(connection);
-				BufferedWriter out = new BufferedWriter(writer)) {
+		try (OutputStream writer = getOutputStreamWriterForConnection(connection)) {
 			String json = produceJSONstring(omc);
+			Map<String, Object> jsonMap = produceMessagepack(omc);
+			ObjectMapper mapper = new MessagePackMapper();
 
-			Logging.devel(json);
-			Logging.devel(produceMessagepack(omc).toString());
-			Logging.devel("");
+			writer.write(mapper.writeValueAsBytes(jsonMap));
+			writer.flush();
 
 			Logging.debug(this, "(POST) sending: " + json);
-			out.write(json);
-			out.flush();
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request " + iox);
 		}
 	}
 
-	private static OutputStreamWriter getOutputStreamWriterForConnection(HttpsURLConnection connection)
-			throws IOException {
+	private static OutputStream getOutputStreamWriterForConnection(HttpsURLConnection connection) throws IOException {
 
 		if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			LZ4FrameOutputStream lz4 = new LZ4FrameOutputStream(connection.getOutputStream());
-			return new OutputStreamWriter(lz4, UTF8DEFAULT);
+			return new LZ4FrameOutputStream(connection.getOutputStream());
+
 		} else {
-			GZIPOutputStream gzip = new GZIPOutputStream(connection.getOutputStream());
-			return new OutputStreamWriter(gzip, UTF8DEFAULT);
+			return new GZIPOutputStream(connection.getOutputStream());
 		}
 	}
 
