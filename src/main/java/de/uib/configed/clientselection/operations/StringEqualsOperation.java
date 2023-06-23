@@ -13,7 +13,6 @@ import de.uib.configed.clientselection.SelectData;
 public class StringEqualsOperation extends AbstractSelectOperation {
 	public StringEqualsOperation(AbstractSelectElement element) {
 		super(element);
-
 	}
 
 	@Override

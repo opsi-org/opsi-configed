@@ -70,10 +70,6 @@ public abstract class AbstractSelectElement {
 		return new ArrayList<>();
 	}
 
-	public boolean hasEnumData() {
-		return false;
-	}
-
 	@Override
 	public String toString() {
 		return "(" + getClassName() + ", path values " + " !!! " + getPath() + " !!! " + getLocalizedPath() + " !!! )";

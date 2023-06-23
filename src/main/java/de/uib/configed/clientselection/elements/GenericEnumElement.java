@@ -36,11 +36,6 @@ public class GenericEnumElement extends AbstractSelectElement {
 		return enumData;
 	}
 
-	@Override
-	public boolean hasEnumData() {
-		return true;
-	}
-
 	protected static String[] removeFirst(int n, String[] data) {
 		return Arrays.copyOfRange(data, n, data.length);
 	}
