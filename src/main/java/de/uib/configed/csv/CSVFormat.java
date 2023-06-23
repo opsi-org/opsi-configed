@@ -27,8 +27,8 @@ public class CSVFormat {
 	private static final char DEFAULT_STRING_SEPARATOR = '"';
 	private static final String FORMAT_HINT_INDICATOR = "//-";
 
-	private char fieldSeparator;
-	private char stringSeparator;
+	private char fieldSeparator = DEFAULT_FIELD_SEPARATOR;
+	private char stringSeparator = DEFAULT_STRING_SEPARATOR;
 	private boolean hasHeader;
 	private boolean hasHint;
 
@@ -36,15 +36,6 @@ public class CSVFormat {
 	private Map<Character, Long> possibleStringSeparators = new HashMap<>();
 
 	private List<String> headers;
-
-	public CSVFormat() {
-		this(DEFAULT_FIELD_SEPARATOR, DEFAULT_STRING_SEPARATOR);
-	}
-
-	public CSVFormat(char fieldSeparator, char stringSeparator) {
-		this.fieldSeparator = fieldSeparator;
-		this.stringSeparator = stringSeparator;
-	}
 
 	public char getFieldSeparator() {
 		return this.fieldSeparator;
@@ -97,7 +88,7 @@ public class CSVFormat {
 		detectHeader(fileAsList);
 	}
 
-	public void detectFieldSeparator(List<String> fileAsList) {
+	private void detectFieldSeparator(List<String> fileAsList) {
 		boolean inQuotes = false;
 
 		for (int i = 0; i < fileAsList.size(); i++) {
@@ -122,7 +113,7 @@ public class CSVFormat {
 		fieldSeparator = Collections.max(possibleFieldSeparators.entrySet(), Map.Entry.comparingByValue()).getKey();
 	}
 
-	public void detectStringSeparator(String fileAsString) {
+	private void detectStringSeparator(String fileAsString) {
 		char singleQuote = '\'';
 		char doubleQuote = '"';
 
@@ -135,7 +126,7 @@ public class CSVFormat {
 		stringSeparator = Collections.max(possibleStringSeparators.entrySet(), Map.Entry.comparingByValue()).getKey();
 	}
 
-	public void detectHeader(List<String> fileAsList) {
+	private void detectHeader(List<String> fileAsList) {
 		int lineNumber = 0;
 		if (fileAsList.get(0).startsWith(FORMAT_HINT_INDICATOR)) {
 			lineNumber = 1;
