@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.2.22.4] - 2023-06-23
+
+### Fixed
+- SSH console will now execute all commands instead of only the first one
+
 ## [4.2.22.3] - 2023-06-19
 ### Changed
 - Reworking the loading animation when waiting for Data from the server
