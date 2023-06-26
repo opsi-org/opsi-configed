@@ -42,7 +42,6 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 			put(LICENSE_OPTIONS_KEY, value);
 			put(REMAINING_OPSI_KEY, value);
 			put(SW_INVENTORY_REMAINING_KEY, value);
-
 		}
 	}
 
@@ -59,5 +58,4 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 			put(SW_INVENTORY_REMAINING_KEY, allowedUsages.add(count).getDisplay());
 		}
 	}
-
 }

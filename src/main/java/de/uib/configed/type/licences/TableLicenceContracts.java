@@ -11,7 +11,7 @@ import java.util.List;
 
 import de.uib.utilities.datastructure.Relation;
 
-public class TableLicenceContracts extends Relation {
+public final class TableLicenceContracts extends Relation {
 
 	/*
 	 * describe LICENSE_CONTRACT 
@@ -73,7 +73,7 @@ public class TableLicenceContracts extends Relation {
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
-	public TableLicenceContracts() {
+	private TableLicenceContracts() {
 		super(INTERFACED_ATTRIBUTES);
 	}
 }

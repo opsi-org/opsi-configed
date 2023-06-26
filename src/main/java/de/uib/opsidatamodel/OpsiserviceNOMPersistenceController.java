@@ -49,7 +49,6 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
@@ -2541,32 +2540,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	/*
 	 * the method is only additionally called because of the retry mechanism
 	 */
-	public DatedRowList getSoftwareAudit(String clientId) {
-		DatedRowList result = getSoftwareAuditOnce(clientId, true);
-
-		// we retry once
-		if (result == null) {
-			result = getSoftwareAuditOnce(clientId, false);
-		}
-
-		return result;
-	}
-
-	// closely related to retrieveSoftwareAuditData(String clientId)
-	private DatedRowList getSoftwareAuditOnce(String clientId, boolean withRetry) {
+	public void getSoftwareAudit(String clientId) {
 		dataStub.fillClient2Software(clientId);
 
 		List<SWAuditClientEntry> entries = dataStub.getClient2Software().get(clientId);
 
 		if (entries == null) {
-			return null;
-		}
-
-		List<String[]> list = new ArrayList<>();
-		String dateS = null;
-
-		if (!entries.isEmpty()) {
-			dateS = entries.get(0).getLastModification();
+			return;
 		}
 
 		for (SWAuditClientEntry entry : entries) {
@@ -2574,7 +2554,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				int i = entry.getSWid();
 
 				Logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
-				if (i == -1 && withRetry) {
+				if (i == -1) {
 					Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
 					int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message") + " "
@@ -2592,25 +2572,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					case JOptionPane.YES_OPTION:
 						installedSoftwareInformationRequestRefresh();
 						softwareAuditOnClientsRequestRefresh();
-						return null;
+						return;
 
 					case JOptionPane.CANCEL_OPTION:
-						return null;
+						return;
 
 					default:
 						Logging.warning(this, "no case found for returnedOption in getSoftwareAuditOnce");
 						break;
 					}
-				} else {
-					if (i != -1) {
-						list.add(entry.getExpandedData(getInstalledSoftwareInformation(), getSWident(i)));
-					}
 				}
 			}
 		}
-
-		Logging.info(this, "getSoftwareAuditBase for client, list.size " + clientId + ", " + list.size());
-		return new DatedRowList(list, dateS);
 	}
 
 	public String getLastSoftwareAuditModification(String clientId) {

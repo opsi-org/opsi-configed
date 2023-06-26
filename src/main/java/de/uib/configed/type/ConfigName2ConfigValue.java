@@ -24,7 +24,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 	public ConfigName2ConfigValue(Map<String, Object> oldValues) {
 		super(oldValues);
-		build();
+		super.build();
 	}
 
 	private void buildX() {
