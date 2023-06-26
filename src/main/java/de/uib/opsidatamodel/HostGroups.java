@@ -23,7 +23,7 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 		super(source);
 	}
 
-	HostGroups addSpecialGroups() {
+	public HostGroups addSpecialGroups() {
 		Logging.debug(this, "addSpecialGroups check");
 		List<StringValuedRelationElement> groups = new ArrayList<>();
 

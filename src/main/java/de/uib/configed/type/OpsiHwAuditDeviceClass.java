@@ -34,7 +34,6 @@ public class OpsiHwAuditDeviceClass {
 	public static final String WMI_KEY = "WMI";
 	public static final String LINUX_KEY = "Linux";
 	public static final String TYPE_KEY = "Type";
-	public static final String UI_KEY = "UI";
 	public static final String LIST_KEY = "Values";
 	public static final String SCOPE_KEY = "Scope";
 
@@ -56,10 +55,6 @@ public class OpsiHwAuditDeviceClass {
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
 
-	}
-
-	public String getHwClassName() {
-		return hwClassName;
 	}
 
 	public void setHostConfigKey(String key) {
@@ -117,5 +112,4 @@ public class OpsiHwAuditDeviceClass {
 	public List<OpsiHwAuditDevicePropertyType> getDeviceHwItemProperties() {
 		return deviceHwItemProperties;
 	}
-
 }

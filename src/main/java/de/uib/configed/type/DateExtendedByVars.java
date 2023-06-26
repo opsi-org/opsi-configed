@@ -11,12 +11,12 @@ import java.util.Calendar;
 
 import de.uib.utilities.logging.Logging;
 
-public class DateExtendedByVars extends Date {
+public final class DateExtendedByVars extends Date {
 	public static final String MINUS = "minus";
 	public static final char CHAR_DELIMITER = '%';
 
-	public DateExtendedByVars(long date) {
-		super(date);
+	private DateExtendedByVars() {
+		super(0);
 	}
 
 	private static String stripTimeFromDay(String datetime) {
@@ -32,7 +32,7 @@ public class DateExtendedByVars extends Date {
 		return datetime.substring(0, idx);
 	}
 
-	private static String interpretVar(final String s) {
+	public static String interpretVar(final String s) {
 		Logging.debug("OpsiDataDateMatcher interpretVar in " + s);
 
 		int i = s.indexOf(CHAR_DELIMITER);
@@ -85,9 +85,4 @@ public class DateExtendedByVars extends Date {
 
 		return s.replace(toReplace, timeS);
 	}
-
-	public static String dayValueOf(String s) {
-		return interpretVar(s);
-	}
-
 }

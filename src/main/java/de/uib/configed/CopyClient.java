@@ -146,7 +146,7 @@ public class CopyClient {
 		persist.setAdditionalConfiguration(newClientNameWithDomain, (ConfigName2ConfigValue) clientConfigStates);
 
 		// Trigger the config state update.
-		persist.setAdditionalConfiguration(false);
+		persist.setAdditionalConfiguration();
 	}
 
 	@SuppressWarnings("java:S109")

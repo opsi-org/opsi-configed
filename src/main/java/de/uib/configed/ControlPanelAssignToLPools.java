@@ -352,7 +352,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						+ persistenceController.getFSoftware2LicencePool(key));
 			}
 
-			if (newAssociation != null && newAssociation) {
+			if (Boolean.TRUE.equals(newAssociation)) {
 				String otherPool = persistenceController.getFSoftware2LicencePool(key);
 
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
@@ -382,11 +382,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						cancelSelectionKeys.add(key);
 					} else {
 						// or delete the assignment to the licence pool
-						List<String> removeKeys = removeKeysFromOtherLicencePool.get(otherPool);
-						if (removeKeys == null) {
-							removeKeys = new ArrayList<>();
-							removeKeysFromOtherLicencePool.put(otherPool, removeKeys);
-						}
+						List<String> removeKeys = removeKeysFromOtherLicencePool.computeIfAbsent(otherPool,
+								s -> new ArrayList<>());
 						removeKeys.add(key);
 					}
 				}

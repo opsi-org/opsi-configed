@@ -41,5 +41,4 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 		}
 	}
-
 }

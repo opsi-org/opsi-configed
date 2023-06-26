@@ -21,10 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -50,7 +48,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -98,8 +95,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	private int foundrow = -1;
 
 	private int lastCountOfSearchWords;
-
-	private NavigableMap<String, Integer> rowIndexMap;
 
 	public JTableSelectionPanel(ConfigedMain main) {
 		super();
@@ -371,15 +366,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.addMouseListener(l);
 	}
 
-	public int convertRowIndexToModel(int i) {
-
-		return table.convertRowIndexToModel(i);
-	}
-
-	public int convertRowIndexToView(int i) {
-		return table.convertRowIndexToView(i);
-	}
-
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
 	}
@@ -392,7 +378,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table.getCellRect(row, col, includeSpacing);
 	}
 
-	public Map<Integer, Integer> getSelectionMap() {
+	private Map<Integer, Integer> getSelectionMap() {
 		Map<Integer, Integer> selectionMap = new HashMap<>();
 		int selectedKeysCount = 0;
 
@@ -404,7 +390,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return selectionMap;
-
 	}
 
 	public Set<String> getSelectedSet() {
@@ -547,10 +532,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		setSelectedValues(valueSet);
 	}
 
-	public void selectAll() {
-		selectionmodel.setSelectionInterval(0, table.getRowCount());
-	}
-
 	public void initSortKeys() {
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
@@ -561,20 +542,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	public void setSortKeys(List<? extends RowSorter.SortKey> orderingKeys) {
 		table.getRowSorter().setSortKeys(orderingKeys);
-	}
-
-	public void buildRowIndexByCol(int i) {
-		int row = 0;
-
-		rowIndexMap = new TreeMap<>();
-
-		while (row < getTableModel().getRowCount()) {
-			rowIndexMap.put((String) getTableModel().getValueAt(row, i), row);
-		}
-	}
-
-	public void setValueForKey(Object value, String key, int colInModelTerms) {
-		getTableModel().setValueAt(value, rowIndexMap.get(key), colInModelTerms);
 	}
 
 	public Set<String> getColumnValues(int col) {
@@ -627,14 +594,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	public TableColumnModel getColumnModel() {
 		return table.getColumnModel();
-	}
-
-	public ListSelectionModel getListSelectionModel() {
-		return table.getSelectionModel();
-	}
-
-	public void listvalueChanged(ListSelectionEvent e) {
-		main.valueChanged(e);
 	}
 
 	public void addListSelectionListener(ListSelectionListener lisel) {
@@ -825,7 +784,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
-
 	}
 
 	public void addSelectedRow(int row) {
@@ -852,7 +810,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setRowSelectionInterval(row, row);
 
 		scrollRowToVisible(row);
-
 	}
 
 	private void searchTheNextRow() {
@@ -930,10 +887,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				setSelectedRow(foundrow);
 			}
 		}
-	}
-
-	public TableCellRenderer getDefaultRenderer(Class<?> columnClass) {
-		return table.getDefaultRenderer(columnClass);
 	}
 
 	private void searchOnDocumentChange() {

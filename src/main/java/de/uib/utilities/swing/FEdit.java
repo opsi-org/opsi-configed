@@ -174,15 +174,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
-
-	}
-
-	public void setAreaDimension(Dimension dim) {
-		areaDimension = dim;
-	}
-
-	public void addToArea(JComponent c) {
-		editingArea.add(c);
 	}
 
 	public void setCaller(JTextComponent c) {

@@ -63,45 +63,11 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	private int hGap = Globals.HGAP_SIZE / 2;
 	private int vGap = Globals.VGAP_SIZE / 2;
 
-	public EditMapPanelGrouped() {
-		this(null);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer) {
-		this(tableCellRenderer, false);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible) {
-		this(tableCellRenderer, keylistExtendible, true);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, (TreeMap<String, String>) null);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, NavigableMap<String, String> classesMap) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, classesMap,
-				(DefaultEditMapPanel.Actor) null);
-	}
-
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable, final DefaultEditMapPanel.Actor actor) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, null, actor);
-	}
-
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, NavigableMap<String, String> classesMap, final DefaultEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
 		buildPanel();
 		this.actor = actor;
-		givenClasses = classesMap;
 
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
@@ -222,7 +188,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		for (String key : keys) {
 			String property = "";
 
-			List listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
+			List<?> listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
 			if (!listelem.isEmpty()) {
 				property = listelem.get(0).toString();
 			}

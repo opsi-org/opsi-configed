@@ -41,7 +41,6 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
@@ -371,19 +370,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
 
 		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.standard"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS));
+				Configed.getResourceValue("PanelDriverUpload.type.standard"), getLocalsystemPath(DIRECTORY_DRIVERS));
 		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
 		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
 		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
+				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
 
 		radioButtons.add(buttonStandard);
 		radioButtons.add(buttonPreferred);
@@ -799,5 +797,19 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String getDefaultName() {
 		return byAuditPath;
+	}
+
+	private static String getLocalsystemPath(String[] parts) {
+		if (parts == null || parts.length == 0) {
+			return "";
+		}
+
+		StringBuilder result = new StringBuilder(parts[0]);
+
+		for (int i = 1; i < parts.length; i++) {
+			result.append(File.separator + parts[i]);
+		}
+
+		return result.toString();
 	}
 }

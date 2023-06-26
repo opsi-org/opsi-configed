@@ -28,16 +28,12 @@ public class FPanel extends SecondaryFrame {
 	private boolean left;
 
 	public FPanel(String title, JPanel panel, boolean checkLeave) {
-		this(title, panel, checkLeave, 300, 300);
-	}
-
-	public FPanel(String title, JPanel panel, boolean checkLeave, int initialWidth, int initialHeight) {
 		super();
 		this.checkLeave = checkLeave;
 		super.setIconImage(Globals.mainIcon);
 		super.setTitle(Globals.APPNAME + " " + title);
 
-		super.setSize(new Dimension(initialWidth, initialHeight));
+		super.setSize(new Dimension(300, 300));
 		innerPanel = panel;
 		super.getContentPane().add(innerPanel);
 		super.centerOnParent();
@@ -100,7 +96,7 @@ public class FPanel extends SecondaryFrame {
 
 	}
 
-	public void leave() {
+	private void leave() {
 		Logging.info(this, "leave ");
 		setVisible(false);
 		dispose();
@@ -125,7 +121,5 @@ public class FPanel extends SecondaryFrame {
 				setVisible(true);
 			}
 		}
-
 	}
-
 }

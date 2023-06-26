@@ -65,5 +65,4 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 
 		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 	}
-
 }

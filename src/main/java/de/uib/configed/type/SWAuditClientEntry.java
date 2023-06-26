@@ -245,13 +245,8 @@ public class SWAuditClientEntry {
 		return data.get(SWAuditEntry.ID);
 	}
 
-	public String getLicenceKey() {
-		return data.get(data.get(LICENCE_KEY));
-	}
-
 	public String getLastModification() {
 		return lastModificationS;
-
 	}
 
 	public Integer getSWid() {
@@ -277,22 +272,8 @@ public class SWAuditClientEntry {
 		return dataMap;
 	}
 
-	public String[] getExpandedData(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<>(data);
-		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-
-		String[] result = new String[KEYS.size()];
-
-		for (int i = 0; i < KEYS.size(); i++) {
-			result[i] = dataMap.get(KEYS.get(i));
-		}
-
-		return result;
-	}
-
 	@Override
 	public String toString() {
 		return "<" + data.toString() + ", swIdent= " + swIdent + ">";
 	}
-
 }

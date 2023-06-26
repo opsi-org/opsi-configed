@@ -51,11 +51,6 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	private String representation;
 	private String lockedText;
 
-	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
-		this(productId, productVersion, packageVersion, productType, false);
-		// compatibility to usages without locked parameter
-	}
-
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType,
 			boolean locked) {
 		this.productId = productId;
@@ -168,5 +163,4 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public boolean equals(Object o) {
 		return o == null || representation.equals(o.toString());
 	}
-
 }

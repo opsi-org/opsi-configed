@@ -238,16 +238,13 @@ public class ControllerHWinfoColumnConfiguration {
 	private void buildUpdateItem(ColumnIdent col, Boolean use) {
 		Logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);
 
-		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.getConfigIdent());
+		Map<String, Boolean> tableConfigUpdates = updateItems.computeIfAbsent(col.getConfigIdent(),
+				s -> new HashMap<>());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
-		if (tableConfigUpdates == null) {
-			tableConfigUpdates = new HashMap<>();
-			updateItems.put(col.getConfigIdent(), tableConfigUpdates);
-		}
 		tableConfigUpdates.put(col.getDBColumnName(), use);
 	}
 

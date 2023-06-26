@@ -19,7 +19,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 
 	private static List<String> messages = new ArrayList<>();
 
-	public FOpsiLicenseMissingText() {
+	private FOpsiLicenseMissingText() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("Permission.modules.title"), false,
 				new String[] { "ok" }, 450, 250);
 	}
@@ -63,5 +63,4 @@ public class FOpsiLicenseMissingText extends FTextArea {
 	public static void reset() {
 		messages.clear();
 	}
-
 }

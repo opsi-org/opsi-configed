@@ -14,7 +14,7 @@ import java.util.Map;
 
 import de.uib.configed.Globals;
 
-public class InstallationStatus {
+public final class InstallationStatus {
 	public static final String KEY = "installationStatus";
 
 	public static final String KEY_NOT_INSTALLED = "not_installed";
@@ -39,7 +39,6 @@ public class InstallationStatus {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
 	private static List<Integer> states;
@@ -49,11 +48,7 @@ public class InstallationStatus {
 	// instance variable
 	private int state = INVALID;
 
-	// constructor
-	public InstallationStatus() {
-	}
-
-	public InstallationStatus(int t) {
+	private InstallationStatus(int t) {
 		if (existsState(t)) {
 			state = t;
 		} else {
@@ -111,15 +106,6 @@ public class InstallationStatus {
 
 		label2displayLabel.put("unknown", "unknown");
 
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("undefined", "undefined");
-		displayLabel2label.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
-		displayLabel2label.put(InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-
-		displayLabel2label.put("unknown", "unknown");
-
 		choiceLabels = new String[] { label2displayLabel.get(InstallationStatus.KEY_NOT_INSTALLED),
 				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("unknown")
 
@@ -129,7 +115,6 @@ public class InstallationStatus {
 		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
 		label2textColor.put(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
 		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
-
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {
@@ -144,13 +129,13 @@ public class InstallationStatus {
 		return label2textColor;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -193,7 +178,7 @@ public class InstallationStatus {
 		return label2displayLabel.get(getLabel(state));
 	}
 
-	public static final String[] getDisplayLabelsForChoice() {
+	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
 		return choiceLabels;
@@ -205,18 +190,9 @@ public class InstallationStatus {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static InstallationStatus produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static InstallationStatus produceFromLabel(String label) {

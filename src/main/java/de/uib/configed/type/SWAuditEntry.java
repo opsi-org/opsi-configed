@@ -100,7 +100,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	private static Map<String, String> locale = new StringIdentityMap(KEYS);
 
-	private String lastseen = "";
 	private String ident;
 	private String identReduced;
 
@@ -138,10 +137,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		identReduced = Globals.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
 
-		if (entry.get("lastseen") != null) {
-			lastseen = entry.get("lastseen").toString();
-		}
-
 		super.put(ID, ident);
 	}
 
@@ -161,24 +156,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 		return KEYS_FOR_GUI_TABLES;
 	}
 
-	public static String getDisplayKey(int i) {
-		return locale.get(KEYS.get(i));
-	}
-
-	public String[] getData() {
-		String[] data = new String[KEYS.size()];
-
-		for (int i = 0; i < KEYS.size(); i++) {
-			data[i] = get(KEYS.get(i));
-		}
-
-		return data;
-	}
-
-	public String getLastseen() {
-		return lastseen;
-	}
-
 	public String getIdent() {
 		return ident;
 	}
@@ -186,5 +163,4 @@ public class SWAuditEntry extends AbstractTableEntry {
 	public String getIdentReduced() {
 		return identReduced;
 	}
-
 }

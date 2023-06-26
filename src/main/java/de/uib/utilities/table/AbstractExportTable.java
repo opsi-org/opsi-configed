@@ -53,11 +53,6 @@ public abstract class AbstractExportTable {
 		askForOverwrite = true;
 	}
 
-	public void setTableAndClassNames(JTable table, List<String> classNames) {
-		this.theTable = table;
-		this.classNames = classNames;
-	}
-
 	public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
 	}
@@ -75,7 +70,6 @@ public abstract class AbstractExportTable {
 		);
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
-
 	}
 
 	public void addMenuItemsTo(JPopupMenu popup) {

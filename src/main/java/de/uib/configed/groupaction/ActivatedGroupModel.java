@@ -81,9 +81,4 @@ public class ActivatedGroupModel {
 
 		return "" + groupName;
 	}
-
-	public String getGroupDescription() {
-		return "" + groupDescription;
-	}
-
 }

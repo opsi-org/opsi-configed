@@ -52,10 +52,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	private List<ChangeListener> changeListeners;
 
-	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Consumer<Enum<E>> enumSetter) {
-		this(null, startValue, values, null, myenum, enumSetter);
-	}
-
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter) {
 		this(title, startValue, values, null, myenum, enumSetter);
@@ -123,10 +119,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	public void addChangeListener(ChangeListener cl) {
 		changeListeners.add(cl);
-	}
-
-	public void removeChangeListener(ChangeListener cl) {
-		changeListeners.remove(cl);
 	}
 
 	protected void notifyChangeListeners(ChangeEvent e) {

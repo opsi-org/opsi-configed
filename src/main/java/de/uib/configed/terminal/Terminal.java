@@ -208,7 +208,7 @@ public final class Terminal {
 		});
 	}
 
-	public JPanel createNorthPanel() {
+	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
@@ -230,7 +230,7 @@ public final class Terminal {
 		return northPanel;
 	}
 
-	public JPanel createSettingsPanel() {
+	private JPanel createSettingsPanel() {
 		JPanel settingsPanel = new JPanel();
 		settingsPanel.setOpaque(false);
 
@@ -308,7 +308,7 @@ public final class Terminal {
 				RequestOrigin.User);
 	}
 
-	public JPanel createSouthPanel() {
+	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 		southPanel.setVisible(false);

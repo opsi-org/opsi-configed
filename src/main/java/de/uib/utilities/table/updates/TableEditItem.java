@@ -14,10 +14,6 @@ public class TableEditItem {
 		return source;
 	}
 
-	public void setSource(Object o) {
-		source = o;
-	}
-
 	public boolean keyChanged() {
 		return true;
 	}

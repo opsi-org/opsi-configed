@@ -133,8 +133,6 @@ import javafx.embed.swing.JFXPanel;
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
-	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
-
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -193,7 +191,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
-	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
 	protected List<String> selectedDepotsV = new ArrayList<>();
@@ -203,8 +200,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
 
-	protected boolean changeListByToggleShowSelection;
-	protected boolean hostgroupChanged;
 	private String appTitle = Globals.APPNAME;
 
 	private FTextArea fAskSaveChangedText;
@@ -3202,13 +3197,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		try {
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"));
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			} else if (getSelectedClients().length > 1) {
-				if (!MULTI_HW_PANEL_ACTIVATED) {
-					mainFrame.setHardwareInfoNotPossible(
-							Configed.getResourceValue("MainFrame.hardwareInfoMultiClientsNotAvailable"));
-				} else {
+				if (persistenceController.canCallMySQL()) {
 					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				} else {
+					mainFrame.setHardwareInfoNotPossible(
+							Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 				}
 			} else {
 				checkHwInfo();
@@ -4649,7 +4644,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void reloadHosts() {
-		mainFrame.setCursor(Globals.WAIT_CURSOR);;
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
 		persistenceController.hostConfigsRequestRefresh();
 		persistenceController.hostGroupsRequestRefresh();
@@ -5161,7 +5156,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (arg == null || arg.isEmpty()) {
 			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
-			String timeAgo = DateExtendedByVars.dayValueOf(arg);
+			String timeAgo = DateExtendedByVars.interpretVar(arg);
 			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
 			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);

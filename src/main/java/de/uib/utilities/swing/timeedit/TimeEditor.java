@@ -27,10 +27,6 @@ public class TimeEditor extends JPanel {
 	private List<String> hours;
 	private List<String> mins;
 
-	public TimeEditor() {
-		this(0, 0);
-	}
-
 	public TimeEditor(int hours, int minutes) {
 		super();
 		init();
@@ -84,7 +80,6 @@ public class TimeEditor extends JPanel {
 		add(labelTime);
 		add(spinnerHour);
 		add(spinnerMin);
-
 	}
 
 	public void setHour(int h) {
@@ -118,5 +113,4 @@ public class TimeEditor extends JPanel {
 
 		return result;
 	}
-
 }

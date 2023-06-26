@@ -252,6 +252,7 @@ public final class SSHCommandFactory {
 
 		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 		// ArrayList! JsonArray muss nicht sortiert sein!"
+
 		return new SSHCommandTemplate(id, c, mt, ns, pmt, ttt, p);
 	}
 
@@ -288,8 +289,7 @@ public final class SSHCommandFactory {
 				List<String> commandCommands = new LinkedList<>(
 						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
 						}));
-				commandCommands.add("echo ... ");
-				commandCommands.add("echo READY");
+
 				com.setCommands(commandCommands);
 			}
 			listKnownMenus.add(com.getMenuText());
@@ -444,6 +444,7 @@ public final class SSHCommandFactory {
 		if (listKnownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
 			if (persistenceController.updateSSHCommand(jsonObjects)) {
+
 				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}

@@ -26,10 +26,6 @@ public class ChainedTableModelFilter extends TableModelFilter {
 		chain.clear();
 	}
 
-	public boolean hasFilterName(String name) {
-		return chain.containsKey(name);
-	}
-
 	public TableModelFilter getElement(String name) {
 		return chain.get(name);
 	}
@@ -87,5 +83,4 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	public String toString() {
 		return getClass().getName() + ", chain is: " + chain;
 	}
-
 }

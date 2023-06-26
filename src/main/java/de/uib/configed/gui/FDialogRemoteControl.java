@@ -54,12 +54,6 @@ public class FDialogRemoteControl extends FEditStringList {
 		return meanings.get(key);
 	}
 
-	// hack to modify settings from superclass
-	@Override
-	protected void initExtraField() {
-		checkSelected();
-	}
-
 	@Override
 	protected void initComponents() {
 		super.initComponents();

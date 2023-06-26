@@ -35,8 +35,8 @@ public final class Logging {
 	private static String logfileMarker;
 	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
-	public static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
-	public static final String RELATIVE_LOG_DIR_UNIX = ".configed";
+	private static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
+	private static final String RELATIVE_LOG_DIR_UNIX = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -105,10 +105,6 @@ public final class Logging {
 		} else {
 			logLevelConsole = newLevel;
 		}
-	}
-
-	public static synchronized Integer getLogLevelFile() {
-		return logLevelFile;
 	}
 
 	public static synchronized void setLogLevelFile(int newLevel) {

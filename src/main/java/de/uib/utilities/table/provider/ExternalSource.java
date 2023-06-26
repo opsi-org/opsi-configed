@@ -23,7 +23,6 @@ public class ExternalSource implements TableSource {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.rowsProvider = rowsProvider;
-
 	}
 
 	@Override

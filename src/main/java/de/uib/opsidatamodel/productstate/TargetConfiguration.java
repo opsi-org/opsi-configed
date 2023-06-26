@@ -33,9 +33,7 @@ public class TargetConfiguration {
 
 	// mappings
 	private static Map<Integer, String> state2label;
-	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 
 	private static List<Integer> states;
 	private static List<String> labels;
@@ -43,18 +41,6 @@ public class TargetConfiguration {
 
 	// instance variable
 	private int state = INVALID;
-
-	// constructor
-	public TargetConfiguration() {
-	}
-
-	public TargetConfiguration(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = INVALID;
-		}
-	}
 
 	private static void checkCollections() {
 		if (states != null) {
@@ -85,14 +71,6 @@ public class TargetConfiguration {
 		state2label.put(ALWAYS, "always");
 		state2label.put(FORBIDDEN, "forbidden");
 
-		label2state = new HashMap<>();
-		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
-		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
-		label2state.put("undefined", UNDEFINED);
-		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
-		label2state.put("always", ALWAYS);
-		label2state.put("forbidden", FORBIDDEN);
-
 		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
@@ -100,14 +78,6 @@ public class TargetConfiguration {
 		label2displayLabel.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
 		label2displayLabel.put("always", "always");
 		label2displayLabel.put("forbidden", "forbidden");
-
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("undefined", "undefined");
-		displayLabel2label.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("forbidden", "forbidden");
 
 		choiceLabels = new String[] { label2displayLabel.get("undefined"),
 				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("always"),
@@ -120,16 +90,10 @@ public class TargetConfiguration {
 		return label2displayLabel;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
-	}
-
-	public static boolean existsLabel(String label) {
-		checkCollections();
-
-		return labels.contains(label);
 	}
 
 	public static String getLabel(int state) {
@@ -148,26 +112,6 @@ public class TargetConfiguration {
 		return labels;
 	}
 
-	public static Integer getVal(String label) {
-		checkCollections();
-
-		if (label == null || label.isEmpty()) {
-			return UNDEFINED;
-		}
-
-		if (!existsLabel(label)) {
-			return null;
-		}
-
-		return label2state.get(label);
-	}
-
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return label2displayLabel.get(getLabel(state));
-	}
-
 	public static final String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
@@ -176,35 +120,8 @@ public class TargetConfiguration {
 
 	// instance methods
 
-	public int getVal() {
-		return state;
-	}
-
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static TargetConfiguration produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
-	}
-
-	public static TargetConfiguration produceFromLabel(String label) {
-		checkCollections();
-
-		if (label == null) {
-			return new TargetConfiguration(INVALID);
-		}
-
-		if (!labels.contains(label)) {
-			return new TargetConfiguration(INVALID);
-		}
-
-		return new TargetConfiguration(getVal(label));
 	}
 }

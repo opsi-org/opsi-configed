@@ -8,12 +8,10 @@ package de.uib.configed.type.licences;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
 
-public class TableLicenceContracts extends Relation {
+public final class TableLicenceContracts extends Relation {
 
 	/*
 	 * describe LICENSE_CONTRACT 
@@ -75,20 +73,7 @@ public class TableLicenceContracts extends Relation {
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
-	public TableLicenceContracts() {
+	private TableLicenceContracts() {
 		super(INTERFACED_ATTRIBUTES);
-	}
-
-	@Override
-	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
-		StringValuedRelationElement rowmap = new StringValuedRelationElement();
-		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
-
-		rowmap.put(ID_DB_KEY, rowmap.get(ID_KEY));
-
-		rowmap.remove(TYPE_KEY);
-		rowmap.remove(IDENT_KEY);
-
-		return rowmap;
 	}
 }

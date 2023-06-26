@@ -15,18 +15,8 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	private int keyCol = -1;
 	private String filterLabel = "";
 
-	public DefaultTableModelFilterCondition(int keyCol, String label) {
-		this.keyCol = keyCol;
-		if (label != null) {
-			this.filterLabel = label;
-		}
-	}
-
-	public DefaultTableModelFilterCondition() {
-	}
-
 	public DefaultTableModelFilterCondition(int keyCol) {
-		this(keyCol, null);
+		this.keyCol = keyCol;
 	}
 
 	public DefaultTableModelFilterCondition(String label) {

@@ -42,10 +42,6 @@ public class CSVParser {
 		this(format, DEFAULT_IGNORE_ERRORS);
 	}
 
-	public CSVParser(boolean ignoreErrors) {
-		this(DEFAULT_FORMAT, ignoreErrors);
-	}
-
 	public CSVParser(CSVFormat format, boolean ignoreErrors) {
 		this.format = format;
 		this.ignoreErrors = ignoreErrors;
@@ -69,7 +65,7 @@ public class CSVParser {
 		return inQuotes;
 	}
 
-	public List<String> parse(List<CSVToken> tokens) throws CSVException {
+	private List<String> parse(List<CSVToken> tokens) throws CSVException {
 		List<String> result = new ArrayList<>();
 		int fieldCount = pendingFieldCount;
 		pendingFieldCount = 0;
@@ -185,5 +181,4 @@ public class CSVParser {
 	public boolean isParserMultiLine() {
 		return isMultiLine;
 	}
-
 }

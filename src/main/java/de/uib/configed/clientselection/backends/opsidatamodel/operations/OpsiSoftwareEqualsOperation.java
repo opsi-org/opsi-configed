@@ -15,5 +15,4 @@ public class OpsiSoftwareEqualsOperation extends OpsiDataStringEqualsOperation {
 		super(OpsiDataClient.SOFTWARE_MAP, key, data, element);
 		Logging.debug(this, "created  for key, data, element " + key + ", " + data + ", " + element);
 	}
-
 }

@@ -78,5 +78,4 @@ public class XTree extends JTree {
 			expandRow(row);
 		}
 	}
-
 }

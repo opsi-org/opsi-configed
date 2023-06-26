@@ -12,19 +12,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 import de.uib.utilities.logging.Logging;
 
 public class JTableWithToolTips extends JTable {
-
-	public JTableWithToolTips() {
-		super();
-	}
-
-	public JTableWithToolTips(TableModel tm) {
-		super(tm);
-	}
 
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int colIndex) {
@@ -58,5 +49,4 @@ public class JTableWithToolTips extends JTable {
 		}
 		return c;
 	}
-
 }

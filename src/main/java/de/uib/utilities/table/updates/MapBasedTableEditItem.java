@@ -32,14 +32,6 @@ public class MapBasedTableEditItem extends TableEditItem {
 		return result;
 	}
 
-	public String getKeyColumnStringValue() {
-		if (keyCol < 0 || keyCol == columnNames.size()) {
-			return null;
-		}
-
-		return rowV.get(keyCol).toString();
-	}
-
 	@Override
 	public String toString() {
 		return getRowAsMap().toString() + " keyCol " + keyCol + " source " + source;

@@ -38,7 +38,6 @@ public class ControllerHWinfoMultiClients {
 
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
-	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
@@ -91,16 +90,6 @@ public class ControllerHWinfoMultiClients {
 
 				super.reload();
 			}
-
-			@Override
-			protected Object modifyHeaderValue(Object s) {
-				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
-					return ((String) s).substring(DELETE_PREFIX.length());
-
-				}
-
-				return s;
-			}
 		};
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
@@ -116,6 +105,7 @@ public class ControllerHWinfoMultiClients {
 
 		List<String> columnNames = persistenceController.getClient2HwRowsColumnNames();
 		List<String> classNames = persistenceController.getClient2HwRowsJavaclassNames();
+
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 

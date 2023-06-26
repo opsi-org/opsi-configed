@@ -24,11 +24,6 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	@Override
-	public void setTableSource(TableSource source) {
-		this.source = source;
-	}
-
-	@Override
 	public List<String> getColumnNames() {
 		if (columnNames == null) {
 			columnNames = source.retrieveColumnNames();
@@ -140,5 +135,4 @@ public class DefaultTableProvider implements TableProvider {
 
 		return new ArrayList<>(set);
 	}
-
 }

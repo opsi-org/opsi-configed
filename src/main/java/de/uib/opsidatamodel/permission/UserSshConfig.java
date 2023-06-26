@@ -49,11 +49,4 @@ public class UserSshConfig extends UserConfigModule {
 	public UserSshConfig(String userName) {
 		super(userName);
 	}
-
-	public UserSshConfig(String userName, UserConfigModule prototype) {
-		super(userName, prototype);
-		Logging.info(this,
-				"created for username " + userName + " with " + super.getBooleanMap() + " -- " + super.getValuesMap());
-	}
-
 }
