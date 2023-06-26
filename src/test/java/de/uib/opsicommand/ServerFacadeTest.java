@@ -5,21 +5,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockserver.model.BinaryBody.binary;
 import static org.mockserver.model.Header.header;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
-import static org.mockserver.model.JsonBody.json;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
-import org.mockserver.matchers.MatchType;
 import org.mockserver.model.HttpStatusCode;
+import org.msgpack.jackson.dataformat.MessagePackMapper;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
@@ -47,17 +50,30 @@ public class ServerFacadeTest {
 				.when(request().withMethod("HEAD").withPath("/").withHeader("Authorization", "Basic " + authorization))
 				.respond(response().withHeader("Server", "opsiconfd 4.2.0.309 (uvicorn)"));
 
+		Map<String, String> resultMap = new HashMap<>();
+		resultMap.put("jsonrpc", "2.0");
+		resultMap.put("method", "accessControl_authenticated");
+		resultMap.put("result", "true");
+
+		byte[] resultBytes = null;
+		try {
+			resultBytes = new MessagePackMapper().writeValueAsBytes(resultMap);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
 		clientServer.withSecure(true)
 				.when(request().withMethod("POST").withPath("/rpc")
 						.withHeaders(header("Authorization", "Basic " + authorization),
 								header("X-opsi-session-lifetime", "900"),
 								header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
-								header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack"))
-						.withBody("{\"method\":\"accessControl_authenticated\",\"id\":1,\"params\":[]}"))
-				.respond(response().withStatusCode(HttpStatusCode.ACCEPTED_202.code())
-						.withBody(json(
-								"{\"jsonrpc\": \"2.0\", \"method\": \"accessControl_authenticated\", \"result\": true}",
-								MatchType.STRICT)));
+								header("Accept-Encoding",
+										"lz4, gzip"),
+								header("Accept", "application/msgpack"), header("Content-Type", "application/msgpack"))
+						.withBody(
+								"BCJNGGBwczAAAICDpm1ldGhvZLthY2Nlc3NDb250cm9sX2F1dGhlbnRpY2F0ZWSiaWQBpnBhcmFtc5AAAAAA"))
+				.respond(response().withHeader(header("Content-Type", "application/msgpack"))
+						.withStatusCode(HttpStatusCode.ACCEPTED_202.code()).withBody(binary(resultBytes)));
 
 		ServerFacade facade = new ServerFacade(Utils.HOST + ":" + Utils.PORT, Utils.USERNAME, Utils.PASSWORD);
 		Map<String, Object> result = facade
@@ -65,7 +81,7 @@ public class ServerFacadeTest {
 
 		assertNotNull(result, "returned result should not equal null");
 		assertFalse(result.isEmpty(), "returned result should not be empty");
-		assertTrue((boolean) result.get("result"), "return should equal true, for authenticated");
+		assertTrue(Boolean.valueOf((String) result.get("result")), "return should equal true, for authenticated");
 		assertEquals(ConnectionState.CONNECTED, facade.getConnectionState().getState(),
 				"The connection state should be connected");
 	}

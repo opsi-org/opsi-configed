@@ -189,7 +189,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		background = false;
 		Logging.info(this, "retrieveResponse started");
 
-		if (omc == null || omc.isBackgroundDefault())  {
+		if (omc == null || omc.isBackgroundDefault()) {
 			background = true;
 		}
 
@@ -199,7 +199,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		timeCheck.start();
 
 		enableFeaturesBasedOnServerVersion();
-
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties());
 		HttpsURLConnection connection = handler.establishConnection(true);
@@ -244,24 +243,21 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		try (OutputStream writer = getOutputStreamWriterForConnection(connection)) {
-			String json = produceJSONstring(omc);
-			Map<String, Object> jsonMap = produceMessagepack(omc);
+			Map<String, Object> omcMap = produceMessagepack(omc);
 			ObjectMapper mapper = new MessagePackMapper();
 
-			writer.write(mapper.writeValueAsBytes(jsonMap));
+			writer.write(mapper.writeValueAsBytes(omcMap));
 			writer.flush();
 
-			Logging.debug(this, "(POST) sending: ");
+			Logging.debug(this, "(POST) sending: " + omcMap);
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request " + iox);
 		}
 	}
 
 	private static OutputStream getOutputStreamWriterForConnection(HttpsURLConnection connection) throws IOException {
-
 		if (versionRetriever.isServerVersionAtLeast("4.2")) {
 			return new LZ4FrameOutputStream(connection.getOutputStream());
-
 		} else {
 			return new GZIPOutputStream(connection.getOutputStream());
 		}
@@ -396,8 +392,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		return stream;
 	}
-
-	
 
 	/**
 	 * Retrieve used username by the connection.
