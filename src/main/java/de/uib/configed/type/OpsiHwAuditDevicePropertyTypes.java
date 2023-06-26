@@ -74,5 +74,4 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 			}
 		}
 	}
-
 }

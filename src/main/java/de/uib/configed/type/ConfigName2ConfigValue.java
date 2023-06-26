@@ -60,8 +60,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 				list = (List<?>) entry.getValue();
 			}
 
-			classnames.put(entry.getKey(), "List");
-
 			if (configOptions != null && configOptions.get(entry.getKey()) != null) {
 				ConfigOption configOption = configOptions.get(entry.getKey());
 

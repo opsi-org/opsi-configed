@@ -5156,7 +5156,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (arg == null || arg.isEmpty()) {
 			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
-			String timeAgo = DateExtendedByVars.dayValueOf(arg);
+			String timeAgo = DateExtendedByVars.interpretVar(arg);
 			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
 			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);

@@ -2731,11 +2731,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
 			firstSeen.setOpsiDbColumnType("timestamp");
-			firstSeen.setUiName("first seen");
 			OpsiHwAuditDevicePropertyType lastSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.LAST_SEEN_COL_NAME);
 			lastSeen.setOpsiDbColumnType("timestamp");
-			lastSeen.setUiName("last seen");
 
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
 			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
@@ -2759,7 +2757,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-					devProperty.setUiName((String) ma.get(OpsiHwAuditDeviceClass.UI_KEY));
 
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
@@ -2769,7 +2766,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-					devProperty.setUiName((String) ma.get(OpsiHwAuditDeviceClass.UI_KEY));
 
 					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"

@@ -34,10 +34,6 @@ public class RemoteControl {
 		editable = "" + s;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public String getCommand() {
 		return command;
 	}
@@ -52,6 +48,6 @@ public class RemoteControl {
 
 	@Override
 	public String toString() {
-		return getName() + ": " + getCommand() + " ( " + getDescription() + ") editable " + getEditable();
+		return name + ": " + command + " ( " + description + ") editable " + editable;
 	}
 }
