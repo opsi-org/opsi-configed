@@ -165,10 +165,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return serviceURL;
 	}
 
-	private static String produceJSONstring(OpsiMethodCall omc) {
-		return omc != null ? omc.getJsonString() : "";
-	}
-
 	private static Map<String, Object> produceMessagepack(OpsiMethodCall omc) {
 		return omc != null ? omc.getMessagepack() : new HashMap<>();
 	}
