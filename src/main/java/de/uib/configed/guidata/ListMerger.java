@@ -64,10 +64,6 @@ public class ListMerger extends ArrayList<Object> {
 		return this;
 	}
 
-	public boolean hasCommonValue() {
-		return havingCommonValue;
-	}
-
 	@SuppressWarnings("java:S1452")
 	public List<?> getValue() {
 		return listValue;

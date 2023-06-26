@@ -53,13 +53,13 @@ public class DependenciesModel {
 		fireUpdateProduct(productId);
 	}
 
-	public void fireUpdateProduct(String productId) {
+	private void fireUpdateProduct(String productId) {
 		for (DependenciesModelListener listener : listeners) {
 			listener.updateProduct(productId);
 		}
 	}
 
-	public void fireUpdateDepot(String depotId) {
+	private void fireUpdateDepot(String depotId) {
 		for (DependenciesModelListener listener : listeners) {
 			listener.updateDepot(depotId);
 		}
