@@ -22,6 +22,7 @@ import javax.swing.ListCellRenderer;
 import de.uib.Main;
 import de.uib.configed.Globals;
 
+// TODO REmove, only used without themes
 public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
 	private static final int IMAGE_DEFAULT_WIDTH = 30;
 

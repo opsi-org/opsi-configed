@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
+import de.uib.Main;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.CellRendererByIndex;
 
@@ -31,8 +32,9 @@ public class DynamicCellEditor extends DefaultCellEditor {
 		this.cbm = cbm;
 		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
-		cc.setRenderer(new CellRendererByIndex(knownKeys, null, 30));
-
+		if (!Main.THEMES) {
+			cc.setRenderer(new CellRendererByIndex(knownKeys, null, 30));
+		}
 	}
 
 	@Override
