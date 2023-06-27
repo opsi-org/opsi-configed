@@ -147,14 +147,13 @@ public abstract class AbstractSWExporter {
 
 	}
 
-	public void finish(int exitcode) {
+	private static void finish(int exitcode) {
 		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
 		Main.endApp(exitcode);
 	}
 
-	public void setWriteToFile(String path) {
+	private void setWriteToFile(String path) {
 		exportFilename = path;
-
 	}
 
 	public void setHost(String hostId) {
@@ -167,7 +166,6 @@ public abstract class AbstractSWExporter {
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
-
 	}
 
 	private void initModel(String hostId) {
@@ -212,11 +210,10 @@ public abstract class AbstractSWExporter {
 
 	protected abstract String getExtension();
 
-	public void updateModel() {
+	private void updateModel() {
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 	}
-
 }
