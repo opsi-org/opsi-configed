@@ -162,24 +162,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		});
 	}
 
-	public void setReloadRequested() {
+	private void setReloadRequested() {
 		manager.getBackend().setReloadRequested();
-	}
-
-	public void refreshGroups() {
-		for (ComplexGroup complex : complexElements) {
-			if (complex.type == GroupType.HOST_GROUP) {
-				for (SimpleGroup group : complex.groupList) {
-					if (group.element instanceof GroupElement) {
-						JComboBox<String> box = (JComboBox<String>) group.dataComponent;
-						box.removeAllItems();
-						for (String data : group.element.getEnumData()) {
-							box.addItem(data);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	public void loadSearch(String name) {
