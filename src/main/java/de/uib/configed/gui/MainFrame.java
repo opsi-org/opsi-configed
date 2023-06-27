@@ -2466,7 +2466,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				super.saveHostConfig();
 				configedMain.checkSaveAll(false);
 			}
-
 		};
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());

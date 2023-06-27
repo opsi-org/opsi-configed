@@ -38,5 +38,4 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 
 		return result;
 	}
-
 }

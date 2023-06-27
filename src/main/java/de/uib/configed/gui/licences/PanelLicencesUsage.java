@@ -68,7 +68,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 			initialSplit++;
 			revalidate();
 		}
-
 	}
 
 	private void initSubPanel() {
@@ -158,5 +157,4 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 			licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem());
 		}
 	}
-
 }

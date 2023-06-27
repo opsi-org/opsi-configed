@@ -640,7 +640,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
-	public void makePath(File path) {
+	private void makePath(File path) {
 		Logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
