@@ -64,7 +64,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 	}
 
-	public static SSHConnectionExecDialog getNewInstance() {
+	private static SSHConnectionExecDialog getNewInstance() {
 
 		if (instance != null) {
 			instance.leave();
@@ -136,14 +136,13 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		layout.setHorizontalGroup(horizontalGroup);
 	}
 
-	public void clear() {
+	private void clear() {
 		output.setText("");
 	}
 
 	public void appendLater(String line) {
 
 		append(line);
-
 	}
 
 	@Override

@@ -719,7 +719,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 	}
 
-	public void showPopupOpsiclientdEvent(boolean visible) {
+	private void showPopupOpsiclientdEvent(boolean visible) {
 
 		itemOnDemand.setVisible(visible);
 		itemSaveAndExecute.setVisible(visible);
@@ -759,7 +759,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		return result;
 	}
 
-	public int convertRowIndexToModel(int row) {
+	private int convertRowIndexToModel(int row) {
 		return tableProducts.convertRowIndexToModel(row);
 	}
 

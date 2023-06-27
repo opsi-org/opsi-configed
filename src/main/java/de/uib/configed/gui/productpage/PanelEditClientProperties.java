@@ -8,7 +8,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -107,19 +106,5 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
 		buttonRemoveSpecificValues.setEnabled(activated);
-	}
-
-	public void setSpecificPropertiesExisting(String productName, Map<String, Boolean> specificPropertiesExisting) {
-
-		setPropertyResetActivated(false);
-		if (specificPropertiesExisting != null && productName != null
-				&& specificPropertiesExisting.get(productName) != null) {
-			setPropertyResetActivated(specificPropertiesExisting.get(productName));
-		}
-	}
-
-	private void setPropertyResetActivated(boolean b) {
-
-		buttonRemoveSpecificValues.setEnabled(b);
 	}
 }

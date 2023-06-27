@@ -17,10 +17,6 @@ public class SSHCompletionComboBox<E> extends JComboBox<E> {
 		super(cbm);
 	}
 
-	public SSHCompletionComboBox(E[] v) {
-		super(v);
-	}
-
 	@Override
 	public void setSelectedItem(Object item) {
 		super.setSelectedItem(item);

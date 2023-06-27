@@ -42,13 +42,6 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
 
-	public SSHOpsiSetRightsParameterDialog() {
-		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
-		commandopsisetrights = new CommandOpsiSetRights();
-		init();
-		initLayout();
-	}
-
 	public SSHOpsiSetRightsParameterDialog(CommandOpsiSetRights command) {
 		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
 		commandopsisetrights = command;
@@ -126,7 +119,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	// /* This method gets called when button 2 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

@@ -41,10 +41,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	private JRadioButton jRadioButtonWGet;
 	private String fromMakeProductfile;
 
-	public SSHPackageManagerInstallParameterDialog() {
-		this(null);
-	}
-
 	public SSHPackageManagerInstallParameterDialog(ConfigedMain m) {
 		this(m, "");
 	}
