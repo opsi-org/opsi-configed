@@ -77,10 +77,6 @@ public class GlassPane extends JPanel implements KeyListener {
 						.addGap(0, 0, Short.MAX_VALUE)));
 	}
 
-	public JLabel getJLabelInfo() {
-		return jLabelInfo;
-	}
-
 	public void setInfoText(String s) {
 		jLabelInfo.setText(s);
 	}

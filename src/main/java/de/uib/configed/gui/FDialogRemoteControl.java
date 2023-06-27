@@ -50,7 +50,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		this.editableFields = editable;
 	}
 
-	public String getValue(String key) {
+	private String getValue(String key) {
 		return meanings.get(key);
 	}
 
@@ -90,7 +90,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		checkSelected();
 	}
 
-	public void appendLog(final String s) {
+	private void appendLog(final String s) {
 		SwingUtilities.invokeLater(() -> {
 			if (s == null) {
 				loggingArea.setText("");

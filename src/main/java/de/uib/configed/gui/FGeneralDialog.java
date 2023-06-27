@@ -608,7 +608,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		glass.begin();
 	}
 
-	public static class FadingMirror extends JPanel implements ActionListener {
+	private static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1F;
 		private float step = 0.3F;
 		private Timer fadeTimer;

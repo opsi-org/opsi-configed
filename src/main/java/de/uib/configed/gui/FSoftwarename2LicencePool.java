@@ -75,15 +75,12 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		SHOW_ALL_NAMES, SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS, SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL
 	}
 
-	public enum Softwarename2LicencepoolChangeOption {
-		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
-	}
-
 	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
 	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
 
+	// TODO probably this needs to be removed
 	private String globalLicencePool;
 
 	private boolean foundVariantLicencepools;
@@ -455,10 +452,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(buttonActive);
 	}
 
-	public String getGlobalLicencePool() {
-		return globalLicencePool;
-	}
-
 	private Map<String, Map<String, String>> produceModelSWxLicencepool(String swName) {
 		Logging.info(this, "produceModelSWxLicencepool for swName: " + swName);
 
@@ -553,9 +546,4 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
 	}
-
-	public void exit() {
-		super.leave();
-	}
-
 }
