@@ -352,16 +352,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		return southPanel;
 	}
 
-	public void setMessage(String message) {
-		try {
-			styledDocument.remove(0, styledDocument.getLength());
-			styledDocument.insertString(styledDocument.getLength(), message, null);
-		} catch (BadLocationException e) {
-			Logging.warning(this, "could not insert message into health check dialog, ", e);
-		}
-	}
-
-	public void setMessage(Map<String, Map<String, Object>> message) {
+	private void setMessage(Map<String, Map<String, Object>> message) {
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
 			for (Map<String, Object> healthInfo : message.values()) {

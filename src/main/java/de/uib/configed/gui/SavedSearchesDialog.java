@@ -236,7 +236,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	// overwrite to implement persistency
-	protected void removeSavedSearch(String name) {
+	private void removeSavedSearch(String name) {
 		persistenceController.deleteSavedSearch(name);
 
 		manager.removeSearch(name);
@@ -249,12 +249,12 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	// overwrite to implement
-	protected void addElement() {
+	private void addElement() {
 		configedMain.callClientSelectionDialog();
 	}
 
 	// overwrite to implement
-	protected void editSearch(String name) {
+	private void editSearch(String name) {
 		configedMain.callClientSelectionDialog();
 		configedMain.loadSearch(name);
 	}
@@ -303,5 +303,4 @@ public class SavedSearchesDialog extends FEditStringList {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		/* Not needed */}
-
 }
