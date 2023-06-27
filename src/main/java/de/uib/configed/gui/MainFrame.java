@@ -2758,7 +2758,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void callSelectionDialog() {
+	private void callSelectionDialog() {
 		configedMain.callClientSelectionDialog();
 	}
 
@@ -2802,7 +2802,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void reloadAction() {
+	private void reloadAction() {
 		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		configedMain.reload();
 	}
@@ -2820,7 +2820,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		glassPane.activate(false);
 	}
 
-	public void reloadLicensesAction() {
+	private void reloadLicensesAction() {
 		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
 		new Thread() {
 			@Override
@@ -2832,7 +2832,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}.start();
 	}
 
-	public void checkMenuItemsDisabling() {
+	private void checkMenuItemsDisabling() {
 		if (menuItemsHost == null) {
 			Logging.info(this, "checkMenuItemsDisabling: menuItemsHost not yet enabled");
 			return;
@@ -2931,25 +2931,25 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -------------------
 
-	public void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
+	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
 		configedMain.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
 				resetNetbootProducts);
 	}
 
-	public void addClientAction() {
+	private void addClientAction() {
 		configedMain.callNewClientDialog();
 	}
 
-	public void changeClientIDAction() {
+	private void changeClientIDAction() {
 		configedMain.callChangeClientIDDialog();
 	}
 
-	public void changeDepotAction() {
+	private void changeDepotAction() {
 		configedMain.callChangeDepotDialog();
 	}
 
-	public void showBackendConfigurationAction() {
+	private void showBackendConfigurationAction() {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { Configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
@@ -3076,7 +3076,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fEditPane.setVisible(true);
 	}
 
-	public void callOpsiLicensingInfo() {
+	private void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
@@ -3394,7 +3394,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			licenseDisplayer.display();
 		}
-
 	}
 
 	public void enableAfterLoading() {
@@ -3625,10 +3624,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void setClientID(String s) {
 		labelHostID.setText(s);
-	}
-
-	public String getClientID() {
-		return labelHostID.getText();
 	}
 
 	public void setClientInfoediting(boolean singleClient) {

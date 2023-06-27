@@ -17,6 +17,7 @@ import java.util.Map;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ErrorCode;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
@@ -90,7 +91,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (clientsFile.isEmpty()) {
-			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
+			finish(ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
 		File userHome = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
@@ -115,11 +116,11 @@ public abstract class AbstractSWExporter {
 		Messages.setLocale("en");
 		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
 		if (persistenceController == null) {
-			finish(de.uib.configed.ErrorCode.INITIALIZATION_ERROR);
+			finish(ErrorCode.INITIALIZATION_ERROR);
 		}
 
 		if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			finish(de.uib.configed.ErrorCode.CONNECTION_ERROR);
+			finish(ErrorCode.CONNECTION_ERROR);
 		}
 
 		Logging.info(this, "starting");
