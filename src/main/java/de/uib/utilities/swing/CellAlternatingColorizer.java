@@ -89,6 +89,14 @@ public final class CellAlternatingColorizer {
 			}
 		} else {
 			StandardTableCellRenderer.colorizeTableCellTheme(cell, isSelected, rowEven);
+			if (colEven) {
+				Color backgroudColor = cell.getBackground();
+
+				Color newBackgroundColor = new Color(backgroudColor.getRed() - 8, backgroudColor.getGreen() - 8,
+						backgroudColor.getBlue() - 8);
+
+				cell.setBackground(newBackgroundColor);
+			}
 		}
 	}
 }
