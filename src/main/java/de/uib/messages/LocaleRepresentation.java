@@ -20,13 +20,6 @@ public class LocaleRepresentation {
 		value = name;
 	}
 
-	public LocaleRepresentation(String name, String iconName) {
-		this(name);
-		if (iconName != null) {
-			value = value + "=" + iconName;
-		}
-	}
-
 	public String getName() {
 		int pos = value.indexOf('=');
 		if (pos > -1) {

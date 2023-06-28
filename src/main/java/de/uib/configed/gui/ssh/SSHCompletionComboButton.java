@@ -72,20 +72,12 @@ public class SSHCompletionComboButton {
 		initButton();
 	}
 
-	public SSHCompletionComboButton(String searchSpecificFiles, String comboboxDefaultPath) {
-		this(null, searchSpecificFiles, comboboxDefaultPath);
-	}
-
-	public SSHCompletionComboButton(String searchSpecificFiles) {
-		this(null, searchSpecificFiles, null);
-	}
-
 	private final void enableComponents(boolean value) {
 		combobox.setEnabled(value);
 		button.setEnabled(value);
 	}
 
-	public String getBasicPath() {
+	private String getBasicPath() {
 		String basicSearchPath = (String) combobox.getSelectedItem();
 		if (basicSearchPath != null) {
 			return basicSearchPath.trim();
@@ -204,11 +196,7 @@ public class SSHCompletionComboButton {
 		setComboDefault(null);
 	}
 
-	public void setSearchSpecificFiles(String fileEndString) {
-		searchSpecificFiles = fileEndString;
-	}
-
-	public void setComboDefault(String value) {
+	private void setComboDefault(String value) {
 		comboboxDefaultPath = value;
 	}
 
@@ -342,7 +330,7 @@ public class SSHCompletionComboButton {
 		}
 	}
 
-	public class ItemElementListener extends DefaultListCellRenderer {
+	private class ItemElementListener extends DefaultListCellRenderer {
 		private SSHCompletionComboButton autocompletion;
 
 		public ItemElementListener(SSHCompletionComboButton autocompletion) {

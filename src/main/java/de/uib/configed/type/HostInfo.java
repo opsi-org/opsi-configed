@@ -278,20 +278,12 @@ public class HostInfo {
 		depotOfClient = depot;
 	}
 
-	public String getHostType() {
-		return hostType;
-	}
-
 	public String getDescription() {
 		return clientDescription;
 	}
 
 	public String getInventoryNumber() {
 		return clientInventoryNumber;
-	}
-
-	public String getOneTimePassword() {
-		return clientOneTimePassword;
 	}
 
 	public String getNotes() {
@@ -308,10 +300,6 @@ public class HostInfo {
 
 	public String getLastSeen() {
 		return lastSeen;
-	}
-
-	public String getCreated() {
-		return created;
 	}
 
 	public String getName() {

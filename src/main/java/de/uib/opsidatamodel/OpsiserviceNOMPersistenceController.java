@@ -49,7 +49,6 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
@@ -2523,32 +2522,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	/*
 	 * the method is only additionally called because of the retry mechanism
 	 */
-	public DatedRowList getSoftwareAudit(String clientId) {
-		DatedRowList result = getSoftwareAuditOnce(clientId, true);
-
-		// we retry once
-		if (result == null) {
-			result = getSoftwareAuditOnce(clientId, false);
-		}
-
-		return result;
-	}
-
-	// closely related to retrieveSoftwareAuditData(String clientId)
-	private DatedRowList getSoftwareAuditOnce(String clientId, boolean withRetry) {
+	public void getSoftwareAudit(String clientId) {
 		dataStub.fillClient2Software(clientId);
 
 		List<SWAuditClientEntry> entries = dataStub.getClient2Software().get(clientId);
 
 		if (entries == null) {
-			return null;
-		}
-
-		List<String[]> list = new ArrayList<>();
-		String dateS = null;
-
-		if (!entries.isEmpty()) {
-			dateS = entries.get(0).getLastModification();
+			return;
 		}
 
 		for (SWAuditClientEntry entry : entries) {
@@ -2556,7 +2536,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				int i = entry.getSWid();
 
 				Logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
-				if (i == -1 && withRetry) {
+				if (i == -1) {
 					Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
 					int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message") + " "
@@ -2574,25 +2554,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					case JOptionPane.YES_OPTION:
 						installedSoftwareInformationRequestRefresh();
 						softwareAuditOnClientsRequestRefresh();
-						return null;
+						return;
 
 					case JOptionPane.CANCEL_OPTION:
-						return null;
+						return;
 
 					default:
 						Logging.warning(this, "no case found for returnedOption in getSoftwareAuditOnce");
 						break;
 					}
-				} else {
-					if (i != -1) {
-						list.add(entry.getExpandedData(getInstalledSoftwareInformation(), getSWident(i)));
-					}
 				}
 			}
 		}
-
-		Logging.info(this, "getSoftwareAuditBase for client, list.size " + clientId + ", " + list.size());
-		return new DatedRowList(list, dateS);
 	}
 
 	public String getLastSoftwareAuditModification(String clientId) {
@@ -2740,11 +2713,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
 			firstSeen.setOpsiDbColumnType("timestamp");
-			firstSeen.setUiName("first seen");
 			OpsiHwAuditDevicePropertyType lastSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.LAST_SEEN_COL_NAME);
 			lastSeen.setOpsiDbColumnType("timestamp");
-			lastSeen.setUiName("last seen");
 
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
 			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
@@ -2768,7 +2739,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-					devProperty.setUiName((String) ma.get(OpsiHwAuditDeviceClass.UI_KEY));
 
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
@@ -2778,7 +2748,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-					devProperty.setUiName((String) ma.get(OpsiHwAuditDeviceClass.UI_KEY));
 
 					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
@@ -5476,8 +5445,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		if (withLicenceManagement) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.add(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			if (exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }))) {
 				result = licensePoolId;
@@ -5495,9 +5467,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		if (withLicenceManagement) {
+
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.remove(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			return exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
 		}

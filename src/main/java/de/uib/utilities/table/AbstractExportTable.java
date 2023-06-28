@@ -26,7 +26,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public abstract class AbstractExportTable {
 	protected JTable theTable;
@@ -88,10 +87,6 @@ public abstract class AbstractExportTable {
 			execute(null, onlySelected);
 		});
 		return menuItem;
-	}
-
-	public void setPanelTable(PanelGenEditTable panelTable) {
-		theTable = panelTable.getTheTable();
 	}
 
 	public void setClient(String clientID) {

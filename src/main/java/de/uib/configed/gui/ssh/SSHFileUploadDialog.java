@@ -71,10 +71,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected int frameHeight = 410;
 	private int frameWidth = 700;
 
-	public SSHFileUploadDialog() {
-		this(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
-	}
-
 	public SSHFileUploadDialog(String title, CommandSFTPUpload com) {
 		super(null, title, false);
 		this.command = com;
@@ -358,7 +354,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	// // /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

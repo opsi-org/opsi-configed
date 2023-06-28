@@ -96,7 +96,7 @@ public final class Messages {
 		return messagesBundle;
 	}
 
-	public static ResourceBundle getResourceEN() throws MissingResourceException {
+	private static ResourceBundle getResourceEN() throws MissingResourceException {
 
 		messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
 				new Locale.Builder().setLanguage("en").setRegion("US").build());

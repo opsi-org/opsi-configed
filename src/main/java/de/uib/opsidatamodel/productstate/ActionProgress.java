@@ -31,12 +31,9 @@ public class ActionProgress {
 	public static final int CACHED = 2;
 
 	private static Map<Integer, String> state2label;
-	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 
 	private static List<Integer> states;
-	private static List<String> labels;
 
 	// instance variable
 	private int state = INVALID;
@@ -54,14 +51,6 @@ public class ActionProgress {
 		states.add(INSTALLING);
 		states.add(CACHED);
 
-		labels = new ArrayList<>();
-		labels.add(Globals.CONFLICT_STATE_STRING);
-		labels.add(Globals.NO_VALID_STATE_STRING);
-		labels.add("not_available");
-		labels.add("none");
-		labels.add("installing");
-		labels.add("cached");
-
 		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
@@ -69,14 +58,6 @@ public class ActionProgress {
 		state2label.put(NONE, "none");
 		state2label.put(INSTALLING, "installing");
 		state2label.put(CACHED, "cached");
-
-		label2state = new HashMap<>();
-		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
-		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
-		label2state.put("not_available", NOT_AVAILABLE);
-		label2state.put("none", NONE);
-		label2state.put("installing", INSTALLING);
-		label2state.put("cached", CACHED);
 
 		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
@@ -86,15 +67,6 @@ public class ActionProgress {
 
 		label2displayLabel.put("installing", "installing");
 		label2displayLabel.put("cached", "cached");
-
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("no process reported", "none");
-
-		displayLabel2label.put("installing", "installing");
-		displayLabel2label.put("cached", "cached");
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {

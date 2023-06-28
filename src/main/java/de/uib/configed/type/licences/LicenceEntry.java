@@ -6,8 +6,6 @@
 
 package de.uib.configed.type.licences;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,16 +36,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	public static final String MAX_INSTALLATIONS_KEY = "maxInstallations";
 	public static final String EXPIRATION_DATE_KEY = "expirationDate";
 	public static final String TYPE_KEY = "licenseType";
-
-	private static final List<String> KEYS = new ArrayList<>();
-	static {
-		KEYS.add(ID_KEY);
-		KEYS.add(LICENCE_CONTRACT_ID_KEY);
-		KEYS.add(BOUND_TO_HOST_KEY);
-		KEYS.add(MAX_INSTALLATIONS_KEY);
-		KEYS.add(EXPIRATION_DATE_KEY);
-		KEYS.add(TYPE_KEY);
-	}
 
 	public static final String VOLUME = "VOLUME";
 	public static final String OEM = "OEM";
@@ -89,10 +77,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {
 			super.put(TYPE_KEY, translateTypeFromService((String) importedEntry.get(TYPE_SERVICE_KEY)));
 		}
-	}
-
-	public static List<String> getKeys() {
-		return KEYS;
 	}
 
 	private String translateTypeFromService(String servicetype) {
@@ -139,5 +123,4 @@ public class LicenceEntry extends TreeMap<String, Object> {
 
 		return count;
 	}
-
 }

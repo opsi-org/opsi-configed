@@ -135,7 +135,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 }

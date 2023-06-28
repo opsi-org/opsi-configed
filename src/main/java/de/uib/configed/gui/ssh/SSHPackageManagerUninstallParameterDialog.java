@@ -495,8 +495,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 						.addComponent(checkBoxKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-
-		);
+				.addGap(Globals.GAP_SIZE));
 	}
 }

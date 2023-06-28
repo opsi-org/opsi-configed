@@ -33,8 +33,6 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	private String toolTipText;
 
-	private boolean emphasized;
-
 	private Map<String, Object> deviceInfo;
 
 	public IconNode(Object userObject, boolean allowsChildren) {
@@ -165,13 +163,5 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	public Icon getEmphasizedIcon() {
 		return emphasizedIcon;
-	}
-
-	public void setEmphasized(boolean b) {
-		emphasized = b;
-	}
-
-	public boolean isEmphasized() {
-		return emphasized;
 	}
 }

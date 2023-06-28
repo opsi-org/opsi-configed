@@ -438,7 +438,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		return "";
 	}
 
-	public final void doSetActionGetVersions() {
+	private final void doSetActionGetVersions() {
 		String versions = doActionGetVersions();
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);
@@ -468,7 +468,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jTextFieldProductVersion.setEnabled(enable);
 	}
 
-	public void doExecSetRights() {
+	private void doExecSetRights() {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		EmptyCommand setRights = new EmptyCommand("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
@@ -476,7 +476,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		ssh.exec(setRights);
 	}
 
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 
@@ -568,6 +568,5 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		}
 
 		return "";
-
 	}
 }

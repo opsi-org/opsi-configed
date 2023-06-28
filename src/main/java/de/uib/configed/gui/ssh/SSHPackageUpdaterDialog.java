@@ -40,12 +40,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private CommandPackageUpdater command;
 
 	public SSHPackageUpdaterDialog() {
-		this(new CommandPackageUpdater());
-	}
-
-	public SSHPackageUpdaterDialog(CommandPackageUpdater command) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
-		this.command = command;
+		command = new CommandPackageUpdater();
 		Logging.info(this, "with command");
 		retrieveRepos();
 		init();
@@ -169,7 +165,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	// /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

@@ -22,9 +22,8 @@ import de.uib.utilities.tree.SimpleTreePath;
 public class Leafname2AllItsPaths {
 	Map<String, ArrayList<SimpleTreePath>> invertedSimpleClientPaths = new HashMap<>();
 
-	Leafname2AllItsPaths() {
+	public Leafname2AllItsPaths() {
 		invertedSimpleClientPaths = new HashMap<>();
-
 	}
 
 	public Set<String> keySet() {
@@ -58,7 +57,7 @@ public class Leafname2AllItsPaths {
 		return invertedSimpleClientPaths.get(leafname);
 	}
 
-	public void add(String leafname, SimpleTreePath simpleTreePath) {
+	private void add(String leafname, SimpleTreePath simpleTreePath) {
 		invertedSimpleClientPaths.computeIfAbsent(leafname, arg -> new ArrayList<>()).add(simpleTreePath);
 	}
 

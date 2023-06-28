@@ -428,7 +428,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		LogFrame.fileName = fn;
 	}
 
-	public String reloadFile(String fn) {
+	private String reloadFile(String fn) {
 		String rs = "";
 		if (fn != null) {
 			try {
@@ -444,7 +444,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		return rs;
 	}
 
-	public void saveToFile(String filename, String[] logfilelines) {
+	private void saveToFile(String filename, String[] logfilelines) {
 		FileWriter fWriter = null;
 		try {
 			fWriter = new FileWriter(filename, StandardCharsets.UTF_8);

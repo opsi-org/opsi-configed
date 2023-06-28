@@ -566,7 +566,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setComponentsEditable(value);
 	}
 
-	public static void setComponentsEditable(boolean value) {
+	private static void setComponentsEditable(boolean value) {
 		jComboBoxHost.setEnabled(value);
 		jTextFieldPort.setEnabled(value);
 		jTextFieldUser.setEnabled(value);
@@ -666,7 +666,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		checkComponentStates();
 	}
 
-	public void doActionOeffnen() {
+	private void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);

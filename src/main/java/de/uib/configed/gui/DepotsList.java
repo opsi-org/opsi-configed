@@ -50,10 +50,6 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		saveV = v;
 	}
 
-	public List<String> getListData() {
-		return saveV;
-	}
-
 	// interface ComponentListene
 	@Override
 	public void componentHidden(ComponentEvent e) {

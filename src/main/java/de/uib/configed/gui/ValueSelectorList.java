@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -91,33 +90,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		return scrollPaneValueList;
 	}
 
-	/**
-	 * gives the color for setting back color of this panel in master panel
-	 * 
-	 * @return java.awt.Color
-	 */
-	public Color getMyColor() {
-		return Globals.SECONDARY_BACKGROUND_COLOR;
-	}
-
-	/**
-	 * allows to show that a depot selection change is in progress
-	 * 
-	 * @param boolean We are in progress
-	 */
-	public void setChangedDepotSelectionActive(boolean active) {
-		if (!Main.THEMES) {
-
-			if (active) {
-				valueList.setBackground(Globals.BACKGROUND_COLOR_9);
-			} else {
-				valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			}
-
-			// colorize as hint that we have changed the depots selection
-		}
-	}
-
 	private void initComponents() {
 		labelValue = new JLabel();
 		if (multidepot) {
@@ -149,13 +121,13 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		buttonSelectValuesAll.setEnabled(multidepot);
 
 		searchPane.setFieldFont(Globals.defaultFont);
-		searchPane.setFieldBackground(getMyColor());
+		searchPane.setFieldBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
 
 		if (!Main.THEMES) {
-			searchPane.setBackground(getMyColor());
+			searchPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		searchPane.setNarrow(true);
 

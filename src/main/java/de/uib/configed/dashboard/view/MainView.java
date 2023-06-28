@@ -281,7 +281,7 @@ public class MainView implements View {
 		loadData();
 	}
 
-	public void setBlurriness(int iterations) {
+	private void setBlurriness(int iterations) {
 		BoxBlur blurriness = new BoxBlur();
 		blurriness.setIterations(iterations);
 		dashboardSceneVBox.setEffect(blurriness);

@@ -48,10 +48,6 @@ public class CharReader {
 		return buff[(lastRead + size - 1) % size];
 	}
 
-	public boolean isLastElement() {
-		return index == size - 1;
-	}
-
 	public int size() {
 		return size;
 	}

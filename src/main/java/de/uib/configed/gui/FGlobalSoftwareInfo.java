@@ -141,9 +141,4 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		// we dont dispose the window, dispose it in the enclosing class
 
 	}
-
-	public void exit() {
-		super.leave();
-	}
-
 }

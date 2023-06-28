@@ -54,7 +54,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		leave();
 	}
 
-	public void leave() {
+	private void leave() {
 		setVisible(false);
 		dispose();
 	}

@@ -352,7 +352,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						+ persistenceController.getFSoftware2LicencePool(key));
 			}
 
-			if (newAssociation != null && newAssociation) {
+			if (Boolean.TRUE.equals(newAssociation)) {
 				String otherPool = persistenceController.getFSoftware2LicencePool(key);
 
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {

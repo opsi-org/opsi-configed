@@ -34,6 +34,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
@@ -184,7 +185,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
-		highlighter = new UnderlineHighlighter(null);
+		highlighter = new DefaultHighlighter();
 		jTextPane.setHighlighter(highlighter);
 
 		if (defaultText != null) {
@@ -359,7 +360,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
 	}
 
-	public void treatPopupAction(int p) {
+	private void treatPopupAction(int p) {
 		switch (p) {
 		case PopupMenuTrait.POPUP_RELOAD:
 			reload();
@@ -537,7 +538,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		return result;
 	}
 
-	public void buildDocument() {
+	private void buildDocument() {
 		Logging.debug(this, "building document");
 		setCursor(Globals.WAIT_CURSOR);
 		// Switch to an blank document temporarily to avoid repaints

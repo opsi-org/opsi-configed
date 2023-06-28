@@ -29,5 +29,4 @@ public class Object2GroupEntry {
 	public String getMember() {
 		return member;
 	}
-
 }

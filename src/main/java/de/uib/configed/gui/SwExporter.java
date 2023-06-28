@@ -30,7 +30,7 @@ public class SwExporter implements ActionListener {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
+	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
 			ConfigedMain configedMain) {
 		this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
 		this.panelSWInfo = panelSWInfo;

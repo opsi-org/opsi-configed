@@ -67,10 +67,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	}
 
-	public IconAsButton(String desc, String imageRelPath) {
-		this(desc, imageRelPath, imageRelPath, imageRelPath, imageRelPath);
-	}
-
 	private void setDisplay(String desc, String inactive, String over, String active, String disabled) {
 		description = desc;
 		tooltipActive = desc;
@@ -100,11 +96,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 		label.setToolTipText(s);
 		this.tooltipActive = s;
 		this.tooltipInactive = s;
-	}
-
-	public void setToolTips(String tipActive, String tipInactive) {
-		this.tooltipActive = tipActive;
-		this.tooltipInactive = tipInactive;
 	}
 
 	@Override
@@ -177,7 +168,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
-	public void fireActionPerformed(ActionEvent e) {
+	private void fireActionPerformed(ActionEvent e) {
 		for (int i = 0; i < actionListeners.size(); i++) {
 			(actionListeners.get(i)).actionPerformed(e);
 		}

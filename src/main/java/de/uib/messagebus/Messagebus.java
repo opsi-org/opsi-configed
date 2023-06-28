@@ -215,7 +215,7 @@ public class Messagebus implements MessagebusListener {
 		return sslFactory;
 	}
 
-	public void makeStandardChannelSubscriptions() {
+	private void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
 		channels.add("event:host_connected");

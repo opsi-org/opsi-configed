@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
@@ -30,16 +29,8 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	private List<MessagebusListener> listeners = new ArrayList<>();
 
-	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
-		super(serverUri, draft);
-	}
-
 	public WebSocketClientEndpoint(URI serverURI) {
 		super(serverURI);
-	}
-
-	public WebSocketClientEndpoint(URI serverUri, Map<String, String> httpHeaders) {
-		super(serverUri, httpHeaders);
 	}
 
 	public void registerListener(MessagebusListener listener) {

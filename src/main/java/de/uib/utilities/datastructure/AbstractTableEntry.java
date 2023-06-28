@@ -24,18 +24,11 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	}
 
 	protected void remap(String key, String keyRetrieved) {
-		remap(key, keyRetrieved, true);
-	}
-
-	private void remap(String key, String keyRetrieved, boolean replaceNull) {
-
 		try {
 			if (entryRetrieved.get(keyRetrieved) != null) {
 				put(key, entryRetrieved.get(keyRetrieved));
 			} else {
-				if (replaceNull) {
-					put(key, "");
-				}
+				put(key, "");
 			}
 		} catch (Exception ex) {
 			Logging.debug(this, "remap keyRetrieved, exception " + ex);

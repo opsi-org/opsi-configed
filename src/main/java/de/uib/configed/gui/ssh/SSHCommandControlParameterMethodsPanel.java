@@ -63,14 +63,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	}
 
-	public JPanel getPanel() {
-		return this;
-	}
-
-	public GroupLayout getGrouplayout() {
-		return thisLayout;
-	}
-
 	/** Init components **/
 	private void init() {
 		Logging.debug(this, "init setting up components ");
@@ -120,7 +112,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		setComponentsEnabledRO();
 	}
 
-	public void setComponentsEnabledRO() {
+	private void setComponentsEnabledRO() {
 		jButtonTestParam.setEnabled(!Globals.isGlobalReadOnly());
 		jButtonAddParam.setEnabled(!Globals.isGlobalReadOnly());
 	}

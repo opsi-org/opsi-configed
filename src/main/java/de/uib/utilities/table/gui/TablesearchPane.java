@@ -908,7 +908,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * select all rows with value from searchfield
 	 */
-	public void markAll() {
+	private void markAll() {
 		Logging.info(this, "markAll");
 		targetModel.setValueIsAdjusting(true);
 		targetModel.clearSelection();

@@ -22,17 +22,6 @@ public class FTextArea extends FGeneralDialog {
 
 	private JTextArea jTextArea1 = new JTextArea();
 
-	public FTextArea(JFrame owner, String title, boolean modal) {
-		super(owner, title, modal);
-		initFTextArea();
-	}
-
-	public FTextArea(JFrame owner, String title, String message, boolean modal) {
-		super(owner, title, modal);
-		initFTextArea();
-		setMessage(message);
-	}
-
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
 		initFTextArea();
@@ -122,5 +111,4 @@ public class FTextArea extends FGeneralDialog {
 			jTextArea1.requestFocus();
 		}
 	}
-
 }

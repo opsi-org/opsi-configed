@@ -108,7 +108,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	abstract static class AbstractDocumentListener implements DocumentListener {
+	private abstract static class AbstractDocumentListener implements DocumentListener {
 
 		private boolean enabled = true;
 
@@ -156,10 +156,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	public void setSearchFields(List<String> fieldList) {
 		searchPane.setSearchFields(fieldList);
-	}
-
-	public void markAllSearchResults() {
-		searchPane.markAll();
 	}
 
 	public void setGuiIsFiltered(boolean b) {
@@ -818,7 +814,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
-			buttonEditDialog.setActivated(!b);
 		}
 	}
 
@@ -830,7 +825,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 
-			cancel();
+			clearChanges();
 		} else if (e.getSource() == buttonDelete) {
 
 			setDeleted(true);
@@ -940,7 +935,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		setMembers();
 	}
 
-	public void setDataChanged(boolean b) {
+	private void setDataChanged(boolean b) {
 
 		if (buttonCommit != null) {
 			buttonCommit.setEnabled(b);
@@ -1001,7 +996,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	public void commit() {
+	private void commit() {
 		Logging.debug(this, "commit");
 		String newGroupID = groupsEditField.getText();
 		if (save()) {
@@ -1010,9 +1005,4 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			enterExistingGroup();
 		}
 	}
-
-	public void cancel() {
-		clearChanges();
-	}
-
 }

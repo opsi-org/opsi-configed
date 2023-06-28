@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.swing.ComboBoxModel;
 
@@ -20,7 +19,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
-	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 
@@ -52,24 +50,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			Logging.info(this, "saveFilterSet " + filterSet);
 		} else {
 			Configed.savedStates.remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
-		}
-	}
-
-	public void resetFilter() {
-		Set<String> filterSaved = new HashSet<>(Arrays.asList(backslashPattern
-				.matcher(Configed.savedStates.getProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY, ""))
-				.replaceAll("").split(",")));
-
-		if (filterSaved.isEmpty()) {
-			setFilterFrom((Set<String>) null);
-		} else {
-			Set<String> productsOnlyInFilterSet = new HashSet<>(filterSaved);
-			productsOnlyInFilterSet.removeAll(tsProductNames);
-			filterSaved.removeAll(productsOnlyInFilterSet);
-			// A - (A - B) is the intersection
-
-			setFilterFrom(filterSaved);
-			Logging.debug(this, "resetFilter " + filterSaved);
 		}
 	}
 

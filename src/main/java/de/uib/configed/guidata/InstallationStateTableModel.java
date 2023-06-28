@@ -98,7 +98,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private final String[] selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
-	protected NavigableSet<String> tsProductNames;
+	private NavigableSet<String> tsProductNames;
 	private List<String> productNamesInDeliveryOrder;
 
 	private Set<String> missingProducts = new HashSet<>();

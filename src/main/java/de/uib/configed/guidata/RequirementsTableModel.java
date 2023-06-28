@@ -7,8 +7,6 @@
 package de.uib.configed.guidata;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -31,8 +29,7 @@ import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends AbstractTableModel {
 
-	private static List<String> rowType;
-	private static int noOfRowTypes;
+	private static final int NO_OF_ROW_TYPES = 3;
 
 	private Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
@@ -44,15 +41,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-
-	static {
-		rowType = new ArrayList<>();
-		rowType.add("KEYROW");
-		rowType.add("SETUP REQUIREMENT");
-		rowType.add("UNINSTALL REQUIREMENT");
-		noOfRowTypes = rowType.size();
-
-	}
 
 	public RequirementsTableModel() {
 		Logging.info(this, "creating");
@@ -103,7 +91,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		fireTableDataChanged();
-
 	}
 
 	@Override
@@ -113,7 +100,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return keyArray.length * noOfRowTypes;
+		return keyArray.length * NO_OF_ROW_TYPES;
 	}
 
 	@Override
@@ -145,9 +132,9 @@ public class RequirementsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int col) {
 
-		String myKey = (String) keyArray[row / noOfRowTypes];
+		String myKey = (String) keyArray[row / NO_OF_ROW_TYPES];
 
-		int rowTypeIndex = row % noOfRowTypes;
+		int rowTypeIndex = row % NO_OF_ROW_TYPES;
 
 		Object result = null;
 		String indent = "     ";

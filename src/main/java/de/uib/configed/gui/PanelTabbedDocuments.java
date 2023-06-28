@@ -291,7 +291,5 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		} catch (IOException ex) {
 			Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
 		}
-
 	}
-
 }

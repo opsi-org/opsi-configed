@@ -64,7 +64,7 @@ public class CSVImportDataModifier {
 		return true;
 	}
 
-	public GenTableModel updateModel(PanelGenEditTable thePanel, CSVParser parser, int startLine) {
+	private GenTableModel updateModel(PanelGenEditTable thePanel, CSVParser parser, int startLine) {
 		try {
 			CSVReader reader = null;
 

@@ -22,7 +22,7 @@ import de.uib.Main;
 public class CheckBoxList extends JList<JCheckBox> {
 	private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
-	public CheckBoxList() {
+	public CheckBoxList(ListModel<JCheckBox> model) {
 		super.setCellRenderer(new CellRenderer());
 
 		super.addMouseListener(new MouseAdapter() {
@@ -37,10 +37,6 @@ public class CheckBoxList extends JList<JCheckBox> {
 				}
 			}
 		});
-	}
-
-	public CheckBoxList(ListModel<JCheckBox> model) {
-		this();
 		super.setModel(model);
 	}
 

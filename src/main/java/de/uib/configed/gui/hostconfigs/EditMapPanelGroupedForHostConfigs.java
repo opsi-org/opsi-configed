@@ -257,8 +257,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				}
 			}
 		};
-		tree.addMouseListener(popupListenerForRolepath);
 
+		tree.addMouseListener(popupListenerForRolepath);
 	}
 
 	@Override
@@ -335,7 +335,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 					}
 				}
-
 			}
 		}
 
@@ -585,5 +584,4 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
 	}
-
 }

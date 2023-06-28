@@ -64,5 +64,4 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 		);
 	}
-
 }

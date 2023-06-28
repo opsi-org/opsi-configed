@@ -122,21 +122,6 @@ public class SWAuditClientEntry {
 
 	}
 
-	public SWAuditClientEntry(final List<String> keys, final List<String> values) {
-
-		data = new HashMap<>();
-
-		data.put(SWAuditEntry.ID, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
-		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
-
-		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
-		swIdent = produceSWident(keys, values);
-		this.software = persistenceController.getSoftwareList();
-		this.software2Number = persistenceController.getSoftware2Number();
-
-		produceSWid();
-	}
-
 	public static String produceSWident(List<String> keys, List<String> values) {
 		// from db columns
 
@@ -260,13 +245,8 @@ public class SWAuditClientEntry {
 		return data.get(SWAuditEntry.ID);
 	}
 
-	public String getLicenceKey() {
-		return data.get(data.get(LICENCE_KEY));
-	}
-
 	public String getLastModification() {
 		return lastModificationS;
-
 	}
 
 	public Integer getSWid() {
@@ -292,22 +272,8 @@ public class SWAuditClientEntry {
 		return dataMap;
 	}
 
-	public String[] getExpandedData(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<>(data);
-		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-
-		String[] result = new String[KEYS.size()];
-
-		for (int i = 0; i < KEYS.size(); i++) {
-			result[i] = dataMap.get(KEYS.get(i));
-		}
-
-		return result;
-	}
-
 	@Override
 	public String toString() {
 		return "<" + data.toString() + ", swIdent= " + swIdent + ">";
 	}
-
 }

@@ -75,10 +75,6 @@ public class OpsiProductInfo extends OpsiPackage {
 		return possibleActions;
 	}
 
-	public boolean hasLoginScript() {
-		return hasUserLoginScript;
-	}
-
 	public String getProductName() {
 		return productName;
 	}

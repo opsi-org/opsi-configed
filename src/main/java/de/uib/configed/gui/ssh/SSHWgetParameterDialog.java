@@ -272,12 +272,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void doActionHelp() {
+	private void doActionHelp() {
 		SSHConnectionExecDialog dia = commandWget.startHelpDialog();
 		dia.setVisible(true);
 	}
 
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 
