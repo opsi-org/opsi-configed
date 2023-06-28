@@ -5474,8 +5474,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		if (withLicenceManagement) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.add(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			if (exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }))) {
 				result = licensePoolId;
@@ -5493,9 +5496,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		if (withLicenceManagement) {
+
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.remove(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			return exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
 		}
