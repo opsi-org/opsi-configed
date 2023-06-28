@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -79,7 +79,7 @@ public class Messagebus implements MessagebusListener {
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		ServerFacade exec = getServerFacadeExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
@@ -87,9 +87,9 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getMessagebusListener());
 		}
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
-		if (exec.sessionId != null) {
+		if (exec.getSessionId() != null) {
 			Logging.debug("Adding cookie header");
-			messagebusWebSocket.addHeader("Cookie", exec.sessionId);
+			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
 		messagebusWebSocket.setSocketFactory(factory);
@@ -170,13 +170,13 @@ public class Messagebus implements MessagebusListener {
 		return result;
 	}
 
-	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
-		return (JSONthroughHTTPS) persistenceController.exec;
+	private ServerFacade getServerFacadeExecutor() {
+		return (ServerFacade) persistenceController.exec;
 	}
 
 	private String createEncBasicAuth() {
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
-		String basicAuth = String.format("%s:%s", exec.username, exec.password);
+		ServerFacade exec = getServerFacadeExecutor();
+		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 

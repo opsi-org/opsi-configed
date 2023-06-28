@@ -41,9 +41,8 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
-import de.uib.opsicommand.AbstractExecutioner;
-import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -153,7 +152,7 @@ public class DataStubNOM {
 	public boolean canCallMySQL() {
 
 		// we cannot call MySQL if version before 4.3
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			return false;
 		}
 
@@ -578,7 +577,7 @@ public class DataStubNOM {
 
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("objectId", AbstractExecutioner.jsonArray(newClients));
+			callFilter.put("objectId", newClients);
 
 			result = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productPropertyState_getObjects");
@@ -866,7 +865,7 @@ public class DataStubNOM {
 				Map<String, Object> callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null) {
-					callFilter.put("clientId", AbstractExecutioner.jsonArray(clientListForCall));
+					callFilter.put("clientId", clientListForCall);
 				}
 
 				List<Map<String, Object>> softwareAuditOnClients = persistenceController

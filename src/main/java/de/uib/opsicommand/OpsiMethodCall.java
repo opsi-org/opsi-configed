@@ -8,12 +8,9 @@ package de.uib.opsicommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import de.uib.utilities.logging.Logging;
 
@@ -121,40 +118,26 @@ public class OpsiMethodCall {
 		return sb.toString();
 	}
 
-	public String getJsonString() {
-		String result = "";
-		try {
-			JSONObject jO = new JSONObject();
+	public Map<String, Object> getOMCMap() {
+		Map<String, Object> map = new HashMap<>();
+		List<Object> params = new ArrayList<>();
 
-			JSONArray joParams = new JSONArray();
+		for (int i = 0; i < parameters.length; i++) {
+			if (parameters[i] instanceof Object[]) {
+				List<Object> list = Arrays.asList((Object[]) parameters[i]);
 
-			for (int i = 0; i < parameters.length; i++) {
-				if (parameters[i] instanceof Object[]) {
-					Object[] obs = (Object[]) parameters[i];
-					JSONArray arr = new JSONArray();
-					for (int j = 0; j < obs.length; j++) {
-						arr.put(obs[j]);
-					}
-
-					joParams.put(arr);
-				} else if (parameters[i] instanceof Map) {
-					JSONObject job = new JSONObject((Map<?, ?>) parameters[i]);
-					joParams.put(job);
-				} else {
-					joParams.put(parameters[i]);
-				}
-
+				params.add(list);
+			} else if (parameters[i] instanceof Map) {
+				params.add(parameters[i]);
+			} else {
+				params.add(parameters[i]);
 			}
-
-			jO.put("id", DEFAULT_JSON_ID);
-			jO.put("method", methodname);
-			jO.put("params", joParams);
-			result = jO.toString();
-
-		} catch (JSONException jex) {
-			Logging.error(this, "Exception while producing a JSONObject", jex);
 		}
 
-		return result;
+		map.put("id", DEFAULT_JSON_ID);
+		map.put("method", methodname);
+		map.put("params", params);
+
+		return map;
 	}
 }
