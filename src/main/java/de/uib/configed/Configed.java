@@ -111,15 +111,11 @@ public final class Configed {
 			Logging.debug("they are equal");
 		}
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		startConfiged();
@@ -211,7 +207,11 @@ public final class Configed {
 			}
 
 			if (result == null) {
-				result = Messages.messagesBundle.getString(key);
+				if (Messages.messagesBundle != null) {
+					result = Messages.messagesBundle.getString(key);
+				} else {
+					Logging.error("Messages.messagesBundle is null...");
+				}
 			}
 
 			if (showLocalizationStrings) {
@@ -221,7 +221,7 @@ public final class Configed {
 			}
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
-			Logging.debug("Problem: " + mre.toString());
+			Logging.error("Problem, missing resource...", mre);
 
 			try {
 				result = Messages.messagesEnBundle.getString(key);
@@ -232,16 +232,14 @@ public final class Configed {
 
 				}
 			} catch (MissingResourceException mre2) {
-				Logging.debug("Problem: " + mre2.toString());
-
+				Logging.error("Problem, missing resource in second try...", mre);
 			}
-		} catch (Exception ex) {
-			Logging.warning("Failed to message " + key, ex);
 		}
 
 		if (result == null) {
 			result = key;
 		}
+
 		return result;
 	}
 
@@ -541,23 +539,15 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		// Turn on antialiasing for text (not for applets)
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex);
-		}
+		System.setProperty("swing.aatext", "true");
 
 		new Configed(host, user, password, client, clientgroup, tab);
 	}
