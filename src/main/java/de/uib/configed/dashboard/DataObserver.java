@@ -27,11 +27,6 @@ public class DataObserver {
 		subscribers.add(listener);
 	}
 
-	public void unsubscribe(String type, DataChangeListener listener) {
-		List<DataChangeListener> subscribers = listeners.get(type);
-		subscribers.remove(listener);
-	}
-
 	public void notify(String type, String depot) {
 		List<DataChangeListener> subscribers = listeners.get(type);
 		for (DataChangeListener subscriber : subscribers) {
