@@ -68,10 +68,6 @@ public class OpsiServerVersionRetriever {
 		return serverVersionString;
 	}
 
-	public boolean isServerVersionSet() {
-		return serverVersion[0] != 0;
-	}
-
 	/**
 	 * Checks if the server version is already known.
 	 */

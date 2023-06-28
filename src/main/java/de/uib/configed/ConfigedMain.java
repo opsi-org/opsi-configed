@@ -97,7 +97,6 @@ import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
