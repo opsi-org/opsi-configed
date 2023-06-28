@@ -364,8 +364,8 @@ public class BackendMySQL {
 			try {
 				return doJSONArray(mySQLRecursion, jsonObject.getJSONArray(KEY_CHILDREN), newType);
 
-			} catch (Exception e) {
-				Logging.warning(this, "" + e);
+			} catch (JSONException e) {
+				Logging.warning(this, "Cannot get JSONArray for " + KEY_CHILDREN, e);
 			}
 		} else {
 			return mySQLRecursion.getMySQLforJSONObject(jsonObject);

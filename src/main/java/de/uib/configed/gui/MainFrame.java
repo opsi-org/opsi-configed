@@ -540,11 +540,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			ImageIcon localeIcon = null;
 			String imageIconName = Messages.getLocaleInfo().get(localeName);
 			if (imageIconName != null && imageIconName.length() > 0) {
-				try {
-					localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
-				} catch (Exception ex) {
-					Logging.info(this, "icon not found: " + imageIconName + ", " + ex);
-				}
+				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
@@ -1681,31 +1677,27 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
 
-		try {
-			HashMap<String, String> metaData = new HashMap<>();
-			String title = Configed.getResourceValue("MainFrame.ClientList");
+		HashMap<String, String> metaData = new HashMap<>();
+		String title = Configed.getResourceValue("MainFrame.ClientList");
 
-			if (statusPane.getGroupName().length() != 0) {
-				title = title + ": " + statusPane.getGroupName();
-			}
-			metaData.put("header", title);
-			title = "";
-			if (statusPane.getInvolvedDepots().length() != 0) {
-				title = title + "Depot(s) : " + statusPane.getInvolvedDepots();
-			}
-
-			metaData.put("title", title);
-			metaData.put("subject", "report of table");
-			metaData.put("keywords", "");
-
-			ExporterToPDF pdfExportTable = new ExporterToPDF(panelClientlist.getTable());
-
-			pdfExportTable.setMetaData(metaData);
-			pdfExportTable.setPageSizeA4Landscape();
-			pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
-		} catch (Exception ex) {
-			Logging.error("pdf printing error " + ex);
+		if (statusPane.getGroupName().length() != 0) {
+			title = title + ": " + statusPane.getGroupName();
 		}
+		metaData.put("header", title);
+		title = "";
+		if (statusPane.getInvolvedDepots().length() != 0) {
+			title = title + "Depot(s) : " + statusPane.getInvolvedDepots();
+		}
+
+		metaData.put("title", title);
+		metaData.put("subject", "report of table");
+		metaData.put("keywords", "");
+
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelClientlist.getTable());
+
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -2751,11 +2743,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void getReachableInfo() {
 		iconButtonReachableInfo.setEnabled(false);
-		try {
-			SwingUtilities.invokeLater(configedMain::getReachableInfo);
-		} catch (Exception ex) {
-			Logging.debug(this, "Exception " + ex);
-		}
+
+		SwingUtilities.invokeLater(configedMain::getReachableInfo);
 	}
 
 	private void callSelectionDialog() {
@@ -3149,12 +3138,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void componentResized(ComponentEvent e) {
 		Logging.debug(this, "componentResized");
 
-		try {
-			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-					(int) (F_WIDTH_RIGHTHANDED * 1.5));
-		} catch (Exception ex) {
-			Logging.info(this, "componentResized " + ex);
-		}
+		moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+				(int) (F_WIDTH_RIGHTHANDED * 1.5));
 		Logging.debug(this, "componentResized ready");
 	}
 
@@ -3193,11 +3178,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			if (f != null) {
 				f.setVisible(true);
-				try {
-					f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
-				} catch (Exception ex) {
-					Logging.info(this, "arrangeWs, could not get location");
-				}
+				f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
 			}
 		}
 	}

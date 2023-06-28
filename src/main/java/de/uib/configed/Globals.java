@@ -550,20 +550,12 @@ public final class Globals {
 
 		// should have the same result (but seems not to have)
 
-		try {
-
-			if (imgURL != null) {
-				return new ImageIcon(imgURL, description);
-			} else {
-				Logging.info("Couldn't find file: " + path);
-				return null;
-			}
-		} catch (Exception ex) {
-			Logging.info("createImageIcon " + path + " : " + ex);
-
+		if (imgURL != null) {
+			return new ImageIcon(imgURL, description);
+		} else {
+			Logging.info("Couldn't find file: " + path);
+			return null;
 		}
-
-		return null;
 	}
 
 	public static String getSeconds() {

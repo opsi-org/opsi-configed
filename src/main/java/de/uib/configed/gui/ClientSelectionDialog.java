@@ -168,15 +168,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public void loadSearch(String name) {
 		Logging.info(this, "loadSearch " + name);
-		try {
-			manager.loadSearch(name);
-			loadFromManager();
-			SavedSearch search = manager.getSavedSearches().get(name);
-			saveNameField.setText(search.getName());
-			saveDescriptionField.setText(search.getDescription());
-		} catch (Exception exc) {
-			Logging.error("Could not load search!", exc);
-		}
+
+		manager.loadSearch(name);
+		loadFromManager();
+		SavedSearch search = manager.getSavedSearches().get(name);
+		saveNameField.setText(search.getName());
+		saveDescriptionField.setText(search.getDescription());
 	}
 
 	@Override

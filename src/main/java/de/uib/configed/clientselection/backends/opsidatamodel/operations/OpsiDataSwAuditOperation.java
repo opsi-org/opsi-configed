@@ -35,13 +35,9 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 
 			String swIdent = null;
 			Integer swIndex = swEntry.getSWid();
-			try {
-				swIdent = persistenceController.getSWident(swIndex);
-				if (swIdent == null || swIndex == null || swIndex == -1) {
-					Logging.info(this, "no swIdent for index " + swIndex);
-					return false;
-				}
-			} catch (Exception ex) {
+
+			swIdent = persistenceController.getSWident(swIndex);
+			if (swIdent == null || swIndex == null || swIndex == -1) {
 				Logging.info(this, "no swIdent for index " + swIndex);
 				return false;
 			}

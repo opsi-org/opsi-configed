@@ -209,19 +209,16 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel.fireTableStructureChanged();
 
 		jList.setListData(theValues.toArray(new String[0]));
-		try {
-			if (filtered) {
-				// we mark all since we just filtered the marked ones
 
-				// selectAll : (since it is assumed that we filter the selected)
-				setValueIsAdjusting(true);
-				jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
-				setValueIsAdjusting(false);
-			} else {
-				jList.setSelectionInterval(0, 0);
-			}
-		} catch (Exception ex) {
-			Logging.warning(this, "selection error " + ex);
+		if (filtered) {
+			// we mark all since we just filtered the marked ones
+
+			// selectAll : (since it is assumed that we filter the selected)
+			setValueIsAdjusting(true);
+			jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
+			setValueIsAdjusting(false);
+		} else {
+			jList.setSelectionInterval(0, 0);
 		}
 
 		Logging.info(this, "setFilter " + theValues);

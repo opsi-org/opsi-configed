@@ -399,15 +399,11 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		return "";
 	}
 
+	// TODO rework, we want to controll it better...
 	@Override
 	public void setCursor(Cursor c) {
 		super.setCursor(c);
-		try {
-			containership.doForAllContainedCompis("setCursor", new Object[] { c });
-		} catch (Exception ex) {
-			Logging.warning(this, "containership error", ex);
-		}
-
+		containership.doForAllContainedCompis("setCursor", new Object[] { c });
 	}
 
 	private void okAction() {

@@ -471,19 +471,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
 		}
 
-		try {
-			comboSearchFieldsMode = new JComboBoxToolTip();
-			if (!Main.FONT) {
-				comboSearchFieldsMode.setFont(Globals.defaultFont);
-			}
-		} catch (Exception ex) {
-
-			Logging.warning(this, "strange nimbus exception, retry creating JComboBox " + ex);
-
-			comboSearchFieldsMode = new JComboBoxToolTip();
-			if (!Main.FONT) {
-				comboSearchFieldsMode.setFont(Globals.defaultFont);
-			}
+		comboSearchFieldsMode = new JComboBoxToolTip();
+		if (!Main.FONT) {
+			comboSearchFieldsMode.setFont(Globals.defaultFont);
 		}
 
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
