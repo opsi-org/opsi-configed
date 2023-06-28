@@ -63,20 +63,6 @@ public final class Helper {
 		return allMaps;
 	}
 
-	public static <T, V> boolean listsInMapAreEmpty(Map<V, List<T>> map) {
-		if (map.isEmpty()) {
-			return true;
-		}
-
-		for (List<T> value : map.values()) {
-			if (!value.isEmpty()) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	public static <T, V> boolean mapsInMapAreEmpty(Map<T, Map<T, V>> map) {
 		if (map.isEmpty()) {
 			return true;
