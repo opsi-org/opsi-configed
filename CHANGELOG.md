@@ -1,5 +1,11 @@
 # Changelog
 
+
+## [4.2.22.5] - 2023-06-28
+
+### Fixed
+- Creating und deleting licensepool - product relations works again
+
 ## [4.2.22.4] - 2023-06-23
 
 ### Fixed
