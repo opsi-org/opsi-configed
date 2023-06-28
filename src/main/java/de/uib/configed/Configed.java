@@ -196,6 +196,7 @@ public final class Configed {
 		return refreshMinutes;
 	}
 
+	// TODO: refactor, don't try twice, we have tests now...
 	public static String getResourceValue(String key) {
 		String result = null;
 		try {
@@ -232,7 +233,7 @@ public final class Configed {
 
 				}
 			} catch (MissingResourceException mre2) {
-				Logging.error("Problem, missing resource in second try...", mre);
+				Logging.error("Problem, missing resource in second try...", mre2);
 			}
 		}
 

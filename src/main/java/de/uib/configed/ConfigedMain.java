@@ -475,29 +475,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (Configed.savedStatesLocationName != null) {
 			Logging.info(this, "trying to write saved states to " + Configed.savedStatesLocationName);
-			try {
-				String directoryName = getSavedStatesDirectoryName(Configed.savedStatesLocationName);
-				savedStatesDir = new File(directoryName);
-				Logging.info(this, "writing saved states, created file " + savedStatesDir);
+			String directoryName = getSavedStatesDirectoryName(Configed.savedStatesLocationName);
+			savedStatesDir = new File(directoryName);
+			Logging.info(this, "writing saved states, created file " + savedStatesDir);
 
-				if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
-					Logging.warning(this, "mkdirs for saved states failed, for File " + savedStatesDir);
-				}
-
-				Logging.info(this, "writing saved states, got dirs");
-
-				if (!savedStatesDir.setWritable(true, true)) {
-					Logging.warning(this, "setting file savedStatesDir writable failed");
-				}
-
-				Logging.info(this, "writing saved states, set writable, success: " + success);
-				Configed.savedStates = new SavedStates(
-						new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
-			} catch (Exception ex) {
-				Logging.warning(this, "saved states exception " + ex);
-				success = false;
-				Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
+			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
+				Logging.warning(this, "mkdirs for saved states failed, for File " + savedStatesDir);
 			}
+
+			Logging.info(this, "writing saved states, got dirs");
+
+			if (!savedStatesDir.setWritable(true, true)) {
+				Logging.warning(this, "setting file savedStatesDir writable failed");
+			}
+
+			Logging.info(this, "writing saved states, set writable, success: " + success);
+			Configed.savedStates = new SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 		}
 
 		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || !success) {
@@ -536,14 +530,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (Configed.savedStatesLocationName != null) {
 			Logging.info(this, "trying to find saved states in " + Configed.savedStatesLocationName);
-			try {
-				savedStatesLocation = new File(Configed.savedStatesLocationName);
-				savedStatesLocation.mkdirs();
-				success = success && savedStatesLocation.setReadable(true);
-			} catch (Exception ex) {
-				success = false;
-				Logging.notice(this, "failed to create saved states' directory: " + ex);
-			}
+
+			savedStatesLocation = new File(Configed.savedStatesLocationName);
+			savedStatesLocation.mkdirs();
+			success = success && savedStatesLocation.setReadable(true);
 		}
 
 		if (!success) {
@@ -2342,11 +2332,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setProductEdited " + productname);
 
 		if (clientProductpropertiesUpdateCollection != null) {
-			try {
-				updateCollection.remove(clientProductpropertiesUpdateCollection);
-			} catch (Exception ex) {
-				Logging.error(this, "removing ProductpropertiesUpdateCollection from updateCollection failed", ex);
-			}
+			updateCollection.remove(clientProductpropertiesUpdateCollection);
 		}
 		clientProductpropertiesUpdateCollection = null;
 
@@ -2582,15 +2568,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		groupPathActivatedByTree = pathToNode;
 
-		try {
-			activatedGroupModel.setNode("" + node);
-			activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
-			activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
-			activatedGroupModel.setActive(true);
-		} catch (Exception ex) {
-			Logging.info(this, "activateGroupByTree, node: " + node + " exception : " + ex);
-		}
-
+		activatedGroupModel.setNode("" + node);
+		activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
+		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
+		activatedGroupModel.setActive(true);
 	}
 
 	public TreePath getGroupPathActivatedByTree() {
@@ -2662,14 +2643,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Configed.savedStates.setProperty("selectedDepots", Arrays.toString(selectedDepots));
 
-		try {
-			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
+		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
-			if (selectionPanel != null) {
-				initialTreeActivation();
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Tree cannot be activated", ex);
+		if (selectionPanel != null) {
+			initialTreeActivation();
 		}
 
 	}
@@ -2808,86 +2785,78 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return false;
 		}
 
-		try {
-			clearProductEditing();
+		clearProductEditing();
 
-			// we reload since at the moment we do not track changes if anyDataChanged
-			if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
-					|| localbootStatesAndActionsUpdate) {
-				localbootStatesAndActionsUpdate = false;
+		// we reload since at the moment we do not track changes if anyDataChanged
+		if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
+				|| localbootStatesAndActionsUpdate) {
+			localbootStatesAndActionsUpdate = false;
 
-				localbootStatesAndActions = persistenceController
-						.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
+			localbootStatesAndActions = persistenceController
+					.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
 
-				istmForSelectedClientsLocalboot = null;
-			}
-
-			clientProductpropertiesUpdateCollections = new HashMap<>();
-			mainFrame.panelLocalbootProductSettings.initAllProperties();
-
-			Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
-			possibleActions = persistenceController.getPossibleActions(depotRepresentative);
-
-			// we retrieve the properties for all clients and products
-
-			// it is necessary to do this before resetting selection below (*) since there a
-			// listener is triggered
-			// which loads the productProperties for each client separately
-
-			persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
-
-			Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
-			List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
-					.getSortKeys();
-
-			Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
-
-			Logging.debug(this,
-					"setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
-
-			String localbootProductsSavedStateObjTag = "localbootProducts";
-
-			if (istmForSelectedClientsLocalboot == null) {
-				// we rebuild only if we reloaded
-				istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
-						collectChangedLocalbootStates,
-						persistenceController.getAllLocalbootProductNames(depotRepresentative),
-						localbootStatesAndActions, possibleActions,
-						persistenceController.getProductGlobalInfos(depotRepresentative),
-						getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
-			}
-
-			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
-			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
-			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
-
-			Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
-
-			Set<String> savedFilter = null;
-
-			if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-				savedFilter = new HashSet<>(Arrays.asList(backslashPattern
-						.matcher(Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-								+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
-						.replaceAll("").split(",")));
-			}
-			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-			mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
-
-			Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
-			mainFrame.panelLocalbootProductSettings.setSearchFields(
-					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
-
-			return true;
-		} catch (Exception ex) {
-			Logging.error("Error in setLocalbootProductsPage: " + ex, ex);
-			return false;
+			istmForSelectedClientsLocalboot = null;
 		}
 
+		clientProductpropertiesUpdateCollections = new HashMap<>();
+		mainFrame.panelLocalbootProductSettings.initAllProperties();
+
+		Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
+		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
+
+		// we retrieve the properties for all clients and products
+
+		// it is necessary to do this before resetting selection below (*) since there a
+		// listener is triggered
+		// which loads the productProperties for each client separately
+
+		persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
+
+		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
+		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
+				.getSortKeys();
+
+		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
+
+		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+
+		String localbootProductsSavedStateObjTag = "localbootProducts";
+
+		if (istmForSelectedClientsLocalboot == null) {
+			// we rebuild only if we reloaded
+			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+					collectChangedLocalbootStates,
+					persistenceController.getAllLocalbootProductNames(depotRepresentative), localbootStatesAndActions,
+					possibleActions, persistenceController.getProductGlobalInfos(depotRepresentative),
+					getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
+		}
+
+		int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
+		mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+		mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+
+		Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+
+		Set<String> savedFilter = null;
+
+		if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+					.matcher(Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+							+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
+					.replaceAll("").split(",")));
+		}
+		mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+		mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
+
+		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
+		mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
+		mainFrame.panelLocalbootProductSettings
+				.setSearchFields(InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+		setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
+
+		return true;
 	}
 
 	private boolean setNetbootProductsPage() {
@@ -2895,83 +2864,72 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return false;
 		}
 
-		try {
-			clearProductEditing();
+		clearProductEditing();
 
-			long startmillis = System.currentTimeMillis();
-			Logging.debug(this,
-					"setLocalbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  start "
-							+ startmillis);
+		long startmillis = System.currentTimeMillis();
+		Logging.debug(this,
+				"setLocalbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  start "
+						+ startmillis);
 
-			if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
-				// we reload since at the moment we do not track changes if anyDataChanged
-				netbootStatesAndActions = persistenceController
-						.getMapOfNetbootProductStatesAndActions(getSelectedClients());
+		if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
+			// we reload since at the moment we do not track changes if anyDataChanged
+			netbootStatesAndActions = persistenceController
+					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
 
-				istmForSelectedClientsNetboot = null;
-			}
-			long endmillis = System.currentTimeMillis();
-			Logging.debug(this,
-					"setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
-							+ endmillis + " diff " + (endmillis - startmillis));
+			istmForSelectedClientsNetboot = null;
+		}
+		long endmillis = System.currentTimeMillis();
+		Logging.debug(this, "setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
+				+ endmillis + " diff " + (endmillis - startmillis));
 
-			List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panelNetbootProductSettings
-					.getSortKeys();
+		List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panelNetbootProductSettings
+				.getSortKeys();
 
-			clientProductpropertiesUpdateCollections = new HashMap<>();
-			mainFrame.panelLocalbootProductSettings.initAllProperties();
+		clientProductpropertiesUpdateCollections = new HashMap<>();
+		mainFrame.panelLocalbootProductSettings.initAllProperties();
 
-			possibleActions = persistenceController.getPossibleActions(depotRepresentative);
+		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
 
-			Set<String> oldProductSelection = mainFrame.panelNetbootProductSettings.getSelectedIDs();
+		Set<String> oldProductSelection = mainFrame.panelNetbootProductSettings.getSelectedIDs();
 
-			// we retrieve the properties for all clients and products
+		// we retrieve the properties for all clients and products
 
-			persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
+		persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
 
-			String netbootProductsSavedStateObjTag = "netbootProducts";
+		String netbootProductsSavedStateObjTag = "netbootProducts";
 
-			if (istmForSelectedClientsNetboot == null) {
-				// we rebuild only if we reloaded
-				istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
-						collectChangedNetbootStates,
-						persistenceController.getAllNetbootProductNames(depotRepresentative), netbootStatesAndActions,
-						possibleActions, persistenceController.getProductGlobalInfos(depotRepresentative),
-						getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
-			}
-
-			try {
-				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
-				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
-				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
-
-				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag
-						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
-
-				Set<String> savedFilter = null;
-
-				if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
-						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-					savedFilter = new HashSet<>(Arrays.asList(backslashPattern
-							.matcher(Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
-							.replaceAll("").split(",")));
-				}
-
-				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
-				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
-				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
-			} catch (Exception ex) {
-				Logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
-			}
-
-			return true;
-		} catch (Exception ex) {
-			Logging.error("Error in setNetbootProductsPage: " + ex, ex);
-			return false;
+		if (istmForSelectedClientsNetboot == null) {
+			// we rebuild only if we reloaded
+			istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+					collectChangedNetbootStates, persistenceController.getAllNetbootProductNames(depotRepresentative),
+					netbootStatesAndActions, possibleActions,
+					persistenceController.getProductGlobalInfos(depotRepresentative),
+					getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
 		}
 
+		int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
+		mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
+		mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
+
+		Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+
+		Set<String> savedFilter = null;
+
+		if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+					.matcher(Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+							+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
+					.replaceAll("").split(",")));
+		}
+
+		mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+		mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
+		mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
+		setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
+
+		return true;
 	}
 
 	private static int[] getTableColumnWidths(JTable table) {
@@ -3058,30 +3016,25 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean setHostPropertiesPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
-		try {
-			if (editingTarget == EditingTarget.DEPOTS) {
-				Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
-						.getDepotPropertiesForPermittedDepots();
+		if (editingTarget == EditingTarget.DEPOTS) {
+			Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
+					.getDepotPropertiesForPermittedDepots();
 
-				if (hostUpdateCollection != null) {
-					updateCollection.remove(hostUpdateCollection);
-				}
-
-				hostUpdateCollection = new HostUpdateCollection();
-				addToGlobalUpdateCollection(hostUpdateCollection);
-
-				mainFrame.panelHostProperties.initMultipleHostsEditing(
-						Configed.getResourceValue("PanelHostProperties.SelectHost"),
-						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
-						depotPropertiesForPermittedDepots, hostUpdateCollection,
-						OpsiserviceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+			if (hostUpdateCollection != null) {
+				updateCollection.remove(hostUpdateCollection);
 			}
 
-			return true;
-		} catch (Exception ex) {
-			Logging.error("Error in setHostPropertiesPage: " + ex, ex);
-			return false;
+			hostUpdateCollection = new HostUpdateCollection();
+			addToGlobalUpdateCollection(hostUpdateCollection);
+
+			mainFrame.panelHostProperties.initMultipleHostsEditing(
+					Configed.getResourceValue("PanelHostProperties.SelectHost"),
+					new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
+					depotPropertiesForPermittedDepots, hostUpdateCollection,
+					OpsiserviceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 		}
+
+		return true;
 	}
 
 	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
@@ -3105,80 +3058,68 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
-		try {
-			String[] objectIds;
-			if (editingTarget == EditingTarget.SERVER) {
-				objectIds = new String[] { myServer };
-			} else {
-				objectIds = getSelectedClients();
-			}
-
-			if (additionalconfigurationUpdateCollection != null) {
-				try {
-					updateCollection.remove(additionalconfigurationUpdateCollection);
-				} catch (Exception ex) {
-					Logging.error(this, "removing additionalconfigurationUpdateCollection from updateCollection failed",
-							ex);
-				}
-			}
-			additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
-			addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
-
-			if (editingTarget == EditingTarget.SERVER) {
-				List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
-
-				Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDefaultValues();
-
-				additionalConfigs.add(defaultValuesMap);
-
-				additionalconfigurationUpdateCollection.setMasterConfig(true);
-
-				mainFrame.panelHostConfig.initEditing("  " + myServer + " (configuration server)",
-						additionalConfigs.get(0), persistenceController.getConfigOptions(), additionalConfigs,
-						additionalconfigurationUpdateCollection, true,
-						// editableOptions
-						OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
-			} else {
-				List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
-
-				if (hostConfigs == null) {
-
-					// serves as marker
-					hostConfigs = new HashMap<>();
-
-					for (String client : getSelectedClients()) {
-						hostConfigs.put(client, persistenceController.getConfigs().get(client));
-					}
-				}
-
-				Logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
-
-				for (int i = 0; i < getSelectedClients().length; i++) {
-					additionalConfigs.add(persistenceController.getConfig(getSelectedClients()[i]));
-					// with server defaults
-				}
-
-				Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-
-				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persistenceController
-						.getConfigOptions();
-
-				removeKeysStartingWith(mergedVisualMap,
-						OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
-
-				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
-						additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
-						OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
-
-			}
-
-			return true;
-		} catch (Exception ex) {
-
-			Logging.error("Error in setNetworkConfigurationPage: " + ex, ex);
-			return false;
+		String[] objectIds;
+		if (editingTarget == EditingTarget.SERVER) {
+			objectIds = new String[] { myServer };
+		} else {
+			objectIds = getSelectedClients();
 		}
 
+		if (additionalconfigurationUpdateCollection != null) {
+			updateCollection.remove(additionalconfigurationUpdateCollection);
+		}
+		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
+		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+
+		if (editingTarget == EditingTarget.SERVER) {
+			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
+
+			Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDefaultValues();
+
+			additionalConfigs.add(defaultValuesMap);
+
+			additionalconfigurationUpdateCollection.setMasterConfig(true);
+
+			mainFrame.panelHostConfig.initEditing("  " + myServer + " (configuration server)", additionalConfigs.get(0),
+					persistenceController.getConfigOptions(), additionalConfigs,
+					additionalconfigurationUpdateCollection, true,
+					// editableOptions
+					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
+		} else {
+			List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
+
+			if (hostConfigs == null) {
+
+				// serves as marker
+				hostConfigs = new HashMap<>();
+
+				for (String client : getSelectedClients()) {
+					hostConfigs.put(client, persistenceController.getConfigs().get(client));
+				}
+			}
+
+			Logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
+
+			for (int i = 0; i < getSelectedClients().length; i++) {
+				additionalConfigs.add(persistenceController.getConfig(getSelectedClients()[i]));
+				// with server defaults
+			}
+
+			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
+
+			Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persistenceController
+					.getConfigOptions();
+
+			removeKeysStartingWith(mergedVisualMap,
+					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+
+			mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
+					additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
+					OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
+
+		}
+
+		return true;
 	}
 
 	private void checkHwInfo() {
@@ -3195,32 +3136,25 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
-		try {
-			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-			} else if (getSelectedClients().length > 1) {
-				if (persistenceController.canCallMySQL()) {
-					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
-				} else {
-					mainFrame.setHardwareInfoNotPossible(
-							Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-				}
+		if (firstSelectedClient == null || getSelectedClients().length == 0) {
+			mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+		} else if (getSelectedClients().length > 1) {
+			if (persistenceController.canCallMySQL()) {
+				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
 			} else {
-				checkHwInfo();
-				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
-				if (hwInfo == null) {
-					hwInfo = persistenceController.getHardwareInfo(firstSelectedClient);
-					hwInfoClientmap.put(firstSelectedClient, hwInfo);
-				}
-				mainFrame.setHardwareInfo(hwInfo);
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
-
-			return true;
-		} catch (Exception ex) {
-
-			Logging.error("Error in setHardwareInfoPage: " + ex, ex);
-			return false;
+		} else {
+			checkHwInfo();
+			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
+			if (hwInfo == null) {
+				hwInfo = persistenceController.getHardwareInfo(firstSelectedClient);
+				hwInfoClientmap.put(firstSelectedClient, hwInfo);
+			}
+			mainFrame.setHardwareInfo(hwInfo);
 		}
+
+		return true;
 	}
 
 	private static void clearSoftwareInfoPage() {
@@ -3235,21 +3169,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
 
-		try {
-			if (firstSelectedClient == null || !checkOneClientSelected()) {
-				mainFrame.setSoftwareAudit();
-			} else {
-				// retrieve data and check with softwaretable
-				persistenceController.getSoftwareAudit(firstSelectedClient);
+		if (firstSelectedClient == null || !checkOneClientSelected()) {
+			mainFrame.setSoftwareAudit();
+		} else {
+			// retrieve data and check with softwaretable
+			persistenceController.getSoftwareAudit(firstSelectedClient);
 
-				mainFrame.setSoftwareAudit(firstSelectedClient);
-			}
-
-			return true;
-		} catch (Exception ex) {
-			Logging.error("Error in setSoftwareInfoPage: " + ex, ex);
-			return false;
+			mainFrame.setSoftwareAudit(firstSelectedClient);
 		}
+
+		return true;
 	}
 
 	private static void clearLogPage() {
@@ -3272,18 +3201,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.setLogfilePanel(logfiles);
 		} else {
 
-			try {
+			// TODO is called twice when clicking on another client
+			mainFrame.activateLoadingPane();
+			logfiles = persistenceController.getLogfiles(firstSelectedClient, logtypeToUpdate);
+			mainFrame.disactivateLoadingPane();
 
-				// TODO is called twice when clicking on another client
-				mainFrame.activateLoadingPane();
-				logfiles = persistenceController.getLogfiles(firstSelectedClient, logtypeToUpdate);
-				mainFrame.disactivateLoadingPane();
-
-				Logging.debug(this, "log pages set");
-			} catch (Exception ex) {
-
-				Logging.error("Error in setLogPage: " + ex, ex);
-			}
+			Logging.debug(this, "log pages set");
 		}
 
 		return logfiles;
@@ -3293,16 +3216,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.debug(this, "setLogPage(), selected clients: " + Arrays.toString(getSelectedClients()));
 
-		try {
-			logfiles = persistenceController.getEmptyLogfiles();
-			mainFrame.setUpdatedLogfilePanel("instlog");
-			mainFrame.setLogview("instlog");
+		logfiles = persistenceController.getEmptyLogfiles();
+		mainFrame.setUpdatedLogfilePanel("instlog");
+		mainFrame.setLogview("instlog");
 
-			return true;
-		} catch (Exception ex) {
-			Logging.error("Error in setLogPage: " + ex, ex);
-			return false;
-		}
+		return true;
 	}
 
 	// extra tasks not done by resetView
@@ -4140,47 +4058,43 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				);
 
 				if (!suspended && /*editingTarget == EditingTarget.CLIENTS && */viewIndex == VIEW_CLIENTS) {
-					try {
-						// we catch exceptions especially if we are on some updating process for the
-						// model
+					// we catch exceptions especially if we are on some updating process for the
+					// model
 
-						if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
-							Map<String, Object> saveReachableInfo = reachableInfo;
+					if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
+						Map<String, Object> saveReachableInfo = reachableInfo;
 
-							reachableInfo = persistenceController.reachableInfo(null);
-							// update column
+						reachableInfo = persistenceController.reachableInfo(null);
+						// update column
 
-							reachableInfo = persistenceController.reachableInfo(null);
+						reachableInfo = persistenceController.reachableInfo(null);
 
-							AbstractTableModel model = selectionPanel.getTableModel();
+						AbstractTableModel model = selectionPanel.getTableModel();
 
-							int col = model.findColumn(
-									Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+						int col = model
+								.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
-							for (int row = 0; row < model.getRowCount(); row++) {
-								String clientId = (String) model.getValueAt(row, 0);
-								Boolean newInfo = (Boolean) reachableInfo.get(clientId);
+						for (int row = 0; row < model.getRowCount(); row++) {
+							String clientId = (String) model.getValueAt(row, 0);
+							Boolean newInfo = (Boolean) reachableInfo.get(clientId);
 
-								if (newInfo != null) {
-									if (saveReachableInfo.get(clientId) == null) {
-										model.setValueAt(newInfo, row, col);
-									} else if (model.getValueAt(row, col) != null
-											&& !model.getValueAt(row, col).equals(newInfo)) {
+							if (newInfo != null) {
+								if (saveReachableInfo.get(clientId) == null) {
+									model.setValueAt(newInfo, row, col);
+								} else if (model.getValueAt(row, col) != null
+										&& !model.getValueAt(row, col).equals(newInfo)) {
 
-										model.setValueAt(newInfo, row, col);
+									model.setValueAt(newInfo, row, col);
 
-										model.fireTableRowsUpdated(row, row);
-										// if ordered by col the order does not change although the value changes
-										// is necessary
-									} else {
-										Logging.warning(this, "Reachability of client " + clientId + " with new value "
-												+ newInfo + " could not be updated");
-									}
+									model.fireTableRowsUpdated(row, row);
+									// if ordered by col the order does not change although the value changes
+									// is necessary
+								} else {
+									Logging.warning(this, "Reachability of client " + clientId + " with new value "
+											+ newInfo + " could not be updated");
 								}
 							}
 						}
-					} catch (Exception ex) {
-						Logging.info(this, "we could not update the model: " + ex);
 					}
 				}
 
@@ -4314,24 +4228,20 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// no old values kept
 		sessionInfo = new HashMap<>();
 
-		try {
-			// leave the Event dispatching thread
-			new Thread() {
-				@Override
-				public void run() {
-					// disable the button
-					disableSessionInfoButton();
+		// leave the Event dispatching thread
+		new Thread() {
+			@Override
+			public void run() {
+				// disable the button
+				disableSessionInfoButton();
 
-					// handling the main perspective
-					startThreadForUpdatingSessionInfo();
+				// handling the main perspective
+				startThreadForUpdatingSessionInfo();
 
-					// fetch the data in a separated thread
-					startThreadForLoadingSessionInfo(onlySelectedClients);
-				}
-			}.start();
-		} catch (Exception ex) {
-			Logging.info(this, "getSessionInfo Exception " + ex);
-		}
+				// fetch the data in a separated thread
+				startThreadForLoadingSessionInfo(onlySelectedClients);
+			}
+		}.start();
 	}
 
 	private void disableSessionInfoButton() {
@@ -4567,12 +4477,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		for (int i = 0; i < getSelectedClients().length; i++) {
 			messageBuffer.append(getSelectedClients()[i]);
 			messageBuffer.append("     (from: ");
-			try {
-				messageBuffer.append(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-						.get(getSelectedClients()[i]));
-			} catch (Exception e) {
-				Logging.warning(this, "changeDepot for " + getSelectedClients()[i] + " " + e);
-			}
+			messageBuffer.append(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+					.get(getSelectedClients()[i]));
 
 			messageBuffer.append(") ");
 
