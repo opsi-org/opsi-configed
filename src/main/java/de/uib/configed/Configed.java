@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -196,45 +195,26 @@ public final class Configed {
 		return refreshMinutes;
 	}
 
-	// TODO: refactor, don't try twice, we have tests now...
 	public static String getResourceValue(String key) {
 		String result = null;
-		try {
-			if (extraLocalization != null) {
-				result = extraLocalization.getProperty(key);
-				if (result == null) {
-					Logging.info("extraLocalization.getProperty null for key " + key);
-				}
-			}
-
+		if (extraLocalization != null) {
+			result = extraLocalization.getProperty(key);
 			if (result == null) {
-				if (Messages.messagesBundle != null) {
-					result = Messages.messagesBundle.getString(key);
-				} else {
-					Logging.error("Messages.messagesBundle is null...");
-				}
+				Logging.info("extraLocalization.getProperty null for key " + key);
 			}
+		}
 
-			if (showLocalizationStrings) {
-				Logging.info("LOCALIZE " + key + " by " + result);
-				result = "" + result + "[[" + key + "]]";
-
+		if (result == null) {
+			if (Messages.messagesBundle != null) {
+				result = Messages.messagesBundle.getString(key);
+			} else {
+				Logging.error("Messages.messagesBundle is null...");
 			}
-		} catch (MissingResourceException mre) {
-			// we return the key and log the problem:
-			Logging.error("Problem, missing resource...", mre);
+		}
 
-			try {
-				result = Messages.messagesEnBundle.getString(key);
-
-				if (showLocalizationStrings) {
-					Logging.info("LOCALIZE " + key + " by " + result);
-					result = "" + result + "?? [[" + key + "]]";
-
-				}
-			} catch (MissingResourceException mre2) {
-				Logging.error("Problem, missing resource in second try...", mre2);
-			}
+		if (showLocalizationStrings) {
+			Logging.info("LOCALIZE " + key + " by " + result);
+			result = "" + result + "[[" + key + "]]";
 		}
 
 		if (result == null) {
