@@ -42,7 +42,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.RowSorterEvent;
@@ -88,11 +87,6 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import utils.PopupMouseListener;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
-
-	private static final List<RowSorter.SortKey> sortkeysDefault = new ArrayList<>();
-	static {
-		sortkeysDefault.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-	}
 
 	private static final int HEIGHT_MIN = 200;
 
@@ -787,7 +781,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			@Override
 			protected boolean useToString(int column) {
-				return false;
+				return true;
 			}
 
 			@Override
@@ -904,7 +898,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			laststatechangeColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
-
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_SEQUENCE)) > -1) {
@@ -957,8 +950,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			TableColumn versionInfoColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			versionInfoColumn.setPreferredWidth(WIDTH_COLUMN_VERSION_INFO);
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
-
-			sorter.setComparator(colIndex, Comparator.comparing(String::toString));
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_INFO)) > -1) {
@@ -975,9 +966,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			installationInfoColumn.setCellEditor(cellEditor);
 		}
-
-		sorter.setSortKeys(sortkeysDefault);
-
 	}
 
 	public void initEditing(String productID, String productTitle, String productInfo, String productHint,

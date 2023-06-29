@@ -818,7 +818,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			// TODO check if this is ever used
 			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-				((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
+				sorter.setComparator(j, new IntComparatorForStrings());
 			}
 		}
 

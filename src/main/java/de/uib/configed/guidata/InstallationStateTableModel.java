@@ -174,7 +174,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
-			columnDict.put("installationInfo", Configed.getResourceValue("InstallationStateTableModel.report"));
+			columnDict.put(ProductState.KEY_INSTALLATION_INFO,
+					Configed.getResourceValue("InstallationStateTableModel.report"));
 			// combines the following three
 			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
 					Configed.getResourceValue("InstallationStateTableModel.actionProgress"));
@@ -1140,7 +1141,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// continues to work
 	@Override
 	public Object getValueAt(int row, int displayCol) {
-		return retrieveValueAt(row, displayCol);
+		Object value = retrieveValueAt(row, displayCol);
+		return value == null ? "" : value;
 	}
 
 	private Object retrieveValueAt(int row, int displayCol) {
@@ -1308,6 +1310,5 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 			main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 		}
-
 	}
 }
