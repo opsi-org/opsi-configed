@@ -228,5 +228,4 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	public boolean isFiltered() {
 		return filtered;
 	}
-
 }

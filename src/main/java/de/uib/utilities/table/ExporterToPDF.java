@@ -122,16 +122,12 @@ public class ExporterToPDF extends AbstractExportTable {
 				if (fileName == null) {
 					return;
 				} else {
-					try {
-						Logging.info(this, "filename for saving PDF: " + fileName);
-						File file = new File(fileName);
-						if (file.isDirectory()) {
-							Logging.error("no valid filename " + fileName);
-						} else {
-							filePath = file.getAbsolutePath();
-						}
-					} catch (Exception e) {
-						Logging.error("no valid filename " + fileName, e);
+					Logging.info(this, "filename for saving PDF: " + fileName);
+					File file = new File(fileName);
+					if (file.isDirectory()) {
+						Logging.error("no valid filename " + fileName);
+					} else {
+						filePath = file.getAbsolutePath();
 					}
 
 					Logging.notice(this, "selected fileName is: " + fileName);
@@ -157,20 +153,16 @@ public class ExporterToPDF extends AbstractExportTable {
 					writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 				}
 
-				try {
-					TableHeader event = new TableHeader();
-					if (metaData.containsKey("header")) {
-						event.setHeader(metaData.get("header"));
-					} else if (metaData.containsKey("title")) {
-						event.setHeader(metaData.get("title"));
-					} else {
-						Logging.warning(this, "metadata contain neither header nor title");
-					}
-
-					writer.setPageEvent(event);
-				} catch (Exception ex) {
-					Logging.error("Error PdfWriter --- " + ex);
+				TableHeader event = new TableHeader();
+				if (metaData.containsKey("header")) {
+					event.setHeader(metaData.get("header"));
+				} else if (metaData.containsKey("title")) {
+					event.setHeader(metaData.get("title"));
+				} else {
+					Logging.warning(this, "metadata contain neither header nor title");
 				}
+
+				writer.setPageEvent(event);
 
 				document.open();
 				addMetaData(metaData);
@@ -181,10 +173,10 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				document.close();
 
-			} catch (FileNotFoundException e) {
-				Logging.error("file not found: " + fileName, e);
-			} catch (Exception exp) {
-				Logging.error("file not found: " + fileName, exp);
+			} catch (FileNotFoundException ex) {
+				Logging.error("file not found: " + fileName, ex);
+			} catch (DocumentException dex) {
+				Logging.error("document exception, cannot get instance for " + document, dex);
 			}
 
 			// saveAction is not null here, open PDF if created only temp file
@@ -288,8 +280,8 @@ public class ExporterToPDF extends AbstractExportTable {
 		try {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbolFont = new Font(bf, 11);
-		} catch (Exception e) {
-			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
+		} catch (DocumentException | IOException e) {
+			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :", e);
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
@@ -312,13 +304,8 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
 					value = new PdfPCell(new Phrase(" "));
-					String s = "";
-					try {
-						s = theTable.getValueAt(j, i).toString();
-					} catch (Exception ex) {
-						s = "";
-						Logging.debug(this, "thrown excpetion: " + ex);
-					}
+					String s = theTable.getValueAt(j, i).toString();
+
 					switch (s) {
 					case "∞":
 						value = new PdfPCell(new Phrase("\u221e", symbolFont));

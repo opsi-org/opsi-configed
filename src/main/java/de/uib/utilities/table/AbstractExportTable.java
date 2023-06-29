@@ -6,6 +6,7 @@
 
 package de.uib.utilities.table;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
@@ -176,23 +177,23 @@ public abstract class AbstractExportTable {
 
 			int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				try {
-					filename = chooser.getSelectedFile().getAbsolutePath();
+				filename = chooser.getSelectedFile().getAbsolutePath();
 
-					File file = new File(filename);
+				File file = new File(filename);
 
-					if (file.isDirectory()) {
-						filename = filename + File.separator + defaultExportFilename;
-					} else {
-						if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
-							filename = filename + ".csv";
-						}
+				if (file.isDirectory()) {
+					filename = filename + File.separator + defaultExportFilename;
+				} else {
+					if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
+						filename = filename + ".csv";
 					}
+				}
 
-					Logging.debug(this, "filename " + filename);
+				Logging.debug(this, "filename " + filename);
 
-					file = new File(filename);
+				file = new File(filename);
 
+				try {
 					if (file.exists() && askForOverwrite) {
 						int option = JOptionPane.showConfirmDialog(Globals.frame1,
 								Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
@@ -203,18 +204,13 @@ public abstract class AbstractExportTable {
 							filename = null;
 						}
 					}
-				} catch (Exception exception) {
+				} catch (HeadlessException exception) {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
 							exception);
 				}
 			}
 		} else {
-			try {
-				exportDirectory = new File(filename).getParentFile();
-			} catch (Exception e) {
-				filename = null;
-				Logging.error("Problem mit dem Verzeichnis von " + filename + " : " + e);
-			}
+			exportDirectory = new File(filename).getParentFile();
 		}
 
 		Logging.debug(this, "export to " + filename);
@@ -245,12 +241,9 @@ public abstract class AbstractExportTable {
 		}
 
 		if (fileName != null) {
-			try {
-				exportDirectory = new File(fileName).getParentFile();
-			} catch (Exception ex) {
-				Logging.error("directory not found for " + fileName + " : " + ex);
-			}
+			exportDirectory = new File(fileName).getParentFile();
 		}
+
 		return fileName;
 	}
 }

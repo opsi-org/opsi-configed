@@ -596,11 +596,8 @@ public class GenTableModel extends AbstractTableModel {
 		requestReload();
 
 		rowsLength++;
-		try {
-			fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
-		} catch (Exception ex) {
-			Logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
-		}
+
+		fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
 	}
 
 	public void addRow(Object[] a) {

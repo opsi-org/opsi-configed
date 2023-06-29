@@ -8,9 +8,11 @@ package de.uib.utilities.table;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -148,13 +150,8 @@ public class ExporterToCSV extends AbstractExportTable {
 									} else if ("java.sql.Timestamp".equals(classNames.get(colI))) {
 										if (theTable.getValueAt(rowI, colI) != null
 												&& !"".equals(theTable.getValueAt(rowI, colI))) {
-											try {
-												date1 = java.sql.Timestamp
-														.valueOf((String) theTable.getValueAt(rowI, colI));
+											date1 = Timestamp.valueOf((String) theTable.getValueAt(rowI, colI));
 
-											} catch (Exception ex2) {
-												Logging.error("Error in date format:" + ex2);
-											}
 											if (date1 != null) {
 												line.append("" + date1);
 											}
@@ -179,7 +176,7 @@ public class ExporterToCSV extends AbstractExportTable {
 					}
 				}
 
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
 			}
 		}
