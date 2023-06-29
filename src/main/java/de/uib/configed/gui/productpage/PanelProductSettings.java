@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.DefaultRowSorter;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
@@ -787,6 +786,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
 
 			@Override
+			protected boolean useToString(int column) {
+				return false;
+			}
+
+			@Override
 			public Comparator<?> getComparator(int column) {
 				if (column == 0) {
 					return myComparator;
@@ -910,12 +914,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			if (sorter instanceof DefaultRowSorter) {
-				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
-			}
+			sorter.setComparator(colIndex, new IntComparatorForStrings());
 
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
-
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_PRIORITY)) > -1) {
@@ -925,8 +926,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
-
+			sorter.setComparator(colIndex, new IntComparatorForStrings());
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {
@@ -958,8 +958,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			versionInfoColumn.setPreferredWidth(WIDTH_COLUMN_VERSION_INFO);
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
 
-			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, Comparator.comparing(String::toString));
-
+			sorter.setComparator(colIndex, Comparator.comparing(String::toString));
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_INFO)) > -1) {
