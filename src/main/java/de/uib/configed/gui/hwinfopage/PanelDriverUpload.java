@@ -689,42 +689,37 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			waiter.startWaiting();
 			rootFrame.activateLoadingCursor();
 
-			try {
-				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
+			Logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-				makePath(targetPath);
+			makePath(targetPath);
 
-				stateServerPath = targetPath.exists();
-				serverPathChecked.setSelected(stateServerPath);
-				if (stateServerPath) {
-					try {
-						if (driverPath.isDirectory()) {
-							FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
-						} else {
-							FileUtils.copyFileToDirectory(driverPath, targetPath);
-						}
-					} catch (IOException iox) {
-						rootFrame.disactivateLoadingCursor();
-						Logging.error("copy error:\n" + iox, iox);
+			stateServerPath = targetPath.exists();
+			serverPathChecked.setSelected(stateServerPath);
+			if (stateServerPath) {
+				try {
+					if (driverPath.isDirectory()) {
+						FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
+					} else {
+						FileUtils.copyFileToDirectory(driverPath, targetPath);
 					}
-				} else {
-					Logging.info(this, "execute: targetPath does not exist");
+				} catch (IOException iox) {
+					rootFrame.disactivateLoadingCursor();
+					Logging.error("copy error:\n" + iox, iox);
 				}
-
-				if (stateServerPath) {
-					String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
-					Logging.info(this, "set rights for " + driverDir);
-					persistenceController.setRights(driverDir);
-				}
-
-				rootFrame.disactivateLoadingCursor();
-
-				waiter.setReady();
-			} catch (Exception ex) {
-				rootFrame.disactivateLoadingCursor();
-				Logging.error("error in uploading :\n" + ex, ex);
+			} else {
+				Logging.info(this, "execute: targetPath does not exist");
 			}
+
+			if (stateServerPath) {
+				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+						+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
+				Logging.info(this, "set rights for " + driverDir);
+				persistenceController.setRights(driverDir);
+			}
+
+			rootFrame.disactivateLoadingCursor();
+
+			waiter.setReady();
 		}
 	}
 

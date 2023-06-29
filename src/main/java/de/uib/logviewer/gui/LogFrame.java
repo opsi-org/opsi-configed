@@ -176,11 +176,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			ImageIcon localeIcon = null;
 			String imageIconName = Messages.getLocaleInfo().get(localeName);
 			if (imageIconName != null && imageIconName.length() > 0) {
-				try {
-					localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
-				} catch (Exception ex) {
-					Logging.info(this, "icon not found: " + imageIconName + ", " + ex);
-				}
+				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
@@ -429,19 +425,13 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private String reloadFile(String fn) {
-		String rs = "";
 		if (fn != null) {
-			try {
-				rs = readFile(fn).toString();
-			} catch (Exception ex) {
-				Logging.error(this, "File does not exist: " + fn);
-				showDialog("No location: \n" + fn);
-			}
+			return readFile(fn).toString();
 		} else {
 			Logging.error(this, "File does not exist: " + fn);
 			showDialog("No location: \n" + fn);
+			return "";
 		}
-		return rs;
 	}
 
 	private void saveToFile(String filename, String[] logfilelines) {
@@ -517,31 +507,28 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private StringBuilder readFile(String fn) {
 		StringBuilder sb = new StringBuilder();
-		try {
-			File file = new File(fn);
 
-			if (file.isDirectory()) {
-				Logging.error("This is not a file, it is a directory: " + fn);
-				showDialog("This is not a file, it is a directory: \n" + fn);
-			} else {
-				if (file.exists()) { // TODO
-					if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini")) {
+		File file = new File(fn);
+
+		if (file.isDirectory()) {
+			Logging.error("This is not a file, it is a directory: " + fn);
+			showDialog("This is not a file, it is a directory: \n" + fn);
+		} else {
+			if (file.exists()) { // TODO
+				if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini")) {
+					sb = readNotCompressedFile(file, sb);
+				} else {
+					//unknown extension
+					try {
+						sb = ExtractorUtil.unzip(file);
+					} catch (SevenZipException e) {
 						sb = readNotCompressedFile(file, sb);
-					} else {
-						//unknown extension
-						try {
-							sb = ExtractorUtil.unzip(file);
-						} catch (SevenZipException e) {
-							sb = readNotCompressedFile(file, sb);
-							Logging.warning("Error unzipping: ", e);
-						}
+						Logging.warning("Error unzipping: ", e);
 					}
 				}
 			}
-		} catch (Exception ex) {
-			Logging.error("Not a valid filename: " + fn, ex);
-			showDialog("Not a valid filename: " + fn);
 		}
+
 		return sb;
 	}
 

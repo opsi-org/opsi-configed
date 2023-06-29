@@ -35,16 +35,13 @@ public final class Logviewer {
 
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this, imageHandled);
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-				imageHandled = "setIconImage";
-			}
-		} catch (Exception ex) {
-			Logging.warning(this, "imageHandled failed: " + ex.toString());
+
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.warning(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+			imageHandled = "setIconImage";
 		}
 
 		Logging.info(this, "--  wantedDirectory " + Logging.logDirectoryName);
@@ -111,22 +108,11 @@ public final class Logviewer {
 
 		processArgs(cmd);
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.warning("imageHandled failed: ", ex);
-		}
-
-		// Turn on antialiasing for text 
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex.toString());
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		new Logviewer();

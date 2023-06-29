@@ -272,18 +272,14 @@ public class SSHCompletionComboButton {
 							return ROOT_DIRECTORY;
 						}
 					};
-					try {
-						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
-						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-						String tempResult = ssh.exec(getFiles, false);
-						if (tempResult != null && !"null".equals(tempResult.trim())) {
-							result += tempResult;
-						}
 
-					} catch (Exception ei) {
-						Logging.warning(this, "Could not find .opsi files in directory " + curdir
-								+ " (It may be the rights are setted wrong.)", ei);
+					////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
+					// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
+					String tempResult = ssh.exec(getFiles, false);
+					if (tempResult != null && !"null".equals(tempResult.trim())) {
+						result += tempResult;
 					}
+
 					setItems(result, curdir);
 					enableComponents(true);
 				} catch (Exception e) {

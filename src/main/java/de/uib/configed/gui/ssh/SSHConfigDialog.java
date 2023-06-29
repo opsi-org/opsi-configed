@@ -160,22 +160,19 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			Logging.info(this, "compareStates 9");
 			return false;
 		} else if (jCheckBoxUseKeyFile.isSelected()) {
-			try {
 
-				if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
-					Logging.debug(this, "compareStates 10");
-					return false;
-				}
-
-				String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
-
-				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
-					Logging.debug(this, "compareStates 11");
-					return false;
-				}
-			} catch (Exception e) {
-				Logging.warning(this, "Error", e);
+			if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
+				Logging.debug(this, "compareStates 10");
+				return false;
 			}
+
+			String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
+
+			if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
+				Logging.debug(this, "compareStates 11");
+				return false;
+			}
+
 		} else {
 			// continue with the rest of the method
 		}

@@ -547,9 +547,6 @@ public final class Configed {
 			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
-		// Turn on antialiasing for text (not for applets)
-		System.setProperty("swing.aatext", "true");
-
 		new Configed(host, user, password, client, clientgroup, tab);
 	}
 }

@@ -270,14 +270,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return value;
 		}
 
-		BigInteger v = null;
-
-		try {
-			v = new BigInteger(value);
-		} catch (Exception e) {
-			Logging.warning(this, "could not create BigInteger from value " + value, e);
-			return value + " " + unit;
-		}
+		BigInteger v = new BigInteger(value);
 
 		int mult = 1000;
 		if ("byte".equalsIgnoreCase(unit)) {

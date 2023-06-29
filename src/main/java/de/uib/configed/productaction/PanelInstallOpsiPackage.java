@@ -120,13 +120,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 					rootFrame.activateLoadingCursor();
 
-					try {
-						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
-
-						// we start at a local directory
-					} catch (Exception ex) {
-						Logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
-					}
+					opsiWorkBenchDirectory = new File(fieldServerPath.getText());
 
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
