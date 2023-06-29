@@ -449,7 +449,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		Logging.debug(this, "setEditableMap set modelProducer  == null " + (modelProducer == null));
 		if (modelProducer != null) {
 			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass());
-			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass(0, 0));
 		}
 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
@@ -462,7 +461,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		editableColumn.setCellEditor(theCellEditor);
-
 	}
 
 	public void cancelOldCellEditing() {
