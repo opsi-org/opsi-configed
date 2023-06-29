@@ -50,13 +50,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 	private void retrieveRepos() {
 		SSHConnectExec ssh = new SSHConnectExec();
-		String result = "";
-		try {
-			result = ssh.exec(command, false /* =>without gui */ );
-		} catch (Exception e) {
-			Logging.error(this, "ssh execution error", e);
-
-		}
+		String result = ssh.exec(command, false);
 
 		if (result == null) {
 			Logging.error("retrieve repos " + "FAILED");

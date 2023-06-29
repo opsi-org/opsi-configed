@@ -144,65 +144,61 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	}
 
 	private void initOutputGui() {
-		try {
-			Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-			if (!Main.THEMES) {
-				inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-				mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			}
-			getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-			mainPanelLayout = new GroupLayout(mainPanel);
-			konsolePanelLayout = new GroupLayout(inputPanel);
-
-			inputPanel.setLayout(konsolePanelLayout);
-			mainPanel.setLayout(mainPanelLayout);
-
-			jScrollPane = new JScrollPane();
-			jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-			output = new JTextPane();
-			output.setEditable(false);
-
-			// THEME color question
-			if (!Main.THEMES) {
-				output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-			}
-			output.setContentType("text/rtf");
-			output.setPreferredSize(new Dimension(250, 200));
-			StyledDocument doc = (StyledDocument) output.getDocument();
-			Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
-
-			if (!Main.THEMES) {
-				// Kein grün :(
-				StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-
-				// Was ist rot?
-				StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
-			}
-
-			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
-			readOnlyAttributeSet.addAttribute("readonly", true);
-			((AbstractDocument) doc).setDocumentFilter(new InputFilter(output));
-
-			DefaultCaret caret = (DefaultCaret) output.getCaret();
-			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
-			jScrollPane.setViewportView(output);
-			output.setText("");
-
-			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
-					"images/cancel.png", "images/cancel.png", true);
-
-			jButtonClose.setPreferredSize(jButtonDimension);
-
-			jButtonClose.addActionListener(closeListener);
-
-		} catch (Exception e) {
-			Logging.warning(this, "initOutputGui, exception occurred", e);
+		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
+		if (!Main.THEMES) {
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
+		getContentPane().add(mainPanel, BorderLayout.CENTER);
+
+		mainPanelLayout = new GroupLayout(mainPanel);
+		konsolePanelLayout = new GroupLayout(inputPanel);
+
+		inputPanel.setLayout(konsolePanelLayout);
+		mainPanel.setLayout(mainPanelLayout);
+
+		jScrollPane = new JScrollPane();
+		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		output = new JTextPane();
+		output.setEditable(false);
+
+		// THEME color question
+		if (!Main.THEMES) {
+			output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
+		}
+		output.setContentType("text/rtf");
+		output.setPreferredSize(new Dimension(250, 200));
+		StyledDocument doc = (StyledDocument) output.getDocument();
+		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+		Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
+
+		if (!Main.THEMES) {
+			// Kein grün :(
+			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
+
+			// Was ist rot?
+			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
+		}
+
+		SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
+		readOnlyAttributeSet.addAttribute("readonly", true);
+		((AbstractDocument) doc).setDocumentFilter(new InputFilter(output));
+
+		DefaultCaret caret = (DefaultCaret) output.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
+		jScrollPane.setViewportView(output);
+		output.setText("");
+
+		jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+				"images/cancel.png", "images/cancel.png", true);
+
+		jButtonClose.setPreferredSize(jButtonDimension);
+
+		jButtonClose.addActionListener(closeListener);
 	}
 
 	public void setStatusFinish() {

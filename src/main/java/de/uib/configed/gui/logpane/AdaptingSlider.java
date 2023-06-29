@@ -100,10 +100,6 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			levelMap.put(i, new JLabel(" . "));
 		}
 
-		try {
-			setLabelTable(new Hashtable<>(levelMap));
-		} catch (Exception ex) {
-			Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
-		}
+		setLabelTable(new Hashtable<>(levelMap));
 	}
 }

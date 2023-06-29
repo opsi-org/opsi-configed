@@ -107,296 +107,286 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void initGUI() {
-		try {
-			JPanel workbenchpanel = new JPanel();
-			mainpanel = new JPanel();
-			JPanel buttonPanel = new JPanel();
-			if (!Main.THEMES) {
-				workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
-				mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
-				buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+
+		JPanel workbenchpanel = new JPanel();
+		mainpanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		if (!Main.THEMES) {
+			workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
+		JPanel mainButtonPanel = new JPanel();
+		if (!Main.THEMES) {
+			mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+		mainButtonPanel.setLayout(new BorderLayout());
+		mainButtonPanel.add(mainpanel, BorderLayout.NORTH);
+		mainButtonPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(workbenchpanel, BorderLayout.CENTER);
+		getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
+
+		GroupLayout mainpanelLayout = new GroupLayout(mainpanel);
+		GroupLayout workbenchpanelLayout = new GroupLayout(workbenchpanel);
+		workbenchpanel.setLayout(workbenchpanelLayout);
+		mainpanel.setLayout(mainpanelLayout);
+
+		workbenchpanel.setBorder(BorderFactory.createTitledBorder(""));
+		mainpanel.setBorder(BorderFactory.createTitledBorder(""));
+		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
+
+		JLabel jLabelDir = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
+
+		autocompletion.setCombobox(new SSHCompletionComboBox<>(
+				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
+			@Override
+			public void setSelectedItem(Object item) {
+				super.setSelectedItem(item);
+				doSetActionGetVersions();
 			}
+		});
+		autocompletion.initCombobox();
+		jComboBoxMainDir = autocompletion.getCombobox();
 
-			JPanel mainButtonPanel = new JPanel();
-			if (!Main.THEMES) {
-				mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			}
-			mainButtonPanel.setLayout(new BorderLayout());
-			mainButtonPanel.add(mainpanel, BorderLayout.NORTH);
-			mainButtonPanel.add(buttonPanel, BorderLayout.SOUTH);
+		JButton jButtonSearchDir = autocompletion.getButton();
+		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
+		jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
+			autocompletion.doButtonAction();
+			doSetActionGetVersions();
+		});
 
-			getContentPane().add(workbenchpanel, BorderLayout.CENTER);
-			getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
+		JLabel jLabelPackageVersion = new JLabel();
+		jLabelPackageVersion.setText(
+				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
+		JLabel jLabelProductVersion = new JLabel();
+		jLabelProductVersion.setText(
+				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
+		JLabel jLabelVersionsControlFile = new JLabel();
+		JLabel jLabelVersions = new JLabel();
+		jLabelVersionsControlFile.setText(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
+		jLabelVersions.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
+		JLabel jLabelSetRights = new JLabel();
+		jLabelSetRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
+		JLabel jLabelSetRightsNow = new JLabel();
+		jLabelSetRightsNow
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
+		JLabel jLabelRemoveExistingPackage = new JLabel();
+		jLabelRemoveExistingPackage
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
+		JLabel jLabelRemoveExistingPackage2 = new JLabel();
+		jLabelRemoveExistingPackage2
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
 
-			GroupLayout mainpanelLayout = new GroupLayout(mainpanel);
-			GroupLayout workbenchpanelLayout = new GroupLayout(workbenchpanel);
-			workbenchpanel.setLayout(workbenchpanelLayout);
-			mainpanel.setLayout(mainpanelLayout);
+		jLabelProductVersionControlFile = new JLabel();
+		jLabelPackageVersionControlFile = new JLabel();
+		jTextFieldPckageVersion = new JTextField();
 
-			workbenchpanel.setBorder(BorderFactory.createTitledBorder(""));
-			mainpanel.setBorder(BorderFactory.createTitledBorder(""));
-			buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
+		jTextFieldProductVersion = new JTextField();
 
-			JLabel jLabelDir = new JLabel(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
+		enableTfVersions(false);
 
-			autocompletion.setCombobox(new SSHCompletionComboBox<>(
-					new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
-				@Override
-				public void setSelectedItem(Object item) {
-					super.setSelectedItem(item);
-					doSetActionGetVersions();
+		JLabel jLabelmd5sum = new JLabel();
+		jLabelmd5sum
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+		jCheckBoxmd5sum = new JCheckBox();
+		jCheckBoxmd5sum.setSelected(true);
+		JLabel jLabelzsync = new JLabel();
+		jLabelzsync.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+		jCheckBoxzsync = new JCheckBox();
+		jCheckBoxzsync.setSelected(true);
+		jCheckBoxOverwrite = new JCheckBox();
+		jCheckBoxOverwrite.setSelected(true);
+		jCheckBoxSetRights = new JCheckBox();
+		jCheckBoxSetRights.setSelected(true);
+
+		JButton jButtonAdvancedSettings = new JButton();
+		jButtonAdvancedSettings.setText(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
+
+		if (!(Globals.isGlobalReadOnly())) {
+			jButtonAdvancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
+		}
+
+		jButtonAdvancedSettings.setPreferredSize(jButtonSearchDir.getPreferredSize());
+		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
+		jTextFieldPckageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
+
+		JButton jButtonSetRights = new JButton();
+		jButtonSetRights
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
+		jButtonSetRights.setToolTipText(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
+		if (!(Globals.isGlobalReadOnly())) {
+			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
+		}
+
+		jButtonToPackageManager = new JButton();
+		jButtonToPackageManager.setEnabled(false);
+		jButtonToPackageManager.setText(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
+		jButtonToPackageManager.setToolTipText(Configed
+				.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
+
+		if (!(Globals.isGlobalReadOnly())) {
+			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
+				if (main != null) {
+					new SSHPackageManagerInstallParameterDialog(main, filename);
 				}
 			});
-			autocompletion.initCombobox();
-			jComboBoxMainDir = autocompletion.getCombobox();
-
-			JButton jButtonSearchDir = autocompletion.getButton();
-			jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
-			jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
-				autocompletion.doButtonAction();
-				doSetActionGetVersions();
-			});
-
-			JLabel jLabelPackageVersion = new JLabel();
-			jLabelPackageVersion.setText(
-					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
-			JLabel jLabelProductVersion = new JLabel();
-			jLabelProductVersion.setText(
-					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
-			JLabel jLabelVersionsControlFile = new JLabel();
-			JLabel jLabelVersions = new JLabel();
-			jLabelVersionsControlFile.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
-			jLabelVersions.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
-			JLabel jLabelSetRights = new JLabel();
-			jLabelSetRights
-					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
-			JLabel jLabelSetRightsNow = new JLabel();
-			jLabelSetRightsNow
-					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
-			JLabel jLabelRemoveExistingPackage = new JLabel();
-			jLabelRemoveExistingPackage
-					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
-			JLabel jLabelRemoveExistingPackage2 = new JLabel();
-			jLabelRemoveExistingPackage2.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
-
-			jLabelProductVersionControlFile = new JLabel();
-			jLabelPackageVersionControlFile = new JLabel();
-			jTextFieldPckageVersion = new JTextField();
-
-			jTextFieldProductVersion = new JTextField();
-
-			enableTfVersions(false);
-
-			JLabel jLabelmd5sum = new JLabel();
-			jLabelmd5sum.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
-			jCheckBoxmd5sum = new JCheckBox();
-			jCheckBoxmd5sum.setSelected(true);
-			JLabel jLabelzsync = new JLabel();
-			jLabelzsync.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
-			jCheckBoxzsync = new JCheckBox();
-			jCheckBoxzsync.setSelected(true);
-			jCheckBoxOverwrite = new JCheckBox();
-			jCheckBoxOverwrite.setSelected(true);
-			jCheckBoxSetRights = new JCheckBox();
-			jCheckBoxSetRights.setSelected(true);
-
-			JButton jButtonAdvancedSettings = new JButton();
-			jButtonAdvancedSettings.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
-
-			if (!(Globals.isGlobalReadOnly())) {
-				jButtonAdvancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
-			}
-
-			jButtonAdvancedSettings.setPreferredSize(jButtonSearchDir.getPreferredSize());
-			jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
-			jTextFieldPckageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
-
-			JButton jButtonSetRights = new JButton();
-			jButtonSetRights
-					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
-			jButtonSetRights.setToolTipText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
-			if (!(Globals.isGlobalReadOnly())) {
-				jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
-			}
-
-			jButtonToPackageManager = new JButton();
-			jButtonToPackageManager.setEnabled(false);
-			jButtonToPackageManager.setText(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
-			jButtonToPackageManager.setToolTipText(Configed
-					.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
-
-			if (!(Globals.isGlobalReadOnly())) {
-				jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
-					if (main != null) {
-						new SSHPackageManagerInstallParameterDialog(main, filename);
-					}
-				});
-			}
-
-			jButtonExec = new JButton();
-			jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-			jButtonExec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-			jButtonExec.setEnabled(false);
-			if (!(Globals.isGlobalReadOnly())) {
-				jButtonExec.addActionListener(actionEvent -> doAction2());
-			}
-
-			JButton jButtonCancel = new JButton();
-			jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-			jButtonCancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-			jButtonCancel.addActionListener(actionEvent -> cancel());
-			buttonPanel.add(jButtonCancel);
-			buttonPanel.add(jButtonToPackageManager);
-			buttonPanel.add(jButtonExec);
-
-			workbenchpanelLayout
-					.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									.addComponent(jComboBoxMainDir, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
-											Short.MAX_VALUE)
-									.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelProductVersionControlFile, Globals.BUTTON_WIDTH,
-											Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
-									.addComponent(jLabelPackageVersionControlFile, Globals.BUTTON_WIDTH,
-											Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
-
-									.addGroup(workbenchpanelLayout.createSequentialGroup()
-											.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addGap(Globals.GAP_SIZE)
-											.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jTextFieldPckageVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-			workbenchpanelLayout
-					.setVerticalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jButtonSetRights, GroupLayout.Alignment.LEADING,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelProductVersionControlFile, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jTextFieldPckageVersion, GroupLayout.Alignment.LEADING,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(jButtonAdvancedSettings, GroupLayout.Alignment.LEADING,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-
-					);
-
-			mainpanelLayout
-					.setHorizontalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-							.addGroup(mainpanelLayout.createParallelGroup()
-									.addComponent(jLabelzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE)
-							.addGroup(mainpanelLayout.createParallelGroup()
-									.addComponent(jCheckBoxzsync, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jCheckBoxmd5sum, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.GAP_SIZE));
-			mainpanelLayout.setVerticalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-					.addGroup(mainpanelLayout.createParallelGroup()
-							.addComponent(jLabelzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(jCheckBoxzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.GAP_SIZE)
-					.addGroup(mainpanelLayout.createParallelGroup()
-							.addComponent(jLabelmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(jCheckBoxmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.GAP_SIZE)
-					.addGroup(mainpanelLayout.createParallelGroup()
-							.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.GAP_SIZE));
-
-		} catch (Exception e) {
-			Logging.error("Error", e);
 		}
+
+		jButtonExec = new JButton();
+		jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jButtonExec.setEnabled(false);
+		if (!(Globals.isGlobalReadOnly())) {
+			jButtonExec.addActionListener(actionEvent -> doAction2());
+		}
+
+		JButton jButtonCancel = new JButton();
+		jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonCancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonCancel.addActionListener(actionEvent -> cancel());
+		buttonPanel.add(jButtonCancel);
+		buttonPanel.add(jButtonToPackageManager);
+		buttonPanel.add(jButtonExec);
+
+		workbenchpanelLayout
+				.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(
+										jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jComboBoxMainDir, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)
+								.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProductVersionControlFile, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+								.addComponent(jLabelPackageVersionControlFile, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+
+								.addGroup(workbenchpanelLayout.createSequentialGroup()
+										.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldPckageVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+
+		workbenchpanelLayout.setVerticalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonSetRights, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelProductVersionControlFile, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jTextFieldPckageVersion, GroupLayout.Alignment.LEADING,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+						jButtonAdvancedSettings, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+		);
+
+		mainpanelLayout.setHorizontalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(mainpanelLayout.createParallelGroup()
+						.addComponent(jLabelzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(mainpanelLayout.createParallelGroup()
+						.addComponent(jCheckBoxzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE));
+		mainpanelLayout.setVerticalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(mainpanelLayout.createParallelGroup()
+						.addComponent(jLabelzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(mainpanelLayout.createParallelGroup()
+						.addComponent(jLabelmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxmd5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(mainpanelLayout.createParallelGroup()
+						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE));
 	}
 
 	private void showAdvancedSettings() {

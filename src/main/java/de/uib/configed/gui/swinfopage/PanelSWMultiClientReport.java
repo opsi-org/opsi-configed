@@ -147,21 +147,18 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		boolean found = false;
-		try {
-			if (exportDirectoryS.length() > 0) {
-				File f = new File(exportDirectoryS);
-				if (f.exists() && f.isDirectory()) {
-					found = true;
-				}
-			}
 
-			if (found) {
-				exportDirectory = new File(exportDirectoryS);
-			} else {
-				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
+		if (exportDirectoryS.length() > 0) {
+			File f = new File(exportDirectoryS);
+			if (f.exists() && f.isDirectory()) {
+				found = true;
 			}
-		} catch (Exception ex) {
-			Logging.warning(this, "could not define exportDirectory)", ex);
+		}
+
+		if (found) {
+			exportDirectory = new File(exportDirectoryS);
+		} else {
+			exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		}
 
 		chooserDirectory = new JFileChooser();

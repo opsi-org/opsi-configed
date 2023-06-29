@@ -101,21 +101,16 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		try {
-			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
-			Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
-			// we are in the event queure
-			new Thread() {
-				@Override
-				public void run() {
-					new SSHConnectExec(commandopsisetrights, jButtonDoAction);
-				}
-			}.start();
 
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
-		}
-
+		commandopsisetrights.setDir(completion.comboBoxGetStringItem());
+		Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
+		// we are in the event queure
+		new Thread() {
+			@Override
+			public void run() {
+				new SSHConnectExec(commandopsisetrights, jButtonDoAction);
+			}
+		}.start();
 	}
 
 	// /* This method gets called when button 2 is pressed */

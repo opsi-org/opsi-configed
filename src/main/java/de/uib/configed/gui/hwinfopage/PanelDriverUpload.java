@@ -97,27 +97,23 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			boolean result = false;
 
 			if (fieldServerPath != null && fieldDriverPath != null) {
-				try {
-					targetPath = new File(fieldServerPath.getText());
-					driverPath = new File(fieldDriverPath.getText());
 
-					stateServerPath = targetPath.isDirectory();
-					serverPathChecked.setSelected(stateServerPath);
-					Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
-					Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
-					Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
+				targetPath = new File(fieldServerPath.getText());
+				driverPath = new File(fieldDriverPath.getText());
 
-					stateDriverPath = driverPath.exists();
-					driverPathChecked.setSelected(stateDriverPath);
-					Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+				stateServerPath = targetPath.isDirectory();
+				serverPathChecked.setSelected(stateServerPath);
+				Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
+				Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
+				Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
 
-					if (stateServerPath && stateDriverPath) {
-						result = true;
-					}
-				} catch (Exception ex) {
-					Logging.info(this, "checkFiles " + ex);
+				stateDriverPath = driverPath.exists();
+				driverPathChecked.setSelected(stateDriverPath);
+				Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+
+				if (stateServerPath && stateDriverPath) {
+					result = true;
 				}
-
 			}
 
 			Logging.info(this, "checkFiles " + result);

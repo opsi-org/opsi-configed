@@ -396,24 +396,15 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		Thread execThread = new Thread() {
 			@Override
 			public void run() {
-				try {
-					Logging.info(this, "start exec thread ");
+				Logging.info(this, "start exec thread ");
 
-					new SSHConnectExec(commandPMUninstall);
+				new SSHConnectExec(commandPMUninstall);
 
-					Logging.debug(this, "end exec thread");
-				} catch (Exception e) {
-					Logging.warning(this, "doAction3, exception occurred", e);
-				}
+				Logging.debug(this, "end exec thread");
 			}
 		};
 
-		try {
-			execThread.start();
-
-		} catch (Exception e) {
-			Logging.warning(this, "doAction3, exception occurred", e);
-		}
+		execThread.start();
 	}
 
 	@Override

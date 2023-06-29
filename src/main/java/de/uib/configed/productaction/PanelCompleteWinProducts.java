@@ -6,8 +6,10 @@
 
 package de.uib.configed.productaction;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -378,9 +380,12 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 				}
 			}
 
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			rootFrame.disactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
+		} catch (HeadlessException ex) {
+			rootFrame.disactivateLoadingCursor();
+			Logging.error("Headless exception when invoking showOptionDialog", ex);
 		}
 	}
 
