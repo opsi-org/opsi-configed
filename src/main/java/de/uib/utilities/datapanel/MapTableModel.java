@@ -229,6 +229,9 @@ public class MapTableModel extends AbstractTableModel {
 			return "";
 		}
 
+		Logging.devel("row, col: " + row + ", " + col);
+		Logging.devel(keys.toString());
+
 		String key = keys.get(row);
 
 		Object result = null;

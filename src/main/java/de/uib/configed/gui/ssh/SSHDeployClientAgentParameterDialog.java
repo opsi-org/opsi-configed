@@ -391,11 +391,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 
 		commandDeployClientAgent.finish(finalAction);
-		try {
-			new SSHConnectExec(commandDeployClientAgent);
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
-		}
+
+		new SSHConnectExec(commandDeployClientAgent);
 	}
 
 	private void doCopySelectedClients() {

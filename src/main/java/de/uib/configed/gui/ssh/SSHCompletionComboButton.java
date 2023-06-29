@@ -254,37 +254,34 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				try {
-					EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
-					SSHConnectExec ssh = new SSHConnectExec();
-					String result = ssh.exec(getFiles, false);
-					if (result == null || result.isEmpty()) {
-						result = ROOT_DIRECTORY;
-					}
 
-					getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-						/** Sets the command specific error text **/
-						@Override
-						public String getErrorText() {
-							// no file found
-							return ROOT_DIRECTORY;
-						}
-					};
-
-					////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
-					// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-					String tempResult = ssh.exec(getFiles, false);
-					if (tempResult != null && !"null".equals(tempResult.trim())) {
-						result += tempResult;
-					}
-
-					setItems(result, curdir);
-					enableComponents(true);
-				} catch (Exception e) {
-					Logging.error("getDirectoriesAndFilesIn failed", e);
+				EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
+				SSHConnectExec ssh = new SSHConnectExec();
+				String result = ssh.exec(getFiles, false);
+				if (result == null || result.isEmpty()) {
+					result = ROOT_DIRECTORY;
 				}
+
+				getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					/** Sets the command specific error text **/
+					@Override
+					public String getErrorText() {
+						// no file found
+						return ROOT_DIRECTORY;
+					}
+				};
+
+				////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
+				// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
+				String tempResult = ssh.exec(getFiles, false);
+				if (tempResult != null && !"null".equals(tempResult.trim())) {
+					result += tempResult;
+				}
+
+				setItems(result, curdir);
+				enableComponents(true);
 			}
 		}.start();
 	}

@@ -145,23 +145,18 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		try {
-			command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
-			String repo = (String) jComboBoxRepos.getSelectedItem();
-			if (repo.equals(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
-				command.setRepo(null);
-			} else {
-				command.setRepo(repo);
-			}
 
-			Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
-			new SSHConnectExec(command);
-
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
+		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
+		String repo = (String) jComboBoxRepos.getSelectedItem();
+		if (repo.equals(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
+			command.setRepo(null);
+		} else {
+			command.setRepo(repo);
 		}
 
+		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
+		new SSHConnectExec(command);
 	}
 
 	// /* This method gets called when button 1 is pressed */

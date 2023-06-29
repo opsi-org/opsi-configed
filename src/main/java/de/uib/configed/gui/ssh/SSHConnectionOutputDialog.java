@@ -134,11 +134,12 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			line = line.replace(ANSI_CODE_END, "").replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
 			linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR;
 		}
+
 		try {
 			StyledDocument doc = output.getStyledDocument();
 			doc.insertString(doc.getLength(), caller + line, aset);
-		} catch (Exception e) {
-			Logging.warning(this, "append, exception occurred ", e);
+		} catch (BadLocationException e) {
+			Logging.warning(this, "append, bad location exception occurred ", e);
 		}
 	}
 

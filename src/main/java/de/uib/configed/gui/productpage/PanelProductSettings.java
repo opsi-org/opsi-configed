@@ -787,28 +787,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
 
 			@Override
-			protected boolean useToString(int column) {
-				try {
-					return super.useToString(column);
-				} catch (Exception ex) {
-					Logging.info(this, "no way to string");
-					return false;
-				}
-			}
-
-			@Override
 			public Comparator<?> getComparator(int column) {
-				try {
-					if (column == 0) {
-						return myComparator;
-					} else {
-						return super.getComparator(column);
-					}
-				} catch (Exception ex) {
-					Logging.info(this, "not getting comparator");
-					return null;
+				if (column == 0) {
+					return myComparator;
+				} else {
+					return super.getComparator(column);
 				}
-
 			}
 		};
 
