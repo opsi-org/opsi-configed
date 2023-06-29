@@ -35,7 +35,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	private FEditStringList listeditor;
 	private int editingRow = -1;
-	private int editingColumn = -1;
 	protected String myKey;
 
 	private ListModelProducer<String> modelProducer;
@@ -130,7 +129,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				startListEditor();
 
 				editingRow = row;
-				editingColumn = column;
 			} else {
 				model = new DefaultListModel<>();
 
@@ -146,7 +144,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				startListEditor();
 
 				editingRow = -1;
-				editingColumn = -1;
 			}
 		}
 

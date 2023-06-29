@@ -400,7 +400,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			while (i < logfilelines.length) {
 				try {
 					fWriter.write(logfilelines[i] + "\n");
-					setTitle(filename);
+					LogFrame.this.setTitle(filename);
 				} catch (IOException ex) {
 					Logging.error("Error writing file: " + filename + "\n --- " + ex);
 				}
