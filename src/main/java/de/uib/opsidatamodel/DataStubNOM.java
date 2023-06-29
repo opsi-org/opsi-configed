@@ -332,30 +332,13 @@ public class DataStubNOM {
 
 				String productName = null;
 
-				try {
-					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
-							.getProductName();
+				productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getProductName();
 
-					productRow.add(productName);
-					p.appendValues(productRow);
+				productRow.add(productName);
+				p.appendValues(productRow);
 
-					if (depotsWithThisVersion.size() == 1) {
-						productRows.add(productRow);
-					}
-				} catch (Exception ex) {
-					Logging.warning(this, "retrieveProductsAllDepots exception " + ex);
-					Logging.warning(this, "retrieveProductsAllDepots exception for package  " + p);
-					Logging.warning(this, "retrieveProductsAllDepots exception productId  " + p.getProductId());
-
-					Logging.warning(this, "retrieveProductsAllDepots exception for product2versionInfo2infos: of size "
-							+ product2versionInfo2infos.size());
-					Logging.warning(this,
-							"retrieveProductsAllDepots exception for product2versionInfo2infos.get(p.getProductId()) "
-									+ product2versionInfo2infos.get(p.getProductId()));
-					if (product2versionInfo2infos.get(p.getProductId()) == null) {
-						Logging.warning(this, "retrieveProductsAllDepots : product " + p.getProductId()
-								+ " seems not to exist in product table");
-					}
+				if (depotsWithThisVersion.size() == 1) {
+					productRows.add(productRow);
 				}
 			}
 

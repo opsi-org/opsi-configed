@@ -679,8 +679,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		int prio = 0;
 		try {
 			prio = Integer.valueOf(jTextFieldPriority.getText());
-		} catch (Exception e) {
-			Logging.warning("Cannot get value from priority field Exception: " + e);
+		} catch (NumberFormatException e) {
+			Logging.warning("Cannot get value from priority field Exception: ", e);
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneCommands.getText().split("\n")) {

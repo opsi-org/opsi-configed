@@ -105,15 +105,7 @@ public class ModulePermissionValue {
 		ExtendedDate result = null;
 
 		if (ob != null) {
-			try {
-				result = new ExtendedDate(ob);
-			} catch (ClassCastException ex) {
-				Logging.warning(this, "not a String: " + ob, ex);
-			} catch (Exception ex) {
-				Logging.debug(this, "DateParseException for " + ob);
-				Logging.debug(this, "thrown exception: " + ex);
-			}
-
+			result = new ExtendedDate(ob);
 		}
 
 		if (result == null || result.getDate() == null) {

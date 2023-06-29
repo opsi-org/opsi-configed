@@ -411,23 +411,18 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
-		try {
-			Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
+		Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
 
-			for (int j = 0; j < table.getColumnCount(); j++) {
-				Logging.info(this, "initColumnName col " + j);
-				Logging.info(this, "initColumnName name  " + table.getColumnName(j));
-				comboSearchItems.add(table.getColumnName(j));
-			}
+		for (int j = 0; j < table.getColumnCount(); j++) {
+			Logging.info(this, "initColumnName col " + j);
+			Logging.info(this, "initColumnName name  " + table.getColumnName(j));
+			comboSearchItems.add(table.getColumnName(j));
+		}
 
-			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
+		comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
 
-			if (oldSelected != null) {
-				comboSearch.setSelectedItem(oldSelected);
-			}
-
-		} catch (Exception ex) {
-			Logging.info(this, "initColumnNames " + ex);
+		if (oldSelected != null) {
+			comboSearch.setSelectedItem(oldSelected);
 		}
 	}
 

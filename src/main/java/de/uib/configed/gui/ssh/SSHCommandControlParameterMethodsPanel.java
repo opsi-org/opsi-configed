@@ -7,6 +7,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
@@ -28,7 +29,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
-	private GroupLayout thisLayout;
+
 	private JDialog main;
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
@@ -138,7 +139,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
-		thisLayout = new GroupLayout(this);
+
+		GroupLayout thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
 				.createParallelGroup()
@@ -220,7 +222,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 			JOptionPane.showMessageDialog(main, showThisText,
 					Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
-		} catch (Exception ble) {
+		} catch (HeadlessException ble) {
 			Logging.warning(this, "Testing parameter-method failed.", ble);
 		}
 		if (caller != null) {

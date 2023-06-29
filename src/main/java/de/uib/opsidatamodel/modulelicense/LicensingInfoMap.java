@@ -517,34 +517,28 @@ public final class LicensingInfoMap {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.Boolean");
 
-		try {
+		for (Map.Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+			columnNames.add(date.getKey());
+			classNames.add("java.lang.String");
+		}
 
+		for (String currentModule : shownModules) {
+			Map<String, Object> line = new HashMap<>();
+
+			// 1st column
+			line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
+
+			// 2nd column
+
+			// 3rd column
+			line.put(Configed.getResourceValue("LicensingInfo.available"), availableModules.contains(currentModule));
+
+			// rest columns
 			for (Map.Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
-				columnNames.add(date.getKey());
-				classNames.add("java.lang.String");
+				line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
 			}
 
-			for (String currentModule : shownModules) {
-				Map<String, Object> line = new HashMap<>();
-
-				// 1st column
-				line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
-
-				// 2nd column
-
-				// 3rd column
-				line.put(Configed.getResourceValue("LicensingInfo.available"),
-						availableModules.contains(currentModule));
-
-				// rest columns
-				for (Map.Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
-					line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
-				}
-
-				resultMap.put(currentModule, line);
-			}
-		} catch (Exception ex) {
-			Logging.error(CLASSNAME + "getTableMapFromDatesMap() ", ex);
+			resultMap.put(currentModule, line);
 		}
 
 		return new TreeMap<>(resultMap);
