@@ -9,7 +9,6 @@ package de.uib.opsicommand;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +32,6 @@ public class OpsiServerVersionRetriever {
 	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
-	private static int[] serverVersion = { 0, 0, 0, 0 };
 	private static String serverVersionString = "Server version not found (assume 4.1)";
 	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
@@ -121,12 +119,10 @@ public class OpsiServerVersionRetriever {
 		setServerVersion(newServerVersion);
 	}
 
-	private static synchronized void setServerVersion(int[] newServerVersion) {
-		if (newServerVersion == null || newServerVersion.length == 0) {
+	private static synchronized void setServerVersion(int[] serverVersion) {
+		if (serverVersion == null || serverVersion.length == 0) {
 			return;
 		}
-
-		serverVersion = Arrays.copyOf(newServerVersion, newServerVersion.length);
 
 		StringBuilder serverVersionBuilder = new StringBuilder(String.valueOf(serverVersion[0]));
 

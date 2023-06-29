@@ -264,7 +264,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		return content;
 	}
 
-	private PdfPTable createTableDataElement(JTable theTable) {
+	private static PdfPTable createTableDataElement(JTable theTable) {
 		boolean onlySelectedRows = theTable.getSelectedRowCount() > 0;
 
 		PdfPTable table = new PdfPTable(theTable.getColumnCount());

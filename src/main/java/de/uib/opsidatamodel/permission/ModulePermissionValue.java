@@ -101,7 +101,7 @@ public class ModulePermissionValue {
 		return result;
 	}
 
-	private ExtendedDate retrieveExpiresDate(Object ob) {
+	private static ExtendedDate retrieveExpiresDate(Object ob) {
 		ExtendedDate result = null;
 
 		if (ob != null) {

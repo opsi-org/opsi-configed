@@ -471,7 +471,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void initSavedStates() {
 		File savedStatesDir = null;
-		boolean success = true;
 
 		if (Configed.savedStatesLocationName != null) {
 			Logging.info(this, "trying to write saved states to " + Configed.savedStatesLocationName);
@@ -489,12 +488,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.warning(this, "setting file savedStatesDir writable failed");
 			}
 
-			Logging.info(this, "writing saved states, set writable, success: " + success);
+			Logging.info(this, "writing saved states, set writable");
 			Configed.savedStates = new SavedStates(
 					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 		}
 
-		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || !success) {
+		if (Configed.savedStatesLocationName == null || Configed.savedStates == null) {
 			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
 
@@ -3146,11 +3145,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		} else {
 			checkHwInfo();
-			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
-			if (hwInfo == null) {
-				hwInfo = persistenceController.getHardwareInfo(firstSelectedClient);
-				hwInfoClientmap.put(firstSelectedClient, hwInfo);
-			}
+			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.computeIfAbsent(firstSelectedClient,
+					s -> persistenceController.getHardwareInfo(firstSelectedClient));
+
 			mainFrame.setHardwareInfo(hwInfo);
 		}
 
@@ -3394,80 +3391,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
-	}
-
-	private void updateLocalbootProductStates() {
-		// localboot products
-		Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
-
-		if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
-				&& !collectChangedLocalbootStates.keySet().isEmpty()) {
-
-			Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
-
-			while (it0.hasNext()) {
-				String client = it0.next();
-				Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
-
-				Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
-						+ clientValues);
-
-				if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
-					continue;
-				}
-
-				Iterator<String> it1 = clientValues.keySet().iterator();
-				while (it1.hasNext()) {
-					String product = it1.next();
-
-					Map<String, String> productValues = clientValues.get(product);
-
-					persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_LOCALBOOT,
-							productValues);
-				}
-			}
-
-			// send the collected items
-			persistenceController.updateProductOnClients();
-		}
-	}
-
-	private void updateNetbootProductStates() {
-		// netboot products
-		Logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
-		if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
-				&& !collectChangedNetbootStates.keySet().isEmpty()) {
-			Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
-
-			while (it0.hasNext()) {
-				String client = it0.next();
-				Map<String, Map<String, String>> clientValues = collectChangedNetbootStates.get(client);
-
-				if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
-					continue;
-				}
-
-				Iterator<String> it1 = clientValues.keySet().iterator();
-				while (it1.hasNext()) {
-					String product = it1.next();
-					Map<String, String> productValues = clientValues.get(product);
-
-					persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_NETBOOT,
-							productValues);
-				}
-			}
-
-			// send the collected items
-			persistenceController.updateProductOnClients();
-		}
-
-		if (istmForSelectedClientsNetboot != null) {
-			istmForSelectedClientsNetboot.clearCollectChangedStates();
-		}
-
-		if (istmForSelectedClientsLocalboot != null) {
-			istmForSelectedClientsLocalboot.clearCollectChangedStates();
-		}
 	}
 
 	public void initServer() {
@@ -3810,11 +3733,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clearUpdateCollectionAndTell();
 		}
 
-		private void updateProductStates() {
-			updateLocalbootProductStates();
-			updateNetbootProductStates();
-		}
-
 		public void save() {
 			if (this.dataChanged) {
 				saveConfigs();
@@ -3828,6 +3746,85 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			this.dataChanged = false;
 
 			updateCollection.cancel();
+		}
+
+		private void updateProductStates() {
+			updateLocalbootProductStates();
+			updateNetbootProductStates();
+		}
+
+		private void updateLocalbootProductStates() {
+			// localboot products
+			Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
+
+			if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
+					&& !collectChangedLocalbootStates.keySet().isEmpty()) {
+
+				Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
+
+				while (it0.hasNext()) {
+					String client = it0.next();
+					Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
+
+					Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client
+							+ " values " + clientValues);
+
+					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
+						continue;
+					}
+
+					Iterator<String> it1 = clientValues.keySet().iterator();
+					while (it1.hasNext()) {
+						String product = it1.next();
+
+						Map<String, String> productValues = clientValues.get(product);
+
+						persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_LOCALBOOT,
+								productValues);
+					}
+				}
+
+				// send the collected items
+				persistenceController.updateProductOnClients();
+			}
+		}
+
+		private void updateNetbootProductStates() {
+			// netboot products
+			Logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
+			if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
+					&& !collectChangedNetbootStates.keySet().isEmpty()) {
+				Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
+
+				while (it0.hasNext()) {
+					String client = it0.next();
+					Map<String, Map<String, String>> clientValues = collectChangedNetbootStates.get(client);
+
+					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
+						continue;
+					}
+
+					Iterator<String> it1 = clientValues.keySet().iterator();
+					while (it1.hasNext()) {
+						String product = it1.next();
+						Map<String, String> productValues = clientValues.get(product);
+
+						persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_NETBOOT,
+								productValues);
+					}
+				}
+
+				// send the collected items
+				persistenceController.updateProductOnClients();
+			}
+
+			if (istmForSelectedClientsNetboot != null) {
+				istmForSelectedClientsNetboot.clearCollectChangedStates();
+			}
+
+			if (istmForSelectedClientsLocalboot != null) {
+				istmForSelectedClientsLocalboot.clearCollectChangedStates();
+			}
 		}
 	}
 
@@ -4051,48 +4048,42 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		@Override
 		public void run() {
 			while (true) {
-				Logging.debug(this, " suspended, editingTarget, viewIndex " +
+				Logging.debug(this,
+						" suspended, editingTarget, viewIndex " + suspended + ", " + editingTarget + ", " + viewIndex);
 
-						suspended + ", " + editingTarget + ", " + viewIndex
+				if (!suspended && viewIndex == VIEW_CLIENTS
+						&& Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
 
-				);
+					Map<String, Object> saveReachableInfo = reachableInfo;
 
-				if (!suspended && /*editingTarget == EditingTarget.CLIENTS && */viewIndex == VIEW_CLIENTS) {
-					// we catch exceptions especially if we are on some updating process for the
-					// model
+					reachableInfo = persistenceController.reachableInfo(null);
+					// update column
 
-					if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
-						Map<String, Object> saveReachableInfo = reachableInfo;
+					reachableInfo = persistenceController.reachableInfo(null);
 
-						reachableInfo = persistenceController.reachableInfo(null);
-						// update column
+					AbstractTableModel model = selectionPanel.getTableModel();
 
-						reachableInfo = persistenceController.reachableInfo(null);
+					int col = model
+							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
-						AbstractTableModel model = selectionPanel.getTableModel();
+					for (int row = 0; row < model.getRowCount(); row++) {
+						String clientId = (String) model.getValueAt(row, 0);
+						Boolean newInfo = (Boolean) reachableInfo.get(clientId);
 
-						int col = model
-								.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+						if (newInfo != null) {
+							if (saveReachableInfo.get(clientId) == null) {
+								model.setValueAt(newInfo, row, col);
+							} else if (model.getValueAt(row, col) != null
+									&& !model.getValueAt(row, col).equals(newInfo)) {
 
-						for (int row = 0; row < model.getRowCount(); row++) {
-							String clientId = (String) model.getValueAt(row, 0);
-							Boolean newInfo = (Boolean) reachableInfo.get(clientId);
+								model.setValueAt(newInfo, row, col);
 
-							if (newInfo != null) {
-								if (saveReachableInfo.get(clientId) == null) {
-									model.setValueAt(newInfo, row, col);
-								} else if (model.getValueAt(row, col) != null
-										&& !model.getValueAt(row, col).equals(newInfo)) {
-
-									model.setValueAt(newInfo, row, col);
-
-									model.fireTableRowsUpdated(row, row);
-									// if ordered by col the order does not change although the value changes
-									// is necessary
-								} else {
-									Logging.warning(this, "Reachability of client " + clientId + " with new value "
-											+ newInfo + " could not be updated");
-								}
+								model.fireTableRowsUpdated(row, row);
+								// if ordered by col the order does not change although the value changes
+								// is necessary
+							} else {
+								Logging.warning(this, "Reachability of client " + clientId + " with new value "
+										+ newInfo + " could not be updated");
 							}
 						}
 					}

@@ -46,7 +46,6 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.tree.ClientTree;
-import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
@@ -119,6 +118,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
 	}
+
+	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
+	public static final String DESCRIPTION_KEY = "description";
+	public static final String EDITABLE_KEY = "editable";
 
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
@@ -223,7 +226,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
 		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "opsi module status display");
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
-		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
 		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
@@ -6929,7 +6932,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		// additional queries
 		String query;
 		StringBuilder qbuf;
-		key = AdditionalQuery.CONFIG_KEY + "." + "hosts_with_products";
+		key = CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
 		defaultValues = configDefaultValues.get(key);
 
@@ -6948,11 +6951,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			readyObjects.add(produceConfigEntry("UnicodeConfig", key, query, description));
 
-			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + AdditionalQuery.EDITABLE_KEY, false,
-					"(command may be edited)"));
+			readyObjects
+					.add(produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false, "(command may be edited)"));
 			// description entry
-			readyObjects.add(
-					produceConfigEntry("UnicodeConfig", key + "." + AdditionalQuery.DESCRIPTION_KEY, description, ""));
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY, description, ""));
 		}
 
 		// WAN_CONFIGURATION
@@ -7427,9 +7429,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private void produceOpsiModulesInfoClassicOpsi43() {
 		produceOpsiInformation();
 
-		// the part of it which delivers the service information on checked
-		// modules
-		Map<String, Object> opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
 
@@ -7437,18 +7436,16 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		// has the actual signal if a module is active
 		opsiModules = new HashMap<>();
 
-		Map<String, Object> opsiCountModules = new HashMap<>();
-
 		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 		// prepare the user info
-		opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
 		Logging.info(this, "opsi module information " + opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
 		// analyse the real module info
-		opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
+		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
 		opsiCountModules.keySet()
 				.removeAll(exec.getListFromItem(((JSONArray) opsiInformation.get("obsolete_modules")).toString()));
 		getHostInfoCollections().retrieveOpsiHosts();
@@ -7698,25 +7695,20 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private void produceOpsiModulesInfoClassic() {
 		produceOpsiInformation();
 
-		// the part of it which delivers the service information on checked
-		// modules
-		Map<String, Object> opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
-		String opsiVersion = "4";
+
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		opsiModules = new HashMap<>();
 
-		Map<String, Object> opsiCountModules = new HashMap<>();
-
-		opsiVersion = (String) opsiInformation.get("opsiVersion");
+		String opsiVersion = (String) opsiInformation.get("opsiVersion");
 		Logging.info(this, "opsi version information " + opsiVersion);
 
 		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 		// prepare the user info
-		opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
 
 		opsiModulesInfo.remove("signature");
 		Logging.info(this, "opsi module information " + opsiModulesInfo);
@@ -7727,7 +7719,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
 		// analyse the real module info
-		opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
+		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
 		getHostInfoCollections().retrieveOpsiHosts();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;

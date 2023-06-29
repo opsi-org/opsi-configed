@@ -377,6 +377,41 @@ public class LogFrame extends JFrame implements WindowListener {
 				super.setTitle(fn);
 			}
 		}
+
+		private String reloadFile(String fn) {
+			if (fn != null) {
+				return readFile(fn).toString();
+			} else {
+				Logging.error(this, "File does not exist: " + fn);
+				showDialog("No location: \n" + fn);
+				return "";
+			}
+		}
+
+		private void saveToFile(String filename, String[] logfilelines) {
+			FileWriter fWriter = null;
+			try {
+				fWriter = new FileWriter(filename, StandardCharsets.UTF_8);
+			} catch (IOException ex) {
+				Logging.error("Error opening file: " + filename + "\n --- ; stop saving to file", ex);
+				return;
+			}
+			int i = 0;
+			while (i < logfilelines.length) {
+				try {
+					fWriter.write(logfilelines[i] + "\n");
+					setTitle(filename);
+				} catch (IOException ex) {
+					Logging.error("Error writing file: " + filename + "\n --- " + ex);
+				}
+				i++;
+			}
+			try {
+				fWriter.close();
+			} catch (IOException ex) {
+				Logging.error("Error closing file: " + filename + "\n --- " + ex);
+			}
+		}
 	}
 
 	/* WindowListener implementation */
@@ -422,41 +457,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
-	}
-
-	private String reloadFile(String fn) {
-		if (fn != null) {
-			return readFile(fn).toString();
-		} else {
-			Logging.error(this, "File does not exist: " + fn);
-			showDialog("No location: \n" + fn);
-			return "";
-		}
-	}
-
-	private void saveToFile(String filename, String[] logfilelines) {
-		FileWriter fWriter = null;
-		try {
-			fWriter = new FileWriter(filename, StandardCharsets.UTF_8);
-		} catch (IOException ex) {
-			Logging.error("Error opening file: " + filename + "\n --- ; stop saving to file", ex);
-			return;
-		}
-		int i = 0;
-		while (i < logfilelines.length) {
-			try {
-				fWriter.write(logfilelines[i] + "\n");
-				setTitle(filename);
-			} catch (IOException ex) {
-				Logging.error("Error writing file: " + filename + "\n --- " + ex);
-			}
-			i++;
-		}
-		try {
-			fWriter.close();
-		} catch (IOException ex) {
-			Logging.error("Error closing file: " + filename + "\n --- " + ex);
-		}
 	}
 
 	private static void showDialog(String errorMsg) {

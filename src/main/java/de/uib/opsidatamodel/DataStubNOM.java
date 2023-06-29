@@ -1364,7 +1364,7 @@ public class DataStubNOM {
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);
-				if (valInRow == null || valInRow.equals("null")) {
+				if (valInRow == null || "null".equals(valInRow)) {
 					valInRow = "";
 				}
 
@@ -1413,11 +1413,11 @@ public class DataStubNOM {
 			return null;
 		}
 
-		if (time0 == null || time0.equals("")) {
+		if (time0 == null || "".equals(time0)) {
 			return time1;
 		}
 
-		if (time1 == null || time1.equals("")) {
+		if (time1 == null || "".equals(time1)) {
 			return time0;
 		}
 

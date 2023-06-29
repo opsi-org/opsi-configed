@@ -265,7 +265,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		rootPath = tree.getPathForRow(0);
 	}
 
-	private String addUnit(String value, String unit) {
+	private static String addUnit(String value, String unit) {
 		if (value.isEmpty()) {
 			return value;
 		}

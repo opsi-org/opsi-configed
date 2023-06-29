@@ -348,11 +348,10 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
-		String formatedResult = "!!!Error!!!";
 
 		replaceElements(strArr, beginEndElement);
 		Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
-		formatedResult = createStringOfArray(strArr, beginEndString, separator);
+		String formatedResult = createStringOfArray(strArr, beginEndString, separator);
 		Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formatedResult);
 
 		return formatedResult;

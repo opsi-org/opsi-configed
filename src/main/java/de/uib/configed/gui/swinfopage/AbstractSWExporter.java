@@ -149,7 +149,7 @@ public abstract class AbstractSWExporter {
 	}
 
 	private static void finish(int exitcode) {
-		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
+		Logging.error(ErrorCode.tell(exitcode));
 		Main.endApp(exitcode);
 	}
 

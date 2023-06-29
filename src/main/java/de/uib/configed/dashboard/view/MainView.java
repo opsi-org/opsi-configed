@@ -243,6 +243,12 @@ public class MainView implements View {
 
 			return null;
 		}
+
+		private void setBlurriness(int iterations) {
+			BoxBlur blurriness = new BoxBlur();
+			blurriness.setIterations(iterations);
+			dashboardSceneVBox.setEffect(blurriness);
+		}
 	}
 
 	@SuppressWarnings("squid:S4968")
@@ -279,12 +285,6 @@ public class MainView implements View {
 			styleAccordingToSelectedTheme();
 		});
 		loadData();
-	}
-
-	private void setBlurriness(int iterations) {
-		BoxBlur blurriness = new BoxBlur();
-		blurriness.setIterations(iterations);
-		dashboardSceneVBox.setEffect(blurriness);
 	}
 
 	private void displayLicenseInfo() {
