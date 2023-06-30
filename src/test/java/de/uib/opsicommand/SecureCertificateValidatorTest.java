@@ -16,31 +16,26 @@ import java.util.Base64;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.ClassOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestClassOrder;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpStatusCode;
 
 import de.uib.Utils;
 
-@TestClassOrder(OrderAnnotation.class)
-@Order(1)
 public class SecureCertificateValidatorTest {
-	static ClientAndServer clientServer;
+	ClientAndServer clientServer;
 
-	@BeforeAll
-	static void setup() {
+	@BeforeEach
+	void setup() {
 		ConnectionErrorObserver.destroy();
 		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
 	}
 
-	@AfterAll
-	static void close() {
+	@AfterEach
+	void close() {
 		clientServer.stop();
 	}
 
