@@ -6,7 +6,10 @@
 
 package de.uib.utilities;
 
+import java.sql.Timestamp;
 import java.util.Date;
+
+import de.uib.utilities.logging.Logging;
 
 public class ExtendedDate {
 	private static final String INFINITE_IMPORT = "never";
@@ -49,11 +52,15 @@ public class ExtendedDate {
 					// append time for reading timestamp
 					value = value + " 00:00:0";
 				}
-				setFromDate(java.sql.Timestamp.valueOf(value));
+
+				try {
+					setFromDate(Timestamp.valueOf(value));
+				} catch (IllegalArgumentException e) {
+					Logging.warning(this, "Cannot parse value to get Timestamp of " + value, e);
+				}
 			}
 
 			return;
-
 		}
 
 		if (ob instanceof Date) {
