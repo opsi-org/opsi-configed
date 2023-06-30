@@ -60,7 +60,8 @@ public class CertificateDownloaderTest {
 	@Test
 	@Order(3)
 	void testIfCertificateIsDownloadedProvidedCorrectURL() throws Exception {
-		byte[] fileBytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("test/opsi-ca-cert.pem"));
+		byte[] fileBytes = IOUtils
+				.toByteArray(getClass().getClassLoader().getResourceAsStream("test/opsi-ca-cert.pem"));
 
 		clientServer.withSecure(true).when(request().withMethod("GET").withPath("/ssl/" + Globals.CERTIFICATE_FILE))
 				.respond(response().withStatusCode(HttpStatusCode.OK_200.code())

@@ -118,6 +118,10 @@ public final class CertificateManager {
 	}
 
 	public static List<File> getCertificates() {
+		if (Configed.savedStatesLocationName == null) {
+			return new ArrayList<>();
+		}
+
 		final PathMatcher matcher = FileSystems.getDefault()
 				.getPathMatcher("glob:**." + Globals.CERTIFICATE_FILE_EXTENSION);
 		final List<File> certificateFiles = new ArrayList<>();
