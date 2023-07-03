@@ -1052,7 +1052,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			args = new String[] {};
 		}
 
-		return exec.getBooleanResult(new OpsiMethodCall(method, args));
+		return exec.doCall(new OpsiMethodCall(method, args));
 	}
 
 	public List<Map<String, Object>> hostRead() {

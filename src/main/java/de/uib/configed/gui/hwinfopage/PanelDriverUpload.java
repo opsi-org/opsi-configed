@@ -216,6 +216,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		evaluateWinProducts();
 
 		buildPanel();
+
+		// We init the values later, since there are listeners attached to it.
+		// If we init the values earlier, null objects will be accessed
+		initValues();
 	}
 
 	private void defineChoosers() {
@@ -398,8 +402,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				}
 			});
 		}
-
-		buttonByAudit.setSelected(true);
 
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
@@ -636,6 +638,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
+	private void initValues() {
+		buttonByAudit.setSelected(true);
+	}
+
 	private void makePath(File path) {
 		Logging.info(this, "makePath for " + path);
 
@@ -747,7 +753,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 
 		fieldServerPath.setText(result);
-
 	}
 
 	private void chooseServerpath() {
@@ -765,7 +770,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
 		}
-
 	}
 
 	// implements NameProducer
