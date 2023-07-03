@@ -48,14 +48,17 @@ import de.uib.utilities.logging.Logging;
 @SuppressWarnings("java:S1258")
 public class SecureCertificateValidator implements CertificateValidator {
 	private boolean certificateExists;
+	private KeyStore ks;
+
+	public SecureCertificateValidator() {
+		ks = CertificateManager.initializeKeyStore();
+	}
 
 	@Override
 	public SSLSocketFactory createSSLSocketFactory() {
 		SSLSocketFactory sslFactory = null;
 
 		try {
-			KeyStore ks = CertificateManager.initializeKeyStore();
-
 			if (CertificateDownloader.getDownloadedCertificateFile() != null) {
 				CertificateManager.loadCertificateToKeyStore(CertificateDownloader.getDownloadedCertificateFile());
 			} else {
@@ -89,7 +92,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 	private static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
 		TrustManager[] trustManagers = tmf.getTrustManagers();
 		if (trustManagers.length != 1) {
-			throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
+			throw new IllegalStateException("Unexpected default trust ma gers: " + Arrays.toString(trustManagers));
 		}
 		TrustManager trustManager = trustManagers[0];
 		if (trustManager instanceof X509TrustManager) {
