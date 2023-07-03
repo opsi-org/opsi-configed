@@ -19,6 +19,7 @@ import javax.net.ssl.SSLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockserver.configuration.ConfigurationProperties;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpStatusCode;
@@ -59,7 +60,7 @@ public class SecureCertificateValidatorTest {
 
 		SecureCertificateValidator certValidator = new SecureCertificateValidator();
 		CertificateManager.loadCertificateToKeyStore(
-				new File(getClass().getClassLoader().getResource("test/opsi-ca-cert.pem").getFile()));
+				new File(getClass().getClassLoader().getResource("test/valid-cert.pem").getFile()));
 		connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 		connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 		connection.connect();
@@ -71,6 +72,9 @@ public class SecureCertificateValidatorTest {
 	void testSecureConnectionWithInvalidCertificate() throws IOException {
 		String authorization = Base64.getEncoder()
 				.encodeToString((Utils.USERNAME + ":" + Utils.PASSWORD).getBytes(StandardCharsets.UTF_8));
+
+		boolean originalTLSMutualAuthenticationRequired = ConfigurationProperties.tlsMutualAuthenticationRequired();
+		ConfigurationProperties.tlsMutualAuthenticationRequired(true);
 
 		clientServer.withSecure(true)
 				.when(request().withMethod("GET").withPath("/")
@@ -87,9 +91,11 @@ public class SecureCertificateValidatorTest {
 
 		SecureCertificateValidator certValidator = new SecureCertificateValidator();
 		CertificateManager.loadCertificateToKeyStore(
-				new File(getClass().getClassLoader().getResource("test/invalid-opsi-ca-cert.pem").getFile()));
+				new File(getClass().getClassLoader().getResource("test/invalid-cert.pem").getFile()));
 		connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 		connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 		assertThrows(SSLException.class, () -> connection.connect(), "should throw SSLException");
+
+		ConfigurationProperties.tlsMutualAuthenticationRequired(originalTLSMutualAuthenticationRequired);
 	}
 }
