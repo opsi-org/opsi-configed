@@ -2,6 +2,7 @@ image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 stages:
   - set_variables
+  - code_coverage_analysis
   - build_and_analyze
   - sign
   - make_opsiproduct
@@ -39,6 +40,14 @@ compile_and_package:
   needs:
     - set_variables
 
+jacoco-check:
+  stage: code_coverage_analysis
+  image: maven:3.8.6-openjdk-18
+  script:
+    - mvn jacoco:report
+  only:
+    - main
+
 sonarqube-check:
   stage: build_and_analyze
   image: maven:3.8.6-openjdk-18
@@ -50,7 +59,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn compile sonar:sonar -Dsonar.projectKey=configed
+    - mvn compile sonar:sonar -Pcoverage -Dsonar.projectKey=configed
   only:
     - main # or the name of your main branch
 
