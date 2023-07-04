@@ -6,10 +6,10 @@
 
 package de.uib.opsidatamodel.productstate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.Globals;
 
@@ -33,7 +33,7 @@ public class ActionProgress {
 	private static Map<Integer, String> state2label;
 	private static Map<String, String> label2displayLabel;
 
-	private static List<Integer> states;
+	private static Set<Integer> states;
 
 	// instance variable
 	private int state = INVALID;
@@ -43,7 +43,7 @@ public class ActionProgress {
 			return;
 		}
 
-		states = new ArrayList<>();
+		states = new HashSet<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);

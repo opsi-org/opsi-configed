@@ -90,7 +90,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
@@ -104,7 +103,7 @@ import de.uib.utilities.table.ListCellOptions;
  * responses. There are several classes which implement the Executioner methods
  * in different ways dependent on the used means and protocols
  */
-public class OpsiserviceNOMPersistenceController implements DataRefreshedObservable {
+public class OpsiserviceNOMPersistenceController {
 	private static final String EMPTYFIELD = "-";
 	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
@@ -503,7 +502,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	// implementation of observer patterns
 	// offer observing of data refreshed announcements
 
-	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers == null) {
 			dataRefreshedObservers = new ArrayList<>();
@@ -511,15 +509,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		dataRefreshedObservers.add(ob);
 	}
 
-	// TODO remove this because never used?
-	@Override
-	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers != null) {
-			dataRefreshedObservers.remove(ob);
-		}
-	}
-
-	@Override
 	public void notifyDataRefreshedObservers(Object mesg) {
 		if (dataRefreshedObservers == null) {
 			return;

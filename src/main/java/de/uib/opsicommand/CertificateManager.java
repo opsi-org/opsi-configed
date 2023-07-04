@@ -28,7 +28,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -38,7 +40,7 @@ import de.uib.utilities.logging.Logging;
 
 public final class CertificateManager {
 	private static KeyStore ks;
-	private static List<String> invalidCertificates = new ArrayList<>();
+	private static Set<String> invalidCertificates = new HashSet<>();
 
 	private CertificateManager() {
 	}

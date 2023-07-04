@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -108,14 +109,10 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Object>> tableMap;
 	private String latestDateString;
 	private String checksum;
-	private List<String> currentCloseToLimitModuleList;
-	private List<String> currentOverLimitModuleList;
-	private List<String> currentTimeWarningModuleList;
-	private List<String> currentTimeOverModuleList;
-	private List<String> futureOverLimitModuleList;
-	private List<String> futureCloseToLimitModuleList;
-	private Set<String> allCloseToLimitModules;
-	private Set<String> allOverLimitModules;
+	private Set<String> currentCloseToLimitModuleList;
+	private Set<String> currentOverLimitModuleList;
+	private Set<String> currentTimeWarningModuleList;
+	private Set<String> currentTimeOverModuleList;
 	private Integer daysClientLimitWarning;
 	private Integer absolutClientLimitWarning;
 	private Integer percentClientLimitWarning;
@@ -380,35 +377,19 @@ public final class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
 		if (currentCloseToLimitModuleList == null) {
-			currentCloseToLimitModuleList = new ArrayList<>();
+			currentCloseToLimitModuleList = new HashSet<>();
 		}
 
 		if (currentOverLimitModuleList == null) {
-			currentOverLimitModuleList = new ArrayList<>();
+			currentOverLimitModuleList = new HashSet<>();
 		}
 
 		if (currentTimeWarningModuleList == null) {
-			currentTimeWarningModuleList = new ArrayList<>();
+			currentTimeWarningModuleList = new HashSet<>();
 		}
 
 		if (currentTimeOverModuleList == null) {
-			currentTimeOverModuleList = new ArrayList<>();
-		}
-
-		if (futureCloseToLimitModuleList == null) {
-			futureCloseToLimitModuleList = new ArrayList<>();
-		}
-
-		if (futureOverLimitModuleList == null) {
-			futureOverLimitModuleList = new ArrayList<>();
-		}
-
-		if (allCloseToLimitModules == null) {
-			allCloseToLimitModules = new LinkedHashSet<>();
-		}
-
-		if (allOverLimitModules == null) {
-			allOverLimitModules = new LinkedHashSet<>();
+			currentTimeOverModuleList = new HashSet<>();
 		}
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
@@ -449,15 +430,12 @@ public final class LicensingInfoMap {
 
 					moduleInfo.put(AVAILABLE, available);
 					if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
-						allCloseToLimitModules.add(currentModule);
 
 						if (key.equals(latestDateString)) {
 							currentCloseToLimitModuleList.add(currentModule);
 						}
 
 					} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
-						allOverLimitModules.add(currentModule);
-
 						if (key.equals(latestDateString)) {
 							currentOverLimitModuleList.add(currentModule);
 						}
@@ -476,13 +454,6 @@ public final class LicensingInfoMap {
 							&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 						moduleInfo.put(FUTURE_STATE, futureCheck);
 
-						if (futureCheck.equals(STATE_OVER_LIMIT)) {
-							futureOverLimitModuleList.add(currentModule);
-						} else if (futureCheck.equals(STATE_CLOSE_TO_LIMIT)) {
-							futureCloseToLimitModuleList.add(currentModule);
-						} else {
-							// Not close to limit, so nothing to do
-						}
 					} else {
 						moduleInfo.put(FUTURE_STATE, "null");
 					}
@@ -738,7 +709,7 @@ public final class LicensingInfoMap {
 
 	}
 
-	public List<String> getCurrentOverLimitModuleList() {
+	public Set<String> getCurrentOverLimitModuleList() {
 		return currentOverLimitModuleList;
 	}
 

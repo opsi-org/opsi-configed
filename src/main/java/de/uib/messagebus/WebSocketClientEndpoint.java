@@ -9,10 +9,10 @@ package de.uib.messagebus;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
@@ -27,7 +27,7 @@ import de.uib.utilities.logging.Logging;
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 
-	private List<MessagebusListener> listeners = new ArrayList<>();
+	private Set<MessagebusListener> listeners = new HashSet<>();
 
 	public WebSocketClientEndpoint(URI serverURI) {
 		super(serverURI);

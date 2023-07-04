@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
 	private OpenSaveDialog dialog;
 	private Boolean saveAction;
@@ -327,11 +325,8 @@ public class ExporterToPDF extends AbstractExportTable {
 						}
 					}
 
-					if (leftAlignmentlist.contains(i)) {
-						value.setHorizontalAlignment(Element.ALIGN_LEFT);
-					} else {
-						value.setHorizontalAlignment(Element.ALIGN_CENTER);
-					}
+					value.setHorizontalAlignment(Element.ALIGN_CENTER);
+
 					value.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(value);
 				}

@@ -56,13 +56,9 @@ public final class LicenseData {
 			return;
 		}
 
-		activeLicenses.clear();
-
-		for (String licence : licenses) {
-			if (!expiredLicenses.contains(licence)) {
-				activeLicenses.add(licence);
-			}
-		}
+		// Get all licences that are not expired
+		activeLicenses = List.copyOf(licenses);
+		activeLicenses.removeAll(expiredLicenses);
 	}
 
 	public static List<String> getExpiredLicenses() {

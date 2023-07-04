@@ -229,7 +229,6 @@ public class DataStubNOM {
 
 			persistenceController.notifyDataRefreshedObservers("product");
 		}
-
 	}
 
 	public void productsAllDepotsRequestRefresh() {

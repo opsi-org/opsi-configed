@@ -52,7 +52,7 @@ public class SWAuditClientEntry {
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 
-	public static final List<String> KEYS = new LinkedList<>();
+	public static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(SWAuditEntry.ID);
 		KEYS.add(SWAuditEntry.NAME);
