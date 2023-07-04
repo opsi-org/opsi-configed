@@ -106,12 +106,14 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 		String errorMessage = null;
 
 		if (retrieved.containsKey("error") && retrieved.get("error") != null) {
-			Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
-					new TypeReference<Map<String, Object>>() {
-					});
+			if (retrieved.get("error") instanceof Map) {
+				Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
+						new TypeReference<Map<String, Object>>() {
+						});
 
-			if (error != null && error.get("class") != null && error.get("message") != null) {
-				errorMessage = " [" + error.get("class") + "] " + error.get("message");
+				if (error != null && error.get("class") != null && error.get("message") != null) {
+					errorMessage = " [" + error.get("class") + "] " + error.get("message");
+				}
 			} else {
 				errorMessage = " " + retrieved.get("error");
 			}
