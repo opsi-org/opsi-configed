@@ -51,7 +51,7 @@ sonarqube-check:
       - .sonar/cache
   script:
     # - mvn jacoco:report
-    - mvn test sonar:sonar -Dsonar.projectKey=configed -Dmockserver.logLevel=OFF -Pcoverage
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed -Dmockserver.logLevel=OFF -Pcoverage
   # only:
   #   - main # or the name of your main branch
 
