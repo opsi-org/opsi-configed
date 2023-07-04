@@ -139,7 +139,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		values.put("%host%", targetClient);
 		String hostName = targetClient;
 		Logging.info(this, " targetClient " + targetClient);
-		if (targetClient.indexOf(".") > 0) {
+		if (targetClient.contains(".")) {
 			String[] parts = targetClient.split("\\.");
 			Logging.info(this, " targetClient " + Arrays.toString(parts));
 			hostName = parts[0];

@@ -29,12 +29,12 @@ public class NONEexecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
