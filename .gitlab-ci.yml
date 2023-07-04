@@ -52,8 +52,8 @@ sonarqube-check:
   script:
     - mvn jacoco:report
     - mvn compile sonar:sonar -Dsonar.projectKey=configed
-  only:
-    - main # or the name of your main branch
+  # only:
+  #   - main # or the name of your main branch
 
 signandupload:
   stage: sign
