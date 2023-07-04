@@ -1088,18 +1088,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 
 			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
-
 			if (
 			// has state unknown, probably because of a failed installation)
 			(includeFailedInstallations
 					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState)) ||
 			// has wrong product version
-					((InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& (!POJOReMapper.equalsNull(clientProductVersion))
-							&& !productVersion.equals(clientProductVersion))
-							|| (!POJOReMapper.equalsNull(clientPackageVersion)
-									&& !packageVersion.equals(clientPackageVersion)))) {
+					(InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
+							&& ((!POJOReMapper.equalsNull(clientProductVersion)
+									&& !productVersion.equals(clientProductVersion))
+									|| (!POJOReMapper.equalsNull(clientPackageVersion)
+											&& !packageVersion.equals(clientPackageVersion))))) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
+
 				result.add(client);
 			}
 		}
