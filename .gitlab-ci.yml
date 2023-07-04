@@ -51,7 +51,7 @@ sonarqube-check:
       - .sonar/cache
   script:
     - mvn jacoco:report
-    - mvn compile sonar:sonar -Dsonar.projectKey=configed
+    - mvn compile sonar:sonar -Dsonar.projectKey=configed -Pcoverage
   # only:
   #   - main # or the name of your main branch
 
