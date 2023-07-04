@@ -68,7 +68,7 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 	private void displayFailedCertificateValidationDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
+				new String[] { Configed.getResourceValue("UIManager.cancelButtonText"),
 						Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"),
 						Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce") },
 				420, 260);
