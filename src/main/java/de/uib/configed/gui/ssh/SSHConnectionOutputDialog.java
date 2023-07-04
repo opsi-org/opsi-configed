@@ -43,10 +43,8 @@ import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
 
-	private static final String ANSI_ESCAPE_1 = "";
-	private static final String ANSI_ESCAPE_2 = "\u001B";
+	private static final String ANSI_ESCAPE_1 = "\u001B";
 
-	public static final String ANSI_CODE_END = "[0;0;0m";
 	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
 	public static final String ANSI_CODE_END_2 = "[0;0;0m";
 
@@ -106,7 +104,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			Logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + entry.getValue().toString());
 
-			line = line.replace(ANSI_ESCAPE_1, "").replace(ANSI_ESCAPE_2, "");
+			line = line.replace(ANSI_ESCAPE_1, "");
 		}
 		return line;
 	}
@@ -130,8 +128,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 		output.setCaretPosition(output.getDocument().getLength());
 		output.setCharacterAttributes(aset, false);
-		if (line.contains(ANSI_CODE_END) || line.contains(ANSI_CODE_END_1) || line.contains(ANSI_CODE_END_2)) {
-			line = line.replace(ANSI_CODE_END, "").replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
+		if (line.contains(ANSI_CODE_END_1) || line.contains(ANSI_CODE_END_2)) {
+			line = line.replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
 			linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR;
 		}
 

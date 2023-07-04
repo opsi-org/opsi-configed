@@ -25,7 +25,7 @@ import org.mockserver.model.HttpStatusCode;
 import de.uib.Utils;
 import de.uib.configed.Globals;
 
-public class ConnectionHandlerTest {
+class ConnectionHandlerTest {
 	static ClientAndServer clientServer;
 
 	@BeforeAll

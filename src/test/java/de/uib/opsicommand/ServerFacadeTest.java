@@ -36,7 +36,7 @@ import de.uib.Utils;
 import de.uib.configed.Globals;
 import net.jpountz.lz4.LZ4FrameOutputStream;
 
-public class ServerFacadeTest {
+class ServerFacadeTest {
 	static ClientAndServer clientServer;
 
 	@BeforeAll

@@ -22,7 +22,7 @@ import de.uib.Utils;
 import de.uib.configed.Globals;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CertificateDownloaderTest {
+class CertificateDownloaderTest {
 	static ClientAndServer clientServer;
 
 	@BeforeAll

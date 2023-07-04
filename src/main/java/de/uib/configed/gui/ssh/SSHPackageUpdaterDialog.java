@@ -63,7 +63,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 				// escaping ansicodes
 				repostatus = repostatus.replace("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
-				repostatus = repostatus.replace("", "").replace("\u001B", "");
+				repostatus = repostatus.replace("\u001B", "").replace("\u001B", "");
 
 				String[] repoStatus = repostatus.split("\\(");
 				repoStatus[1] = repoStatus[1].split("\\)")[0];

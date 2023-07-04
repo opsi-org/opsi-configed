@@ -26,7 +26,7 @@ import org.mockserver.model.HttpStatusCode;
 
 import de.uib.Utils;
 
-public class SecureCertificateValidatorTest {
+class SecureCertificateValidatorTest {
 	ClientAndServer clientServer;
 
 	@BeforeEach
