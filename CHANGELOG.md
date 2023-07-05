@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.22.6] - 2023-07-05
+
+### Fixed
+- Creating and editing groups works again
+- Fix wrong message after successful driver upload
+
+## Added
+- Use gzip/lz4 and messagepack also for POST-requests to the server
 
 ## [4.2.22.5] - 2023-06-28
 
