@@ -5,9 +5,10 @@
 ### Fixed
 - Creating and editing groups works again
 - Fix wrong message after successful driver upload
+- Fix session information
 
 ## Added
-- Use gzip/lz4 and messagepack also for POST-requests to the server
+- Use gzip/lz4 and messagepack also for POST-requests to the server (small performance advantage)
 
 ## [4.2.22.5] - 2023-06-28
 
