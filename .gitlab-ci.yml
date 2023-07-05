@@ -26,7 +26,7 @@ compile_and_package:
   stage: build_and_analyze
   script:
     - mvn package
-    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun.nio.ch" > target/module.deps
+    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun" > target/module.deps
     # jdk.crypto.ec is needed for TLS (HTTPS)
     - echo "   jdk.crypto.ec" >> target/module.deps
     - cat target/module.deps
