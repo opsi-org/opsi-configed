@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7443,9 +7441,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		int countClients = hostInfoCollections.getCountClients();
 
-		Date today = new Date();
-		Calendar nowCal = Calendar.getInstance();
-		nowCal.setTime(today);
+		LocalDateTime today = LocalDateTime.now();
 
 		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
 
@@ -7548,16 +7544,14 @@ public class OpsiserviceNOMPersistenceController {
 						opsiModules.put(key, false);
 					} else {
 						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							Date expiresDate = expiresForThisModule.getDate();
+							LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-							if (today.after(expiresDate)) {
+							if (today.isAfter(expiresDate)) {
 								opsiModules.put(key, false);
 							}
 						}
 					}
-
 				}
-
 			}
 		}
 
@@ -7594,12 +7588,9 @@ public class OpsiserviceNOMPersistenceController {
 						+ " count " + countClientsInThisBlock);
 
 				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-					Date expiresDate = expiresForThisModule.getDate();
-					Calendar noticeCal = Calendar.getInstance();
-					noticeCal.setTime(expiresDate);
-					noticeCal.add(Calendar.DAY_OF_MONTH, -14);
+					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
 
-					if (nowCal.after(noticeCal)) {
+					if (today.isAfter(noticeDate)) {
 						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 					}
 				}
@@ -7715,9 +7706,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		int countClients = hostInfoCollections.getCountClients();
 
-		Date today = new Date();
-		Calendar nowCal = Calendar.getInstance();
-		nowCal.setTime(today);
+		LocalDateTime today = LocalDateTime.now();
 
 		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
 
@@ -7805,9 +7794,9 @@ public class OpsiserviceNOMPersistenceController {
 						opsiModules.put(key, false);
 					} else {
 						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							Date expiresDate = expiresForThisModule.getDate();
+							LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-							if (today.after(expiresDate)) {
+							if (today.isAfter(expiresDate)) {
 								opsiModules.put(key, false);
 							}
 						}
@@ -7849,12 +7838,9 @@ public class OpsiserviceNOMPersistenceController {
 						+ " count " + countClientsInThisBlock);
 
 				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-					Date expiresDate = expiresForThisModule.getDate();
-					Calendar noticeCal = Calendar.getInstance();
-					noticeCal.setTime(expiresDate);
-					noticeCal.add(Calendar.DAY_OF_MONTH, -14);
+					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
 
-					if (nowCal.after(noticeCal)) {
+					if (today.isAfter(noticeDate)) {
 						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 					}
 				}

@@ -6,8 +6,8 @@
 
 package de.uib.utilities;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 import de.uib.utilities.logging.Logging;
 
@@ -18,18 +18,19 @@ public class ExtendedDate {
 	public static final ExtendedDate INFINITE = new ExtendedDate(STRING_INFINITE);
 	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
 
-	private Date date;
+	private LocalDateTime date;
 	private String sDate;
 
+	// TODO where will this be needed?
 	public ExtendedDate(Object value) {
 		interpretAsTimestamp(value);
 	}
 
-	private void setFromDate(Date d) {
+	private void setFromDate(LocalDateTime d) {
 		date = d;
 		sDate = date.toString();
 		// remove time
-		sDate = sDate.substring(0, sDate.indexOf(' '));
+		sDate = sDate.substring(0, sDate.indexOf('T'));
 	}
 
 	private void interpretAsTimestamp(Object ob) {
@@ -48,14 +49,18 @@ public class ExtendedDate {
 
 				// extend
 
-				if (value.indexOf(' ') == -1) {
+				if (!value.contains(" ")) {
 					// append time for reading timestamp
-					value = value + " 00:00:0";
+					value = value + "T00:00:0";
+				} else {
+					value = value.replace(' ', 'T');
 				}
 
+				value = value + '0';
+
 				try {
-					setFromDate(Timestamp.valueOf(value));
-				} catch (IllegalArgumentException e) {
+					setFromDate(LocalDateTime.parse(value));
+				} catch (DateTimeParseException e) {
 					Logging.warning(this, "Cannot parse value to get Timestamp of " + value, e);
 				}
 			}
@@ -63,8 +68,8 @@ public class ExtendedDate {
 			return;
 		}
 
-		if (ob instanceof Date) {
-			setFromDate((Date) ob);
+		if (ob instanceof LocalDateTime) {
+			setFromDate((LocalDateTime) ob);
 		}
 	}
 
@@ -78,7 +83,7 @@ public class ExtendedDate {
 		return this == ob || (ob instanceof ExtendedDate && toString().equals(ob.toString()));
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 }
