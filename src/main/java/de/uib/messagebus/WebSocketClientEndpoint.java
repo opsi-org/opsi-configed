@@ -9,7 +9,6 @@ package de.uib.messagebus;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -77,8 +76,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			Map<String, Object> message = mapper.readValue(data.array(), new TypeReference<Map<String, Object>>() {
 			});
 			long expires = (long) message.get("expires");
-			Date now = new Date();
-			if (now.getTime() >= expires) {
+			if (System.currentTimeMillis() >= expires) {
 				Logging.info("Expired message received");
 				return;
 			}

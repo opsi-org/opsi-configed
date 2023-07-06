@@ -18,7 +18,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -108,13 +107,14 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private boolean waitForInitialChannelSubscritionEvent(long timeoutMs) {
-		long start = new Date().getTime();
+		long start = System.currentTimeMillis();
 		while (!initialSubscriptionReceived) {
 			if (!messagebusWebSocket.isOpen()) {
 				Logging.info("Websocket closed while waiting for inital subscription event");
 				return false;
 			}
-			if (new Date().getTime() - start >= timeoutMs) {
+
+			if (System.currentTimeMillis() - start >= timeoutMs) {
 				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
 				return false;
 			}
