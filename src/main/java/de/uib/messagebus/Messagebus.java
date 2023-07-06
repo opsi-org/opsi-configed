@@ -182,7 +182,7 @@ public class Messagebus implements MessagebusListener {
 
 	private SSLSocketFactory createDullSSLSocketFactory() {
 		// Create a new trust manager that trust all certificates
-		@SuppressWarnings("squid:S4830")
+		@SuppressWarnings("java:S4830")
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			@Override
 			public X509Certificate[] getAcceptedIssuers() {

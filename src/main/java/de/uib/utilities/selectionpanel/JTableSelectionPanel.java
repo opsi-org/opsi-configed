@@ -518,6 +518,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
+	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
 		return table.getRowSorter().getSortKeys();
 	}

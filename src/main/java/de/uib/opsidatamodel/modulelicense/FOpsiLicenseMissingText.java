@@ -13,7 +13,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 
-public class FOpsiLicenseMissingText extends FTextArea {
+public final class FOpsiLicenseMissingText extends FTextArea {
 
 	private static FOpsiLicenseMissingText instance;
 

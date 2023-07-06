@@ -38,7 +38,7 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	}
 
 	@Override
-	@SuppressWarnings("squid:S1192")
+	@SuppressWarnings("java:S1192")
 	public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(s, host, port, autoClose);
 		Logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose

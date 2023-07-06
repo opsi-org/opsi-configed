@@ -15,7 +15,7 @@ import java.util.Set;
 
 import de.uib.configed.Globals;
 
-public class LastAction {
+public final class LastAction {
 	public static final String KEY = "lastAction";
 
 	// conflicting entries from several clients

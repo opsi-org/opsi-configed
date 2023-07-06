@@ -700,6 +700,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
+	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
 		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
 		return currentSortKeys;
