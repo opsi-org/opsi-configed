@@ -141,7 +141,7 @@ public final class SSHCommandFactory {
 	 **/
 	private SSHCommandFactory(ConfigedMain main) {
 		this.configedMain = main;
-		Logging.info(this, "SSHComandFactory new instance");
+		Logging.info(this.getClass(), "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);

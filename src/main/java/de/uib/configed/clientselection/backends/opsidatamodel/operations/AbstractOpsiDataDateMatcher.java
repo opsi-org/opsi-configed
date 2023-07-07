@@ -20,7 +20,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 	private String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
-		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this.getClass(), "created:  maptype, key, data: " + map + ", " + key + ", " + data);
 
 		this.map = map;
 		this.key = key;

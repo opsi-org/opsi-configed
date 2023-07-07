@@ -37,7 +37,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private SSHConnectionExecDialog() {
 		super(Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput"));
 		if (!SSHConnect.isConnectionAllowed()) {
-			Logging.warning(this, "Connection forbidden. Close exec dialog.");
+			Logging.warning(this.getClass(), "Connection forbidden. Close exec dialog.");
 			this.cancel();
 		} else {
 			buildFrame = false;
@@ -47,7 +47,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 			this.setSize(900, 500);
 			this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			Logging.info(this, "SSHConnectionExecDialog built");
+			Logging.info(this.getClass(), "SSHConnectionExecDialog built");
 
 			this.setVisible(!SSHCommandFactory.sshAlwaysExecInBackground);
 			buildFrame = true;

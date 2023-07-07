@@ -58,7 +58,7 @@ public class SSHCompletionComboButton {
 	}
 
 	public SSHCompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
-		Logging.info(this, "instance created");
+		Logging.info(this.getClass(), "instance created");
 		this.searchSpecificFiles = searchSpecificFiles;
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);

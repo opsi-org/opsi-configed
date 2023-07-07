@@ -116,11 +116,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this, "creating an InstallationStateTableModel ");
+		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
-			Logging.info(this, " statesAndActions null ");
+			Logging.info(this.getClass(), " statesAndActions null ");
 		} else {
-			Logging.info(this, " statesAndActions " + statesAndActions.size());
+			Logging.info(this.getClass(), " statesAndActions " + statesAndActions.size());
 		}
 
 		this.main = main;
@@ -153,7 +153,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		tsProductNames.addAll(productNamesInDeliveryOrder);
 		productsV = new ArrayList<>(tsProductNames);
 
-		Logging.debug(this, "tsProductNames " + tsProductNames);
+		Logging.debug(this.getClass(), "tsProductNames " + tsProductNames);
 
 		initalizeProductStates(statesAndActions);
 	}

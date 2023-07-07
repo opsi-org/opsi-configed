@@ -185,7 +185,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 		wLeftText = jLabelTopic.getPreferredSize().width;
@@ -209,7 +209,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		initComponents();
 
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 

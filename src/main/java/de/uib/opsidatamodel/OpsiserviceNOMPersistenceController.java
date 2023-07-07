@@ -445,11 +445,11 @@ public class OpsiserviceNOMPersistenceController {
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
+		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
 		this.user = user;
 
-		Logging.debug(this, "create");
+		Logging.debug(this.getClass(), "create");
 
 		hostInfoCollections = new HostInfoCollections(this);
 

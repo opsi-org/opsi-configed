@@ -18,7 +18,7 @@ public class HardwareOperation extends AbstractSelectGroupOperation {
 	}
 
 	public HardwareOperation(List<AbstractSelectOperation> operations) {
-		Logging.info(this, "created, with operations " + operations);
+		Logging.info(this.getClass(), "created, with operations " + operations);
 		registerChildOperation(operations.get(0));
 	}
 }

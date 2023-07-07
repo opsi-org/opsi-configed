@@ -48,7 +48,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
-		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 		setGapSize(lg, rg, ug, og);
@@ -58,7 +58,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
 		super();
-		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 

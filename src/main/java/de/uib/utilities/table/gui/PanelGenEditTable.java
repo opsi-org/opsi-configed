@@ -184,7 +184,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (popupsWanted != null) {
 			for (int j = 0; j < popupsWanted.length; j++) {
 				this.internalpopups.add(popupsWanted[j]);
-				Logging.info(this, "add popup " + popupsWanted[j]);
+				Logging.info(this.getClass(), "add popup " + popupsWanted[j]);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -192,11 +192,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			this.internalpopups.add(POPUP_PDF);
 		}
 
-		Logging.info(this, "internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups " + giveMenuitemNames(internalpopups));
 
 		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
-		Logging.info(this, "internalpopups supplemented " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups supplemented " + giveMenuitemNames(internalpopups));
 
 		if (maxTableWidth > 0) {
 			this.maxTableWidth = maxTableWidth;

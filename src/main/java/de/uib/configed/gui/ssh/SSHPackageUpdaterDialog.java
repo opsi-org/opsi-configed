@@ -42,7 +42,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	public SSHPackageUpdaterDialog() {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
 		command = new CommandPackageUpdater();
-		Logging.info(this, "with command");
+		Logging.info(this.getClass(), "with command");
 		retrieveRepos();
 		init();
 		initLayout();

@@ -112,7 +112,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super(new BorderLayout());
 
 		// Set variables
-		Logging.info(this, "initializing");
+		Logging.info(this.getClass(), "initializing");
 		title = "";
 		info = "";
 

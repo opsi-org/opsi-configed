@@ -28,7 +28,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelGroupedProductSettings panelProductSettings) {
 
 		this.table = table;
-		Logging.info(this, "table null? " + (table == null));
+		Logging.info(this.getClass(), "table null? " + (table == null));
 
 		this.panelProductSettings = panelProductSettings;
 	}

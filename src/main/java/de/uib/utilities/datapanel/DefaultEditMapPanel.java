@@ -108,7 +108,8 @@ public class DefaultEditMapPanel extends JPanel {
 		this.reloadable = reloadable;
 
 		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
+		Logging.debug(this.getClass(),
+				"DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);

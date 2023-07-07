@@ -25,7 +25,7 @@ public class TableModelFilter {
 		this.inverted = inverted;
 		this.inUse = used;
 
-		Logging.info(this, "TableModelFilter constructed : " + this);
+		Logging.info(this.getClass(), "TableModelFilter constructed : " + this);
 	}
 
 	public TableModelFilter() {

@@ -44,8 +44,8 @@ public class MapSource implements TableSource {
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
 			boolean rowCounting) {
-		Logging.info(this, "constructed with cols " + columnNames);
-		Logging.info(this, "constructed with classes " + classNames);
+		Logging.info(this.getClass(), "constructed with cols " + columnNames);
+		Logging.info(this.getClass(), "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.table = table;
