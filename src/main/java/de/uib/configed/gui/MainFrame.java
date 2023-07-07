@@ -3423,7 +3423,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				@Override
 				protected void reload() {
 					super.reload();
-					configedMain.clearHwInfo();
 
 					// otherwise we get a wait cursor only in table component
 					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
