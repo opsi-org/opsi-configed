@@ -97,6 +97,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 				}
 			}
 		}
+
 		activatePacketSelectionHandling(true);
 		groupPanel.findGroup(selectedIDs);
 	}

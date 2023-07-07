@@ -604,7 +604,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private JTable strippTable(JTable jTable) {
-		boolean dontStrippIt;
+		boolean strippIt;
 		List<String[]> data = new ArrayList<>();
 		String[] headers = new String[jTable.getColumnCount()];
 		for (int i = 0; i < jTable.getColumnCount(); i++) {
@@ -612,47 +612,24 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		for (int j = 0; j < jTable.getRowCount(); j++) {
-			dontStrippIt = false;
+			strippIt = true;
 			String[] actCol = new String[jTable.getColumnCount()];
 			for (int i = 0; i < jTable.getColumnCount(); i++) {
 
-				String s;
 				Object cellValue = jTable.getValueAt(j, i);
 
-				if (cellValue == null) {
-					s = "";
-				} else {
-					s = cellValue.toString();
-				}
+				String cellValueString = cellValue == null ? "" : cellValue.toString();
 
-				actCol[i] = s;
+				actCol[i] = cellValueString;
 
-				switch (jTable.getColumnName(i)) {
-				case "Stand":
-					if (!s.equals(InstallationStatus.KEY_NOT_INSTALLED)) {
-						dontStrippIt = true;
-					}
-					break;
-				case "Report":
-					if (!s.isEmpty()) {
-						dontStrippIt = true;
-					}
-					break;
-				case "Angefordert":
-					if (!"none".equals(s)) {
-						dontStrippIt = true;
-					}
-					break;
-				default:
-					Logging.warning(this, "no case found for columnName in jTable");
-					break;
-				}
+				strippIt = shouldStrippIt(jTable.getColumnName(i), cellValueString);
 			}
-			if (dontStrippIt) {
+
+			if (!strippIt) {
 				data.add(actCol);
 			}
-
 		}
+
 		// create jTable with selected rows
 		int rows = data.size();
 		int cols = jTable.getColumnCount();
@@ -661,6 +638,34 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			strippedData[i] = data.get(i);
 		}
 		return new JTable(strippedData, headers);
+	}
+
+	private boolean shouldStrippIt(String columnName, String cellValueString) {
+
+		boolean strippIt = false;
+
+		switch (columnName) {
+		case "Stand":
+			if (!cellValueString.equals(InstallationStatus.KEY_NOT_INSTALLED)) {
+				strippIt = true;
+			}
+			break;
+		case "Report":
+			if (!cellValueString.isEmpty()) {
+				strippIt = true;
+			}
+			break;
+		case "Angefordert":
+			if (!"none".equals(cellValueString)) {
+				strippIt = true;
+			}
+			break;
+		default:
+			Logging.warning(this, "no case found for columnName in jTable");
+			break;
+		}
+
+		return strippIt;
 	}
 
 	protected void reloadAction() {

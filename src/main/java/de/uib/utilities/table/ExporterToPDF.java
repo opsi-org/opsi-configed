@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -230,8 +229,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	}
 
 	private static Paragraph addTitleLines(Map<String, String> metaData) {
-		// TODO timezone
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
 

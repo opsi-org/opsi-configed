@@ -176,6 +176,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void init() {
 		setSearchFieldsAll();
 		initComponents();
+		setupLayout();
 		setNarrow(false);
 	}
 
@@ -530,6 +531,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
 		checkmarkFullText.addActionListener(this);
 
+	}
+
+	private void setupLayout() {
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		this.setLayout(layoutTablesearchPane);
 
@@ -588,7 +592,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 		);
-
 	}
 
 	private void buildMenuSearchfield() {
@@ -833,7 +836,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				} else {
 					found = stringContainsParts(compareVal, valParts).success;
 				}
-
 			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
@@ -868,7 +870,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 								found = stringStartsWith(compareVal, val);
 
 							}
-
 						}
 					}
 
@@ -876,7 +877,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						break;
 					}
 				}
-
 			}
 
 			if (!found) {
