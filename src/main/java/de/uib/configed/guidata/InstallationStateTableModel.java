@@ -159,11 +159,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	// collects titles for the columns prepared in this class
-	public static void restartColumnDict() {
+	public static synchronized void restartColumnDict() {
 		columnDict = null;
 	}
 
-	public static String getColumnTitle(String column) {
+	public static synchronized String getColumnTitle(String column) {
 		if (columnDict == null) {
 			columnDict = new HashMap<>();
 			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));
