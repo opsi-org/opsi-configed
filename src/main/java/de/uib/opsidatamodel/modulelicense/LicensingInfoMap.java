@@ -537,7 +537,7 @@ public final class LicensingInfoMap {
 		return newest;
 	}
 
-	private LocalDate findLatestChangeDate(List<String> dates) {
+	private static LocalDate findLatestChangeDate(List<String> dates) {
 		LocalDate newest = LocalDate.now();
 
 		LocalDate now = LocalDate.now();
