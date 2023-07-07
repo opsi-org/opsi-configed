@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -257,7 +258,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 
 		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", "
-				+ dateFormatter.format(new Date()), smallBold));
+				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd. MMM yyyy"))));
 		content.add(addEmptyLines(1));
 		return content;
 	}
