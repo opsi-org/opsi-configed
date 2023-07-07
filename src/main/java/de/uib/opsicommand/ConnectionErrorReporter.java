@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
@@ -76,24 +77,17 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"),
 				Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
 
-		try {
-			if (!SwingUtilities.isEventDispatchThread()) {
-				SwingUtilities.invokeAndWait(() -> {
-					fErrorMsg.setMessage(message);
-					fErrorMsg.setAlwaysOnTop(true);
+		fErrorMsg.setMessage(message);
+		fErrorMsg.setAlwaysOnTop(true);
 
-					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
-						fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
-					}
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
+		}
 
-					fErrorMsg.setVisible(true);
-				});
-			}
-		} catch (InterruptedException e) {
-			Logging.info(this, "Thread was interrupted");
-			Thread.currentThread().interrupt();
-		} catch (InvocationTargetException e) {
-			Logging.debug(this, "exception thrown during doRun: " + e);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			launchDialogInEDT(fErrorMsg);
+		} else {
+			fErrorMsg.setVisible(true);
 		}
 
 		int choice = fErrorMsg.getResult();
@@ -121,22 +115,17 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
 				new String[] { Configed.getResourceValue(Configed.getResourceValue("FGeneralDialog.ok")) }, 420, 200);
 
-		try {
-			SwingUtilities.invokeAndWait(() -> {
-				fErrorMsg.setMessage(message);
-				fErrorMsg.setAlwaysOnTop(true);
+		fErrorMsg.setMessage(message);
+		fErrorMsg.setAlwaysOnTop(true);
 
-				if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
-					fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
-				}
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
+		}
 
-				fErrorMsg.setVisible(true);
-			});
-		} catch (InvocationTargetException e) {
-			Logging.debug(this, "exception thrown during doRun: " + e);
-		} catch (InterruptedException e) {
-			Logging.info(this, "Thread was interrupted");
-			Thread.currentThread().interrupt();
+		if (!SwingUtilities.isEventDispatchThread()) {
+			launchDialogInEDT(fErrorMsg);
+		} else {
+			fErrorMsg.setVisible(true);
 		}
 
 		int choice = fErrorMsg.getResult();
@@ -162,25 +151,32 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 				Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"));
 		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
 
+		newPasswordDialog.setTitle(
+				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword") + " (" + Globals.APPNAME + ")");
+		newPasswordDialog.init();
+		newPasswordDialog.setSize(420, 210);
+		newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		newPasswordDialog.setModal(true);
+		newPasswordDialog.setAlwaysOnTop(true);
+
+		if (!SwingUtilities.isEventDispatchThread()) {
+			launchDialogInEDT(newPasswordDialog);
+		} else {
+			newPasswordDialog.setVisible(true);
+		}
+
+		ConfigedMain.password = newPasswordDialog.getData().get("password");
+	}
+
+	private static void launchDialogInEDT(JDialog dialog) {
 		try {
-			SwingUtilities.invokeAndWait(() -> {
-				newPasswordDialog.setTitle(Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword") + " ("
-						+ Globals.APPNAME + ")");
-				newPasswordDialog.init();
-				newPasswordDialog.setSize(420, 210);
-				newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-				newPasswordDialog.setModal(true);
-				newPasswordDialog.setAlwaysOnTop(true);
-				newPasswordDialog.setVisible(true);
-			});
+			SwingUtilities.invokeAndWait(() -> dialog.setVisible(true));
 		} catch (InvocationTargetException e) {
 			Logging.debug("exception thrown during doRun: " + e);
 		} catch (InterruptedException e) {
 			Logging.info("Thread was interrupted");
 			Thread.currentThread().interrupt();
 		}
-
-		ConfigedMain.password = newPasswordDialog.getData().get("password");
 	}
 
 	/**
