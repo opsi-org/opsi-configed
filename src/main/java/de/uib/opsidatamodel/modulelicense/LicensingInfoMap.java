@@ -345,31 +345,26 @@ public final class LicensingInfoMap {
 	private List<String> produceDatesKeys() {
 		List<String> dates = new ArrayList<>();
 
-		try {
-			Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES),
-					new TypeReference<Map<String, Object>>() {
-					});
+		Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES), new TypeReference<Map<String, Object>>() {
+		});
 
-			for (Map.Entry<String, Object> entry : datesM.entrySet()) {
-				dates.add(entry.getKey());
-			}
-			Collections.sort(dates);
+		for (Map.Entry<String, Object> entry : datesM.entrySet()) {
+			dates.add(entry.getKey());
+		}
+		Collections.sort(dates);
 
-			Date latest = findLatestChangeDate(dates);
+		LocalDate latest = findLatestChangeDate(dates);
 
-			List<String> reducedDatesKeys = new ArrayList<>();
+		List<String> reducedDatesKeys = new ArrayList<>();
 
-			if (reducedView) {
-				for (String key : dates) {
-					if ((sdf.parse(key)).compareTo(latest) >= 0) {
-						reducedDatesKeys.add(key);
-					}
+		if (reducedView) {
+			for (String key : dates) {
+				if ((LocalDate.parse(key)).compareTo(latest) >= 0) {
+					reducedDatesKeys.add(key);
 				}
-
-				dates = reducedDatesKeys;
 			}
-		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " parsing exeption in produceDatesKeys ", ex);
+
+			dates = reducedDatesKeys;
 		}
 
 		return dates;
@@ -542,24 +537,19 @@ public final class LicensingInfoMap {
 		return newest;
 	}
 
-	private Date findLatestChangeDate(List<String> dates) {
-		Date newest = new Date();
-		try {
-			LocalDate now = LocalDate.now();
+	private LocalDate findLatestChangeDate(List<String> dates) {
+		LocalDate newest = LocalDate.now();
 
-			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		LocalDate now = LocalDate.now();
 
-			for (String key : dates) {
+		for (String key : dates) {
 
-				Date thisDate = sdf.parse(key);
-				if (dateNow.compareTo(thisDate) >= 0) {
-					newest = thisDate;
-				} else {
-					break;
-				}
+			LocalDate thisDate = LocalDate.parse(key);
+			if (now.compareTo(thisDate) >= 0) {
+				newest = thisDate;
+			} else {
+				break;
 			}
-		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " findLatestChangeDate", ex);
 		}
 
 		return newest;
