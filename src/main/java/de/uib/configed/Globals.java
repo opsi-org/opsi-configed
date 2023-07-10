@@ -713,65 +713,6 @@ public final class Globals {
 		return result;
 	}
 
-	public static String makeHTMLlines(String s) {
-		if (s == null || s.trim().startsWith("<")) {
-			return s;
-		}
-
-		final int MAX_LINE_LENGTH = 80;
-
-		StringBuilder b = new StringBuilder("<html>");
-		int charsInLine = 0;
-		boolean indentDone = false;
-		int lineIndent = 0;
-		for (int c = 0; c < s.length(); c++) {
-			charsInLine++;
-			switch (s.charAt(c)) {
-			case ' ':
-				b.append("&nbsp;");
-				if (!indentDone) {
-					lineIndent = lineIndent + 1;
-				}
-				break;
-			case '\t':
-				b.append("&nbsp;&nbsp;&nbsp;");
-				if (!indentDone) {
-					lineIndent = lineIndent + 3;
-				}
-				break;
-			case '\n':
-				b.append("<br/>");
-				indentDone = false;
-				charsInLine = 0;
-				lineIndent = 0;
-				break;
-			default:
-				indentDone = true;
-				b.append(s.charAt(c));
-				break;
-			}
-			if (charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length()
-					&& (s.charAt(c + 1) == ' ' || s.charAt(c + 1) == '\t' || s.charAt(c + 1) == '\n')) {
-				c++;
-				b.append("<br/>");
-				if (s.charAt(c) != '\n') {
-					while (lineIndent > 0) {
-						lineIndent--;
-						charsInLine++;
-						b.append("&nbsp;");
-					}
-				}
-				charsInLine = 0;
-				indentDone = false;
-				lineIndent = 0;
-			}
-		}
-
-		b.append("</html>");
-
-		return b.toString();
-	}
-
 	public static String usedMemory() {
 		long total = Runtime.getRuntime().totalMemory();
 		long free = Runtime.getRuntime().freeMemory();

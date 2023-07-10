@@ -323,10 +323,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					}
 
 					if (propertyName != null && descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-						tooltip = tooltip + "\n\n" + descriptionsMap.get(propertyName);
+						tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
 					}
 
-					jc.setToolTipText(Globals.makeHTMLlines(tooltip));
+					jc.setToolTipText("<html>" + tooltip + "</html>");
 
 					// check equals with default
 
