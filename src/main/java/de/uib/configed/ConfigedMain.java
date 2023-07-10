@@ -2431,6 +2431,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						for (int i = 0; i < selTreePaths.length; i++) {
 							DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i]
 									.getLastPathComponent();
+
 							activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
 							activePaths.add(selTreePaths[i]);
 							treeClients.collectParentIDsFrom(selNode);
@@ -2483,6 +2484,31 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return true;
 	}
 
+	public boolean treeClientsSelectAction(TreePath[] selTreePaths) {
+		Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
+		clearTree();
+
+		for (int i = 0; i < selTreePaths.length; i++) {
+			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i].getLastPathComponent();
+			activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
+			activePaths.add(selTreePaths[i]);
+			treeClients.collectParentIDsFrom(selNode);
+			activateClientByTree((String) selNode.getUserObject(), selTreePaths[i]);
+			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+			if (getSelectedClients().length == 1) {
+				mainFrame.getHostsStatusInfo().setGroupName(selNode.getParent().toString());
+			} else {
+				mainFrame.getHostsStatusInfo().setGroupName("");
+			}
+
+			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+					getSelectedClientsString(), clientInDepot);
+		}
+
+		return true;
+	}
+
 	private void initTree() {
 		Logging.debug(this, "initTree");
 		activeTreeNodes = new HashMap<>();
@@ -2490,27 +2516,22 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		treeClients = new ClientTree(this);
 		persistenceController.getHostInfoCollections().setTree(treeClients);
-
 	}
 
 	private void setClientByTree(String nodeObject, TreePath pathToNode) {
 		clearTree();
-
 		activateClientByTree(nodeObject, pathToNode);
-
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusInfo().setGroupName(
-
-					pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
+			mainFrame.getHostsStatusInfo()
+					.setGroupName(pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
 		} else {
 			mainFrame.getHostsStatusInfo().setGroupName("");
 		}
 
 		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
-
 	}
 
 	private void activateClientByTree(String nodeObject, TreePath pathToNode) {
