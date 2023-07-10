@@ -358,8 +358,7 @@ public class UserConfigProducing {
 
 			// there is no formally correct value)
 			// the specific values differs from prototype values and must be corrected
-			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
-					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))) {
+			if (containsValidBoolean(values, prototypeObligatory, prototypeConfig.getBooleanValue(partkey))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 				value = prototypeConfig.getBooleanValue(partkey);
@@ -660,5 +659,15 @@ public class UserConfigProducing {
 			// TODO
 			readyObjects.add(itemModifyTime);
 		}
+	}
+
+	private static boolean containsValidBoolean(List<Object> values, boolean prototypeObligatory,
+			Boolean prototypeConfigValue) {
+
+		if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)) {
+			return true;
+		}
+
+		return prototypeObligatory && !values.get(0).equals(prototypeConfigValue);
 	}
 }
