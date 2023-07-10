@@ -666,11 +666,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private Finding stringContainsParts(final String s, String[] parts) {
 		Finding result = new Finding();
 
-		if (s == null) {
-			return result;
-		}
-
-		if (parts == null) {
+		if (s == null || parts == null) {
 			return result;
 		}
 
@@ -697,13 +693,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					result.success = true;
 					result.endChar = partSearch.endChar;
 					searching = false;
+				} else if (remainder.length() > 0) {
+					remainder = remainder.substring(partSearch.endChar);
 				} else {
-					if (remainder.length() > 0) {
-						remainder = remainder.substring(partSearch.endChar);
-					} else {
-						result.success = false;
-					}
+					result.success = false;
 				}
+
 			} else {
 				result.success = false;
 				searching = false;
@@ -742,11 +737,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean stringStartsWith(final String s, final String part) {
-		if (s == null) {
-			return false;
-		}
-
-		if (part == null) {
+		if (s == null || part == null) {
 			return false;
 		}
 

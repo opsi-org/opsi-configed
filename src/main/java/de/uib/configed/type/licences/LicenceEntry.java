@@ -90,12 +90,9 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		case CONCURRENT_SERVICE:
 			return CONCURRENT;
 		default:
-			Logging.warning(this, "no case found for servicetype in translateTypeFromService");
-			break;
+			Logging.warning(this, "illlegal servicetype " + servicetype);
+			return "";
 		}
-
-		Logging.warning(this, "illlegal servicetype " + servicetype);
-		return "";
 	}
 
 	public String getId() {
@@ -111,13 +108,7 @@ public class LicenceEntry extends TreeMap<String, Object> {
 			return null;
 		}
 
-		if ("0".equals(count.trim())) {
-			return "0";
-		}
-
-		ExtendedInteger ei = new ExtendedInteger(count);
-
-		if (ei.equals(ExtendedInteger.INFINITE)) {
+		if ("0".equals(count.trim()) || new ExtendedInteger(count).equals(ExtendedInteger.INFINITE)) {
 			return "0";
 		}
 
