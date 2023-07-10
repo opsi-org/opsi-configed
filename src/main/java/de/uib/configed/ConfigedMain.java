@@ -2490,6 +2490,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		for (int i = 0; i < selTreePaths.length; i++) {
 			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i].getLastPathComponent();
+
+			if (selNode.getAllowsChildren()) {
+				continue;
+			}
+
 			activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
 			activePaths.add(selTreePaths[i]);
 			treeClients.collectParentIDsFrom(selNode);
