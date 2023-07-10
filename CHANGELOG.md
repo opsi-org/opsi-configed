@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.7] - 2023-07-11
+### Fixed
+- Issue with ReachableUpdater slowing the program down
+
 ## [4.2.22.6] - 2023-07-05
 
 ### Fixed
