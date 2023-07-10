@@ -729,10 +729,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// we start with a language
 
-		if (reachableUpdater != null) {
-			reachableUpdater.setInterval(0);
-		}
-
 		InstallationStateTableModel.restartColumnDict();
 		SWAuditEntry.setLocale();
 
@@ -1130,10 +1126,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
-
 		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
 			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
 		}
@@ -1141,10 +1133,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setEditingDepots() {
 		Logging.info(this, "setEditingTarget  DEPOTS");
-
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -1161,9 +1149,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void setEditingServer() {
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -3347,9 +3332,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			if (viewIndex == VIEW_CLIENTS) {
-				if (reachableUpdater.isInterrupted()) {
-					reachableUpdater.interrupt();
-				}
 
 				mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 			} else {
@@ -4022,7 +4004,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private class ReachableUpdater extends Thread {
-		private boolean suspended;
 		private int interval;
 
 		ReachableUpdater(Integer interval) {
@@ -4046,46 +4027,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		@Override
 		public void run() {
-			while (true) {
-				Logging.debug(this,
-						" suspended, editingTarget, viewIndex " + suspended + ", " + editingTarget + ", " + viewIndex);
+			while (!isInterrupted()) {
+				Logging.debug(this, " editingTarget, viewIndex " + editingTarget + ", " + viewIndex);
 
-				if (!suspended && viewIndex == VIEW_CLIENTS
+				if (viewIndex == VIEW_CLIENTS
 						&& Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
 
-					Map<String, Object> saveReachableInfo = reachableInfo;
-
-					reachableInfo = persistenceController.reachableInfo(null);
-					// update column
-
 					reachableInfo = persistenceController.reachableInfo(null);
 
-					AbstractTableModel model = selectionPanel.getTableModel();
-
-					int col = model
-							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-					for (int row = 0; row < model.getRowCount(); row++) {
-						String clientId = (String) model.getValueAt(row, 0);
-						Boolean newInfo = (Boolean) reachableInfo.get(clientId);
-
-						if (newInfo != null) {
-							if (saveReachableInfo.get(clientId) == null) {
-								model.setValueAt(newInfo, row, col);
-							} else if (model.getValueAt(row, col) != null
-									&& !model.getValueAt(row, col).equals(newInfo)) {
-
-								model.setValueAt(newInfo, row, col);
-
-								model.fireTableRowsUpdated(row, row);
-								// if ordered by col the order does not change although the value changes
-								// is necessary
-							} else {
-								Logging.warning(this, "Reachability of client " + clientId + " with new value "
-										+ newInfo + " could not be updated");
-							}
-						}
-					}
+					setReachableInfo(selectedClients);
 				}
 
 				try {
