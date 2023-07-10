@@ -117,10 +117,10 @@ public abstract class AbstractSWExporter {
 		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
 		if (persistenceController == null) {
 			finish(ErrorCode.INITIALIZATION_ERROR);
-		}
-
-		if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
+		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			finish(ErrorCode.CONNECTION_ERROR);
+		} else {
+			// Continue, Configed won't be closed
 		}
 
 		Logging.info(this, "starting");

@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -521,7 +522,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private List<String> readLocallySavedServerNames() {
 		List<String> result = new ArrayList<>();
-		TreeMap<java.sql.Timestamp, String> sortingmap = new TreeMap<>();
+		TreeMap<Timestamp, String> sortingmap = new TreeMap<>();
 		File savedStatesLocation = null;
 		// the following is nearly a double of initSavedStates
 
@@ -550,7 +551,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		File[] subdirs = null;
 
-		try {
+		if (savedStatesLocation != null) {
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
@@ -562,10 +563,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					elementname = elementname.replace("_", ":");
 				}
 
-				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname);
+				sortingmap.put(new Timestamp(checkFile.lastModified()), elementname);
 			}
-		} catch (SecurityException ex) {
-			Logging.warning("could not read file: " + ex);
 		}
 
 		for (Date date : sortingmap.descendingKeySet()) {
