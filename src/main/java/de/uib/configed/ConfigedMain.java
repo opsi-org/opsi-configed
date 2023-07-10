@@ -65,7 +65,6 @@ import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
-import de.uib.configed.gui.DPassword;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FDialogRemoteControl;
 import de.uib.configed.gui.FShowList;
@@ -74,6 +73,7 @@ import de.uib.configed.gui.FStartWakeOnLan;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.FWakeClients;
 import de.uib.configed.gui.HostsStatusPanel;
+import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
@@ -150,7 +150,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
 	private static MainFrame mainFrame;
-	public static DPassword dPassword;
+	private static LoginDialog loginDialog;
 
 	public static String host;
 	public static String user;
@@ -416,7 +416,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			dPassword.setVisible(false);
+			loginDialog.setVisible(false);
 		});
 
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
@@ -716,7 +716,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				checkErrorList();
 
-				dPassword.setVisible(false);
+				loginDialog.setVisible(false);
 
 				mainFrame.toFront();
 				mainFrame.disactivateLoadingPane();
@@ -1389,7 +1389,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private static void locateAndDisplay() {
-		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
+		Rectangle screenRectangle = loginDialog.getGraphicsConfiguration().getBounds();
 		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
 		Logging.info("set size and location of mainFrame");
@@ -1541,29 +1541,29 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// returns true if we have a PersistenceController and are connected
 	private void setupLoginDialog(List<String> savedServers) {
 		Logging.debug(this, " create password dialog ");
-		dPassword = new DPassword(this);
+		loginDialog = new LoginDialog(this);
 
 		// set list of saved servers
 		if (savedServers != null && !savedServers.isEmpty()) {
-			dPassword.setServers(savedServers);
+			loginDialog.setServers(savedServers);
 		}
 
 		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {
-			dPassword.setHost(host);
+			loginDialog.setHost(host);
 		}
 
 		if (user != null) {
-			dPassword.setUser(user);
+			loginDialog.setUser(user);
 		}
 
 		if (password != null) {
-			dPassword.setPassword(password);
+			loginDialog.setPassword(password);
 		}
 
 		Logging.info(this, "become interactive");
 
-		dPassword.setVisible(true);
+		loginDialog.setVisible(true);
 
 		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame
@@ -1571,7 +1571,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// Auto login
 			Logging.info(this, "start with given credentials");
 
-			dPassword.tryConnecting();
+			loginDialog.tryConnecting();
 		}
 	}
 
@@ -5133,6 +5133,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
+	public static LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
 
@@ -5165,9 +5169,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame = null;
 		}
 
-		if (dPassword != null) {
-			dPassword.setVisible(false);
-			dPassword.dispose();
+		if (loginDialog != null) {
+			loginDialog.setVisible(false);
+			loginDialog.dispose();
 		}
 
 		if (!checkSavedLicencesFrame()) {

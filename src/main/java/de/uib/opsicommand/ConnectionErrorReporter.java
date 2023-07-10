@@ -80,8 +80,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
 
-		if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
-			fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
 		}
 
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -118,8 +118,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
 
-		if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
-			fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
 		}
 
 		if (!SwingUtilities.isEventDispatchThread()) {
