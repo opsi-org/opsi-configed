@@ -62,7 +62,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			Iterator<? extends UpdateCommand> it = collection.iterator();
 			int i = 0;
 			while (it.hasNext()) {
-				Map map = null;
+				Map<?, ?> map = null;
 				Object obj = it.next();
 
 				Logging.debug(this, "addAll, element of Collection: " + obj);
