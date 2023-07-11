@@ -583,8 +583,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " handled removeProperty for key "
 				+ key + " options " + optionsMap.get(key));
-		Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultsMap.get(key)
-				+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+
+		Object defaultValue = defaultsMap.get(key);
+
+		if (defaultValue == null) {
+			Logging.info(this, "there was no default value for " + key);
+		} else {
+			Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultValue
+					+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+		}
 
 		names = mapTableModel.getKeys();
 		Logging.info(this, "removeProperty names left: " + names);

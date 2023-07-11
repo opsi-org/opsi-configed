@@ -4024,7 +4024,7 @@ public class OpsiserviceNOMPersistenceController {
 				state.put("productId", productname);
 				state.put("propertyId", propertyId);
 
-				if (newValue.equals(MapTableModel.nullLIST)) {
+				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
 					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(propertyId));
 					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
