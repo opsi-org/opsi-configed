@@ -48,7 +48,6 @@ public final class PersistenceControllerFactory {
 		}
 
 		if (connected) {
-
 			persistenceController.checkMultiFactorAuthentication();
 			Globals.isMultiFactorAuthenticationEnabled = persistenceController.usesMultiFactorAuthentication();
 			persistenceController.checkConfiguration();

@@ -3141,10 +3141,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.setSoftwareAuditNullInfo("");
 	}
 
-	public void clearSwInfo() {
-		// TODO, check what clearHwInfo does...
-	}
-
 	private boolean setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
@@ -3536,7 +3532,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// dont do anything if we did not finish another thread for this
 		if (dataReady) {
-
 			allowedClients = null;
 
 			FOpsiLicenseMissingText.reset();
@@ -3582,9 +3577,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// clearing softwareMap in OpsiDataBackend
 			OpsiDataBackend.getInstance().setReloadRequested();
 
-			clearSwInfo();
-
-			// sets dataReady
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());

@@ -2476,7 +2476,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			@Override
 			protected void reload() {
 				super.reload();
-				configedMain.clearSwInfo();
 				persistenceController.installedSoftwareInformationRequestRefresh();
 				persistenceController.softwareAuditOnClientsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);

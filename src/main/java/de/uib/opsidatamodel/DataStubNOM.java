@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -85,8 +84,6 @@ public class DataStubNOM {
 
 	// will only be refreshed when all product data are refreshed
 	private List<Map<String, Object>> productPropertyDepotStates;
-
-	private Set<String> hostsWithProductProperties;
 
 	private NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
 	private NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
@@ -490,11 +487,9 @@ public class DataStubNOM {
 	public void productPropertyStatesRequestRefresh() {
 		Logging.info(this, "productPropertyStatesRequestRefresh");
 		productPropertyStates = null;
-		hostsWithProductProperties = null;
 	}
 
 	public List<Map<String, Object>> getProductPropertyStates() {
-		retrieveProductPropertyStates();
 		return productPropertyStates;
 	}
 
@@ -510,22 +505,14 @@ public class DataStubNOM {
 
 	public void fillProductPropertyStates(Collection<String> clients) {
 		Logging.info(this, "fillProductPropertyStates for " + clients);
-		if (productPropertyStates == null) {
-			productPropertyStates = produceProductPropertyStates(clients, hostsWithProductProperties);
-		} else {
-			productPropertyStates.addAll(produceProductPropertyStates(clients, hostsWithProductProperties));
-		}
-	}
-
-	private void retrieveProductPropertyStates() {
-		produceProductPropertyStates((Collection<String>) null, hostsWithProductProperties);
+		productPropertyStates = produceProductPropertyStates(clients);
 	}
 
 	private void retrieveProductPropertyDepotStates(Set<String> depots) {
 		Logging.info(this, "retrieveProductPropertyDepotStates for depots " + depots + " depotStates == null "
 				+ (productPropertyDepotStates == null));
 		if (productPropertyDepotStates == null) {
-			productPropertyDepotStates = produceProductPropertyStates(depots, null);
+			productPropertyDepotStates = produceProductPropertyStates(depots);
 		}
 
 		Logging.info(this, "retrieveProductPropertyDepotStates ready  size " + productPropertyDepotStates.size());
@@ -533,20 +520,13 @@ public class DataStubNOM {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
-			Set<String> hosts) {
-		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
+	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients) {
+		Logging.info(this, "produceProductPropertyStates new hosts " + clients/* + " old hosts " + hosts */);
 		List<String> newClients = null;
 		if (clients == null) {
 			newClients = new ArrayList<>();
 		} else {
 			newClients = new ArrayList<>(clients);
-		}
-
-		if (hosts == null) {
-			hosts = new HashSet<>();
-		} else {
-			newClients.removeAll(hosts);
 		}
 
 		List<Map<String, Object>> result = null;
@@ -555,8 +535,6 @@ public class DataStubNOM {
 			// look if propstates is initialized
 			result = new ArrayList<>();
 		} else {
-			hosts.addAll(newClients);
-
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 			callFilter.put("objectId", newClients);
@@ -564,8 +542,6 @@ public class DataStubNOM {
 			result = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productPropertyState_getObjects");
 		}
-
-		Logging.info(this, "produceProductPropertyStates for hosts " + hosts);
 
 		return result;
 	}
@@ -764,89 +740,47 @@ public class DataStubNOM {
 		softwareIdent2clients = null;
 	}
 
-	public void fillClient2Software(String client) {
-		Logging.info(this, "fillClient2Software " + client);
-		if (client2software == null) {
-			retrieveSoftwareAuditOnClients(client);
-
-			return;
-		}
-
-		if (client2software.get(client) == null) {
-			retrieveSoftwareAuditOnClients(client);
-		}
-	}
-
-	public void fillClient2Software(List<String> clients) {
-		if (clients == null) {
-			Logging.info(this, "fillClient2Software for clients null");
-		} else {
-			Logging.info(this, "fillClient2Software for clients " + clients.size());
-		}
-		retrieveSoftwareAuditOnClients(clients);
-	}
-
 	public Map<String, List<SWAuditClientEntry>> getClient2Software() {
 		Logging.info(this, "getClient2Software");
 		retrieveInstalledSoftwareInformation();
 		return client2software;
 	}
 
-	public Map<String, Set<String>> getSoftwareIdent2clients() {
+	public Map<String, Set<String>> getSoftwareIdent2clients(List<String> clients) {
+		if (softwareIdent2clients == null) {
+			retrieveSoftwareIdentOnClients(clients);
+		}
+
 		return softwareIdent2clients;
 	}
 
-	private void retrieveSoftwareAuditOnClients(String client) {
-		List<String> clients = new ArrayList<>();
-		clients.add(client);
-		retrieveSoftwareAuditOnClients(clients);
-	}
-
-	private void retrieveSoftwareAuditOnClients(final List<String> clients) {
+	private void retrieveSoftwareIdentOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
-
-		retrieveInstalledSoftwareInformation();
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count: " + clients.size());
-
-		List<String> newClients = new ArrayList<>(clients);
-
-		if (client2software != null) {
-			Logging.info(this,
-					"retrieveSoftwareAuditOnClients client2Software.keySet size: " + client2software.keySet().size());
-
-			newClients.removeAll(client2software.keySet());
-		}
-
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
-				+ "  new clients count: " + newClients.size());
+				+ "  new clients count: " + clients.size());
 
 		final int STEP_SIZE = 100;
 
-		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
-			while (!newClients.isEmpty()) {
+		if (softwareIdent2clients == null || !clients.isEmpty()) {
+			softwareIdent2clients = new HashMap<>();
+
+			while (!clients.isEmpty()) {
 				List<String> clientListForCall = new ArrayList<>();
 
-				for (int i = 0; i < STEP_SIZE && i < newClients.size(); i++) {
-					clientListForCall.add(newClients.get(i));
+				for (int i = 0; i < STEP_SIZE && i < clients.size(); i++) {
+					clientListForCall.add(clients.get(i));
 				}
 
-				newClients.removeAll(clientListForCall);
-
-				if (client2software == null) {
-					client2software = new HashMap<>();
-				}
-
-				if (softwareIdent2clients == null) {
-					softwareIdent2clients = new HashMap<>();
-				}
+				clients.removeAll(clientListForCall);
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 
 				String[] callAttributes = new String[] {};
 				Map<String, Object> callFilter = new HashMap<>();
 				callFilter.put("state", 1);
-				if (newClients != null) {
+				if (clients != null) {
 					callFilter.put("clientId", clientListForCall);
 				}
 
@@ -856,33 +790,14 @@ public class DataStubNOM {
 				Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size "
 						+ softwareAuditOnClients.size());
 
-				for (String clientId : clientListForCall) {
-					client2software.put(clientId, new LinkedList<>());
-				}
-
 				for (Map<String, Object> item : softwareAuditOnClients) {
-
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-
-					String clientId = clientEntry.getClientId();
-					String swIdent = clientEntry.getSWident();
-
-					Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(swIdent,
+					Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWident(),
 							s -> new HashSet<>());
-
-					clientsWithThisSW.add(clientId);
-
-					// null not allowed in mysql
-					if (clientId != null) {
-						List<SWAuditClientEntry> entries = client2software.get(clientId);
-
-						entries.add(clientEntry);
-					}
-
+					clientsWithThisSW.add(clientEntry.getClientId());
 				}
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
-
 			}
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
