@@ -282,6 +282,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			configedMain.clearSelectionOnPanel();
+		} else if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+			if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+				configedMain.treeClientsSelectAction(getSelectionPaths(), false);
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
@@ -294,7 +298,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void keyReleased(KeyEvent e) {
 		if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)) {
-			configedMain.treeClientsSelectAction(getSelectionPaths());
+			configedMain.treeClientsSelectAction(getSelectionPaths(), true);
 		}
 	}
 

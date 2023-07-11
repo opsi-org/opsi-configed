@@ -2484,7 +2484,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return true;
 	}
 
-	public boolean treeClientsSelectAction(TreePath[] selTreePaths) {
+	public boolean treeClientsSelectAction(TreePath[] selTreePaths, boolean rebuildClientListTable) {
 		Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
 		clearTree();
 
@@ -2499,17 +2499,20 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			activePaths.add(selTreePaths[i]);
 			treeClients.collectParentIDsFrom(selNode);
 			activateClientByTree((String) selNode.getUserObject(), selTreePaths[i]);
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+			if (rebuildClientListTable) {
+				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+			}
 
 			if (getSelectedClients().length == 1) {
 				mainFrame.getHostsStatusInfo().setGroupName(selNode.getParent().toString());
 			} else {
 				mainFrame.getHostsStatusInfo().setGroupName("");
 			}
-
-			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
-					getSelectedClientsString(), clientInDepot);
 		}
+
+		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+				getSelectedClientsString(), clientInDepot);
 
 		return true;
 	}
