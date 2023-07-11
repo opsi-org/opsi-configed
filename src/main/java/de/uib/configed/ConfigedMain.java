@@ -2422,8 +2422,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
 				} else {
-					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-							|| (mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
 
 						TreePath[] selTreePaths = treeClients.getSelectionPaths();
@@ -2436,12 +2435,25 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							activePaths.add(selTreePaths[i]);
 							treeClients.collectParentIDsFrom(selNode);
 						}
+
+						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+					} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+						DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+						if (treeClients.isPathSelected(mousePath)) {
+							activeTreeNodes.remove(selNode.getUserObject());
+							activePaths.add(mousePath);
+						} else {
+							activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
+							activePaths.add(mousePath);
+							treeClients.collectParentIDsFrom(selNode);
+							activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+						}
 					} else {
 						clearTree();
+						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 					}
 				}
 
-				activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 				Logging.info(this,
