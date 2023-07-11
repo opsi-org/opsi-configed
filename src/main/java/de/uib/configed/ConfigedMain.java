@@ -144,6 +144,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
+	private static final int ICON_COLUMN_MAX_WIDTH = 100;
+
 	// Are themes enabled?
 	public static final boolean THEMES = false;
 
@@ -445,8 +447,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		// \u0009 is tab
-		Logging.debug(this, "initialTreeActivation\u0009");
+		Logging.debug(this, "initialTreeActivation");
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
@@ -1414,13 +1415,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// general
 
-		licencesFrame = new LicencesFrame(this);
+		initTableData();
 
-		Globals.frame1 = licencesFrame;
+		startLicencesFrame();
 
-		licencesFrame.setGlobals(Globals.getMap());
-		licencesFrame.setTitle(
-				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
+		long endmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
+	}
+
+	private void initTableData() {
 
 		licencesStatus = getStartTabState();
 
@@ -1485,6 +1488,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 				() -> (Map) persistenceController.getSoftwareLicences()));
+	}
+
+	private void startLicencesFrame() {
+		licencesFrame = new LicencesFrame(this);
+
+		Globals.frame1 = licencesFrame;
+
+		licencesFrame.setGlobals(Globals.getMap());
+		licencesFrame.setTitle(
+				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
@@ -1533,9 +1546,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "set size and location of licencesFrame");
 
 		licencesFrame.setSize(licencesInitDimension);
-
-		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -2018,8 +2028,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
-		final int ICON_COLUMN_MAX_WIDTH = 100;
-
 		if (Boolean.TRUE.equals(
 				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
@@ -2049,17 +2057,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "showAndSave found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				// column.setCellRenderer(new
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-
-			}
+			initSelectionPanelColumn(col);
 		}
 
 		if (Boolean.TRUE.equals(
@@ -2077,15 +2075,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-			}
-
+			initSelectionPanelColumn(col);
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields()
@@ -2104,17 +2094,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-			}
-
+			initSelectionPanelColumn(col);
 		}
+	}
 
+	private void initSelectionPanelColumn(int col) {
+		if (col > -1) {
+			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
+			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
+
+			column.setCellRenderer(new BooleanIconTableCellRenderer(
+					Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
+		}
 	}
 
 	private void setRebuiltClientListTableModel() {
