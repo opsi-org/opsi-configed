@@ -2496,7 +2496,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return true;
 	}
 
-	public boolean treeClientsSelectAction(TreePath[] selTreePaths, boolean rebuildClientListTable) {
+	public boolean treeClientsSelectAction(TreePath[] selTreePaths) {
 		Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
 		clearTree();
 
@@ -2510,17 +2510,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
 			activePaths.add(selTreePaths[i]);
 			treeClients.collectParentIDsFrom(selNode);
-			activateClientByTree((String) selNode.getUserObject(), selTreePaths[i]);
+		}
 
-			if (rebuildClientListTable) {
-				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-			}
+		DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
+				.getLastPathComponent();
 
-			if (getSelectedClients().length == 1) {
-				mainFrame.getHostsStatusInfo().setGroupName(selNode.getParent().toString());
-			} else {
-				mainFrame.getHostsStatusInfo().setGroupName("");
-			}
+		activateClientByTree((String) selNode.getUserObject(), selTreePaths[selTreePaths.length - 1]);
+
+		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+		if (getSelectedClients().length == 1) {
+			mainFrame.getHostsStatusInfo().setGroupName(selNode.getParent().toString());
+		} else {
+			mainFrame.getHostsStatusInfo().setGroupName("");
 		}
 
 		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
