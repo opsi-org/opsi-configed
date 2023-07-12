@@ -8,8 +8,10 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -30,18 +32,18 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	private String action = " list --repos";
 	private String repo = "";
-	private List<String> actionlist = new ArrayList<>();
+	private Set<String> actionSet = new HashSet<>();
 	private Map<String, String> actionhash = new HashMap<>();
 	private Map<String, String> repohash = new HashMap<>();
 	private String verbosity = " -v ";
 
 	public CommandPackageUpdater() {
 		command = baseName;
-		actionlist.add("list");
+		actionSet.add("list");
 		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
-		actionlist.add("install");
+		actionSet.add("install");
 		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
-		actionlist.add("update");
+		actionSet.add("update");
 		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
 	}
 
@@ -193,7 +195,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public void setAction(String a) {
-		if (actionlist.contains(a)) {
+		if (actionSet.contains(a)) {
 			action = a;
 		} else {
 			action = "";

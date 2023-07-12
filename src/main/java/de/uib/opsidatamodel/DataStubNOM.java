@@ -41,9 +41,8 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
-import de.uib.opsicommand.AbstractExecutioner;
-import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -153,7 +152,7 @@ public class DataStubNOM {
 	public boolean canCallMySQL() {
 
 		// we cannot call MySQL if version before 4.3
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			return false;
 		}
 
@@ -230,7 +229,6 @@ public class DataStubNOM {
 
 			persistenceController.notifyDataRefreshedObservers("product");
 		}
-
 	}
 
 	public void productsAllDepotsRequestRefresh() {
@@ -333,30 +331,13 @@ public class DataStubNOM {
 
 				String productName = null;
 
-				try {
-					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
-							.getProductName();
+				productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getProductName();
 
-					productRow.add(productName);
-					p.appendValues(productRow);
+				productRow.add(productName);
+				p.appendValues(productRow);
 
-					if (depotsWithThisVersion.size() == 1) {
-						productRows.add(productRow);
-					}
-				} catch (Exception ex) {
-					Logging.warning(this, "retrieveProductsAllDepots exception " + ex);
-					Logging.warning(this, "retrieveProductsAllDepots exception for package  " + p);
-					Logging.warning(this, "retrieveProductsAllDepots exception productId  " + p.getProductId());
-
-					Logging.warning(this, "retrieveProductsAllDepots exception for product2versionInfo2infos: of size "
-							+ product2versionInfo2infos.size());
-					Logging.warning(this,
-							"retrieveProductsAllDepots exception for product2versionInfo2infos.get(p.getProductId()) "
-									+ product2versionInfo2infos.get(p.getProductId()));
-					if (product2versionInfo2infos.get(p.getProductId()) == null) {
-						Logging.warning(this, "retrieveProductsAllDepots : product " + p.getProductId()
-								+ " seems not to exist in product table");
-					}
+				if (depotsWithThisVersion.size() == 1) {
+					productRows.add(productRow);
 				}
 			}
 
@@ -578,7 +559,7 @@ public class DataStubNOM {
 
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("objectId", AbstractExecutioner.jsonArray(newClients));
+			callFilter.put("objectId", newClients);
 
 			result = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productPropertyState_getObjects");
@@ -866,7 +847,7 @@ public class DataStubNOM {
 				Map<String, Object> callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null) {
-					callFilter.put("clientId", AbstractExecutioner.jsonArray(clientListForCall));
+					callFilter.put("clientId", clientListForCall);
 				}
 
 				List<Map<String, Object>> softwareAuditOnClients = persistenceController
@@ -1382,7 +1363,7 @@ public class DataStubNOM {
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);
-				if (valInRow == null || valInRow.equals("null")) {
+				if (valInRow == null || "null".equals(valInRow)) {
 					valInRow = "";
 				}
 
@@ -1431,11 +1412,11 @@ public class DataStubNOM {
 			return null;
 		}
 
-		if (time0 == null || time0.equals("")) {
+		if (time0 == null || "".equals(time0)) {
 			return time1;
 		}
 
-		if (time1 == null || time1.equals("")) {
+		if (time1 == null || "".equals(time1)) {
 			return time0;
 		}
 

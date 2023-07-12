@@ -91,7 +91,7 @@ public class UserConfig {
 	private Map<String, List<Object>> possibleValuesMap;
 
 	public UserConfig(String userName) {
-		Logging.info(this, "create for " + userName);
+		Logging.info(this.getClass(), "create for " + userName);
 		this.username = userName;
 		booleanMap = new LinkedHashMap<>();
 		valuesMap = new LinkedHashMap<>();

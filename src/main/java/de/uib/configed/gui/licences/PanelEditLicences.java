@@ -122,7 +122,5 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
 	}
-
 }

@@ -20,7 +20,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 	private String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
-		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this.getClass(), "created:  maptype, key, data: " + map + ", " + key + ", " + data);
 
 		this.map = map;
 		this.key = key;
@@ -45,15 +45,6 @@ public abstract class AbstractOpsiDataDateMatcher {
 
 	private boolean checkData(final String realdata) {
 
-		Date date = null;
-
-		try {
-			date = Date.valueOf(data);
-		} catch (Exception ex) {
-			Logging.debug(this, "OpsiDataDateMatcher data is not a date! " + date + " " + ex);
-			return false;
-		}
-
 		if (realdata == null) {
 			Logging.debug(this, "OpsiDataDateMatcher no data found");
 			return false;
@@ -75,17 +66,11 @@ public abstract class AbstractOpsiDataDateMatcher {
 			realD = realD.substring(0, posBlank);
 		}
 
+		Date date = Date.valueOf(data);
+
 		// check if we have to interpret variables
-		Date realdate = null;
-
-		try {
-			realdate = Date.valueOf(realD);
-			return compare(date, realdate);
-		} catch (Exception ex) {
-			Logging.debug(this, "data is not a date! " + realdata + " " + ex);
-			return false;
-		}
-
+		Date realdate = Date.valueOf(realD);
+		return compare(date, realdate);
 	}
 
 	protected abstract boolean compare(Date date, Date realdate);

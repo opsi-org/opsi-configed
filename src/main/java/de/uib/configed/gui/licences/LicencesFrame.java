@@ -45,21 +45,10 @@ public class LicencesFrame extends SecondaryFrame {
 		setExtendedState(Frame.NORMAL);
 	}
 
-	public TabbedPaneX getMainPanel() {
-		return panel;
-	}
-
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
 	public void addTab(LicencesTabStatus s, String title, Component c) {
 		panel.addTab(s, title, c);
-	}
-
-	/**
-	 * removes a tab
-	 */
-	public void removeTab(LicencesTabStatus s) {
-		panel.removeTab(s);
 	}
 }

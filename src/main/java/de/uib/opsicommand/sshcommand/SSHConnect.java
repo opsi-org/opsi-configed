@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import de.uib.configed.Configed;
@@ -228,7 +229,7 @@ public class SSHConnect {
 			successfulConnectObservedCount++;
 
 			return true;
-		} catch (com.jcraft.jsch.JSchException authfail) {
+		} catch (JSchException authfail) {
 			retriedTimesAuth = retry(retriedTimesAuth, authfail);
 			if (retriedTimesAuth >= 2) {
 				Logging.warning(this, "connect Authentication failed. " + authfail);
@@ -243,7 +244,7 @@ public class SSHConnect {
 			} else {
 				connect(command);
 			}
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 			retriedTimesJschex = retry(retriedTimesJschex, e);
 			if (retriedTimesJschex >= 3) {
 				Logging.warning(this, "connect error: " + e);

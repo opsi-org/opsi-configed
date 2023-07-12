@@ -117,14 +117,4 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	public void updateDepot(String depotId) {
 		depotLabel.setText(Configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
 	}
-
-	public DependenciesTreePanel getDependenciesTree() {
-
-		return dependenciesTreePanel;
-	}
-
-	public JTable getDependenciesTable() {
-
-		return dependenciesTable;
-	}
 }

@@ -42,13 +42,6 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
 
-	public SSHOpsiSetRightsParameterDialog() {
-		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
-		commandopsisetrights = new CommandOpsiSetRights();
-		init();
-		initLayout();
-	}
-
 	public SSHOpsiSetRightsParameterDialog(CommandOpsiSetRights command) {
 		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
 		commandopsisetrights = command;
@@ -108,25 +101,20 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		try {
-			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
-			Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
-			// we are in the event queure
-			new Thread() {
-				@Override
-				public void run() {
-					new SSHConnectExec(commandopsisetrights, jButtonDoAction);
-				}
-			}.start();
 
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
-		}
-
+		commandopsisetrights.setDir(completion.comboBoxGetStringItem());
+		Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
+		// we are in the event queure
+		new Thread() {
+			@Override
+			public void run() {
+				new SSHConnectExec(commandopsisetrights, jButtonDoAction);
+			}
+		}.start();
 	}
 
 	// /* This method gets called when button 2 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

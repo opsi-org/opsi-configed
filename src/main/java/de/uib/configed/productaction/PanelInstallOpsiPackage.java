@@ -51,7 +51,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private JTextField fieldOpsiPackageName;
 
 	private String opsiWorkBenchDirectoryS;
-	private File opsiWorkBenchDirectory;
 	private String opsiPackageServerPathS;
 
 	private PanelMountShare panelMountShare;
@@ -120,13 +119,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 					rootFrame.activateLoadingCursor();
 
-					try {
-						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
-
-						// we start at a local directory
-					} catch (Exception ex) {
-						Logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
-					}
+					File opsiWorkBenchDirectory = new File(fieldServerPath.getText());
 
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);

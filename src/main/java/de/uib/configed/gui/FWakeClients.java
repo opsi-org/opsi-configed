@@ -19,7 +19,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -95,7 +95,7 @@ public class FWakeClients extends FShowList {
 				}
 			}
 
-			if (JSONthroughHTTPS.isOpsi43()) {
+			if (ServerFacade.isOpsi43()) {
 				persistenceController.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
 			} else {
 				persistenceController.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);

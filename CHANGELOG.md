@@ -1,5 +1,30 @@
 # Changelog
 
+## [version] - date
+### Fixed
+- Problems with editing and deleting product properties
+- opsi-configed did not start when invoking persistenceController.addGroup because it was null
+
+
+## [4.2.22.7] - 2023-07-11
+### Fixed
+- Issue with ReachableUpdater slowing the program down
+
+## [4.2.22.6] - 2023-07-05
+
+### Fixed
+- Creating and editing groups works again
+- Fix wrong message after successful driver upload
+- Fix session information
+
+## Added
+- Use gzip/lz4 and messagepack also for POST-requests to the server (small performance advantage)
+
+## [4.2.22.5] - 2023-06-28
+
+### Fixed
+- Creating und deleting licensepool - product relations works again
+
 ## [4.2.22.4] - 2023-06-23
 
 ### Fixed

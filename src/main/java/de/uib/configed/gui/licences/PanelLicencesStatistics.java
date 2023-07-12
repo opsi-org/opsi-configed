@@ -63,5 +63,4 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 		);
 	}
-
 }

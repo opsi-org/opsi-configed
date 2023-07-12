@@ -28,7 +28,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 	public SimpleTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
 
-		Logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
+		Logging.debug(this.getClass(), "SimpleTreeModel created for " + dottedKeys);
 		super.setAsksAllowsChildren(true);
 
 		rootNode = (SimpleIconNode) super.getRoot();

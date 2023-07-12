@@ -7,13 +7,14 @@
 package de.uib.utilities.table;
 
 import java.awt.Component;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererDate extends ColorTableCellRenderer {
@@ -37,12 +38,8 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 
 		if (value instanceof String && !((String) value).isEmpty()) {
 
-			try {
-				java.util.Date d = java.sql.Timestamp.valueOf((String) value);
-				selectedString = dateFormat.format(d);
-			} catch (Exception ex) {
-				Logging.debug(this, " time format exception: " + ex);
-			}
+			Date d = Timestamp.valueOf((String) value);
+			selectedString = dateFormat.format(d);
 
 		} else {
 			selectedString = "";

@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,7 +44,6 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.tree.ClientTree;
-import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
@@ -72,9 +69,9 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -91,7 +88,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
@@ -105,7 +101,7 @@ import de.uib.utilities.table.ListCellOptions;
  * responses. There are several classes which implement the Executioner methods
  * in different ways dependent on the used means and protocols
  */
-public class OpsiserviceNOMPersistenceController implements DataRefreshedObservable {
+public class OpsiserviceNOMPersistenceController {
 	private static final String EMPTYFIELD = "-";
 	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
@@ -119,6 +115,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
 	}
+
+	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
+	public static final String DESCRIPTION_KEY = "description";
+	public static final String EDITABLE_KEY = "editable";
 
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
@@ -223,7 +223,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
 		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "opsi module status display");
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
-		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
 		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
@@ -381,7 +381,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 	private Map<String, String> logfiles;
 
-	private List<JSONObject> updateProductOnClientItems;
+	private List<Map<String, Object>> updateProductOnClientItems;
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
@@ -425,11 +425,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private Map<String, Boolean> hostDisplayFields;
 
 	private List<Map<String, Object>> configStateCollection;
-	private List<JSONObject> deleteConfigStateItems;
+	private List<Map<String, Object>> deleteConfigStateItems;
 	private List<Map<String, Object>> configCollection;
 
-	private List<JSONObject> productPropertyStateUpdateCollection;
-	private List<JSONObject> productPropertyStateDeleteCollection;
+	private List<Map<String, Object>> productPropertyStateUpdateCollection;
+	private List<Map<String, Object>> productPropertyStateDeleteCollection;
 
 	private Map<String, Map<String, Object>> hostUpdates;
 
@@ -445,15 +445,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
+		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
 		this.user = user;
 
-		Logging.debug(this, "create");
+		Logging.debug(this.getClass(), "create");
 
 		hostInfoCollections = new HostInfoCollections(this);
 
-		exec = new JSONthroughHTTPS(server, user, password);
+		exec = new ServerFacade(server, user, password);
 
 		hwAuditConf = new HashMap<>();
 
@@ -477,9 +477,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		item.put("editable", editable);
 		item.put("multiValue", multiValue);
 
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+		item.put("defaultValues", defaultValues);
 
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("possibleValues", possibleValues);
 
 		return item;
 	}
@@ -500,7 +500,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	// implementation of observer patterns
 	// offer observing of data refreshed announcements
 
-	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers == null) {
 			dataRefreshedObservers = new ArrayList<>();
@@ -508,15 +507,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		dataRefreshedObservers.add(ob);
 	}
 
-	// TODO remove this because never used?
-	@Override
-	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers != null) {
-			dataRefreshedObservers.remove(ob);
-		}
-	}
-
-	@Override
 	public void notifyDataRefreshedObservers(Object mesg) {
 		if (dataRefreshedObservers == null) {
 			return;
@@ -698,10 +688,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, keyUserRegisterValue,
 					"without given values the primary value setting is false");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		}
@@ -718,8 +707,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			if (!readyConfigObjects.isEmpty()) {
 
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(readyConfigObjects) });
+				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyConfigObjects });
 
 				exec.doCall(omc);
 			}
@@ -746,7 +734,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		String password = (String) getHostInfoCollections().getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
 
-		AbstractExecutioner exec1 = new JSONthroughHTTPS(depot, depot, password);
+		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password);
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);
@@ -793,7 +781,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = JSONthroughHTTPS.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
+		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
 	}
 
 	private String getOTPSecret(String userId) {
@@ -1051,7 +1039,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			args = new String[] {};
 		}
 
-		return exec.getBooleanResult(new OpsiMethodCall(method, args));
+		return exec.doCall(new OpsiMethodCall(method, args));
 	}
 
 	public List<Map<String, Object>> hostRead() {
@@ -1087,18 +1075,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 
 			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
-
 			if (
 			// has state unknown, probably because of a failed installation)
 			(includeFailedInstallations
 					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState)) ||
 			// has wrong product version
-					((InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& (!POJOReMapper.equalsNull(clientProductVersion))
-							&& !productVersion.equals(clientProductVersion))
-							|| (!POJOReMapper.equalsNull(clientPackageVersion)
-									&& !packageVersion.equals(clientPackageVersion)))) {
+					(InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
+							&& ((!POJOReMapper.equalsNull(clientProductVersion)
+									&& !productVersion.equals(clientProductVersion))
+									|| (!POJOReMapper.equalsNull(clientPackageVersion)
+											&& !packageVersion.equals(clientPackageVersion))))) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
+
 				result.add(client);
 			}
 		}
@@ -1153,30 +1141,30 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	private static List<Object> buildWANConfigOptions(List<Object> readyObjects) {
+	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
 				"meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
 				true, "meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION, false,
 				"meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createJSONBoolConfig(CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER,
 				false, "meta configuration for default not wan behaviour");
 
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		return readyObjects;
 	}
@@ -1301,7 +1289,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return allWanConfigOptions;
 	}
 
-	private List<Object> addWANConfigStates(String clientId, boolean wan, List<Object> jsonObjects) {
+	private List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
+			List<Map<String, Object>> jsonObjects) {
 		getWANConfigOptions();
 
 		Logging.debug(this,
@@ -1339,7 +1328,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			Logging.info(this, "addWANConfigState values " + config.getValue());
 
-			item.put(VALUES_ID, AbstractExecutioner.jsonArray(config.getValue()));
+			item.put(VALUES_ID, config.getValue());
 
 			item.put(OBJECT_ID, clientId);
 
@@ -1355,7 +1344,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			getConfigs().get(clientId).put(config.getKey(), config.getValue());
 
 			// prepare for JSON RPC
-			jsonObjects.add(AbstractExecutioner.jsonMap(item));
+			jsonObjects.add(item);
 		}
 
 		return jsonObjects;
@@ -1365,24 +1354,23 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		boolean result = false;
 		Logging.info(this, "setWANConfigs " + clientId + " . " + wan);
 
-		List<Object> jsonObjects = addWANConfigStates(clientId, wan, null);
+		List<Map<String, Object>> jsonObjects = addWANConfigStates(clientId, wan, null);
 
-		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
 		result = exec.doCall(omc);
 
 		return result;
 	}
 
-	private static Object createUefiJSONEntry(String clientId, String val) {
+	private static Map<String, Object> createUefiJSONEntry(String clientId, String val) {
 		Map<String, Object> item = createNOMitem("ConfigState");
 		List<String> values = new ArrayList<>();
 		values.add(val);
 		item.put("objectId", clientId);
-		item.put("values", AbstractExecutioner.jsonArray(values));
+		item.put("values", values);
 		item.put("configId", CONFIG_DHCPD_FILENAME);
 
-		return AbstractExecutioner.jsonMap(item);
+		return item;
 	}
 
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
@@ -1395,20 +1383,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (uefiBoot) {
 			values.add(EFI_DHCPD_FILENAME);
 
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			jsonObjects.add(createUefiJSONEntry(clientId, EFI_DHCPD_FILENAME));
 
-			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		} else {
 			values.add(EFI_DHCPD_NOT);
 
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			jsonObjects.add(createUefiJSONEntry(clientId, EFI_DHCPD_NOT));
 
-			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
@@ -1427,10 +1413,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public boolean createClients(Iterable<List<Object>> clients) {
-		List<Object> clientsJsonObject = new ArrayList<>();
-		List<Object> productsNetbootJsonObject = new ArrayList<>();
-		List<Object> groupsJsonObject = new ArrayList<>();
-		List<Object> configStatesJsonObject = new ArrayList<>();
+		List<Map<String, Object>> clientsJsonObject = new ArrayList<>();
+		List<Map<String, Object>> productsNetbootJsonObject = new ArrayList<>();
+		List<Map<String, Object>> groupsJsonObject = new ArrayList<>();
+		List<Map<String, Object>> configStatesJsonObject = new ArrayList<>();
 
 		for (List<Object> client : clients) {
 			String hostname = (String) client.get(0);
@@ -1459,16 +1445,16 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 
-			clientsJsonObject.add(AbstractExecutioner.jsonMap(hostItem));
+			clientsJsonObject.add(hostItem);
 
 			Map<String, Object> itemDepot = createNOMitem(CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(OBJECT_ID, newClientId);
-			itemDepot.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(VALUES_ID, valuesDepot);
 			itemDepot.put(CONFIG_ID, CONFIG_DEPOT_ID);
 
-			configStatesJsonObject.add(AbstractExecutioner.jsonMap(itemDepot));
+			configStatesJsonObject.add(itemDepot);
 
 			if (uefiBoot) {
 				configStatesJsonObject.add(createUefiJSONEntry(newClientId, EFI_DHCPD_FILENAME));
@@ -1484,12 +1470,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 				Map<String, Object> itemShI = createNOMitem(CONFIG_STATE_TYPE);
 				itemShI.put(OBJECT_ID, newClientId);
-				itemShI.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(VALUES_ID, valuesShI);
 				itemShI.put(CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
-				configStatesJsonObject.add(AbstractExecutioner.jsonMap(itemShI));
+				configStatesJsonObject.add(itemShI);
 			}
 
 			if (group != null && !group.isEmpty()) {
@@ -1498,7 +1484,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
 				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-				groupsJsonObject.add(AbstractExecutioner.jsonMap(itemGroup));
+				groupsJsonObject.add(itemGroup);
 			}
 
 			if (productNetboot != null && !productNetboot.isEmpty()) {
@@ -1508,7 +1494,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 				itemProducts.put("clientId", newClientId);
 				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
-				productsNetbootJsonObject.add(AbstractExecutioner.jsonMap(itemProducts));
+				productsNetbootJsonObject.add(itemProducts);
 			}
 
 			HostInfo hostInfo = new HostInfo(hostItem);
@@ -1523,26 +1509,22 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects",
-				new Object[] { AbstractExecutioner.jsonArray(clientsJsonObject) });
+		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
 			if (!configStatesJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("configState_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(configStatesJsonObject) });
+				omc = new OpsiMethodCall("configState_updateObjects", new Object[] { configStatesJsonObject });
 				result = exec.doCall(omc);
 			}
 
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("objectToGroup_createObjects",
-						new Object[] { AbstractExecutioner.jsonArray(groupsJsonObject) });
+				omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { groupsJsonObject });
 				result = exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("productOnClient_createObjects",
-						new Object[] { AbstractExecutioner.jsonArray(productsNetbootJsonObject) });
+				omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { productsNetbootJsonObject });
 				result = exec.doCall(omc);
 			}
 		}
@@ -1592,23 +1574,22 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects",
-				new Object[] { AbstractExecutioner.jsonMap(hostItem) });
+		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { hostItem });
 		result = exec.doCall(omc);
 
 		HostInfo hostInfo = new HostInfo(hostItem);
 
 		if (result) {
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 
 			Map<String, Object> itemDepot = createNOMitem(CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(OBJECT_ID, newClientId);
-			itemDepot.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(VALUES_ID, valuesDepot);
 			itemDepot.put(CONFIG_ID, CONFIG_DEPOT_ID);
 
-			jsonObjects.add(AbstractExecutioner.jsonMap(itemDepot));
+			jsonObjects.add(itemDepot);
 
 			if (uefiBoot) {
 				jsonObjects.add(createUefiJSONEntry(newClientId, EFI_DHCPD_FILENAME));
@@ -1624,58 +1605,54 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 				Map<String, Object> itemShI = createNOMitem(CONFIG_STATE_TYPE);
 				itemShI.put(OBJECT_ID, newClientId);
-				itemShI.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(VALUES_ID, valuesShI);
 				itemShI.put(CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
-				jsonObjects.add(AbstractExecutioner.jsonMap(itemShI));
+				jsonObjects.add(itemShI);
 			}
 
-			omc = new OpsiMethodCall("configState_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
 
 			result = exec.doCall(omc);
 		}
 
 		if (result && group != null && !group.isEmpty()) {
 			Logging.info(this, "createClient" + " group " + group);
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemGroup = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
 			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-			jsonObjects.add(AbstractExecutioner.jsonMap(itemGroup));
-			omc = new OpsiMethodCall("objectToGroup_createObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			jsonObjects.add(itemGroup);
+			omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
 		if (result && productNetboot != null && !productNetboot.isEmpty()) {
 			Logging.info(this, "createClient" + " productNetboot " + productNetboot);
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
 			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
-			jsonObjects.add(AbstractExecutioner.jsonMap(itemProducts));
-			omc = new OpsiMethodCall("productOnClient_createObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			jsonObjects.add(itemProducts);
+			omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
 		if (result && productLocalboot != null && !productLocalboot.isEmpty()) {
 			Logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
-			List<Object> jsonObjects = new ArrayList<>();
+			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productLocalboot);
 			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
-			jsonObjects.add(AbstractExecutioner.jsonMap(itemProducts));
-			omc = new OpsiMethodCall("productOnClient_createObjects",
-					new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+			jsonObjects.add(itemProducts);
+			omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
@@ -2004,9 +1981,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			return;
 		}
 
-		List<Object> updates = new ArrayList<>();
+		List<Map<String, Object>> updates = new ArrayList<>();
 		for (Map<String, Object> hostUpdateValue : hostUpdates.values()) {
-			updates.add(AbstractExecutioner.jsonMap(hostUpdateValue));
+			updates.add(hostUpdateValue);
 		}
 
 		OpsiMethodCall omc = new OpsiMethodCall("host_updateObjects", new Object[] { updates.toArray() });
@@ -2097,7 +2074,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
+				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 
@@ -2205,20 +2182,19 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 
-		List<Object> jsonObjects = new ArrayList<>();
+		List<Map<String, Object>> jsonObjects = new ArrayList<>();
 
 		for (String ob : objectIds) {
 			Map<String, Object> item = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			item.put(Object2GroupEntry.MEMBER_KEY, ob);
 			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
-			jsonObjects.add(AbstractExecutioner.jsonMap(item));
+			jsonObjects.add(item);
 		}
 
 		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
 
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects",
-				new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonObjects });
 
 		return exec.doCall(omc);
 	}
@@ -2241,14 +2217,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			return false;
 		}
 
-		List<Object> deleteItems = new ArrayList<>();
+		List<Map<String, Object>> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
 			Map<String, Object> deleteItem = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
 			deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());
 
-			deleteItems.add(AbstractExecutioner.jsonMap(deleteItem));
+			deleteItems.add(deleteItem);
 		}
 
 		boolean result = true;
@@ -2361,8 +2337,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Logging.debug(this, "updateGroup " + parentGroupId);
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_updateObject",
-				new Object[] { AbstractExecutioner.jsonMap(updateInfo) });
+		OpsiMethodCall omc = new OpsiMethodCall("group_updateObject", new Object[] { updateInfo });
 		return exec.doCall(omc);
 	}
 
@@ -2389,8 +2364,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			map.put("description", description);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_createObjects",
-				new Object[] { new Object[] { AbstractExecutioner.jsonMap(map) } });
+		OpsiMethodCall omc = new OpsiMethodCall("group_createObjects", new Object[] { new Object[] { map } });
 		result = exec.doCall(omc);
 
 		HashSet<String> inNewSetnotInOriSet = new HashSet<>(productSet);
@@ -2411,20 +2385,19 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		typingObject.put("groupType", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		typingObject.put("type", Object2GroupEntry.TYPE_NAME);
 
-		List<JSONObject> object2Groups = new ArrayList<>();
+		List<Map<String, String>> object2Groups = new ArrayList<>();
 		for (String objectId : inOriSetnotInNewSet) {
 			Map<String, String> m = new HashMap<>(typingObject);
 			m.put("groupId", groupId);
 			m.put("objectId", objectId);
-			object2Groups.add(AbstractExecutioner.jsonMap(m));
+			object2Groups.add(m);
 		}
 
 		Logging.debug(this, "delete objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
-			Object jsonArray = AbstractExecutioner.jsonArray(object2Groups);
 			result = result
-					&& exec.doCall(new OpsiMethodCall("objectToGroup_deleteObjects", new Object[] { jsonArray }));
+					&& exec.doCall(new OpsiMethodCall("objectToGroup_deleteObjects", new Object[] { object2Groups }));
 		}
 
 		object2Groups.clear();
@@ -2432,15 +2405,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Map<String, String> m = new HashMap<>(typingObject);
 			m.put("groupId", groupId);
 			m.put("objectId", objectId);
-			object2Groups.add(AbstractExecutioner.jsonMap(m));
+			object2Groups.add(m);
 		}
 
 		Logging.debug(this, "create new objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
-			Object jsonArray = AbstractExecutioner.jsonArray(object2Groups);
 			result = result
-					&& exec.doCall(new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonArray }));
+					&& exec.doCall(new OpsiMethodCall("objectToGroup_createObjects", new Object[] { object2Groups }));
 		}
 
 		if (result) {
@@ -2951,7 +2923,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(configItem));
+				readyObjects.add(configItem);
 
 				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
@@ -2992,7 +2964,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(configItem));
+				readyObjects.add(configItem);
 
 				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
@@ -3017,8 +2989,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		Logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		return exec.doCall(omc);
 
@@ -3052,23 +3023,20 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		String[] logtypes = Globals.getLogTypes();
 
 		String s = "";
+
+		Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
+
 		try {
-			Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
-
-			try {
-				if (Globals.getMaxLogSize(i) == 0) {
-					s = exec.getStringResult(new OpsiMethodCall("log_read", new String[] { logtype, clientId }));
-				} else {
-					s = exec.getStringResult(new OpsiMethodCall("log_read",
-							new String[] { logtype, clientId, String.valueOf(Globals.getMaxLogSize(i)) }));
-				}
-
-			} catch (OutOfMemoryError e) {
-				s = "--- file too big for showing, enlarge java memory  ---";
-				Logging.debug(this, "thrown exception: " + e);
+			if (Globals.getMaxLogSize(i) == 0) {
+				s = exec.getStringResult(new OpsiMethodCall("log_read", new String[] { logtype, clientId }));
+			} else {
+				s = exec.getStringResult(new OpsiMethodCall("log_read",
+						new String[] { logtype, clientId, String.valueOf(Globals.getMaxLogSize(i)) }));
 			}
-		} catch (Exception ex) {
-			s = "not found, " + ex;
+
+		} catch (OutOfMemoryError e) {
+			s = "--- file too big for showing, enlarge java memory  ---";
+			Logging.debug(this, "thrown exception: " + e);
 		}
 
 		logfiles.put(logtype, s);
@@ -3374,7 +3342,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", AbstractExecutioner.jsonArray(Arrays.asList(clientIds)));
+		callFilter.put("clientId", Arrays.asList(clientIds));
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
 				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
@@ -3393,7 +3361,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", AbstractExecutioner.jsonArray(Arrays.asList(clientIds)));
+		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
@@ -3428,7 +3396,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", AbstractExecutioner.jsonArray(Arrays.asList(clientIds)));
+		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
@@ -3456,8 +3424,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return getNetBootProductStatesNOM(clientIds);
 	}
 
-	private boolean updateProductOnClient(String pcname, String productname, int producttype,
-			Map<String, String> updateValues, List<JSONObject> updateItems) {
+	private void updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues, List<Map<String, Object>> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
 		values.put("productType", OpsiPackage.giveProductType(producttype));
@@ -3467,22 +3435,20 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		values.putAll(updateValues);
 
 		Logging.debug(this, "updateProductOnClient, values " + values);
-		updateItems.add(AbstractExecutioner.jsonMap(values));
-
-		return true;
+		updateItems.add(values);
 	}
 
-	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+	public void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
 
-		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
+		updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
 	// hopefully we get only updateItems for allowed clients
-	private boolean updateProductOnClients(List<JSONObject> updateItems) {
+	private boolean updateProductOnClients(List<Map<String, Object>> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
 		if (globalReadOnly) {
@@ -3494,8 +3460,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (updateItems != null && !updateItems.isEmpty()) {
 			Logging.info(this, "updateProductOnClients  updateItems.size " + updateItems.size());
 
-			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(updateItems) });
+			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_updateObjects", new Object[] { updateItems });
 
 			result = exec.doCall(omc);
 
@@ -3512,17 +3477,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
 			Map<String, String> changedValues) {
-		List<JSONObject> updateCollection = new ArrayList<>();
-
-		boolean result = true;
+		List<Map<String, Object>> updateCollection = new ArrayList<>();
 
 		// collect updates for all clients
 		for (String client : clients) {
-			result = result && updateProductOnClient(client, productName, productType, changedValues, updateCollection);
+			updateProductOnClient(client, productName, productType, changedValues, updateCollection);
 		}
 
 		// execute
-		return result && updateProductOnClients(updateCollection);
+		return updateProductOnClients(updateCollection);
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
@@ -3728,7 +3691,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public Set<String> getMessagebusConnectedClients() {
 
 		// no messagebus available if not at least opsi 4.3
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			return new HashSet<>();
 		}
 
@@ -3782,7 +3745,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				+ "  -- " + clients);
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("objectId", AbstractExecutioner.jsonArray(clients));
+		callFilter.put("objectId", clients);
 		callFilter.put("productId", product);
 		callFilter.put("propertyId", property);
 		List<Map<String, Object>> properties = retrieveListOfMapsNOM(callAttributes, callFilter,
@@ -4033,8 +3996,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// collect productPropertyState updates and deletions
-	private void setProductProperties(String pcname, String productname, Map<?, ?> properties,
-			List<JSONObject> updateCollection, List<JSONObject> deleteCollection) {
+	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
+			List<Map<String, Object>> updateCollection, List<Map<String, Object>> deleteCollection) {
 		if (!(properties instanceof ConfigName2ConfigValue)) {
 			Logging.warning(this, "! properties instanceof ConfigName2ConfigValue ");
 			return;
@@ -4042,47 +4005,54 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
 
-		Map<String, Object> state = new HashMap<>();
-
 		while (propertiesKeyIterator.hasNext()) {
-			String key = (String) propertiesKeyIterator.next();
+			String propertyId = (String) propertiesKeyIterator.next();
 
-			state.put("type", "ProductPropertyState");
-			state.put("objectId", pcname);
-			state.put("productId", productname);
-			state.put("propertyId", key);
-
-			List<?> newValue = (List<?>) properties.get(key);
+			List<?> newValue = (List<?>) properties.get(propertyId);
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
-			Object oldValue = null;
-
-			if (retrievedConfig != null) {
-				oldValue = retrievedConfig.get(key);
-			}
+			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
 			if (newValue != oldValue) {
-				if (newValue.equals(MapTableModel.nullLIST)) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(key));
-					deleteCollection.add(AbstractExecutioner.jsonMap(state));
+				Map<String, Object> state = new HashMap<>();
+				state.put("type", "ProductPropertyState");
+				state.put("objectId", pcname);
+				state.put("productId", productname);
+				state.put("propertyId", propertyId);
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.remove(key);
-					}
+				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
+					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(propertyId));
+					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
-					state.put("values", AbstractExecutioner.jsonArray(newValue));
-					Logging.debug(this, "setProductProperties,  requested update " + properties.get(key)
+					Logging.debug(this, "setProductProperties,  requested update " + properties.get(propertyId)
 							+ " for oldValue " + oldValue);
-					Logging.debug(this, "setProductProperties,  we have new state " + state);
-					updateCollection.add(AbstractExecutioner.jsonMap(state));
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.put(key, properties.get(key));
-					}
+					state.put("values", newValue);
+					updateState(state, updateCollection, retrievedConfig, propertyId, properties.get(propertyId));
 				}
 			}
+		}
+	}
+
+	private static void deleteState(Map<String, Object> state, List<Map<String, Object>> deleteCollection,
+			Map<String, Object> retrievedConfig, String propertyId) {
+		deleteCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.remove(propertyId);
+		}
+	}
+
+	private void updateState(Map<String, Object> state, List<Map<String, Object>> updateCollection,
+			Map<String, Object> retrievedConfig, String propertyId, Object propertyValue) {
+
+		Logging.debug(this, "setProductProperties,  we have new state " + state);
+		updateCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.put(propertyId, propertyValue);
 		}
 	}
 
@@ -4109,30 +4079,28 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	// send productPropertyState updates and clear the collections
-	private void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
+	private void setProductProperties(List<Map<String, Object>> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
 			return;
 		}
 
-		if (updateCollection != null && !updateCollection.isEmpty()
-				&& exec.doCall(new OpsiMethodCall("productPropertyState_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(updateCollection) }))) {
+		if (updateCollection != null && !updateCollection.isEmpty() && exec
+				.doCall(new OpsiMethodCall("productPropertyState_updateObjects", new Object[] { updateCollection }))) {
 			updateCollection.clear();
 		}
 
-		if (deleteCollection != null && !deleteCollection.isEmpty()
-				&& exec.doCall(new OpsiMethodCall("productPropertyState_deleteObjects",
-						new Object[] { AbstractExecutioner.jsonArray(deleteCollection) }))) {
+		if (deleteCollection != null && !deleteCollection.isEmpty() && exec
+				.doCall(new OpsiMethodCall("productPropertyState_deleteObjects", new Object[] { deleteCollection }))) {
 			deleteCollection.clear();
 		}
 	}
 
 	public void setCommonProductPropertyValue(Iterable<String> clientNames, String productName, String propertyName,
 			List<String> values) {
-		List<JSONObject> updateCollection = new ArrayList<>();
-		List<JSONObject> deleteCollection = new ArrayList<>();
+		List<Map<String, Object>> updateCollection = new ArrayList<>();
+		List<Map<String, Object>> deleteCollection = new ArrayList<>();
 
 		// collect updates for all clients
 		for (String client : clientNames) {
@@ -4444,11 +4412,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 								String configVal = "";
 
-								try {
-									configVal = jO.toString();
-								} catch (Exception jsonEx) {
-									Logging.debug(this, "" + jsonEx);
-								}
+								configVal = jO.toString();
+
 								buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
 								buf.append("<td width='200px'  bgcolor='" + bgColor
 										+ "' align='left' valign='top'><font size='" + fontSizeSmall + "'>" + configKey
@@ -4483,7 +4448,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (configListCellOptions == null || configOptions == null || configDefaultValues == null) {
 			Logging.debug(this, "getConfigOptions() work");
 
-			List<Object> deleteItems = new ArrayList<>();
+			List<Map<String, Object>> deleteItems = new ArrayList<>();
 
 			boolean tryIt = true;
 
@@ -4534,7 +4499,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 								+ " produced by a still somewhere running old configed version , please delete user entry "
 								+ pseudouserProducedByOldVersion);
 
-						deleteItems.add(AbstractExecutioner.jsonMap(configItem));
+						deleteItems.add(configItem);
 
 						Logging.info(this, "deleteItem " + configItem);
 
@@ -4608,14 +4573,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Map<String, Object> item = createNOMitem(CONFIG_STATE_TYPE);
 		item.put(OBJECT_ID, hostName);
-		item.put(VALUES_ID, AbstractExecutioner.jsonArray(values));
+		item.put(VALUES_ID, values);
 		item.put(CONFIG_ID, configId);
 
-		List<Object> jsonObjects = new ArrayList<>();
-		jsonObjects.add(AbstractExecutioner.jsonMap(item));
+		List<Map<String, Object>> jsonObjects = new ArrayList<>();
+		jsonObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
 
 		return exec.doCall(omc);
 	}
@@ -4707,7 +4671,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			return;
 		}
 
-		List<JSONObject> hostMaps = new ArrayList<>();
+		List<Map<String, Object>> hostMaps = new ArrayList<>();
 
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
@@ -4718,9 +4682,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			}
 		}
 
-		hostMaps.add(AbstractExecutioner.jsonMap(corrected));
+		hostMaps.add(corrected);
 
-		exec.doCall(new OpsiMethodCall("host_createObjects", new Object[] { AbstractExecutioner.jsonArray(hostMaps) }));
+		exec.doCall(new OpsiMethodCall("host_createObjects", new Object[] { hostMaps }));
 	}
 
 	// collect config state updates
@@ -4750,7 +4714,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 					Map<String, Object> item = createNOMitem("ConfigState");
 					item.put("ident", ident);
-					deleteConfigStateItems.add(AbstractExecutioner.jsonMap(item));
+					deleteConfigStateItems.add(item);
 				}
 			}
 		}
@@ -4821,7 +4785,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					item.put("objectId", configState.get("objectId"));
 					item.put("configId", configState.get("configId"));
 
-					deleteConfigStateItems.add(AbstractExecutioner.jsonMap(item));
+					deleteConfigStateItems.add(item);
 
 					doneList.add(configState);
 				}
@@ -4848,11 +4812,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			missingConfigIds.removeAll(existingConfigIds);
 
 			Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
-			List<JSONObject> createItems = new ArrayList<>();
+			List<Map<String, Object>> createItems = new ArrayList<>();
 			for (String missingId : missingConfigIds) {
 				Map<String, Object> item = createNOMitem(typesOfUsedConfigIds.get(missingId));
 				item.put("ident", missingId);
-				createItems.add(AbstractExecutioner.jsonMap(item));
+				createItems.add(item);
 			}
 
 			if (!createItems.isEmpty()) {
@@ -4868,26 +4832,25 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			// build calls
 
-			List<JSONObject> callsConfigName2ConfigValueCollection = new ArrayList<>();
-			List<JSONObject> callsConfigCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigCollection = new ArrayList<>();
 
 			for (Map<String, Object> state : configStateCollection) {
 
-				state.put("values", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
-				callsConfigName2ConfigValueCollection.add(AbstractExecutioner.jsonMap(state));
+				state.put("values", state.get("values"));
+				callsConfigName2ConfigValueCollection.add(state);
 			}
 
 			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
 			if (!callsConfigCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(callsConfigCollection) }));
+				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigCollection }));
 			}
 
 			// do call
 
 			// now we can set the values and clear the collected update items
 			exec.doCall(new OpsiMethodCall("configState_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(callsConfigName2ConfigValueCollection) }));
+					new Object[] { callsConfigName2ConfigValueCollection }));
 
 			// at any rate:
 			configStateCollection.clear();
@@ -5008,11 +4971,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				missingConfigIds.remove(configId);
 			}
 			Logging.info(this, "setConfig(), missingConfigIds: " + missingConfigIds);
-			List<JSONObject> createItems = new ArrayList<>();
+			List<Map<String, Object>> createItems = new ArrayList<>();
 			for (String missingId : missingConfigIds) {
 				Map<String, Object> item = createNOMitem(typesOfUsedConfigIds.get(missingId));
 				item.put("ident", missingId);
-				createItems.add(AbstractExecutioner.jsonMap(item));
+				createItems.add(item);
 			}
 
 			if (!createItems.isEmpty()) {
@@ -5021,24 +4984,22 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			}
 
 			// remap to JSON types
-			List<JSONObject> callsConfigUpdateCollection = new ArrayList<>();
-			List<JSONObject> callsConfigDeleteCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigUpdateCollection = new ArrayList<>();
+			List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
 
 			for (Map<String, Object> callConfig : configCollection) {
 
 				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
-					callsConfigDeleteCollection.add(AbstractExecutioner.jsonMap(callConfig));
+					callsConfigDeleteCollection.add(callConfig);
 				} else {
 					Logging.debug(this, "setConfig config with ident " + callConfig.get("ident"));
 
 					boolean isMissing = missingConfigIds.contains(callConfig.get("ident"));
 
 					if (!restrictToMissing || isMissing) {
-						callConfig.put("defaultValues",
-								AbstractExecutioner.jsonArray((List<?>) callConfig.get("defaultValues")));
-						callConfig.put("possibleValues",
-								AbstractExecutioner.jsonArray((List<?>) callConfig.get("possibleValues")));
-						callsConfigUpdateCollection.add(AbstractExecutioner.jsonMap(callConfig));
+						callConfig.put("defaultValues", callConfig.get("defaultValues"));
+						callConfig.put("possibleValues", callConfig.get("possibleValues"));
+						callsConfigUpdateCollection.add(callConfig);
 					}
 				}
 			}
@@ -5046,8 +5007,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigDeleteCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_deleteObjects",
-						new Object[] { AbstractExecutioner.jsonArray(callsConfigDeleteCollection) }));
+				exec.doCall(new OpsiMethodCall("config_deleteObjects", new Object[] { callsConfigDeleteCollection }));
 				configOptionsRequestRefresh();
 				// because of referential integrity
 				hostConfigsRequestRefresh();
@@ -5056,8 +5016,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigUpdateCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(callsConfigUpdateCollection) }));
+				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigUpdateCollection }));
 				configOptionsRequestRefresh();
 			}
 
@@ -5152,16 +5111,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		item.put("ident", key);
 		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(domains));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(domains));
+		item.put("defaultValues", domains);
+		item.put("possibleValues", domains);
 		item.put("editable", true);
 		item.put("multiValue", true);
 
-		List<Object> readyObjects = new ArrayList<>();
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
+		readyObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -5474,8 +5432,11 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		if (withLicenceManagement) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.add(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			if (exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }))) {
 				result = licensePoolId;
@@ -5493,9 +5454,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		if (withLicenceManagement) {
+
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
-			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+			// Replace old product list with actualized list
+			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.remove(productId);
+			licensePool.put("productIds", licensePoolProductIds);
 
 			return exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
 		}
@@ -5655,13 +5619,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 
 		if (withLicenceManagement) {
-			List<JSONObject> deleteItems = new ArrayList<>();
+			List<Map<String, String>> deleteItems = new ArrayList<>();
 
 			for (String swIdent : softwareIds) {
 				Map<String, String> item = new HashMap<>();
 				item.put("ident", swIdent + ";" + licencePoolId);
 				item.put("type", "AuditSoftwareToLicensePool");
-				deleteItems.add(AbstractExecutioner.jsonMap(item));
+				deleteItems.add(item);
 			}
 
 			OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_deleteObjects",
@@ -5724,7 +5688,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
 			if (!onlyAdding) {
-				ArrayList<JSONObject> deleteItems = new ArrayList<>();
+				ArrayList<Map<String, String>> deleteItems = new ArrayList<>();
 
 				for (String swIdent : oldEntriesTruely) {
 					// software exists in audit software
@@ -5733,7 +5697,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 						Map<String, String> item = new HashMap<>();
 						item.put("ident", swIdent + ";" + licensePoolId);
 						item.put("type", "AuditSoftwareToLicensePool");
-						deleteItems.add(AbstractExecutioner.jsonMap(item));
+						deleteItems.add(item);
 
 						Logging.info(this, "" + instSwI.get(swIdent));
 					}
@@ -5758,13 +5722,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			}
 
-			ArrayList<JSONObject> createItems = new ArrayList<>();
+			ArrayList<Map<String, String>> createItems = new ArrayList<>();
 
 			for (String swIdent : softwareToAssignTruely) {
 				Map<String, String> item = new HashMap<>();
 				item.put("ident", swIdent + ";" + licensePoolId);
 				item.put("type", "AuditSoftwareToLicensePool");
-				createItems.add(AbstractExecutioner.jsonMap(item));
+				createItems.add(item);
 			}
 
 			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
@@ -5837,7 +5801,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				// nothing to do, we deleted the entry
 				ok = true;
 			} else {
-				List<Object> readyObjects = new ArrayList<>();
+				List<Map<String, Object>> readyObjects = new ArrayList<>();
 				Map<String, Object> item;
 
 				Map<String, String> swMap = AuditSoftwareXLicencePool.produceMapFromSWident(softwareID);
@@ -5847,10 +5811,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				item.putAll(swMap);
 				// create the edited entry
 
-				readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(item);
 
 				OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_createObjects",
-						new Object[] { AbstractExecutioner.jsonArray(readyObjects) }
+						new Object[] { readyObjects }
 
 				);
 				Logging.info(this, "editPool2AuditSoftware call " + omc);
@@ -5965,13 +5929,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 						continue;
 					}
 
-					try {
-						for (String client : swId2clients.get(softwareIdent)) {
-							listOfUsingClients.add(client);
-							setOfUsingClients.add(client);
-						}
-					} catch (Exception ex) {
-						Logging.warning(" swId2clients.get(softwareIdent) -" + ex);
+					for (String client : swId2clients.get(softwareIdent)) {
+						listOfUsingClients.add(client);
+						setOfUsingClients.add(client);
 					}
 
 					licencePoolUsagecountSWInvent.put(licencePoolId, setOfUsingClients.size());
@@ -6252,13 +6212,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		boolean result = false;
 
-		List<Object> jsonPreparedList = new ArrayList<>();
+		List<Map<String, Object>> jsonPreparedList = new ArrayList<>();
 		for (LicenceUsageEntry item : itemsDeletionLicenceUsage) {
-			jsonPreparedList.add(AbstractExecutioner.jsonMap(item.getNOMobject()));
+			jsonPreparedList.add(item.getNOMobject());
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_deleteObjects",
-				new Object[] { AbstractExecutioner.jsonArray(jsonPreparedList) });
+		OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_deleteObjects", new Object[] { jsonPreparedList });
 
 		result = exec.doCall(omc);
 
@@ -6343,15 +6302,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
 		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
 		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", false);
 		item.put("multiValue", true);
 
 		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6369,7 +6327,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	private void addRoleAndUserConfig(String configkey, String rolename) {
-		List<Object> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		String role = rolename;
 
 		if (role == null) {
@@ -6383,10 +6341,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				ConfigOption.TYPE.UNICODE_CONFIG, configkey, "which role should determine this configuration", false,
 				false, selectedValuesRole, selectedValuesRole);
 
-		readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
+		readyObjects.add(itemRole);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -6500,19 +6457,18 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public void deleteSavedSearch(String name) {
 		Logging.debug(this, "deleteSavedSearch " + name);
 
-		List<Object> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		Map<String, Object> item;
 
 		item = createNOMitem("UnicodeConfig");
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name);
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
 		item = createNOMitem("UnicodeConfig");
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
+		readyObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 		savedSearches.remove(name);
@@ -6530,8 +6486,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				SavedSearch.CONFIG_KEY + "." + ob.getName() + "." + SavedSearch.DESCRIPTION_KEY, ob.getDescription(),
 				"", true));
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 		exec.doCall(omc);
 	}
@@ -6573,15 +6528,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
 		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
 		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", false);
 		item.put("multiValue", true);
 
 		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6670,13 +6624,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Map<String, Object> item = createNOMitem("UnicodeConfig");
 			item.put("ident", KEY_HOST_DISPLAYFIELDS);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonMap(item) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
 
 			exec.doCall(omc);
 		} else {
@@ -6729,11 +6682,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	private static Object produceConfigEntry(String nomType, String key, Object value, String description) {
+	private static Map<String, Object> produceConfigEntry(String nomType, String key, Object value,
+			String description) {
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private static Object produceConfigEntry(String nomType, String key, Object value, String description,
+	private static Map<String, Object> produceConfigEntry(String nomType, String key, Object value, String description,
 			boolean editable) {
 		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(value);
@@ -6748,12 +6702,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		item = createNOMitem(nomType);
 		item.put("ident", key);
 		item.put("description", description);
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
 		item.put("editable", editable);
 		item.put("multiValue", false);
 
-		return AbstractExecutioner.jsonMap(item);
+		return item;
 	}
 
 	private boolean checkStandardConfigs() {
@@ -6768,7 +6722,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		List<Object> possibleValues;
 		Map<String, Object> item;
 		String key;
-		List<Object> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
 		// list of domains for new clients
 		key = CONFIGED_GIVEN_DOMAINS_KEY;
@@ -6786,12 +6740,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -6806,7 +6760,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item = createJSONBoolConfig(key, DEFAULTVALUE_SEARCH_BY_SQL,
 					"Use SQL calls for search if SQL backend is active");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// global value for install_by_shutdown
@@ -6820,12 +6774,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item = createJSONBoolConfig(key, DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 					"Use install by shutdown if possible");
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// product_sort_algorithm
 		// will not be used in opsi 4.3
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			key = KEY_PRODUCT_SORT_ALGORITHM;
 			// defaultValues
 			defaultValues = configDefaultValues.get(key);
@@ -6845,13 +6799,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				item = createNOMitem("UnicodeConfig");
 				item.put("ident", key);
 				item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-				item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+				item.put("defaultValues", defaultValues);
 
-				item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+				item.put("possibleValues", possibleValues);
 				item.put("editable", false);
 				item.put("multiValue", false);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(item);
 			}
 		}
 
@@ -6880,13 +6834,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item.put("ident", key);
 			item.put("description",
 					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// remote controls
@@ -6968,7 +6922,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		// additional queries
 		String query;
 		StringBuilder qbuf;
-		key = AdditionalQuery.CONFIG_KEY + "." + "hosts_with_products";
+		key = CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
 		defaultValues = configDefaultValues.get(key);
 
@@ -6987,11 +6941,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			readyObjects.add(produceConfigEntry("UnicodeConfig", key, query, description));
 
-			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + AdditionalQuery.EDITABLE_KEY, false,
-					"(command may be edited)"));
+			readyObjects
+					.add(produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false, "(command may be edited)"));
 			// description entry
-			readyObjects.add(
-					produceConfigEntry("UnicodeConfig", key + "." + AdditionalQuery.DESCRIPTION_KEY, description, ""));
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY, description, ""));
 		}
 
 		// WAN_CONFIGURATION
@@ -7053,13 +7006,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		key = KEY_SSH_DEFAULTWINUSER;
@@ -7114,13 +7067,13 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);
 			item.put("description", "");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("defaultValues", defaultValues);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		// for warnings for opsi licences
@@ -7141,12 +7094,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7167,12 +7120,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7193,12 +7146,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7217,12 +7170,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7233,15 +7186,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-					new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		} else {
 			Logging.notice(this, "there are no configurations to update");
 		}
 
-		List<JSONObject> defaultUserConfigsObsolete = new ArrayList<>();
+		List<Map<String, Object>> defaultUserConfigsObsolete = new ArrayList<>();
 
 		// delete obsolete configs
 
@@ -7259,7 +7211,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					String type = "BoolConfig";
 					config.put("type", type);
 
-					defaultUserConfigsObsolete.add(AbstractExecutioner.jsonMap(config));
+					defaultUserConfigsObsolete.add(config);
 				}
 			}
 		}
@@ -7278,7 +7230,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 					String type = "BoolConfig";
 					config.put("type", type);
 
-					defaultUserConfigsObsolete.add(AbstractExecutioner.jsonMap(config));
+					defaultUserConfigsObsolete.add(config);
 				}
 			}
 		}
@@ -7286,8 +7238,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
-			exec.doCall(new OpsiMethodCall("config_deleteObjects",
-					new Object[] { AbstractExecutioner.jsonArray(defaultUserConfigsObsolete) }));
+			exec.doCall(new OpsiMethodCall("config_deleteObjects", new Object[] { defaultUserConfigsObsolete }));
 		}
 
 		return true;
@@ -7407,7 +7358,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		String methodName = "backend_info";
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			methodName = BACKEND_LICENSING_INFO_METHOD_NAME;
 		}
 
@@ -7468,9 +7419,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private void produceOpsiModulesInfoClassicOpsi43() {
 		produceOpsiInformation();
 
-		// the part of it which delivers the service information on checked
-		// modules
-		Map<String, Object> opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
 
@@ -7478,238 +7426,223 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		// has the actual signal if a module is active
 		opsiModules = new HashMap<>();
 
-		Map<String, Object> opsiCountModules = new HashMap<>();
+		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
-		try {
-			final List<String> missingModulesPermissionInfo = new ArrayList<>();
+		// prepare the user info
+		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		Logging.info(this, "opsi module information " + opsiModulesInfo);
 
-			// prepare the user info
-			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-			Logging.info(this, "opsi module information " + opsiModulesInfo);
+		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
-			ExtendedDate validUntil = ExtendedDate.INFINITE;
+		// analyse the real module info
+		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
+		opsiCountModules.keySet()
+				.removeAll(exec.getListFromItem(((JSONArray) opsiInformation.get("obsolete_modules")).toString()));
+		getHostInfoCollections().retrieveOpsiHosts();
 
-			// analyse the real module info
-			opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
-			opsiCountModules.keySet()
-					.removeAll(exec.getListFromItem(((JSONArray) opsiInformation.get("obsolete_modules")).toString()));
-			getHostInfoCollections().retrieveOpsiHosts();
+		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
 
-			ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
+		int countClients = hostInfoCollections.getCountClients();
 
-			int countClients = hostInfoCollections.getCountClients();
+		LocalDateTime today = LocalDateTime.now();
 
-			Date today = new Date();
-			Calendar nowCal = Calendar.getInstance();
-			nowCal.setTime(today);
+		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
 
-			Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
+		// read in modules
+		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
+			Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
+					new TypeReference<Map<String, Object>>() {
+					});
+			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
+					validUntil);
 
-			// read in modules
-			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
-				Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
-						new TypeReference<Map<String, Object>>() {
-						});
-				ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
-						validUntil);
-
-				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
-				Boolean permissionCheck = modulePermission.getBoolean();
-				opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
-				if (permissionCheck != null) {
-					opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
-				}
-
-				if (opsiModuleData.get("available") != null) {
-					opsiModulesDisplayInfo.put(opsiModuleInfo.getKey(), opsiModuleData.get("available"));
-				}
+			Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
+			Boolean permissionCheck = modulePermission.getBoolean();
+			opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
+			if (permissionCheck != null) {
+				opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
 			}
 
-			Logging.info(this, "modules resulting step 0  " + opsiModules);
+			if (opsiModuleData.get("available") != null) {
+				opsiModulesDisplayInfo.put(opsiModuleInfo.getKey(), opsiModuleData.get("available"));
+			}
+		}
 
-			// existing
-			for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
-				Logging.info(this,
-						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
-				Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
-						new TypeReference<Map<String, Object>>() {
-						});
+		Logging.info(this, "modules resulting step 0  " + opsiModules);
 
-				if ("free".equals(opsiModuleData.get("state"))) {
-					continue;
-				}
+		// existing
+		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
+			Logging.info(this,
+					"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
+					new TypeReference<Map<String, Object>>() {
+					});
 
-				modulePermission = new ModulePermissionValue(opsiModuleData.get("client_number"), validUntil);
-
-				Logging.info(this,
-						"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
-				// replace value got from modulesInfo
-				opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
-
-				if (opsiModuleData.get("client_number") != null) {
-					opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiModuleData.get("client_number"));
-				}
+			if ("free".equals(opsiModuleData.get("state"))) {
+				continue;
 			}
 
-			Logging.info(this, "modules resulting step 1 " + opsiModules);
-			Logging.info(this, "countModules is  " + opsiCountModules);
+			modulePermission = new ModulePermissionValue(opsiModuleData.get("client_number"), validUntil);
 
-			// set values for modules checked by configed
-			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-				ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
-				ExtendedDate expiresForThisModule = modulePermission.getExpires();
+			Logging.info(this,
+					"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
+			// replace value got from modulesInfo
+			opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
 
-				if (modulePermission.getBoolean() != null) {
-					opsiModules.put(key, modulePermission.getBoolean());
-					Logging.info(this, " retrieveOpsiModules, set opsiModules for key " + key + ": "
-							+ modulePermission.getBoolean());
+			if (opsiModuleData.get("client_number") != null) {
+				opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiModuleData.get("client_number"));
+			}
+		}
+
+		Logging.info(this, "modules resulting step 1 " + opsiModules);
+		Logging.info(this, "countModules is  " + opsiCountModules);
+
+		// set values for modules checked by configed
+		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+			ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
+			ExtendedDate expiresForThisModule = modulePermission.getExpires();
+
+			if (modulePermission.getBoolean() != null) {
+				opsiModules.put(key, modulePermission.getBoolean());
+				Logging.info(this,
+						" retrieveOpsiModules, set opsiModules for key " + key + ": " + modulePermission.getBoolean());
+			} else {
+				opsiModules.put(key, true);
+				Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
+
+				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+					opsiModules.put(key, false);
 				} else {
-					opsiModules.put(key, true);
-					Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
 
-					if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+					Integer warningLimit = null;
+					Integer stopLimit = null;
+
+					Logging.info(this,
+							" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
+
+					Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
+							+ maxClientsForThisModule.getNumber());
+
+					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
+
+					Logging.info(this,
+							" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
+
+					Integer newGlobalLimit = globalMaxClients.getNumber();
+
+					// global limit is changed by this module a real warning
+					// and error limit exists
+					if (newGlobalLimit != null) {
+						warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
+						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
+					}
+
+					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
+							+ " stopLimit " + stopLimit);
+
+					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
 					} else {
+						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+							LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-						Integer warningLimit = null;
-						Integer stopLimit = null;
-
-						Logging.info(this,
-								" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
-
-						Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
-								+ maxClientsForThisModule.getNumber());
-
-						globalMaxClients = calculateModulePermission(globalMaxClients,
-								maxClientsForThisModule.getNumber());
-
-						Logging.info(this,
-								" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
-
-						Integer newGlobalLimit = globalMaxClients.getNumber();
-
-						// global limit is changed by this module a real warning
-						// and error limit exists
-						if (newGlobalLimit != null) {
-							warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
-							stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
-						}
-
-						Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
-								+ " stopLimit " + stopLimit);
-
-						if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
-							opsiModules.put(key, false);
-						} else {
-							if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-								Date expiresDate = expiresForThisModule.getDate();
-
-								if (today.after(expiresDate)) {
-									opsiModules.put(key, false);
-								}
+							if (today.isAfter(expiresDate)) {
+								opsiModules.put(key, false);
 							}
 						}
-
-					}
-
-				}
-			}
-
-			Logging.info(this, "modules resulting step 2  " + opsiModules);
-			Logging.info(this, "count Modules is  " + opsiCountModules);
-
-			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-				int countClientsInThisBlock = countClients;
-
-				// tests
-
-				Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
-				boolean problemToIndicate = true;
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-				ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
-				ExtendedDate expiresForThisModule = modulePermission.getExpires();
-
-				Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
-						+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
-
-				if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-					problemToIndicate = false;
-				}
-
-				if (problemToIndicate
-						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
-					problemToIndicate = false;
-				}
-
-				Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
-
-				if (problemToIndicate) {
-					Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
-							+ " count " + countClientsInThisBlock);
-
-					if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-						Date expiresDate = expiresForThisModule.getDate();
-						Calendar noticeCal = Calendar.getInstance();
-						noticeCal.setTime(expiresDate);
-						noticeCal.add(Calendar.DAY_OF_MONTH, -14);
-
-						if (nowCal.after(noticeCal)) {
-							missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-						}
-					}
-
-					if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
-						int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
-						int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
-
-						if (countClientsInThisBlock > stopCount) {
-							Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount
-									+ " count clients " + countClients);
-
-							String warningText =
-
-									String.format(
-											// locale.
-											Configed.getResourceValue("Permission.modules.clientcount.error"),
-											"" + countClientsInThisBlock, "" + key,
-											"" + maxAllowedClientsForThisModule.getNumber());
-
-							missingModulesPermissionInfo.add(warningText);
-
-							Logging.warning(this, warningText);
-						} else if (countClientsInThisBlock > startWarningCount) {
-							Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
-									+ " count clients " + countClients);
-
-							String warningText =
-
-									String.format(
-											// locale,
-											Configed.getResourceValue("Permission.modules.clientcount.warning"),
-											"" + countClientsInThisBlock, "" + key,
-											"" + maxAllowedClientsForThisModule.getNumber());
-
-							missingModulesPermissionInfo.add(warningText);
-							Logging.warning(this, warningText);
-						} else {
-							// Do nothing when countClientsInThisBlock <= startWarningCount
-						}
 					}
 				}
 			}
-
-			Logging.info(this, "modules resulting  " + opsiModules);
-			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
-
-			// Will be called only, when info empty
-			callOpsiLicenceMissingModules(missingModulesPermissionInfo);
-
-		} catch (Exception ex) {
-			Logging.warning("opsi module information problem", ex);
 		}
+
+		Logging.info(this, "modules resulting step 2  " + opsiModules);
+		Logging.info(this, "count Modules is  " + opsiCountModules);
+
+		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+			int countClientsInThisBlock = countClients;
+
+			// tests
+
+			Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
+			boolean problemToIndicate = true;
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+			ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
+			ExtendedDate expiresForThisModule = modulePermission.getExpires();
+
+			Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
+					+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
+
+			if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+				problemToIndicate = false;
+			}
+
+			if (problemToIndicate
+					&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
+				problemToIndicate = false;
+			}
+
+			Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
+
+			if (problemToIndicate) {
+				Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
+						+ " count " + countClientsInThisBlock);
+
+				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
+
+					if (today.isAfter(noticeDate)) {
+						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
+					}
+				}
+
+				if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
+					int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
+					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
+
+					if (countClientsInThisBlock > stopCount) {
+						Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount + " count clients "
+								+ countClients);
+
+						String warningText =
+
+								String.format(
+										// locale.
+										Configed.getResourceValue("Permission.modules.clientcount.error"),
+										"" + countClientsInThisBlock, "" + key,
+										"" + maxAllowedClientsForThisModule.getNumber());
+
+						missingModulesPermissionInfo.add(warningText);
+
+						Logging.warning(this, warningText);
+					} else if (countClientsInThisBlock > startWarningCount) {
+						Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
+								+ " count clients " + countClients);
+
+						String warningText =
+
+								String.format(
+										// locale,
+										Configed.getResourceValue("Permission.modules.clientcount.warning"),
+										"" + countClientsInThisBlock, "" + key,
+										"" + maxAllowedClientsForThisModule.getNumber());
+
+						missingModulesPermissionInfo.add(warningText);
+						Logging.warning(this, warningText);
+					} else {
+						// Do nothing when countClientsInThisBlock <= startWarningCount
+					}
+				}
+			}
+		}
+
+		Logging.info(this, "modules resulting  " + opsiModules);
+		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
+
+		// Will be called only, when info empty
+		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
 
 		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
 		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
@@ -7745,236 +7678,219 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private void produceOpsiModulesInfoClassic() {
 		produceOpsiInformation();
 
-		// the part of it which delivers the service information on checked
-		// modules
-		Map<String, Object> opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
-		String opsiVersion = "4";
+
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		opsiModules = new HashMap<>();
 
-		Map<String, Object> opsiCountModules = new HashMap<>();
+		String opsiVersion = (String) opsiInformation.get("opsiVersion");
+		Logging.info(this, "opsi version information " + opsiVersion);
 
-		try {
-			opsiVersion = (String) opsiInformation.get("opsiVersion");
-			Logging.info(this, "opsi version information " + opsiVersion);
+		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
-			final List<String> missingModulesPermissionInfo = new ArrayList<>();
+		// prepare the user info
+		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
 
-			// prepare the user info
-			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		opsiModulesInfo.remove("signature");
+		Logging.info(this, "opsi module information " + opsiModulesInfo);
+		opsiModulesInfo.remove("valid");
 
-			opsiModulesInfo.remove("signature");
-			Logging.info(this, "opsi module information " + opsiModulesInfo);
-			opsiModulesInfo.remove("valid");
+		opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
 
-			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
+		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
-			ExtendedDate validUntil = ExtendedDate.INFINITE;
+		// analyse the real module info
+		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
+		getHostInfoCollections().retrieveOpsiHosts();
 
-			// analyse the real module info
-			opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
-			getHostInfoCollections().retrieveOpsiHosts();
+		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
 
-			ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
+		int countClients = hostInfoCollections.getCountClients();
 
-			int countClients = hostInfoCollections.getCountClients();
+		LocalDateTime today = LocalDateTime.now();
 
-			Date today = new Date();
-			Calendar nowCal = Calendar.getInstance();
-			nowCal.setTime(today);
+		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
 
-			Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
+		// read in modules
+		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
+			Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo.getKey());
+			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleInfo.getValue(), validUntil);
 
-			// read in modules
-			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo.getKey());
-				ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleInfo.getValue(),
-						validUntil);
-
-				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
-				Boolean permissionCheck = modulePermission.getBoolean();
-				opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
-				if (permissionCheck != null) {
-					opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
-				}
+			Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
+			Boolean permissionCheck = modulePermission.getBoolean();
+			opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
+			if (permissionCheck != null) {
+				opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
 			}
+		}
 
-			Logging.info(this, "modules resulting step 0  " + opsiModules);
+		Logging.info(this, "modules resulting step 0  " + opsiModules);
 
-			// existing
-			for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
-				Logging.info(this,
-						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
+		// existing
+		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
+			Logging.info(this,
+					"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
 
-				modulePermission = new ModulePermissionValue(opsiCountModule.getValue(), validUntil);
+			modulePermission = new ModulePermissionValue(opsiCountModule.getValue(), validUntil);
 
-				Logging.info(this,
-						"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
-				// replace value got from modulesInfo
-				opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
+			Logging.info(this,
+					"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
+			// replace value got from modulesInfo
+			opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
 
-				if (opsiCountModule.getValue() != null) {
-					opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiCountModule.getValue());
-				}
+			if (opsiCountModule.getValue() != null) {
+				opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiCountModule.getValue());
 			}
+		}
 
-			Logging.info(this, "modules resulting step 1 " + opsiModules);
-			Logging.info(this, "countModules is  " + opsiCountModules);
+		Logging.info(this, "modules resulting step 1 " + opsiModules);
+		Logging.info(this, "countModules is  " + opsiCountModules);
 
-			// set values for modules checked by configed
-			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-				ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
-				ExtendedDate expiresForThisModule = modulePermission.getExpires();
+		// set values for modules checked by configed
+		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+			ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
+			ExtendedDate expiresForThisModule = modulePermission.getExpires();
 
-				if (modulePermission.getBoolean() != null) {
-					opsiModules.put(key, modulePermission.getBoolean());
-					Logging.info(this, " retrieveOpsiModules, set opsiModules for key " + key + ": "
-							+ modulePermission.getBoolean());
+			if (modulePermission.getBoolean() != null) {
+				opsiModules.put(key, modulePermission.getBoolean());
+				Logging.info(this,
+						" retrieveOpsiModules, set opsiModules for key " + key + ": " + modulePermission.getBoolean());
+			} else {
+				opsiModules.put(key, true);
+				Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
+
+				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+					opsiModules.put(key, false);
 				} else {
-					opsiModules.put(key, true);
-					Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
 
-					if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+					Integer warningLimit = null;
+					Integer stopLimit = null;
+
+					Logging.info(this,
+							" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
+
+					Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
+							+ maxClientsForThisModule.getNumber());
+
+					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
+
+					Logging.info(this,
+							" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
+
+					Integer newGlobalLimit = globalMaxClients.getNumber();
+
+					// global limit is changed by this module a real warning
+					// and error limit exists
+					if (newGlobalLimit != null) {
+						warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
+						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
+					}
+
+					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
+							+ " stopLimit " + stopLimit);
+
+					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
 					} else {
+						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+							LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-						Integer warningLimit = null;
-						Integer stopLimit = null;
-
-						Logging.info(this,
-								" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
-
-						Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
-								+ maxClientsForThisModule.getNumber());
-
-						globalMaxClients = calculateModulePermission(globalMaxClients,
-								maxClientsForThisModule.getNumber());
-
-						Logging.info(this,
-								" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
-
-						Integer newGlobalLimit = globalMaxClients.getNumber();
-
-						// global limit is changed by this module a real warning
-						// and error limit exists
-						if (newGlobalLimit != null) {
-							warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
-							stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
-						}
-
-						Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
-								+ " stopLimit " + stopLimit);
-
-						if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
-							opsiModules.put(key, false);
-						} else {
-							if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-								Date expiresDate = expiresForThisModule.getDate();
-
-								if (today.after(expiresDate)) {
-									opsiModules.put(key, false);
-								}
+							if (today.isAfter(expiresDate)) {
+								opsiModules.put(key, false);
 							}
 						}
 					}
 				}
 			}
+		}
 
-			Logging.info(this, "modules resulting step 2  " + opsiModules);
-			Logging.info(this, "count Modules is  " + opsiCountModules);
+		Logging.info(this, "modules resulting step 2  " + opsiModules);
+		Logging.info(this, "count Modules is  " + opsiCountModules);
 
-			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-				int countClientsInThisBlock = countClients;
+		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+			int countClientsInThisBlock = countClients;
 
-				// tests
+			// tests
 
-				Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
-				boolean problemToIndicate = true;
-				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-				ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
-				ExtendedDate expiresForThisModule = modulePermission.getExpires();
+			Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
+			boolean problemToIndicate = true;
+			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+			ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
+			ExtendedDate expiresForThisModule = modulePermission.getExpires();
 
-				Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
-						+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
+			Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
+					+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
 
-				if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-					problemToIndicate = false;
-				}
+			if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+				problemToIndicate = false;
+			}
 
-				if (problemToIndicate
-						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
-					problemToIndicate = false;
-				}
+			if (problemToIndicate
+					&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
+				problemToIndicate = false;
+			}
 
-				Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
+			Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
 
-				if (problemToIndicate) {
-					Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
-							+ " count " + countClientsInThisBlock);
+			if (problemToIndicate) {
+				Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
+						+ " count " + countClientsInThisBlock);
 
-					if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-						Date expiresDate = expiresForThisModule.getDate();
-						Calendar noticeCal = Calendar.getInstance();
-						noticeCal.setTime(expiresDate);
-						noticeCal.add(Calendar.DAY_OF_MONTH, -14);
+				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
 
-						if (nowCal.after(noticeCal)) {
-							missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-						}
+					if (today.isAfter(noticeDate)) {
+						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 					}
+				}
 
-					if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
-						int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
-						int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
+				if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
+					int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
+					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
 
-						if (countClientsInThisBlock > stopCount) {
-							Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount
-									+ " count clients " + countClients);
+					if (countClientsInThisBlock > stopCount) {
+						Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount + " count clients "
+								+ countClients);
 
-							String warningText =
+						String warningText =
 
-									String.format(
-											// locale.
-											Configed.getResourceValue("Permission.modules.clientcount.error"),
-											"" + countClientsInThisBlock, "" + key,
-											"" + maxAllowedClientsForThisModule.getNumber());
+								String.format(
+										// locale.
+										Configed.getResourceValue("Permission.modules.clientcount.error"),
+										"" + countClientsInThisBlock, "" + key,
+										"" + maxAllowedClientsForThisModule.getNumber());
 
-							missingModulesPermissionInfo.add(warningText);
+						missingModulesPermissionInfo.add(warningText);
 
-							Logging.warning(this, warningText);
-						} else if (countClientsInThisBlock > startWarningCount) {
-							Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
-									+ " count clients " + countClients);
+						Logging.warning(this, warningText);
+					} else if (countClientsInThisBlock > startWarningCount) {
+						Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
+								+ " count clients " + countClients);
 
-							String warningText =
+						String warningText =
 
-									String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
-											"" + countClientsInThisBlock, "" + key,
-											"" + maxAllowedClientsForThisModule.getNumber());
+								String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
+										"" + countClientsInThisBlock, "" + key,
+										"" + maxAllowedClientsForThisModule.getNumber());
 
-							missingModulesPermissionInfo.add(warningText);
-							Logging.warning(this, warningText);
-						} else {
-							// countClientsInThisBlock small enough, so nothing to do
-						}
+						missingModulesPermissionInfo.add(warningText);
+						Logging.warning(this, warningText);
+					} else {
+						// countClientsInThisBlock small enough, so nothing to do
 					}
 				}
 			}
-
-			Logging.info(this, "modules resulting  " + opsiModules);
-			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
-
-			// Will be called only when info empty
-			callOpsiLicenceMissingModules(missingModulesPermissionInfo);
-
-		} catch (Exception ex) {
-			Logging.warning("opsi module information problem", ex);
 		}
+
+		Logging.info(this, "modules resulting  " + opsiModules);
+		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
+
+		// Will be called only when info empty
+		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
 
 		withLicenceManagement = (opsiModules.get("license_management") != null)
 				&& opsiModules.get("license_management");
@@ -7997,7 +7913,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		// probably old opsi service version
 		if (licencingInfoOpsiAdmin == null) {
-			if (JSONthroughHTTPS.isOpsi43()) {
+			if (ServerFacade.isOpsi43()) {
 				produceOpsiModulesInfoClassicOpsi43();
 			} else {
 				produceOpsiModulesInfoClassic();
@@ -8147,7 +8063,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (globalReadOnly) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
 		boolean result = exec.doCall(omc);
 		Logging.info(this, "doActionSSHCommand method " + method + " result " + result);
 		return result;
@@ -8165,8 +8081,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (globalReadOnly) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall("SSHCommand_deleteObjects",
-				new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
+		OpsiMethodCall omc = new OpsiMethodCall("SSHCommand_deleteObjects", new Object[] { jsonObjects });
 		boolean result = exec.doCall(omc);
 		Logging.info(this, "deleteSSHCommand result " + result);
 		return result;

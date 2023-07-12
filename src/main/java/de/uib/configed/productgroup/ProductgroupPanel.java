@@ -814,7 +814,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
-			buttonEditDialog.setActivated(!b);
 		}
 	}
 

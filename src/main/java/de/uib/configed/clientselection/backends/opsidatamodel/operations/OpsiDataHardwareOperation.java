@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 public class OpsiDataHardwareOperation extends HardwareOperation implements ExecutableOperation {
 	public OpsiDataHardwareOperation(AbstractSelectOperation operation) {
 		super(operation);
-		Logging.info(this, "created");
+		Logging.info(this.getClass(), "created");
 	}
 
 	@Override

@@ -11,7 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.GroupLayout;
@@ -36,7 +37,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	private JXMonthView monthView;
 	private TimeEditor timeSetter;
-	private Calendar calendar;
+	private LocalDateTime calendar;
 	private boolean withMovingSelectionDate = true;
 	private boolean withTime = true;
 
@@ -66,7 +67,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		super.addMouseListener(new PopupMouseListener(popup));
 
-		calendar = Calendar.getInstance();
+		calendar = LocalDateTime.now();
 		if (!withTime) {
 			setToMidnight();
 		}
@@ -78,7 +79,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		// observe monthview
 		addDateSelectionListener(this);
 
-		timeSetter = new TimeEditor(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+		timeSetter = new TimeEditor(calendar.getHour(), calendar.getMinute());
 		if (!withTime) {
 			timeSetter.setVisible(false);
 		}
@@ -138,30 +139,26 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	private void setToMidnight() {
 
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
+		calendar = calendar.withHour(0).withMinute(0).withSecond(0);
 	}
 
 	private void switchMonth(int d) {
 
-		calendar.add(Calendar.MONTH, d);
+		calendar = calendar.plusMonths(d);
 
-		Date newDate = calendar.getTime();
+		Date newDate = Timestamp.valueOf(calendar);
 		monthView.ensureDateVisible(newDate);
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-
 		}
 	}
 
 	private void switchYear(int d) {
 
-		calendar.add(Calendar.YEAR, d);
+		calendar = calendar.plusYears(d);
 
-		Date newDate = calendar.getTime();
+		Date newDate = Timestamp.valueOf(calendar);
 		monthView.ensureDateVisible(newDate);
 
 		if (withMovingSelectionDate) {
@@ -176,38 +173,35 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public void setDate(boolean select) {
-		Date now = new Date();
-		calendar.setTime(now);
+
+		calendar = LocalDateTime.now();
 
 		if (!withTime) {
 			setToMidnight();
 		}
 
-		monthView.setFirstDisplayedDay(now);
+		monthView.setFirstDisplayedDay(Timestamp.valueOf(calendar));
 		if (select) {
-			monthView.setSelectionDate(now);
+			monthView.setSelectionDate(Timestamp.valueOf(calendar));
 		} else {
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		}
-		Logging.debug(this, " ------- setDate,  hour  " + calendar.get(Calendar.HOUR_OF_DAY) + ", min "
-				+ calendar.get(Calendar.MINUTE));
-		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-
+		Logging.debug(this, " ------- setDate,  hour  " + calendar.getHour() + ", min " + calendar.getMinute());
+		timeSetter.setHour(calendar.getHour());
+		timeSetter.setMin(calendar.getMinute());
 	}
 
 	public void setSelectionDate(Date d) {
 		Logging.debug(this, " setSelectionDate " + d);
 		if (d != null) {
 			monthView.ensureDateVisible(d);
+
+			calendar = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+			monthView.setSelectionDate(d);
+			timeSetter.setHour(calendar.getHour());
+			timeSetter.setMin(calendar.getMinute());
 		}
-
-		calendar.setTime(d);
-		monthView.setSelectionDate(d);
-		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-
 	}
 
 	public Timestamp getSelectedSqlTime() {
@@ -215,10 +209,10 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 			return null;
 		}
 
-		calendar.setTime(monthView.getFirstSelectionDate());
-		calendar.add(Calendar.HOUR, timeSetter.getHour());
-		calendar.add(Calendar.MINUTE, timeSetter.getMin());
-		return new Timestamp(calendar.getTimeInMillis());
+		calendar = monthView.getFirstSelectionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		calendar = calendar.plusHours(timeSetter.getHour());
+		calendar = calendar.plusMinutes(timeSetter.getMin());
+		return Timestamp.valueOf(calendar);
 	}
 
 	public void addDateSelectionListener(org.jdesktop.swingx.event.DateSelectionListener listener) {
@@ -238,12 +232,13 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	@Override
 	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
 		if (withMovingSelectionDate) {
-			if (calendar.getTime().equals(monthView.getFirstSelectionDate())) {
+			if (Timestamp.valueOf(calendar).equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
 
 			} else {
 				if (monthView.getFirstSelectionDate() != null) {
-					calendar.setTime(monthView.getFirstSelectionDate());
+					calendar = monthView.getFirstSelectionDate().toInstant().atZone(ZoneId.systemDefault())
+							.toLocalDateTime();
 				}
 			}
 		}

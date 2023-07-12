@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -111,15 +110,11 @@ public final class Configed {
 			Logging.debug("they are equal");
 		}
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		startConfiged();
@@ -202,46 +197,30 @@ public final class Configed {
 
 	public static String getResourceValue(String key) {
 		String result = null;
-		try {
-			if (extraLocalization != null) {
-				result = extraLocalization.getProperty(key);
-				if (result == null) {
-					Logging.info("extraLocalization.getProperty null for key " + key);
-				}
-			}
-
+		if (extraLocalization != null) {
+			result = extraLocalization.getProperty(key);
 			if (result == null) {
+				Logging.info("extraLocalization.getProperty null for key " + key);
+			}
+		}
+
+		if (result == null) {
+			if (Messages.messagesBundle != null) {
 				result = Messages.messagesBundle.getString(key);
+			} else {
+				Logging.error("Messages.messagesBundle is null...");
 			}
+		}
 
-			if (showLocalizationStrings) {
-				Logging.info("LOCALIZE " + key + " by " + result);
-				result = "" + result + "[[" + key + "]]";
-
-			}
-		} catch (MissingResourceException mre) {
-			// we return the key and log the problem:
-			Logging.debug("Problem: " + mre.toString());
-
-			try {
-				result = Messages.messagesEnBundle.getString(key);
-
-				if (showLocalizationStrings) {
-					Logging.info("LOCALIZE " + key + " by " + result);
-					result = "" + result + "?? [[" + key + "]]";
-
-				}
-			} catch (MissingResourceException mre2) {
-				Logging.debug("Problem: " + mre2.toString());
-
-			}
-		} catch (Exception ex) {
-			Logging.warning("Failed to message " + key, ex);
+		if (showLocalizationStrings) {
+			Logging.info("LOCALIZE " + key + " by " + result);
+			result = "" + result + "[[" + key + "]]";
 		}
 
 		if (result == null) {
 			result = key;
 		}
+
 		return result;
 	}
 
@@ -541,22 +520,11 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
-		}
-
-		// Turn on antialiasing for text (not for applets)
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex);
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		new Configed(host, user, password, client, clientgroup, tab);

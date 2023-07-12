@@ -52,7 +52,7 @@ public class SWAuditClientEntry {
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 
-	public static final List<String> KEYS = new LinkedList<>();
+	public static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(SWAuditEntry.ID);
 		KEYS.add(SWAuditEntry.NAME);
@@ -125,39 +125,11 @@ public class SWAuditClientEntry {
 	public static String produceSWident(List<String> keys, List<String> values) {
 		// from db columns
 
-		String result = "";
-		try {
-			result = Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
-		} catch (Exception ex) {
-			Logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys + " -- " + values);
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.NAME));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.VERSION));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUB_VERSION));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.LANGUAGE));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))));
-
-		}
-
-		return result;
+		return Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 	}
 
 	private void updateSoftware() {

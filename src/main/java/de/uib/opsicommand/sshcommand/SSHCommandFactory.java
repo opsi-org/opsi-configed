@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -140,7 +141,7 @@ public final class SSHCommandFactory {
 	 **/
 	private SSHCommandFactory(ConfigedMain main) {
 		this.configedMain = main;
-		Logging.info(this, "SSHComandFactory new instance");
+		Logging.info(this.getClass(), "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);
@@ -437,8 +438,8 @@ public final class SSHCommandFactory {
 			JSONArray jsComArrCom = new JSONArray(((SSHMultiCommand) command).getCommandsRaw());
 			jsComMap.put(COMMAND_MAP_COMMANDS, jsComArrCom);
 			jsonObjects.add(jsComMap);
-		} catch (Exception e) {
-			Logging.warning(this, "saveSSHCommand, exception occurred", e);
+		} catch (JSONException e) {
+			Logging.warning(this, "saveSSHCommand, JSONException occurred", e);
 		}
 
 		if (listKnownMenus.contains(command.getMenuText())) {
@@ -539,29 +540,24 @@ public final class SSHCommandFactory {
 	public void testConnection(String user, String host) {
 		SSHCommand command = new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false);
 		connectionState = UNKNOWN;
-		try {
-			if (connection.connect(command)) {
-				String result = connection.exec(command, false);
-				Logging.info(this, "connection.exec produces " + result);
-				if (result == null || result.trim().isEmpty()) {
-					Logging.info(this, "testConnection not allowed");
-					connectionState = CONNECTION_NOT_ALLOWED;
-					Logging.warning(this, "cannot connect to " + user + "@" + host);
-				} else {
-					Logging.info(this, "testConnection connected");
-					connectionState = CONNECTED;
-				}
-			} else {
-				Logging.info(this, "testConnection not connected");
-				connectionState = NOT_CONNECTED;
-				Logging.warning(this, "cannot connect to " + user + "@" + host);
-			}
 
-		} catch (Exception e) {
+		if (connection.connect(command)) {
+			String result = connection.exec(command, false);
+			Logging.info(this, "connection.exec produces " + result);
+			if (result == null || result.trim().isEmpty()) {
+				Logging.info(this, "testConnection not allowed");
+				connectionState = CONNECTION_NOT_ALLOWED;
+				Logging.warning(this, "cannot connect to " + user + "@" + host);
+			} else {
+				Logging.info(this, "testConnection connected");
+				connectionState = CONNECTED;
+			}
+		} else {
 			Logging.info(this, "testConnection not connected");
 			connectionState = NOT_CONNECTED;
-			Logging.warning(this, "cannot connect to " + user + "@" + host, e);
+			Logging.warning(this, "cannot connect to " + user + "@" + host);
 		}
+
 		updateConnectionInfo(connectionState);
 		Logging.info(this, "testConnection connection state " + connectionState);
 	}

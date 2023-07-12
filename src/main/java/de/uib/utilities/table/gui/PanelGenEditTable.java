@@ -184,7 +184,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (popupsWanted != null) {
 			for (int j = 0; j < popupsWanted.length; j++) {
 				this.internalpopups.add(popupsWanted[j]);
-				Logging.info(this, "add popup " + popupsWanted[j]);
+				Logging.info(this.getClass(), "add popup " + popupsWanted[j]);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -192,11 +192,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			this.internalpopups.add(POPUP_PDF);
 		}
 
-		Logging.info(this, "internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups " + giveMenuitemNames(internalpopups));
 
 		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
-		Logging.info(this, "internalpopups supplemented " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups supplemented " + giveMenuitemNames(internalpopups));
 
 		if (maxTableWidth > 0) {
 			this.maxTableWidth = maxTableWidth;
@@ -714,20 +714,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void exportTable() {
-		try {
-			HashMap<String, String> metaData = new HashMap<>();
-			metaData.put("header", title);
-			metaData.put("subject", "report of table");
-			metaData.put("keywords", "");
+		HashMap<String, String> metaData = new HashMap<>();
+		metaData.put("header", title);
+		metaData.put("subject", "report of table");
+		metaData.put("keywords", "");
 
-			ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
-			pdfExportTable.setMetaData(metaData);
-			pdfExportTable.setPageSizeA4Landscape();
-			pdfExportTable.execute(null, true);
-
-		} catch (Exception ex) {
-			Logging.error("PDF printing error " + ex);
-		}
+		ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		pdfExportTable.execute(null, true);
 	}
 
 	public void addPopupItem(JMenuItem item) {
@@ -780,14 +775,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			sortDescriptor = new LinkedHashMap<>();
 
 			if (tableModel.getKeyCol() > -1) {
-				try {
+				sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 
-					sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
-
-					sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
-				} catch (Exception ex) {
-					Logging.debug(this, "sortkey problem " + ex);
-				}
+				sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
 
 			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
 				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
@@ -821,35 +811,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			return;
 		}
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel) {
-			@Override
-			protected boolean useToString(int column) {
-				try {
-					return super.useToString(column);
-				} catch (Exception ex) {
-					Logging.debug(this, "column " + column + " no way to string");
-					return false;
-				}
-			}
-
-			@Override
-			public Comparator<?> getComparator(int column) {
-				try {
-					Logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
-					return super.getComparator(column);
-				} catch (Exception ex) {
-					Logging.warning(this, "column " + column + " not getting comparator", ex);
-					return null;
-				}
-			}
-		};
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 
 		for (int j = 0; j < tableModel.getColumnCount(); j++) {
 
 			// TODO check if this is ever used
 			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-				((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
+				sorter.setComparator(j, new IntComparatorForStrings());
 			}
 		}
 
@@ -1209,13 +1178,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public Object getValueAt(int row, int col) {
-
-		try {
-			return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
-		} catch (Exception ex) {
-			Logging.debug("encountered error while trying to retrieve value from table: " + ex);
-			return null;
-		}
+		return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 	}
 
 	public void selectedRowChanged() {

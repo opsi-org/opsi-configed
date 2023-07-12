@@ -59,11 +59,9 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			@Override
 			public void run() {
 				Logging.debug(this, "activateShowLevel call");
-				try {
-					logPane.activateShowLevel();
-				} catch (Exception ex) {
-					Logging.debug(this, "Exception in activateShowLevel " + ex);
-				}
+
+				logPane.activateShowLevel();
+
 				setCursor(null);
 			}
 		});
@@ -102,10 +100,6 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			levelMap.put(i, new JLabel(" . "));
 		}
 
-		try {
-			setLabelTable(new Hashtable<>(levelMap));
-		} catch (Exception ex) {
-			Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
-		}
+		setLabelTable(new Hashtable<>(levelMap));
 	}
 }

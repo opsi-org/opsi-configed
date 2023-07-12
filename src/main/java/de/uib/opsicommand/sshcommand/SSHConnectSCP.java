@@ -18,6 +18,7 @@ import javax.swing.SwingWorker;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -230,8 +231,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 				Logging.warning(this, "SSH IOException", ex);
 				foundError = true;
 				publishError(ex.toString());
-			} catch (Exception e) {
-				Logging.warning(this, "SSH Exception", e);
+			} catch (SftpException e) {
+				Logging.warning(this, "SftpException Exception", e);
 				foundError = true;
 				publishError(e.getMessage());
 				Thread.currentThread().interrupt();

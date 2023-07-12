@@ -19,7 +19,6 @@ import java.util.TreeSet;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
@@ -60,8 +59,8 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		Logging.info(this, "create with existing collections depots, hostgroups, productgroups " + existingDepots.size()
-				+ " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
+		Logging.info(this.getClass(), "create with existing collections depots, hostgroups, productgroups "
+				+ existingDepots.size() + " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
 	}
 
 	public List<Object> produce() {
@@ -172,7 +171,7 @@ public class UserConfigProducing {
 			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
 			item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 
 		Logging.info(this, "supplyPermissionList  configKey " + configKeyList);
@@ -204,10 +203,10 @@ public class UserConfigProducing {
 
 			item.put("description",
 					"the primary value setting is an empty selection list, but all existing items as option");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(selectedValues));
-			item.put("possibleValues", AbstractExecutioner.jsonArray(listOptions));
+			item.put("defaultValues", selectedValues);
+			item.put("possibleValues", listOptions);
 
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+			readyObjects.add(item);
 		}
 	}
 
@@ -291,7 +290,7 @@ public class UserConfigProducing {
 				Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " "
 						+ possibleValuesRole + ", " + roleParts);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
+				readyObjects.add(itemRole);
 			} else if (!((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
 
 				// we have got some value
@@ -359,8 +358,7 @@ public class UserConfigProducing {
 
 			// there is no formally correct value)
 			// the specific values differs from prototype values and must be corrected
-			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
-					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))) {
+			if (containsValidBoolean(values, prototypeObligatory, prototypeConfig.getBooleanValue(partkey))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 				value = prototypeConfig.getBooleanValue(partkey);
@@ -369,7 +367,7 @@ public class UserConfigProducing {
 				item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKey, value,
 						"the primary value setting is based on the user group");
 
-				readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(item);
 			} else {
 				value = (Boolean) values.get(0);
 			}
@@ -406,7 +404,7 @@ public class UserConfigProducing {
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
 
-				readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
+				readyObjects.add(itemRole);
 			}
 		}
 
@@ -435,7 +433,7 @@ public class UserConfigProducing {
 						configKey, false, false, values, values);
 
 				// TODO
-				readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(item);
 			}
 		}
 
@@ -659,7 +657,17 @@ public class UserConfigProducing {
 			Logging.info(this, "modi time " + itemModifyTime);
 
 			// TODO
-			readyObjects.add(AbstractExecutioner.jsonMap(itemModifyTime));
+			readyObjects.add(itemModifyTime);
 		}
+	}
+
+	private static boolean containsValidBoolean(List<Object> values, boolean prototypeObligatory,
+			Boolean prototypeConfigValue) {
+
+		if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)) {
+			return true;
+		}
+
+		return prototypeObligatory && !values.get(0).equals(prototypeConfigValue);
 	}
 }

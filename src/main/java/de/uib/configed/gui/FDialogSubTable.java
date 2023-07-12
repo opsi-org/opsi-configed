@@ -24,7 +24,7 @@ public class FDialogSubTable extends FGeneralDialog {
 	public FDialogSubTable(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, true);
-		Logging.info(this, "created ");
+		Logging.info(this.getClass(), "created ");
 		additionalPaneMaxWidth = Short.MAX_VALUE;
 	}
 
@@ -94,6 +94,5 @@ public class FDialogSubTable extends FGeneralDialog {
 						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)));
-
 	}
 }

@@ -42,5 +42,4 @@ public class SWcsvExporter extends AbstractSWExporter {
 	protected String getExtension() {
 		return ".csv";
 	}
-
 }

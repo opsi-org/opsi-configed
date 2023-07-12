@@ -48,10 +48,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SSHPMInstallSettingsPanel() {
-		this(null);
-	}
-
 	public SSHPMInstallSettingsPanel(JDialog dia) {
 
 		if (dia != null) {

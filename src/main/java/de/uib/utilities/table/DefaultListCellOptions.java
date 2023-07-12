@@ -28,8 +28,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 		editable = true;
 		nullable = true;
 		description = "";
-		Logging.info(this, "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode + ", "
-				+ editable + ", " + nullable);
+		Logging.info(this.getClass(), "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode
+				+ ", " + editable + ", " + nullable);
 	}
 
 	public DefaultListCellOptions(List<Object> possibleValues, List<Object> defaultValues, int selectionMode,
@@ -45,8 +45,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 		} else {
 			this.description = description;
 		}
-		Logging.info(this, "constructed with given " + possibleValues + ", " + defaultValues + ", " + selectionMode
-				+ ", " + editable + ", " + nullable);
+		Logging.info(this.getClass(), "constructed with given " + possibleValues + ", " + defaultValues + ", "
+				+ selectionMode + ", " + editable + ", " + nullable);
 	}
 
 	public static ListCellOptions getNewBooleanListCellOptions() {

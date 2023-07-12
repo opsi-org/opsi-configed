@@ -9,8 +9,6 @@ package de.uib.utilities.datastructure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
-
 public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	// very similar to RelationElement
 	// static values and methods (resp. methods based on static values)
@@ -24,15 +22,9 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	}
 
 	protected void remap(String key, String keyRetrieved) {
-		try {
-			if (entryRetrieved.get(keyRetrieved) != null) {
-				put(key, entryRetrieved.get(keyRetrieved));
-			} else {
-				put(key, "");
-			}
-		} catch (Exception ex) {
-			Logging.debug(this, "remap keyRetrieved, exception " + ex);
-
+		if (entryRetrieved.get(keyRetrieved) != null) {
+			put(key, entryRetrieved.get(keyRetrieved));
+		} else {
 			put(key, "");
 		}
 	}

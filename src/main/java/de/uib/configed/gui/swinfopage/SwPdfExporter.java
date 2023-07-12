@@ -12,13 +12,11 @@ import javax.swing.JTable;
 
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class SwPdfExporter extends AbstractSWExporter {
 
 	private JTable theTable;
 	private ExporterToPDF exportTable;
-	private boolean onlySelectedRows;
 
 	public SwPdfExporter() {
 
@@ -46,20 +44,12 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 		exportTable.setClient(clientName);
 		exportTable.setMetaData(metaData);
-		exportTable.execute(exportFilename, onlySelectedRows);
+		exportTable.execute(exportFilename, false);
 
 	}
 
 	@Override
 	protected String getExtension() {
 		return ".pdf";
-	}
-
-	public void setPanelTableForExportTable(PanelGenEditTable panelTable) {
-		exportTable.setPanelTable(panelTable);
-	}
-
-	public void setOnlySelectedRows() {
-		onlySelectedRows = true;
 	}
 }

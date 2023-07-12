@@ -145,8 +145,6 @@ public class PanelMountShare extends JPanel {
 			Runtime.getRuntime().exec(new String[] { call });
 		} catch (IOException ioex) {
 			Logging.error("io-Error: " + ioex, ioex);
-		} catch (Exception ex) {
-			Logging.error("general error on starting net mount " + ex, ex);
 		}
 
 		mountShareDescriptionLabel

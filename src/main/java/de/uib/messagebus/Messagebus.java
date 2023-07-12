@@ -18,7 +18,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -79,7 +78,7 @@ public class Messagebus implements MessagebusListener {
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		ServerFacade exec = getServerFacadeExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
@@ -87,9 +86,9 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getMessagebusListener());
 		}
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
-		if (exec.sessionId != null) {
+		if (exec.getSessionId() != null) {
 			Logging.debug("Adding cookie header");
-			messagebusWebSocket.addHeader("Cookie", exec.sessionId);
+			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
 		messagebusWebSocket.setSocketFactory(factory);
@@ -108,13 +107,14 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private boolean waitForInitialChannelSubscritionEvent(long timeoutMs) {
-		long start = new Date().getTime();
+		long start = System.currentTimeMillis();
 		while (!initialSubscriptionReceived) {
 			if (!messagebusWebSocket.isOpen()) {
 				Logging.info("Websocket closed while waiting for inital subscription event");
 				return false;
 			}
-			if (new Date().getTime() - start >= timeoutMs) {
+
+			if (System.currentTimeMillis() - start >= timeoutMs) {
 				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
 				return false;
 			}
@@ -170,19 +170,19 @@ public class Messagebus implements MessagebusListener {
 		return result;
 	}
 
-	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
-		return (JSONthroughHTTPS) persistenceController.exec;
+	private ServerFacade getServerFacadeExecutor() {
+		return (ServerFacade) persistenceController.exec;
 	}
 
 	private String createEncBasicAuth() {
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
-		String basicAuth = String.format("%s:%s", exec.username, exec.password);
+		ServerFacade exec = getServerFacadeExecutor();
+		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 
 	private SSLSocketFactory createDullSSLSocketFactory() {
 		// Create a new trust manager that trust all certificates
-		@SuppressWarnings("squid:S4830")
+		@SuppressWarnings("java:S4830")
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			@Override
 			public X509Certificate[] getAcceptedIssuers() {

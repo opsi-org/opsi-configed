@@ -152,6 +152,16 @@ public class CopyClient {
 	@SuppressWarnings("java:S109")
 	private String getDomainFromClientName() {
 		String[] splittedClientName = clientToCopy.getName().split("\\.");
-		return splittedClientName[1] + "." + splittedClientName[2];
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 1; i < splittedClientName.length; i++) {
+			sb.append(splittedClientName[i]);
+			
+			if (i != splittedClientName.length - 1) {
+				sb.append(".");
+			}
+		}
+
+		return sb.toString();
 	}
 }

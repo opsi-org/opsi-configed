@@ -124,12 +124,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		return instance;
 	}
 
-	public static void closeNewClientDialog() {
-		if (instance != null) {
-			instance.setVisible(false);
-		}
-	}
-
 	/**
 	 * Sets the given domain configuration for new clients It expects that
 	 * domains is not empty and the
@@ -897,7 +891,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		return csvImportDataDialog;
 	}
 
-	public static void createCSVTemplate() {
+	private static void createCSVTemplate() {
 		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");

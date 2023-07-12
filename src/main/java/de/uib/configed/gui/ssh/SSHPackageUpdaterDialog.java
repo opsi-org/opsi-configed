@@ -40,13 +40,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private CommandPackageUpdater command;
 
 	public SSHPackageUpdaterDialog() {
-		this(new CommandPackageUpdater());
-	}
-
-	public SSHPackageUpdaterDialog(CommandPackageUpdater command) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
-		this.command = command;
-		Logging.info(this, "with command");
+		command = new CommandPackageUpdater();
+		Logging.info(this.getClass(), "with command");
 		retrieveRepos();
 		init();
 		initLayout();
@@ -54,13 +50,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 	private void retrieveRepos() {
 		SSHConnectExec ssh = new SSHConnectExec();
-		String result = "";
-		try {
-			result = ssh.exec(command, false /* =>without gui */ );
-		} catch (Exception e) {
-			Logging.error(this, "ssh execution error", e);
-
-		}
+		String result = ssh.exec(command, false);
 
 		if (result == null) {
 			Logging.error("retrieve repos " + "FAILED");
@@ -73,7 +63,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 				// escaping ansicodes
 				repostatus = repostatus.replace("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
-				repostatus = repostatus.replace("", "").replace("\u001B", "");
+				repostatus = repostatus.replace("\u001B", "").replace("\u001B", "");
 
 				String[] repoStatus = repostatus.split("\\(");
 				repoStatus[1] = repoStatus[1].split("\\)")[0];
@@ -149,27 +139,22 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		try {
-			command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
-			String repo = (String) jComboBoxRepos.getSelectedItem();
-			if (repo.equals(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
-				command.setRepo(null);
-			} else {
-				command.setRepo(repo);
-			}
 
-			Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
-			new SSHConnectExec(command);
-
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
+		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
+		String repo = (String) jComboBoxRepos.getSelectedItem();
+		if (repo.equals(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
+			command.setRepo(null);
+		} else {
+			command.setRepo(repo);
 		}
 
+		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
+		new SSHConnectExec(command);
 	}
 
 	// /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

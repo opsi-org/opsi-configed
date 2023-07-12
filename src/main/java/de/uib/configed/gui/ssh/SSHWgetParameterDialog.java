@@ -261,23 +261,19 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			new Thread() {
 				@Override
 				public void run() {
-					try {
-						Logging.info(this, "doAction3 wget ");
-						new SSHConnectExec(commandWget, jButtonExecute);
-					} catch (Exception e) {
-						Logging.warning(this, "doAction3, exception occurred", e);
-					}
+					Logging.info(this, "doAction3 wget ");
+					new SSHConnectExec(commandWget, jButtonExecute);
 				}
 			}.start();
 		}
 	}
 
-	public void doActionHelp() {
+	private void doActionHelp() {
 		SSHConnectionExecDialog dia = commandWget.startHelpDialog();
 		dia.setVisible(true);
 	}
 
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

@@ -108,7 +108,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		editMapPanel.registerDataChangedObserver(o);
 	}
 
-	public void activateCombo(ComboBoxModel<String> model) {
+	private void activateCombo(ComboBoxModel<String> model) {
 		if (model != null) {
 			combo.setModel(model);
 		}
@@ -153,5 +153,4 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 			setMap((String) combo.getSelectedItem());
 		}
 	}
-
 }

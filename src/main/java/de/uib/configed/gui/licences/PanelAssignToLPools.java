@@ -605,5 +605,4 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			fSoftwarename2LicencePool.panelSWnames.moveToValue(resetToSWname, 0, true);
 		}
 	}
-
 }

@@ -160,22 +160,19 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			Logging.info(this, "compareStates 9");
 			return false;
 		} else if (jCheckBoxUseKeyFile.isSelected()) {
-			try {
 
-				if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
-					Logging.debug(this, "compareStates 10");
-					return false;
-				}
-
-				String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
-
-				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
-					Logging.debug(this, "compareStates 11");
-					return false;
-				}
-			} catch (Exception e) {
-				Logging.warning(this, "Error", e);
+			if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
+				Logging.debug(this, "compareStates 10");
+				return false;
 			}
+
+			String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
+
+			if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
+				Logging.debug(this, "compareStates 11");
+				return false;
+			}
+
 		} else {
 			// continue with the rest of the method
 		}
@@ -566,7 +563,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setComponentsEditable(value);
 	}
 
-	public static void setComponentsEditable(boolean value) {
+	private static void setComponentsEditable(boolean value) {
 		jComboBoxHost.setEnabled(value);
 		jTextFieldPort.setEnabled(value);
 		jTextFieldUser.setEnabled(value);
@@ -666,7 +663,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		checkComponentStates();
 	}
 
-	public void doActionOeffnen() {
+	private void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);

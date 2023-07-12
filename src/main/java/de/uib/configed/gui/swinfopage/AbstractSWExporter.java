@@ -17,6 +17,7 @@ import java.util.Map;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ErrorCode;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
@@ -90,7 +91,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (clientsFile.isEmpty()) {
-			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
+			finish(ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
 		File userHome = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
@@ -115,11 +116,11 @@ public abstract class AbstractSWExporter {
 		Messages.setLocale("en");
 		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
 		if (persistenceController == null) {
-			finish(de.uib.configed.ErrorCode.INITIALIZATION_ERROR);
-		}
-
-		if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			finish(de.uib.configed.ErrorCode.CONNECTION_ERROR);
+			finish(ErrorCode.INITIALIZATION_ERROR);
+		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
+			finish(ErrorCode.CONNECTION_ERROR);
+		} else {
+			// Continue, Configed won't be closed
 		}
 
 		Logging.info(this, "starting");
@@ -147,14 +148,13 @@ public abstract class AbstractSWExporter {
 
 	}
 
-	public void finish(int exitcode) {
-		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
+	private static void finish(int exitcode) {
+		Logging.error(ErrorCode.tell(exitcode));
 		Main.endApp(exitcode);
 	}
 
-	public void setWriteToFile(String path) {
+	private void setWriteToFile(String path) {
 		exportFilename = path;
-
 	}
 
 	public void setHost(String hostId) {
@@ -167,7 +167,6 @@ public abstract class AbstractSWExporter {
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
-
 	}
 
 	private void initModel(String hostId) {
@@ -212,11 +211,10 @@ public abstract class AbstractSWExporter {
 
 	protected abstract String getExtension();
 
-	public void updateModel() {
+	private void updateModel() {
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 	}
-
 }

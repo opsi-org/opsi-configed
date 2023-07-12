@@ -171,37 +171,22 @@ public class PanelProductProperties extends JSplitPane {
 
 					Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 
-					List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
-
 					String versionInfo = "";
-					boolean retrieval = true;
 
-					try {
-						versionInfo = OpsiPackage.produceVersionInfo(
-								"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-								"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+					versionInfo = OpsiPackage.produceVersionInfo(
+							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-						depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
-								.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+					List<String> depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
+							.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
-						Logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
-								+ versionInfo + " " + (depotsOfPackageAsRetrieved == null));
-
-					} catch (Exception ex) {
-						retrieval = false;
-					}
-					// no exception
-					if (retrieval && depotsOfPackageAsRetrieved == null) {
-						retrieval = false;
-					}
+					Logging.info(this, "valueChanged  versionInfo " + versionInfo);
 
 					depotsOfPackage = new LinkedList<>();
 
-					if (retrieval) {
-						for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
-							if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
-								depotsOfPackage.add(depot);
-							}
+					for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
+						if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
+							depotsOfPackage.add(depot);
 						}
 					}
 

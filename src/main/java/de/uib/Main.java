@@ -272,32 +272,35 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-
 		setGlobalValues();
 
 		createOptions();
-
+		CommandLine cmd;
 		try {
 			CommandLineParser parser = new DefaultParser(false);
 
-			CommandLine cmd = parser.parse(options, args, false);
-
-			parseArgs(cmd);
-
-			if (THEMES) {
-				setOpsiLaf();
-			} else {
-				configureUI();
-			}
-
-			if (isLogviewer) {
-				Logviewer.main(cmd);
-			} else {
-				Configed.main(cmd);
-			}
+			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
 			Logging.error("Problem parsing arguments", e);
 			showHelp();
+			return;
+		}
+
+		parseArgs(cmd);
+
+		if (THEMES) {
+			setOpsiLaf();
+		} else {
+			configureUI();
+		}
+
+		// Turn on antialiasing for text (not for applets)
+		System.setProperty("swing.aatext", "true");
+
+		if (isLogviewer) {
+			Logviewer.main(cmd);
+		} else {
+			Configed.main(cmd);
 		}
 
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);

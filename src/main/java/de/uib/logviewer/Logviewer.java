@@ -31,31 +31,28 @@ public final class Logviewer {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		Logging.essential(this, "starting " + getClass().getName());
+		Logging.essential(this.getClass(), "starting " + getClass().getName());
 
 		String imageHandled = "(we start image retrieving)";
-		Logging.info(this, imageHandled);
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-				imageHandled = "setIconImage";
-			}
-		} catch (Exception ex) {
-			Logging.warning(this, "imageHandled failed: " + ex.toString());
+		Logging.info(this.getClass(), imageHandled);
+
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.warning(this.getClass(), "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+			imageHandled = "setIconImage";
 		}
 
-		Logging.info(this, "--  wantedDirectory " + Logging.logDirectoryName);
+		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
 
 		// set wanted fileName
 		if (fileName != null) {
 			if (new File(fileName).isDirectory()) {
-				Logging.info(this, "This is a directory: " + fileName);
+				Logging.info(this.getClass(), "This is a directory: " + fileName);
 				LogFrame.setFileName("");
 			} else if (!new File(fileName).exists()) {
-				Logging.info(this, "File does not exist: " + fileName);
+				Logging.info(this.getClass(), "File does not exist: " + fileName);
 				LogFrame.setFileName("");
 			} else {
 				LogFrame.setFileName(fileName);
@@ -111,22 +108,11 @@ public final class Logviewer {
 
 		processArgs(cmd);
 
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.warning("imageHandled failed: ", ex);
-		}
-
-		// Turn on antialiasing for text 
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex.toString());
+		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+		if (resource == null) {
+			Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+		} else {
+			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		new Logviewer();

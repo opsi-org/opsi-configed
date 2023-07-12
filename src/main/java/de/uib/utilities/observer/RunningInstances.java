@@ -6,8 +6,7 @@
 
 package de.uib.utilities.observer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,15 +33,14 @@ public class RunningInstances<T> {
 	private ConcurrentHashMap<T, String> instances;
 
 	// the observers
-	private List<RunningInstancesObserver<T>> observers;
+	private Set<RunningInstancesObserver<T>> observers;
 
 	public RunningInstances(Class<?> type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
-		Logging.info(this, "created for class " + classname);
+		Logging.info(this.getClass(), "created for class " + classname);
 		instances = new ConcurrentHashMap<>();
-		observers = new ArrayList<>();
-
+		observers = new HashSet<>();
 	}
 
 	public void add(T instance, String description) {

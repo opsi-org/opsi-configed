@@ -409,7 +409,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		leave();
 	}
 
-	public void write(String csvFile) {
+	private void write(String csvFile) {
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
 			List<String> headers = new ArrayList<>();

@@ -107,7 +107,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
@@ -540,11 +540,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			ImageIcon localeIcon = null;
 			String imageIconName = Messages.getLocaleInfo().get(localeName);
 			if (imageIconName != null && imageIconName.length() > 0) {
-				try {
-					localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
-				} catch (Exception ex) {
-					Logging.info(this, "icon not found: " + imageIconName + ", " + ex);
-				}
+				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
@@ -873,7 +869,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(jMenuAddClient);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuClients.add(jMenuCopyClient);
 		}
 		jMenuClients.add(jMenuDeleteClient);
@@ -898,7 +894,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuClients.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		}
 		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
@@ -1198,7 +1194,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(this);
-		jMenuFrameDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
+		jMenuFrameDashboard.setVisible(ServerFacade.isOpsi43());
 
 		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
 		jMenuFrameLicences.setEnabled(false);
@@ -1228,11 +1224,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameDashboard);
 		}
 		jMenuFrames.add(jMenuFrameLicences);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameTerminal);
 		}
 		jMenuFrames.addSeparator();
@@ -1257,8 +1253,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
-				+ JSONthroughHTTPS.getServerVersion());
+		jMenuHelpOpsiVersion.setText(
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + ServerFacade.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		if (!Main.THEMES) {
 			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
@@ -1274,7 +1270,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpInternalConfiguration.setText(Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
 
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpInternalConfiguration);
 		}
 
@@ -1305,7 +1301,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
 		}
 
@@ -1617,7 +1613,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// --
 		popupClients.add(popupAddClient);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			popupClients.add(popupCopyClient);
 		}
 		popupClients.add(popupDeleteClient);
@@ -1639,7 +1635,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		popupClients.add(popupShowWANactiveColumn);
 		popupClients.add(popupShowIPAddressColumn);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			popupClients.add(popupShowSystemUUIDColumn);
 		}
 		popupClients.add(popupShowHardwareAddressColumn);
@@ -1681,31 +1677,27 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
 
-		try {
-			HashMap<String, String> metaData = new HashMap<>();
-			String title = Configed.getResourceValue("MainFrame.ClientList");
+		HashMap<String, String> metaData = new HashMap<>();
+		String title = Configed.getResourceValue("MainFrame.ClientList");
 
-			if (statusPane.getGroupName().length() != 0) {
-				title = title + ": " + statusPane.getGroupName();
-			}
-			metaData.put("header", title);
-			title = "";
-			if (statusPane.getInvolvedDepots().length() != 0) {
-				title = title + "Depot(s) : " + statusPane.getInvolvedDepots();
-			}
-
-			metaData.put("title", title);
-			metaData.put("subject", "report of table");
-			metaData.put("keywords", "");
-
-			ExporterToPDF pdfExportTable = new ExporterToPDF(panelClientlist.getTable());
-
-			pdfExportTable.setMetaData(metaData);
-			pdfExportTable.setPageSizeA4Landscape();
-			pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
-		} catch (Exception ex) {
-			Logging.error("pdf printing error " + ex);
+		if (statusPane.getGroupName().length() != 0) {
+			title = title + ": " + statusPane.getGroupName();
 		}
+		metaData.put("header", title);
+		title = "";
+		if (statusPane.getInvolvedDepots().length() != 0) {
+			title = title + "Depot(s) : " + statusPane.getInvolvedDepots();
+		}
+
+		metaData.put("title", title);
+		metaData.put("subject", "report of table");
+		metaData.put("keywords", "");
+
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelClientlist.getTable());
+
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -1786,7 +1778,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		labelClientInventoryNumber.setPreferredSize(Globals.buttonDimension);
 		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
 		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
-		labelClientSystemUUID.setVisible(JSONthroughHTTPS.isOpsi43());
+		labelClientSystemUUID.setVisible(ServerFacade.isOpsi43());
 		JLabel labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
 		JLabel labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
@@ -1842,7 +1834,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(JSONthroughHTTPS.isOpsi43());
+		systemUUIDField.setVisible(ServerFacade.isOpsi43());
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -2185,8 +2177,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonDashboard.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 
-		jButtonDashboard.setEnabled(JSONthroughHTTPS.isOpsi43());
-		jButtonDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
+		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
+		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
 		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
@@ -2269,9 +2261,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
-										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
-										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0)
+								.addGap(ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0)
 								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -2466,7 +2458,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				super.saveHostConfig();
 				configedMain.checkSaveAll(false);
 			}
-
 		};
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
@@ -2752,14 +2743,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void getReachableInfo() {
 		iconButtonReachableInfo.setEnabled(false);
-		try {
-			SwingUtilities.invokeLater(configedMain::getReachableInfo);
-		} catch (Exception ex) {
-			Logging.debug(this, "Exception " + ex);
-		}
+
+		SwingUtilities.invokeLater(configedMain::getReachableInfo);
 	}
 
-	public void callSelectionDialog() {
+	private void callSelectionDialog() {
 		configedMain.callClientSelectionDialog();
 	}
 
@@ -2803,7 +2791,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void reloadAction() {
+	private void reloadAction() {
 		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		configedMain.reload();
 	}
@@ -2821,7 +2809,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		glassPane.activate(false);
 	}
 
-	public void reloadLicensesAction() {
+	private void reloadLicensesAction() {
 		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
 		new Thread() {
 			@Override
@@ -2833,7 +2821,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}.start();
 	}
 
-	public void checkMenuItemsDisabling() {
+	private void checkMenuItemsDisabling() {
 		if (menuItemsHost == null) {
 			Logging.info(this, "checkMenuItemsDisabling: menuItemsHost not yet enabled");
 			return;
@@ -2932,25 +2920,25 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -------------------
 
-	public void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
+	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
 		configedMain.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
 				resetNetbootProducts);
 	}
 
-	public void addClientAction() {
+	private void addClientAction() {
 		configedMain.callNewClientDialog();
 	}
 
-	public void changeClientIDAction() {
+	private void changeClientIDAction() {
 		configedMain.callChangeClientIDDialog();
 	}
 
-	public void changeDepotAction() {
+	private void changeDepotAction() {
 		configedMain.callChangeDepotDialog();
 	}
 
-	public void showBackendConfigurationAction() {
+	private void showBackendConfigurationAction() {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { Configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
@@ -3077,7 +3065,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fEditPane.setVisible(true);
 	}
 
-	public void callOpsiLicensingInfo() {
+	private void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
@@ -3150,12 +3138,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void componentResized(ComponentEvent e) {
 		Logging.debug(this, "componentResized");
 
-		try {
-			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-					(int) (F_WIDTH_RIGHTHANDED * 1.5));
-		} catch (Exception ex) {
-			Logging.info(this, "componentResized " + ex);
-		}
+		moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+				(int) (F_WIDTH_RIGHTHANDED * 1.5));
 		Logging.debug(this, "componentResized ready");
 	}
 
@@ -3194,11 +3178,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			if (f != null) {
 				f.setVisible(true);
-				try {
-					f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
-				} catch (Exception ex) {
-					Logging.info(this, "arrangeWs, could not get location");
-				}
+				f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
 			}
 		}
 	}
@@ -3395,7 +3375,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			licenseDisplayer.display();
 		}
-
 	}
 
 	public void enableAfterLoading() {
@@ -3626,10 +3605,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void setClientID(String s) {
 		labelHostID.setText(s);
-	}
-
-	public String getClientID() {
-		return labelHostID.getText();
 	}
 
 	public void setClientInfoediting(boolean singleClient) {

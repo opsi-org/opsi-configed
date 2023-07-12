@@ -34,6 +34,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
@@ -111,7 +112,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super(new BorderLayout());
 
 		// Set variables
-		Logging.info(this, "initializing");
+		Logging.info(this.getClass(), "initializing");
 		title = "";
 		info = "";
 
@@ -184,7 +185,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
-		highlighter = new UnderlineHighlighter(null);
+		highlighter = new DefaultHighlighter();
 		jTextPane.setHighlighter(highlighter);
 
 		if (defaultText != null) {
@@ -359,7 +360,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
 	}
 
-	public void treatPopupAction(int p) {
+	private void treatPopupAction(int p) {
 		switch (p) {
 		case PopupMenuTrait.POPUP_RELOAD:
 			reload();
@@ -517,27 +518,26 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private Integer produceInitialMaxShowLevel() {
 		int result = 1;
 
-		int savedMaxShownLogLevel = 0;
+		int savedMaxShownLogLevel = DEFAULT_MAX_SHOW_LEVEL;
 		try {
 			if (Configed.savedStates != null) {
 				savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.getProperty("savedMaxShownLogLevel"));
 			}
 		} catch (NumberFormatException ex) {
-			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
-					+ Configed.savedStates.getProperty("savedMaxShownLogLevel"));
-		}
-		if (savedMaxShownLogLevel > 0) {
-			result = savedMaxShownLogLevel;
-		} else {
-			result = DEFAULT_MAX_SHOW_LEVEL;
+			Logging.warning(this,
+					"savedMaxShownLogLevel could not be read, value "
+							+ Configed.savedStates.getProperty("savedMaxShownLogLevel") + ", fallback to "
+							+ DEFAULT_MAX_SHOW_LEVEL);
+
+			Configed.savedStates.setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
 
 		Logging.info(this, "produceInitialMaxShowLevel " + result);
 
-		return result;
+		return savedMaxShownLogLevel;
 	}
 
-	public void buildDocument() {
+	private void buildDocument() {
 		Logging.debug(this, "building document");
 		setCursor(Globals.WAIT_CURSOR);
 		// Switch to an blank document temporarily to avoid repaints

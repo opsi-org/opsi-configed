@@ -124,8 +124,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
 		objectCounter++;
 
-		Logging.debug(this, " created EditMapPanelX instance No " + objectCounter + "::" + keylistExtendible + ",  "
-				+ entryRemovable + ",  " + reloadable);
+		Logging.debug(this.getClass(), " created EditMapPanelX instance No " + objectCounter + "::" + keylistExtendible
+				+ ",  " + entryRemovable + ",  " + reloadable);
 		ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -323,10 +323,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					}
 
 					if (propertyName != null && descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-						tooltip = tooltip + "\n\n" + descriptionsMap.get(propertyName);
+						tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
 					}
 
-					jc.setToolTipText(Globals.makeHTMLlines(tooltip));
+					jc.setToolTipText("<html>" + tooltip + "</html>");
 
 					// check equals with default
 
@@ -449,7 +449,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		Logging.debug(this, "setEditableMap set modelProducer  == null " + (modelProducer == null));
 		if (modelProducer != null) {
 			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass());
-			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass(0, 0));
 		}
 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
@@ -462,7 +461,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		editableColumn.setCellEditor(theCellEditor);
-
 	}
 
 	public void cancelOldCellEditing() {
@@ -585,8 +583,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " handled removeProperty for key "
 				+ key + " options " + optionsMap.get(key));
-		Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultsMap.get(key)
-				+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+
+		Object defaultValue = defaultsMap.get(key);
+
+		if (defaultValue == null) {
+			Logging.info(this, "there was no default value for " + key);
+		} else {
+			Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultValue
+					+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+		}
 
 		names = mapTableModel.getKeys();
 		Logging.info(this, "removeProperty names left: " + names);

@@ -431,22 +431,6 @@ public class PanelSWInfo extends JPanel {
 		}
 	}
 
-	public void sendToTerminal() {
-
-		SWterminalExporter exporter = new SWterminalExporter();
-
-		exporter.setHost(hostId);
-
-		if (panelTable.getSelectedRowCount() > 0) {
-			exporter.setOnlySelectedRows();
-		}
-
-		exporter.setPanelTableForExportTable(panelTable);
-
-		exporter.export();
-
-	}
-
 	public void export() {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
@@ -460,15 +444,15 @@ public class PanelSWInfo extends JPanel {
 		}
 	}
 
-	public void sendToCSV() {
+	private void sendToCSV() {
 		csvExportTable.execute(null, false);
 	}
 
-	public void sendToCSVonlySelected() {
+	private void sendToCSVonlySelected() {
 		csvExportTable.execute(null, true);
 	}
 
-	public void sendToPDF() {
+	private void sendToPDF() {
 		Logging.info(this, "create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();

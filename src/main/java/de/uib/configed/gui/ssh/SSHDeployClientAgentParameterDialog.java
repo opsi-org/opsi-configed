@@ -85,10 +85,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SSHDeployClientAgentParameterDialog() {
-		this(null);
-	}
-
 	public SSHDeployClientAgentParameterDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
 		configedMain = m;
@@ -104,7 +100,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
-		Logging.info(this, "SSHDeployClientAgentParameterDialog build");
+		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
 
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 	}
@@ -368,7 +364,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		updateCommand();
 	}
 
-	public void changeEchoChar() {
+	private void changeEchoChar() {
 		if (aktive) {
 			aktive = false;
 			jTextFieldPassword.setEchoChar('*');
@@ -378,13 +374,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void setComponentsEditable(boolean value) {
-		jTextFieldUser.setEnabled(value);
-		jTextFieldPassword.setEnabled(value);
-	}
-
 	// /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 
@@ -400,14 +391,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 
 		commandDeployClientAgent.finish(finalAction);
-		try {
-			new SSHConnectExec(commandDeployClientAgent);
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
-		}
+
+		new SSHConnectExec(commandDeployClientAgent);
 	}
 
-	public void doCopySelectedClients() {
+	private void doCopySelectedClients() {
 		String[] clientsList = configedMain.getSelectedClients();
 		if (clientsList.length > 0) {
 			StringBuilder clients = new StringBuilder();
@@ -419,7 +407,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void doActionHelp() {
+	private void doActionHelp() {
 		SSHConnectionExecDialog dia = commandDeployClientAgent.startHelpDialog();
 		dia.setVisible(true);
 	}

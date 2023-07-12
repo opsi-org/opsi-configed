@@ -252,8 +252,12 @@ public final class Logging {
 
 		String curTime = now();
 		String context = Thread.currentThread().getName();
-		if (caller != null) {
+		if (caller instanceof Class) {
+			mesg += "   (" + ((Class<?>) caller).getName() + ")";
+		} else if (caller != null) {
 			mesg += "   (" + caller.getClass().getName() + ")";
+		} else {
+			// Do nothing if caller is null
 		}
 
 		String exMesg = "";

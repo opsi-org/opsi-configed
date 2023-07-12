@@ -58,9 +58,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 			d = d + "/";
 		}
 		setProduct(d + getFilenameFromUrl(url));
-		Logging.debug(this, "CommandWget dir " + dir);
-		Logging.debug(this, "CommandWget url " + url);
-		Logging.debug(this, "CommandWget product " + getProduct());
+		Logging.debug(this.getClass(), "CommandWget dir " + dir);
+		Logging.debug(this.getClass(), "CommandWget url " + url);
+		Logging.debug(this.getClass(), "CommandWget product " + getProduct());
 		needParameter = false;
 	}
 

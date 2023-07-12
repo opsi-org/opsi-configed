@@ -118,7 +118,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		Logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlDialog instance " + instance + " main " + main);
 		main = owner;
 		cmain = cm;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
@@ -133,18 +133,15 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/**
 	 * Method allows only one instance Design: Singelton-Pattern
 	 * 
+	 * @param cm the main controller
 	 * @param fr the parent Frame usually the MainFrame
 	 * @return SSHCommandControlDialog instance
 	 **/
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm) {
-		return getInstance(cm, ConfigedMain.getMainFrame());
-	}
-
-	public static SSHCommandControlDialog getInstance(ConfigedMain cm, JFrame fr) {
 		if (instance == null) {
-			instance = new SSHCommandControlDialog(cm, fr);
+			instance = new SSHCommandControlDialog(cm, ConfigedMain.getMainFrame());
 		} else {
-			instance.setLocationRelativeTo(fr);
+			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 
 		instance.setVisible(true);
@@ -544,7 +541,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * 
 	 * @param menuText The selected menu text
 	 **/
-	public void updateSelectedCommand(String menuText) {
+	private void updateSelectedCommand(String menuText) {
 		Logging.info(this, "updateSelectedCommand menuText " + menuText);
 		if (menuText != null && menuText.equals(SSHCommandFactory.MENU_NEW)) {
 			menuText = null;
@@ -626,7 +623,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		return name.replace(" ", "_").toLowerCase(Locale.ROOT).trim();
 	}
 
-	public void doActionTestCommand() {
+	private void doActionTestCommand() {
 		Logging.info(this, "doActionTestCommand testCommand building command ...");
 		SSHCommandTemplate command = getCommandNow(true /* testing */);
 		if (command == null) {
@@ -668,11 +665,11 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		}
 	}
 
-	public SSHCommandTemplate getCommandNow() {
+	private SSHCommandTemplate getCommandNow() {
 		return getCommandNow(false);
 	}
 
-	public SSHCommandTemplate getCommandNow(boolean testing) {
+	private SSHCommandTemplate getCommandNow(boolean testing) {
 		Logging.debug(this, "getCommandNow ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		if (!testing && menuText.trim().equals(SSHCommandFactory.MENU_NEW)) {
@@ -682,8 +679,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		int prio = 0;
 		try {
 			prio = Integer.valueOf(jTextFieldPriority.getText());
-		} catch (Exception e) {
-			Logging.warning("Cannot get value from priority field Exception: " + e);
+		} catch (NumberFormatException e) {
+			Logging.warning("Cannot get value from priority field Exception: ", e);
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneCommands.getText().split("\n")) {

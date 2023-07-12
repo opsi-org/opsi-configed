@@ -29,6 +29,8 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
+	private static final byte[] CRLF = new byte[] { '\r', '\n' };
+
 	private LogPane[] textPanes;
 	private String[] idents;
 	private final List<String> identsList;
@@ -113,15 +115,12 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 								Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
 										+ textPanes[logNo].lines.length);
-
 							}
 						}
 
 						saveAllToZipFile(pathname);
 					}
-
 				}
-
 			};
 
 			textPanes[i] = showPane;
@@ -231,11 +230,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	private void saveAllToZipFile(String pn) {
 
-		byte[] crlf = new byte[2];
-		crlf[0] = '\r';
-		crlf[1] = '\n';
-
-		byte[] buffer;
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
 
 			out.setMethod(ZipOutputStream.DEFLATED);
@@ -246,17 +240,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (textPanes[logNo].lines.length > 1) {
 					ZipEntry entry = new ZipEntry(textPanes[logNo].getFilenameFromTitle());
 					out.putNextEntry(entry);
-					int i = 0;
-					while (i < textPanes[logNo].lines.length) {
-						try {
-							buffer = textPanes[logNo].lines[i].getBytes(StandardCharsets.UTF_8);
-							out.write(buffer, 0, textPanes[logNo].lines[i].length());
-							out.write(crlf, 0, 2);
-						} catch (IOException ex) {
-							Logging.error("Error writing zip file: " + pn + "\n --- " + ex);
-						}
-						i++;
-					}
+
+					writeToOutputStream(textPanes[logNo].lines, out);
 				}
 				out.closeEntry();
 			}
@@ -267,31 +252,29 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	private static void saveToZipFile(String pn, String fn, String[] lines) {
 
-		byte[] crlf = new byte[2];
-		crlf[0] = '\r';
-		crlf[1] = '\n';
-		byte[] buffer;
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
 			ZipEntry entry = new ZipEntry(fn);
 			out.putNextEntry(entry);
-			int i = 0;
-			while (i < lines.length) {
-				try {
 
-					buffer = lines[i].getBytes(StandardCharsets.UTF_8);
-					out.write(buffer, 0, lines[i].length());
-					out.write(crlf, 0, 2);
-				} catch (IOException ex) {
-					Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
-				}
-				i++;
-			}
+			writeToOutputStream(lines, out);
+
 			out.closeEntry();
 		} catch (IOException ex) {
 			Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
 		}
-
 	}
 
+	private static void writeToOutputStream(String[] lines, ZipOutputStream out) {
+
+		for (int i = 0; i < lines.length; i++) {
+			try {
+				byte[] buffer = lines[i].getBytes(StandardCharsets.UTF_8);
+				out.write(buffer, 0, lines[i].length());
+				out.write(CRLF, 0, 2);
+			} catch (IOException ex) {
+				Logging.error("Error writing zip file: " + "\n --- " + ex);
+			}
+		}
+	}
 }

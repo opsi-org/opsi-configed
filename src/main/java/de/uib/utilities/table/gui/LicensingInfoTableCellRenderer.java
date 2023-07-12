@@ -114,21 +114,16 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
-			try {
-				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules"))
-						&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))) {
-					String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
-					String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
-							.toString();
+			if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules"))
+					&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))) {
+				String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
+				String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
+						.toString();
 
-					if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-							&& prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
-						jc.setFont(Globals.defaultFontBold);
-					}
+				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
+						&& prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
+					jc.setFont(Globals.defaultFontBold);
 				}
-
-			} catch (Exception ex) {
-				Logging.error(this, "Exception thrown: " + ex);
 			}
 		} else {
 			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
@@ -136,5 +131,4 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 		return jc;
 	}
-
 }

@@ -8,12 +8,14 @@ package de.uib.opsidatamodel.productstate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.Globals;
 
-public class LastAction {
+public final class LastAction {
 	public static final String KEY = "lastAction";
 
 	// conflicting entries from several clients
@@ -37,7 +39,7 @@ public class LastAction {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 
-	private static List<Integer> states;
+	private static Set<Integer> states;
 	private static List<String> labels;
 
 	// instance variable
@@ -56,7 +58,7 @@ public class LastAction {
 			return;
 		}
 
-		states = new ArrayList<>();
+		states = new HashSet<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);

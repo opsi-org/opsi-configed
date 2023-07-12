@@ -97,27 +97,23 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			boolean result = false;
 
 			if (fieldServerPath != null && fieldDriverPath != null) {
-				try {
-					targetPath = new File(fieldServerPath.getText());
-					driverPath = new File(fieldDriverPath.getText());
 
-					stateServerPath = targetPath.isDirectory();
-					serverPathChecked.setSelected(stateServerPath);
-					Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
-					Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
-					Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
+				targetPath = new File(fieldServerPath.getText());
+				driverPath = new File(fieldDriverPath.getText());
 
-					stateDriverPath = driverPath.exists();
-					driverPathChecked.setSelected(stateDriverPath);
-					Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+				stateServerPath = targetPath.isDirectory();
+				serverPathChecked.setSelected(stateServerPath);
+				Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
+				Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
+				Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
 
-					if (stateServerPath && stateDriverPath) {
-						result = true;
-					}
-				} catch (Exception ex) {
-					Logging.info(this, "checkFiles " + ex);
+				stateDriverPath = driverPath.exists();
+				driverPathChecked.setSelected(stateDriverPath);
+				Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+
+				if (stateServerPath && stateDriverPath) {
+					result = true;
 				}
-
 			}
 
 			Logging.info(this, "checkFiles " + result);
@@ -189,7 +185,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 		wLeftText = jLabelTopic.getPreferredSize().width;
@@ -213,13 +209,17 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		initComponents();
 
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 
 		evaluateWinProducts();
 
 		buildPanel();
+
+		// We init the values later, since there are listeners attached to it.
+		// If we init the values earlier, null objects will be accessed
+		initValues();
 	}
 
 	private void defineChoosers() {
@@ -402,8 +402,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				}
 			});
 		}
-
-		buttonByAudit.setSelected(true);
 
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
@@ -640,7 +638,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
-	public void makePath(File path) {
+	private void initValues() {
+		buttonByAudit.setSelected(true);
+	}
+
+	private void makePath(File path) {
 		Logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
@@ -689,42 +691,37 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			waiter.startWaiting();
 			rootFrame.activateLoadingCursor();
 
-			try {
-				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
+			Logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-				makePath(targetPath);
+			makePath(targetPath);
 
-				stateServerPath = targetPath.exists();
-				serverPathChecked.setSelected(stateServerPath);
-				if (stateServerPath) {
-					try {
-						if (driverPath.isDirectory()) {
-							FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
-						} else {
-							FileUtils.copyFileToDirectory(driverPath, targetPath);
-						}
-					} catch (IOException iox) {
-						rootFrame.disactivateLoadingCursor();
-						Logging.error("copy error:\n" + iox, iox);
+			stateServerPath = targetPath.exists();
+			serverPathChecked.setSelected(stateServerPath);
+			if (stateServerPath) {
+				try {
+					if (driverPath.isDirectory()) {
+						FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
+					} else {
+						FileUtils.copyFileToDirectory(driverPath, targetPath);
 					}
-				} else {
-					Logging.info(this, "execute: targetPath does not exist");
+				} catch (IOException iox) {
+					rootFrame.disactivateLoadingCursor();
+					Logging.error("copy error:\n" + iox, iox);
 				}
-
-				if (stateServerPath) {
-					String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
-					Logging.info(this, "set rights for " + driverDir);
-					persistenceController.setRights(driverDir);
-				}
-
-				rootFrame.disactivateLoadingCursor();
-
-				waiter.setReady();
-			} catch (Exception ex) {
-				rootFrame.disactivateLoadingCursor();
-				Logging.error("error in uploading :\n" + ex, ex);
+			} else {
+				Logging.info(this, "execute: targetPath does not exist");
 			}
+
+			if (stateServerPath) {
+				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+						+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
+				Logging.info(this, "set rights for " + driverDir);
+				persistenceController.setRights(driverDir);
+			}
+
+			rootFrame.disactivateLoadingCursor();
+
+			waiter.setReady();
 		}
 	}
 
@@ -756,7 +753,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 
 		fieldServerPath.setText(result);
-
 	}
 
 	private void chooseServerpath() {
@@ -774,7 +770,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
 		}
-
 	}
 
 	// implements NameProducer

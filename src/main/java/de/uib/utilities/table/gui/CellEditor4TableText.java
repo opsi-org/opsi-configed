@@ -144,14 +144,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 			}
 		}
 
-		Point loc = null;
 		Rectangle rec = table.getCellRect(row, column, true);
-		try {
-			loc = table.getLocationOnScreen();
-		} catch (Exception ex) {
-			Logging.warning(this, "get location error " + ex);
-			loc = new Point(50, 50);
-		}
+		Point loc = table.getLocationOnScreen();
 
 		fEdit.setVisible(true);
 

@@ -6,10 +6,6 @@
 
 package de.uib.opsidatamodel;
 
-import javax.swing.JOptionPane;
-
-import de.uib.Main;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
@@ -51,25 +47,12 @@ public final class PersistenceControllerFactory {
 			connected = persistenceController.makeConnection();
 		}
 
-		try {
-			if (connected) {
+		if (connected) {
 
-				persistenceController.checkMultiFactorAuthentication();
-				Globals.isMultiFactorAuthenticationEnabled = persistenceController.usesMultiFactorAuthentication();
-				persistenceController.checkConfiguration();
-				persistenceController.retrieveOpsiModules();
-			}
-		} catch (Exception ex) {
-			Logging.error("Error", ex);
-
-			String errorInfo = ex.toString();
-
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
-					JOptionPane.OK_OPTION);
-
-			Main.endApp(2);
-
-			return null;
+			persistenceController.checkMultiFactorAuthentication();
+			Globals.isMultiFactorAuthenticationEnabled = persistenceController.usesMultiFactorAuthentication();
+			persistenceController.checkConfiguration();
+			persistenceController.retrieveOpsiModules();
 		}
 
 		staticPersistControl = persistenceController;

@@ -84,7 +84,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, false);
 		this.owner = owner;
 
-		Logging.info(this, "created by constructor 1, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
 		super.setIconImage(Globals.mainIcon);
 		super.setTitle(title);
@@ -99,7 +99,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, modal);
 		this.owner = owner;
 
-		Logging.info(this, "created by constructor 2, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
 		if (!Main.FONT) {
@@ -134,7 +134,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
 		this.owner = owner;
-		Logging.info(this, "created by constructor 3  owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 3  owner " + owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
@@ -608,7 +608,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		glass.begin();
 	}
 
-	public static class FadingMirror extends JPanel implements ActionListener {
+	private static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1F;
 		private float step = 0.3F;
 		private Timer fadeTimer;

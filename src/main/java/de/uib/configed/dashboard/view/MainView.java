@@ -243,9 +243,15 @@ public class MainView implements View {
 
 			return null;
 		}
+
+		private void setBlurriness(int iterations) {
+			BoxBlur blurriness = new BoxBlur();
+			blurriness.setIterations(iterations);
+			dashboardSceneVBox.setEffect(blurriness);
+		}
 	}
 
-	@SuppressWarnings("squid:S4968")
+	@SuppressWarnings("java:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
@@ -279,12 +285,6 @@ public class MainView implements View {
 			styleAccordingToSelectedTheme();
 		});
 		loadData();
-	}
-
-	public void setBlurriness(int iterations) {
-		BoxBlur blurriness = new BoxBlur();
-		blurriness.setIterations(iterations);
-		dashboardSceneVBox.setEffect(blurriness);
 	}
 
 	private void displayLicenseInfo() {

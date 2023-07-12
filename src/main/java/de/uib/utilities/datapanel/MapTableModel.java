@@ -229,12 +229,7 @@ public class MapTableModel extends AbstractTableModel {
 			return "";
 		}
 
-		String key = null;
-		try {
-			key = keys.get(row);
-		} catch (Exception ex) {
-			return "keys " + keys + " row " + row + " : " + ex.toString();
-		}
+		String key = keys.get(row);
 
 		Object result = null;
 
