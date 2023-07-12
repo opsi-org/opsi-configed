@@ -3,6 +3,7 @@
 ## [version] - date
 ### Fixed
 - Problems with editing and deleting product properties
+- opsi-configed did not start when invoking persistenceController.addGroup because it was null
 
 
 ## [4.2.22.7] - 2023-07-11

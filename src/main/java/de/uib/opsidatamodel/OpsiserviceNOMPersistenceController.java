@@ -2074,7 +2074,7 @@ public class OpsiserviceNOMPersistenceController {
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
+				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 
