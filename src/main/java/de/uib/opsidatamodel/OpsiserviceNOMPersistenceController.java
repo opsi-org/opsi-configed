@@ -3424,7 +3424,7 @@ public class OpsiserviceNOMPersistenceController {
 		return getNetBootProductStatesNOM(clientIds);
 	}
 
-	private boolean updateProductOnClient(String pcname, String productname, int producttype,
+	private void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues, List<Map<String, Object>> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
@@ -3436,17 +3436,15 @@ public class OpsiserviceNOMPersistenceController {
 
 		Logging.debug(this, "updateProductOnClient, values " + values);
 		updateItems.add(values);
-
-		return true;
 	}
 
-	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+	public void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
 
-		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
+		updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
 	// hopefully we get only updateItems for allowed clients
@@ -3481,15 +3479,13 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, String> changedValues) {
 		List<Map<String, Object>> updateCollection = new ArrayList<>();
 
-		boolean result = true;
-
 		// collect updates for all clients
 		for (String client : clients) {
-			result = result && updateProductOnClient(client, productName, productType, changedValues, updateCollection);
+			updateProductOnClient(client, productName, productType, changedValues, updateCollection);
 		}
 
 		// execute
-		return result && updateProductOnClients(updateCollection);
+		return updateProductOnClients(updateCollection);
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
