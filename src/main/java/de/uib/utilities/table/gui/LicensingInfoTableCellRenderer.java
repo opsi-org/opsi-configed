@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -79,36 +81,54 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			if (columnName.equals(latestChange)) {
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					if (!Main.THEMES) {
-						jc.setBackground(Globals.darkOrange);
+
+					if (Main.THEMES && FlatLaf.isLafDark()) {
+						jc.setBackground(Globals.opsiWARNINGDark);
+					} else {
+						jc.setBackground(Globals.opsiWARNING);
 					}
+
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					if (!Main.THEMES) {
-						jc.setBackground(Globals.WARNING_COLOR);
+
+					if (Main.THEMES && FlatLaf.isLafDark()) {
+						jc.setBackground(Globals.opsiERRORDark);
+					} else {
+						jc.setBackground(Globals.opsiERROR);
 					}
+
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-					if (!Main.THEMES) {
-						jc.setBackground(Globals.darkOrange);
+
+					if (Main.THEMES && FlatLaf.isLafDark()) {
+						jc.setBackground(Globals.opsiWARNINGDark);
+					} else {
+						jc.setBackground(Globals.opsiWARNING);
 					}
+
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-					if (!Main.THEMES) {
-						jc.setBackground(Globals.WARNING_COLOR);
+
+					if (Main.THEMES && FlatLaf.isLafDark()) {
+						jc.setBackground(Globals.opsiERRORDark);
+					} else {
+						jc.setBackground(Globals.opsiERROR);
 					}
+
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
-					if (!Main.THEMES) {
-						jc.setBackground(Globals.CHECK_COLOR);
+					if (Main.THEMES && FlatLaf.isLafDark()) {
+						jc.setBackground(Globals.opsiOKDark);
+					} else {
+						jc.setBackground(Globals.opsiOK);
 					}
 				}
 			}
