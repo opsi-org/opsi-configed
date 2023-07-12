@@ -58,15 +58,15 @@ import de.uib.utilities.tree.SimpleTreePath;
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
 
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
-	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");;
-	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";;
-	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");;
+	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
+	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
+	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
 	private static Map<String, String> translationsToPersistentNames;
 	private static Set<String> topGroupNames;
 
 	private static final Map<String, String> translationsFromPersistentNames;
 
-	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");;
+	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
 
 	private DefaultTreeModel model;
 
