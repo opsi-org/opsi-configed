@@ -69,6 +69,10 @@ public class JComboBoxToolTip extends JComboBox<String> {
 				setText(value.toString());
 			}
 
+			if (Main.THEMES) {
+				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			}
+
 			return this;
 		}
 	}
