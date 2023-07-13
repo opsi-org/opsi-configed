@@ -51,7 +51,6 @@ import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
-
 	private static NewClientDialog instance;
 
 	private ConfigedMain configedMain;
@@ -148,7 +147,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 		jComboPrimaryGroup.setModel(model);
 		jComboPrimaryGroup.setSelectedIndex(0);
-
 	}
 
 	public void setProductNetbootList(Iterable<String> productList) {
@@ -229,8 +227,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		jTextNotes.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				jTextNotes.setText(jTextNotes.getText().trim());
 				// remove tab at end of text, inserted by navigating while in the panel
+				jTextNotes.setText(jTextNotes.getText().trim());
 			}
 
 			@Override
@@ -238,12 +236,10 @@ public final class NewClientDialog extends FGeneralDialog {
 				/* Not needed */}
 		});
 
-		jTextNotes.addKeyListener(this);
 		// we shall extend the KeyListener from the superclass method for jTextNotes to
 		// handle backtab (below)
-
+		jTextNotes.addKeyListener(this);
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
@@ -265,7 +261,6 @@ public final class NewClientDialog extends FGeneralDialog {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				/* Not needed */}
-
 		});
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
@@ -316,7 +311,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		if (!persistenceController.isWithUEFI()) {
 			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
-
 		}
 
 		jCheckShutdownInstall = new JCheckBox();
@@ -388,7 +382,6 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jTextInventoryNumber, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
-
 				/////// NOTES
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -497,7 +490,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				/////// NOTES
 				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE)
 				.addComponent(jLabelNotes).addComponent(jTextNotes)
-
 				/////// SYSTEM UUID
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelSystemUUID))
@@ -510,7 +502,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelIpAddress).addComponent(labelInfoIP))
 				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-
 				/////// SHUTDOWN
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -518,7 +509,6 @@ public final class NewClientDialog extends FGeneralDialog {
 								Globals.LINE_HEIGHT)
 						.addComponent(jCheckShutdownInstall, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
-
 				/////// UEFI
 				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -529,7 +519,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWanDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-
 				/////// depot
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(
@@ -672,7 +661,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
-
 		if (!areValuesValid(hostname, selectedDomain)) {
 			return false;
 		}
@@ -694,7 +682,6 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private boolean checkOpsiHostKey(String opsiHostKey) {
 		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
-
 			if (depots.contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
 						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
