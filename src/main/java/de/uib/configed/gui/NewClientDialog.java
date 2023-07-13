@@ -64,7 +64,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JTextArea jTextNotes;
 	private JComboBox<String> jComboPrimaryGroup;
 	private JComboBox<String> jComboNetboot;
-	private JComboBox<String> jComboLocalboot;
 	private JTextField systemUUIDField;
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
@@ -163,17 +162,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboNetboot.setSelectedIndex(0);
 	}
 
-	public void setProductLocalbootList(Iterable<String> productList) {
-		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboLocalboot.getModel();
-		model.removeAllElements();
-		model.addElement(null);
-		for (String product : productList) {
-			model.addElement(product);
-		}
-		jComboLocalboot.setModel(model);
-		jComboLocalboot.setSelectedIndex(0);
-	}
-
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
 		labelUefiDefault.setValue(uefiIsDefault);
 		labelWanDefault.setValue(wanIsDefault);
@@ -185,7 +173,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-
+		Logging.devel(this, "initializing");
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
 		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
@@ -235,15 +223,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		if (!Main.FONT) {
 			jComboNetboot.setFont(Globals.defaultFontBig);
 		}
-
-		JLabel jLabelLocalboot = new JLabel();
-		jLabelLocalboot.setText(Configed.getResourceValue("NewClientDialog.localbootProduct"));
-		jComboLocalboot = new JComboBox<>(new String[] { "a", "ab" });
-		jComboLocalboot.setMaximumRowCount(10);
-		if (!Main.FONT) {
-			jComboLocalboot.setFont(Globals.defaultFontBig);
-		}
-		jComboLocalboot.setEnabled(false);
 
 		JLabel jLabelNotes = new JLabel();
 		jLabelNotes.setText(Configed.getResourceValue("NewClientDialog.notes"));
@@ -609,6 +588,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		scrollpane.getViewport().add(panel);
 		pack();
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
+		Logging.devel(this, "finished");
 	}
 
 	private void createClients(List<List<Object>> clients) {
@@ -654,12 +634,11 @@ public final class NewClientDialog extends FGeneralDialog {
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
-			final boolean wanConfig, final String group, final String netbootProduct, final String localbootProduct) {
+			final boolean wanConfig, final String group, final String netbootProduct) {
 
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct,
-					localbootProduct);
+					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct);
 
 			treatSelectedDomainForNewClient(selectedDomain);
 		}
@@ -855,7 +834,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("ipaddress");
 		columnNames.add("group");
 		columnNames.add("netbootProduct");
-		columnNames.add("localbootProduct");
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
@@ -905,7 +883,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("ipaddress");
 		columnNames.add("group");
 		columnNames.add("netbootProduct");
-		columnNames.add("localbootProduct");
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
@@ -956,7 +933,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		String ipaddress = ipAddressField.getText();
 		String group = (String) jComboPrimaryGroup.getSelectedItem();
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
-		String localbootProduct = (String) jComboLocalboot.getSelectedItem();
 
 		if (persistenceController.isWithUEFI()) {
 			uefiboot = false;
@@ -975,7 +951,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
-				macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
+				macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct);
 	}
 
 	@Override

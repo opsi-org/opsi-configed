@@ -58,7 +58,7 @@ public class CopyClient {
 		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(),
 				clientToCopy.getDescription(), clientToCopy.getInventoryNumber(), clientToCopy.getNotes(),
 				clientToCopy.getIpAddress(), clientToCopy.getSystemUUID(), clientToCopy.getMacAddress(),
-				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "", "");
+				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
 		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 
@@ -156,7 +156,7 @@ public class CopyClient {
 
 		for (int i = 1; i < splittedClientName.length; i++) {
 			sb.append(splittedClientName[i]);
-			
+
 			if (i != splittedClientName.length - 1) {
 				sb.append(".");
 			}
