@@ -173,7 +173,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		Logging.devel(this, "initializing");
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
 		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
@@ -588,7 +587,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		scrollpane.getViewport().add(panel);
 		pack();
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		Logging.devel(this, "finished");
 	}
 
 	private void createClients(List<List<Object>> clients) {
