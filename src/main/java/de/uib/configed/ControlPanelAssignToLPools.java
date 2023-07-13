@@ -40,6 +40,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
+import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
@@ -646,9 +647,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			col.setMaxWidth(12);
 			col.setHeaderValue("");
 
-			col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(
-					Globals.createImageIcon("images/minibarpointerred.png", ""),
-					Globals.createImageIcon("images/minibarpointervoid.png", "")));
+			col.setCellRenderer(
+					new BooleanIconTableCellRenderer(Globals.createImageIcon("images/minibarpointerred.png", ""),
+							Globals.createImageIcon("images/minibarpointervoid.png", "")));
 		}
 
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);

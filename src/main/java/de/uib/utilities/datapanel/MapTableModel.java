@@ -22,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
@@ -107,8 +108,7 @@ public class MapTableModel extends AbstractTableModel {
 		}
 
 		for (String key : keys) {
-			if (key.startsWith(de.uib.opsidatamodel.permission.UserConfig.CONFIGKEY_STR_USER)
-					&& key.endsWith(de.uib.opsidatamodel.permission.UserConfig.MODIFICATION_INFO_KEY)) {
+			if (key.startsWith(UserConfig.CONFIGKEY_STR_USER) && key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 				modifiedKey = key;
 				break;
 			}

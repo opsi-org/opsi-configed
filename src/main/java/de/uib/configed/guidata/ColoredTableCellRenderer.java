@@ -20,8 +20,9 @@ import javax.swing.JTable;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
-public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.StandardTableCellRenderer {
+public class ColoredTableCellRenderer extends StandardTableCellRenderer {
 
 	public ColoredTableCellRenderer(String tooltipPrefix) {
 		super(tooltipPrefix);

@@ -8,8 +8,9 @@ package de.uib.configed.gui.licences;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Globals;
+import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 
-public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClientAdapter {
+public class MultiTablePanel extends TabClientAdapter {
 	protected AbstractControlMultiTablePanel controller;
 
 	public MultiTablePanel(AbstractControlMultiTablePanel controller) {
