@@ -176,7 +176,6 @@ public class DefaultEditMapPanel extends JPanel {
 		/* Not needed */}
 
 	public void setValues(Map<String, Object> data) {
-
 		if (data == null) {
 			return;
 		}
@@ -195,7 +194,6 @@ public class DefaultEditMapPanel extends JPanel {
 	public void setVoid() {
 		for (String key : names) {
 			mapTableModel.removeEntryFromStoredMaps(key);
-
 		}
 
 		mapTableModel.unsetWrite();

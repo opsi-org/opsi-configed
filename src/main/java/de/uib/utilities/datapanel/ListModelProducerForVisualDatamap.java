@@ -47,24 +47,22 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		mapTypes(currentData);
 	}
 
-	public void updateData(Map<String, Object> currentData) {
-		mapTypes(currentData);
+	public void updateData(Map<String, Object> data) {
+		mapTypes(data);
 	}
 
 	private ListCellOptions getListCellOptions(String key) {
 		return optionsMap.computeIfAbsent(key, arg -> new DefaultListCellOptions());
 	}
 
-	private void mapTypes(final Map<String, Object> currentData) {
-		this.currentData = new HashMap<>();
-		Logging.debug(this, "mapTypes  " + currentData);
+	private void mapTypes(final Map<String, Object> data) {
+		currentData = new HashMap<>();
+		Logging.debug(this, "mapTypes  " + data);
 		originalTypes = new HashMap<>();
-		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
-
+		for (Entry<String, Object> dataEntry : data.entrySet()) {
 			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
-			this.currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
+			currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
-
 	}
 
 	@Override
@@ -110,7 +108,6 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 	@Override
 	public List<O> getSelectedValues(int row, int column) {
-
 		String key = (String) table.getValueAt(row, 0);
 		return currentData.get(key);
 	}
@@ -140,9 +137,12 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 	@Override
 	public Class<?> getClass(int row) {
-
 		String key = (String) table.getValueAt(row, 0);
-
 		return originalTypes.get(key);
+	}
+
+	@Override
+	public void setValue(int row, Object value) {
+		currentData.replace((String) table.getValueAt(row, 0), toList(value));
 	}
 }

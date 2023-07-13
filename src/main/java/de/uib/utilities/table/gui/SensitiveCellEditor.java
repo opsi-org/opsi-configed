@@ -21,8 +21,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
-import org.json.JSONObject;
-
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditStringList;
@@ -154,60 +152,41 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Object getCellEditorValue() {
+		Object result = null;
 
 		if (listeditor.getValue() == null) {
-			return null;
-		}
-
-		if (listeditor.getValue() instanceof List) {
+			result = null;
+		} else if (listeditor.getValue() instanceof List) {
 			List<?> list = (List<?>) listeditor.getValue();
 
-			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			if (list.isEmpty()) {
+				result = null;
+			} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+				result = list;
+			} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+				result = list.get(0);
+			} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+				result = list.get(0);
+			} else {
+				StringBuilder buf = new StringBuilder("");
 
-				return list;
-			}
-
-			int n = list.size();
-
-			if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-
-				if (n == 0) {
-					return null;
+				for (int i = 0; i < list.size() - 1; i++) {
+					buf.append("" + list.get(i) + ",");
 				}
+				buf.append("" + list.get(list.size() - 1));
 
-				return list.get(0);
-			}
+				result = buf.toString();
 
-			if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-
-				if (n == 0) {
-					return null;
+				if ("null".equalsIgnoreCase((String) result)) {
+					result = null;
 				}
-
-				return list.get(0);
 			}
-
-			if (n == 0) {
-				return "";
-			}
-
-			StringBuilder buf = new StringBuilder("");
-
-			for (int i = 0; i < n - 1; i++) {
-				buf.append("" + list.get(i) + ",");
-			}
-			buf.append("" + list.get(n - 1));
-
-			String result = buf.toString();
-
-			if ("null".equalsIgnoreCase(result)) {
-				return JSONObject.NULL;
-			}
-
-			return result;
+		} else {
+			result = listeditor.getValue();
 		}
 
-		return listeditor.getValue();
+		modelProducer.setValue(editingRow, result);
+		return result;
 	}
 
 	// MouseListener for textfield

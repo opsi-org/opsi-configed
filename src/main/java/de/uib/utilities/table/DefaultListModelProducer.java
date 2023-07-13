@@ -66,4 +66,9 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 		return Collections.singletonList((O) value);
 	}
 
+	@Override
+	public void setValue(int row, Object value) {
+		// DefaultListModelProducer holds no data, therefore there is no data
+		// to update.
+	}
 }

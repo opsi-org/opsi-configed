@@ -26,4 +26,6 @@ public interface ListModelProducer<O> {
 	List<O> toList(Object value);
 
 	Class<?> getClass(int row);
+
+	void setValue(int row, Object value);
 }
