@@ -44,7 +44,8 @@ import de.uib.utilities.table.updates.TableEditItem;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
-	public static boolean extendedView;
+	private static boolean extendedView;
+	private static boolean showUnavailableModules;
 
 	public LicensingInfoPanelGenEditTable thePanel;
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -263,14 +264,22 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		}
 
 		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
-		JCheckBox checkExtendedView = new JCheckBox(""
-
-				, extendedView);
+		JCheckBox checkExtendedView = new JCheckBox("", extendedView);
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			extendedView = checkExtendedView.isSelected();
 			Logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 			LicensingInfoMap.setReduced(!extendedView);
+			LicensingInfoMap.requestRefresh();
+			thePanel.reload();
+		});
+
+		JLabel labelShowOnlyAvailableModules = new JLabel(
+				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"));
+		JCheckBox checkShowOnlyAvailableModules = new JCheckBox("", false);
+
+		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
+			showUnavailableModules = checkShowOnlyAvailableModules.isSelected();
 			LicensingInfoMap.requestRefresh();
 			thePanel.reload();
 		});
@@ -285,9 +294,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		});
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
-				labelExtendedView
-
-		};
+				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 		if (!Main.THEMES) {
@@ -418,5 +425,13 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setColumnNames(columnNames);
 
 		thePanel.setTableModel(theModel);
+	}
+
+	public static boolean isExtendedView() {
+		return extendedView;
+	}
+
+	public static boolean isShowOnlyAvailableModules() {
+		return showUnavailableModules;
 	}
 }

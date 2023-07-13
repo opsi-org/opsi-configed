@@ -7388,7 +7388,7 @@ public class OpsiserviceNOMPersistenceController {
 								.getCurrentOverLimitModuleList());
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
-				!FGeneralDialogLicensingInfo.extendedView);
+				!FGeneralDialogLicensingInfo.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 

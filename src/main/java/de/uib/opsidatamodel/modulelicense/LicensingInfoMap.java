@@ -89,7 +89,7 @@ public final class LicensingInfoMap {
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
 
-	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
+	private static boolean reducedView = !FGeneralDialogLicensingInfo.isExtendedView();
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -243,7 +243,6 @@ public final class LicensingInfoMap {
 		Collections.sort(result);
 
 		return result;
-
 	}
 
 	private List<String> produceKnownModules() {
@@ -274,6 +273,10 @@ public final class LicensingInfoMap {
 	private List<String> produceShownModules() {
 		if (!jOResult.containsKey(OBSOLETE_MODULES)) {
 			return produceKnownModules();
+		}
+
+		if (FGeneralDialogLicensingInfo.isShowOnlyAvailableModules()) {
+			return availableModules;
 		}
 
 		List<String> result = new ArrayList<>();
