@@ -23,7 +23,6 @@ import de.uib.utilities.datapanel.DefaultEditMapPanel;
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private JLabel jLabelProductProperties;
 	private IconButton buttonSetValuesFromServerDefaults;
-	private IconButton buttonRemoveSpecificValues;
 
 	private JPanel titlePanel;
 
@@ -50,16 +49,6 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
-		buttonRemoveSpecificValues = new IconButton(
-				Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
-				"images/reset_network_eliminate.png", /* "images/edit-delete.png", */
-				"images/reset_network_eliminate_over.png", /* "images/edit-delete_over.png", */
-				"images/reset_network_eliminate_disabled.png", true);
-
-		buttonRemoveSpecificValues.setPreferredSize(new Dimension(15, 30));
-
-		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());
-
 		GroupLayout layoutEditProperties = new GroupLayout(this);
 		setLayout(layoutEditProperties);
 
@@ -82,15 +71,11 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
 				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
 				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE)
-				.addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
-				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE)
-				.addComponent(buttonRemoveSpecificValues, 20, 20, 20));
+				.addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20));
 
 		titleLayout.setVerticalGroup(titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 	}
 
@@ -105,6 +90,5 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 			jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
 		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
-		buttonRemoveSpecificValues.setEnabled(activated);
 	}
 }

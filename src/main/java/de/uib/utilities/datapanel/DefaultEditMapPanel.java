@@ -191,16 +191,6 @@ public class DefaultEditMapPanel extends JPanel {
 		setValues(defaultsMap);
 	}
 
-	public void setVoid() {
-		for (String key : names) {
-			mapTableModel.removeEntryFromStoredMaps(key);
-		}
-
-		mapTableModel.unsetWrite();
-		setValues(defaultsMap);
-		mapTableModel.setWrite();
-	}
-
 	public List<String> getNames() {
 		return mapTableModel.getKeys();
 	}
