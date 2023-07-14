@@ -275,17 +275,15 @@ public final class LicensingInfoMap {
 			return produceKnownModules();
 		}
 
+		List<String> result;
+
 		if (FGeneralDialogLicensingInfo.isShowOnlyAvailableModules()) {
-			return availableModules;
+			result = new ArrayList<>(availableModules);
+		} else {
+			result = new ArrayList<>(knownModulesList);
 		}
 
-		List<String> result = new ArrayList<>();
-
-		for (String mod : knownModulesList) {
-			if (!obsoleteModules.contains(mod)) {
-				result.add(mod);
-			}
-		}
+		result.removeAll(new HashSet<>(obsoleteModules));
 
 		Collections.sort(result);
 		return result;
