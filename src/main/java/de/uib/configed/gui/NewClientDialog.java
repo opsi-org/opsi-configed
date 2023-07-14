@@ -52,32 +52,28 @@ import de.uib.utilities.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
 	private static NewClientDialog instance;
-
 	private ConfigedMain configedMain;
-	private JTextField jTextHostname;
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
-	private JTextField jTextDescription;
-	private JTextField jTextInventoryNumber;
-	private JTextArea jTextNotes;
 	private JComboBox<String> jComboPrimaryGroup;
 	private JComboBox<String> jComboNetboot;
+	private JTextField jTextHostname;
+	private JTextField jTextDescription;
+	private JTextField jTextInventoryNumber;
 	private JTextField systemUUIDField;
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
+	private JTextArea jTextNotes;
 	private LabelChecked labelShutdownDefault;
 	private LabelChecked labelUefiDefault;
 	private LabelChecked labelWanDefault;
 	private JCheckBox jCheckUefi;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
+
 	private List<String> depots;
-
 	private List<String> domains;
-	private boolean uefiboot;
-	private boolean wanConfig;
-
 	private List<String> existingHostNames;
 
 	private int wLeftLabel = Globals.BUTTON_WIDTH + 20;
@@ -94,11 +90,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.configedMain = main;
 
-		jButton2.addMouseListener(this);
-		jButton2.addKeyListener(this);
 		jButton2.setDefaultIcon("images/client_small.png");
 		jButton2.setIcon(jButton2.getDefaultIcon());
-
 		jButton2.setRunningActionIcon("images/waitingcircle_16.png");
 
 		this.depots = depots;
@@ -139,25 +132,22 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	public void setGroupList(Iterable<String> groupList) {
-		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboPrimaryGroup.getModel();
-		model.removeAllElements();
-		model.addElement(null);
-		for (String group : groupList) {
-			model.addElement(group);
-		}
-		jComboPrimaryGroup.setModel(model);
-		jComboPrimaryGroup.setSelectedIndex(0);
+		setJComboBoxModel(jComboPrimaryGroup, groupList);
 	}
 
 	public void setProductNetbootList(Iterable<String> productList) {
-		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboNetboot.getModel();
+		setJComboBoxModel(jComboNetboot, productList);
+	}
+
+	private static void setJComboBoxModel(JComboBox<String> comboBox, Iterable<String> list) {
+		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) comboBox.getModel();
 		model.removeAllElements();
 		model.addElement(null);
-		for (String product : productList) {
-			model.addElement(product);
+		for (String element : list) {
+			model.addElement(element);
 		}
-		jComboNetboot.setModel(model);
-		jComboNetboot.setSelectedIndex(0);
+		comboBox.setModel(model);
+		comboBox.setSelectedIndex(0);
 	}
 
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
@@ -171,14 +161,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
-		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
-
-		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
-		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
-		jImportButton.addActionListener((ActionEvent e) -> importCSV());
-
 		JLabel jLabelHostname = new JLabel();
 		jLabelHostname.setText(Configed.getResourceValue("NewClientDialog.hostname"));
 		jTextHostname = new JTextField(new CheckedDocument(/* allowedChars */ new char[] { '-', '0', '1', '2', '3', '4',
@@ -236,8 +218,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				/* Not needed */}
 		});
 
-		// we shall extend the KeyListener from the superclass method for jTextNotes to
-		// handle backtab (below)
 		jTextNotes.addKeyListener(this);
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -543,6 +523,22 @@ public final class NewClientDialog extends FGeneralDialog {
 								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)));
 
+		createNorthPanel();
+
+		scrollpane.getViewport().add(panel);
+		pack();
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
+	}
+
+	private void createNorthPanel() {
+		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
+		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
+		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
+
+		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
+		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
+		jImportButton.addActionListener((ActionEvent e) -> importCSV());
+
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
@@ -572,10 +568,6 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jImportButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
-
-		scrollpane.getViewport().add(panel);
-		pack();
-		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void createClients(List<List<Object>> clients) {
@@ -585,8 +577,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
 
-			if (!isBoolean((String) client.get(12)) || !isBoolean((String) client.get(13))
-					|| !isBoolean((String) client.get(14))) {
+			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
+					|| !isBoolean((String) client.get(13))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
 								+ ") ",
@@ -919,20 +911,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		String group = (String) jComboPrimaryGroup.getSelectedItem();
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		if (persistenceController.isWithUEFI()) {
-			uefiboot = false;
-			if (jCheckUefi.getSelectedObjects() != null) {
-				uefiboot = true;
-			}
-		}
-
-		if (persistenceController.isWithWAN()) {
-			wanConfig = false;
-			if (jCheckWan.getSelectedObjects() != null) {
-				wanConfig = true;
-			}
-		}
-
+		boolean uefiboot = persistenceController.isWithUEFI() && jCheckUefi.getSelectedObjects() != null;
+		boolean wanConfig = persistenceController.isWithWAN() && jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
@@ -944,7 +924,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		if (e.getSource() == jTextNotes
 				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& e.getKeyCode() == KeyEvent.VK_TAB) {
-			jTextDescription.requestFocusInWindow();
+			jTextInventoryNumber.requestFocusInWindow();
 		} else {
 			Logging.info(this, "keyPressed source " + e.getSource());
 			super.keyPressed(e);

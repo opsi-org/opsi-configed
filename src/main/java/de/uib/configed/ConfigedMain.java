@@ -4324,10 +4324,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void callNewClientDialog() {
 		Collections.sort(netbootProductnames);
-		List<String> vNetbootProducts = new ArrayList<>(netbootProductnames);
+		List<String> vNetbootProducts = netbootProductnames;
 
 		NewClientDialog.getInstance(this, getLinkedDepots());
-		NewClientDialog.getInstance().setGroupList(new ArrayList<>(persistenceController.getHostGroupIds()));
+		NewClientDialog.getInstance().setGroupList(persistenceController.getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
 
 		NewClientDialog.getInstance().setDomains(editableDomains);
