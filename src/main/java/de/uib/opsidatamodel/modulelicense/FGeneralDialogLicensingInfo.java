@@ -24,6 +24,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -215,11 +217,17 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		JLabel orangeWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning") + "</html>");
-		orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
 
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
-		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
+
+		if (Main.THEMES && FlatLaf.isLafDark()) {
+			orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange_dark.png", ""));
+			redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red_dark.png", ""));
+		} else {
+			orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
+			redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
+		}
 
 		JLabel warningLevelAbsolute = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
