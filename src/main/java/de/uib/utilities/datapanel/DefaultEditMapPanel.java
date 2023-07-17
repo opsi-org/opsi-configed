@@ -132,7 +132,6 @@ public class DefaultEditMapPanel extends JPanel {
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
@@ -176,7 +175,6 @@ public class DefaultEditMapPanel extends JPanel {
 		/* Not needed */}
 
 	public void setValues(Map<String, Object> data) {
-
 		if (data == null) {
 			return;
 		}
@@ -195,7 +193,6 @@ public class DefaultEditMapPanel extends JPanel {
 	public void setVoid() {
 		for (String key : names) {
 			mapTableModel.removeEntryFromStoredMaps(key);
-
 		}
 
 		mapTableModel.unsetWrite();
