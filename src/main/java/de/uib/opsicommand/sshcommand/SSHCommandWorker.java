@@ -69,7 +69,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 	private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
 		String s = "checkExitCode " + exitCode;
 		Logging.debug(this, "publish " + s);
-		publishInfo(SSHConnectExec.SEPARATING_LINE);
+		publishInfo(SSHConnectSCP.SEPARATING_LINE);
 		if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 			publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 					.replace("xX0Xx", Integer.toString(this.commandNumber))

@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -469,7 +468,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	protected void saveAllAsZip(boolean loadMissingDocs) {
-		Logging.debug(this, "save all as zip action");
+		Logging.debug(this, "save all as zip action, loadMissingDocs = " + loadMissingDocs);
 	}
 
 	public void floatExternal() {
@@ -579,7 +578,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
-		SwingUtilities.invokeLater(() -> setCursor(null));
+		setCursor(null);
 	}
 
 	private void setLevelWithoutAction(Object l) {
@@ -640,31 +639,30 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
 			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
 
-		} else {
+		} else if (!lineCount2docLinestartPosition.isEmpty()) {
 			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-			int nextLineNo = 0;
-
-			if (linesIterator.hasNext()) {
-				nextLineNo = linesIterator.next();
-			}
+			int nextLineNo = linesIterator.next();;
 
 			while (linesIterator.hasNext() && nextLineNo < lineNo) {
 				nextLineNo = linesIterator.next();
 			}
 
 			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-
+		} else {
+			Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
 		}
 
-		try {
-			jTextPane.setCaretPosition(startPosition);
+		if (jComboBoxSearch.getSelectedIndex() != -1) {
+			try {
+				jTextPane.setCaretPosition(startPosition);
 
-			jTextPane.scrollRectToVisible(jTextPane
-					.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-			jTextPane.getCaret().setVisible(true);
-			highlighter.removeAllHighlights();
-		} catch (BadLocationException e) {
-			Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
+				jTextPane.scrollRectToVisible(jTextPane
+						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
+				jTextPane.getCaret().setVisible(true);
+				highlighter.removeAllHighlights();
+			} catch (BadLocationException e) {
+				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
+			}
 		}
 	}
 
