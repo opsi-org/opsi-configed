@@ -641,7 +641,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		} else if (!lineCount2docLinestartPosition.isEmpty()) {
 			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-			int nextLineNo = linesIterator.next();;
+			int nextLineNo = linesIterator.next();
 
 			while (linesIterator.hasNext() && nextLineNo < lineNo) {
 				nextLineNo = linesIterator.next();

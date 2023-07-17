@@ -134,7 +134,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencesUsage = new MapTableUpdateItemFactory(modelLicencesUsage,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					persistenceController.licencesUsageRequestRefresh();
@@ -162,11 +162,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
