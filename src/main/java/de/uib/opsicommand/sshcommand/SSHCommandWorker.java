@@ -66,30 +66,14 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 		this.commandNumber = cn;
 	}
 
-	private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
+	private void checkExitCode(int exitCode, Channel channel) {
 		if (exitCode == 127) {
 			Logging.info(this, "exec exit code 127 (command does not exists).");
-			Logging.debug(Configed.getResourceValue("SSHConnection.Exec.exit127"));
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exit127"));
-				Logging.info(this, "2. publish");
-			}
 		} else if (exitCode != 0) {
 			caller.foundError();
 			Logging.info(this, "exec exit code " + exitCode + ".");
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError") + " "
-					+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitError") + " "
-						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
-			}
 		} else {
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-			}
+			// Do nothing, everything ok
 		}
 
 		if (interruptChannelWorker && caller != null) {
@@ -197,7 +181,8 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					if (in.available() > 0 && !caller.isChannelInterrupted()) {
 						continue;
 					}
-					checkExitCode(channel.getExitStatus(), withGui, channel);
+
+					checkExitCode(channel.getExitStatus(), channel);
 					if (channel.getExitStatus() != 0) {
 						Logging.info(this, "exec ready (2)");
 						caller.foundError();
@@ -220,7 +205,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			if (retriedTimes >= 3) {
 				retriedTimes = 1;
 				Logging.warning(this, "jsch exception", jschex);
-				publishError(jschex.toString());
 				return "";
 			} else {
 				Logging.warning(this, "jsch exception", jschex);
@@ -230,7 +214,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			}
 		} catch (IOException ex) {
 			Logging.warning(this, "SSH IOException", ex);
-			publishError(ex.toString());
 		}
 
 		if (outputDialog != null && !caller.isMultiCommand()) {
@@ -255,10 +238,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			}
 
 		}
-	}
-
-	private void publishError(String s) {
-		// TODO what to do if publishError?
 	}
 
 	@Override
