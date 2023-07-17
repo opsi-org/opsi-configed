@@ -121,7 +121,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
 				listeditor.setEditable(modelProducer.isEditable(row, column));
 				listeditor.setNullable(modelProducer.isNullable(row, column));
-				listeditor.setSelectedValues(modelProducer.getSelectedValues(row, column));
+				listeditor.setSelectedValues(val);
 
 				listeditor.enter();
 				startListEditor();
@@ -185,7 +185,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			result = listeditor.getValue();
 		}
 
-		modelProducer.setValue(editingRow, result);
 		return result;
 	}
 

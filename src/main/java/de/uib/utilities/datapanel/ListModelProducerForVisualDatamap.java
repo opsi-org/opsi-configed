@@ -140,9 +140,4 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		String key = (String) table.getValueAt(row, 0);
 		return originalTypes.get(key);
 	}
-
-	@Override
-	public void setValue(int row, Object value) {
-		currentData.replace((String) table.getValueAt(row, 0), toList(value));
-	}
 }

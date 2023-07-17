@@ -65,10 +65,4 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 		Logging.info(this, "value is not instance of List<O>, create List with element value");
 		return Collections.singletonList((O) value);
 	}
-
-	@Override
-	public void setValue(int row, Object value) {
-		// DefaultListModelProducer holds no data, therefore there is no data
-		// to update.
-	}
 }
