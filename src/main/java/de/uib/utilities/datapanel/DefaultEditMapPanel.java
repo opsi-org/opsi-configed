@@ -132,7 +132,6 @@ public class DefaultEditMapPanel extends JPanel {
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 

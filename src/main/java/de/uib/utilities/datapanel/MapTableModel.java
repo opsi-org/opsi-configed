@@ -323,7 +323,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-
 				aStoreMap.put(myKey, nullLIST);
 			}
 
