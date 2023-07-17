@@ -29,6 +29,7 @@ import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
+import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
@@ -403,7 +404,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	@Override
 	public void dataHaveChanged(Object source) {
 
-		if (source instanceof de.uib.utilities.datapanel.EditMapPanelX) {
+		if (source instanceof EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}
 	}

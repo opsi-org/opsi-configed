@@ -41,7 +41,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private JButton buttonGet;
 	private JPanel panelGetAndAssignSL;
-	private de.uib.utilities.swing.DynamicCombo comboClient;
+	private DynamicCombo comboClient;
 
 	private int tablesMaxWidth = 1000;
 	private int buttonHeight = 15;

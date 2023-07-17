@@ -5045,7 +5045,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SelectionManager manager = new SelectionManager(null);
 
-		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
+		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
 		manager.setSearch(test);
 
