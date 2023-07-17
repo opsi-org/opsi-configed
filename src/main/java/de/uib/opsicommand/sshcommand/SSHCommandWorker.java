@@ -67,16 +67,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 	}
 
 	private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
-		String s = "checkExitCode " + exitCode;
-		Logging.debug(this, "publish " + s);
-		publishInfo(SSHConnectSCP.SEPARATING_LINE);
-		if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
-			publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
-					.replace("xX0Xx", Integer.toString(this.commandNumber))
-					.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
-		}
-
-		publishInfo(s);
 		if (exitCode == 127) {
 			Logging.info(this, "exec exit code 127 (command does not exists).");
 			Logging.debug(Configed.getResourceValue("SSHConnection.Exec.exit127"));
@@ -109,7 +99,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			interruptChannelWorker = true;
 			Globals.threadSleep(this, 50);
 		}
-
 	}
 
 	@SuppressWarnings("java:S106")
@@ -265,13 +254,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 
 			}
 
-		}
-	}
-
-	private void publishInfo(String s) {
-		if (outputDialog != null) {
-
-			outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 		}
 	}
 
