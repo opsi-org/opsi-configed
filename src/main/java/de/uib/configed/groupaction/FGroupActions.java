@@ -29,6 +29,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -115,7 +116,7 @@ public class FGroupActions extends SecondaryFrame {
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
-		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
+		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persistenceController.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,

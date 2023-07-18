@@ -992,9 +992,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Globals.checkCollection(this, "editableProductProperties ", editableProductProperties);
 		Globals.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
 
-		propertiesPanel.setEditableMap(
-				// visualMap (merged for different clients)
-				editableProductProperties, productpropertyOptionsMap);
+		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
 
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);

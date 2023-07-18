@@ -46,6 +46,7 @@ import de.uib.configed.ControlPanelEnterLicence;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -409,7 +410,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jLabelSLid3info.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
 
-		de.uib.utilities.swing.Containership cs = new de.uib.utilities.swing.Containership(this);
+		Containership cs = new Containership(this);
 		cs.doForAllContainedCompisOfClass("setFont", new Object[] { Globals.defaultFont }, JTextField.class);
 
 		GroupLayout panelLicenceModelLayout = new GroupLayout(panelLicenceModel);

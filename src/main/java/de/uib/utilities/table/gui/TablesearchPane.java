@@ -1009,8 +1009,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		fieldSearch.getCaret().setVisible(false);
 
-		// final de.uib.utilities.thread.WaitCursor waitCursor = new
-
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {

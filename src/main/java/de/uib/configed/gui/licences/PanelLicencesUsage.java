@@ -29,6 +29,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
+import de.uib.utilities.swing.DynamicCombo;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
@@ -40,7 +41,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private JButton buttonGet;
 	private JPanel panelGetAndAssignSL;
-	private de.uib.utilities.swing.DynamicCombo comboClient;
+	private DynamicCombo comboClient;
 
 	private int tablesMaxWidth = 1000;
 	private int buttonHeight = 15;
@@ -80,7 +81,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		JLabel labelGetAndAssignSL = new JLabel(
 				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
-		comboClient = new de.uib.utilities.swing.DynamicCombo();
+		comboClient = new DynamicCombo();
 		if (!Main.FONT) {
 			comboClient.setFont(Globals.defaultFontBig);
 		}

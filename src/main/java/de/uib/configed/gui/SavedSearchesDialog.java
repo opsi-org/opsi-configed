@@ -25,6 +25,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditStringList;
@@ -263,7 +264,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		Logging.info(this, "resetModel");
 		model.removeAllElements();
 
-		de.uib.opsidatamodel.SavedSearches savedSearches = manager.getSavedSearches();
+		SavedSearches savedSearches = manager.getSavedSearches();
 		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
 		Map<String, String> valueMap = new HashMap<>();
 		Map<String, String> descMap = new HashMap<>();

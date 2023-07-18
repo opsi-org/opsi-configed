@@ -13,7 +13,6 @@ import javax.swing.text.JTextComponent;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
 
 public class FEditStringList extends FEditList<String> {
-
 	public FEditStringList() {
 		super();
 	}
@@ -23,14 +22,10 @@ public class FEditStringList extends FEditList<String> {
 	}
 
 	private void addElementFromExtraField(String element) {
-
 		addElement(element);
-
-		// ever event
 		extraFieldChanged(false);
 	}
 
-	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		super.actionPerformed(e);
@@ -40,7 +35,6 @@ public class FEditStringList extends FEditList<String> {
 		}
 	}
 
-	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 		super.keyPressed(e);

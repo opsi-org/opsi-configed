@@ -438,7 +438,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		cancelOldCellEditing();
 
 		if (optionsMap != null) {
-
 			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
 				Logging.debug(this, " key " + option.getKey() + " is nullable " + option.getValue().isNullable());
 			}
@@ -454,9 +453,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
 
 		if (theCellEditor instanceof SensitiveCellEditor) {
-
 			((SensitiveCellEditor) theCellEditor).setModelProducer(modelProducer);
-
 			((SensitiveCellEditor) theCellEditor).reInit();
 		}
 

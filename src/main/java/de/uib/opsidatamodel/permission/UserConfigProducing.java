@@ -21,6 +21,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.ListCellOptions;
 
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
@@ -31,7 +32,7 @@ public class UserConfigProducing {
 	private Collection<String> existingProductgroups;
 
 	private Map<String, List<Object>> serverconfigValuesMap;
-	private Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
+	private Map<String, ListCellOptions> configOptionsMap;
 
 	private List<Object> readyObjects;
 
@@ -47,8 +48,7 @@ public class UserConfigProducing {
 			Collection<String> existingProductgroups,
 
 			// data. on which changes are based
-			Map<String, List<Object>> serverconfigValuesMap,
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap) {
+			Map<String, List<Object>> serverconfigValuesMap, Map<String, ListCellOptions> configOptionsMap) {
 		this.notUsingDefaultUser = notUsingDefaultUser;
 		this.configserver = configserver;
 

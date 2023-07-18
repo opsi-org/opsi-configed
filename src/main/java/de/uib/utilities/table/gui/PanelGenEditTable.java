@@ -57,6 +57,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
@@ -1572,13 +1573,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void floatExternal() {
 
 		PanelGenEditTable copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new PanelGenEditTable(title, maxTableWidth, false);
 
 		copyOfMe.setTableModel(tableModel);
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, "hallo", false);
+		externalView = new GeneralFrame(null, "hallo", false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());

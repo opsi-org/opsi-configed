@@ -105,12 +105,14 @@ import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
+import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
@@ -120,6 +122,7 @@ import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
+import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -2565,7 +2568,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return treeClients.getActiveParents();
 	}
 
-	public boolean addGroup(de.uib.utilities.datastructure.StringValuedRelationElement newGroup) {
+	public boolean addGroup(StringValuedRelationElement newGroup) {
 		return persistenceController.addGroup(newGroup);
 	}
 
@@ -3082,8 +3085,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persistenceController
-					.getConfigOptions();
+			Map<String, ListCellOptions> configOptions = persistenceController.getConfigOptions();
 
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
@@ -4992,10 +4994,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		SelectionManager manager = new SelectionManager(null);
 
 		if (arg == null || arg.isEmpty()) {
-			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
+			manager.setSearch(SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
 			String timeAgo = DateExtendedByVars.interpretVar(arg);
-			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
+			String test = String.format(SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
 			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);
 			manager.setSearch(test);
@@ -5043,7 +5045,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SelectionManager manager = new SelectionManager(null);
 
-		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
+		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
 		manager.setSearch(test);
 

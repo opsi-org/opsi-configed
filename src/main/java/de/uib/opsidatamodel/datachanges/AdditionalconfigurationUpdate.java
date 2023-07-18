@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
+import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
@@ -26,8 +27,8 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 
-		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
-			de.uib.configed.type.ConfigName2ConfigValue configState = (de.uib.configed.type.ConfigName2ConfigValue) newdata;
+		if (newdata instanceof ConfigName2ConfigValue) {
+			ConfigName2ConfigValue configState = (ConfigName2ConfigValue) newdata;
 
 			persistenceController.setAdditionalConfiguration(objectId, configState);
 			// for opsi 4.0, this only collects the data
