@@ -785,9 +785,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}));
 	}
 
-	// sets dataReady = true when finished
 	private void preloadData() {
-
 		persistenceController.retrieveOpsiModules();
 
 		if (depotRepresentative == null) {
@@ -833,8 +831,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persistenceController.retrieveProductDependencies();
 
 		persistenceController.retrieveDepotProductProperties();
-
-		persistenceController.getInstalledSoftwareInformation();
 
 		dataReady = true;
 		mainFrame.enableAfterLoading();
