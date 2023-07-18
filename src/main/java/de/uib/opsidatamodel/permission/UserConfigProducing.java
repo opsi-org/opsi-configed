@@ -36,26 +36,14 @@ public class UserConfigProducing {
 
 	private List<Object> readyObjects;
 
-	public UserConfigProducing(
-			// command tools
-
-			// data used for configuring
-			boolean notUsingDefaultUser,
-
-			String configserver,
-
-			Collection<String> existingDepots, Collection<String> existingHostgroups,
-			Collection<String> existingProductgroups,
-
-			// data. on which changes are based
+	public UserConfigProducing(boolean notUsingDefaultUser, String configserver, Collection<String> existingDepots,
+			Collection<String> existingHostgroups, Collection<String> existingProductgroups,
 			Map<String, List<Object>> serverconfigValuesMap, Map<String, ListCellOptions> configOptionsMap) {
 		this.notUsingDefaultUser = notUsingDefaultUser;
 		this.configserver = configserver;
-
 		this.existingDepots = existingDepots;
 		this.existingHostgroups = existingHostgroups;
 		this.existingProductgroups = existingProductgroups;
-
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
@@ -76,12 +64,7 @@ public class UserConfigProducing {
 		if (notUsingDefaultUser && ConfigedMain.user != null && !serverconfigValuesMap.containsKey(ConfigedMain.user)) {
 			Logging.info(this, "supply logged in user");
 			userparts.add(ConfigedMain.user);
-			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
-
-			OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
-				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
-				return "";
-			});
+			createPropertySubclass(ConfigedMain.user, "user");
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
@@ -92,67 +75,63 @@ public class UserConfigProducing {
 	private void produceRoleAndUserParts(Set<String> userNames, Set<String> roleNames) {
 		Logging.info(this, "produceRoleAndUserParts for " + userNames + " resp. " + roleNames);
 
-		final String roleBranchPart = UserConfig.KEY_USER_ROLE_ROOT;
-		final String startRoleKey = roleBranchPart + ".{";
-
 		for (String key : serverconfigValuesMap.keySet()) {
 			if (!(key.startsWith(UserConfig.KEY_USER_ROOT))) {
 				continue;
 			}
 
-			if (key.startsWith(roleBranchPart)) {
-				String rolenameBefore = key.substring(0, startRoleKey.length());
-				String rolename = key.substring(rolenameBefore.length());
-				int lenOfRoleName = rolename.indexOf("}");
-
-				if (lenOfRoleName > 0) {
-					rolename = rolename.substring(0, lenOfRoleName);
-
-					Logging.info(this, "role branch with rolename " + rolename);
-
-					roleNames.add(rolename);
-
-					String propertyclass = startRoleKey + rolename + '}';
-
-					final String role = rolename;
-					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
-							(String arg) -> {
-								Logging.info(this, "createRolePropertySubclass for role  " + role);
-								return "";
-							});
-				} else {
-					Logging.warning(this, "rolePart without proper rolename found " + key);
+			if (key.startsWith(UserConfig.KEY_USER_ROLE_ROOT)) {
+				String roleName = produceRolePart(key);
+				if (roleName != null) {
+					Logging.info(this, "role branch with rolename " + roleName);
+					roleNames.add(roleName);
+					createPropertySubclass(roleName, "role");
 				}
+			} else if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
+				Logging.info(this, "not delivered in this collection " + key);
 			} else {
-
-				if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
-					Logging.info(this,
-							"not delivered in this collection " + key.substring(UserConfig.START_USER_KEY.length()));
-					// not delivered in this collection
+				String userName = produceUserPart(key);
+				if (userName != null) {
+					Logging.debug(this, "usernames, add " + userName + " for key " + key);
+					userNames.add(userName);
+					createPropertySubclass(userName, "user");
 				} else {
-					String username = UserConfig.getUserFromKey(key);
-					Logging.debug(this, "produceRoleAndUserParts userpart start  " + username);
-
-					if (username != null) {
-						userNames.add(username);
-						Logging.debug(this, "usernames, add " + username + " for key " + key);
-						String propertyclass = UserConfig.START_USER_KEY + username + '}';
-
-						OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
-								(String arg) -> {
-									Logging.info(this, "createUserPropertySubclass for user  " + username);
-									return "";
-								});
-
-					} else {
-						Logging.warning(this, "username not specified in key " + key);
-					}
+					Logging.warning(this, "username not specified in key " + key);
 				}
 			}
 		}
 
 		Logging.info(this, "all roleNames " + roleNames);
 		Logging.info(this, "all userNames " + userNames);
+	}
+
+	private String produceRolePart(String roleKey) {
+		final String startRoleKey = UserConfig.KEY_USER_ROLE_ROOT + ".{";
+		final String roleNameBefore = roleKey.substring(0, startRoleKey.length());
+		String roleName = roleKey.substring(roleNameBefore.length());
+		final int lenOfRoleName = roleName.indexOf("}");
+
+		if (lenOfRoleName > 0) {
+			return roleName.substring(0, lenOfRoleName);
+		} else {
+			Logging.warning(this, "rolePart without proper rolename found " + roleKey);
+		}
+
+		return null;
+	}
+
+	private String produceUserPart(String userKey) {
+		String username = UserConfig.getUserFromKey(userKey);
+		Logging.debug(this, "produceUserPart userpart start  " + username);
+		return username;
+	}
+
+	private void createPropertySubclass(String property, String propertyType) {
+		final String propertyclass = UserConfig.START_USER_KEY + property + '}';
+		OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
+			Logging.info(this, "createPropertySubclass for " + propertyType + " " + property);
+			return "";
+		});
 	}
 
 	private void supplyConfigPermissionList(final String configKeyUseList, final boolean initialValue,
@@ -213,11 +192,8 @@ public class UserConfigProducing {
 	/** we call up the cascade of default role, other roles, and the users */
 	private void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
-
 		Logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);
 		Logging.info(this, "supplyAllPermissionEntries first for default role,  " + UserConfig.DEFAULT_ROLE_NAME);
-
-		// (1) the default role
 		Logging.info(this, "supplyAllPermissionEntries UserConfig.getArcheoConfig( " + UserConfig.getArcheoConfig());
 
 		UserConfig defaultUserConfig = new UserConfig(UserConfig.DEFAULT_ROLE_NAME);
@@ -251,15 +227,16 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries readyObjects for roleparts " + readyObjects.size());
 		Logging.info(this, "supplyAllPermissionEntries for userparts " + userParts);
 
-		for (String username : userParts) {
+		for (String userName : userParts) {
+			UserConfig userConfig = new UserConfig(userName);
+			userConfigs.put(userName, userConfig);
+
 			String roleToPlay = UserConfig.DEFAULT_ROLE_NAME;
-			String usernameStartkey = UserConfig.KEY_USER_ROOT + ".{" + username + "}.";
-			UserConfig userConfig = new UserConfig(username);
-			userConfigs.put(username, userConfig);
-			String roleKey = usernameStartkey + UserConfig.HAS_ROLE_ATTRIBUT;
+			String userNameStartKey = UserConfig.KEY_USER_ROOT + ".{" + userName + "}.";
+			String roleKey = userNameStartKey + UserConfig.HAS_ROLE_ATTRIBUT;
 
 			Logging.info(this,
-					"supplyAllPermissionEntries usernameStartkey " + usernameStartkey + " roleKey " + roleKey);
+					"supplyAllPermissionEntries usernameStartkey " + userNameStartKey + " roleKey " + roleKey);
 
 			List<Object> values = serverconfigValuesMap.get(roleKey);
 
@@ -272,28 +249,8 @@ public class UserConfigProducing {
 
 			if (values == null || values.isEmpty()) {
 				// update role selection because we don't have one
-				List<Object> selectedValuesRole = new ArrayList<>();
-				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
-
-				Set<String> possibleValuesSet = new HashSet<>(roleParts);
-				possibleValuesSet.add(configuredRole);
-
-				possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
-
-				List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
-
-				Map<String, Object> itemRole = OpsiserviceNOMPersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
-						"which role should determine this users configuration", false, false, selectedValuesRole,
-						possibleValuesRole);
-
-				Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " "
-						+ possibleValuesRole + ", " + roleParts);
-
-				readyObjects.add(itemRole);
+				readyObjects.add(createDefaultItemRole(roleKey, configuredRole, roleParts));
 			} else if (!((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-
-				// we have got some value
 				configuredRole = "" + values.get(0);
 
 				Logging.info(this, "supplyAllPermissionEntries configuredRole " + configuredRole);
@@ -304,16 +261,14 @@ public class UserConfigProducing {
 					followConfiguredRole = true;
 				}
 			} else {
-				Logging.info(this, "no role specified for user " + username);
+				Logging.info(this, "no role specified for user " + userName);
 			}
 
 			Logging.info(this,
-					" for user " + username + " followConfiguredRole " + followConfiguredRole + ": " + roleToPlay);
+					" for user " + userName + " followConfiguredRole " + followConfiguredRole + ": " + roleToPlay);
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
-			// is defaultConfig if roleToPlay does not exist
-
-			supplyPermissionEntriesForAUser(username, usernameStartkey, followConfiguredRole, roleConfig, userConfig);
+			supplyPermissionEntriesForAUser(userName, userNameStartKey, followConfiguredRole, roleConfig, userConfig);
 		}
 
 		Logging.info(this, "readyObjects for userparts " + readyObjects.size());
@@ -325,60 +280,37 @@ public class UserConfigProducing {
 		}
 	}
 
-	private void supplyPermissionEntriesForAUser(final String username, final String startkey,
+	private Map<String, Object> createDefaultItemRole(String roleKey, String configuredRole, Set<String> roleParts) {
+		List<Object> selectedValuesRole = new ArrayList<>();
+		selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
+
+		Set<String> possibleValuesSet = new HashSet<>(roleParts);
+		possibleValuesSet.add(configuredRole);
+		possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
+
+		List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
+		Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole + ", "
+				+ roleParts);
+
+		return OpsiserviceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
+				"which role should determine this users configuration", false, false, selectedValuesRole,
+				possibleValuesRole);
+	}
+
+	private void supplyPermissionEntriesForAUser(final String username, final String startKey,
 			final boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
-		Logging.info(this, "supplyPermissionEntriesForAUser for user " + username + " with startkey " + startkey);
+		Logging.info(this, "supplyPermissionEntriesForAUser for user " + username + " with startkey " + startKey);
 		Logging.info(this, "supplyPermissionEntriesForAUser for user, prototypeConfig " + prototypeConfig);
 
 		int countReadyObjectsOnStart = readyObjects.size();
 
-		Map<String, Object> item = null;
-
-		String configKey = null;
-
-		// Boolean valued
-
 		Logging.info(this,
 				"supplyPermissionEntriesForAUser UserConfig.getUserBoolKeys( " + UserConfig.getUserBoolKeys());
 
-		for (String partkey : UserConfig.getUserBoolKeys()) {
-			// includes at the moment ssh permission keys and opsi permission keys
-
-			configKey = startkey + partkey;
-
-			Logging.info(this,
-					"supplyPermissionEntriesForAUser boolean configKey " + configKey + " -- partkey " + partkey);
-
-			List<Object> values = serverconfigValuesMap.get(configKey);
-			Boolean value = null;
-
-			Logging.info(this,
-					"supplyPermissionEntriesForAUser bool configKey " + configKey + " -- partkey " + partkey);
-			Logging.info(this, "supplyPermissionEntriesForAUser bool configKey has values " + values);
-
-			// there is no formally correct value)
-			// the specific values differs from prototype values and must be corrected
-			if (containsValidBoolean(values, prototypeObligatory, prototypeConfig.getBooleanValue(partkey))) {
-				Logging.info(this,
-						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
-				value = prototypeConfig.getBooleanValue(partkey);
-
-				userConfig.setBooleanValue(partkey, value);
-				item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKey, value,
-						"the primary value setting is based on the user group");
-
-				readyObjects.add(item);
-			} else {
-				value = (Boolean) values.get(0);
-			}
-
-			userConfig.setBooleanValue(partkey, value);
-		}
+		updateUserConfigBooleanValues(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
 		Logging.info(this, "supplyPermissionEntriesForAUser, readyObjects bool keys for user named " + username + " "
 				+ readyObjects);
-
-		// single String valued
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys "
 				+ UserConfig.getUserStringValueKeys());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys_withoutRole "
@@ -386,13 +318,12 @@ public class UserConfigProducing {
 
 		// role entry, will be removed for the next run, if not obligatory
 		if (!prototypeObligatory) {
-			configKey = startkey + UserConfig.HAS_ROLE_ATTRIBUT;
+			String configKey = startKey + UserConfig.HAS_ROLE_ATTRIBUT;
 			Logging.info(this, "configkey " + configKey);
 			List<Object> values = serverconfigValuesMap.get(configKey);
 
 			if (values == null || values.isEmpty() || values.get(0) == null
 					|| !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 
@@ -403,64 +334,59 @@ public class UserConfigProducing {
 						ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
-
 				readyObjects.add(itemRole);
 			}
 		}
 
-		for (String partkey : UserConfig.getUserStringValueKeysWithoutRole()) {
-
-			configKey = startkey + partkey;
-			// String configKey = startkey +
-
-			List<Object> values = serverconfigValuesMap.get(configKey);
-
-			Logging.info(this, "supplyPermissionEntriesForAUser configKey " + configKey + " -- partkey " + partkey);
-			Logging.info(this, "supplyPermissionEntriesForAUser configKey has size 1 values " + values);
-
-			// We don't want to change the 'modified' value based on userroles (when prototypeObligatory is true)
-			if (values == null || (prototypeObligatory && !partkey.equals(UserConfig.MODIFICATION_INFO_KEY)
-					&& !(values.equals(prototypeConfig.getValues(partkey))))) {
-				Logging.info(this,
-						"supplyPermissionEntriesForAUser. serverconfigValuesMap gives not valid value for key "
-								+ configKey);
-
-				values = prototypeConfig.getValues(partkey);
-
-				userConfig.setValues(partkey, values);
-
-				item = OpsiserviceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
-						configKey, false, false, values, values);
-
-				// TODO
-				readyObjects.add(item);
-			}
-		}
-
-		// Stringlist valued
+		updateUserConfigUserStringValuesWithoutKeyRoles(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
 		Logging.info(this,
 				"supplyPermissionEntriesForAUser UserConfig.getUserListKeys( " + UserConfig.getUserListKeys());
-
 		Logging.info(this, "supplyPermissionEntriesForAUser  user config " + userConfig);
-
 		Logging.info(this,
 				"supplyPermissionEntriesForAUser, readyObjects list keys for " + username + " " + readyObjects.size());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig " + userConfig);
 
-		// == update all list entries
+		updateDepots(userConfig, prototypeConfig, prototypeObligatory, startKey);
+		updateHostGroups(userConfig, prototypeConfig, prototypeObligatory, startKey, username);
+		updateProductGroups(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
-		// == update depots
+		Logging.info(this, "supplyPermissionEntriesForAUser username " + username);
+		Logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart " + countReadyObjectsOnStart);
+		Logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() " + readyObjects.size());
 
+		if (countReadyObjectsOnStart == readyObjects.size()) {
+			Logging.info(this,
+					"supplyPermissionEntriesForAUser added no object(s) for saving, for username " + username);
+		} else {
+			Logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username " + username
+					+ ": " + (readyObjects.size() - 1));
+			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
+
+			Map<String, Object> itemModifyTime = OpsiserviceNOMPersistenceController
+					.createNOMitem(ConfigOption.UNICODE_TYPE);
+			itemModifyTime.put("ident", startKey + UserConfig.MODIFICATION_INFO_KEY);
+			itemModifyTime.put("editable", false);
+			itemModifyTime.put("multiValue", false);
+			itemModifyTime.put("description", "last modification time for entries of this user");
+			itemModifyTime.put("defaultValues", timeVal);
+			itemModifyTime.put("possibleValues", timeVal);
+
+			Logging.info(this, "modi time " + itemModifyTime);
+			readyObjects.add(itemModifyTime);
+		}
+	}
+
+	private void updateDepots(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
+			String startKey) {
 		List<Object> selectedValuesDepot = null;
 		List<Object> possibleValuesDepot = null;
 		Set<Object> oldPossibleValuesDepot = null;
 		LinkedHashSet<Object> currentPossibleValuesDepotListed = null;
 
-		String configKeyUseList = startkey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
-
+		String configKeyUseList = startKey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
-		String configKeyList = startkey + partkey;
+		String configKeyList = startKey + partkey;
 
 		boolean defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
@@ -488,9 +414,7 @@ public class UserConfigProducing {
 		if (prototypeObligatory) {
 			possibleValuesDepot = prototypeConfig.getPossibleValues(partkey);
 			currentPossibleValuesDepotListed = new LinkedHashSet<>(possibleValuesDepot);
-
 		} else {
-
 			currentPossibleValuesDepotListed.add(configserver);
 
 			Set<Object> posVals = new TreeSet<>();
@@ -503,29 +427,27 @@ public class UserConfigProducing {
 		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesDepotListed));
 
 		Logging.info(this,
-				"depots currentPossibleValuesDepotListed before supplying " + currentPossibleValuesDepotListed);
+				"updateDepots currentPossibleValuesDepotListed before supplying " + currentPossibleValuesDepotListed);
 
-		supplyConfigPermissionList(configKeyUseList, // final
-				// activate this feature by default?
-				defaultvalueForRestrictionUsage, configKeyList, // final
-				selectedValuesDepot, // final
-				oldPossibleValuesDepot, // final
-				currentPossibleValuesDepotListed);
+		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+				selectedValuesDepot, oldPossibleValuesDepot, currentPossibleValuesDepotListed);
+	}
 
-		// == update hostgroups
-
+	private void updateHostGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
+			String startKey, String username) {
 		List<Object> selectedValuesHostgroup = null;
 		List<Object> possibleValuesHostgroup = null;
 		Set<Object> oldPossibleValuesHostgroup = null;
 		Set<Object> currentPossibleValuesHostgroupListed = null;
 
-		configKeyUseList = startkey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
-		partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
-		configKeyList = startkey + partkey;
+		String configKeyUseList = startKey
+				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
+		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
+		String configKeyList = startKey + partkey;
 
 		Logging.info(this, "configKeyUseList " + configKeyUseList + ", configKeyList " + configKeyList);
 
-		defaultvalueForRestrictionUsage = prototypeConfig
+		boolean defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
 
 		possibleValuesHostgroup = new ArrayList<>();
@@ -558,36 +480,34 @@ public class UserConfigProducing {
 
 		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesHostgroupListed));
 
-		Logging.info(this,
-				"hostGroups selectedValuesHostgroup before supplying for " + username + ": " + selectedValuesHostgroup);
-		Logging.info(this, "hostGroups oldPossibleValuesHostgroupListed before supplying for " + username + ": "
+		Logging.info(this, "updateHostGroups selectedValuesHostgroup before supplying for " + username + ": "
+				+ selectedValuesHostgroup);
+		Logging.info(this, "updateHostGroups oldPossibleValuesHostgroupListed before supplying for " + username + ": "
 				+ oldPossibleValuesHostgroup);
-		Logging.info(this,
-				"hostgroups possibleValuesHostgroup before supplying for " + username + ": " + possibleValuesHostgroup);
-		Logging.info(this, "hostgroups currentPossibleValuesHostgroupListed before supplying for " + username + ": "
-				+ currentPossibleValuesHostgroupListed);
+		Logging.info(this, "updateHostGroups possibleValuesHostgroup before supplying for " + username + ": "
+				+ possibleValuesHostgroup);
+		Logging.info(this, "updateHostGroups currentPossibleValuesHostgroupListed before supplying for " + username
+				+ ": " + currentPossibleValuesHostgroupListed);
 
-		supplyConfigPermissionList(configKeyUseList, // final
-				// activate this feature by default?
-				defaultvalueForRestrictionUsage, configKeyList, // final
-				selectedValuesHostgroup, // final
-				oldPossibleValuesHostgroup, // final
-				currentPossibleValuesHostgroupListed);
+		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+				selectedValuesHostgroup, oldPossibleValuesHostgroup, currentPossibleValuesHostgroupListed);
+	}
 
-		// == update productgroups possible values
-
+	private void updateProductGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
+			String startKey) {
 		List<Object> selectedValuesProductgroups = null;
 		List<Object> possibleValuesProductgroups = null;
 		Set<Object> oldPossibleValuesProductgroups = null;
 		LinkedHashSet<Object> currentPossibleValuesProductgroupsListed = null;
 
-		configKeyUseList = startkey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
-		partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
-		configKeyList = startkey + partkey;
+		String configKeyUseList = startKey
+				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
+		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
+		String configKeyList = startKey + partkey;
 
 		Logging.info(this, "configKeyUseList " + configKeyUseList + ", configKeyList " + configKeyList);
 
-		defaultvalueForRestrictionUsage = prototypeConfig
+		boolean defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -617,53 +537,76 @@ public class UserConfigProducing {
 
 		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
 
-		Logging.info(this, "productGroups selectedValuesProductgroups before supplying " + selectedValuesProductgroups);
-		Logging.info(this, "productGroups oldPossibleValuesProductgroupsListed before supplying "
+		Logging.info(this,
+				"updateProductGroups selectedValuesProductgroups before supplying " + selectedValuesProductgroups);
+		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying "
 				+ oldPossibleValuesProductgroups);
-		Logging.info(this, "productGroups currentPossibleValuesProductgroupsListed before supplying "
+		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying "
 				+ currentPossibleValuesProductgroupsListed);
 
-		supplyConfigPermissionList(configKeyUseList, // final
-				// activate this feature by default?
-				defaultvalueForRestrictionUsage, configKeyList, // final
-				selectedValuesProductgroups, // final
-				oldPossibleValuesProductgroups, // final
-				currentPossibleValuesProductgroupsListed);
+		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
+	}
 
-		Logging.info(this, "supplyPermissionEntriesForAUser username " + username);
-		Logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart " + countReadyObjectsOnStart);
-		Logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() " + readyObjects.size());
+	private void updateUserConfigBooleanValues(UserConfig userConfig, UserConfig prototypeConfig,
+			boolean prototypeObligatory, String startKey) {
+		for (String partKey : UserConfig.getUserBoolKeys()) {
+			String configKey = startKey + partKey;
+			List<Object> values = serverconfigValuesMap.get(configKey);
+			Boolean value = null;
 
-		if (countReadyObjectsOnStart == readyObjects.size()) {
-			Logging.info(this,
-					"supplyPermissionEntriesForAUser added no object(s) for saving, for username " + username);
-		} else {
-			Logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username " + username
-					+ ": " + (readyObjects.size() - 1));
-			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
+			Logging.info(this, "fillUserConfigBooleanValues bool configKey " + configKey + " -- partkey " + partKey);
+			Logging.info(this, "fillUserConfigBooleanValues bool configKey has values " + values);
 
-			Map<String, Object> itemModifyTime = OpsiserviceNOMPersistenceController
-					.createNOMitem(ConfigOption.UNICODE_TYPE);
+			// there is no formally correct value.
+			// the specific values differs from prototype values and must be corrected.
+			if (containsValidBoolean(values, prototypeObligatory, prototypeConfig.getBooleanValue(partKey))) {
+				Logging.info(this,
+						"fillUserConfigBooleanValues serverconfigValuesMap has no value for key " + configKey);
 
-			itemModifyTime.put("ident", startkey + UserConfig.MODIFICATION_INFO_KEY);
-			itemModifyTime.put("editable", false);
-			itemModifyTime.put("multiValue", false);
+				value = prototypeConfig.getBooleanValue(partKey);
+				userConfig.setBooleanValue(partKey, value);
 
-			itemModifyTime.put("description", "last modification time for entries of this user");
+				Map<String, Object> item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKey, value,
+						"the primary value setting is based on the user group");
+				readyObjects.add(item);
+			} else {
+				value = (Boolean) values.get(0);
+			}
 
-			itemModifyTime.put("defaultValues", timeVal);
-			itemModifyTime.put("possibleValues", timeVal);
+			userConfig.setBooleanValue(partKey, value);
+		}
+	}
 
-			Logging.info(this, "modi time " + itemModifyTime);
+	private void updateUserConfigUserStringValuesWithoutKeyRoles(UserConfig userConfig, UserConfig prototypeConfig,
+			boolean prototypeObligatory, String startKey) {
+		for (String partkey : UserConfig.getUserStringValueKeysWithoutRole()) {
+			String configKey = startKey + partkey;
+			List<Object> values = serverconfigValuesMap.get(configKey);
 
-			// TODO
-			readyObjects.add(itemModifyTime);
+			Logging.info(this, "updateUserConfigUserStringValuesWithoutKeyRoles configKey " + configKey + " -- partkey "
+					+ partkey);
+			Logging.info(this, "updateUserConfigUserStringValuesWithoutKeyRoles configKey has size 1 values " + values);
+
+			// We don't want to change the 'modified' value based on userroles (when prototypeObligatory is true)
+			if (values == null || (prototypeObligatory && !partkey.equals(UserConfig.MODIFICATION_INFO_KEY)
+					&& !(values.equals(prototypeConfig.getValues(partkey))))) {
+				Logging.info(this,
+						"updateUserConfigUserStringValuesWithoutKeyRoles serverconfigValuesMap gives not valid value for key "
+								+ configKey);
+
+				values = prototypeConfig.getValues(partkey);
+				userConfig.setValues(partkey, values);
+
+				Map<String, Object> item = OpsiserviceNOMPersistenceController.createJSONConfig(
+						ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey, false, false, values, values);
+				readyObjects.add(item);
+			}
 		}
 	}
 
 	private static boolean containsValidBoolean(List<Object> values, boolean prototypeObligatory,
 			Boolean prototypeConfigValue) {
-
 		if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)) {
 			return true;
 		}
