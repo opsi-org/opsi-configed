@@ -65,8 +65,6 @@ public final class Globals {
 
 	public static final String BUNDLE_NAME = "de/uib/messages/configed";
 
-	public static final boolean SHOW_ICONS_IN_PRODUCT_TABLE = false;
-
 	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;

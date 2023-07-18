@@ -9,91 +9,26 @@ package de.uib.utilities.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 
-public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
-	private static final int IMAGE_DEFAULT_WIDTH = 30;
+public class CellRendererByIndex extends JLabel implements ListCellRenderer<String> {
 
 	private Font uhOhFont;
 
 	private Map<String, String> mapOfStrings;
 	private Map<String, String> mapOfTooltips;
-	private Map<String, ImageIcon> mapOfImages;
 
-	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
-		super(imageWidth);
-
-		super.setOpaque(true);
-
-		mapOfImages = new HashMap<>();
-		mapOfStrings = new HashMap<>();
-
-		// Load the item images
-		if (imagesBase == null) {
-			super.setIconVisible(false);
-		} else {
-			Iterator<String> iter = keySet.iterator();
-			while (iter.hasNext()) {
-				String key = iter.next();
-				String stringval = key;
-				mapOfStrings.put(key, key);
-
-				ImageIcon image = null;
-
-				String imageFileString = imagesBase + "/" + stringval + ".png";
-
-				image = Globals.createImageIcon(imageFileString, stringval);
-				if (image != null) {
-					mapOfImages.put(key, image);
-				}
-			}
-		}
-		mapOfTooltips = mapOfStrings;
-
-	}
-
-	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
-		super(IMAGE_DEFAULT_WIDTH);
-
-		super.setOpaque(true);
+	public CellRendererByIndex(Map<String, String> mapOfStringValues) {
 
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfStringValues;
-		mapOfImages = new HashMap<>();
-
-		// Load the item images
-		if (imagesBase == null) {
-			super.setIconVisible(false);
-		} else {
-			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
-			while (iter.hasNext()) {
-				Entry<String, String> entry = iter.next();
-				String key = entry.getKey();
-				String stringval = entry.getValue();
-
-				ImageIcon image = null;
-
-				if (key != null && stringval != null) {
-					String imageFileString = imagesBase + "/" + stringval + ".png";
-
-					image = Globals.createImageIcon(imageFileString, stringval);
-					if (image != null) {
-						mapOfImages.put(key, image);
-					}
-				}
-			}
-		}
 	}
 
 	/*
@@ -124,7 +59,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		}
 
 		String selectedString = "";
-		ImageIcon selectedIcon = null;
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) {
@@ -140,10 +74,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 				selectedString = mapOfStrings.get(value);
 			}
 
-			if (mapOfImages != null) {
-				selectedIcon = mapOfImages.get(value);
-			}
-
 			if (mapOfTooltips != null) {
 				selectedTooltip = mapOfTooltips.get(value);
 			}
@@ -153,7 +83,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			selectedString = "" + value;
 		}
 
-		setIcon(selectedIcon);
 		setText(selectedString);
 
 		setToolTipText(selectedTooltip);
