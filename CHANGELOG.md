@@ -1,5 +1,9 @@
 # Changelog
 
+## [update] - update
+### Fixed
+- Sort position of products correctly
+
 ## [4.2.22.8] - 2023-07-17
 ### Fixed
 - Problems with editing and deleting product properties
