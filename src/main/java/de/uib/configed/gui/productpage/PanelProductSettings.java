@@ -524,7 +524,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Logging.info(this, "create report");
 		HashMap<String, String> metaData = new HashMap<>();
 
-		// TODO: getFilter
 		// display, if filter is active,
 		// display selected productgroup
 		// depot server, selected clients out of statusPane
