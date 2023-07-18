@@ -89,7 +89,7 @@ public final class LicensingInfoMap {
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
 
-	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
+	private static boolean reducedView = !FGeneralDialogLicensingInfo.isExtendedView();
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

@@ -1022,7 +1022,7 @@ public class OpsiserviceNOMPersistenceController {
 		String method = "depot_installPackage";
 
 		Logging.notice(this, method);
-		// TODO is "true" necessary?
+
 		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, true }));
 		Logging.info(this, "installPackage result " + result);
 
@@ -7388,7 +7388,7 @@ public class OpsiserviceNOMPersistenceController {
 								.getCurrentOverLimitModuleList());
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
-				!FGeneralDialogLicensingInfo.extendedView);
+				!FGeneralDialogLicensingInfo.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 

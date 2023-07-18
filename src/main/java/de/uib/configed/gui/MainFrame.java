@@ -2184,7 +2184,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
 				&& licensingInfoMap == null) {
 			licensingInfoMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
-					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
+					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:

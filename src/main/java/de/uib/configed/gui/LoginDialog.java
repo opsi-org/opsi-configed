@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -397,13 +396,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return "";
-	}
-
-	// TODO rework, we want to controll it better...
-	@Override
-	public void setCursor(Cursor c) {
-		super.setCursor(c);
-		containership.doForAllContainedCompis("setCursor", new Object[] { c });
 	}
 
 	private void okAction() {
