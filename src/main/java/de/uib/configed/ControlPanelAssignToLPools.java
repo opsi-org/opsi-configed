@@ -200,12 +200,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				missingSoftwareMap.put(ID, rowMap);
 			}
 
-			thePanel.fMissingSoftwareInfo.setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, 0), // dummy
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
-					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
+			thePanel.fMissingSoftwareInfo.setTableModel(
+					new GenTableModel(new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames, 0), // dummy
+							new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
+									thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
+							0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}
 
@@ -407,17 +406,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		// --- panelLicencepools
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
@@ -464,11 +459,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		classNames = new ArrayList<>();
+		List<String> classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persistenceController.getRelationsProductId2LPool())),

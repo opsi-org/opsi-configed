@@ -35,6 +35,8 @@ This class those the Right SwingWorker to execute it.
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectSCP extends SSHConnectExec {
+	public static final String SEPARATING_LINE = "-".repeat(147);
+
 	private SSHConnectionExecDialog outputDialog;
 
 	public SSHConnectSCP(String commandInfo) {

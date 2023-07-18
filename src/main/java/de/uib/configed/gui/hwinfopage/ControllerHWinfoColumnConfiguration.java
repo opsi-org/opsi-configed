@@ -141,7 +141,7 @@ public class ControllerHWinfoColumnConfiguration {
 			classNames.add("java.lang.String");
 		}
 
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, KEY_COL);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
 

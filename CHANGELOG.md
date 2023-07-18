@@ -1,10 +1,15 @@
 # Changelog
 
-## [version] - date
+## [update] - update
+### Fixed
+- Sort position of products correctly
+
+## [4.2.22.8] - 2023-07-17
 ### Fixed
 - Problems with editing and deleting product properties
 - opsi-configed did not start when invoking persistenceController.addGroup because it was null
-
+- Cursor bug when changing loglevel in logviewer
+- Right property is selected in list when changing values
 
 ## [4.2.22.7] - 2023-07-11
 ### Fixed
