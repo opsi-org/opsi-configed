@@ -27,14 +27,14 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 	private ComboBoxModel<String> nullModel;
 
 	public AdaptingCellEditorValuesByIndex(JComboBox<String> cc, ComboBoxModeller cbm,
-			Map<String, String> universalMapOfStrings, String imagesBase) {
+			Map<String, String> universalMapOfStrings) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
 		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 		if (!Main.THEMES) {
-			cc.setRenderer(new CellRendererByIndex(universalMapOfStrings, imagesBase));
+			cc.setRenderer(new CellRendererByIndex(universalMapOfStrings));
 		}
 	}
 
