@@ -111,7 +111,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private ProductInfoPane infoPane;
 	private DefaultEditMapPanel propertiesPanel;
 
-	private ListCellRenderer standardListCellRenderer;
+	private ListCellRenderer<Object> standardListCellRenderer;
 
 	private TableCellRenderer productNameTableCellRenderer;
 	private TableCellRenderer productCompleteNameTableCellRenderer;
