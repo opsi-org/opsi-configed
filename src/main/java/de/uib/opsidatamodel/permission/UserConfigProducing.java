@@ -64,7 +64,7 @@ public class UserConfigProducing {
 		if (notUsingDefaultUser && ConfigedMain.user != null && !serverconfigValuesMap.containsKey(ConfigedMain.user)) {
 			Logging.info(this, "supply logged in user");
 			userparts.add(ConfigedMain.user);
-			createPropertySubclass(ConfigedMain.user, "user");
+			createPropertySubclass(ConfigedMain.user, UserConfig.CONFIGKEY_STR_USER);
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
@@ -85,7 +85,7 @@ public class UserConfigProducing {
 				if (roleName != null) {
 					Logging.info(this, "role branch with rolename " + roleName);
 					roleNames.add(roleName);
-					createPropertySubclass(roleName, "role");
+					createPropertySubclass(roleName, UserConfig.ROLE);
 				}
 			} else if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
 				Logging.info(this, "not delivered in this collection " + key);
@@ -94,7 +94,7 @@ public class UserConfigProducing {
 				if (userName != null) {
 					Logging.debug(this, "usernames, add " + userName + " for key " + key);
 					userNames.add(userName);
-					createPropertySubclass(userName, "user");
+					createPropertySubclass(userName, UserConfig.CONFIGKEY_STR_USER);
 				} else {
 					Logging.warning(this, "username not specified in key " + key);
 				}
