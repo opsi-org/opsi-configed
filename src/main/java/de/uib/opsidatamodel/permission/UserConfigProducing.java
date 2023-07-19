@@ -144,47 +144,38 @@ public class UserConfigProducing {
 		// item variable for adding items to readyObjects
 		Map<String, Object> item = null;
 
-		Logging.info(this, "supplyConfigPermissionList  configKey " + configKeyUseList);
-
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
-			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
+			Logging.info(this,
+					"supplyConfigPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
 			item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(item);
 		}
 
-		Logging.info(this, "supplyPermissionList  configKey " + configKeyList);
-
-		Logging.debug(this, "serverconfigValuesMap.get( configKeyList ) " + serverconfigValuesMap.get(configKeyList));
-		Logging.debug(this, "selectedValues  " + selectedValues);
-
+		Logging.info(this, "supplyConfigPermissionList configKey " + configKeyList);
+		Logging.debug(this, "serverconfigValuesMap.get(configKeyList) " + serverconfigValuesMap.get(configKeyList));
+		Logging.debug(this, "selectedValues " + selectedValues);
 		Logging.debug(this, "currentPossibleValuesListed " + currentPossibleValuesListed);
 		Logging.debug(this, "oldPossibleValues " + oldPossibleValues);
 
 		if (serverconfigValuesMap.get(configKeyList) == null
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
 				|| !currentPossibleValuesListed.equals(oldPossibleValues)) {
-
-			// for the configKey at all
-			Logging.info(this, "supplyPermissionList initialization or change");
-
+			Logging.info(this, "supplyConfigPermissionList initialization or change");
 			Logging.info(this,
-					"supplyPermissionList add to currentPossibleValuesListed " + currentPossibleValuesListed);
-			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
+					"supplyConfigPermissionList add to currentPossibleValuesListed " + currentPossibleValuesListed);
 
-			Logging.info(this, "supplyPermissionList products List " + listOptions);
+			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
+			Logging.info(this, "supplyConfigPermissionList products List " + listOptions);
 
 			item = OpsiserviceNOMPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
-
 			item.put("ident", configKeyList);
 			item.put("editable", false);
 			item.put("multiValue", true);
-
 			item.put("description",
 					"the primary value setting is an empty selection list, but all existing items as option");
 			item.put("defaultValues", selectedValues);
 			item.put("possibleValues", listOptions);
-
 			readyObjects.add(item);
 		}
 	}
@@ -215,12 +206,10 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries extraRoleParts " + extraRoleParts);
 
 		for (String rolename : extraRoleParts) {
-			rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + rolename + "}.";
-
 			UserConfig roleConfig = new UserConfig(rolename);
-			supplyPermissionEntriesForAUser(rolename, rolenameStartkey, false, defaultUserConfig, roleConfig);
-
 			roleConfigs.put(rolename, roleConfig);
+			rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + rolename + "}.";
+			supplyPermissionEntriesForAUser(rolename, rolenameStartkey, false, defaultUserConfig, roleConfig);
 		}
 
 		Logging.info(this, "supplyAllPermissionEntries roleConfigs.size() " + roleConfigs.size());
