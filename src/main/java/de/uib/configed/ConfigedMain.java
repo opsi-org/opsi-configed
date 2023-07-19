@@ -2973,17 +2973,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setProductPropertiesPage");
 
 		if (editingTarget == EditingTarget.DEPOTS) {
-			int saveSelectedRow = mainFrame.panelProductProperties.paneProducts.getSelectedRow();
-			mainFrame.panelProductProperties.paneProducts.reset();
-
-			if (mainFrame.panelProductProperties.paneProducts.getTableModel().getRowCount() > 0) {
-				if (saveSelectedRow == -1 || mainFrame.panelProductProperties.paneProducts.getTableModel()
-						.getRowCount() <= saveSelectedRow) {
-					mainFrame.panelProductProperties.paneProducts.setSelectedRow(0);
-				} else {
-					mainFrame.panelProductProperties.paneProducts.setSelectedRow(saveSelectedRow);
-				}
-			}
+			mainFrame.panelProductProperties.setProductProperties();
 
 			return true;
 		} else {
@@ -3550,7 +3540,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "reloadData _1");
 
 			// calls again persist.productDataRequestRefresh()
-			mainFrame.panelProductProperties.paneProducts.reload();
+			mainFrame.panelProductProperties.reload();
 			Logging.info(this, "reloadData _2");
 
 			// if variable modelDataValid in GenTableModel has no function , the following

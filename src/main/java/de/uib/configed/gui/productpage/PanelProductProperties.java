@@ -31,22 +31,22 @@ import de.uib.utilities.table.updates.TableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
 
-	public PanelGenEditTable paneProducts;
+	private PanelGenEditTable paneProducts;
 	private List<String> depotsOfPackage;
 
 	// right pane
 	private ProductInfoPane infoPane;
 	private PanelEditDepotProperties panelEditProperties;
-	public DefaultEditMapPanel propertiesPanel;
+	private DefaultEditMapPanel propertiesPanel;
 
 	private ConfigedMain configedMain;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelProductProperties(ConfigedMain mainController) {
+	public PanelProductProperties(ConfigedMain configedMain) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.configedMain = mainController;
+		this.configedMain = configedMain;
 		init();
 
 		super.setResizeWeight(0.7);
@@ -92,6 +92,23 @@ public class PanelProductProperties extends JSplitPane {
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
+	}
+
+	public void setProductProperties() {
+		int saveSelectedRow = paneProducts.getSelectedRow();
+		paneProducts.reset();
+
+		if (paneProducts.getTableModel().getRowCount() > 0) {
+			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {
+				paneProducts.setSelectedRow(0);
+			} else {
+				paneProducts.setSelectedRow(saveSelectedRow);
+			}
+		}
+	}
+
+	public void reload() {
+		paneProducts.reload();
 	}
 
 	private class PaneProducts extends PanelGenEditTable {
