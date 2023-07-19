@@ -92,7 +92,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
-		Logging.info(this, "SSHFileUploadDialog build");
+		Logging.info(this.getClass(), "SSHFileUploadDialog build");
 	}
 
 	protected void showDialog() {

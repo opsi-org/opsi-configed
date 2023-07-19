@@ -80,7 +80,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
-		Logging.info(this, "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
+		Logging.info(this.getClass(), "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
 		buildFrame = false;
 		closeListener = new DialogCloseListener();
 		initOutputGui();

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -49,7 +48,7 @@ import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class DPassword extends JFrame implements WaitingSleeper {
+public class LoginDialog extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
@@ -100,7 +99,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		}
 	};
 
-	public DPassword(ConfigedMain configedMain) {
+	public LoginDialog(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
 
@@ -397,13 +396,6 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return "";
-	}
-
-	// TODO rework, we want to controll it better...
-	@Override
-	public void setCursor(Cursor c) {
-		super.setCursor(c);
-		containership.doForAllContainedCompis("setCursor", new Object[] { c });
 	}
 
 	private void okAction() {

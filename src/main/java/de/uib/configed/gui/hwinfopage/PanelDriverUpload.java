@@ -41,13 +41,14 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.SecondaryFrame;
 
-public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
+public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
 	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
 	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
@@ -185,7 +186,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 		wLeftText = jLabelTopic.getPreferredSize().width;
@@ -209,7 +210,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		initComponents();
 
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 

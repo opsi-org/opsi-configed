@@ -100,7 +100,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
-		Logging.info(this, "SSHDeployClientAgentParameterDialog build");
+		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
 
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 	}

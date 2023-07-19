@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,7 +65,6 @@ import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
-import de.uib.configed.gui.DPassword;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FDialogRemoteControl;
 import de.uib.configed.gui.FShowList;
@@ -73,6 +73,7 @@ import de.uib.configed.gui.FStartWakeOnLan;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.FWakeClients;
 import de.uib.configed.gui.HostsStatusPanel;
+import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
@@ -104,12 +105,14 @@ import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
+import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
@@ -119,6 +122,7 @@ import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
+import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -143,13 +147,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
+	private static final int ICON_COLUMN_MAX_WIDTH = 100;
+
 	// Are themes enabled?
 	public static final boolean THEMES = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
 	private static MainFrame mainFrame;
-	public static DPassword dPassword;
+	private static LoginDialog loginDialog;
 
 	public static String host;
 	public static String user;
@@ -413,7 +419,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			dPassword.setVisible(false);
+			loginDialog.setVisible(false);
 		});
 
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
@@ -442,8 +448,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		// \u0009 is tab
-		Logging.debug(this, "initialTreeActivation\u0009");
+		Logging.debug(this, "initialTreeActivation");
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
@@ -519,7 +524,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private List<String> readLocallySavedServerNames() {
 		List<String> result = new ArrayList<>();
-		TreeMap<java.sql.Timestamp, String> sortingmap = new TreeMap<>();
+		TreeMap<Timestamp, String> sortingmap = new TreeMap<>();
 		File savedStatesLocation = null;
 		// the following is nearly a double of initSavedStates
 
@@ -548,7 +553,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		File[] subdirs = null;
 
-		try {
+		if (savedStatesLocation != null) {
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
@@ -560,10 +565,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					elementname = elementname.replace("_", ":");
 				}
 
-				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname);
+				sortingmap.put(new Timestamp(checkFile.lastModified()), elementname);
 			}
-		} catch (SecurityException ex) {
-			Logging.warning("could not read file: " + ex);
 		}
 
 		for (Date date : sortingmap.descendingKeySet()) {
@@ -715,7 +718,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				checkErrorList();
 
-				dPassword.setVisible(false);
+				loginDialog.setVisible(false);
 
 				mainFrame.toFront();
 				mainFrame.disactivateLoadingPane();
@@ -727,10 +730,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "init");
 
 		// we start with a language
-
-		if (reachableUpdater != null) {
-			reachableUpdater.setInterval(0);
-		}
 
 		InstallationStateTableModel.restartColumnDict();
 		SWAuditEntry.setLocale();
@@ -1125,10 +1124,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
-
 		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
 			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
 		}
@@ -1136,10 +1131,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setEditingDepots() {
 		Logging.info(this, "setEditingTarget  DEPOTS");
-
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -1156,9 +1147,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void setEditingServer() {
-		if (!reachableUpdater.isInterrupted()) {
-			reachableUpdater.interrupt();
-		}
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -1399,7 +1387,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private static void locateAndDisplay() {
-		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
+		Rectangle screenRectangle = loginDialog.getGraphicsConfiguration().getBounds();
 		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
 		Logging.info("set size and location of mainFrame");
@@ -1424,13 +1412,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// general
 
-		licencesFrame = new LicencesFrame(this);
+		initTableData();
 
-		Globals.frame1 = licencesFrame;
+		startLicencesFrame();
 
-		licencesFrame.setGlobals(Globals.getMap());
-		licencesFrame.setTitle(
-				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
+		long endmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
+	}
+
+	private void initTableData() {
 
 		licencesStatus = getStartTabState();
 
@@ -1495,6 +1485,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 				() -> (Map) persistenceController.getSoftwareLicences()));
+	}
+
+	private void startLicencesFrame() {
+		licencesFrame = new LicencesFrame(this);
+
+		Globals.frame1 = licencesFrame;
+
+		licencesFrame.setGlobals(Globals.getMap());
+		licencesFrame.setTitle(
+				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
@@ -1543,37 +1543,34 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "set size and location of licencesFrame");
 
 		licencesFrame.setSize(licencesInitDimension);
-
-		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
 
 	// returns true if we have a PersistenceController and are connected
 	private void setupLoginDialog(List<String> savedServers) {
 		Logging.debug(this, " create password dialog ");
-		dPassword = new DPassword(this);
+		loginDialog = new LoginDialog(this);
 
 		// set list of saved servers
 		if (savedServers != null && !savedServers.isEmpty()) {
-			dPassword.setServers(savedServers);
+			loginDialog.setServers(savedServers);
 		}
 
 		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {
-			dPassword.setHost(host);
+			loginDialog.setHost(host);
 		}
 
 		if (user != null) {
-			dPassword.setUser(user);
+			loginDialog.setUser(user);
 		}
 
 		if (password != null) {
-			dPassword.setPassword(password);
+			loginDialog.setPassword(password);
 		}
 
 		Logging.info(this, "become interactive");
 
-		dPassword.setVisible(true);
+		loginDialog.setVisible(true);
 
 		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame
@@ -1581,7 +1578,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// Auto login
 			Logging.info(this, "start with given credentials");
 
-			dPassword.tryConnecting();
+			loginDialog.tryConnecting();
 		}
 	}
 
@@ -2028,8 +2025,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
-		final int ICON_COLUMN_MAX_WIDTH = 100;
-
 		if (Boolean.TRUE.equals(
 				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
@@ -2059,17 +2054,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "showAndSave found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				// column.setCellRenderer(new
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-
-			}
+			initSelectionPanelColumn(col);
 		}
 
 		if (Boolean.TRUE.equals(
@@ -2087,15 +2072,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-			}
-
+			initSelectionPanelColumn(col);
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields()
@@ -2114,17 +2091,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
-			if (col > -1) {
-				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
-			}
-
+			initSelectionPanelColumn(col);
 		}
+	}
 
+	private void initSelectionPanelColumn(int col) {
+		if (col > -1) {
+			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
+			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
+
+			column.setCellRenderer(new BooleanIconTableCellRenderer(
+					Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
+		}
 	}
 
 	private void setRebuiltClientListTableModel() {
@@ -2583,7 +2562,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return treeClients.getActiveParents();
 	}
 
-	public boolean addGroup(de.uib.utilities.datastructure.StringValuedRelationElement newGroup) {
+	public boolean addGroup(StringValuedRelationElement newGroup) {
 		return persistenceController.addGroup(newGroup);
 	}
 
@@ -3100,8 +3079,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persistenceController
-					.getConfigOptions();
+			Map<String, ListCellOptions> configOptions = persistenceController.getConfigOptions();
 
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
@@ -3323,9 +3301,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			if (viewIndex == VIEW_CLIENTS) {
-				if (reachableUpdater.isInterrupted()) {
-					reachableUpdater.interrupt();
-				}
 
 				mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 			} else {
@@ -3560,7 +3535,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persistenceController.configOptionsRequestRefresh();
 
 			if (mainFrame.fDialogOpsiLicensingInfo != null) {
-				mainFrame.fDialogOpsiLicensingInfo.thePanel.reload();
+				mainFrame.fDialogOpsiLicensingInfo.reload();
 			}
 
 			requestRefreshDataForClientSelection();
@@ -3993,7 +3968,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private class ReachableUpdater extends Thread {
-		private boolean suspended;
 		private int interval;
 
 		ReachableUpdater(Integer interval) {
@@ -4017,46 +3991,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		@Override
 		public void run() {
-			while (true) {
-				Logging.debug(this,
-						" suspended, editingTarget, viewIndex " + suspended + ", " + editingTarget + ", " + viewIndex);
+			while (!isInterrupted()) {
+				Logging.debug(this, " editingTarget, viewIndex " + editingTarget + ", " + viewIndex);
 
-				if (!suspended && viewIndex == VIEW_CLIENTS
+				if (viewIndex == VIEW_CLIENTS
 						&& Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
 
-					Map<String, Object> saveReachableInfo = reachableInfo;
-
-					reachableInfo = persistenceController.reachableInfo(null);
-					// update column
-
 					reachableInfo = persistenceController.reachableInfo(null);
 
-					AbstractTableModel model = selectionPanel.getTableModel();
-
-					int col = model
-							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-					for (int row = 0; row < model.getRowCount(); row++) {
-						String clientId = (String) model.getValueAt(row, 0);
-						Boolean newInfo = (Boolean) reachableInfo.get(clientId);
-
-						if (newInfo != null) {
-							if (saveReachableInfo.get(clientId) == null) {
-								model.setValueAt(newInfo, row, col);
-							} else if (model.getValueAt(row, col) != null
-									&& !model.getValueAt(row, col).equals(newInfo)) {
-
-								model.setValueAt(newInfo, row, col);
-
-								model.fireTableRowsUpdated(row, row);
-								// if ordered by col the order does not change although the value changes
-								// is necessary
-							} else {
-								Logging.warning(this, "Reachability of client " + clientId + " with new value "
-										+ newInfo + " could not be updated");
-							}
-						}
-					}
+					setReachableInfo(selectedClients);
 				}
 
 				try {
@@ -5021,10 +4964,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		SelectionManager manager = new SelectionManager(null);
 
 		if (arg == null || arg.isEmpty()) {
-			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
+			manager.setSearch(SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
 			String timeAgo = DateExtendedByVars.interpretVar(arg);
-			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
+			String test = String.format(SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
 			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);
 			manager.setSearch(test);
@@ -5072,7 +5015,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SelectionManager manager = new SelectionManager(null);
 
-		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
+		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
 		manager.setSearch(test);
 
@@ -5154,6 +5097,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
+	public static LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
 
@@ -5186,9 +5133,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame = null;
 		}
 
-		if (dPassword != null) {
-			dPassword.setVisible(false);
-			dPassword.dispose();
+		if (loginDialog != null) {
+			loginDialog.setVisible(false);
+			loginDialog.dispose();
 		}
 
 		if (!checkSavedLicencesFrame()) {

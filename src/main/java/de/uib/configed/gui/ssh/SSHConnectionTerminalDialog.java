@@ -135,7 +135,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
-		Logging.info(this, "SSHConnectionTerminalDialog build ");
+		Logging.info(this.getClass(), "SSHConnectionTerminalDialog build ");
 		super.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

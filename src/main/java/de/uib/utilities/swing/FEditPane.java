@@ -41,7 +41,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
-		Logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.info(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
 		singleLine = false;

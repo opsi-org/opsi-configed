@@ -26,7 +26,6 @@ import de.uib.utilities.logging.Logging;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
-	public static final String SEPARATING_LINE = "-".repeat(147);
 
 	private SSHConnectionExecDialog outputDialog;
 	protected boolean multiCommand;
@@ -65,9 +64,9 @@ public class SSHConnectExec extends SSHConnect {
 		foundError = false;
 		configedMain = m;
 
-		Logging.info(this, "SSHConnectExec main " + configedMain);
+		Logging.info(this.getClass(), "SSHConnectExec main " + configedMain);
 
-		Logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
+		Logging.info(this.getClass(), "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
 		this.responseButton = responseButton;
 		if (responseButton != null) {
 			responseButton.setEnabled(false);

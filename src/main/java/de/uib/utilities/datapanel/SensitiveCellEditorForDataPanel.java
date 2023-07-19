@@ -17,8 +17,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.gui.SensitiveCellEditor;
 
-public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.SensitiveCellEditor {
+public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 
 	private static final Map<Object, SensitiveCellEditorForDataPanel> instances = new HashMap<>();
 

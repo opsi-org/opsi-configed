@@ -22,7 +22,6 @@ public class SoftwareNameElement extends GenericTextElement {
 				Configed.getResourceValue("ClientSelectionDialog.softwareName"),
 				Configed.getResourceValue("InstallationStateTableModel.productId"));
 
-		Logging.debug(this, "proposed " + proposedData);
+		Logging.debug(this.getClass(), "proposed " + proposedData);
 	}
-
 }

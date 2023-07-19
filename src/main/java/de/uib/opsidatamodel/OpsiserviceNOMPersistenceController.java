@@ -446,11 +446,11 @@ public class OpsiserviceNOMPersistenceController {
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
+		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
 		this.user = user;
 
-		Logging.debug(this, "create");
+		Logging.debug(this.getClass(), "create");
 
 		hostInfoCollections = new HostInfoCollections(this);
 
@@ -1012,7 +1012,7 @@ public class OpsiserviceNOMPersistenceController {
 		String method = "depot_installPackage";
 
 		Logging.notice(this, method);
-		// TODO is "true" necessary?
+
 		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, true }));
 		Logging.info(this, "installPackage result " + result);
 
@@ -2064,7 +2064,7 @@ public class OpsiserviceNOMPersistenceController {
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
+				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 
@@ -3466,7 +3466,7 @@ public class OpsiserviceNOMPersistenceController {
 		return getNetBootProductStatesNOM(clientIds);
 	}
 
-	private boolean updateProductOnClient(String pcname, String productname, int producttype,
+	private void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues, List<Map<String, Object>> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
@@ -3478,17 +3478,15 @@ public class OpsiserviceNOMPersistenceController {
 
 		Logging.debug(this, "updateProductOnClient, values " + values);
 		updateItems.add(values);
-
-		return true;
 	}
 
-	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+	public void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
 
-		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
+		updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
 	// hopefully we get only updateItems for allowed clients
@@ -3523,15 +3521,13 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, String> changedValues) {
 		List<Map<String, Object>> updateCollection = new ArrayList<>();
 
-		boolean result = true;
-
 		// collect updates for all clients
 		for (String client : clients) {
-			result = result && updateProductOnClient(client, productName, productType, changedValues, updateCollection);
+			updateProductOnClient(client, productName, productType, changedValues, updateCollection);
 		}
 
 		// execute
-		return result && updateProductOnClients(updateCollection);
+		return updateProductOnClients(updateCollection);
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
@@ -4051,47 +4047,54 @@ public class OpsiserviceNOMPersistenceController {
 
 		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
 
-		Map<String, Object> state = new HashMap<>();
-
 		while (propertiesKeyIterator.hasNext()) {
-			String key = (String) propertiesKeyIterator.next();
+			String propertyId = (String) propertiesKeyIterator.next();
 
-			state.put("type", "ProductPropertyState");
-			state.put("objectId", pcname);
-			state.put("productId", productname);
-			state.put("propertyId", key);
-
-			List<?> newValue = (List<?>) properties.get(key);
+			List<?> newValue = (List<?>) properties.get(propertyId);
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
-			Object oldValue = null;
-
-			if (retrievedConfig != null) {
-				oldValue = retrievedConfig.get(key);
-			}
+			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
 			if (newValue != oldValue) {
-				if (newValue.equals(MapTableModel.nullLIST)) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(key));
-					deleteCollection.add(state);
+				Map<String, Object> state = new HashMap<>();
+				state.put("type", "ProductPropertyState");
+				state.put("objectId", pcname);
+				state.put("productId", productname);
+				state.put("propertyId", propertyId);
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.remove(key);
-					}
+				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
+					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(propertyId));
+					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
-					state.put("values", newValue);
-					Logging.debug(this, "setProductProperties,  requested update " + properties.get(key)
+					Logging.debug(this, "setProductProperties,  requested update " + properties.get(propertyId)
 							+ " for oldValue " + oldValue);
-					Logging.debug(this, "setProductProperties,  we have new state " + state);
-					updateCollection.add(state);
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.put(key, properties.get(key));
-					}
+					state.put("values", newValue);
+					updateState(state, updateCollection, retrievedConfig, propertyId, properties.get(propertyId));
 				}
 			}
+		}
+	}
+
+	private static void deleteState(Map<String, Object> state, List<Map<String, Object>> deleteCollection,
+			Map<String, Object> retrievedConfig, String propertyId) {
+		deleteCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.remove(propertyId);
+		}
+	}
+
+	private void updateState(Map<String, Object> state, List<Map<String, Object>> updateCollection,
+			Map<String, Object> retrievedConfig, String propertyId, Object propertyValue) {
+
+		Logging.debug(this, "setProductProperties,  we have new state " + state);
+		updateCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.put(propertyId, propertyValue);
 		}
 	}
 
@@ -4118,7 +4121,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	// send productPropertyState updates and clear the collections
-	private void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
+	private void setProductProperties(List<Map<String, Object>> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
@@ -7426,7 +7429,7 @@ public class OpsiserviceNOMPersistenceController {
 								.getCurrentOverLimitModuleList());
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
-				!FGeneralDialogLicensingInfo.extendedView);
+				!FGeneralDialogLicensingInfo.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 

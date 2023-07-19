@@ -44,7 +44,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-07-05";
+	public static final String VERDATE = "2023-07-17";
 
 	public static final String VERHASHTAG = "";
 
@@ -64,8 +64,6 @@ public final class Globals {
 	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
 
 	public static final String BUNDLE_NAME = "de/uib/messages/configed";
-
-	public static final boolean SHOW_ICONS_IN_PRODUCT_TABLE = false;
 
 	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
@@ -711,65 +709,6 @@ public final class Globals {
 		}
 
 		return result;
-	}
-
-	public static String makeHTMLlines(String s) {
-		if (s == null || s.trim().startsWith("<")) {
-			return s;
-		}
-
-		final int MAX_LINE_LENGTH = 80;
-
-		StringBuilder b = new StringBuilder("<html>");
-		int charsInLine = 0;
-		boolean indentDone = false;
-		int lineIndent = 0;
-		for (int c = 0; c < s.length(); c++) {
-			charsInLine++;
-			switch (s.charAt(c)) {
-			case ' ':
-				b.append("&nbsp;");
-				if (!indentDone) {
-					lineIndent = lineIndent + 1;
-				}
-				break;
-			case '\t':
-				b.append("&nbsp;&nbsp;&nbsp;");
-				if (!indentDone) {
-					lineIndent = lineIndent + 3;
-				}
-				break;
-			case '\n':
-				b.append("<br/>");
-				indentDone = false;
-				charsInLine = 0;
-				lineIndent = 0;
-				break;
-			default:
-				indentDone = true;
-				b.append(s.charAt(c));
-				break;
-			}
-			if (charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length()
-					&& (s.charAt(c + 1) == ' ' || s.charAt(c + 1) == '\t' || s.charAt(c + 1) == '\n')) {
-				c++;
-				b.append("<br/>");
-				if (s.charAt(c) != '\n') {
-					while (lineIndent > 0) {
-						lineIndent--;
-						charsInLine++;
-						b.append("&nbsp;");
-					}
-				}
-				charsInLine = 0;
-				indentDone = false;
-				lineIndent = 0;
-			}
-		}
-
-		b.append("</html>");
-
-		return b.toString();
 	}
 
 	public static String usedMemory() {

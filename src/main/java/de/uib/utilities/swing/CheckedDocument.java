@@ -61,7 +61,7 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected String giveAllowedCharacters(String s, int offset) {
-
+		Logging.info(this, "givaAllowedCharacters, s = " + s + " offset (not used in this method) = " + offset);
 		if (s == null) {
 			return "";
 		}

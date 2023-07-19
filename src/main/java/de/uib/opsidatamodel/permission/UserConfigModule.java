@@ -27,7 +27,7 @@ public class UserConfigModule {
 	protected UserConfigModule(String userName) {
 		this.username = userName;
 
-		Logging.info(this, "create UserConfigModule for user named " + username);
+		Logging.info(this.getClass(), "create UserConfigModule for user named " + username);
 
 		booleanMap = new LinkedHashMap<>();
 		boolKeys = new LinkedHashSet<>();
@@ -35,8 +35,9 @@ public class UserConfigModule {
 		possibleValuesMap = new LinkedHashMap<>();
 		listKeys = new LinkedHashSet<>();
 
-		Logging.info(this, "for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
-		Logging.info(this, "for user " + userName + " bool keys " + boolKeys + " -- list keys " + listKeys);
+		Logging.info(this.getClass(),
+				"for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
+		Logging.info(this.getClass(), "for user " + userName + " bool keys " + boolKeys + " -- list keys " + listKeys);
 
 	}
 

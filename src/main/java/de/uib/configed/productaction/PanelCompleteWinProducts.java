@@ -351,13 +351,9 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 			String oldProductKey = null;
 
-			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
-					&& !((List<?>) propsMap.get("productkey")).isEmpty()
-					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0))) {
+			if (mapContainsProductKey(propsMap)) {
 				oldProductKey = (String) ((List<?>) propsMap.get("productkey")).get(0);
-			}
-
-			if (oldProductKey == null) {
+			} else {
 				oldProductKey = "";
 			}
 
@@ -386,6 +382,15 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		} catch (HeadlessException ex) {
 			rootFrame.disactivateLoadingCursor();
 			Logging.error("Headless exception when invoking showOptionDialog", ex);
+		}
+	}
+
+	private static boolean mapContainsProductKey(Map<String, Object> propsMap) {
+		if (propsMap == null || !(propsMap.get("productkey") instanceof List)) {
+			return false;
+		} else {
+			return !((List<?>) propsMap.get("productkey")).isEmpty()
+					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0));
 		}
 	}
 

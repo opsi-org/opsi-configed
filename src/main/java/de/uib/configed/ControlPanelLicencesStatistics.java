@@ -65,7 +65,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryStatistics = new MapTableUpdateItemFactory(modelStatistics,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override

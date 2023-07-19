@@ -96,7 +96,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		}
 
 		if (super.get(LICENCE_ID_KEY) == null || super.get(LICENCE_POOL_ID_KEY) == null) {
-			Logging.warning(this, "missing values " + entry);
+			Logging.warning(this.getClass(), "missing values " + entry);
 		}
 	}
 

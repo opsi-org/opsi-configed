@@ -40,9 +40,9 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		setProductVersion(prv);
 		setMd5sum(m);
 		setZsync(z);
-		Logging.info(this, "CommandOpsimakeproductfile dir " + dir);
-		Logging.info(this, "CommandOpsimakeproductfile packageVersion " + packageVersion);
-		Logging.info(this, "CommandOpsimakeproductfile productVersion " + productVersion);
+		Logging.info(this.getClass(), "CommandOpsimakeproductfile dir " + dir);
+		Logging.info(this.getClass(), "CommandOpsimakeproductfile packageVersion " + packageVersion);
+		Logging.info(this.getClass(), "CommandOpsimakeproductfile productVersion " + productVersion);
 	}
 
 	public CommandOpsimakeproductfile(String d, String pav, String prv) {

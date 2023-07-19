@@ -118,7 +118,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		Logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlDialog instance " + instance + " main " + main);
 		main = owner;
 		cmain = cm;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,

@@ -187,12 +187,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		}
 
 		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
-			if (persistenceController.hasDepotPermission(depot)
-					&& ((persistenceController.getDepot2LocalbootProducts().get(depot) != null && persistenceController
-							.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
-							|| (persistenceController.getDepot2NetbootProducts().get(depot) != null
-									&& persistenceController.getDepot2NetbootProducts().get(depot).keySet()
-											.contains(selectedProduct)))) {
+			if (isPossibleDepot(depot, selectedProduct)) {
 				Logging.info(this, "taking this depot " + depot);
 				result.add(depot);
 			}
@@ -201,7 +196,20 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		Logging.info(this, "getPossibleDepots " + result);
 
 		return result;
+	}
 
+	private boolean isPossibleDepot(String depot, String selectedProduct) {
+		if (!persistenceController.hasDepotPermission(depot)) {
+			return false;
+		}
+
+		if (persistenceController.getDepot2LocalbootProducts().get(depot) != null
+				&& persistenceController.getDepot2LocalbootProducts().get(depot).containsKey(selectedProduct)) {
+			return true;
+		}
+
+		return persistenceController.getDepot2NetbootProducts().get(depot) != null
+				&& persistenceController.getDepot2NetbootProducts().get(depot).containsKey(selectedProduct);
 	}
 
 	private void initDepots() {

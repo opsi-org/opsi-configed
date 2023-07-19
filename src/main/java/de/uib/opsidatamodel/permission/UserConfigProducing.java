@@ -21,6 +21,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.ListCellOptions;
 
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
@@ -31,7 +32,7 @@ public class UserConfigProducing {
 	private Collection<String> existingProductgroups;
 
 	private Map<String, List<Object>> serverconfigValuesMap;
-	private Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
+	private Map<String, ListCellOptions> configOptionsMap;
 
 	private List<Object> readyObjects;
 
@@ -47,8 +48,7 @@ public class UserConfigProducing {
 			Collection<String> existingProductgroups,
 
 			// data. on which changes are based
-			Map<String, List<Object>> serverconfigValuesMap,
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap) {
+			Map<String, List<Object>> serverconfigValuesMap, Map<String, ListCellOptions> configOptionsMap) {
 		this.notUsingDefaultUser = notUsingDefaultUser;
 		this.configserver = configserver;
 
@@ -59,8 +59,8 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		Logging.info(this, "create with existing collections depots, hostgroups, productgroups " + existingDepots.size()
-				+ " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
+		Logging.info(this.getClass(), "create with existing collections depots, hostgroups, productgroups "
+				+ existingDepots.size() + " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
 	}
 
 	public List<Object> produce() {
@@ -358,8 +358,7 @@ public class UserConfigProducing {
 
 			// there is no formally correct value)
 			// the specific values differs from prototype values and must be corrected
-			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
-					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))) {
+			if (containsValidBoolean(values, prototypeObligatory, prototypeConfig.getBooleanValue(partkey))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 				value = prototypeConfig.getBooleanValue(partkey);
@@ -660,5 +659,15 @@ public class UserConfigProducing {
 			// TODO
 			readyObjects.add(itemModifyTime);
 		}
+	}
+
+	private static boolean containsValidBoolean(List<Object> values, boolean prototypeObligatory,
+			Boolean prototypeConfigValue) {
+
+		if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)) {
+			return true;
+		}
+
+		return prototypeObligatory && !values.get(0).equals(prototypeConfigValue);
 	}
 }

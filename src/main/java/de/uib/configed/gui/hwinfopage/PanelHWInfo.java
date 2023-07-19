@@ -37,6 +37,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.utilities.logging.Logging;
@@ -224,7 +225,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void floatExternal() {
 		PanelHWInfo copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new PanelHWInfo(false, main);
 		copyOfMe.setHardwareConfig(hwConfig);
@@ -233,7 +234,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());

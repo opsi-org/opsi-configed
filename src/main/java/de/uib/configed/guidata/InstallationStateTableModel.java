@@ -58,7 +58,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private static final String FAILED_DISPLAY_STRING = "failed";
 	private static final String SUCCESS_DISPLAY_STRING = "success";
 
-	public static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
+	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
 		defaultDisplayValues.add(NONE_DISPLAY_STRING);
 		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
@@ -116,11 +116,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this, "creating an InstallationStateTableModel ");
+		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
-			Logging.info(this, " statesAndActions null ");
+			Logging.info(this.getClass(), " statesAndActions null ");
 		} else {
-			Logging.info(this, " statesAndActions " + statesAndActions.size());
+			Logging.info(this.getClass(), " statesAndActions " + statesAndActions.size());
 		}
 
 		this.main = main;
@@ -153,17 +153,17 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		tsProductNames.addAll(productNamesInDeliveryOrder);
 		productsV = new ArrayList<>(tsProductNames);
 
-		Logging.debug(this, "tsProductNames " + tsProductNames);
+		Logging.debug(this.getClass(), "tsProductNames " + tsProductNames);
 
 		initalizeProductStates(statesAndActions);
 	}
 
 	// collects titles for the columns prepared in this class
-	public static void restartColumnDict() {
+	public static synchronized void restartColumnDict() {
 		columnDict = null;
 	}
 
-	public static String getColumnTitle(String column) {
+	public static synchronized String getColumnTitle(String column) {
 		if (columnDict == null) {
 			columnDict = new HashMap<>();
 			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));

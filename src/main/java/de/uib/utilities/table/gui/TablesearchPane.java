@@ -176,6 +176,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void init() {
 		setSearchFieldsAll();
 		initComponents();
+		setupLayout();
 		setNarrow(false);
 	}
 
@@ -530,6 +531,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
 		checkmarkFullText.addActionListener(this);
 
+	}
+
+	private void setupLayout() {
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		this.setLayout(layoutTablesearchPane);
 
@@ -588,7 +592,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 		);
-
 	}
 
 	private void buildMenuSearchfield() {
@@ -663,11 +666,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private Finding stringContainsParts(final String s, String[] parts) {
 		Finding result = new Finding();
 
-		if (s == null) {
-			return result;
-		}
-
-		if (parts == null) {
+		if (s == null || parts == null) {
 			return result;
 		}
 
@@ -694,13 +693,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					result.success = true;
 					result.endChar = partSearch.endChar;
 					searching = false;
+				} else if (remainder.length() > 0) {
+					remainder = remainder.substring(partSearch.endChar);
 				} else {
-					if (remainder.length() > 0) {
-						remainder = remainder.substring(partSearch.endChar);
-					} else {
-						result.success = false;
-					}
+					result.success = false;
 				}
+
 			} else {
 				result.success = false;
 				searching = false;
@@ -739,11 +737,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean stringStartsWith(final String s, final String part) {
-		if (s == null) {
-			return false;
-		}
-
-		if (part == null) {
+		if (s == null || part == null) {
 			return false;
 		}
 
@@ -833,7 +827,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				} else {
 					found = stringContainsParts(compareVal, valParts).success;
 				}
-
 			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
@@ -868,7 +861,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 								found = stringStartsWith(compareVal, val);
 
 							}
-
 						}
 					}
 
@@ -876,7 +868,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						break;
 					}
 				}
-
 			}
 
 			if (!found) {
@@ -1017,8 +1008,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		final boolean combineCols = fulltextSearch;
 
 		fieldSearch.getCaret().setVisible(false);
-
-		// final de.uib.utilities.thread.WaitCursor waitCursor = new
 
 		if (value.length() < 2) {
 			setRow(0, false, select);

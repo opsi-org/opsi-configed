@@ -57,16 +57,16 @@ import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
 
-	public static final String ALL_GROUPS_NAME;
-	public static final String DIRECTORY_NAME;
-	public static final String DIRECTORY_PERSISTENT_NAME;
-	public static final String DIRECTORY_NOT_ASSIGNED_NAME;
+	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
+	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
+	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
+	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
 	private static Map<String, String> translationsToPersistentNames;
 	private static Set<String> topGroupNames;
 
 	private static final Map<String, String> translationsFromPersistentNames;
 
-	public static final String ALL_CLIENTS_NAME;
+	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
 
 	private DefaultTreeModel model;
 
@@ -115,23 +115,17 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private ConfigedMain configedMain;
 
 	static {
-		ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
 
-		ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
-		DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
-		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
-		DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
 		translationsToPersistentNames = new HashMap<>();
 		translationsFromPersistentNames = new HashMap<>();
 		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
 		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
-		topGroupNames = new HashSet<>();
 
+		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
 		topGroupNames.add(ALL_GROUPS_NAME);
 		topGroupNames.add(DIRECTORY_NAME);
 		topGroupNames.add(DIRECTORY_NOT_ASSIGNED_NAME);
-
 	}
 
 	public ClientTree(ConfigedMain configedMain) {

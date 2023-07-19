@@ -132,7 +132,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
-		Logging.info(this, "use mysql " + withMySQL);
+		Logging.info(this.getClass(), "use mysql " + withMySQL);
 
 		this.main = main;
 		this.selectionPanel = selectionPanel;

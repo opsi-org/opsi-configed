@@ -44,9 +44,9 @@ import de.uib.utilities.table.updates.TableEditItem;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
-	public static boolean extendedView;
+	private static boolean extendedView;
 
-	public LicensingInfoPanelGenEditTable thePanel;
+	private LicensingInfoPanelGenEditTable thePanel;
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
@@ -418,5 +418,13 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setColumnNames(columnNames);
 
 		thePanel.setTableModel(theModel);
+	}
+
+	public static boolean isExtendedView() {
+		return extendedView;
+	}
+
+	public void reload() {
+		thePanel.reload();
 	}
 }

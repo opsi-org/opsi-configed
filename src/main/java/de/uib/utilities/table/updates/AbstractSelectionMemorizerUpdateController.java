@@ -8,6 +8,7 @@ package de.uib.utilities.table.updates;
 
 import javax.swing.JOptionPane;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -35,11 +36,9 @@ public abstract class AbstractSelectionMemorizerUpdateController implements Upda
 			Logging.info(this, "no row selected");
 
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					de.uib.configed.Configed
-							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
+					Configed.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
 					Globals.APPNAME + "  "
-							+ de.uib.configed.Configed
-									.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
+							+ Configed.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
 					JOptionPane.OK_OPTION);
 
 			return false;

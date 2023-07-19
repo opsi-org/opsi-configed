@@ -65,7 +65,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public FEdit(String initialText, String hint) {
 		super((Dialog) null);
 
-		Logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.debug(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
 		super.setIconImage(Globals.mainIcon);
 
 		if (initialText != null) {
