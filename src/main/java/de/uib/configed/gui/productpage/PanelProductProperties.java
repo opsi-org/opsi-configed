@@ -177,49 +177,51 @@ public class PanelProductProperties extends JSplitPane {
 				infoPane.setActive();
 				int row = lsm.getMinSelectionIndex();
 
-				Logging.info(this, "selected  row " + row);
+				updateInfoPane(row);
+			}
+		}
 
-				if (row == -1) {
-					depotsOfPackage.clear();
-				} else {
-					String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
+		private void updateInfoPane(int row) {
+			Logging.info(this, "selected  row " + row);
 
-					String depotId = "";
+			if (row == -1) {
+				depotsOfPackage.clear();
+			} else {
+				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
-					Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
+				String depotId = "";
 
-					String versionInfo = "";
+				Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 
-					versionInfo = OpsiPackage.produceVersionInfo(
-							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+				String versionInfo = OpsiPackage.produceVersionInfo(
+						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-					List<String> depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
-							.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+				List<String> depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
+						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
-					Logging.info(this, "valueChanged  versionInfo " + versionInfo);
+				Logging.info(this, "valueChanged  versionInfo " + versionInfo);
 
-					depotsOfPackage = new LinkedList<>();
+				depotsOfPackage = new LinkedList<>();
 
-					for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
-						if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
-							depotsOfPackage.add(depot);
-						}
+				for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
+					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
+						depotsOfPackage.add(depot);
 					}
-
-					Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
-
-					infoPane.clearEditing();
-					if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
-
-						infoPane.setEditValues(productEdited,
-								"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-								"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-								depotsOfPackage.get(0));
-					}
-
-					panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 				}
+
+				Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
+
+				infoPane.clearEditing();
+				if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
+
+					infoPane.setEditValues(productEdited,
+							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
+							depotsOfPackage.get(0));
+				}
+
+				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 			}
 		}
 	}
