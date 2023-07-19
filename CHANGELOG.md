@@ -1,9 +1,10 @@
 # Changelog
 
-## [update] - update
+## [4.2.22.9] - 2023-07-19
 ### Fixed
 - Sort position of products correctly
 - Make it possible to read all textfiles in logviewer
+- Go to previously selected line when changing loglevel
 
 ## [4.2.22.8] - 2023-07-17
 ### Fixed
