@@ -3563,9 +3563,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
 
-			// we do this again since we reloaded the configuration
-			persistenceController.checkConfiguration();
-
 			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
 
