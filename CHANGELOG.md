@@ -3,6 +3,7 @@
 ## [update] - update
 ### Fixed
 - Sort position of products correctly
+- Make it possible to read all textfiles in logviewer
 
 ## [4.2.22.8] - 2023-07-17
 ### Fixed

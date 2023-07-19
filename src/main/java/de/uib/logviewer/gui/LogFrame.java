@@ -46,7 +46,6 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import net.sf.sevenzipjbinding.SevenZipException;
 import utils.ExtractorUtil;
 
 public class LogFrame extends JFrame implements WindowListener {
@@ -505,28 +504,29 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 	}
 
-	private StringBuilder readFile(String fn) {
+	private StringBuilder readFile(String fileName) {
 		StringBuilder sb = new StringBuilder();
 
-		File file = new File(fn);
+		File file = new File(fileName);
 
 		if (file.isDirectory()) {
-			Logging.error("This is not a file, it is a directory: " + fn);
-			showDialog("This is not a file, it is a directory: \n" + fn);
-		} else {
-			if (file.exists()) { // TODO
-				if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini")) {
+			Logging.error("This is not a file, it is a directory: " + fileName);
+			showDialog("This is not a file, it is a directory: \n" + fileName);
+		} else if (file.exists()) {
+			if (fileName.endsWith(".log") || fileName.endsWith(".txt") || !fileName.contains(".")
+					|| fileName.endsWith(".ini")) {
+				sb = readNotCompressedFile(file, sb);
+			} else {
+				//unknown extension
+				sb = ExtractorUtil.unzip(file);
+				if (sb == null) {
+					Logging.warning("Tried unzipping file, could not do it, open it as text");
 					sb = readNotCompressedFile(file, sb);
-				} else {
-					//unknown extension
-					try {
-						sb = ExtractorUtil.unzip(file);
-					} catch (SevenZipException e) {
-						sb = readNotCompressedFile(file, sb);
-						Logging.warning("Error unzipping: ", e);
-					}
 				}
 			}
+		} else {
+			Logging.error("This file does not exist: " + fileName);
+			showDialog("This file does not exist: \n" + fileName);
 		}
 
 		return sb;
