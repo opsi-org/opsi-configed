@@ -2048,10 +2048,6 @@ public class OpsiserviceNOMPersistenceController {
 		return productGroups;
 	}
 
-	public void productGroupsRequestRefresh() {
-		productGroups = null;
-	}
-
 	public Map<String, Map<String, String>> getHostGroups() {
 		if (hostGroups != null) {
 			return hostGroups;

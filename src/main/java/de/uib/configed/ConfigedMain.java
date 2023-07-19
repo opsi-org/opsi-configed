@@ -803,8 +803,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		netbootProductnames = persistenceController.getAllNetbootProductNames();
 		persistenceController.getProductIds();
 
-		persistenceController.productGroupsRequestRefresh();
-
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts();
