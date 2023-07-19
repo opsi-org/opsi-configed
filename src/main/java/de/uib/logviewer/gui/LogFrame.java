@@ -50,7 +50,7 @@ import utils.ExtractorUtil;
 
 public class LogFrame extends JFrame implements WindowListener {
 
-	private static String fileName;
+	private static String fileName = "";
 
 	//menu system
 
@@ -174,7 +174,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		for (final String localeName : Messages.getLocaleInfo().keySet()) {
 			ImageIcon localeIcon = null;
 			String imageIconName = Messages.getLocaleInfo().get(localeName);
-			if (imageIconName != null && imageIconName.length() > 0) {
+			if (imageIconName != null && !imageIconName.isEmpty()) {
 				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
@@ -337,11 +337,11 @@ public class LogFrame extends JFrame implements WindowListener {
 		logPane.setTitle("unknown");
 		setTitle(null);
 		if (!"".equals(fileName)) {
-			StringBuilder sbf = readFile(fileName);
-			if ((sbf != null) && sbf.length() > 0) {
+			String logText = readFile(fileName);
+			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.setMainText(sbf.toString());
+				logPane.setMainText(logText);
 			}
 		}
 	}
@@ -362,7 +362,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		public void close() {
-			fileName = "";
+			resetFileName();
 			super.setMainText(fileName);
 			super.setTitle(fileName);
 			super.removeAllHighlights();
@@ -378,8 +378,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		private String reloadFile(String fn) {
-			if (fn != null) {
-				return readFile(fn).toString();
+			if (fn != null && !"".equals(fn)) {
+				return readFile(fn);
 			} else {
 				Logging.error(this, "File does not exist: " + fn);
 				showDialog("No location: \n" + fn);
@@ -484,7 +484,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		if (fileName != null) {
 			Logging.info(this, "usedmemory " + Globals.usedMemory());
-			logPane.setMainText(readFile(fileName).toString());
+			logPane.setMainText(readFile(fileName));
 			Logging.info(this, "usedmemory " + Globals.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
@@ -504,50 +504,52 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 	}
 
-	private StringBuilder readFile(String fileName) {
-		StringBuilder sb = new StringBuilder();
+	private String readFile(String fileName) {
+		String result = "";
 
 		File file = new File(fileName);
 
 		if (file.isDirectory()) {
 			Logging.error("This is not a file, it is a directory: " + fileName);
+			resetFileName();
 			showDialog("This is not a file, it is a directory: \n" + fileName);
 		} else if (file.exists()) {
 			if (fileName.endsWith(".log") || fileName.endsWith(".txt") || !fileName.contains(".")
 					|| fileName.endsWith(".ini")) {
-				sb = readNotCompressedFile(file, sb);
+				result = readNotCompressedFile(file);
 			} else {
 				//unknown extension
-				sb = ExtractorUtil.unzip(file);
-				if (sb == null) {
+				result = ExtractorUtil.unzip(file);
+				if (result == null) {
 					Logging.warning("Tried unzipping file, could not do it, open it as text");
-					sb = readNotCompressedFile(file, sb);
+					result = readNotCompressedFile(file);
 				}
 			}
 		} else {
 			Logging.error("This file does not exist: " + fileName);
+			resetFileName();
 			showDialog("This file does not exist: \n" + fileName);
 		}
 
-		return sb;
+		return result;
 	}
 
-	private StringBuilder readNotCompressedFile(File file, StringBuilder sb) {
+	private String readNotCompressedFile(File file) {
 		Logging.info(this, "start readNotCompressedFile");
-		InputStream fis;
+		String result = "";
 		try {
-			fis = new FileInputStream(file);
-			sb = readInputStream(fis);
+			InputStream fis = new FileInputStream(file);
+			result = readInputStream(fis);
 			fis.close();
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + ex);
 			showDialog("Error opening file: " + ex);
 		}
 
-		return sb;
+		return result;
 	}
 
-	private static StringBuilder readInputStream(InputStream fis) {
+	private static String readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;
@@ -562,6 +564,11 @@ public class LogFrame extends JFrame implements WindowListener {
 			Logging.error("Error reading file: " + ex);
 			showDialog("Error reading file: " + ex);
 		}
-		return sb;
+		return sb.toString();
+	}
+
+	// Resets filename to empty name
+	private static void resetFileName() {
+		fileName = "";
 	}
 }

@@ -30,7 +30,7 @@ public final class ExtractorUtil {
 	private ExtractorUtil() {
 	}
 
-	public static StringBuilder unzip(File file) {
+	public static String unzip(File file) {
 
 		Logging.info("ExtractorUtil: starting extract");
 		final StringBuilder sb = new StringBuilder();
@@ -75,12 +75,12 @@ public final class ExtractorUtil {
 			Logging.error("Could not find file....", ex);
 		} catch (IOException ex) {
 			if (ex instanceof SevenZipException) {
-				return null;
+				return "";
 			}
 
 			Logging.warning("Could not close file, exception thrown...", ex);
 		}
 
-		return sb;
+		return sb.toString();
 	}
 }
