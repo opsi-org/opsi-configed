@@ -127,7 +127,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.provider.RowsProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -756,18 +755,7 @@ public class ConfigedMain implements ListSelectionListener {
 			classNames.add("java.lang.String");
 		}
 
-		globalProductsTableProvider = new DefaultTableProvider(
-				new ExternalSource(columnNames, classNames, new RowsProvider() {
-					@Override
-					public void requestReload() {
-						persistenceController.productDataRequestRefresh();
-					}
-
-					@Override
-					public List<List<Object>> getRows() {
-						return persistenceController.getProductRows();
-					}
-				}));
+		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
 	// sets dataReady = true when finished
