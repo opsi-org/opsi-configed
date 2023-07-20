@@ -7,7 +7,6 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
@@ -19,10 +18,9 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
+	public boolean doesMatch(OpsiDataClient client) {
 
-		OpsiDataClient oClient = (OpsiDataClient) client;
-		if (oClient.getSuperGroups() == null) {
+		if (client.getSuperGroups() == null) {
 			if (!issuedTreeError) {
 				Logging.debug(
 						"Selection by tree structure not possible in headless mode, please remove this selection criterion.");
@@ -32,7 +30,7 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 			return false;
 		}
 
-		for (String group : oClient.getSuperGroups()) {
+		for (String group : client.getSuperGroups()) {
 			if (checkData(group)) {
 				return true;
 			}

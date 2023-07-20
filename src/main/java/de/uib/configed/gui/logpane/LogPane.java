@@ -652,18 +652,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
 		}
 
-		if (jComboBoxSearch.getSelectedIndex() != -1) {
-			try {
-				jTextPane.setCaretPosition(startPosition);
+		jTextPane.setCaretPosition(startPosition);
 
+		if (jComboBoxSearch.getSelectedIndex() != -1) {
+
+			try {
 				jTextPane.scrollRectToVisible(jTextPane
 						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-				jTextPane.getCaret().setVisible(true);
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
 				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
 			}
 		}
+
+		jTextPane.getCaret().setVisible(true);
 	}
 
 	private Style getStyleByLevelNo(int lev) {

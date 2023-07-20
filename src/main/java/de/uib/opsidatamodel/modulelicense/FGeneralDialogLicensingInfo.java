@@ -397,22 +397,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
-		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
-
-				// tableProvider
-				new DefaultTableProvider(tableSource),
-
-				// keycol
-				0,
-
-				// final columns int array
-				new int[] {},
-
-				// table model listener
-				thePanel,
-
-				// ArrayList<TableEditItem> updates
-				updateCollection);
+		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
+				thePanel, updateCollection);
 
 		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory(0);
 

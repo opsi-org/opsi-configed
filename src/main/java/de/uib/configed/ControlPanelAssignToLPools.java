@@ -660,7 +660,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// updates
 		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
-				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this::updateLicencepool) {
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this) {
 
 			@Override
 			public boolean cancelChanges() {
@@ -727,7 +727,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 	}
 
-	private boolean updateLicencepool(String poolId, List<String> softwareIds) {
+	public boolean updateLicencepool(String poolId, List<String> softwareIds) {
 
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
