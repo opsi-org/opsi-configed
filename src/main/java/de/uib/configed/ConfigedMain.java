@@ -113,7 +113,6 @@ import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
@@ -133,7 +132,7 @@ import de.uib.utilities.table.provider.RowsProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+public class ConfigedMain implements ListSelectionListener, TabController {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final int VIEW_CLIENTS = 0;
@@ -357,7 +356,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
 		}
 
-		Logging.registLogEventObserver(this);
+		Logging.registerConfigedMain(this);
 	}
 
 	public static MainFrame getMainFrame() {
