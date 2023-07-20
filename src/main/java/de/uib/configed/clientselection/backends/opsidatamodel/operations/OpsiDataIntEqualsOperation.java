@@ -9,7 +9,6 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 import java.util.Map;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.IntEqualsOperation;
@@ -28,9 +27,8 @@ public class OpsiDataIntEqualsOperation extends IntEqualsOperation implements Ex
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
-		OpsiDataClient oClient = (OpsiDataClient) client;
-		Map<String, Object> realMap = oClient.getMap(map);
+	public boolean doesMatch(OpsiDataClient client) {
+		Map<String, Object> realMap = client.getMap(map);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 			Logging.debug(this, "key " + key + " not found!");
 			return false;
