@@ -130,7 +130,6 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
-import de.uib.utilities.table.provider.TableProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -166,12 +165,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private OpsiserviceNOMPersistenceController persistenceController;
 
 	// global table providers for licence management
-	protected TableProvider licencePoolTableProvider;
-	protected TableProvider licenceOptionsTableProvider;
-	protected TableProvider licenceContractsTableProvider;
-	protected TableProvider softwarelicencesTableProvider;
+	protected DefaultTableProvider licencePoolTableProvider;
+	protected DefaultTableProvider licenceOptionsTableProvider;
+	protected DefaultTableProvider licenceContractsTableProvider;
+	protected DefaultTableProvider softwarelicencesTableProvider;
 
-	public TableProvider globalProductsTableProvider;
+	public DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
