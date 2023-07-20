@@ -5043,8 +5043,6 @@ public class ConfigedMain implements ListSelectionListener, TabController {
 		setSelectedClientsCollectionOnPanel(result, true);
 	}
 
-	// interface LogEventObserver
-	@Override
 	public void logEventOccurred() {
 
 		if (allFrames == null) {
