@@ -173,11 +173,10 @@ public final class CertificateManager {
 
 		if (!certificateFiles.isEmpty()) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
-			X509Certificate tmpCertificate = retrieveCertificate();
+			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
 
 			for (File certificateFile : certificateFiles) {
 				X509Certificate localCertificate = instantiateCertificate(certificateFile);
-
 				if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
 					writeToCertificate(certificateFile, certificateContent);
 				}
@@ -185,8 +184,7 @@ public final class CertificateManager {
 		}
 	}
 
-	private static X509Certificate retrieveCertificate() {
-		String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
+	private static X509Certificate createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
 			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
