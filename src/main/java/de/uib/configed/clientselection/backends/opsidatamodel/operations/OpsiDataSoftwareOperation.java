@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
@@ -34,19 +33,18 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
+	public boolean doesMatch(OpsiDataClient client) {
 		Logging.debug(this, "doesMatch starting");
-		OpsiDataClient oClient = (OpsiDataClient) client;
 
-		List<Map<String, String>> softwareSet = oClient.getSoftwareList();
-		List<String> theProductNames = oClient.getProductNames();
+		List<Map<String, String>> softwareSet = client.getSoftwareList();
+		List<String> theProductNames = client.getProductNames();
 		TreeSet<String> productsWithDefaultValuesClient = new TreeSet<>(productsWithDefaultValues);
 
 		productsWithDefaultValuesClient.removeAll(theProductNames);
 
 		for (Map<String, String> value : softwareSet) {
 			if (value instanceof Map) {
-				oClient.setCurrentSoftwareValue(value);
+				client.setCurrentSoftwareValue(value);
 				Logging.debug(this,
 						" getChildOperations().get(0) instance of " + (getChildOperations().get(0)).getClass());
 				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
@@ -58,7 +56,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		}
 
 		for (String product : productsWithDefaultValuesClient) {
-			oClient.setCurrentSoftwareValue(productDefaultStates.get(product));
+			client.setCurrentSoftwareValue(productDefaultStates.get(product));
 			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
 					+ (getChildOperations().get(0)).getClass());
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {

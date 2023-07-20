@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntEqualsOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterOrEqualOperation;
@@ -159,11 +158,11 @@ public final class OpsiDataBackend {
 		this.hasSoftware = hasSoftware;
 		this.hasHardware = hasHardware;
 		this.hasSwAudit = hasSwAudit;
-		List<Client> clients = getClients();
+		List<OpsiDataClient> clients = getClients();
 		Logging.debug(this, "Number of clients to filter: " + clients.size());
 
 		List<String> matchingClients = new LinkedList<>();
-		for (Client client : clients) {
+		for (OpsiDataClient client : clients) {
 			if (operation.doesMatch(client)) {
 
 				matchingClients.add(client.getId());
@@ -473,8 +472,8 @@ public final class OpsiDataBackend {
 
 	}
 
-	private List<Client> getClients() {
-		List<Client> clients = new LinkedList<>();
+	private List<OpsiDataClient> getClients() {
+		List<OpsiDataClient> clients = new LinkedList<>();
 
 		checkInitData();
 

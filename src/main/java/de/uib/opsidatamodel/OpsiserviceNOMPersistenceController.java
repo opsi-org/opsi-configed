@@ -44,6 +44,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
+import de.uib.configed.productaction.PanelCompleteWinProducts;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -89,7 +90,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
 /**
@@ -284,7 +284,7 @@ public class OpsiserviceNOMPersistenceController {
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	private List<DataRefreshedObserver> dataRefreshedObservers;
+	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	public AbstractExecutioner exec;
 
@@ -498,23 +498,16 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	// ---------------------------------------------------------------
-	// implementation of observer patterns
-	// offer observing of data refreshed announcements
+	// Registering and notifying panelCompleteWinProducts
+	// TODO change how messages are shown there
 
-	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers == null) {
-			dataRefreshedObservers = new ArrayList<>();
-		}
-		dataRefreshedObservers.add(ob);
+	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
+		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}
 
-	public void notifyDataRefreshedObservers(Object mesg) {
-		if (dataRefreshedObservers == null) {
-			return;
-		}
-
-		for (DataRefreshedObserver ob : dataRefreshedObservers) {
-			ob.gotNotification(mesg);
+	public void notifyPanelCompleteWinProducts() {
+		if (panelCompleteWinProducts != null) {
+			panelCompleteWinProducts.evaluateWinProducts();
 		}
 	}
 
