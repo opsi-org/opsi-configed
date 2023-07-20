@@ -437,7 +437,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusInfo());
+		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
 		setEditingTarget(EditingTarget.CLIENTS);
 
@@ -1246,7 +1246,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
 					+ " as well as " + selectionPanel.getSelectedValues().size());
 
-			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
 
 			activatedGroupModel.setActive(getSelectedClients().length <= 0);
@@ -1614,7 +1614,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusInfo().updateValues(clientCount, null, null, null);
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
 
 			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
 				selectionPanel.setMissingDataPanel();
@@ -1929,7 +1929,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "setSelectedClientsArray produced firstSelectedClient " + firstSelectedClient);
 
-		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
 	}
 
@@ -2425,12 +2425,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
 				if (getSelectedClients().length == 1) {
-					mainFrame.getHostsStatusInfo().setGroupName(mouseNode.getParent().toString());
+					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
 				} else {
-					mainFrame.getHostsStatusInfo().setGroupName("");
+					mainFrame.getHostsStatusPanel().setGroupName("");
 				}
 
-				mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+				mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 						getSelectedClientsString(), clientInDepot);
 			} else {
 				activateGroupByTree(false, mouseNode, mousePath);
@@ -2479,14 +2479,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusInfo().setGroupName(
+			mainFrame.getHostsStatusPanel().setGroupName(
 
 					pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
 		} else {
-			mainFrame.getHostsStatusInfo().setGroupName("");
+			mainFrame.getHostsStatusPanel().setGroupName("");
 		}
 
-		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
 
 	}
@@ -3627,8 +3627,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.disactivateLoadingPane();
 	}
 
-	public HostsStatusInfo getHostsStatusInfo() {
-		return mainFrame.getHostsStatusInfo();
+	public HostsStatusPanel getHostsStatusInfo() {
+		return mainFrame.getHostsStatusPanel();
 	}
 
 	public TableModel getSelectedClientsTableModel() {

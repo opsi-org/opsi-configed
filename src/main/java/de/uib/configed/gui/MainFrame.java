@@ -93,7 +93,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
-import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
@@ -476,7 +475,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		statusPane.updateValues(0, null, null, null);
 	}
 
-	public HostsStatusInfo getHostsStatusInfo() {
+	public HostsStatusPanel getHostsStatusPanel() {
 		return statusPane;
 	}
 
