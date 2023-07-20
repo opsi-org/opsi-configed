@@ -328,10 +328,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Globals.isMultiFactorAuthenticationEnabled);
 			if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
-				ConnectionErrorReporter reporter = new ConnectionErrorReporter(conStat);
-				ConnectionErrorObserver.getInstance().subscribe(reporter);
-				ConnectionErrorObserver.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				ConnectionErrorObserver.getInstance().unsubscribe(reporter);
+				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				password = ConfigedMain.password;
 				conStat = new ConnectionState(ConnectionState.UNAUTHORIZED);
 			} else {
