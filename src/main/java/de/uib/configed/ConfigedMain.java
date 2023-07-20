@@ -130,7 +130,6 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
-import de.uib.utilities.table.provider.TableProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -166,12 +165,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private OpsiserviceNOMPersistenceController persistenceController;
 
 	// global table providers for licence management
-	protected TableProvider licencePoolTableProvider;
-	protected TableProvider licenceOptionsTableProvider;
-	protected TableProvider licenceContractsTableProvider;
-	protected TableProvider softwarelicencesTableProvider;
+	protected DefaultTableProvider licencePoolTableProvider;
+	protected DefaultTableProvider licenceOptionsTableProvider;
+	protected DefaultTableProvider licenceContractsTableProvider;
+	protected DefaultTableProvider softwarelicencesTableProvider;
 
-	public TableProvider globalProductsTableProvider;
+	public DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -2965,17 +2964,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setProductPropertiesPage");
 
 		if (editingTarget == EditingTarget.DEPOTS) {
-			int saveSelectedRow = mainFrame.panelProductProperties.paneProducts.getSelectedRow();
-			mainFrame.panelProductProperties.paneProducts.reset();
-
-			if (mainFrame.panelProductProperties.paneProducts.getTableModel().getRowCount() > 0) {
-				if (saveSelectedRow == -1 || mainFrame.panelProductProperties.paneProducts.getTableModel()
-						.getRowCount() <= saveSelectedRow) {
-					mainFrame.panelProductProperties.paneProducts.setSelectedRow(0);
-				} else {
-					mainFrame.panelProductProperties.paneProducts.setSelectedRow(saveSelectedRow);
-				}
-			}
+			mainFrame.panelProductProperties.setProductProperties();
 
 			return true;
 		} else {
@@ -3522,7 +3511,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "reloadData _1");
 
 			// calls again persist.productDataRequestRefresh()
-			mainFrame.panelProductProperties.paneProducts.reload();
+			mainFrame.panelProductProperties.reload();
 			Logging.info(this, "reloadData _2");
 
 			// if variable modelDataValid in GenTableModel has no function , the following

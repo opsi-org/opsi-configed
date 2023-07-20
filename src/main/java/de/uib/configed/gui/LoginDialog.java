@@ -63,8 +63,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private WaitingWorker waitingWorker;
 
-	private Containership containership;
-
 	private JLabel jLabelTitle = new JLabel();
 	private JLabel jLabelVersion = new JLabel();
 
@@ -214,7 +212,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
-		containership = new Containership(panel);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 

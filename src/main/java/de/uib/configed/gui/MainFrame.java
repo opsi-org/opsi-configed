@@ -2530,7 +2530,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		});
 
 		panelProductProperties = new PanelProductProperties(configedMain);
-		panelProductProperties.propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panelProductProperties,
