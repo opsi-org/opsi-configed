@@ -18,7 +18,7 @@ public class ExternalSource implements TableSource {
 
 	private List<String> classNames;
 
-	private boolean reloadRequested = true;
+	private boolean reloadRequested;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
