@@ -65,8 +65,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String sessionId;
 	private int portHTTPS = 4447;
 
-	private boolean background;
-
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
 	 * 
@@ -217,12 +215,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	@Override
 	@SuppressWarnings("java:S1168")
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		background = false;
 		Logging.info(this, "retrieveResponse started");
-
-		if (omc == null || omc.isBackgroundDefault()) {
-			background = true;
-		}
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 
@@ -234,7 +227,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		conStat = handler.getConnectionState();
-		sendPOSTRequest(connection, omc);
+		sendPostRequest(connection, omc);
 
 		if (connection == null) {
 			return null;
@@ -246,9 +239,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
-				Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
-
-				handleResponseCode(connection, omc);
+				handleResponseCode(connection);
 
 				if (conStat.getState() == ConnectionState.CONNECTED) {
 					retrieveSessionIDFromResponse(connection);
@@ -257,6 +248,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
+				} else if (conStat.getState() == ConnectionState.UNAUTHORIZED) {
+					return retrieveResponse(omc);
+				} else {
+					Logging.warning(this, "Encountered unhandled connection state: " + conStat);
 				}
 			} catch (IOException ex) {
 				Logging.error(this, "Exception while data reading", ex);
@@ -268,7 +263,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private void sendPOSTRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
+	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
 		if (connection == null) {
 			return;
 		}
@@ -324,25 +319,28 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private void handleResponseCode(HttpsURLConnection connection, OpsiMethodCall omc) throws IOException {
-		String errorInfo = retrieveErrorFromResponse(connection);
+	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
+		Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-
-			Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
-					+ Globals.isMultiFactorAuthenticationEnabled);
+			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Globals.isMultiFactorAuthenticationEnabled);
 			if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
+				ConnectionErrorReporter reporter = new ConnectionErrorReporter(conStat);
+				ConnectionErrorObserver.getInstance().subscribe(reporter);
 				ConnectionErrorObserver.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				retrieveResponse(omc);
+				ConnectionErrorObserver.getInstance().unsubscribe(reporter);
+				password = ConfigedMain.password;
+				conStat = new ConnectionState(ConnectionState.UNAUTHORIZED);
+			} else {
+				conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
 			}
 		} else {
 			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
 			Logging.error(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage() + " "
-					+ errorInfo);
+					+ retrieveErrorFromResponse(connection));
 		}
 	}
 

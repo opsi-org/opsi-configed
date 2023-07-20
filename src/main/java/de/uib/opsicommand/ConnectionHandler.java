@@ -218,12 +218,15 @@ public class ConnectionHandler {
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.connect();
+
+			observer.unsubscribe(reporter);
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: " + ex);
 
 			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
 				observer.notify(produceCertificateWarningMessage(certValidator),
 						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
+				observer.unsubscribe(reporter);
 			}
 
 			conStat = reporter.getConnectionState();
@@ -236,6 +239,7 @@ public class ConnectionHandler {
 				Logging.error("Exception on connecting, ", ex);
 			}
 
+			observer.unsubscribe(reporter);
 			connection = null;
 		}
 

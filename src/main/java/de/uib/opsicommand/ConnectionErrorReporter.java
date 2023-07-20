@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -53,7 +54,6 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 			displayGeneralDialog(message);
 			break;
 		case INVALID_HOSTNAME_ERROR:
-
 			if (conStat.getState() != ConnectionState.RETRY_CONNECTION) {
 				displayGeneralDialog(message);
 			}
@@ -113,7 +113,7 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 	private void displayGeneralDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue(Configed.getResourceValue("FGeneralDialog.ok")) }, 420, 200);
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 420, 200);
 
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
@@ -135,7 +135,7 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		}
 	}
 
-	private static void displayMFADialog() {
+	private synchronized void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
 
 		Map<String, String> groupData = new LinkedHashMap<>();
@@ -165,7 +165,42 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 			newPasswordDialog.setVisible(true);
 		}
 
-		ConfigedMain.password = newPasswordDialog.getData().get("password");
+		if (newPasswordDialog.isCancelled()) {
+			displayCancelConfigedDialog();
+		} else {
+			ConfigedMain.password = newPasswordDialog.getData().get("password");
+		}
+	}
+
+	private void displayCancelConfigedDialog() {
+		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") },
+				420, 200);
+
+		fErrorMsg.setTooltipButtons(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCancelHint"),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);
+		fErrorMsg.setMessage(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"));
+		fErrorMsg.setAlwaysOnTop(true);
+
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
+		}
+
+		if (!SwingUtilities.isEventDispatchThread()) {
+			launchDialogInEDT(fErrorMsg);
+		} else {
+			fErrorMsg.setVisible(true);
+		}
+
+		int choice = fErrorMsg.getResult();
+
+		if (choice == 1) {
+			displayMFADialog();
+		} else {
+			Main.endApp(Main.NO_ERROR);
+		}
 	}
 
 	private static void launchDialogInEDT(JDialog dialog) {
