@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
@@ -41,11 +40,10 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
-		OpsiDataClient oClient = (OpsiDataClient) client;
-		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + oClient);
+	public boolean doesMatch(OpsiDataClient client) {
+		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + client);
 
-		Map<String, Object> realMap = oClient.getMap(map);
+		Map<String, Object> realMap = client.getMap(map);
 		Logging.debug(this, "doesMatch,  we look into map for key " + key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 

@@ -43,6 +43,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
+import de.uib.configed.productaction.PanelCompleteWinProducts;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -88,7 +89,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
 /**
@@ -283,7 +283,7 @@ public class OpsiserviceNOMPersistenceController {
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	private List<DataRefreshedObserver> dataRefreshedObservers;
+	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	public AbstractExecutioner exec;
 
@@ -497,23 +497,16 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	// ---------------------------------------------------------------
-	// implementation of observer patterns
-	// offer observing of data refreshed announcements
+	// Registering and notifying panelCompleteWinProducts
+	// TODO change how messages are shown there
 
-	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers == null) {
-			dataRefreshedObservers = new ArrayList<>();
-		}
-		dataRefreshedObservers.add(ob);
+	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
+		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}
 
-	public void notifyDataRefreshedObservers(Object mesg) {
-		if (dataRefreshedObservers == null) {
-			return;
-		}
-
-		for (DataRefreshedObserver ob : dataRefreshedObservers) {
-			ob.gotNotification(mesg);
+	public void notifyPanelCompleteWinProducts() {
+		if (panelCompleteWinProducts != null) {
+			panelCompleteWinProducts.evaluateWinProducts();
 		}
 	}
 
@@ -601,7 +594,6 @@ public class OpsiserviceNOMPersistenceController {
 									Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
-
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 					msg.append("\n");
@@ -609,7 +601,7 @@ public class OpsiserviceNOMPersistenceController {
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
-					dialog.setMessage("" + msg);
+					dialog.setMessage(msg.toString());
 					dialog.setVisible(true);
 					int result = dialog.getResult();
 					Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
@@ -2679,9 +2671,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
-			//|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
-			/*|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)*/) {
+					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {

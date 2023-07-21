@@ -144,9 +144,6 @@ public class ControllerHWinfoColumnConfiguration {
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
-
-				// tableProvider
-
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
 				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override

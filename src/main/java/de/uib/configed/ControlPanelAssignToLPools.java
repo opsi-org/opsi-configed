@@ -43,10 +43,10 @@ import de.uib.utilities.table.gui.AdaptingCellEditor;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
@@ -121,7 +121,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	}
 
-	private void setSoftwareIdsFromLicencePool(final String poolID) {
+	public void setSoftwareIdsFromLicencePool(final String poolID) {
 		Logging.info(this,
 				"setSoftwareIdsFromLicencePool " + poolID + " should be thePanel.panelLicencepools.getSelectedRow() "
 						+ thePanel.panelLicencepools.getSelectedRow());
@@ -659,15 +659,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col.setMaxWidth(60);
 
 		// updates
-		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
-				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this::updateLicencepool) {
-
-			@Override
-			public boolean cancelChanges() {
-				setSoftwareIdsFromLicencePool(null);
-				return true;
-			}
-		});
+		thePanel.panelRegisteredSoftware.setUpdateController(new SelectionMemorizerUpdateController(
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this));
 
 		// -- Softwarename --> LicencePool
 
@@ -727,7 +720,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 	}
 
-	private boolean updateLicencepool(String poolId, List<String> softwareIds) {
+	public boolean updateLicencepool(String poolId, List<String> softwareIds) {
 
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);

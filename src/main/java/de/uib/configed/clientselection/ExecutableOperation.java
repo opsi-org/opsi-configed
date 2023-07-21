@@ -6,6 +6,8 @@
 
 package de.uib.configed.clientselection;
 
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
+
 /**
  * Classes implementing this interface can check whether specific clients match
  * a certain condition. These are the only operation classes that can be used in
@@ -16,5 +18,5 @@ public interface ExecutableOperation {
 	 * Checks whether the client does match the given criteria. You may need to
 	 * set the data first.
 	 */
-	boolean doesMatch(Client client);
+	boolean doesMatch(OpsiDataClient client);
 }
