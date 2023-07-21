@@ -110,7 +110,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		return this;
 	}
 
-	private String modify(final String in) {
+	private static String modify(final String in) {
 		if (in == null) {
 			return null;
 		}
