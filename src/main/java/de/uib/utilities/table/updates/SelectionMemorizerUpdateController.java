@@ -15,14 +15,14 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public abstract class AbstractSelectionMemorizerUpdateController implements UpdateController {
+public class SelectionMemorizerUpdateController implements UpdateController {
 	private PanelGenEditTable keysPanel;
 	private int keyCol;
 	private PanelGenEditTable panel;
 	private ControlPanelAssignToLPools controlPanelAssignToLPools;
 
-	protected AbstractSelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol,
-			PanelGenEditTable panel, ControlPanelAssignToLPools controlPanelAssignToLPools) {
+	public SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
+			ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;
 		this.panel = panel;
@@ -52,5 +52,11 @@ public abstract class AbstractSelectionMemorizerUpdateController implements Upda
 		Logging.checkErrorList(null);
 
 		return success;
+	}
+
+	@Override
+	public boolean cancelChanges() {
+		controlPanelAssignToLPools.setSoftwareIdsFromLicencePool(null);
+		return true;
 	}
 }
