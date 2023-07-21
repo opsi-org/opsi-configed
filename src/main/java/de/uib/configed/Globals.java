@@ -100,6 +100,9 @@ public final class Globals {
 	public static final Color opsiBlue = new Color(63, 90, 166);
 	public static final Color opsiDarkBlue = new Color(45, 65, 120);
 
+	public static final Color opsiLightBlue = new Color(159, 172, 210);
+	public static final Color opsiLightBlue2 = new Color(141, 154, 192);
+
 	public static final Color opsiBackgroundLight = new Color(255, 255, 255);
 	public static final Color opsiBackgroundDark = new Color(31, 31, 31);
 
