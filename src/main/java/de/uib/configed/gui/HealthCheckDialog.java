@@ -358,7 +358,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			for (Map<String, Object> healthInfo : message.values()) {
 				styledDocument.insertString(styledDocument.getLength(), ((String) healthInfo.get("message")), null);
 
-				if (!((String) healthInfo.get("details")).trim().isBlank()) {
+				if (!((String) healthInfo.get("details")).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
 					String imagePath = (boolean) healthInfo.get("showDetails")
 							? "images/arrows/arrow_green_16x16-down.png"
@@ -373,6 +373,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 				if ((boolean) healthInfo.get("showDetails")) {
 					styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("details"), null);
+					styledDocument.insertString(styledDocument.getLength(), "\n", null);
 				}
 			}
 		} catch (BadLocationException e) {
