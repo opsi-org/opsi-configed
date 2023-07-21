@@ -356,27 +356,27 @@ public class HealthCheckDialog extends FGeneralDialog {
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
 			for (Map<String, Object> healthInfo : message.values()) {
-				String imagePath = "images/arrows/arrow_green_16x16-right.png";
+				styledDocument.insertString(styledDocument.getLength(), ((String) healthInfo.get("message")), null);
 
-				if ((boolean) healthInfo.get("showDetails")) {
-					imagePath = "images/arrows/arrow_green_16x16-down.png";
-				}
-
-				if (!((String) healthInfo.get("details")).isEmpty()) {
-					textPane.insertIcon(Globals.createImageIcon(imagePath, ""));
+				if (!((String) healthInfo.get("details")).trim().isBlank()) {
+					Style iconStyle = styledDocument.addStyle("iconStyle", null);
+					String imagePath = (boolean) healthInfo.get("showDetails")
+							? "images/arrows/arrow_green_16x16-down.png"
+							: "images/arrows/arrow_green_16x16-right.png";
+					StyleConstants.setIcon(iconStyle, Globals.createImageIcon(imagePath, ""));
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
+							iconStyle);
 				} else {
-					styledDocument.insertString(styledDocument.getLength(), "    ", null);
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), "    ",
+							null);
 				}
-
-				styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("message"), null);
 
 				if ((boolean) healthInfo.get("showDetails")) {
 					styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("details"), null);
 				}
-
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "could not insert message into health check dialog, ", e);
+			Logging.warning(this, "could not insert message into health check dialog", e);
 		}
 
 		Matcher matcher = pattern.matcher(textPane.getText());
@@ -384,6 +384,13 @@ public class HealthCheckDialog extends FGeneralDialog {
 			Style style = getStyle(matcher.group());
 			styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
 		}
+	}
+
+	private int getMessageStartOffset(String message) {
+		Element root = styledDocument.getDefaultRootElement();
+		int offset = styledDocument.getLength() - message.trim().replace("\n", "").replace("\t", " ").length();
+		int elementIndex = root.getElementIndex(offset);
+		return root.getElement(elementIndex).getStartOffset();
 	}
 
 	private Style getStyle(String token) {
