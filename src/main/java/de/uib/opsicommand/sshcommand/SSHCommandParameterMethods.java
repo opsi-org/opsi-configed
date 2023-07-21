@@ -43,7 +43,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 /**
  * This Class handles SSHCommands.
  **/
-public final class SSHCommandParameterMethods implements SSHCommandParameterInterface {
+public final class SSHCommandParameterMethods {
 
 	/** default parameter replace id beginns with <<< **/
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
@@ -417,8 +417,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return null;
 	}
 
-	@Override
-	public String getConfigServerName() {
+	private String getConfigServerName() {
 		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.host)) {
@@ -433,13 +432,12 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return ConfigedMain.host;
 	}
 
-	@Override
-	public String getConfigSSHServerName() {
+	private String getConfigSSHServerName() {
 		Logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
 		return SSHConnectionInfo.getInstance().getHost();
 	}
 
-	public String[] getSelectedClientIPs() {
+	private String[] getSelectedClientIPs() {
 		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(configedMain.getSelectedClients()));
 		String[] clientnames = new String[configedMain.getSelectedClients().length];
 		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
@@ -459,8 +457,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return clientIPs;
 	}
 
-	@Override
-	public String[] getSelectedClientNames() {
+	private String[] getSelectedClientNames() {
 		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(configedMain.getSelectedClients()));
 		String[] clientnames = new String[configedMain.getSelectedClients().length];
 		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
@@ -468,13 +465,12 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return clientnames;
 	}
 
-	@Override
-	public String[] getSelectedDepotNames() {
+	private String[] getSelectedDepotNames() {
 		Logging.debug(this, "getSelected_depotnames  " + configedMain.getSelectedDepots());
 		return configedMain.getSelectedDepots();
 	}
 
-	public String[] getSelectedDepotIPs() {
+	private String[] getSelectedDepotIPs() {
 		Logging.debug(this, "getSelected_depotIPs " + configedMain.getSelectedDepots());
 		String[] depotnames = new String[configedMain.getSelectedDepots().length];
 		System.arraycopy(configedMain.getSelectedDepots(), 0, depotnames, 0, configedMain.getSelectedDepots().length);

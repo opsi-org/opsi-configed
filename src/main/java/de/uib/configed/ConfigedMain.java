@@ -113,7 +113,6 @@ import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
@@ -121,7 +120,6 @@ import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
-import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
@@ -129,12 +127,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.provider.RowsProvider;
-import de.uib.utilities.table.provider.TableProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+public class ConfigedMain implements ListSelectionListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final int VIEW_CLIENTS = 0;
@@ -166,12 +162,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private OpsiserviceNOMPersistenceController persistenceController;
 
 	// global table providers for licence management
-	protected TableProvider licencePoolTableProvider;
-	protected TableProvider licenceOptionsTableProvider;
-	protected TableProvider licenceContractsTableProvider;
-	protected TableProvider softwarelicencesTableProvider;
+	protected DefaultTableProvider licencePoolTableProvider;
+	protected DefaultTableProvider licenceOptionsTableProvider;
+	protected DefaultTableProvider licenceContractsTableProvider;
+	protected DefaultTableProvider softwarelicencesTableProvider;
 
-	public TableProvider globalProductsTableProvider;
+	public DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -358,37 +354,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
 		}
 
-		Logging.registLogEventObserver(this);
+		Logging.registerConfigedMain(this);
 	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
 	}
 
-	// TabController Interface
-	@Override
-	public LicencesTabStatus getStartTabState() {
-		return LicencesTabStatus.LICENCEPOOL;
-	}
-
-	@Override
-	public TabClient getClient(LicencesTabStatus state) {
-		return licencesPanels.get(state);
-	}
-
-	@Override
-	public void addClient(LicencesTabStatus status, TabClient panel) {
+	private void addClient(LicencesTabStatus status, TabClient panel) {
 		licencesPanels.put(status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
 	}
 
-	@Override
 	public LicencesTabStatus reactToStateChangeRequest(LicencesTabStatus newState) {
 		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
-		if (newState != licencesStatus && getClient(licencesStatus).mayLeave()) {
+		if (newState != licencesStatus && licencesPanels.get(licencesStatus).mayLeave()) {
 			licencesStatus = newState;
 
-			if (getClient(licencesStatus) != null) {
+			if (licencesPanels.get(licencesStatus) != null) {
 				licencesPanels.get(licencesStatus).reset();
 			}
 			// otherwise we return the old status
@@ -438,7 +421,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusInfo());
+		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
 		setEditingTarget(EditingTarget.CLIENTS);
 
@@ -772,18 +755,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			classNames.add("java.lang.String");
 		}
 
-		globalProductsTableProvider = new DefaultTableProvider(
-				new ExternalSource(columnNames, classNames, new RowsProvider() {
-					@Override
-					public void requestReload() {
-						persistenceController.productDataRequestRefresh();
-					}
-
-					@Override
-					public List<List<Object>> getRows() {
-						return persistenceController.getProductRows();
-					}
-				}));
+		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
 	// sets dataReady = true when finished
@@ -1247,7 +1219,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
 					+ " as well as " + selectionPanel.getSelectedValues().size());
 
-			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
 
 			activatedGroupModel.setActive(getSelectedClients().length <= 0);
@@ -1428,7 +1400,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void initTableData() {
 
-		licencesStatus = getStartTabState();
+		licencesStatus = LicencesTabStatus.LICENCEPOOL;
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();
@@ -1615,7 +1587,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusInfo().updateValues(clientCount, null, null, null);
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
 
 			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
 				selectionPanel.setMissingDataPanel();
@@ -1930,7 +1902,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "setSelectedClientsArray produced firstSelectedClient " + firstSelectedClient);
 
-		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
 	}
 
@@ -2426,12 +2398,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
 				if (getSelectedClients().length == 1) {
-					mainFrame.getHostsStatusInfo().setGroupName(mouseNode.getParent().toString());
+					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
 				} else {
-					mainFrame.getHostsStatusInfo().setGroupName("");
+					mainFrame.getHostsStatusPanel().setGroupName("");
 				}
 
-				mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+				mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 						getSelectedClientsString(), clientInDepot);
 			} else {
 				activateGroupByTree(false, mouseNode, mousePath);
@@ -2480,14 +2452,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusInfo().setGroupName(
+			mainFrame.getHostsStatusPanel().setGroupName(
 
 					pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
 		} else {
-			mainFrame.getHostsStatusInfo().setGroupName("");
+			mainFrame.getHostsStatusPanel().setGroupName("");
 		}
 
-		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
 
 	}
@@ -3628,8 +3600,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.disactivateLoadingPane();
 	}
 
-	public HostsStatusInfo getHostsStatusInfo() {
-		return mainFrame.getHostsStatusInfo();
+	public HostsStatusPanel getHostsStatusInfo() {
+		return mainFrame.getHostsStatusPanel();
 	}
 
 	public TableModel getSelectedClientsTableModel() {
@@ -5045,8 +5017,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setSelectedClientsCollectionOnPanel(result, true);
 	}
 
-	// interface LogEventObserver
-	@Override
 	public void logEventOccurred() {
 
 		if (allFrames == null) {

@@ -41,10 +41,9 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.swing.SecondaryFrame;
 
-public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObserver, NameProducer {
+public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	// file name conventions
 
@@ -111,20 +110,14 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		defineLayout();
 
-		persistenceController.registerDataRefreshedObserver(this);
+		persistenceController.registerPanelCompleteWinProducts(this);
 	}
 
-	private void evaluateWinProducts() {
+	public void evaluateWinProducts() {
 		retrieveWinProducts();
 
 		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
-	}
-
-	// implementation of DataRefreshedObserver
-	@Override
-	public void gotNotification(Object mesg) {
-		evaluateWinProducts();
 	}
 
 	private void retrieveWinProducts() {

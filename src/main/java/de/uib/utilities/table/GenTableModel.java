@@ -20,7 +20,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.provider.TableProvider;
+import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
@@ -53,7 +53,7 @@ public class GenTableModel extends AbstractTableModel {
 	private boolean modelDataValid;
 	private boolean modelStructureValid;
 
-	private TableProvider tableProvider;
+	private DefaultTableProvider tableProvider;
 	private TableUpdateItemInterface itemFactory;
 
 	private final ChainedTableModelFilter chainedFilter;
@@ -67,7 +67,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	private CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
 		this.keyCol = keyCol;
 		this.updates = updates;
@@ -110,7 +110,7 @@ public class GenTableModel extends AbstractTableModel {
 		setFilter(chainedFilter);
 	}
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			TableModelListener l, List<TableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
