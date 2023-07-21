@@ -17,13 +17,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
-public abstract class AbstractRecordPane extends JPanel implements KeyListener, DocumentListener {
+public class RecordPane extends JPanel implements KeyListener, DocumentListener {
 	private static final int LINE_HEIGHT = Globals.LINE_HEIGHT;
 	private static final int MIN_FIELD_WIDTH = 60;
 	private static final int MAX_FIELD_WIDTH = Short.MAX_VALUE;
@@ -41,7 +42,10 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener, 
 	private Map<String, Boolean> editable;
 	private Map<String, Boolean> secrets;
 
-	protected AbstractRecordPane() {
+	private FEditRecord fEditRecord;
+
+	public RecordPane(FEditRecord fEditRecord) {
+		this.fEditRecord = fEditRecord;
 	}
 
 	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
@@ -190,4 +194,30 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener, 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		/* Not needed */}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			fEditRecord.commit();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			fEditRecord.cancel();
+		} else {
+			// We want to do nothing on other keys
+		}
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent document) {
+		fEditRecord.setDataChanged(true);
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent document) {
+		fEditRecord.setDataChanged(true);
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent document) {
+		fEditRecord.setDataChanged(true);
+	}
 }
