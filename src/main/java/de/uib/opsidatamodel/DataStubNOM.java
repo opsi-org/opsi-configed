@@ -227,7 +227,7 @@ public class DataStubNOM {
 
 			Logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
 
-			persistenceController.notifyDataRefreshedObservers("product");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -341,7 +341,7 @@ public class DataStubNOM {
 				}
 			}
 
-			persistenceController.notifyDataRefreshedObservers("productOnDepot");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -410,7 +410,7 @@ public class DataStubNOM {
 
 			Logging.debug(this, "retrieveAllProductPropertyDefinitions ");
 
-			persistenceController.notifyDataRefreshedObservers("productProperty");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -483,7 +483,7 @@ public class DataStubNOM {
 				}
 			}
 
-			persistenceController.notifyDataRefreshedObservers("productDependency");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -754,7 +754,7 @@ public class DataStubNOM {
 				n++;
 			}
 
-			persistenceController.notifyDataRefreshedObservers("software");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -887,7 +887,7 @@ public class DataStubNOM {
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			persistenceController.notifyDataRefreshedObservers("softwareConfig");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -972,7 +972,7 @@ public class DataStubNOM {
 		timeCheck.stop();
 		Logging.info(this, "retrieveHostConfigs retrieved " + hostConfigs.keySet());
 
-		persistenceController.notifyDataRefreshedObservers("configState");
+		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
 	public void licencepoolsRequestRefresh() {
@@ -1242,7 +1242,7 @@ public class DataStubNOM {
 
 		timeCheck.stop();
 		Logging.info(this, "retrieveClient2HwRows finished  ");
-		persistenceController.notifyDataRefreshedObservers("client2HwRows");
+		persistenceController.notifyPanelCompleteWinProducts();
 
 	}
 

@@ -118,7 +118,6 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.RunningInstancesObserver;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
@@ -136,8 +135,8 @@ import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
 
-public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
-		ComponentListener, RunningInstancesObserver<JDialog> {
+public class MainFrame extends JFrame
+		implements WindowListener, KeyListener, MouseListener, ActionListener, ComponentListener {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
@@ -461,8 +460,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
 		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("UIManager.noButtonText"));
 		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
-
-		FEditObject.runningInstances.addObserver(this);
 	}
 
 	@Override
@@ -3160,7 +3157,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
 	private void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
@@ -3181,9 +3177,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	// RunningInstancesObserver
-	@Override
-	public void instancesChanged(Set<JDialog> instances) {
+	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		if (jMenuShowScheduledWOL != null) {
@@ -3194,8 +3188,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	@Override
-	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
+	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if ("arrange".equals(command)) {
 			arrangeWs(instances);
