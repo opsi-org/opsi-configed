@@ -152,12 +152,10 @@ public final class Globals {
 
 	public static final Color FAILED_BACKGROUND_COLOR = new Color(100, 100, 100);
 
-	public static final Color FAILED_COLOR = Color.RED;
-	public static final Color ACTION_COLOR = new Color(239, 4, 4);
-	public static final Color WARNING_COLOR = new Color(204, 51, 0);
-	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful?
-	public static final Color OK_COLOR = new Color(20, 140, 20);
-	public static final Color UNKNOWN_COLOR = new Color(40, 17, 213);
+	public static final Color FAILED_COLOR = opsiERROR;
+	public static final Color ACTION_COLOR = opsiWARNING;
+	public static final Color OK_COLOR = opsiOK;
+	public static final Color UNKNOWN_COLOR = logColorSecret;
 
 	public static final Color darkOrange = new Color(218, 180, 4);
 	public static final Color lightBlack = new Color(30, 30, 30);

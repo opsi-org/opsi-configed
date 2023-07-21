@@ -61,9 +61,7 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
 					} else {
-						if (!Main.THEMES || !isSelected) {
-							c.setForeground(textcolor);
-						}
+						c.setForeground(textcolor);
 					}
 				}
 			}
