@@ -594,7 +594,6 @@ public class OpsiserviceNOMPersistenceController {
 									Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
-
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 					msg.append("\n");
@@ -602,7 +601,7 @@ public class OpsiserviceNOMPersistenceController {
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
-					dialog.setMessage("" + msg);
+					dialog.setMessage(msg.toString());
 					dialog.setVisible(true);
 					int result = dialog.getResult();
 					Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
@@ -2672,9 +2671,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
-			//|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
-			/*|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)*/) {
+					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {

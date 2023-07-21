@@ -18,8 +18,9 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public abstract class AbstractNavigationPanel extends JPanel implements ActionListener {
+public class NavigationPanel extends JPanel implements ActionListener {
 
 	private JButton nextButton;
 	private JButton previousButton;
@@ -28,7 +29,11 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 
 	private List<JButton> buttons;
 
-	protected AbstractNavigationPanel() {
+	private PanelGenEditTable associatedPanel;
+
+	public NavigationPanel(PanelGenEditTable associatedPanel) {
+		this.associatedPanel = associatedPanel;
+
 		initComponents();
 
 		buttons = new ArrayList<>();
@@ -106,13 +111,21 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 
 	}
 
-	protected abstract void next();
+	public void next() {
+		associatedPanel.advanceCursor(+1);
+	}
 
-	protected abstract void previous();
+	public void previous() {
+		associatedPanel.advanceCursor(-1);
+	}
 
-	protected abstract void last();
+	public void first() {
+		associatedPanel.setCursorToFirstRow();
+	}
 
-	protected abstract void first();
+	public void last() {
+		associatedPanel.setCursorToLastRow();
+	}
 
 	// interface
 	// ActionListener
