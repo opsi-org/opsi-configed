@@ -131,7 +131,21 @@ public class HealthCheckDialog extends FGeneralDialog {
 		textPane.setAutoscrolls(false);
 		textPane.setEditable(false);
 		textPane.setInheritsPopupMenu(true);
-		textPane.addMouseListener(new MyMouseListener());
+		textPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				Element element = styledDocument.getParagraphElement(textPane.viewToModel2D(event.getPoint()));
+				String key = retrieveKeyFromElement(element);
+
+				if (showDetailsForKey(key)) {
+					setMessage(healthData);
+					textPane.setCaretPosition(textPane.viewToModel2D(event.getPoint()));
+
+					jButtonExpandAll.setEnabled(!isAllDetailsShown());
+					jButtonCollapseAll.setEnabled(isDetailsShown());
+				}
+			}
+		});
 
 		healthData = HealthInfo.getHealthDataMap(false);
 		setMessage(healthData);
@@ -148,6 +162,53 @@ public class HealthCheckDialog extends FGeneralDialog {
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
 
 		return northPanel;
+	}
+
+	private boolean showDetailsForKey(String key) {
+		if (key.isBlank()) {
+			return false;
+		}
+
+		if (healthData.containsKey(key)) {
+			Map<String, Object> details = healthData.get(key);
+
+			if (((String) details.get("details")).isEmpty()) {
+				return false;
+			}
+
+			details.put("showDetails", !((boolean) details.get("showDetails")));
+			healthData.put(key, details);
+		}
+
+		return true;
+	}
+
+	private String retrieveKeyFromElement(Element element) {
+		String text = "";
+		try {
+			text = textPane.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
+		} catch (BadLocationException e) {
+			Logging.warning("could not retrieve text from JTextPane, ", e);
+		}
+		return (text.isEmpty() || !text.contains(":")) ? "" : text.substring(0, text.indexOf(":"));
+	}
+
+	private boolean isDetailsShown() {
+		for (Map<String, Object> healthDetails : healthData.values()) {
+			if ((boolean) healthDetails.get("showDetails")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isAllDetailsShown() {
+		for (Map<String, Object> healthDetails : healthData.values()) {
+			if (!((boolean) healthDetails.get("showDetails")) && !((String) healthDetails.get("details")).isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private JPopupMenu createPopupMenu() {
@@ -416,63 +477,5 @@ public class HealthCheckDialog extends FGeneralDialog {
 		}
 
 		return style;
-	}
-
-	private class MyMouseListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			try {
-				Element element = styledDocument.getParagraphElement(textPane.viewToModel2D(arg0.getPoint()));
-				String text = textPane
-						.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
-
-				if (text.isEmpty() || !text.contains(":")) {
-					return;
-				}
-
-				String key = text.substring(0, text.indexOf(":"));
-
-				if (healthData.containsKey(key)) {
-					Map<String, Object> details = healthData.get(key);
-
-					if (((String) details.get("details")).isEmpty()) {
-						return;
-					}
-
-					details.put("showDetails", !((boolean) details.get("showDetails")));
-					healthData.put(key, details);
-				}
-
-				jButtonExpandAll.setEnabled(!isAllDetailsShown());
-
-				setMessage(healthData);
-				textPane.setCaretPosition(textPane.viewToModel2D(arg0.getPoint()));
-
-				jButtonCollapseAll.setEnabled(isDetailsShown());
-			} catch (BadLocationException e) {
-				Logging.warning("could not retrieve text from JTextPane, ", e);
-			}
-		}
-
-		private boolean isDetailsShown() {
-			for (Map<String, Object> healthDetails : healthData.values()) {
-				if ((boolean) healthDetails.get("showDetails")) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private boolean isAllDetailsShown() {
-			for (Map<String, Object> healthDetails : healthData.values()) {
-				if (!((boolean) healthDetails.get("showDetails"))
-						&& !((String) healthDetails.get("details")).isEmpty()) {
-					return false;
-				}
-			}
-
-			return true;
-		}
 	}
 }
