@@ -79,7 +79,7 @@ public final class Logging {
 
 	private static FShowList fErrors;
 
-	private static List<LogEventObserver> logEventObservers = new ArrayList<>();
+	private static ConfigedMain configedMain;
 
 	// private constructor to hide the implicit public one
 	private Logging() {
@@ -224,8 +224,8 @@ public final class Logging {
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
-		for (int i = 0; i < logEventObservers.size(); i++) {
-			logEventObservers.get(i).logEventOccurred();
+		if (configedMain != null) {
+			configedMain.logEventOccurred();
 		}
 	}
 
@@ -455,7 +455,7 @@ public final class Logging {
 		return result.toString();
 	}
 
-	public static void registLogEventObserver(LogEventObserver o) {
-		logEventObservers.add(o);
+	public static void registerConfigedMain(ConfigedMain configedMain) {
+		Logging.configedMain = configedMain;
 	}
 }

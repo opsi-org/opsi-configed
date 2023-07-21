@@ -113,7 +113,6 @@ import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
@@ -121,7 +120,6 @@ import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
-import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
@@ -129,11 +127,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.provider.RowsProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+public class ConfigedMain implements ListSelectionListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final int VIEW_CLIENTS = 0;
@@ -357,37 +354,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
 		}
 
-		Logging.registLogEventObserver(this);
+		Logging.registerConfigedMain(this);
 	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
 	}
 
-	// TabController Interface
-	@Override
-	public LicencesTabStatus getStartTabState() {
-		return LicencesTabStatus.LICENCEPOOL;
-	}
-
-	@Override
-	public TabClient getClient(LicencesTabStatus state) {
-		return licencesPanels.get(state);
-	}
-
-	@Override
-	public void addClient(LicencesTabStatus status, TabClient panel) {
+	private void addClient(LicencesTabStatus status, TabClient panel) {
 		licencesPanels.put(status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
 	}
 
-	@Override
 	public LicencesTabStatus reactToStateChangeRequest(LicencesTabStatus newState) {
 		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
-		if (newState != licencesStatus && getClient(licencesStatus).mayLeave()) {
+		if (newState != licencesStatus && licencesPanels.get(licencesStatus).mayLeave()) {
 			licencesStatus = newState;
 
-			if (getClient(licencesStatus) != null) {
+			if (licencesPanels.get(licencesStatus) != null) {
 				licencesPanels.get(licencesStatus).reset();
 			}
 			// otherwise we return the old status
@@ -771,18 +755,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			classNames.add("java.lang.String");
 		}
 
-		globalProductsTableProvider = new DefaultTableProvider(
-				new ExternalSource(columnNames, classNames, new RowsProvider() {
-					@Override
-					public void requestReload() {
-						persistenceController.productDataRequestRefresh();
-					}
-
-					@Override
-					public List<List<Object>> getRows() {
-						return persistenceController.getProductRows();
-					}
-				}));
+		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
 	// sets dataReady = true when finished
@@ -1427,7 +1400,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void initTableData() {
 
-		licencesStatus = getStartTabState();
+		licencesStatus = LicencesTabStatus.LICENCEPOOL;
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();
@@ -5044,8 +5017,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setSelectedClientsCollectionOnPanel(result, true);
 	}
 
-	// interface LogEventObserver
-	@Override
 	public void logEventOccurred() {
 
 		if (allFrames == null) {
