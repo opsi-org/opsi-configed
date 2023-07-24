@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
+import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
@@ -52,46 +53,12 @@ public final class ProductData {
 		return new ArrayList<>(products.get(selectedDepot));
 	}
 
-	private static void retrieveProducts() {
-		if (!products.isEmpty()) {
-			return;
-		}
-
-		for (String depot : depots) {
-			if (products.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
-				List<String> allDepotProducts = products
-						.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
-				allDepotProducts.addAll(persistenceController.getAllProductNames(depot));
-				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
-			} else {
-				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
-						persistenceController.getAllProductNames(depot));
-			}
-
-			products.put(depot, persistenceController.getAllProductNames(depot));
-		}
-	}
-
 	public static List<String> getNetbootProducts() {
 		if (netbootProducts.isEmpty() || !netbootProducts.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(netbootProducts.get(selectedDepot));
-	}
-
-	private static void retrieveNetbootProducts() {
-		if (!netbootProducts.isEmpty()) {
-			return;
-		}
-
-		for (String depot : depots) {
-			List<String> netbootProductsList = persistenceController.getProvidedNetbootProducts(depot);
-			netbootProducts.put(depot, netbootProductsList);
-		}
-
-		List<String> allNetbootProducts = Helper.combineListsFromMap(netbootProducts);
-		netbootProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allNetbootProducts);
 	}
 
 	public static List<String> getLocalbootProducts() {
@@ -102,18 +69,38 @@ public final class ProductData {
 		return new ArrayList<>(localbootProducts.get(selectedDepot));
 	}
 
-	private static void retrieveLocalbootProducts() {
-		if (!localbootProducts.isEmpty()) {
+	private static void retrieveProducts() {
+		if (!products.isEmpty()) {
 			return;
 		}
 
 		for (String depot : depots) {
-			List<String> localbootProductsList = persistenceController.getProvidedLocalbootProducts(depot);
-			localbootProducts.put(depot, localbootProductsList);
+			List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProductsInDepot(depot);
+			fillProducts(allProductsInDepot, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, depot, localbootProducts);
+			fillProducts(allProductsInDepot, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, depot, netbootProducts);
+			fillProducts(allProductsInDepot, null, depot, products);
+		}
+	}
+
+	private static void fillProducts(List<Map<String, Object>> allProductsInDepot, String productType, String depot,
+			Map<String, List<String>> list) {
+		List<String> productsInDepot;
+		if (productType != null) {
+			productsInDepot = allProductsInDepot.stream().filter(v -> v.get("productType").equals(productType))
+					.map(v -> (String) v.get("productId")).collect(Collectors.toList());
+		} else {
+			productsInDepot = allProductsInDepot.stream().map(v -> (String) v.get("productId"))
+					.collect(Collectors.toList());
 		}
 
-		List<String> allLocalbootProducts = Helper.combineListsFromMap(localbootProducts);
-		localbootProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allLocalbootProducts);
+		if (list.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			List<String> allDepotProducts = list.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			allDepotProducts.addAll(productsInDepot);
+			list.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
+		} else {
+			list.put(Configed.getResourceValue("Dashboard.selection.allDepots"), productsInDepot);
+		}
+		list.put(depot, productsInDepot);
 	}
 
 	public static Map<Product, Product> getInstalledProducts() {
@@ -213,7 +200,7 @@ public final class ProductData {
 				failedProductsList.put(product, product);
 				allUnusedProducts.remove(productId);
 			} else {
-				// Do nothing when product is not installed or product installation has not failed
+				// Do nothing when product is not installed or product installation has not failed.
 			}
 		}
 	}
@@ -313,11 +300,7 @@ public final class ProductData {
 
 	public static void retrieveData(String depot) {
 		selectedDepot = depot;
-
 		retrieveProducts();
-		retrieveLocalbootProducts();
-		retrieveNetbootProducts();
-
 		retrieveInstalledOS();
 		retrieveInstalledAndFailedProducts();
 	}
