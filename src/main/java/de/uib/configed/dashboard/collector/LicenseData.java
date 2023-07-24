@@ -56,8 +56,7 @@ public final class LicenseData {
 			return;
 		}
 
-		// Get all licences that are not expired
-		activeLicenses = List.copyOf(licenses);
+		activeLicenses = new ArrayList<>(licenses);
 		activeLicenses.removeAll(expiredLicenses);
 	}
 
