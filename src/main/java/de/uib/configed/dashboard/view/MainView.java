@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
+import de.uib.Main;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.DataObserver;
@@ -282,7 +283,10 @@ public class MainView implements View {
 	public void display() {
 		Platform.runLater(() -> {
 			fxPanel.setScene(scene);
-			styleAccordingToSelectedTheme();
+			if (Main.THEMES) {
+				Logging.devel(this, "styling main");
+				styleAccordingToSelectedTheme();
+			}
 		});
 		loadData();
 	}

@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -104,7 +105,9 @@ public class LicenseDisplayer {
 
 		Platform.runLater(() -> {
 			loadData();
-			styleAccordingToSelectedTheme();
+			if (Main.THEMES) {
+				styleAccordingToSelectedTheme();
+			}
 		});
 	}
 

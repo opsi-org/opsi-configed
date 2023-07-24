@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 import javax.swing.UIManager;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
@@ -25,6 +26,7 @@ import de.uib.configed.dashboard.chart.ProductStatusComparison;
 import de.uib.configed.dashboard.collector.Product;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
+import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -230,7 +232,10 @@ public class ProductView implements View {
 		Platform.runLater(() -> {
 			fxPanel.setScene(scene);
 			loadData();
-			styleAccordingToSelectedTheme();
+			if (Main.THEMES) {
+				Logging.devel(this, "styling product");
+				styleAccordingToSelectedTheme();
+			}
 		});
 	}
 
