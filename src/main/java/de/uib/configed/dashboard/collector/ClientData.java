@@ -157,57 +157,55 @@ public final class ClientData {
 
 		clientLastSeen.clear();
 
-		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		final LocalDate current = LocalDate.now();
-
 		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
 				.getMapOfAllPCInfoMaps();
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
-			final Map<String, Integer> lastSeenData = new HashMap<>();
-			int fourteenOrLowerDays = 0;
-			int betweenFifteenAndThirtyDays = 0;
-			int moreThanThirtyDays = 0;
-
-			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
-				if (entry.getValue().getInDepot().equals(depot)) {
-					if (entry.getValue().getLastSeen().trim().isEmpty()) {
-						continue;
-					}
-
-					String date = entry.getValue().getLastSeen().substring(0, 10);
-
-					try {
-						final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
-						final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
-
-						if (days <= 14) {
-							fourteenOrLowerDays++;
-						} else if (days <= 30) {
-							betweenFifteenAndThirtyDays++;
-						} else {
-							moreThanThirtyDays++;
-						}
-					} catch (DateTimeParseException ex) {
-						Logging.info("Date couldn't be parsed: " + date);
-					}
-
-				}
-
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"),
-						fourteenOrLowerDays);
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
-						betweenFifteenAndThirtyDays);
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
-						moreThanThirtyDays);
-			}
-
-			clientLastSeen.put(depot, lastSeenData);
+			clientLastSeen.put(depot, produceLastSeenData(mapOfAllPCInfoMaps, depot));
 		}
 
 		Map<String, Integer> allClientLastSeen = Helper.combineMapsFromMap(clientLastSeen);
 		clientLastSeen.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
+	}
+
+	private static Map<String, Integer> produceLastSeenData(Map<String, HostInfo> mapOfAllPCInfoMaps, String depot) {
+		final Map<String, Integer> lastSeenData = new HashMap<>();
+		int fourteenOrLowerDays = 0;
+		int betweenFifteenAndThirtyDays = 0;
+		int moreThanThirtyDays = 0;
+
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		final LocalDate currentDate = LocalDate.now();
+
+		for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
+			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().trim().isEmpty()) {
+				continue;
+			}
+
+			String date = entry.getValue().getLastSeen().substring(0, 10);
+
+			try {
+				final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
+				final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
+
+				if (days <= 14) {
+					fourteenOrLowerDays++;
+				} else if (days <= 30) {
+					betweenFifteenAndThirtyDays++;
+				} else {
+					moreThanThirtyDays++;
+				}
+			} catch (DateTimeParseException ex) {
+				Logging.info("Date couldn't be parsed: " + date);
+			}
+		}
+
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), fourteenOrLowerDays);
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
+				betweenFifteenAndThirtyDays);
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), moreThanThirtyDays);
+		return lastSeenData;
 	}
 
 	public static void clear() {
