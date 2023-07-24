@@ -6,7 +6,7 @@
 
 package de.uib.opsicommand;
 
-import com.google.inject.internal.util.Objects;
+import java.util.Objects;
 
 import de.uib.utilities.logging.Logging;
 
@@ -88,7 +88,7 @@ public class ConnectionState {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(myState, message);
+		return Objects.hash(myState, message);
 	}
 
 	/**
