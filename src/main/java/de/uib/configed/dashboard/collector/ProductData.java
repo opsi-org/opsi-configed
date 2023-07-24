@@ -166,73 +166,18 @@ public final class ProductData {
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
 					String hostname = entry.getKey();
-
-					for (Map<String, String> productInfo : entry.getValue()) {
-						String productId = productInfo.get("productId");
-
-						Product product = new Product();
-						product.setId(productId);
-						product.setDepot(depot);
-
-						if ("installed".equals(productInfo.get("installationStatus"))) {
-							product.setStatus(Configed.getResourceValue("Dashboard.products.installed"));
-
-							Optional<Product> matchedProduct = installedProductsList.keySet().stream()
-									.filter(p -> p.getId().equals(productId) && p.getStatus()
-											.equals(Configed.getResourceValue("Dashboard.products.installed")))
-									.findFirst();
-
-							if (matchedProduct.isPresent()) {
-								List<String> clients = matchedProduct.get().getClients();
-								clients.add(hostname);
-								product.setClients(clients);
-								installedProductsList.replace(matchedProduct.get(), product);
-							} else {
-								List<String> clients = new ArrayList<>();
-								clients.add(hostname);
-								product.setClients(clients);
-								installedProductsList.put(product, product);
-							}
-
-							allUnusedProducts.remove(productId);
-						} else if ("failed".equals(productInfo.get("actionResult"))) {
-							product.setStatus(Configed.getResourceValue("Dashboard.products.failed"));
-
-							Optional<Product> matchedProduct = failedProductsList.keySet().stream()
-									.filter(p -> p.getId().equals(productId) && p.getStatus()
-											.equals(Configed.getResourceValue("Dashboard.products.failed")))
-									.findFirst();
-
-							if (matchedProduct.isPresent()) {
-								List<String> clients = matchedProduct.get().getClients();
-								clients.add(hostname);
-								product.setClients(clients);
-								failedProductsList.replace(matchedProduct.get(), product);
-							} else {
-								List<String> clients = new ArrayList<>();
-								clients.add(hostname);
-								product.setClients(clients);
-								failedProductsList.put(product, product);
-							}
-
-							allUnusedProducts.remove(productId);
-						} else {
-							// Do nothing when product not installed or installation failed
-						}
-					}
-
+					fillProductStatesListsWithClientProducts(entry.getValue(), depot, hostname, installedProductsList,
+							failedProductsList, allUnusedProducts);
 					clientUnusedProducts.put(hostname, allUnusedProducts);
 				}
-
 				clientUnusedProductsList.put(depot, clientUnusedProducts);
 			} else {
 				allUnusedProducts.forEach((String productId) -> {
 					if (installedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& failedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& unusedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))) {
-
-						Product product = createProduct(productId, depot);
-
+						Product product = produceProduct(Configed.getResourceValue("Dashboard.products.unused"),
+								new HashMap<>(), productId, "", depot);
 						unusedProductsList.put(product, product);
 					}
 				});
@@ -252,64 +197,75 @@ public final class ProductData {
 		unusedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
 	}
 
-	private static Product createProduct(String productId, String depot) {
-
-		Product product = new Product();
-		product.setId(productId);
-		product.setDepot(depot);
-		product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
-		product.setClients(new ArrayList<>());
-
-		return product;
+	private static void fillProductStatesListsWithClientProducts(List<Map<String, String>> data, String depot,
+			String hostname, Map<Product, Product> installedProductsList, Map<Product, Product> failedProductsList,
+			List<String> allUnusedProducts) {
+		for (Map<String, String> productInfo : data) {
+			String productId = productInfo.get("productId");
+			if ("installed".equals(productInfo.get("installationStatus"))) {
+				Product product = produceProduct(Configed.getResourceValue("Dashboard.products.installed"),
+						installedProductsList, productId, hostname, depot);
+				installedProductsList.put(product, product);
+				allUnusedProducts.remove(productId);
+			} else if ("failed".equals(productInfo.get("actionResult"))) {
+				Product product = produceProduct(Configed.getResourceValue("Dashboard.products.failed"),
+						failedProductsList, productId, hostname, depot);
+				failedProductsList.put(product, product);
+				allUnusedProducts.remove(productId);
+			} else {
+				// Do nothing when product is not installed or product installation has not failed
+			}
+		}
 	}
 
 	public static void retrieveUnusedProducts() {
 		depots.forEach((String depot) -> {
-
 			if (clientUnusedProductsList.get(depot) != null) {
-
 				unusedProducts.put(depot, createUnusedProductList(depot));
 			}
 		});
-
 		Map<Product, Product> allUnusedProducts = Helper.combineMapsFromMap2(unusedProducts);
 		unusedProducts.get(selectedDepot).putAll(allUnusedProducts);
 	}
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
-
 		for (Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
 			String hostname = entry.getKey();
-
 			entry.getValue().forEach(
 					(String productId) -> addUnusedProductToList(depot, productId, hostname, unusedProductsList));
 		}
-
 		return unusedProductsList;
 	}
 
 	private static void addUnusedProductToList(String depot, String productId, String hostname,
 			Map<Product, Product> unusedProductsList) {
+		Product product = produceProduct(Configed.getResourceValue("Dashboard.products.unused"), unusedProductsList,
+				productId, hostname, depot);
+		unusedProductsList.put(product, product);
+	}
+
+	private static Product produceProduct(String productStatus, Map<Product, Product> productsList, String productId,
+			String hostname, String depot) {
 		Product product = new Product();
-		product.setDepot(depot);
-		product.setId(productId);
-		product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
 
-		Optional<Product> matchedProduct = unusedProductsList.keySet().stream().filter(p -> p.getId().equals(productId)
-				&& p.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused"))).findFirst();
-
+		Optional<Product> matchedProduct = productsList.keySet().stream()
+				.filter(p -> p.getId().equals(productId) && p.getStatus().equals(productStatus)).findFirst();
 		if (matchedProduct.isPresent()) {
-			List<String> clientss = matchedProduct.get().getClients();
-			clientss.add(hostname);
-			product.setClients(clientss);
-			unusedProductsList.replace(matchedProduct.get(), product);
+			product = matchedProduct.get();
 		} else {
-			List<String> clientss = new ArrayList<>();
-			clientss.add(hostname);
-			product.setClients(clientss);
-			unusedProductsList.put(product, product);
+			product.setDepot(depot);
+			product.setId(productId);
+			product.setStatus(productStatus);
 		}
+
+		if (!hostname.isBlank()) {
+			List<String> clients = product.getClients();
+			clients.add(hostname);
+			product.setClients(clients);
+		}
+
+		return product;
 	}
 
 	public static int getTotalOSInstallations() {

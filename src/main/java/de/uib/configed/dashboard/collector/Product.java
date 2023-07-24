@@ -6,6 +6,7 @@
 
 package de.uib.configed.dashboard.collector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +58,7 @@ public class Product implements Comparable<Product> {
 	}
 
 	public final List<String> getClients() {
-		return clients.get();
+		return clients.get() != null ? clients.get() : new ArrayList<>();
 	}
 
 	public final void setClients(List<String> value) {
