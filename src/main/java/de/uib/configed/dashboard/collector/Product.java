@@ -7,13 +7,14 @@
 package de.uib.configed.dashboard.collector;
 
 import java.util.List;
+import java.util.Objects;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Product {
+public class Product implements Comparable<Product> {
 	private final StringProperty id = new SimpleStringProperty();
 	private final StringProperty depot = new SimpleStringProperty();
 	private final StringProperty status = new SimpleStringProperty();
@@ -65,5 +66,29 @@ public class Product {
 
 	public ObjectProperty<List<String>> clientsProperty() {
 		return clients;
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		return getId().compareTo(o.getId());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Product otherProduct = (Product) o;
+		return Objects.equals(getId(), otherProduct.getId()) && Objects.equals(getDepot(), otherProduct.getDepot())
+				&& Objects.equals(getStatus(), otherProduct.getStatus())
+				&& Objects.equals(getClients(), otherProduct.getClients());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getDepot(), getStatus(), getClients());
 	}
 }
