@@ -163,4 +163,9 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public boolean equals(Object o) {
 		return o == null || representation.equals(o.toString());
 	}
+
+	@Override
+	public int hashCode() {
+		return representation.hashCode();
+	}
 }

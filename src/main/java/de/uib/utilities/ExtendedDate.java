@@ -83,6 +83,11 @@ public class ExtendedDate {
 		return this == ob || (ob instanceof ExtendedDate && toString().equals(ob.toString()));
 	}
 
+	@Override
+	public int hashCode() {
+		return sDate.hashCode();
+	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}

@@ -6,6 +6,8 @@
 
 package de.uib.opsicommand;
 
+import com.google.inject.internal.util.Objects;
+
 import de.uib.utilities.logging.Logging;
 
 public class ConnectionState {
@@ -82,6 +84,11 @@ public class ConnectionState {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(myState, message);
 	}
 
 	/**

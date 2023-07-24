@@ -82,6 +82,11 @@ public class ExtendedInteger implements Comparable<Integer> {
 		return ei.getString().equals(getString());
 	}
 
+	@Override
+	public int hashCode() {
+		return value.hashCode();
+	}
+
 	public ExtendedInteger add(ExtendedInteger ei) {
 		ExtendedInteger result;
 
