@@ -16,6 +16,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class is responsible for copying the client. By creating a new client
@@ -57,6 +58,7 @@ public class CopyClient {
 
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
 		this(clientToCopy, newClientName, "", "", "", "", "", "");
+		Logging.debug("Copy client constructor: " + clientToCopy + " -> " + newClientNameWithDomain);
 	}
 
 	/**
@@ -64,6 +66,7 @@ public class CopyClient {
 	 * product's properties and config states.
 	 */
 	public void copy() {
+		Logging.debug("Copy client: " + clientToCopy + " -> " + newClientNameWithDomain);
 		copyClient();
 		copyGroups();
 		copyProducts();
