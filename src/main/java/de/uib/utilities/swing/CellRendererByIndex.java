@@ -8,6 +8,7 @@ package de.uib.utilities.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Map;
 
@@ -92,6 +93,12 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 
 		if (!Main.FONT) {
 			setFont(Globals.defaultFont);
+		}
+
+		if (!Main.THEMES) {
+			Dimension d = getPreferredSize();
+			d.height = 20;
+			setPreferredSize(d);
 		}
 
 		return this;
