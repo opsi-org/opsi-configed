@@ -284,7 +284,6 @@ public class MainView implements View {
 		Platform.runLater(() -> {
 			fxPanel.setScene(scene);
 			if (Main.THEMES) {
-				Logging.devel(this, "styling main");
 				styleAccordingToSelectedTheme();
 			}
 		});

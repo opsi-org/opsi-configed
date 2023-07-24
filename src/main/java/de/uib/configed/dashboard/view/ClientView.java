@@ -30,7 +30,6 @@ import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
 import de.uib.configed.dashboard.collector.Client;
 import de.uib.configed.dashboard.collector.ClientData;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -275,7 +274,6 @@ public class ClientView implements View {
 			fxPanel.setScene(scene);
 			loadData();
 			if (Main.THEMES) {
-				Logging.devel(this, "styling client");
 				styleAccordingToSelectedTheme();
 			}
 		});
