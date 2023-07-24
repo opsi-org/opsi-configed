@@ -26,7 +26,6 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 	private Map<String, String> mapOfTooltips;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues) {
-
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfStringValues;
 	}
@@ -58,8 +57,8 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 			setForeground(foreground);
 		}
 
-		String selectedString = "";
-		String selectedTooltip = "";
+		String selectedString = null;
+		String selectedTooltip = null;
 
 		if (uhOhFont == null) {
 			// lazily create this font
@@ -81,6 +80,10 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 
 		if (selectedString == null) {
 			selectedString = "" + value;
+		}
+
+		if (selectedTooltip == null) {
+			selectedTooltip = "" + value;
 		}
 
 		setText(selectedString);
