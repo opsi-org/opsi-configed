@@ -8,6 +8,7 @@ package de.uib.utilities.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Map;
 
@@ -26,7 +27,6 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 	private Map<String, String> mapOfTooltips;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues) {
-
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfStringValues;
 	}
@@ -58,8 +58,8 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 			setForeground(foreground);
 		}
 
-		String selectedString = "";
-		String selectedTooltip = "";
+		String selectedString = null;
+		String selectedTooltip = null;
 
 		if (uhOhFont == null) {
 			// lazily create this font
@@ -83,12 +83,22 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 			selectedString = "" + value;
 		}
 
+		if (selectedTooltip == null) {
+			selectedTooltip = "" + value;
+		}
+
 		setText(selectedString);
 
 		setToolTipText(selectedTooltip);
 
 		if (!Main.FONT) {
 			setFont(Globals.defaultFont);
+		}
+
+		if (!Main.THEMES) {
+			Dimension d = getPreferredSize();
+			d.height = 20;
+			setPreferredSize(d);
 		}
 
 		return this;

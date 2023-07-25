@@ -16,6 +16,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class is responsible for copying the client. By creating a new client
@@ -29,17 +30,47 @@ public class CopyClient {
 	private HostInfo clientToCopy;
 	private String newClientName;
 	private String newClientNameWithDomain;
+	private String newDescription;
+	private String newInventoryNumber;
+	private String newNotes;
+	private String newIpAddress;
+	private String newSystemUUID;
+	private String newMacAddress;
 
 	/**
-	 * Creates CopyClient object with provided information.
-	 * 
+	 * Creates {@link CopyClient} object with provided information.
+	 *
+	 * @param clientToCopy       client to copy
+	 * @param newClientName      client name for the client's copy
+	 * @param newDescription     client description
+	 * @param newInventoryNumber client inventory number
+	 * @param newNotes           client notes
+	 * @param newIpAddress       client IP address
+	 * @param newSystemUUID      client system UUID
+	 * @param newMacAddress      client MAC address
+	 */
+	public CopyClient(HostInfo clientToCopy, String newClientName, String newDescription, String newInventoryNumber,
+			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
+		this.clientToCopy = clientToCopy;
+		this.newClientName = newClientName;
+		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
+		this.newDescription = newDescription;
+		this.newInventoryNumber = newInventoryNumber;
+		this.newNotes = newNotes;
+		this.newIpAddress = newIpAddress;
+		this.newSystemUUID = newSystemUUID;
+		this.newMacAddress = newMacAddress;
+	}
+
+	/**
+	 * Creates {@link CopyClient} object with provided information.
+	 *
 	 * @param clientToCopy  client to copy
 	 * @param newClientName client name for the client's copy
 	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
-		this.clientToCopy = clientToCopy;
-		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
+		this(clientToCopy, newClientName, "", "", "", "", "", "");
+		Logging.debug("Copy client constructor: " + clientToCopy + " -> " + newClientNameWithDomain);
 	}
 
 	/**
@@ -47,6 +78,7 @@ public class CopyClient {
 	 * product's properties and config states.
 	 */
 	public void copy() {
+		Logging.debug("Copy client: " + clientToCopy + " -> " + newClientNameWithDomain);
 		copyClient();
 		copyGroups();
 		copyProducts();
@@ -55,10 +87,9 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(),
-				clientToCopy.getDescription(), clientToCopy.getInventoryNumber(), clientToCopy.getNotes(),
-				clientToCopy.getIpAddress(), clientToCopy.getSystemUUID(), clientToCopy.getMacAddress(),
-				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "", "");
+		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(), newDescription,
+				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
+				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
 		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 
@@ -156,7 +187,7 @@ public class CopyClient {
 
 		for (int i = 1; i < splittedClientName.length; i++) {
 			sb.append(splittedClientName[i]);
-			
+
 			if (i != splittedClientName.length - 1) {
 				sb.append(".");
 			}
