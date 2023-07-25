@@ -11,10 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -23,11 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
@@ -39,6 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
+import de.uib.opsicommand.CertificateValidator;
+import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -77,7 +70,6 @@ public class Messagebus implements MessagebusListener {
 		disconnecting = false;
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
-		SSLSocketFactory factory = createDullSSLSocketFactory();
 		ServerFacade exec = getServerFacadeExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
@@ -91,7 +83,8 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
-		messagebusWebSocket.setSocketFactory(factory);
+		CertificateValidator certValidator = CertificateValidatorFactory.createSecure();
+		messagebusWebSocket.setSocketFactory(certValidator.createSSLSocketFactory());
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
@@ -180,41 +173,6 @@ public class Messagebus implements MessagebusListener {
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 
-	private SSLSocketFactory createDullSSLSocketFactory() {
-		// Create a new trust manager that trust all certificates
-		@SuppressWarnings("java:S4830")
-		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-			@Override
-			public X509Certificate[] getAcceptedIssuers() {
-				return new X509Certificate[0];
-			}
-
-			@Override
-			public void checkClientTrusted(X509Certificate[] certs, String authType) {
-				// we skip certificate verification.
-			}
-
-			@Override
-			public void checkServerTrusted(X509Certificate[] certs, String authType) {
-				// we skip certificate verification.
-			}
-		} };
-
-		SSLSocketFactory sslFactory = null;
-
-		try {
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, trustAllCerts, new SecureRandom());
-			sslFactory = sslContext.getSocketFactory();
-		} catch (NoSuchAlgorithmException ex) {
-			Logging.warning(this, "provider doesn't support algorithm: ", ex);
-		} catch (KeyManagementException ex) {
-			Logging.warning(this, "failed to initialize SSL context: ", ex);
-		}
-
-		return sslFactory;
-	}
-
 	private void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
@@ -232,7 +190,6 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
-
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", "channel_subscription_request");
 		message.put("id", UUID.randomUUID().toString());
