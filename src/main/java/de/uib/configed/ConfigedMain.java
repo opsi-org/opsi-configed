@@ -4250,15 +4250,12 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callNewClientDialog() {
-		Collections.sort(localbootProductnames);
-		List<String> vLocalbootProducts = new ArrayList<>(localbootProductnames);
 		Collections.sort(netbootProductnames);
-		List<String> vNetbootProducts = new ArrayList<>(netbootProductnames);
+		List<String> vNetbootProducts = netbootProductnames;
 
-		NewClientDialog.getInstance(this, getLinkedDepots()).setVisible(true);
-		NewClientDialog.getInstance().setGroupList(new ArrayList<>(persistenceController.getHostGroupIds()));
+		NewClientDialog.getInstance(this, getLinkedDepots());
+		NewClientDialog.getInstance().setGroupList(persistenceController.getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
-		NewClientDialog.getInstance().setProductLocalbootList(vLocalbootProducts);
 
 		NewClientDialog.getInstance().setDomains(editableDomains);
 
@@ -4266,6 +4263,7 @@ public class ConfigedMain implements ListSelectionListener {
 				persistenceController.isUefiConfigured(myServer), persistenceController.isWanConfigured(myServer));
 
 		NewClientDialog.getInstance().setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		NewClientDialog.getInstance().setVisible(true);
 	}
 
 	public void callChangeClientIDDialog() {
@@ -4441,20 +4439,19 @@ public class ConfigedMain implements ListSelectionListener {
 	public void createClient(final String hostname, final String domainname, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
-			final boolean wanConfig, final String group, final String productNetboot, final String productLocalboot) {
+			final boolean wanConfig, final String group, final String productNetboot) {
 
 		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
-						+ group + ", " + productNetboot + ", " + productLocalboot);
+						+ group + ", " + productNetboot);
 
 		String newClientID = hostname + "." + domainname;
 
 		persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 
 		if (persistenceController.createClient(hostname, domainname, depotID, description, inventorynumber, notes,
-				ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot,
-				productLocalboot)) {
+				ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot)) {
 			checkErrorList();
 			persistenceController.fObject2GroupsRequestRefresh();
 

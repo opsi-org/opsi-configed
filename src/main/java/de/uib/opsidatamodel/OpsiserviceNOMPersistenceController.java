@@ -1412,9 +1412,9 @@ public class OpsiserviceNOMPersistenceController {
 			String ipaddress = (String) client.get(8);
 			String group = (String) client.get(9);
 			String productNetboot = (String) client.get(10);
-			boolean wanConfig = Boolean.parseBoolean((String) client.get(12));
-			boolean uefiBoot = Boolean.parseBoolean((String) client.get(13));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(14));
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
+			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));
 
 			String newClientId = hostname + "." + domainname;
 
@@ -1516,8 +1516,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot,
-			String productLocalboot) {
+			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot) {
 		if (!hasDepotPermission(depotId)) {
 			return false;
 		}
@@ -1618,19 +1617,6 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
 			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
-			jsonObjects.add(itemProducts);
-			omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		}
-
-		if (result && productLocalboot != null && !productLocalboot.isEmpty()) {
-			Logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
-			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productLocalboot);
-			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(itemProducts);
