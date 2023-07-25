@@ -254,8 +254,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	// collection of retrieved software audit and hardware maps
 
-	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
-
 	private String myServer;
 	private List<String> editableDomains;
 	private boolean multiDepot;
@@ -758,9 +756,7 @@ public class ConfigedMain implements ListSelectionListener {
 		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
-	// sets dataReady = true when finished
 	private void preloadData() {
-
 		persistenceController.retrieveOpsiModules();
 
 		if (depotRepresentative == null) {
@@ -778,8 +774,6 @@ public class ConfigedMain implements ListSelectionListener {
 		localbootProductnames = persistenceController.getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getAllNetbootProductNames();
 		persistenceController.getProductIds();
-
-		persistenceController.productGroupsRequestRefresh();
 
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
@@ -806,8 +800,6 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.retrieveProductDependencies();
 
 		persistenceController.retrieveDepotProductProperties();
-
-		persistenceController.getInstalledSoftwareInformation();
 
 		dataReady = true;
 		mainFrame.enableAfterLoading();
@@ -3061,17 +3053,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private void checkHwInfo() {
-		if (hwInfoClientmap == null) {
-			hwInfoClientmap = new HashMap<>();
-		}
-	}
-
-	public void clearHwInfo() {
-		checkHwInfo();
-		hwInfoClientmap.clear();
-	}
-
 	private boolean setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
@@ -3084,11 +3065,7 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			checkHwInfo();
-			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.computeIfAbsent(firstSelectedClient,
-					s -> persistenceController.getHardwareInfo(firstSelectedClient));
-
-			mainFrame.setHardwareInfo(hwInfo);
+			mainFrame.setHardwareInfo(persistenceController.getHardwareInfo(firstSelectedClient));
 		}
 
 		return true;
@@ -3096,10 +3073,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private static void clearSoftwareInfoPage() {
 		mainFrame.setSoftwareAuditNullInfo("");
-	}
-
-	public void clearSwInfo() {
-		// TODO, check what clearHwInfo does...
 	}
 
 	private boolean setSoftwareInfoPage() {
@@ -3490,7 +3463,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		// dont do anything if we did not finish another thread for this
 		if (dataReady) {
-
 			allowedClients = null;
 
 			FOpsiLicenseMissingText.reset();
@@ -3536,10 +3508,6 @@ public class ConfigedMain implements ListSelectionListener {
 			// clearing softwareMap in OpsiDataBackend
 			OpsiDataBackend.getInstance().setReloadRequested();
 
-			clearSwInfo();
-			clearHwInfo();
-
-			// sets dataReady
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -3554,9 +3522,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
-
-			// we do this again since we reloaded the configuration
-			persistenceController.checkConfiguration();
 
 			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
