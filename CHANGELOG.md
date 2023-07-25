@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.10] - 2023-07-25
+### Fixed
+- Show Selection box for report in Product table correctly
+
 ## [4.2.22.9] - 2023-07-19
 ### Fixed
 - Sort position of products correctly

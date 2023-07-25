@@ -254,8 +254,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	// collection of retrieved software audit and hardware maps
 
-	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
-
 	private String myServer;
 	private List<String> editableDomains;
 	private boolean multiDepot;
@@ -758,9 +756,7 @@ public class ConfigedMain implements ListSelectionListener {
 		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
-	// sets dataReady = true when finished
 	private void preloadData() {
-
 		persistenceController.retrieveOpsiModules();
 
 		if (depotRepresentative == null) {
@@ -778,8 +774,6 @@ public class ConfigedMain implements ListSelectionListener {
 		localbootProductnames = persistenceController.getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getAllNetbootProductNames();
 		persistenceController.getProductIds();
-
-		persistenceController.productGroupsRequestRefresh();
 
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
@@ -806,8 +800,6 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.retrieveProductDependencies();
 
 		persistenceController.retrieveDepotProductProperties();
-
-		persistenceController.getInstalledSoftwareInformation();
 
 		dataReady = true;
 		mainFrame.enableAfterLoading();
@@ -3061,17 +3053,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private void checkHwInfo() {
-		if (hwInfoClientmap == null) {
-			hwInfoClientmap = new HashMap<>();
-		}
-	}
-
-	public void clearHwInfo() {
-		checkHwInfo();
-		hwInfoClientmap.clear();
-	}
-
 	private boolean setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
@@ -3084,11 +3065,7 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			checkHwInfo();
-			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.computeIfAbsent(firstSelectedClient,
-					s -> persistenceController.getHardwareInfo(firstSelectedClient));
-
-			mainFrame.setHardwareInfo(hwInfo);
+			mainFrame.setHardwareInfo(persistenceController.getHardwareInfo(firstSelectedClient));
 		}
 
 		return true;
@@ -3096,10 +3073,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private static void clearSoftwareInfoPage() {
 		mainFrame.setSoftwareAuditNullInfo("");
-	}
-
-	public void clearSwInfo() {
-		// TODO, check what clearHwInfo does...
 	}
 
 	private boolean setSoftwareInfoPage() {
@@ -3490,7 +3463,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		// dont do anything if we did not finish another thread for this
 		if (dataReady) {
-
 			allowedClients = null;
 
 			FOpsiLicenseMissingText.reset();
@@ -3536,10 +3508,6 @@ public class ConfigedMain implements ListSelectionListener {
 			// clearing softwareMap in OpsiDataBackend
 			OpsiDataBackend.getInstance().setReloadRequested();
 
-			clearSwInfo();
-			clearHwInfo();
-
-			// sets dataReady
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -3554,9 +3522,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
-
-			// we do this again since we reloaded the configuration
-			persistenceController.checkConfiguration();
 
 			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
@@ -4285,15 +4250,12 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callNewClientDialog() {
-		Collections.sort(localbootProductnames);
-		List<String> vLocalbootProducts = new ArrayList<>(localbootProductnames);
 		Collections.sort(netbootProductnames);
-		List<String> vNetbootProducts = new ArrayList<>(netbootProductnames);
+		List<String> vNetbootProducts = netbootProductnames;
 
-		NewClientDialog.getInstance(this, getLinkedDepots()).setVisible(true);
-		NewClientDialog.getInstance().setGroupList(new ArrayList<>(persistenceController.getHostGroupIds()));
+		NewClientDialog.getInstance(this, getLinkedDepots());
+		NewClientDialog.getInstance().setGroupList(persistenceController.getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
-		NewClientDialog.getInstance().setProductLocalbootList(vLocalbootProducts);
 
 		NewClientDialog.getInstance().setDomains(editableDomains);
 
@@ -4301,6 +4263,7 @@ public class ConfigedMain implements ListSelectionListener {
 				persistenceController.isUefiConfigured(myServer), persistenceController.isWanConfigured(myServer));
 
 		NewClientDialog.getInstance().setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		NewClientDialog.getInstance().setVisible(true);
 	}
 
 	public void callChangeClientIDDialog() {
@@ -4476,20 +4439,19 @@ public class ConfigedMain implements ListSelectionListener {
 	public void createClient(final String hostname, final String domainname, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
-			final boolean wanConfig, final String group, final String productNetboot, final String productLocalboot) {
+			final boolean wanConfig, final String group, final String productNetboot) {
 
 		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
-						+ group + ", " + productNetboot + ", " + productLocalboot);
+						+ group + ", " + productNetboot);
 
 		String newClientID = hostname + "." + domainname;
 
 		persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 
 		if (persistenceController.createClient(hostname, domainname, depotID, description, inventorynumber, notes,
-				ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot,
-				productLocalboot)) {
+				ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot)) {
 			checkErrorList();
 			persistenceController.fObject2GroupsRequestRefresh();
 

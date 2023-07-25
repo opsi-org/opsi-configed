@@ -243,7 +243,6 @@ public final class LicensingInfoMap {
 		Collections.sort(result);
 
 		return result;
-
 	}
 
 	private List<String> produceKnownModules() {
@@ -276,13 +275,15 @@ public final class LicensingInfoMap {
 			return produceKnownModules();
 		}
 
-		List<String> result = new ArrayList<>();
+		List<String> result;
 
-		for (String mod : knownModulesList) {
-			if (!obsoleteModules.contains(mod)) {
-				result.add(mod);
-			}
+		if (FGeneralDialogLicensingInfo.isShowOnlyAvailableModules()) {
+			result = new ArrayList<>(availableModules);
+		} else {
+			result = new ArrayList<>(knownModulesList);
 		}
+
+		result.removeAll(new HashSet<>(obsoleteModules));
 
 		Collections.sort(result);
 		return result;

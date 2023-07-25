@@ -7,7 +7,7 @@
 package de.uib.configed.gui.hwinfopage;
 
 import java.awt.Dimension;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -271,22 +271,25 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return value;
 		}
 
-		BigInteger v = new BigInteger(value);
+		String result = "";
+		BigDecimal v = new BigDecimal(value);
 
 		int mult = 1000;
 		if ("byte".equalsIgnoreCase(unit)) {
 			mult = 1024;
 		}
 		// TODO: nano, micro
-		if (v.compareTo(BigInteger.valueOf((long) mult * mult * mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
-		} else if (v.compareTo(BigInteger.valueOf((long) mult * mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
-		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
+		if (v.compareTo(BigDecimal.valueOf((long) mult * mult * mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
+		} else if (v.compareTo(BigDecimal.valueOf((long) mult * mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
+		} else if (v.compareTo(BigDecimal.valueOf(mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
 		} else {
-			return value + " " + unit;
+			result = value + " " + unit;
 		}
+
+		return result;
 	}
 
 	private void expandRows(List<Integer> rows) {
