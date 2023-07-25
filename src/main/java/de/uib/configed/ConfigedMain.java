@@ -2365,8 +2365,7 @@ public class ConfigedMain implements ListSelectionListener {
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
 				} else {
-					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-							|| (mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
 
 						TreePath[] selTreePaths = treeClients.getSelectionPaths();
@@ -2374,16 +2373,30 @@ public class ConfigedMain implements ListSelectionListener {
 						for (int i = 0; i < selTreePaths.length; i++) {
 							DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i]
 									.getLastPathComponent();
+
 							activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
 							activePaths.add(selTreePaths[i]);
 							treeClients.collectParentIDsFrom(selNode);
 						}
+
+						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+					} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+						DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+						if (treeClients.isPathSelected(mousePath)) {
+							activeTreeNodes.remove(selNode.getUserObject());
+							activePaths.add(mousePath);
+						} else {
+							activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
+							activePaths.add(mousePath);
+							treeClients.collectParentIDsFrom(selNode);
+							activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+						}
 					} else {
 						clearTree();
+						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 					}
 				}
 
-				activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 				Logging.info(this,
@@ -2426,27 +2439,31 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private void initTree() {
-		Logging.debug(this, "initTree");
-		activeTreeNodes = new HashMap<>();
-		activePaths = new ArrayList<>();
-
-		treeClients = new ClientTree(this);
-		persistenceController.getHostInfoCollections().setTree(treeClients);
-
-	}
-
-	private void setClientByTree(String nodeObject, TreePath pathToNode) {
+	public boolean treeClientsSelectAction(TreePath[] selTreePaths) {
+		Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
 		clearTree();
 
-		activateClientByTree(nodeObject, pathToNode);
+		for (int i = 0; i < selTreePaths.length; i++) {
+			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i].getLastPathComponent();
+
+			if (selNode.getAllowsChildren()) {
+				continue;
+			}
+
+			activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
+			activePaths.add(selTreePaths[i]);
+			treeClients.collectParentIDsFrom(selNode);
+		}
+
+		DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
+				.getLastPathComponent();
+
+		activateClientByTree((String) selNode.getUserObject(), selTreePaths[selTreePaths.length - 1]);
 
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusPanel().setGroupName(
-
-					pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
+			mainFrame.getHostsStatusPanel().setGroupName(selNode.getParent().toString());
 		} else {
 			mainFrame.getHostsStatusPanel().setGroupName("");
 		}
@@ -2454,6 +2471,32 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
 
+		return true;
+	}
+
+	private void initTree() {
+		Logging.debug(this, "initTree");
+		activeTreeNodes = new HashMap<>();
+		activePaths = new ArrayList<>();
+
+		treeClients = new ClientTree(this);
+		persistenceController.getHostInfoCollections().setTree(treeClients);
+	}
+
+	private void setClientByTree(String nodeObject, TreePath pathToNode) {
+		clearTree();
+		activateClientByTree(nodeObject, pathToNode);
+		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+		if (getSelectedClients().length == 1) {
+			mainFrame.getHostsStatusPanel()
+					.setGroupName(pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
+		} else {
+			mainFrame.getHostsStatusPanel().setGroupName("");
+		}
+
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+				getSelectedClientsString(), clientInDepot);
 	}
 
 	private void activateClientByTree(String nodeObject, TreePath pathToNode) {
