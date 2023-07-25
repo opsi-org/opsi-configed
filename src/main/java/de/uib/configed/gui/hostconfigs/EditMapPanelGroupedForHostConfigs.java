@@ -33,6 +33,7 @@ import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
+import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import utils.PopupMouseListener;
@@ -478,7 +479,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				// Map<String, List<Object>> serverconfigValuesMap,
 				persistenceController.getConfigDefaultValues(),
 
-				// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
+				// Map<String, ListCellOptions> configOptionsMap
 				persistenceController.getConfigOptions());
 
 		List<Object> newData = up.produce();
@@ -561,7 +562,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 			List<String> propertyNames = partialPanels.get(key).getNames();
 			Logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
-				((de.uib.utilities.datapanel.EditMapPanelX) partialPanels.get(key)).removeProperty(name);
+				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
 			}
 
 			removeSubpanelClass(key);

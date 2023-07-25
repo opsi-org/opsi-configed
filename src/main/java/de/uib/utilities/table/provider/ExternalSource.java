@@ -8,6 +8,9 @@ package de.uib.utilities.table.provider;
 
 import java.util.List;
 
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+
 public class ExternalSource implements TableSource {
 	// adapter for external source for table data
 
@@ -15,14 +18,14 @@ public class ExternalSource implements TableSource {
 
 	private List<String> classNames;
 
-	private boolean reloadRequested = true;
+	private boolean reloadRequested;
 
-	private RowsProvider rowsProvider;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public ExternalSource(List<String> columnNames, List<String> classNames, RowsProvider rowsProvider) {
+	public ExternalSource(List<String> columnNames, List<String> classNames) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
-		this.rowsProvider = rowsProvider;
 	}
 
 	@Override
@@ -38,11 +41,11 @@ public class ExternalSource implements TableSource {
 	@Override
 	public List<List<Object>> retrieveRows() {
 		if (reloadRequested) {
-			rowsProvider.requestReload();
+			persistenceController.productDataRequestRefresh();
 			reloadRequested = false;
 		}
 
-		return rowsProvider.getRows();
+		return persistenceController.getProductRows();
 	}
 
 	@Override

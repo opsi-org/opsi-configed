@@ -26,7 +26,6 @@ import de.uib.utilities.logging.Logging;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
-	public static final String SEPARATING_LINE = "-".repeat(147);
 
 	private SSHConnectionExecDialog outputDialog;
 	protected boolean multiCommand;

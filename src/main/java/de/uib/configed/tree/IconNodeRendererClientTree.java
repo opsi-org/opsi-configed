@@ -20,7 +20,6 @@ import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
 	private ConfigedMain main;
-	private VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
@@ -72,7 +71,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 			} else {
 				// group
-				String visualText = modifier.modify(stringValue);
+
+				String visualText = modify(stringValue);
+
 				setText(visualText);
 
 				// default,will be changed, if clients are childs
@@ -103,5 +104,23 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		}
 
 		return this;
+	}
+
+	private static String modify(final String in) {
+		if (in == null) {
+			return null;
+		}
+
+		int l = in.length();
+		int i = l - 1;
+		while (i > 0 && in.charAt(i) == '_') {
+			i--;
+		}
+
+		if (i == l - 1) {
+			return in;
+		}
+
+		return in.substring(0, i + 1);
 	}
 }

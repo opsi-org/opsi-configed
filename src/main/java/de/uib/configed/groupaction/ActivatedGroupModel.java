@@ -9,7 +9,7 @@ package de.uib.configed.groupaction;
 import java.util.Set;
 
 import de.uib.configed.Configed;
-import de.uib.configed.HostsStatusInfo;
+import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.utilities.logging.Logging;
 
 public class ActivatedGroupModel {
@@ -20,9 +20,9 @@ public class ActivatedGroupModel {
 
 	private boolean active;
 
-	private HostsStatusInfo hostsInfo;
+	private HostsStatusPanel hostsInfo;
 
-	public ActivatedGroupModel(HostsStatusInfo hostsInfo) {
+	public ActivatedGroupModel(HostsStatusPanel hostsInfo) {
 		this.hostsInfo = hostsInfo;
 	}
 

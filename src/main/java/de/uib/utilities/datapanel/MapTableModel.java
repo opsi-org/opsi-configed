@@ -22,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
@@ -107,8 +108,7 @@ public class MapTableModel extends AbstractTableModel {
 		}
 
 		for (String key : keys) {
-			if (key.startsWith(de.uib.opsidatamodel.permission.UserConfig.CONFIGKEY_STR_USER)
-					&& key.endsWith(de.uib.opsidatamodel.permission.UserConfig.MODIFICATION_INFO_KEY)) {
+			if (key.startsWith(UserConfig.CONFIGKEY_STR_USER) && key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 				modifiedKey = key;
 				break;
 			}
@@ -323,7 +323,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-
 				aStoreMap.put(myKey, nullLIST);
 			}
 
@@ -424,7 +423,6 @@ public class MapTableModel extends AbstractTableModel {
 	 * @param Object value
 	 */
 	public void setValue(String key, Object value) {
-
 		int row = keys.indexOf(key);
 
 		if (row < 0) {
@@ -436,7 +434,6 @@ public class MapTableModel extends AbstractTableModel {
 			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
-
 				Logging.error("EditMapPanel: value not allowed: " + value);
 				return;
 			}

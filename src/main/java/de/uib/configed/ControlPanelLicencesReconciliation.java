@@ -20,6 +20,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilterCondition;
+import de.uib.utilities.table.gui.CheckBoxTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -116,7 +117,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames.add("java.lang.Boolean");
 		classNames.add("java.lang.Boolean");
 		MapTableUpdateItemFactory updateItemFactoryLicencesReconciliation = new MapTableUpdateItemFactory(
-				modelLicencesReconciliation, columnNames, classNames, 0);
+				modelLicencesReconciliation, columnNames, 0);
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
@@ -162,12 +163,12 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		TableColumn col;
 
 		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexUsedByOpsi);
-		col.setCellRenderer(new de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
+		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
 		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexSWInventoryUsed);
-		col.setCellRenderer(new de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
+		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 	}

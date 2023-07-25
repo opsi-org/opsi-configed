@@ -58,7 +58,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private static final String FAILED_DISPLAY_STRING = "failed";
 	private static final String SUCCESS_DISPLAY_STRING = "success";
 
-	public static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
+	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
 		defaultDisplayValues.add(NONE_DISPLAY_STRING);
 		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);

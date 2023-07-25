@@ -6,7 +6,6 @@
 
 package de.uib.utilities.observer;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,9 +18,7 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * Allows to produce a static member of a class in order to count instances of
- * that class and check for running instances on ending the program. Implements
- * an observable pattern so that another class can react to relevant events or
- * execute something on all instances
+ * that class and check for running instances on ending the program.
  */
 
 public class RunningInstances<T> {
@@ -32,15 +29,11 @@ public class RunningInstances<T> {
 	// collect instances of a class in this map
 	private ConcurrentHashMap<T, String> instances;
 
-	// the observers
-	private Set<RunningInstancesObserver<T>> observers;
-
 	public RunningInstances(Class<?> type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
 		Logging.info(this.getClass(), "created for class " + classname);
 		instances = new ConcurrentHashMap<>();
-		observers = new HashSet<>();
 	}
 
 	public void add(T instance, String description) {
@@ -80,21 +73,8 @@ public class RunningInstances<T> {
 		return instances.toString();
 	}
 
-	// observable implementation
-	public void addObserver(RunningInstancesObserver<T> observer) {
-		observers.add(observer);
-	}
-
-	public void removeObserver(RunningInstancesObserver<T> observer) {
-		observers.remove(observer);
-	}
-
 	private void sendChangeEvent() {
-		Logging.debug(this, "sendChangeEvent observers: " + observers.size());
-		for (RunningInstancesObserver<T> aFollower : observers) {
-			aFollower.instancesChanged(getAll());
-		}
-
+		Logging.debug(this, "sendChangeEvent to mainFrame");
+		ConfigedMain.getMainFrame().instancesChanged(getAll());
 	}
-
 }

@@ -19,9 +19,11 @@ import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
@@ -97,7 +99,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		initPanels();
 
 		// combo clients
-		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
+		thePanel.setClientsSource(new ComboBoxModeller() {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
@@ -132,7 +134,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencesUsage = new MapTableUpdateItemFactory(modelLicencesUsage,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					persistenceController.licencesUsageRequestRefresh();
@@ -151,7 +153,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 		TableColumn col;
 		col = thePanel.panelUsage.getColumnModel().getColumn(4);
-		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText());
+		col.setCellEditor(new CellEditor4TableText());
 
 		// updates
 		setPanelUsageUpdateController();
@@ -160,11 +162,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);

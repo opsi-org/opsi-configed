@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -43,6 +44,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
+import de.uib.configed.productaction.PanelCompleteWinProducts;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -88,7 +90,6 @@ import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
 /**
@@ -283,7 +284,7 @@ public class OpsiserviceNOMPersistenceController {
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	private List<DataRefreshedObserver> dataRefreshedObservers;
+	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	public AbstractExecutioner exec;
 
@@ -497,23 +498,16 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	// ---------------------------------------------------------------
-	// implementation of observer patterns
-	// offer observing of data refreshed announcements
+	// Registering and notifying panelCompleteWinProducts
+	// TODO change how messages are shown there
 
-	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers == null) {
-			dataRefreshedObservers = new ArrayList<>();
-		}
-		dataRefreshedObservers.add(ob);
+	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
+		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}
 
-	public void notifyDataRefreshedObservers(Object mesg) {
-		if (dataRefreshedObservers == null) {
-			return;
-		}
-
-		for (DataRefreshedObserver ob : dataRefreshedObservers) {
-			ob.gotNotification(mesg);
+	public void notifyPanelCompleteWinProducts() {
+		if (panelCompleteWinProducts != null) {
+			panelCompleteWinProducts.evaluateWinProducts();
 		}
 	}
 
@@ -601,7 +595,6 @@ public class OpsiserviceNOMPersistenceController {
 									Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
-
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 					msg.append("\n");
@@ -609,7 +602,7 @@ public class OpsiserviceNOMPersistenceController {
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
 					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
-					dialog.setMessage("" + msg);
+					dialog.setMessage(msg.toString());
 					dialog.setVisible(true);
 					int result = dialog.getResult();
 					Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
@@ -704,11 +697,8 @@ public class OpsiserviceNOMPersistenceController {
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
 		} else {
-
 			if (!readyConfigObjects.isEmpty()) {
-
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyConfigObjects });
-
 				exec.doCall(omc);
 			}
 
@@ -751,19 +741,11 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	private boolean makeConnection(AbstractExecutioner exec1) {
-		// set by executioner
-
 		Logging.info(this, "trying to make connection");
-		boolean result = false;
-		try {
-			result = exec1.doCall(new OpsiMethodCall("accessControl_authenticated", new String[] {}));
+		boolean result = exec1.doCall(new OpsiMethodCall("accessControl_authenticated", new String[] {}));
 
-			if (!result) {
-				Logging.info(this, "connection does not work");
-			}
-
-		} catch (ClassCastException ex) {
-			Logging.info(this, "JSONthroughHTTPS failed to make connection: " + ex);
+		if (!result) {
+			Logging.info(this, "connection does not work");
 		}
 
 		result = result && getConnectionState().getState() == ConnectionState.CONNECTED;
@@ -1022,7 +1004,7 @@ public class OpsiserviceNOMPersistenceController {
 		String method = "depot_installPackage";
 
 		Logging.notice(this, method);
-		// TODO is "true" necessary?
+
 		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, true }));
 		Logging.info(this, "installPackage result " + result);
 
@@ -2058,10 +2040,6 @@ public class OpsiserviceNOMPersistenceController {
 		return productGroups;
 	}
 
-	public void productGroupsRequestRefresh() {
-		productGroups = null;
-	}
-
 	public Map<String, Map<String, String>> getHostGroups() {
 		if (hostGroups != null) {
 			return hostGroups;
@@ -2074,7 +2052,7 @@ public class OpsiserviceNOMPersistenceController {
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
+				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 
@@ -2501,21 +2479,14 @@ public class OpsiserviceNOMPersistenceController {
 		dataStub.softwareAuditOnClientsRequestRefresh();
 	}
 
-	public void fillClient2Software(List<String> clients) {
-		dataStub.fillClient2Software(clients);
+	public Map<String, List<SWAuditClientEntry>> getClient2Software(List<String> clients) {
+		return retrieveSoftwareAuditOnClients(clients);
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getClient2Software() {
-		return dataStub.getClient2Software();
-	}
-
-	/*
-	 * the method is only additionally called because of the retry mechanism
-	 */
 	public void getSoftwareAudit(String clientId) {
-		dataStub.fillClient2Software(clientId);
-
-		List<SWAuditClientEntry> entries = dataStub.getClient2Software().get(clientId);
+		List<String> clients = new ArrayList<>();
+		clients.add(clientId);
+		List<SWAuditClientEntry> entries = retrieveSoftwareAuditOnClients(clients).get(clientId);
 
 		if (entries == null) {
 			return;
@@ -2561,10 +2532,15 @@ public class OpsiserviceNOMPersistenceController {
 	public String getLastSoftwareAuditModification(String clientId) {
 		String result = "";
 
-		if (clientId != null && !clientId.isEmpty() && dataStub.getClient2Software() != null
-				&& dataStub.getClient2Software().get(clientId) != null
-				&& !dataStub.getClient2Software().get(clientId).isEmpty()) {
-			result = dataStub.getClient2Software().get(clientId).get(0).getLastModification();
+		Map<String, List<SWAuditClientEntry>> entries = new HashMap<>();
+		if (clientId != null && !clientId.isEmpty()) {
+			List<String> clients = new ArrayList<>();
+			clients.add(clientId);
+			entries = retrieveSoftwareAuditOnClients(clients);
+		}
+
+		if (!entries.isEmpty() && entries.get(clientId) != null && !entries.get(clientId).isEmpty()) {
+			result = entries.get(clientId).get(0).getLastModification();
 		}
 
 		return result;
@@ -2577,9 +2553,9 @@ public class OpsiserviceNOMPersistenceController {
 			return result;
 		}
 
-		dataStub.fillClient2Software(clientId);
-
-		List<SWAuditClientEntry> entries = dataStub.getClient2Software().get(clientId);
+		List<String> clients = new ArrayList<>();
+		clients.add(clientId);
+		List<SWAuditClientEntry> entries = retrieveSoftwareAuditOnClients(clients).get(clientId);
 
 		if (entries == null) {
 			return result;
@@ -2593,6 +2569,60 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		return result;
+	}
+
+	private Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
+		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
+
+		final int STEP_SIZE = 100;
+
+		while (!clients.isEmpty()) {
+			List<String> clientListForCall = new ArrayList<>();
+
+			for (int i = 0; i < STEP_SIZE && i < clients.size(); i++) {
+				clientListForCall.add(clients.get(i));
+			}
+
+			clients.removeAll(clientListForCall);
+
+			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
+
+			String[] callAttributes = new String[] {};
+			Map<String, Object> callFilter = new HashMap<>();
+			callFilter.put("state", 1);
+			if (clients != null) {
+				callFilter.put("clientId", clientListForCall);
+			}
+
+			List<Map<String, Object>> softwareAuditOnClients = retrieveListOfMapsNOM(callAttributes, callFilter,
+					"auditSoftwareOnClient_getHashes");
+
+			Logging.info(this,
+					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
+
+			for (String clientId : clientListForCall) {
+				client2software.put(clientId, new LinkedList<>());
+			}
+
+			for (Map<String, Object> item : softwareAuditOnClients) {
+				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
+				String clientId = clientEntry.getClientId();
+
+				if (clientId != null) {
+					List<SWAuditClientEntry> entries = client2software.get(clientId);
+					entries.add(clientEntry);
+				}
+			}
+
+			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
+		}
+
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
+
+		return client2software;
 	}
 
 	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {
@@ -2679,9 +2709,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
-			//|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
-			/*|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)*/) {
+					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
@@ -3424,7 +3452,7 @@ public class OpsiserviceNOMPersistenceController {
 		return getNetBootProductStatesNOM(clientIds);
 	}
 
-	private boolean updateProductOnClient(String pcname, String productname, int producttype,
+	private void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues, List<Map<String, Object>> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
@@ -3436,17 +3464,15 @@ public class OpsiserviceNOMPersistenceController {
 
 		Logging.debug(this, "updateProductOnClient, values " + values);
 		updateItems.add(values);
-
-		return true;
 	}
 
-	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+	public void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
 
-		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
+		updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
 	// hopefully we get only updateItems for allowed clients
@@ -3481,15 +3507,13 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, String> changedValues) {
 		List<Map<String, Object>> updateCollection = new ArrayList<>();
 
-		boolean result = true;
-
 		// collect updates for all clients
 		for (String client : clients) {
-			result = result && updateProductOnClient(client, productName, productType, changedValues, updateCollection);
+			updateProductOnClient(client, productName, productType, changedValues, updateCollection);
 		}
 
 		// execute
-		return result && updateProductOnClients(updateCollection);
+		return updateProductOnClients(updateCollection);
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
@@ -4009,47 +4033,54 @@ public class OpsiserviceNOMPersistenceController {
 
 		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
 
-		Map<String, Object> state = new HashMap<>();
-
 		while (propertiesKeyIterator.hasNext()) {
-			String key = (String) propertiesKeyIterator.next();
+			String propertyId = (String) propertiesKeyIterator.next();
 
-			state.put("type", "ProductPropertyState");
-			state.put("objectId", pcname);
-			state.put("productId", productname);
-			state.put("propertyId", key);
-
-			List<?> newValue = (List<?>) properties.get(key);
+			List<?> newValue = (List<?>) properties.get(propertyId);
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
-			Object oldValue = null;
-
-			if (retrievedConfig != null) {
-				oldValue = retrievedConfig.get(key);
-			}
+			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
 			if (newValue != oldValue) {
-				if (newValue.equals(MapTableModel.nullLIST)) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(key));
-					deleteCollection.add(state);
+				Map<String, Object> state = new HashMap<>();
+				state.put("type", "ProductPropertyState");
+				state.put("objectId", pcname);
+				state.put("productId", productname);
+				state.put("propertyId", propertyId);
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.remove(key);
-					}
+				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
+					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(propertyId));
+					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
-					state.put("values", newValue);
-					Logging.debug(this, "setProductProperties,  requested update " + properties.get(key)
+					Logging.debug(this, "setProductProperties,  requested update " + properties.get(propertyId)
 							+ " for oldValue " + oldValue);
-					Logging.debug(this, "setProductProperties,  we have new state " + state);
-					updateCollection.add(state);
 
-					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null) {
-						retrievedConfig.put(key, properties.get(key));
-					}
+					state.put("values", newValue);
+					updateState(state, updateCollection, retrievedConfig, propertyId, properties.get(propertyId));
 				}
 			}
+		}
+	}
+
+	private static void deleteState(Map<String, Object> state, List<Map<String, Object>> deleteCollection,
+			Map<String, Object> retrievedConfig, String propertyId) {
+		deleteCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.remove(propertyId);
+		}
+	}
+
+	private void updateState(Map<String, Object> state, List<Map<String, Object>> updateCollection,
+			Map<String, Object> retrievedConfig, String propertyId, Object propertyValue) {
+
+		Logging.debug(this, "setProductProperties,  we have new state " + state);
+		updateCollection.add(state);
+
+		// we hope that the update works and directly update the retrievedConfig
+		if (retrievedConfig != null) {
+			retrievedConfig.put(propertyId, propertyValue);
 		}
 	}
 
@@ -4076,7 +4107,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	// send productPropertyState updates and clear the collections
-	private void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
+	private void setProductProperties(List<Map<String, Object>> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
@@ -5869,11 +5900,10 @@ public class OpsiserviceNOMPersistenceController {
 		// result
 		Map<String, Integer> licencePoolUsagecountSWInvent = new HashMap<>();
 
-		// now we have audit software on client data for all clients
-		fillClient2Software(getHostInfoCollections().getOpsiHostNames());
 		AuditSoftwareXLicencePool auditSoftwareXLicencePool = dataStub.getAuditSoftwareXLicencePool();
 
-		Map<String, Set<String>> swId2clients = dataStub.getSoftwareIdent2clients();
+		Map<String, Set<String>> swId2clients = dataStub
+				.getSoftwareIdent2clients(getHostInfoCollections().getOpsiHostNames());
 
 		if (withLicenceManagement) {
 			Map<String, LicencepoolEntry> licencePools = dataStub.getLicencepools();
@@ -7385,7 +7415,7 @@ public class OpsiserviceNOMPersistenceController {
 								.getCurrentOverLimitModuleList());
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
-				!FGeneralDialogLicensingInfo.extendedView);
+				!FGeneralDialogLicensingInfo.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 

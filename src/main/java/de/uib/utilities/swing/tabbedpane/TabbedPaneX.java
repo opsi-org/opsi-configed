@@ -19,17 +19,18 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
 import de.uib.Main;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
 public class TabbedPaneX extends JPanel {
 	private JTabbedPane jTabbedPaneMain;
 
-	private TabController controller;
+	private ConfigedMain configedMain;
 
 	private List<LicencesTabStatus> tabOrder;
 
-	public TabbedPaneX(TabController controller) {
-		this.controller = controller;
+	public TabbedPaneX(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		init();
 	}
 
@@ -54,7 +55,7 @@ public class TabbedPaneX extends JPanel {
 			LicencesTabStatus newS = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
-			LicencesTabStatus s = controller.reactToStateChangeRequest(newS);
+			LicencesTabStatus s = configedMain.reactToStateChangeRequest(newS);
 
 			// if the controller did not accept the new index set it back
 			// observe that we get a recursion since we initiate another state change

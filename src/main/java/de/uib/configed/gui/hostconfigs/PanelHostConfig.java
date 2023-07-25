@@ -14,6 +14,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
+import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -89,12 +90,10 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel() {
-		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(
-				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
-				reloadable, new DefaultEditMapPanel.Actor() {
+		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
+				entryRemovable, reloadable, new DefaultEditMapPanel.Actor() {
 					@Override
 					protected void reloadData() {
 						reloadHostConfig();
