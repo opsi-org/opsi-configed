@@ -144,13 +144,13 @@ public class ClientView implements View {
 
 	private void loadData() {
 		List<Client> clients = ClientData.getClients();
-		List<String> activeClients = ClientData.getReachableClients();
-		List<String> inactiveClients = ClientData.getUnreachableClients();
+		List<String> connectedClientsByMessagebus = ClientData.getConnectedClientsByMessagebus();
+		List<String> notConnectedClientsByMessagebus = ClientData.getNotConnectedClientsByMessagebus();
 		Map<String, Integer> lastSeenData = ClientData.getLastSeenData();
 
 		clientsNumberLabel.setText(String.valueOf(clients.size()));
-		activeClientsNumberLabel.setText(String.valueOf(activeClients.size()));
-		inactiveClientsNumberLabel.setText(String.valueOf(inactiveClients.size()));
+		activeClientsNumberLabel.setText(String.valueOf(connectedClientsByMessagebus.size()));
+		inactiveClientsNumberLabel.setText(String.valueOf(notConnectedClientsByMessagebus.size()));
 		fourteenOrLowerDaysNumberLabel.setText(
 				String.valueOf(lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"))));
 		betweenFifteenAndThirtyDaysNumberLabel.setText(String.valueOf(
@@ -160,7 +160,7 @@ public class ClientView implements View {
 
 		hostnameTableColumn.setCellValueFactory(cellData -> cellData.getValue().hostnameProperty());
 		lastSeenTableColumn.setCellValueFactory(cellData -> cellData.getValue().lastSeenProperty());
-		clientActiveTableColumn.setCellValueFactory(cellData -> cellData.getValue().reachableProperty());
+		clientActiveTableColumn.setCellValueFactory(cellData -> cellData.getValue().connectedWithMessagebusProperty());
 		clientActiveTableColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 
 		List<String> clientStatus = new ArrayList<>();
@@ -207,9 +207,9 @@ public class ClientView implements View {
 				return true;
 			}
 
-			return (client.isReachable() && clientActivityStatusComboBox.getValue()
+			return (client.isConnectedWithMessagebus() && clientActivityStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.client.active")))
-					|| (!client.isReachable() && clientActivityStatusComboBox.getValue()
+					|| (!client.isConnectedWithMessagebus() && clientActivityStatusComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.client.inactive")));
 		}, clientActivityStatusComboBox.valueProperty()));
 

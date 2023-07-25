@@ -3688,7 +3688,6 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public Set<String> getMessagebusConnectedClients() {
-
 		// no messagebus available if not at least opsi 4.3
 		if (!ServerFacade.isOpsi43()) {
 			return new HashSet<>();

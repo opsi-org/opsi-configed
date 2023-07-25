@@ -25,8 +25,8 @@ import de.uib.utilities.logging.Logging;
 
 public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
-	private static Map<String, List<String>> reachableClients = new HashMap<>();
-	private static Map<String, List<String>> unreachableClients = new HashMap<>();
+	private static Map<String, List<String>> connectedClientsByMessagebus = new HashMap<>();
+	private static Map<String, List<String>> notConnectedClientsByMessagebus = new HashMap<>();
 	private static Map<String, Map<String, Integer>> clientLastSeen = new HashMap<>();
 
 	private static String selectedDepot;
@@ -67,7 +67,8 @@ public final class ClientData {
 					Client client = new Client();
 					client.setHostname(hostInfo.getName());
 					client.setLastSeen(hostInfo.getLastSeen());
-					client.setReachable(reachableClients.get(depot).contains(hostInfo.getName()));
+					client.setConnectedWithMessagebus(
+							connectedClientsByMessagebus.get(depot).contains(hostInfo.getName()));
 					clientsList.add(client);
 				}
 			}
@@ -79,67 +80,52 @@ public final class ClientData {
 		clients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
-	public static List<String> getReachableClients() {
-		if (reachableClients.isEmpty() || !reachableClients.containsKey(selectedDepot)) {
+	public static List<String> getConnectedClientsByMessagebus() {
+		if (connectedClientsByMessagebus.isEmpty() || !connectedClientsByMessagebus.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(reachableClients.get(selectedDepot));
+		return new ArrayList<>(connectedClientsByMessagebus.get(selectedDepot));
 	}
 
-	public static List<String> getUnreachableClients() {
-		if (unreachableClients.isEmpty() || !unreachableClients.containsKey(selectedDepot)) {
+	public static List<String> getNotConnectedClientsByMessagebus() {
+		if (notConnectedClientsByMessagebus.isEmpty() || !notConnectedClientsByMessagebus.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(unreachableClients.get(selectedDepot));
+		return new ArrayList<>(notConnectedClientsByMessagebus.get(selectedDepot));
 	}
 
-	private static void retrieveClientActivityState() {
-		if (!reachableClients.isEmpty() && !unreachableClients.isEmpty()) {
+	private static void retrieveClientsWithMessagebusConnection() {
+		if (!connectedClientsByMessagebus.isEmpty() && !notConnectedClientsByMessagebus.isEmpty()) {
 			return;
 		}
 
-		reachableClients.clear();
-		unreachableClients.clear();
+		connectedClientsByMessagebus.clear();
+		notConnectedClientsByMessagebus.clear();
 
-		Map<String, Object> reachableInfo = persistenceController.reachableInfo(null);
+		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
+				persistenceController.getMessagebusConnectedClients());
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
-
 		for (String depot : depots) {
-			List<String> clients = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
-					.collect(Collectors.toList());
-
-			List<String> reachableClientsList = new ArrayList<>();
-			List<String> unreachableClientsList = new ArrayList<>();
-
-			if (!clients.isEmpty()) {
-				addClientsToReachableLists(clients, reachableClientsList, unreachableClientsList, reachableInfo);
-			}
-
-			reachableClients.put(depot, reachableClientsList);
-			unreachableClients.put(depot, unreachableClientsList);
+			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()
+					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
+					.map(HostInfo::getName).collect(Collectors.toList());
+			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
+					.filter(notConnectedClientsByMessagebusInDepot::contains).collect(Collectors.toList());
+			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
+			notConnectedClientsByMessagebus.put(depot, notConnectedClientsByMessagebusInDepot);
+			connectedClientsByMessagebus.put(depot, allConnectedClientsByMessagebusInDepot);
 		}
 
-		List<String> allActiveClients = Helper.combineListsFromMap(reachableClients);
-		reachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
+		List<String> connectedClientsByMessagebusInAllDepots = Helper.combineListsFromMap(connectedClientsByMessagebus);
+		List<String> notConnectedClientsByMessagebusInAllDepots = Helper
+				.combineListsFromMap(notConnectedClientsByMessagebus);
 
-		List<String> allInactiveClients = Helper.combineListsFromMap(unreachableClients);
-		unreachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
-	}
-
-	private static void addClientsToReachableLists(List<String> clients, List<String> reachableClientsList,
-			List<String> unreachableClientsList, Map<String, Object> reachableInfo) {
-		for (String client : clients) {
-			if (reachableInfo.containsKey(client)) {
-				if (Boolean.TRUE.equals(reachableInfo.get(client))) {
-					reachableClientsList.add(client);
-				} else {
-					unreachableClientsList.add(client);
-				}
-			}
-		}
+		connectedClientsByMessagebus.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
+				connectedClientsByMessagebusInAllDepots);
+		notConnectedClientsByMessagebus.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
+				notConnectedClientsByMessagebusInAllDepots);
 	}
 
 	public static Map<String, Integer> getLastSeenData() {
@@ -210,15 +196,15 @@ public final class ClientData {
 
 	public static void clear() {
 		clients.clear();
-		reachableClients.clear();
-		unreachableClients.clear();
+		connectedClientsByMessagebus.clear();
+		notConnectedClientsByMessagebus.clear();
 		clientLastSeen.clear();
 	}
 
 	public static void retrieveData(String depot) {
 		selectedDepot = depot;
 
-		retrieveClientActivityState();
+		retrieveClientsWithMessagebusConnection();
 		retrieveClients();
 		retrieveLastSeenData();
 	}

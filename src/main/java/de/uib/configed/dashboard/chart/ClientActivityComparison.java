@@ -50,10 +50,10 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		clientActivityComparisonPieChart.setTitle(Configed.getResourceValue("Dashboard.clientActivityTitle"));
 
 		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-		List<String> activeClients = ClientData.getReachableClients();
-		List<String> inactiveClients = ClientData.getUnreachableClients();
+		List<String> connectedClientsByMessagebus = ClientData.getConnectedClientsByMessagebus();
+		List<String> notConnectedClientsByMessagebus = ClientData.getNotConnectedClientsByMessagebus();
 
-		if (activeClients.isEmpty() && inactiveClients.isEmpty()) {
+		if (connectedClientsByMessagebus.isEmpty() && notConnectedClientsByMessagebus.isEmpty()) {
 			clientsActivityNoDataText.setVisible(true);
 			clientActivityComparisonPieChart.setLabelsVisible(false);
 		} else {
@@ -61,15 +61,13 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 			clientActivityComparisonPieChart.setLabelsVisible(true);
 		}
 
-		int totalActiveClients = activeClients.size();
-		int totalInactiveClients = inactiveClients.size();
+		int totalConnectedClientsByMessagebus = connectedClientsByMessagebus.size();
+		int totalNotConnectedClientsByMessagebus = notConnectedClientsByMessagebus.size();
 
-		data.add(new PieChart.Data(
-				String.format("%s %d", Configed.getResourceValue("Dashboard.client.active"), totalActiveClients),
-				totalActiveClients));
-		data.add(new PieChart.Data(
-				String.format("%s %d", Configed.getResourceValue("Dashboard.client.inactive"), totalInactiveClients),
-				totalInactiveClients));
+		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.client.active"),
+				totalConnectedClientsByMessagebus), totalConnectedClientsByMessagebus));
+		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.client.inactive"),
+				totalNotConnectedClientsByMessagebus), totalNotConnectedClientsByMessagebus));
 
 		clientActivityComparisonPieChart.setData(data);
 
