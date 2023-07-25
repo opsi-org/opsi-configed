@@ -137,7 +137,7 @@ public final class ProductData {
 		unusedProducts.clear();
 
 		for (String depot : depots) {
-			List<String> allUnusedProducts = persistenceController.getAllProductNames(depot);
+			List<String> allUnusedProducts = new ArrayList<>(products.get(depot));
 			Map<Product, Product> installedProductsList = new HashMap<>();
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
