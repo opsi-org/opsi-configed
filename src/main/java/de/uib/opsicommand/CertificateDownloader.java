@@ -78,9 +78,11 @@ public final class CertificateDownloader {
 				FileOutputStream fos = new FileOutputStream(tmpCertFile)) {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
-			ConnectionErrorReporter.getInstance().notify(
-					Configed.getResourceValue("CertificateDownloader.unableToDownloadCertificate") + " " + url,
-					ConnectionErrorType.FAILED_CERTIFICATE_DOWNLOAD_ERROR);
+			if (ConnectionErrorReporter.getInstance() != null) {
+				ConnectionErrorReporter.getInstance().notify(
+						Configed.getResourceValue("CertificateDownloader.unableToDownloadCertificate") + " " + url,
+						ConnectionErrorType.FAILED_CERTIFICATE_DOWNLOAD_ERROR);
+			}
 			Logging.error("unable to download certificate from specified url: " + url.toString(), e);
 		}
 
