@@ -44,9 +44,10 @@ import de.uib.utilities.table.updates.TableEditItem;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
-	public static boolean extendedView;
+	private static boolean extendedView;
+	private static boolean showOnlyAvailableModules = true;
 
-	public LicensingInfoPanelGenEditTable thePanel;
+	private LicensingInfoPanelGenEditTable thePanel;
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
@@ -263,14 +264,22 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		}
 
 		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
-		JCheckBox checkExtendedView = new JCheckBox(""
-
-				, extendedView);
+		JCheckBox checkExtendedView = new JCheckBox("", extendedView);
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			extendedView = checkExtendedView.isSelected();
 			Logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 			LicensingInfoMap.setReduced(!extendedView);
+			LicensingInfoMap.requestRefresh();
+			thePanel.reload();
+		});
+
+		JLabel labelShowOnlyAvailableModules = new JLabel(
+				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"));
+		JCheckBox checkShowOnlyAvailableModules = new JCheckBox("", showOnlyAvailableModules);
+
+		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
+			showOnlyAvailableModules = checkShowOnlyAvailableModules.isSelected();
 			LicensingInfoMap.requestRefresh();
 			thePanel.reload();
 		});
@@ -285,9 +294,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		});
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
-				labelExtendedView
-
-		};
+				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 		if (!Main.THEMES) {
@@ -328,12 +335,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 										.addComponent(customerTitle)
 										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-
-												.addComponent(customerNames)
-
-										)
-
-								)));
+												.addComponent(customerNames)))));
 
 		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
 
@@ -389,22 +391,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
-		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
-
-				// tableProvider
-				new DefaultTableProvider(tableSource),
-
-				// keycol
-				0,
-
-				// final columns int array
-				new int[] {},
-
-				// table model listener
-				thePanel,
-
-				// ArrayList<TableEditItem> updates
-				updateCollection);
+		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
+				thePanel, updateCollection);
 
 		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory(0);
 
@@ -418,5 +406,17 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setColumnNames(columnNames);
 
 		thePanel.setTableModel(theModel);
+	}
+
+	public void reload() {
+		thePanel.reload();
+	}
+
+	public static boolean isExtendedView() {
+		return extendedView;
+	}
+
+	public static boolean isShowOnlyAvailableModules() {
+		return showOnlyAvailableModules;
 	}
 }

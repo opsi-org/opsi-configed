@@ -43,10 +43,10 @@ import de.uib.utilities.table.gui.AdaptingCellEditor;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
@@ -121,7 +121,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	}
 
-	private void setSoftwareIdsFromLicencePool(final String poolID) {
+	public void setSoftwareIdsFromLicencePool(final String poolID) {
 		Logging.info(this,
 				"setSoftwareIdsFromLicencePool " + poolID + " should be thePanel.panelLicencepools.getSelectedRow() "
 						+ thePanel.panelLicencepools.getSelectedRow());
@@ -200,12 +200,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				missingSoftwareMap.put(ID, rowMap);
 			}
 
-			thePanel.fMissingSoftwareInfo.setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, 0), // dummy
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
-					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
+			thePanel.fMissingSoftwareInfo.setTableModel(
+					new GenTableModel(new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames, 0), // dummy
+							new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
+									thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
+							0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}
 
@@ -407,17 +406,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		// --- panelLicencepools
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
@@ -464,11 +459,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		classNames = new ArrayList<>();
+		List<String> classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persistenceController.getRelationsProductId2LPool())),
@@ -664,15 +659,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col.setMaxWidth(60);
 
 		// updates
-		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
-				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this::updateLicencepool) {
-
-			@Override
-			public boolean cancelChanges() {
-				setSoftwareIdsFromLicencePool(null);
-				return true;
-			}
-		});
+		thePanel.panelRegisteredSoftware.setUpdateController(new SelectionMemorizerUpdateController(
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this));
 
 		// -- Softwarename --> LicencePool
 
@@ -732,7 +720,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 	}
 
-	private boolean updateLicencepool(String poolId, List<String> softwareIds) {
+	public boolean updateLicencepool(String poolId, List<String> softwareIds) {
 
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);

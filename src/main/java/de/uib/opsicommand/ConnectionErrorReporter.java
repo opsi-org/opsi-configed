@@ -28,7 +28,7 @@ import de.uib.utilities.swing.FEditRecord;
  * <p>
  * {@code ConnectionErrorReporter} is built using the Observer design pattern.
  */
-public class ConnectionErrorReporter implements ConnectionErrorListener {
+public class ConnectionErrorReporter {
 	private ConnectionState conStat;
 
 	/**
@@ -43,7 +43,6 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		this.conStat = conStat;
 	}
 
-	@Override
 	public void onError(String message, ConnectionErrorType errorType) {
 		switch (errorType) {
 		case FAILED_CERTIFICATE_VALIDATION_ERROR:

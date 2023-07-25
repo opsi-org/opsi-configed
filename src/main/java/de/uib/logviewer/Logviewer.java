@@ -8,7 +8,6 @@ package de.uib.logviewer;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
 import java.net.URL;
 
 import javax.swing.SwingUtilities;
@@ -47,16 +46,10 @@ public final class Logviewer {
 		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
 
 		// set wanted fileName
+		LogFrame.setFileName(fileName);
 		if (fileName != null) {
-			if (new File(fileName).isDirectory()) {
-				Logging.info(this.getClass(), "This is a directory: " + fileName);
-				LogFrame.setFileName("");
-			} else if (!new File(fileName).exists()) {
-				Logging.info(this.getClass(), "File does not exist: " + fileName);
-				LogFrame.setFileName("");
-			} else {
-				LogFrame.setFileName(fileName);
-			}
+
+			LogFrame.setFileName(fileName);
 		} else {
 			Logging.info(" --  fileName " + Logging.logDirectoryName);
 		}

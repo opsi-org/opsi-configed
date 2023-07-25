@@ -93,7 +93,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
-import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
@@ -119,7 +118,6 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.RunningInstancesObserver;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
@@ -137,8 +135,8 @@ import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
 
-public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
-		ComponentListener, RunningInstancesObserver<JDialog> {
+public class MainFrame extends JFrame
+		implements WindowListener, KeyListener, MouseListener, ActionListener, ComponentListener {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
@@ -462,8 +460,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
 		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("UIManager.noButtonText"));
 		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
-
-		FEditObject.runningInstances.addObserver(this);
 	}
 
 	@Override
@@ -476,7 +472,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		statusPane.updateValues(0, null, null, null);
 	}
 
-	public HostsStatusInfo getHostsStatusInfo() {
+	public HostsStatusPanel getHostsStatusPanel() {
 		return statusPane;
 	}
 
@@ -2184,7 +2180,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
 				&& licensingInfoMap == null) {
 			licensingInfoMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
-					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
+					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -2476,7 +2472,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			@Override
 			protected void reload() {
 				super.reload();
-				configedMain.clearSwInfo();
 				persistenceController.installedSoftwareInformationRequestRefresh();
 				persistenceController.softwareAuditOnClientsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
@@ -2531,7 +2526,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		});
 
 		panelProductProperties = new PanelProductProperties(configedMain);
-		panelProductProperties.propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panelProductProperties,
@@ -3162,7 +3156,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
 	private void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
@@ -3183,9 +3176,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	// RunningInstancesObserver
-	@Override
-	public void instancesChanged(Set<JDialog> instances) {
+	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		if (jMenuShowScheduledWOL != null) {
@@ -3196,8 +3187,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	@Override
-	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
+	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if ("arrange".equals(command)) {
 			arrangeWs(instances);
@@ -3423,7 +3413,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				@Override
 				protected void reload() {
 					super.reload();
-					configedMain.clearHwInfo();
 
 					// otherwise we get a wait cursor only in table component
 					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);

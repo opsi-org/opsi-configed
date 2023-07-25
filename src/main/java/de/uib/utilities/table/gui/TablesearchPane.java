@@ -40,10 +40,10 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.AbstractNavigationPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
+import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	private static final int BLINK_RATE = 0;
@@ -74,7 +74,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelFilterMarkGap;
 
-	private AbstractNavigationPanel navPane;
+	private NavigationPanel navPane;
 	private PanelGenEditTable associatedPanel;
 
 	private LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
@@ -305,28 +305,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		navPane = new AbstractNavigationPanel() {
-
-			@Override
-			public void next() {
-				associatedPanel.advanceCursor(+1);
-			}
-
-			@Override
-			public void previous() {
-				associatedPanel.advanceCursor(-1);
-			}
-
-			@Override
-			public void first() {
-				associatedPanel.setCursorToFirstRow();
-			}
-
-			@Override
-			public void last() {
-				associatedPanel.setCursorToLastRow();
-			}
-		};
+		navPane = new NavigationPanel(associatedPanel);
 
 		navPane.setVisible(false);
 

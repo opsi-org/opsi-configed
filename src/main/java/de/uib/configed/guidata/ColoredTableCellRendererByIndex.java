@@ -27,14 +27,13 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 
 	private Map<String, Color> mapOfTextColors;
 
-	public ColoredTableCellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase,
-			boolean showOnlyIcon, String tooltipPrefix) {
-		this(null, mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
+	public ColoredTableCellRendererByIndex(Map<String, String> mapOfStringValues, String tooltipPrefix) {
+		this(null, mapOfStringValues, tooltipPrefix);
 	}
 
 	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors, Map<String, String> mapOfStringValues,
-			String imagesBase, boolean showOnlyIcon, String tooltipPrefix) {
-		super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
+			String tooltipPrefix) {
+		super(mapOfStringValues, tooltipPrefix);
 		this.mapOfTextColors = mapOfTextColors;
 	}
 

@@ -111,7 +111,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private ProductInfoPane infoPane;
 	private DefaultEditMapPanel propertiesPanel;
 
-	private ListCellRenderer standardListCellRenderer;
+	private ListCellRenderer<Object> standardListCellRenderer;
 
 	private TableCellRenderer productNameTableCellRenderer;
 	private TableCellRenderer productCompleteNameTableCellRenderer;
@@ -200,57 +200,29 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		productCompleteNameTableCellRenderer = new StandardTableCellRenderer("");
 
-		String iconsDir = null;
-
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/targetconfiguration";
-		}
-
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
+				TargetConfiguration.getLabel2DisplayLabel(),
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/installationstatus";
-		}
-
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStatus.getLabel2TextColor(), InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStatus.getLabel2TextColor(), InstallationStatus.getLabel2DisplayLabel(),
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/actionprogress";
-		}
-
 		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(ActionProgress.getLabel2DisplayLabel(),
-				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
-
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/actionresult";
-		}
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
 
 		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(ActionResult.getLabel2DisplayLabel(),
-				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
-
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/lastaction";
-		}
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
 
 		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2DisplayLabel(),
-				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
-
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-			iconsDir = "images/productstate/actionrequest";
-		}
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
 
 		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(),
-				ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
+				ActionRequest.getLabel2DisplayLabel(),
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(ActionSequence.getLabel2DisplayLabel(),
-				null, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE) + ": "
-
-		);
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE) + ": ");
 
 		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE));
@@ -552,7 +524,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Logging.info(this, "create report");
 		HashMap<String, String> metaData = new HashMap<>();
 
-		// TODO: getFilter
 		// display, if filter is active,
 		// display selected productgroup
 		// depot server, selected clients out of statusPane
@@ -832,16 +803,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_TARGET_CONFIGURATION)) > -1) {
 			TableColumn targetColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
-			String iconsDir = null;
-			if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-				iconsDir = "images/productstate/targetconfiguration";
-			}
-
 			JComboBox<String> targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
-					TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
+					TargetConfiguration.getLabel2DisplayLabel()));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
@@ -849,16 +815,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_STATUS)) > -1) {
 			TableColumn statusColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
-			String iconsDir = null;
-			if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-				iconsDir = "images/productstate/installationstatus";
-			}
-
 			JComboBox<String> statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
 
-			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
-					InstallationStatus.getLabel2DisplayLabel(), iconsDir));
+			statusColumn.setCellEditor(
+					new AdaptingCellEditorValuesByIndex(statesCombo, istm, InstallationStatus.getLabel2DisplayLabel()));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -886,15 +847,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
-			String iconsDir = null;
-			if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
-				iconsDir = "images/productstate/actionrequest";
-			}
-
 			JComboBox<String> actionsCombo = new JComboBox<>();
 			actionsCombo.setRenderer(standardListCellRenderer);
-			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
-					ActionRequest.getLabel2DisplayLabel(), iconsDir));
+			actionColumn.setCellEditor(
+					new AdaptingCellEditorValuesByIndex(actionsCombo, istm, ActionRequest.getLabel2DisplayLabel()));
 			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
 		}
@@ -935,8 +891,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
-			// we already have Integer
-
+			sorter.setComparator(colIndex, new IntComparatorForStrings());
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_VERSION)) > -1) {
@@ -967,8 +922,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			installationInfoCombo.setRenderer(standardListCellRenderer);
 
-			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm,
-					InstallationStateTableModel.defaultDisplayValues);
+			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm);
 
 			installationInfoColumn.setCellEditor(cellEditor);
 		}
@@ -992,9 +946,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Globals.checkCollection(this, "editableProductProperties ", editableProductProperties);
 		Globals.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
 
-		propertiesPanel.setEditableMap(
-				// visualMap (merged for different clients)
-				editableProductProperties, productpropertyOptionsMap);
+		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
 
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);

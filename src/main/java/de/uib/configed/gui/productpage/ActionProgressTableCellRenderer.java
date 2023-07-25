@@ -17,9 +17,8 @@ import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 
 public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-	ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
-			String tooltipPrefix) {
-		super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
+	ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String tooltipPrefix) {
+		super(mapOfStringValues, tooltipPrefix);
 	}
 
 	// overwrite the renderer in order to get the behaviour:

@@ -323,7 +323,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-
 				aStoreMap.put(myKey, nullLIST);
 			}
 
@@ -424,7 +423,6 @@ public class MapTableModel extends AbstractTableModel {
 	 * @param Object value
 	 */
 	public void setValue(String key, Object value) {
-
 		int row = keys.indexOf(key);
 
 		if (row < 0) {
@@ -436,7 +434,6 @@ public class MapTableModel extends AbstractTableModel {
 			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
-
 				Logging.error("EditMapPanel: value not allowed: " + value);
 				return;
 			}

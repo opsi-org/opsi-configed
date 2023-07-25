@@ -11,7 +11,7 @@ import java.util.Set;
 
 public final class ConnectionErrorObserver {
 	private static ConnectionErrorObserver instance;
-	private Set<ConnectionErrorListener> listeners = new HashSet<>();
+	private Set<ConnectionErrorReporter> listeners = new HashSet<>();
 
 	private ConnectionErrorObserver() {
 	}
@@ -28,11 +28,11 @@ public final class ConnectionErrorObserver {
 		instance = null;
 	}
 
-	public void subscribe(ConnectionErrorListener listener) {
+	public void subscribe(ConnectionErrorReporter listener) {
 		listeners.add(listener);
 	}
 
-	public void unsubscribe(ConnectionErrorListener listener) {
+	public void unsubscribe(ConnectionErrorReporter listener) {
 		listeners.remove(listener);
 	}
 

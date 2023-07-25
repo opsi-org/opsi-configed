@@ -35,24 +35,20 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	public CellEditor4TableText(FEdit fEdit, Dimension initSize) {
 		super(new JTextField());
-		editorContent = (JTextField) super.getComponent();
-
+		this.initSize = initSize;
 		if (fEdit == null) {
 			this.fEdit = new FEditText("");
 		} else {
 			this.fEdit = fEdit;
 		}
 
-		fEditInitialized = false;
-
-		this.initSize = initSize;
-
+		editorContent = (JTextField) super.getComponent();
 		editorContent.setEditable(false);
-
 		editorContent.addMouseListener(this);
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
 		editorContent.setBorder(null);
+
 	}
 
 	public CellEditor4TableText() {

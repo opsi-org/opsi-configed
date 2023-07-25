@@ -7,7 +7,6 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Component;
-import java.util.Set;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
@@ -25,14 +24,13 @@ public class DynamicCellEditor extends DefaultCellEditor {
 	private ComboBoxModeller cbm;
 	private ComboBoxModel<String> nullModel;
 
-	public DynamicCellEditor(JComboBox<String> cc, ComboBoxModeller cbm, Set<String> knownKeys) {
+	public DynamicCellEditor(JComboBox<String> cc, ComboBoxModeller cbm) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
 		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
-		cc.setRenderer(new CellRendererByIndex(knownKeys, null, 30));
-
+		cc.setRenderer(new CellRendererByIndex(null));
 	}
 
 	@Override
@@ -40,6 +38,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
+
 		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn) == null
 				|| cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {
 			cc.setModel(nullModel);
@@ -49,6 +48,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
+
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 		}
 
@@ -59,5 +59,4 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 		return c;
 	}
-
 }

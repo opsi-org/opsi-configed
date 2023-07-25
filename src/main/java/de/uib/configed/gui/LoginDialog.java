@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -63,8 +62,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private GlassPane glassPane;
 
 	private WaitingWorker waitingWorker;
-
-	private Containership containership;
 
 	private JLabel jLabelTitle = new JLabel();
 	private JLabel jLabelVersion = new JLabel();
@@ -215,7 +212,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
-		containership = new Containership(panel);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
@@ -399,13 +395,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		return "";
 	}
 
-	// TODO rework, we want to controll it better...
-	@Override
-	public void setCursor(Cursor c) {
-		super.setCursor(c);
-		containership.doForAllContainedCompis("setCursor", new Object[] { c });
-	}
-
 	private void okAction() {
 		Logging.info(this, "ok_action");
 
@@ -424,7 +413,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				+ fieldUser.getText());
 
 		if (waitingWorker != null && !waitingWorker.isReady()) {
-
 			Logging.info(this, "old waiting task not ready");
 			return;
 		}

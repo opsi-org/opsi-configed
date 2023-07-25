@@ -11,8 +11,8 @@ import java.util.List;
 
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 
 /**
  * Connects two or more operations with a logical and, i.e. this Operation only
@@ -30,7 +30,7 @@ public class AndOperation extends AbstractSelectGroupOperation implements Execut
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
+	public boolean doesMatch(OpsiDataClient client) {
 		for (AbstractSelectOperation operation : operations) {
 			if (!((ExecutableOperation) operation).doesMatch(client)) {
 				return false;

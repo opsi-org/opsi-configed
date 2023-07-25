@@ -15,11 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.utilities.logging.Logging;
 
-public class OpsiDataClient implements Client {
+public class OpsiDataClient {
 	public static final String HOSTINFO_MAP = "HostMap";
 	public static final String SOFTWARE_MAP = "SoftwareMap";
 	public static final String SWAUDIT_MAP = "SwAuditMap";
@@ -106,7 +105,6 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the ID of this client */
-	@Override
 	public String getId() {
 		return hostId;
 	}
