@@ -7983,39 +7983,7 @@ public class OpsiserviceNOMPersistenceController {
 		return false;
 	}
 
-	public List<Map<String, Object>> getOpsiconfdConfigHealth() {
-		return retrieveHealthDetails("opsiconfd_config");
-	}
-
-	public List<Map<String, Object>> getDiskUsageHealth() {
-		return retrieveHealthDetails("disk_usage");
-	}
-
-	public List<Map<String, Object>> getDepotHealth() {
-		return retrieveHealthDetails("depotservers");
-	}
-
-	public List<Map<String, Object>> getSystemPackageHealth() {
-		return retrieveHealthDetails("system_packages");
-	}
-
-	public List<Map<String, Object>> getProductOnDepotsHealth() {
-		return retrieveHealthDetails("product_on_depots");
-	}
-
-	public List<Map<String, Object>> getProductOnClientsHealth() {
-		return retrieveHealthDetails("product_on_clients");
-	}
-
-	public List<Map<String, Object>> getLicenseHealth() {
-		return retrieveHealthDetails("opsi_licenses");
-	}
-
-	public List<Map<String, Object>> getDeprecatedCalls() {
-		return retrieveHealthDetails("deprecated_calls");
-	}
-
-	private List<Map<String, Object>> retrieveHealthDetails(String checkId) {
+	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
 		List<Map<String, Object>> result = new ArrayList<>();
 
 		for (Map<String, Object> data : checkHealth()) {
