@@ -167,6 +167,7 @@ public class MainView implements View {
 
 	private LicenseDisplayer licenseDisplayer;
 
+	@SuppressWarnings("java:S4968")
 	public MainView(JFXPanel fxPanel) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
 				Messages.getResource());
@@ -189,12 +190,8 @@ public class MainView implements View {
 		observer.subscribe(DATA_CHANGED_SERVICE, depotInfo);
 		observer.subscribe(NEW_DEPOT_SELECTED_SERVICE, depotInfo);
 
-		depotSelectionListener = new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue);
-			}
-		};
+		depotSelectionListener = (ObservableValue<? extends String> observable, String oldValue,
+				String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue);
 	}
 
 	public void init() {
