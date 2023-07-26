@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public final class ProductData {
 	private static Map<String, Map<Product, Product>> installedProducts = new HashMap<>();
 	private static Map<String, Map<Product, Product>> failedProducts = new HashMap<>();
 	private static Map<String, Map<Product, Product>> unusedProducts = new HashMap<>();
-	private static Map<String, Map<String, List<String>>> clientUnusedProductsList = new HashMap<>();
+	private static Map<String, List<String>> tmpUnusedProductsList = new HashMap<>();
 
 	private static int totalOSInstallations;
 	private static int totalLinuxInstallations;
@@ -70,7 +69,7 @@ public final class ProductData {
 	}
 
 	private static void retrieveProducts() {
-		if (!products.isEmpty()) {
+		if (!products.isEmpty() && !localbootProducts.isEmpty() && !netbootProducts.isEmpty()) {
 			return;
 		}
 
@@ -130,7 +129,6 @@ public final class ProductData {
 			Map<Product, Product> installedProductsList = new HashMap<>();
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
-			Map<String, List<String>> clientUnusedProducts = new HashMap<>();
 
 			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
 					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
@@ -144,9 +142,8 @@ public final class ProductData {
 					String hostname = entry.getKey();
 					fillProductStatesListsWithClientProducts(entry.getValue(), depot, hostname, installedProductsList,
 							failedProductsList, allUnusedProducts);
-					clientUnusedProducts.put(hostname, allUnusedProducts);
 				}
-				clientUnusedProductsList.put(depot, clientUnusedProducts);
+				tmpUnusedProductsList.put(depot, allUnusedProducts);
 			} else {
 				allUnusedProducts.forEach((String productId) -> {
 					if (installedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
@@ -188,31 +185,39 @@ public final class ProductData {
 
 	public static void retrieveUnusedProducts() {
 		depots.forEach((String depot) -> {
-			if (clientUnusedProductsList.get(depot) != null) {
+			if (tmpUnusedProductsList.get(depot) != null) {
 				Helper.fillMapOfMapsForDepots(unusedProducts, createUnusedProductList(depot), depot);
 			}
 		});
+		tmpUnusedProductsList.clear();
 	}
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
-		for (Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
-			String hostname = entry.getKey();
-			entry.getValue().forEach(
-					(String productId) -> addUnusedProductToList(depot, productId, hostname, unusedProductsList));
+		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
+				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+		for (String productId : tmpUnusedProductsList.get(depot)) {
+			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}
 		return unusedProductsList;
 	}
 
-	private static void addUnusedProductToList(String depot, String productId, String hostname,
+	private static void addUnusedProductToList(String depot, String productId, List<String> hostnames,
 			Map<Product, Product> unusedProductsList) {
 		Product product = produceProduct(Configed.getResourceValue("Dashboard.products.unused"), unusedProductsList,
-				productId, hostname, depot);
+				productId, hostnames, depot);
 		unusedProductsList.put(product, product);
 	}
 
 	private static Product produceProduct(String productStatus, Map<Product, Product> productsList, String productId,
 			String hostname, String depot) {
+		List<String> hostnames = new ArrayList<>();
+		hostnames.add(hostname);
+		return produceProduct(productStatus, productsList, productId, hostnames, depot);
+	}
+
+	private static Product produceProduct(String productStatus, Map<Product, Product> productsList, String productId,
+			List<String> hostnames, String depot) {
 		Product product = new Product();
 
 		Optional<Product> matchedProduct = productsList.keySet().stream()
@@ -225,9 +230,9 @@ public final class ProductData {
 			product.setStatus(productStatus);
 		}
 
-		if (!hostname.isBlank()) {
+		if (!hostnames.isEmpty()) {
 			List<String> clients = product.getClients();
-			clients.add(hostname);
+			clients.addAll(hostnames);
 			product.setClients(clients);
 		}
 
