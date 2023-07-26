@@ -36,9 +36,9 @@ public class GenTableModel extends AbstractTableModel {
 	private List<String> classNames;
 	private List<List<Object>> rows;
 
-	private List<Integer> addedRows;
+	private Set<Integer> addedRows;
 	// rows which are added and not yet saved
-	private List<Integer> updatedRows;
+	private Set<Integer> updatedRows;
 	// rows which are updated and not yet saved
 
 	private List<Integer> finalCols;
@@ -79,8 +79,8 @@ public class GenTableModel extends AbstractTableModel {
 		initColumns();
 		setRows(dataProvider.getRows());
 
-		addedRows = new ArrayList<>();
-		updatedRows = new ArrayList<>();
+		addedRows = new HashSet<>();
+		updatedRows = new HashSet<>();
 
 		this.finalCols = new ArrayList<>();
 		if (finalColumns == null) {
@@ -438,7 +438,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
+		if (!addedRows.contains(row) && finalCols.contains(col)) {
 			// we cannot edit a key column but when it is not saved in the data backend
 			return false;
 		} else {
@@ -533,7 +533,7 @@ public class GenTableModel extends AbstractTableModel {
 		if (valueChanged) {
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
-			if (addedRows.indexOf(row) == -1 && updatedRows.indexOf(row) == -1) {
+			if (!addedRows.contains(row) && !updatedRows.contains(row)) {
 				List<Object> oldValues = new ArrayList<>(rows.get(row));
 
 				rows.get(row).set(col, value);
@@ -553,7 +553,7 @@ public class GenTableModel extends AbstractTableModel {
 			}
 
 			// we cannot edit a key column after it is saved in the data backend
-			if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
+			if (!addedRows.contains(row) && finalCols.indexOf(col) > -1) {
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
 				Logging.warning("key column cannot be edited after saving the data");
@@ -615,7 +615,7 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
-		if (addedRows.indexOf(rowNum) > -1) {
+		if (addedRows.contains(rowNum)) {
 
 			// deletion of added rows is not adequately managed
 			// therefore we reject it
@@ -660,7 +660,7 @@ public class GenTableModel extends AbstractTableModel {
 
 			if (updatedRows.contains(selection[i])) {
 				Logging.debug(this, "deleteRows, remove from updatedRows  " + selection[i]);
-				updatedRows.remove((Integer) selection[i]);
+				updatedRows.remove(selection[i]);
 			}
 		}
 
@@ -700,9 +700,9 @@ public class GenTableModel extends AbstractTableModel {
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row
 
-		if (updatedRows.indexOf(rowNum) > -1) {
-			Logging.debug(this, "deleteRow, remove from updatedRows  " + updatedRows.indexOf(rowNum));
-			updatedRows.remove(updatedRows.indexOf(rowNum));
+		if (updatedRows.contains(rowNum)) {
+			Logging.debug(this, "deleteRow, remove from updatedRows  " + rowNum);
+			updatedRows.remove(rowNum);
 		}
 
 		rows.remove(rowNum);

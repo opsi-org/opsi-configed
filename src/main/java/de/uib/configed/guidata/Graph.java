@@ -44,13 +44,11 @@ public class Graph {
 
 	public void addEdges(Map<String, List<Map<String, String>>> dependencies, Map<String, Integer> productMap) {
 		for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
-			Object fst = productMap.get(entry.getKey());
+			Integer first = productMap.get(entry.getKey());
 
-			if (fst == null) {
+			if (first == null) {
 				continue;
 			}
-
-			int first = (int) fst;
 
 			for (Map<String, String> dependenciesElement : entry.getValue()) {
 				Object sec = productMap.get(dependenciesElement.get("requiredProductId"));

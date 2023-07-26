@@ -131,7 +131,21 @@ public class HealthCheckDialog extends FGeneralDialog {
 		textPane.setAutoscrolls(false);
 		textPane.setEditable(false);
 		textPane.setInheritsPopupMenu(true);
-		textPane.addMouseListener(new MyMouseListener());
+		textPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				Element element = styledDocument.getParagraphElement(textPane.viewToModel2D(event.getPoint()));
+				String key = retrieveKeyFromElement(element);
+
+				if (showDetailsForKey(key)) {
+					setMessage(healthData);
+					textPane.setCaretPosition(textPane.viewToModel2D(event.getPoint()));
+
+					jButtonExpandAll.setEnabled(!isAllDetailsShown());
+					jButtonCollapseAll.setEnabled(isDetailsShown());
+				}
+			}
+		});
 
 		healthData = HealthInfo.getHealthDataMap(false);
 		setMessage(healthData);
@@ -148,6 +162,53 @@ public class HealthCheckDialog extends FGeneralDialog {
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
 
 		return northPanel;
+	}
+
+	private boolean showDetailsForKey(String key) {
+		if (key.isBlank()) {
+			return false;
+		}
+
+		if (healthData.containsKey(key)) {
+			Map<String, Object> details = healthData.get(key);
+
+			if (((String) details.get("details")).isEmpty()) {
+				return false;
+			}
+
+			details.put("showDetails", !((boolean) details.get("showDetails")));
+			healthData.put(key, details);
+		}
+
+		return true;
+	}
+
+	private String retrieveKeyFromElement(Element element) {
+		String text = "";
+		try {
+			text = textPane.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
+		} catch (BadLocationException e) {
+			Logging.warning("could not retrieve text from JTextPane, ", e);
+		}
+		return (text.isEmpty() || !text.contains(":")) ? "" : text.substring(0, text.indexOf(":"));
+	}
+
+	private boolean isDetailsShown() {
+		for (Map<String, Object> healthDetails : healthData.values()) {
+			if ((boolean) healthDetails.get("showDetails")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isAllDetailsShown() {
+		for (Map<String, Object> healthDetails : healthData.values()) {
+			if (!((boolean) healthDetails.get("showDetails")) && !((String) healthDetails.get("details")).isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private JPopupMenu createPopupMenu() {
@@ -356,27 +417,28 @@ public class HealthCheckDialog extends FGeneralDialog {
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
 			for (Map<String, Object> healthInfo : message.values()) {
-				String imagePath = "images/arrows/arrow_green_16x16-right.png";
+				styledDocument.insertString(styledDocument.getLength(), ((String) healthInfo.get("message")), null);
 
-				if ((boolean) healthInfo.get("showDetails")) {
-					imagePath = "images/arrows/arrow_green_16x16-down.png";
-				}
-
-				if (!((String) healthInfo.get("details")).isEmpty()) {
-					textPane.insertIcon(Globals.createImageIcon(imagePath, ""));
+				if (!((String) healthInfo.get("details")).isBlank()) {
+					Style iconStyle = styledDocument.addStyle("iconStyle", null);
+					String imagePath = (boolean) healthInfo.get("showDetails")
+							? "images/arrows/arrow_green_16x16-down.png"
+							: "images/arrows/arrow_green_16x16-right.png";
+					StyleConstants.setIcon(iconStyle, Globals.createImageIcon(imagePath, ""));
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
+							iconStyle);
 				} else {
-					styledDocument.insertString(styledDocument.getLength(), "    ", null);
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), "    ",
+							null);
 				}
-
-				styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("message"), null);
 
 				if ((boolean) healthInfo.get("showDetails")) {
 					styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("details"), null);
+					styledDocument.insertString(styledDocument.getLength(), "\n", null);
 				}
-
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "could not insert message into health check dialog, ", e);
+			Logging.warning(this, "could not insert message into health check dialog", e);
 		}
 
 		Matcher matcher = pattern.matcher(textPane.getText());
@@ -384,6 +446,13 @@ public class HealthCheckDialog extends FGeneralDialog {
 			Style style = getStyle(matcher.group());
 			styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
 		}
+	}
+
+	private int getMessageStartOffset(String message) {
+		Element root = styledDocument.getDefaultRootElement();
+		int offset = styledDocument.getLength() - message.trim().replace("\n", "").replace("\t", " ").length();
+		int elementIndex = root.getElementIndex(offset);
+		return root.getElement(elementIndex).getStartOffset();
 	}
 
 	private Style getStyle(String token) {
@@ -408,63 +477,5 @@ public class HealthCheckDialog extends FGeneralDialog {
 		}
 
 		return style;
-	}
-
-	private class MyMouseListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			try {
-				Element element = styledDocument.getParagraphElement(textPane.viewToModel2D(arg0.getPoint()));
-				String text = textPane
-						.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
-
-				if (text.isEmpty() || !text.contains(":")) {
-					return;
-				}
-
-				String key = text.substring(0, text.indexOf(":"));
-
-				if (healthData.containsKey(key)) {
-					Map<String, Object> details = healthData.get(key);
-
-					if (((String) details.get("details")).isEmpty()) {
-						return;
-					}
-
-					details.put("showDetails", !((boolean) details.get("showDetails")));
-					healthData.put(key, details);
-				}
-
-				jButtonExpandAll.setEnabled(!isAllDetailsShown());
-
-				setMessage(healthData);
-				textPane.setCaretPosition(textPane.viewToModel2D(arg0.getPoint()));
-
-				jButtonCollapseAll.setEnabled(isDetailsShown());
-			} catch (BadLocationException e) {
-				Logging.warning("could not retrieve text from JTextPane, ", e);
-			}
-		}
-
-		private boolean isDetailsShown() {
-			for (Map<String, Object> healthDetails : healthData.values()) {
-				if ((boolean) healthDetails.get("showDetails")) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private boolean isAllDetailsShown() {
-			for (Map<String, Object> healthDetails : healthData.values()) {
-				if (!((boolean) healthDetails.get("showDetails"))
-						&& !((String) healthDetails.get("details")).isEmpty()) {
-					return false;
-				}
-			}
-
-			return true;
-		}
 	}
 }

@@ -413,7 +413,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				+ fieldUser.getText());
 
 		if (waitingWorker != null && !waitingWorker.isReady()) {
-
 			Logging.info(this, "old waiting task not ready");
 			return;
 		}

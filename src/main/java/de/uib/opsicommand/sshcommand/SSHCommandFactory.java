@@ -119,9 +119,9 @@ public final class SSHCommandFactory {
 	/** List<SSHCommand_Template> list elements are sshcommands **/
 	private List<SSHCommandTemplate> sshCommandList;
 	/** list of known menus **/
-	private List<String> listKnownMenus;
+	private Set<String> knownMenus;
 	/** list of known parent menus **/
-	private List<String> listKnownParents;
+	private Set<String> knownParents;
 
 	/** ConfigedMain instance **/
 	private ConfigedMain configedMain;
@@ -270,14 +270,14 @@ public final class SSHCommandFactory {
 		}
 
 		sshCommandList = new ArrayList<>();
-		listKnownMenus = new ArrayList<>();
-		listKnownParents = new ArrayList<>();
+		knownMenus = new HashSet<>();
+		knownParents = new HashSet<>();
 
 		if (!commandlist.isEmpty()) {
-			listKnownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+			knownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		}
 
-		listKnownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+		knownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<String, Object> map : commandlist) {
 			SSHCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
@@ -293,7 +293,7 @@ public final class SSHCommandFactory {
 
 				com.setCommands(commandCommands);
 			}
-			listKnownMenus.add(com.getMenuText());
+			knownMenus.add(com.getMenuText());
 
 			String parent = com.getParentMenuText();
 
@@ -302,13 +302,13 @@ public final class SSHCommandFactory {
 			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
-			if (!listKnownParents.contains(parent)) {
-				listKnownParents.add(parent);
+			if (!knownParents.contains(parent)) {
+				knownParents.add(parent);
 			}
 
 			Logging.info(this, "parent menu text changed  " + parent);
 
-			Logging.info(this, "list_knownParents " + listKnownParents);
+			Logging.info(this, "list_knownParents " + knownParents);
 
 			sshCommandList.add(com);
 		}
@@ -324,8 +324,10 @@ public final class SSHCommandFactory {
 		if (commandlist == null) {
 			commandlist = persistenceController.retrieveCommandList();
 		}
-		Collections.sort(listKnownMenus, String::compareToIgnoreCase);
-		return listKnownMenus;
+
+		List<String> knownMenusList = new ArrayList<>(knownMenus);
+		Collections.sort(knownMenusList, String::compareToIgnoreCase);
+		return knownMenusList;
 	}
 
 	/**
@@ -337,8 +339,11 @@ public final class SSHCommandFactory {
 		if (commandlist == null) {
 			commandlist = persistenceController.retrieveCommandList();
 		}
-		Collections.sort(listKnownParents, String::compareToIgnoreCase);
-		return listKnownParents;
+
+		List<String> knownParentsList = new ArrayList<>(knownParents);
+
+		Collections.sort(knownParentsList, String::compareToIgnoreCase);
+		return knownParentsList;
 	}
 
 	/**
@@ -442,7 +447,7 @@ public final class SSHCommandFactory {
 			Logging.warning(this, "saveSSHCommand, JSONException occurred", e);
 		}
 
-		if (listKnownMenus.contains(command.getMenuText())) {
+		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
 			if (persistenceController.updateSSHCommand(jsonObjects)) {
 
@@ -453,7 +458,7 @@ public final class SSHCommandFactory {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
 			if (persistenceController.createSSHCommand(jsonObjects)) {
 				sshCommandList.add(command);
-				listKnownMenus.add(command.getMenuText());
+				knownMenus.add(command.getMenuText());
 				return true;
 			}
 		}
@@ -461,7 +466,7 @@ public final class SSHCommandFactory {
 	}
 
 	public boolean isSSHCommandEqualSavedCommand(SSHCommandTemplate command) {
-		if (listKnownMenus.contains(command.getMenuText())) {
+		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "isSSHCommandEqualSavedCommand compare command " + command.toString());
 			if (sshCommandList == null) {
 				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
@@ -504,7 +509,7 @@ public final class SSHCommandFactory {
 		jsonObjects.add(menu);
 		if (persistenceController.deleteSSHCommand(jsonObjects)) {
 			sshCommandList.remove(getSSHCommandByMenu(menu));
-			listKnownMenus.remove(menu);
+			knownMenus.remove(menu);
 		}
 	}
 

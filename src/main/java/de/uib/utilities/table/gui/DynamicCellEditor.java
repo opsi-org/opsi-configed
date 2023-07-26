@@ -41,6 +41,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
+
 		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn) == null
 				|| cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {
 			cc.setModel(nullModel);
@@ -50,6 +51,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
+
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 		}
 
