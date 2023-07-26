@@ -83,7 +83,7 @@ public final class ProductData {
 	}
 
 	private static void fillProducts(List<Map<String, Object>> allProductsInDepot, String productType, String depot,
-			Map<String, List<String>> list) {
+			Map<String, List<String>> map) {
 		List<String> productsInDepot;
 		if (productType != null) {
 			productsInDepot = allProductsInDepot.stream().filter(v -> v.get("productType").equals(productType))
@@ -93,14 +93,14 @@ public final class ProductData {
 					.collect(Collectors.toList());
 		}
 
-		if (list.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
-			List<String> allDepotProducts = list.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
+		if (map.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			List<String> allDepotProducts = map.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
 			allDepotProducts.addAll(productsInDepot);
-			list.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
 		} else {
-			list.put(Configed.getResourceValue("Dashboard.selection.allDepots"), productsInDepot);
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), new ArrayList<>(productsInDepot));
 		}
-		list.put(depot, productsInDepot);
+		map.put(depot, productsInDepot);
 	}
 
 	public static Map<Product, Product> getInstalledProducts() {
