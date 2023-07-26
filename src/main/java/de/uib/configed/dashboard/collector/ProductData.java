@@ -76,31 +76,20 @@ public final class ProductData {
 
 		for (String depot : depots) {
 			List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProductsInDepot(depot);
-			fillProducts(allProductsInDepot, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, depot, localbootProducts);
-			fillProducts(allProductsInDepot, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, depot, netbootProducts);
-			fillProducts(allProductsInDepot, null, depot, products);
+			Helper.fillMapOfListsForDepots(products,
+					allProductsInDepot.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+					depot);
+			Helper.fillMapOfListsForDepots(netbootProducts,
+					allProductsInDepot.stream()
+							.filter(v -> v.get("productType").equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING))
+							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+					depot);
+			Helper.fillMapOfListsForDepots(localbootProducts,
+					allProductsInDepot.stream()
+							.filter(v -> v.get("productType").equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING))
+							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+					depot);
 		}
-	}
-
-	private static void fillProducts(List<Map<String, Object>> allProductsInDepot, String productType, String depot,
-			Map<String, List<String>> map) {
-		List<String> productsInDepot;
-		if (productType != null) {
-			productsInDepot = allProductsInDepot.stream().filter(v -> v.get("productType").equals(productType))
-					.map(v -> (String) v.get("productId")).collect(Collectors.toList());
-		} else {
-			productsInDepot = allProductsInDepot.stream().map(v -> (String) v.get("productId"))
-					.collect(Collectors.toList());
-		}
-
-		if (map.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
-			List<String> allDepotProducts = map.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
-			allDepotProducts.addAll(productsInDepot);
-			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
-		} else {
-			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), new ArrayList<>(productsInDepot));
-		}
-		map.put(depot, productsInDepot);
 	}
 
 	public static Map<Product, Product> getInstalledProducts() {
@@ -170,18 +159,10 @@ public final class ProductData {
 				});
 			}
 
-			installedProducts.put(depot, installedProductsList);
-			failedProducts.put(depot, failedProductsList);
-			unusedProducts.put(depot, unusedProductsList);
+			Helper.fillMapOfMapsForDepots(installedProducts, installedProductsList, depot);
+			Helper.fillMapOfMapsForDepots(failedProducts, failedProductsList, depot);
+			Helper.fillMapOfMapsForDepots(unusedProducts, unusedProductsList, depot);
 		}
-
-		Map<Product, Product> allInstalledProducts = Helper.combineMapsFromMap2(installedProducts);
-		Map<Product, Product> allFailedProducts = Helper.combineMapsFromMap2(failedProducts);
-		Map<Product, Product> allUnusedProducts = Helper.combineMapsFromMap2(unusedProducts);
-
-		installedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInstalledProducts);
-		failedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allFailedProducts);
-		unusedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
 	}
 
 	private static void fillProductStatesListsWithClientProducts(List<Map<String, String>> data, String depot,
@@ -208,11 +189,9 @@ public final class ProductData {
 	public static void retrieveUnusedProducts() {
 		depots.forEach((String depot) -> {
 			if (clientUnusedProductsList.get(depot) != null) {
-				unusedProducts.put(depot, createUnusedProductList(depot));
+				Helper.fillMapOfMapsForDepots(unusedProducts, createUnusedProductList(depot), depot);
 			}
 		});
-		Map<Product, Product> allUnusedProducts = Helper.combineMapsFromMap2(unusedProducts);
-		unusedProducts.get(selectedDepot).putAll(allUnusedProducts);
 	}
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {

@@ -73,11 +73,8 @@ public final class ClientData {
 				}
 			}
 
-			clients.put(depot, clientsList);
+			Helper.fillMapOfListsForDepots(clients, clientsList, depot);
 		}
-
-		List<Client> allClients = Helper.combineListsFromMap(clients);
-		clients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
 	public static List<String> getConnectedClientsByMessagebus() {
@@ -116,16 +113,11 @@ public final class ClientData {
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
 			notConnectedClientsByMessagebus.put(depot, notConnectedClientsByMessagebusInDepot);
 			connectedClientsByMessagebus.put(depot, allConnectedClientsByMessagebusInDepot);
+
+			Helper.fillMapOfListsForDepots(connectedClientsByMessagebus, allConnectedClientsByMessagebusInDepot, depot);
+			Helper.fillMapOfListsForDepots(notConnectedClientsByMessagebus, notConnectedClientsByMessagebusInDepot,
+					depot);
 		}
-
-		List<String> connectedClientsByMessagebusInAllDepots = Helper.combineListsFromMap(connectedClientsByMessagebus);
-		List<String> notConnectedClientsByMessagebusInAllDepots = Helper
-				.combineListsFromMap(notConnectedClientsByMessagebus);
-
-		connectedClientsByMessagebus.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
-				connectedClientsByMessagebusInAllDepots);
-		notConnectedClientsByMessagebus.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
-				notConnectedClientsByMessagebusInAllDepots);
 	}
 
 	public static Map<String, Integer> getLastSeenData() {
@@ -148,11 +140,8 @@ public final class ClientData {
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
-			clientLastSeen.put(depot, produceLastSeenData(mapOfAllPCInfoMaps, depot));
+			Helper.fillMapOfMapsForDepots(clientLastSeen, produceLastSeenData(mapOfAllPCInfoMaps, depot), depot);
 		}
-
-		Map<String, Integer> allClientLastSeen = Helper.combineMapsFromMap(clientLastSeen);
-		clientLastSeen.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
 	}
 
 	private static Map<String, Integer> produceLastSeenData(Map<String, HostInfo> mapOfAllPCInfoMaps, String depot) {
