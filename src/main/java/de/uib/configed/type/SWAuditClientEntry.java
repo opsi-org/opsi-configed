@@ -8,11 +8,13 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
@@ -48,7 +50,7 @@ public class SWAuditClientEntry {
 	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 
-	private static List<String> notFoundSoftwareIDs;
+	private static Set<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 
@@ -138,7 +140,7 @@ public class SWAuditClientEntry {
 			persistenceController.installedSoftwareInformationRequestRefresh();
 			software = persistenceController.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
-			notFoundSoftwareIDs = new ArrayList<>();
+			notFoundSoftwareIDs = new HashSet<>();
 		} else {
 			Logging.warning(this, "updateSoftware: doing nothing since we just updated");
 		}
@@ -195,7 +197,7 @@ public class SWAuditClientEntry {
 			if (swId == -1) {
 				Logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null) {
-					notFoundSoftwareIDs = new ArrayList<>();
+					notFoundSoftwareIDs = new HashSet<>();
 				}
 				notFoundSoftwareIDs.add(swIdent);
 			}

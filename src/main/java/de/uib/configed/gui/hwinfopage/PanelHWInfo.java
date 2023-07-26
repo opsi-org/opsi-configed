@@ -11,10 +11,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -50,7 +52,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
-	private static final List<String> hwClassesForByAudit = new ArrayList<>();
+	private static final Set<String> hwClassesForByAudit = new HashSet<>();
 	static {
 		hwClassesForByAudit.add(CLASS_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(CLASS_BASE_BOARD);
@@ -111,7 +113,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		panelByAuditInfo = new PanelHWByAuditDriver(main);
 
-		tree = new XTree(null);
+		tree = new XTree();
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
