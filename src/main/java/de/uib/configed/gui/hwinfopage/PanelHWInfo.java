@@ -565,48 +565,63 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				displayNames.get(displayName).add(devices.get(j));
 			}
 
-			int num = 0;
-			String[] names = new String[devices.size()];
-			Iterator<String> iter = displayNames.keySet().iterator();
-			while (iter.hasNext()) {
-				String displayName = iter.next();
-				List<Map<String, Object>> devs = displayNames.get(displayName);
+			String[] names = createNamesArray(devices, displayNames);
 
-				for (int j = 0; j < devs.size(); j++) {
-					Map<String, Object> dev = devs.get(j);
-					String dn = displayName;
-					if (devs.size() > 1) {
-						dn += " (" + j + ")";
-					}
-
-					dev.put("displayName", dn);
-					names[num] = dn;
-					num++;
-				}
-			}
-
-			Arrays.sort(names);
-
-			for (int j = 0; j < names.length; j++) {
-				for (int k = 0; k < devices.size(); k++) {
-					if (names[j].equals(devices.get(k).get("displayName"))) {
-						IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
-						iconNode.setClosedIcon(classIcon);
-						iconNode.setLeafIcon(classIcon);
-						iconNode.setOpenIcon(classIcon);
-						iconNode.setDeviceInfo(devices.get(k));
-						classNode.add(iconNode);
-						scanNodes(iconNode);
-						break;
-					}
-				}
-			}
+			createIconNodes(names, devices, classIcon, classNode);
 		}
 
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
 
+	}
+
+	private static String[] createNamesArray(List<Map<String, Object>> devices,
+			Map<String, List<Map<String, Object>>> displayNames) {
+
+		String[] names = new String[devices.size()];
+
+		int num = 0;
+
+		for (Entry<String, List<Map<String, Object>>> displayEntry : displayNames.entrySet()) {
+			List<Map<String, Object>> devs = displayEntry.getValue();
+
+			for (int j = 0; j < devs.size(); j++) {
+				Map<String, Object> dev = devs.get(j);
+				String dn = displayEntry.getKey();
+				if (devs.size() > 1) {
+					dn += " (" + j + ")";
+				}
+
+				dev.put("displayName", dn);
+				names[num] = dn;
+				num++;
+			}
+		}
+
+		return names;
+
+	}
+
+	private void createIconNodes(String[] names, List<Map<String, Object>> devices, Icon classIcon,
+			IconNode classNode) {
+
+		Arrays.sort(names);
+
+		for (int j = 0; j < names.length; j++) {
+			for (int k = 0; k < devices.size(); k++) {
+				if (names[j].equals(devices.get(k).get("displayName"))) {
+					IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
+					iconNode.setClosedIcon(classIcon);
+					iconNode.setLeafIcon(classIcon);
+					iconNode.setOpenIcon(classIcon);
+					iconNode.setDeviceInfo(devices.get(k));
+					classNode.add(iconNode);
+					scanNodes(iconNode);
+					break;
+				}
+			}
+		}
 	}
 
 	private void getLocalizedHashMap() {

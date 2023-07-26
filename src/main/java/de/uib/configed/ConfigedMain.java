@@ -3154,7 +3154,6 @@ public class ConfigedMain implements ListSelectionListener {
 			mainFrame.setLogfilePanel(logfiles);
 		} else {
 
-			// TODO is called twice when clicking on another client
 			mainFrame.activateLoadingPane();
 			logfiles = persistenceController.getLogfiles(firstSelectedClient, logtypeToUpdate);
 			mainFrame.disactivateLoadingPane();
