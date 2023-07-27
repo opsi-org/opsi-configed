@@ -3079,10 +3079,9 @@ public class OpsiserviceNOMPersistenceController {
 		depotChange();
 	}
 
-	public List<Map<String, Object>> getAllProductsInDepot(String depotId) {
+	public List<Map<String, Object>> getAllProducts() {
 		String callReturnType = "dict";
 		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("depotId", depotId);
 		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
 				new Object[] { callReturnType, callFilter });
 		return exec.getListOfMaps(omc);

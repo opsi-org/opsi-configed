@@ -73,19 +73,23 @@ public final class ProductData {
 			return;
 		}
 
+		List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProducts();
+
 		for (String depot : depots) {
-			List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProductsInDepot(depot);
 			Helper.fillMapOfListsForDepots(products,
-					allProductsInDepot.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+					allProductsInDepot.stream().filter(v -> depot.equals(v.get("depotId")))
+							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
 					depot);
 			Helper.fillMapOfListsForDepots(netbootProducts,
 					allProductsInDepot.stream()
-							.filter(v -> v.get("productType").equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING))
+							.filter(v -> v.get("productType").equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+									&& depot.equals(v.get("depotId")))
 							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
 					depot);
 			Helper.fillMapOfListsForDepots(localbootProducts,
 					allProductsInDepot.stream()
-							.filter(v -> v.get("productType").equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING))
+							.filter(v -> v.get("productType").equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+									&& depot.equals(v.get("depotId")))
 							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
 					depot);
 		}
