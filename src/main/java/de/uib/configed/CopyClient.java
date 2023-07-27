@@ -38,10 +38,16 @@ public class CopyClient {
 	private String newMacAddress;
 
 	/**
-	 * Creates CopyClient object with provided information.
+	 * Creates {@link CopyClient} object with provided information.
 	 *
-	 * @param clientToCopy  client to copy
-	 * @param newClientName client name for the client's copy
+	 * @param clientToCopy       client to copy
+	 * @param newClientName      client name for the client's copy
+	 * @param newDescription     client description
+	 * @param newInventoryNumber client inventory number
+	 * @param newNotes           client notes
+	 * @param newIpAddress       client IP address
+	 * @param newSystemUUID      client system UUID
+	 * @param newMacAddress      client MAC address
 	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName, String newDescription, String newInventoryNumber,
 			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
@@ -56,6 +62,12 @@ public class CopyClient {
 		this.newMacAddress = newMacAddress;
 	}
 
+	/**
+	 * Creates {@link CopyClient} object with provided information.
+	 *
+	 * @param clientToCopy  client to copy
+	 * @param newClientName client name for the client's copy
+	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
 		this(clientToCopy, newClientName, "", "", "", "", "", "");
 		Logging.debug("Copy client constructor: " + clientToCopy + " -> " + newClientNameWithDomain);
@@ -77,7 +89,7 @@ public class CopyClient {
 	private void copyClient() {
 		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(), newDescription,
 				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
-				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "", "");
+				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
 		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 

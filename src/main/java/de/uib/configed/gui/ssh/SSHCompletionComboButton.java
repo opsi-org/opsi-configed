@@ -97,17 +97,15 @@ public class SSHCompletionComboButton {
 			opsiRepo = opsiRepo + "/";
 		}
 
+		defaultvalues = new ArrayList<>();
+
 		if (comboboxDefaultPath != null) {
-			defaultvalues = new ArrayList<>();
 			defaultvalues.add(comboboxDefaultPath);
 			defaultvalues.add(ROOT_DIRECTORY);
 			defaultvalues.add(opsiRepo);
-
 		} else {
-			defaultvalues = new ArrayList<>();
 			defaultvalues.add(opsiRepo);
 			defaultvalues.add(ROOT_DIRECTORY);
-
 		}
 		// Is element in defaultValues?
 		if (defvalues != null) {

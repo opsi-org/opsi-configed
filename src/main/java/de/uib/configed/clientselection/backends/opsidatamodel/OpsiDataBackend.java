@@ -6,7 +6,6 @@
 
 package de.uib.configed.clientselection.backends.opsidatamodel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -455,7 +455,7 @@ public final class OpsiDataBackend {
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
-		swauditMap = getSwAuditOnClients();
+		swauditMap = getSwAuditOnClients(clientNames);
 
 		getHardwareConfig();
 
@@ -617,14 +617,13 @@ public final class OpsiDataBackend {
 		}
 	}
 
-	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients() {
+	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(String[] clientNames) {
 		Map<String, List<SWAuditClientEntry>> result = new HashMap<>();
 		if (!hasSwAudit) {
 			return result;
 		}
 
-		persistenceController.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
-		result = persistenceController.getClient2Software();
+		result = persistenceController.getClient2Software(Arrays.stream(clientNames).collect(Collectors.toList()));
 
 		return result;
 	}

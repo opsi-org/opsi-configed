@@ -19,7 +19,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
-
 	private ConfigedMain main;
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
@@ -37,7 +36,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (!Main.THEMES) {
@@ -59,7 +57,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			if (!node.getAllowsChildren()) {
 				// client
-
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
 						setFont(Globals.defaultFontStandardBold);
@@ -97,9 +94,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 			}
 
-			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+			if (tree.getLeadSelectionPath() != null && node.equals(tree.getLeadSelectionPath().getLastPathComponent())
 					&& tree.hasFocus()) {
-
 				setFont(getFont()
 						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
 			}

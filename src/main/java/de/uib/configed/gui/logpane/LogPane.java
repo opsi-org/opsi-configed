@@ -178,7 +178,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				return getUI().getMinimumSize(this);
 			}
 		};
-
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 
@@ -214,6 +213,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		jComboBoxSearch = new JComboBox<>();
+		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
 		jComboBoxSearch.setEditable(true);
 		jComboBoxSearch.addActionListener(this);
 

@@ -8,6 +8,7 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -261,7 +262,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
 
@@ -276,6 +276,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			configedMain.clearSelectionOnPanel();
+		} else if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+			if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+				configedMain.treeClientsSelectAction(getSelectionPaths());
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
@@ -286,7 +290,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
+		if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
+				&& (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)) {
+			configedMain.treeClientsSelectAction(getSelectionPaths());
+		}
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -295,7 +303,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-
 		TreePath selectedPath = getSelectionPath();
 
 		if (selectedPath != null && getSelectionRows().length == 1) {

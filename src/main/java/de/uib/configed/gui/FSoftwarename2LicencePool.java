@@ -80,7 +80,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
 	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
 
-	// TODO probably this needs to be removed
 	private String globalLicencePool;
 
 	private boolean foundVariantLicencepools;

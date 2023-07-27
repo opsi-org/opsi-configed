@@ -90,7 +90,6 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel() {
-		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
