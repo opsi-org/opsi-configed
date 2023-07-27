@@ -15,7 +15,7 @@ import javafx.beans.property.StringProperty;
 public class Client {
 	private StringProperty hostname = new SimpleStringProperty();
 	private StringProperty lastSeen = new SimpleStringProperty();
-	private BooleanProperty reachable = new SimpleBooleanProperty();
+	private BooleanProperty connectedWithMessagebus = new SimpleBooleanProperty();
 
 	public final String getHostname() {
 		return hostname.get();
@@ -49,15 +49,15 @@ public class Client {
 		return lastSeen;
 	}
 
-	public final boolean isReachable() {
-		return reachable.get();
+	public final boolean isConnectedWithMessagebus() {
+		return connectedWithMessagebus.get();
 	}
 
-	public final void setReachable(boolean value) {
-		reachable.setValue(value);
+	public final void setConnectedWithMessagebus(boolean value) {
+		connectedWithMessagebus.setValue(value);
 	}
 
-	public BooleanProperty reachableProperty() {
-		return reachable;
+	public BooleanProperty connectedWithMessagebusProperty() {
+		return connectedWithMessagebus;
 	}
 }

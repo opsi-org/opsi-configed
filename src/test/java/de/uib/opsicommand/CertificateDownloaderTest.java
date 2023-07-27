@@ -27,7 +27,7 @@ class CertificateDownloaderTest {
 
 	@BeforeAll
 	static void setup() {
-		ConnectionErrorObserver.destroy();
+		ConnectionErrorReporter.destroy();
 		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
 	}
 
