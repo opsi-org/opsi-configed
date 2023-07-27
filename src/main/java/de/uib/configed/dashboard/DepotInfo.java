@@ -26,19 +26,16 @@ public class DepotInfo implements DataChangeListener {
 
 	@Override
 	public void display() {
-		if (controller.selectedDepotComboBox.getItems().isEmpty()) {
+		if (controller.selectedDepotComboBox.getItems().isEmpty()
+				|| controller.selectedDepotComboBox.getItems().size() == 1) {
+			controller.selectedDepotComboBox.getItems().clear();
 			controller.selectedDepotComboBox.getItems().add(Configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotComboBox.setValue(Configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
-		} else if (controller.selectedDepotComboBox.getItems().size() == 1) {
-			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
-		} else {
-			Logging.warning(this, "it should not be possible to select several values");
 		}
 
 		String depotType = "-";
 		String depotDescription = "-";
-
 		Map<String, Map<String, Object>> depots = DepotData.getDepots();
 
 		if (selectedDepot != null
@@ -54,25 +51,32 @@ public class DepotInfo implements DataChangeListener {
 			}
 		}
 
-		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
-			depotType = "Client";
-		}
-
-		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_DEPOT_SERVER)) {
-			depotType = "Depot Server";
-		}
-
-		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER)) {
-			depotType = "Config Server";
-		}
-
-		controller.depotTypeText.setText(depotType);
+		controller.depotTypeText.setText(convertDepotTypeToDisplayText(depotType));
 		controller.depotDescriptionText.setText(depotDescription);
-
 		controller.clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
 		controller.productsNumberLabel.setText(String.valueOf(ProductData.getProducts().size()));
 		controller.localbootProductsNumberLabel.setText(String.valueOf(ProductData.getLocalbootProducts().size()));
 		controller.netbootProductsNumberLabel.setText(String.valueOf(ProductData.getNetbootProducts().size()));
+	}
+
+	private static String convertDepotTypeToDisplayText(String depotType) {
+		String result = "-";
+
+		if ("-".equals(depotType)) {
+			return result;
+		}
+
+		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
+			result = "Client";
+		} else if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_DEPOT_SERVER)) {
+			result = "Depot Server";
+		} else if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER)) {
+			result = "Config Server";
+		} else {
+			Logging.warning("Encountered unhandled depot type: " + depotType);
+		}
+
+		return result;
 	}
 
 	@Override

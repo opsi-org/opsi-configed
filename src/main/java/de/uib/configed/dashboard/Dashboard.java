@@ -33,9 +33,13 @@ public class Dashboard {
 	private static final int WINDOW_HEIGHT = 1200;
 	private static final int WINDOW_WIDTH = 860;
 
-	private final JFrame frame = new JFrame();
-
+	private final JFrame frame;
 	private MainView mainView;
+
+	public Dashboard() {
+		frame = new JFrame();
+		mainView = null;
+	}
 
 	public void initAndShowGUI() {
 		final JFXPanel fxPanel = new JFXPanel();
