@@ -5195,15 +5195,12 @@ public class OpsiserviceNOMPersistenceController {
 		return dataStub.getSoftware2Number();
 	}
 
-	// without internal caching
 	public Map<String, LicenceContractEntry> getLicenceContracts() {
-		dataStub.licenceContractsRequestRefresh();
 		return dataStub.getLicenceContracts();
 	}
 
 	// date in sql time format, contrad ID
 	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		dataStub.licenceContractsRequestRefresh();
 		return dataStub.getLicenceContractsToNotify();
 	}
 
