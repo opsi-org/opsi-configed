@@ -62,7 +62,6 @@ public class ConnectionHandler {
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
 	private ConnectionState conStat;
-	private ConnectionErrorObserver observer;
 	private ConnectionErrorReporter reporter;
 	private String requestMethod = "POST";
 
@@ -76,9 +75,7 @@ public class ConnectionHandler {
 		this.serviceURL = serviceURL;
 		this.requestProperties = requestProperties != null ? new HashMap<>(requestProperties) : null;
 		this.conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
-		this.observer = ConnectionErrorObserver.getInstance();
-		this.reporter = new ConnectionErrorReporter(conStat);
-		observer.subscribe(reporter);
+		this.reporter = ConnectionErrorReporter.getNewInstance(conStat);
 	}
 
 	/**
@@ -222,7 +219,7 @@ public class ConnectionHandler {
 			Logging.debug(this, "caught SSLException: " + ex);
 
 			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
-				observer.notify(produceCertificateWarningMessage(certValidator),
+				reporter.notify(produceCertificateWarningMessage(certValidator),
 						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
 			}
 

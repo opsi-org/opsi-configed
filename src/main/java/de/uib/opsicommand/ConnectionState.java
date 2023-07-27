@@ -16,6 +16,7 @@ public class ConnectionState {
 	public static final int RETRY_CONNECTION = 4;
 	public static final int CLOSING = 5;
 	public static final int INTERRUPTED = 6;
+	public static final int UNAUTHORIZED = 7;
 	public static final int ERROR = 10;
 
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
@@ -111,6 +112,9 @@ public class ConnectionState {
 			break;
 		case RETRY_CONNECTION:
 			state = "Reconnecting";
+			break;
+		case UNAUTHORIZED:
+			state = "Unauthorized";
 			break;
 		case CLOSING:
 			state = "Closing";

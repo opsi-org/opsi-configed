@@ -176,7 +176,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 			message.append(Configed.getResourceValue("SecureCertificateValidator.validHostnames"));
 			message.append("\n\n");
 			message.append(subjectAlternativeNames.toString().replace("[", "").replace("]", ""));
-			ConnectionErrorObserver.getInstance().notify(message.toString(),
+			ConnectionErrorReporter.getInstance().notify(message.toString(),
 					ConnectionErrorType.INVALID_HOSTNAME_ERROR);
 
 			return false;
