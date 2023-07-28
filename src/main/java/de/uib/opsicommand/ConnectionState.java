@@ -78,9 +78,9 @@ public class ConnectionState {
 
 	@Override
 	public boolean equals(Object state) {
-		if (state instanceof Integer) {
+		if (state != null && state.getClass().equals(Integer.class)) {
 			return myState == (Integer) state;
-		} else if (state instanceof ConnectionState) {
+		} else if (state != null && state.getClass().equals(ConnectionState.class)) {
 			return myState == ((ConnectionState) state).getState();
 		} else {
 			return false;
