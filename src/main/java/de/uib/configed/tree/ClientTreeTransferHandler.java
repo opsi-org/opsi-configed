@@ -59,13 +59,11 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
 
-		if (Globals.isGlobalReadOnly()) {
+		if (Globals.isGlobalReadOnly() || !support.isDataFlavorSupported(DataFlavor.stringFlavor)
+				|| !support.isDrop()) {
 			return false;
 		}
 
-		if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
-			return false;
-		}
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
 
@@ -115,17 +113,22 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
 		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
 
-		boolean result = true;
+		if (targetNode == null) {
+			return false;
+		}
 
-		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null && !targetNode.allowsSubGroups())
-				|| (sourceGroupNode == null && targetNode.allowsOnlyGroupChilds()) || (sourceGroupNode != null // group
-						&& sourceObjectPath.length > 1 && dropObjectPath.length > 1
-						&& !(sourceObjectPath[1].equals(dropObjectPath[1])))) {
+		boolean result = true;
+		boolean canNotImportGroupNode = sourceGroupNode != null && !targetNode.allowsSubGroups();
+		boolean canNotImportNonGroupNode = sourceGroupNode == null && targetNode.allowsOnlyGroupChilds();
+		boolean isDifferentGroupBranch = (sourceGroupNode != null && sourceObjectPath.length > 1
+				&& dropObjectPath.length > 1 && !(sourceObjectPath[1].equals(dropObjectPath[1])));
+
+		if (targetNode.isImmutable() || canNotImportGroupNode || canNotImportNonGroupNode || isDifferentGroupBranch) {
 			result = false;
 		}
 
 		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
-		Logging.debug(this, "can import: " + result);
+		Logging.debug(this, "canImport: " + result);
 
 		return result;
 	}
