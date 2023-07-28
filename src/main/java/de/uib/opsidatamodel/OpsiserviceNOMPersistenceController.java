@@ -3079,6 +3079,14 @@ public class OpsiserviceNOMPersistenceController {
 		depotChange();
 	}
 
+	public List<Map<String, Object>> getAllProducts() {
+		String callReturnType = "dict";
+		Map<String, String> callFilter = new HashMap<>();
+		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+				new Object[] { callReturnType, callFilter });
+		return exec.getListOfMaps(omc);
+	}
+
 	public List<String> getAllProductNames(String depotId) {
 		String callReturnType = "dict";
 		Map<String, String> callFilter = new HashMap<>();
@@ -3703,7 +3711,6 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public Set<String> getMessagebusConnectedClients() {
-
 		// no messagebus available if not at least opsi 4.3
 		if (!ServerFacade.isOpsi43()) {
 			return new HashSet<>();
@@ -5187,15 +5194,12 @@ public class OpsiserviceNOMPersistenceController {
 		return dataStub.getSoftware2Number();
 	}
 
-	// without internal caching
 	public Map<String, LicenceContractEntry> getLicenceContracts() {
-		dataStub.licenceContractsRequestRefresh();
 		return dataStub.getLicenceContracts();
 	}
 
 	// date in sql time format, contrad ID
 	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		dataStub.licenceContractsRequestRefresh();
 		return dataStub.getLicenceContractsToNotify();
 	}
 

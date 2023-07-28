@@ -31,7 +31,7 @@ class SecureCertificateValidatorTest {
 
 	@BeforeEach
 	void setup() {
-		ConnectionErrorObserver.destroy();
+		ConnectionErrorReporter.destroy();
 		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
 	}
 

@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -26,24 +27,45 @@ import de.uib.utilities.swing.FEditRecord;
  * the connection, to the users graphically. Different connection errors are
  * handled differently (i.e. different dialogs are displayed to the user).
  * <p>
- * {@code ConnectionErrorReporter} is built using the Observer design pattern.
+ * {@code ConnectionErrorReporter} is built using the Singleton design pattern.
  */
-public class ConnectionErrorReporter {
+public final class ConnectionErrorReporter {
+	private static ConnectionErrorReporter instance;
 	private ConnectionState conStat;
 
+	private ConnectionErrorReporter(ConnectionState conStat) {
+		this.conStat = conStat;
+	}
+
 	/**
-	 * Constructs {@code ConnectionErrorReporter} with provided information.
+	 * Constructs new instnace of {@link ConnectionErrorReporter} with provided
+	 * information.
 	 * <p>
 	 * {@link ConnectionState} is used to indicate the connection state. The
 	 * connection state changes based on the user's choice.
 	 * 
-	 * @param conStat current connection state.
+	 * @param conState current connection state.
+	 * @return new instance of {@link ConnectionErrorReporter}.
 	 */
-	public ConnectionErrorReporter(ConnectionState conStat) {
-		this.conStat = conStat;
+	public static synchronized ConnectionErrorReporter getNewInstance(ConnectionState conStat) {
+		instance = new ConnectionErrorReporter(conStat);
+		return instance;
 	}
 
-	public void onError(String message, ConnectionErrorType errorType) {
+	/**
+	 * Retrievies current instance of {@link ConnectionErrorReporter}.
+	 * 
+	 * @return current instance of {@link ConnectionErrorReporter}.
+	 */
+	public static synchronized ConnectionErrorReporter getInstance() {
+		return instance;
+	}
+
+	public static synchronized void destroy() {
+		instance = null;
+	}
+
+	public void notify(String message, ConnectionErrorType errorType) {
 		switch (errorType) {
 		case FAILED_CERTIFICATE_VALIDATION_ERROR:
 			displayFailedCertificateValidationDialog(message);
@@ -52,10 +74,7 @@ public class ConnectionErrorReporter {
 			displayGeneralDialog(message);
 			break;
 		case INVALID_HOSTNAME_ERROR:
-
-			if (conStat.getState() != ConnectionState.RETRY_CONNECTION) {
-				displayGeneralDialog(message);
-			}
+			displayGeneralDialog(message);
 			break;
 		case MFA_ERROR:
 			displayMFADialog();
@@ -112,7 +131,7 @@ public class ConnectionErrorReporter {
 	private void displayGeneralDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue(Configed.getResourceValue("FGeneralDialog.ok")) }, 420, 200);
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 420, 200);
 
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
@@ -134,7 +153,7 @@ public class ConnectionErrorReporter {
 		}
 	}
 
-	private static void displayMFADialog() {
+	private synchronized void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
 
 		Map<String, String> groupData = new LinkedHashMap<>();
@@ -164,7 +183,42 @@ public class ConnectionErrorReporter {
 			newPasswordDialog.setVisible(true);
 		}
 
-		ConfigedMain.password = newPasswordDialog.getData().get("password");
+		if (newPasswordDialog.isCancelled()) {
+			displayCancelConfigedDialog();
+		} else {
+			ConfigedMain.password = newPasswordDialog.getData().get("password");
+		}
+	}
+
+	private void displayCancelConfigedDialog() {
+		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") },
+				420, 200);
+
+		fErrorMsg.setTooltipButtons(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCancelHint"),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);
+		fErrorMsg.setMessage(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"));
+		fErrorMsg.setAlwaysOnTop(true);
+
+		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
+			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
+		}
+
+		if (!SwingUtilities.isEventDispatchThread()) {
+			launchDialogInEDT(fErrorMsg);
+		} else {
+			fErrorMsg.setVisible(true);
+		}
+
+		int choice = fErrorMsg.getResult();
+
+		if (choice == 1) {
+			displayMFADialog();
+		} else {
+			Main.endApp(Main.NO_ERROR);
+		}
 	}
 
 	private static void launchDialogInEDT(JDialog dialog) {

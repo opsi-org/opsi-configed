@@ -25,8 +25,8 @@ import de.uib.utilities.logging.Logging;
 
 public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
-	private static Map<String, List<String>> reachableClients = new HashMap<>();
-	private static Map<String, List<String>> unreachableClients = new HashMap<>();
+	private static Map<String, List<String>> connectedClientsByMessagebus = new HashMap<>();
+	private static Map<String, List<String>> notConnectedClientsByMessagebus = new HashMap<>();
 	private static Map<String, Map<String, Integer>> clientLastSeen = new HashMap<>();
 
 	private static String selectedDepot;
@@ -67,78 +67,56 @@ public final class ClientData {
 					Client client = new Client();
 					client.setHostname(hostInfo.getName());
 					client.setLastSeen(hostInfo.getLastSeen());
-					client.setReachable(reachableClients.get(depot).contains(hostInfo.getName()));
+					client.setConnectedWithMessagebus(
+							connectedClientsByMessagebus.get(depot).contains(hostInfo.getName()));
 					clientsList.add(client);
 				}
 			}
 
-			clients.put(depot, clientsList);
+			Helper.fillMapOfListsForDepots(clients, clientsList, depot);
 		}
-
-		List<Client> allClients = Helper.combineListsFromMap(clients);
-		clients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
-	public static List<String> getReachableClients() {
-		if (reachableClients.isEmpty() || !reachableClients.containsKey(selectedDepot)) {
+	public static List<String> getConnectedClientsByMessagebus() {
+		if (connectedClientsByMessagebus.isEmpty() || !connectedClientsByMessagebus.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(reachableClients.get(selectedDepot));
+		return new ArrayList<>(connectedClientsByMessagebus.get(selectedDepot));
 	}
 
-	public static List<String> getUnreachableClients() {
-		if (unreachableClients.isEmpty() || !unreachableClients.containsKey(selectedDepot)) {
+	public static List<String> getNotConnectedClientsByMessagebus() {
+		if (notConnectedClientsByMessagebus.isEmpty() || !notConnectedClientsByMessagebus.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
-		return new ArrayList<>(unreachableClients.get(selectedDepot));
+		return new ArrayList<>(notConnectedClientsByMessagebus.get(selectedDepot));
 	}
 
-	private static void retrieveClientActivityState() {
-		if (!reachableClients.isEmpty() && !unreachableClients.isEmpty()) {
+	private static void retrieveClientsWithMessagebusConnection() {
+		if (!connectedClientsByMessagebus.isEmpty() && !notConnectedClientsByMessagebus.isEmpty()) {
 			return;
 		}
 
-		reachableClients.clear();
-		unreachableClients.clear();
+		connectedClientsByMessagebus.clear();
+		notConnectedClientsByMessagebus.clear();
 
-		Map<String, Object> reachableInfo = persistenceController.reachableInfo(null);
+		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
+				persistenceController.getMessagebusConnectedClients());
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
-
 		for (String depot : depots) {
-			List<String> clients = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
-					.collect(Collectors.toList());
+			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()
+					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
+					.map(HostInfo::getName).collect(Collectors.toList());
+			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
+					.filter(notConnectedClientsByMessagebusInDepot::contains).collect(Collectors.toList());
+			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
+			notConnectedClientsByMessagebus.put(depot, notConnectedClientsByMessagebusInDepot);
+			connectedClientsByMessagebus.put(depot, allConnectedClientsByMessagebusInDepot);
 
-			List<String> reachableClientsList = new ArrayList<>();
-			List<String> unreachableClientsList = new ArrayList<>();
-
-			if (!clients.isEmpty()) {
-				addClientsToReachableLists(clients, reachableClientsList, unreachableClientsList, reachableInfo);
-			}
-
-			reachableClients.put(depot, reachableClientsList);
-			unreachableClients.put(depot, unreachableClientsList);
-		}
-
-		List<String> allActiveClients = Helper.combineListsFromMap(reachableClients);
-		reachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
-
-		List<String> allInactiveClients = Helper.combineListsFromMap(unreachableClients);
-		unreachableClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
-	}
-
-	private static void addClientsToReachableLists(List<String> clients, List<String> reachableClientsList,
-			List<String> unreachableClientsList, Map<String, Object> reachableInfo) {
-		for (String client : clients) {
-			if (reachableInfo.containsKey(client)) {
-				if (Boolean.TRUE.equals(reachableInfo.get(client))) {
-					reachableClientsList.add(client);
-				} else {
-					unreachableClientsList.add(client);
-				}
-			}
+			Helper.fillMapOfListsForDepots(connectedClientsByMessagebus, allConnectedClientsByMessagebusInDepot, depot);
+			Helper.fillMapOfListsForDepots(notConnectedClientsByMessagebus, notConnectedClientsByMessagebusInDepot,
+					depot);
 		}
 	}
 
@@ -157,70 +135,65 @@ public final class ClientData {
 
 		clientLastSeen.clear();
 
-		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		final LocalDate current = LocalDate.now();
-
 		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
 				.getMapOfAllPCInfoMaps();
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
-			final Map<String, Integer> lastSeenData = new HashMap<>();
-			int fourteenOrLowerDays = 0;
-			int betweenFifteenAndThirtyDays = 0;
-			int moreThanThirtyDays = 0;
+			Helper.fillMapOfMapsForDepots(clientLastSeen, produceLastSeenData(mapOfAllPCInfoMaps, depot), depot);
+		}
+	}
 
-			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
-				if (entry.getValue().getInDepot().equals(depot)) {
-					if (entry.getValue().getLastSeen().trim().isEmpty()) {
-						continue;
-					}
+	private static Map<String, Integer> produceLastSeenData(Map<String, HostInfo> mapOfAllPCInfoMaps, String depot) {
+		final Map<String, Integer> lastSeenData = new HashMap<>();
+		int fourteenOrLowerDays = 0;
+		int betweenFifteenAndThirtyDays = 0;
+		int moreThanThirtyDays = 0;
 
-					String date = entry.getValue().getLastSeen().substring(0, 10);
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		final LocalDate currentDate = LocalDate.now();
 
-					try {
-						final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
-						final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
-
-						if (days <= 14) {
-							fourteenOrLowerDays++;
-						} else if (days <= 30) {
-							betweenFifteenAndThirtyDays++;
-						} else {
-							moreThanThirtyDays++;
-						}
-					} catch (DateTimeParseException ex) {
-						Logging.info("Date couldn't be parsed: " + date);
-					}
-
-				}
-
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"),
-						fourteenOrLowerDays);
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
-						betweenFifteenAndThirtyDays);
-				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
-						moreThanThirtyDays);
+		for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
+			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().trim().isEmpty()) {
+				continue;
 			}
 
-			clientLastSeen.put(depot, lastSeenData);
+			String date = entry.getValue().getLastSeen().substring(0, 10);
+
+			try {
+				final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
+				final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
+
+				if (days <= 14) {
+					fourteenOrLowerDays++;
+				} else if (days <= 30) {
+					betweenFifteenAndThirtyDays++;
+				} else {
+					moreThanThirtyDays++;
+				}
+			} catch (DateTimeParseException ex) {
+				Logging.info("Date couldn't be parsed: " + date);
+			}
 		}
 
-		Map<String, Integer> allClientLastSeen = Helper.combineMapsFromMap(clientLastSeen);
-		clientLastSeen.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), fourteenOrLowerDays);
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
+				betweenFifteenAndThirtyDays);
+		lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), moreThanThirtyDays);
+		return lastSeenData;
 	}
 
 	public static void clear() {
 		clients.clear();
-		reachableClients.clear();
-		unreachableClients.clear();
+		connectedClientsByMessagebus.clear();
+		notConnectedClientsByMessagebus.clear();
 		clientLastSeen.clear();
 	}
 
 	public static void retrieveData(String depot) {
 		selectedDepot = depot;
 
-		retrieveClientActivityState();
+		retrieveClientsWithMessagebusConnection();
 		retrieveClients();
 		retrieveLastSeenData();
 	}

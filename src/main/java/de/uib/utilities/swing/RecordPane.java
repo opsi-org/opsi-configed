@@ -65,7 +65,6 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 	}
 
 	private void initComponents() {
-
 		if (!Main.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
@@ -112,11 +111,8 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 
 		for (Entry<String, String> dataEntry : data.entrySet()) {
 			JLabel jLabel = createJLabel(dataEntry);
-
 			labelfields.put(dataEntry.getKey(), jLabel);
-
 			JTextField jTextField = createJTextField(dataEntry);
-
 			datafields.put(dataEntry.getKey(), jTextField);
 		}
 	}
@@ -138,11 +134,11 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 	}
 
 	private JTextField createJTextField(Entry<String, String> dataEntry) {
-
 		JTextField jTextField;
 
 		if (secrets != null && !secrets.isEmpty() && Boolean.TRUE.equals(secrets.get(dataEntry.getKey()))) {
 			jTextField = new JPasswordField();
+			jTextField.getDocument().addDocumentListener(this);
 		} else {
 			jTextField = new JTextFieldObserved();
 			jTextField.getDocument().addDocumentListener(this);
