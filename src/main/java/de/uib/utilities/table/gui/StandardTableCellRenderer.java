@@ -78,9 +78,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiDarkBlue);
+				component.setBackground(Globals.opsiDarkBlue2);
 			} else {
-				component.setBackground(Globals.opsiBlue);
+				component.setBackground(Globals.opsiBlue2);
 			}
 		}
 	}
