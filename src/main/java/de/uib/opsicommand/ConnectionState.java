@@ -6,10 +6,6 @@
 
 package de.uib.opsicommand;
 
-import java.util.Objects;
-
-import de.uib.utilities.logging.Logging;
-
 public class ConnectionState {
 	public static final int UNDEFINED = 0;
 	public static final int NOT_CONNECTED = 1;
@@ -76,22 +72,6 @@ public class ConnectionState {
 		return message;
 	}
 
-	@Override
-	public boolean equals(Object state) {
-		if (state != null && state.getClass().equals(Integer.class)) {
-			return myState == (Integer) state;
-		} else if (state != null && state.getClass().equals(ConnectionState.class)) {
-			return myState == ((ConnectionState) state).getState();
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(myState, message);
-	}
-
 	/**
 	 * Returns the Connection State String Value
 	 * 
@@ -136,27 +116,4 @@ public class ConnectionState {
 
 		return state;
 	}
-
-	public void waitForConnection(int timeoutSecs) {
-
-		int waitMs = 200;
-		int divisorSeconds = 5;
-		int countWait = 0;
-
-		int secsWaited = 0;
-
-		while (getState() != CONNECTED && (timeoutSecs == 0 || secsWaited < timeoutSecs)) {
-			try {
-				countWait++;
-				Thread.sleep(waitMs);
-				Logging.debug(this, "countWait " + countWait + " waited, thread " + Thread.currentThread().getName()
-						+ " " + this.toString());
-				secsWaited = countWait / divisorSeconds;
-			} catch (InterruptedException ex) {
-				Logging.info(this, "Thread interrupted exception: " + ex);
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
-
 }
