@@ -3515,27 +3515,11 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		boolean result = true;
-
-		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
-
-		for (int i = 0; i < selectedClients.length; i++) {
-			for (String product : localbootProductNames) {
-				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
-				productOnClientItem.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-				productOnClientItem.put("clientId", selectedClients[i]);
-				productOnClientItem.put("productId", product);
-
-				deleteProductItems.add(productOnClientItem);
-			}
-		}
-
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
+				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		Logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
-
-		result = resetProducts(deleteProductItems, withDependencies);
-
+		boolean result = resetProducts(deleteProductItems, withDependencies);
 		Logging.debug(this, "resetLocalbootProducts result " + result);
-
 		return result;
 	}
 
@@ -3544,28 +3528,33 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		boolean result = true;
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
+		boolean result = resetProducts(deleteProductItems, withDependencies);
+		Logging.debug(this, "resetNetbootProducts result " + result);
+		return result;
+	}
 
+	private List<Map<String, Object>> produceDeleteProductItems(String[] selectedClients, String productType) {
 		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
+		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(
+				Arrays.asList(selectedClients));
 
-		for (int i = 0; i < selectedClients.length; i++) {
-			for (String product : netbootProductNames) {
+		for (final String clientId : selectedClients) {
+			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
+					.filter(m -> clientId.equals(m.get("clientId"))).map(m -> (String) m.get("productId"))
+					.collect(Collectors.toList());
+			for (final String product : modifiedProductsOnClient) {
 				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
-				productOnClientItem.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-				productOnClientItem.put("clientId", selectedClients[i]);
+				productOnClientItem.put("productType", productType);
+				productOnClientItem.put("clientId", clientId);
 				productOnClientItem.put("productId", product);
-
 				deleteProductItems.add(productOnClientItem);
 			}
 		}
 
-		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
-
-		result = resetProducts(deleteProductItems, withDependencies);
-
-		Logging.debug(this, "resetNetbootProducts result " + result);
-
-		return result;
+		return deleteProductItems;
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
@@ -3597,6 +3586,13 @@ public class OpsiserviceNOMPersistenceController {
 		Logging.debug(this, "resetProducts result " + result);
 
 		return result;
+	}
+
+	public List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
+		String[] callAttributes = new String[] {};
+		HashMap<String, Object> callFilter = new HashMap<>();
+		callFilter.put("clientId", clientIds);
+		return retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects");
 	}
 
 	public void retrieveProductDependencies() {
