@@ -3587,10 +3587,9 @@ public class ConfigedMain implements ListSelectionListener {
 			// no action before gui initialized
 			if (selectionPanel != null) {
 				// reactivate selection listener
-
 				Logging.debug(this, " reset the values, particularly in list ");
-
-				selectionPanel.addListSelectionListener(ConfigedMain.this);
+				selectionPanel.removeListSelectionListener(this);
+				selectionPanel.addListSelectionListener(this);
 				setSelectedClientsCollectionOnPanel(clientsLeft);
 
 				// no list select item is provided
@@ -3600,7 +3599,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-
 			mainFrame.reloadServerMenu();
 		}
 
