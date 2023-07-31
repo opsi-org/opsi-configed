@@ -2364,6 +2364,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (activePaths.size() == 1
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				} else {
 					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
