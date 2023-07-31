@@ -4253,6 +4253,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
+
 		if (resetLocalbootProducts) {
 			persistenceController.resetLocalbootProducts(getSelectedClients(), withDependencies);
 		}
@@ -4262,6 +4264,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
+		mainFrame.setCursor(null);
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
