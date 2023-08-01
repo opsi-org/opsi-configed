@@ -2142,24 +2142,41 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		Logging.info(this, "addHosts2Group hosts " + objectIds);
-
+		Logging.info(this, "addHosts2Group hosts " + objectIds + " group " + groupId);
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
+		List<Map<String, Object>> data = new ArrayList<>();
 
 		for (String ob : objectIds) {
 			Map<String, Object> item = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			item.put(Object2GroupEntry.MEMBER_KEY, ob);
 			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
-			jsonObjects.add(item);
+			data.add(item);
 		}
 
 		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
+		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
+		return exec.doCall(omc);
+	}
 
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonObjects });
+	public boolean addHost2Groups(String objectId, List<String> groupIds) {
+		if (globalReadOnly) {
+			return false;
+		}
 
+		Logging.info(this, "addHost2Groups host " + objectId + " groups " + groupIds);
+		List<Map<String, Object>> data = new ArrayList<>();
+
+		for (String groupId : groupIds) {
+			String persistentGroupId = ClientTree.translateToPersistentName(groupId);
+			Map<String, Object> item = createNOMitem(Object2GroupEntry.TYPE_NAME);
+			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+			item.put(Object2GroupEntry.MEMBER_KEY, objectId);
+			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
+			data.add(item);
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
 		return exec.doCall(omc);
 	}
 
@@ -4014,6 +4031,20 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		return productProperties.get(pcname).get(productname);
+	}
+
+	public Map<String, ConfigName2ConfigValue> getProductsProperties(String pcname) {
+		Logging.debug(this, "getProductsProperties for host " + pcname);
+
+		Set<String> pcs = new TreeSet<>();
+		pcs.add(pcname);
+		retrieveProductProperties(pcs);
+
+		if (productProperties.get(pcname) == null) {
+			return new HashMap<>();
+		}
+
+		return productProperties.get(pcname);
 	}
 
 	// collect productPropertyState updates and deletions

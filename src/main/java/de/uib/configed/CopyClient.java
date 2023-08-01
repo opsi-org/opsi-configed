@@ -8,6 +8,7 @@ package de.uib.configed;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -90,7 +91,9 @@ public class CopyClient {
 		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(), newDescription,
 				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
 				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
-		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
+		if (newClientNameWithDomain != null || persist.getHostInfoCollections() != null) {
+			persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
+		}
 	}
 
 	private void copyGroups() {
@@ -103,7 +106,7 @@ public class CopyClient {
 			return;
 		}
 
-		clientGroups.forEach(clientGroup -> persist.addObject2Group(newClientNameWithDomain, clientGroup));
+		persist.addHost2Groups(newClientNameWithDomain, clientGroups);
 		persist.fObject2GroupsRequestRefresh();
 	}
 
@@ -132,7 +135,6 @@ public class CopyClient {
 	}
 
 	private static int getProductType(String productId) {
-
 		if (persist.getAllLocalbootProductNames().contains(productId)) {
 			return OpsiPackage.TYPE_LOCALBOOT;
 		} else {
@@ -141,27 +143,14 @@ public class CopyClient {
 	}
 
 	private void copyProductProperties() {
-		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist
-				.getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
+		Map<String, ConfigName2ConfigValue> products = persist.getProductsProperties(clientToCopy.getName());
 
-		if (mapOfProductStatesAndActions.isEmpty()) {
+		if (products.isEmpty()) {
 			return;
 		}
 
-		for (List<Map<String, String>> productStatesAndActions : mapOfProductStatesAndActions.values()) {
-			if (productStatesAndActions.isEmpty()) {
-				continue;
-			}
-
-			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
-				Map<String, Object> clientProductProperties = persist.getProductProperties(newClientNameWithDomain,
-						productInfo.get("productId"));
-				clientProductProperties.clear();
-				clientProductProperties
-						.putAll(persist.getProductProperties(clientToCopy.getName(), productInfo.get("productId")));
-				persist.setProductProperties(newClientNameWithDomain, productInfo.get("productId"),
-						clientProductProperties);
-			});
+		for (Entry<String, ConfigName2ConfigValue> entry : products.entrySet()) {
+			persist.setProductProperties(newClientNameWithDomain, entry.getKey(), entry.getValue());
 		}
 
 		// Trigger the product's properties update.
@@ -169,15 +158,12 @@ public class CopyClient {
 	}
 
 	private void copyConfigStates() {
-		Map<String, Object> clientConfigStates = persist.getConfig(newClientNameWithDomain);
-
-		clientConfigStates.clear();
-		clientConfigStates.putAll(persist.getConfig(clientToCopy.getName()));
-
-		persist.setAdditionalConfiguration(newClientNameWithDomain, (ConfigName2ConfigValue) clientConfigStates);
-
-		// Trigger the config state update.
-		persist.setAdditionalConfiguration();
+		Map<String, Object> clientConfigStates = persist.getConfig(clientToCopy.getName());
+		if (clientConfigStates != null) {
+			persist.setAdditionalConfiguration(newClientNameWithDomain, (ConfigName2ConfigValue) clientConfigStates);
+			// Trigger the config state update.
+			persist.setAdditionalConfiguration();
+		}
 	}
 
 	@SuppressWarnings("java:S109")
