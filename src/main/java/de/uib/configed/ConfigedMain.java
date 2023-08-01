@@ -4828,6 +4828,7 @@ public class ConfigedMain implements ListSelectionListener {
 			fAskCopyClient.setVisible(true);
 
 			if (fAskCopyClient.getResult() == 2) {
+				mainFrame.setCursor(Globals.WAIT_CURSOR);
 				String newClientName = jTextHostname.getText();
 
 				if (newClientName.isEmpty()) {
@@ -4855,6 +4856,7 @@ public class ConfigedMain implements ListSelectionListener {
 				copyClient.copy();
 
 				refreshClientList(newClientName);
+				mainFrame.setCursor(null);
 			}
 		}
 	}
