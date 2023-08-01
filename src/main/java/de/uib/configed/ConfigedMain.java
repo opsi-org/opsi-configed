@@ -643,13 +643,9 @@ public class ConfigedMain implements ListSelectionListener {
 		String clientId = data.get("clientId");
 		String productType = data.get("productType");
 
-		// get the data for the updated client
-
-		Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
-
-		int selectedView = getViewIndex();
-
 		if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
+			int selectedView = getViewIndex();
 			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
 					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
 					&& istmForSelectedClientsLocalboot != null) {
