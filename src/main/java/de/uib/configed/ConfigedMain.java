@@ -4783,82 +4783,78 @@ public class ConfigedMain implements ListSelectionListener {
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
 				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
 
-		if (selectedClient.isPresent()) {
-			JPanel additionalPane = new JPanel();
-			additionalPane.setOpaque(false);
-			GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
-			additionalPane.setLayout(additionalPaneLayout);
-
-			JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-			JTextField jTextHostname = new JTextField(new CheckedDocument(new char[] { '-', '0', '1', '2', '3', '4',
-					'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-					'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
-			jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-			CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
-			jTextHostname.setText(copySuffixAddition.add());
-
-			additionalPaneLayout.setHorizontalGroup(additionalPaneLayout
-					.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
-			additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jLabelHostname)
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jTextHostname));
-
-			additionalPane.add(jLabelHostname);
-			additionalPane.add(jTextHostname);
-			additionalPane.setVisible(true);
-
-			FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
-					Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
-					new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") },
-					null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
-
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-			message.append("\n\n");
-			message.append(selectedClient.get().getName());
-
-			fAskCopyClient.setMessage(message.toString());
-			fAskCopyClient.setLocationRelativeTo(getMainFrame());
-			fAskCopyClient.setAlwaysOnTop(true);
-			fAskCopyClient.setVisible(true);
-
-			if (fAskCopyClient.getResult() == 2) {
-				mainFrame.setCursor(Globals.WAIT_CURSOR);
-				String newClientName = jTextHostname.getText();
-
-				if (newClientName.isEmpty()) {
-					return;
-				}
-
-				HostInfo clientToCopy = selectedClient.get();
-				String[] splittedClientName = clientToCopy.getName().split("\\.");
-				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
-						+ splittedClientName[2];
-
-				// if client already exists ask if they want to override
-				if (persistenceController.getHostInfoCollections().getOpsiHostNames()
-						.contains(newClientNameWithDomain)) {
-					boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-
-					if (!overwriteExistingHost) {
-						return;
-					}
-				}
-
-				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-
-				Logging.info(this, "copy client with new name " + newClientName);
-				copyClient.copy();
-
-				refreshClientList(newClientName);
-				mainFrame.setCursor(null);
-			}
+		if (!selectedClient.isPresent()) {
+			return;
 		}
+
+		JPanel additionalPane = new JPanel();
+		additionalPane.setOpaque(false);
+		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
+		additionalPane.setLayout(additionalPaneLayout);
+
+		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
+		JTextField jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
+		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+		jTextHostname.setText(copySuffixAddition.add());
+
+		additionalPaneLayout.setHorizontalGroup(additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jLabelHostname)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jTextHostname));
+
+		additionalPane.add(jLabelHostname);
+		additionalPane.add(jTextHostname);
+		additionalPane.setVisible(true);
+
+		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") },
+				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+
+		StringBuilder message = new StringBuilder("");
+		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+		message.append("\n\n");
+		message.append(selectedClient.get().getName());
+
+		fAskCopyClient.setMessage(message.toString());
+		fAskCopyClient.setLocationRelativeTo(getMainFrame());
+		fAskCopyClient.setAlwaysOnTop(true);
+		fAskCopyClient.setVisible(true);
+
+		if (fAskCopyClient.getResult() == 2) {
+			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			String newClientName = jTextHostname.getText();
+			boolean proceed = true;
+			if (newClientName.isEmpty()) {
+				proceed = false;
+			}
+
+			CopyClient copyClient = new CopyClient(selectedClient.get(), newClientName);
+			String newClientNameWithDomain = newClientName + "." + copyClient.getDomainFromClientName();
+			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
+				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
+				if (!overwriteExistingHost) {
+					proceed = false;
+				}
+			}
+
+			Logging.info(this, "copy client with new name " + newClientName);
+			if (proceed) {
+				copyClient.copy();
+				refreshClientList(newClientName);
+			}
+			mainFrame.setCursor(null);
+		}
+
 	}
 
 	private static boolean ask2OverwriteExistingHost(String host) {

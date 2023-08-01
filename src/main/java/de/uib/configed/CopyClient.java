@@ -54,7 +54,6 @@ public class CopyClient {
 			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
 		this.clientToCopy = clientToCopy;
 		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
 		this.newDescription = newDescription;
 		this.newInventoryNumber = newInventoryNumber;
 		this.newNotes = newNotes;
@@ -71,7 +70,6 @@ public class CopyClient {
 	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
 		this(clientToCopy, newClientName, "", "", "", "", "", "");
-		Logging.debug("Copy client constructor: " + clientToCopy + " -> " + newClientNameWithDomain);
 	}
 
 	/**
@@ -79,6 +77,7 @@ public class CopyClient {
 	 * product's properties and config states.
 	 */
 	public void copy() {
+		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
 		Logging.debug("Copy client: " + clientToCopy + " -> " + newClientNameWithDomain);
 		copyClient();
 		copyGroups();
@@ -167,7 +166,7 @@ public class CopyClient {
 	}
 
 	@SuppressWarnings("java:S109")
-	private String getDomainFromClientName() {
+	public String getDomainFromClientName() {
 		String[] splittedClientName = clientToCopy.getName().split("\\.");
 		StringBuilder sb = new StringBuilder();
 
