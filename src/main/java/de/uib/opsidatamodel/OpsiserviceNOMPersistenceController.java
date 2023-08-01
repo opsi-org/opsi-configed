@@ -3367,7 +3367,7 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("clientId", Arrays.asList(clientIds));
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
+				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -3387,7 +3387,7 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
+				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -3422,7 +3422,7 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
+				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -3617,7 +3617,7 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("clientId", clientId);
 
 		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
-				"productOnClient_getHashes").get(0);
+				"productOnClient_getObjects").get(0);
 
 		return new ProductState(POJOReMapper.giveEmptyForNull(retrievedMap), true);
 	}
