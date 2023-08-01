@@ -1781,33 +1781,16 @@ public class ConfigedMain implements ListSelectionListener {
 		return model;
 	}
 
-	/**
-	 * selects a client
-	 *
-	 * @param clientName
-	 */
 	public void setClient(String clientName) {
-		Logging.info(this, "setClient " + clientName);
-
-		if (clientName == null) {
-			setSelectedClientsOnPanel(new String[] {});
-		} else {
-			setSelectedClientsOnPanel(new String[] { clientName });
-			// implies:
-
-			actOnListSelection();
-		}
+		setClients(new String[] { clientName });
 	}
 
 	public void setClients(String[] clientNames) {
 		Logging.info(this, "setClients " + clientNames);
-
 		if (clientNames == null) {
 			setSelectedClientsOnPanel(new String[] {});
 		} else {
 			setSelectedClientsOnPanel(clientNames);
-			// implies:
-
 			actOnListSelection();
 		}
 	}
@@ -4850,11 +4833,10 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "copy client with new name " + newClientName);
 			if (proceed) {
 				copyClient.copy();
-				refreshClientList(newClientName);
+				setClient(newClientNameWithDomain);
 			}
 			mainFrame.setCursor(null);
 		}
-
 	}
 
 	private static boolean ask2OverwriteExistingHost(String host) {

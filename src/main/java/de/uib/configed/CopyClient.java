@@ -90,9 +90,7 @@ public class CopyClient {
 		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(), newDescription,
 				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
 				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
-		if (newClientNameWithDomain != null || persist.getHostInfoCollections() != null) {
-			persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
-		}
+		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 
 	private void copyGroups() {
@@ -165,7 +163,6 @@ public class CopyClient {
 		}
 	}
 
-	@SuppressWarnings("java:S109")
 	public String getDomainFromClientName() {
 		String[] splittedClientName = clientToCopy.getName().split("\\.");
 		StringBuilder sb = new StringBuilder();
