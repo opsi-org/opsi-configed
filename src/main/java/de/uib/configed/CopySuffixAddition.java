@@ -97,7 +97,8 @@ public class CopySuffixAddition {
 	}
 
 	private static boolean containsNumberSuffix(String clientName) {
-		return Character.isDigit(clientName.charAt(clientName.length() - 1));
+		Matcher matcher = numberSuffixPattern.matcher(clientName);
+		return matcher.find();
 	}
 
 	private boolean clientHasCopy(String clientName) {
