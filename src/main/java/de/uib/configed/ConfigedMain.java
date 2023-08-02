@@ -1131,7 +1131,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-
 		checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
@@ -1225,12 +1224,9 @@ public class ConfigedMain implements ListSelectionListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
-
 		actOnListSelection();
 	}
 
@@ -1786,7 +1782,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void setClients(String[] clientNames) {
-		Logging.info(this, "setClients " + clientNames);
+		Logging.info(this, "setClients " + Arrays.toString(clientNames));
 		if (clientNames == null) {
 			setSelectedClientsOnPanel(new String[] {});
 		} else {
@@ -1868,7 +1864,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setSelectedClientsArray " + a.length);
 		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
 
-		selectedClients = a;
+		selectedClients = a.clone();
 		if (selectedClients.length == 0) {
 			firstSelectedClient = "";
 		} else {
@@ -4833,7 +4829,7 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "copy client with new name " + newClientName);
 			if (proceed) {
 				copyClient.copy();
-				setClient(newClientNameWithDomain);
+				refreshClientList(newClientNameWithDomain);
 			}
 			mainFrame.setCursor(null);
 		}
