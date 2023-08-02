@@ -70,7 +70,7 @@ public class CopySuffixAddition {
 	private Integer generateNumberSuffix(String clientName) {
 		Integer numberSuffix = 1;
 
-		if (Character.isDigit(clientName.charAt(clientName.length() - 1))) {
+		if (containsNumberSuffix(clientName)) {
 			Integer currentNumberSuffix = Integer
 					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
 			numberSuffix = currentNumberSuffix;
@@ -92,7 +92,6 @@ public class CopySuffixAddition {
 			StringBuilder sb = new StringBuilder(clientName);
 			sb.replace(matcher.start(), matcher.end(), numberSuffix.toString());
 			clientName = sb.toString();
-			// clientName = clientName.replace(matcher.group(), numberSuffix.toString());
 		}
 		return clientName;
 	}
