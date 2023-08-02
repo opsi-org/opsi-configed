@@ -21,8 +21,8 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * This class is responsible for copying the client. By creating a new client
- * with provided name. Additionally, it copies client's products, product's
- * properties and config states.
+ * with provided name. Additionally, it copies client's groups, products,
+ * product's properties and config states.
  */
 public class CopyClient {
 	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
@@ -73,8 +73,8 @@ public class CopyClient {
 	}
 
 	/**
-	 * Copies provided client, by creating it and copying client's products,
-	 * product's properties and config states.
+	 * Copies provided client, by creating it and copying client's groups,
+	 * products, product's properties and config states.
 	 */
 	public void copy() {
 		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
