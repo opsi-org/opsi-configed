@@ -68,13 +68,9 @@ public class CopySuffixAddition {
 	}
 
 	private Integer generateNumberSuffix(String clientName) {
-		Integer numberSuffix = 1;
+		Integer numberSuffix = retrieveNumberSuffix(clientName);
 
-		if (containsNumberSuffix(clientName)) {
-			Integer currentNumberSuffix = Integer
-					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
-			numberSuffix = currentNumberSuffix;
-		} else {
+		if (!containsNumberSuffix(clientName)) {
 			clientName = clientName.concat(numberSuffix.toString());
 		}
 
@@ -99,6 +95,11 @@ public class CopySuffixAddition {
 	private static boolean containsNumberSuffix(String clientName) {
 		Matcher matcher = numberSuffixPattern.matcher(clientName);
 		return matcher.find();
+	}
+
+	private static Integer retrieveNumberSuffix(String clientName) {
+		Matcher matcher = numberSuffixPattern.matcher(clientName);
+		return matcher.find() ? Integer.valueOf(matcher.group()) : 1;
 	}
 
 	private boolean clientHasCopy(String clientName) {
