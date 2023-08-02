@@ -86,9 +86,15 @@ public class CopySuffixAddition {
 
 		while (clientExists(clientName.concat("." + getDomainFromClientName()))) {
 			numberSuffix += 1;
-			Integer currentNumberSuffix = Integer
-					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
-			clientName = clientName.replace(currentNumberSuffix.toString(), numberSuffix.toString());
+			StringBuilder sb = new StringBuilder(clientName);
+			String strRepresentation = numberSuffix.toString();
+			sb.setCharAt(sb.length() - 1, strRepresentation.charAt(0));
+			if (strRepresentation.length() > 1) {
+				for (int i = 1; i < strRepresentation.length(); i++) {
+					sb.append(strRepresentation.charAt(i));
+				}
+			}
+			clientName = sb.toString();
 		}
 
 		return numberSuffix;
@@ -103,10 +109,19 @@ public class CopySuffixAddition {
 		return splittedClientName[0];
 	}
 
-	@SuppressWarnings("java:S109")
 	private String getDomainFromClientName() {
 		String[] splittedClientName = clientName.split("\\.");
-		return splittedClientName[1] + "." + splittedClientName[2];
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 1; i < splittedClientName.length; i++) {
+			sb.append(splittedClientName[i]);
+
+			if (i != splittedClientName.length - 1) {
+				sb.append(".");
+			}
+		}
+
+		return sb.toString();
 	}
 
 	private static boolean clientExists(String clientName) {
