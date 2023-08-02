@@ -54,6 +54,7 @@ public class CopyClient {
 			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
 		this.clientToCopy = clientToCopy;
 		this.newClientName = newClientName;
+		this.newClientNameWithDomain = newClientName + "." + Globals.getDomainFromClientName(clientToCopy.getName());
 		this.newDescription = newDescription;
 		this.newInventoryNumber = newInventoryNumber;
 		this.newNotes = newNotes;
@@ -77,7 +78,6 @@ public class CopyClient {
 	 * products, product's properties and config states.
 	 */
 	public void copy() {
-		this.newClientNameWithDomain = newClientName + "." + getDomainFromClientName();
 		Logging.debug("Copy client: " + clientToCopy + " -> " + newClientNameWithDomain);
 		copyClient();
 		copyGroups();
@@ -87,9 +87,10 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		persist.createClient(newClientName, getDomainFromClientName(), clientToCopy.getInDepot(), newDescription,
-				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
-				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
+		persist.createClient(newClientName, Globals.getDomainFromClientName(clientToCopy.getName()),
+				clientToCopy.getInDepot(), newDescription, newInventoryNumber, newNotes, newIpAddress, newSystemUUID,
+				newMacAddress, clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(),
+				clientToCopy.getWanConfig(), "", "");
 		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 
@@ -161,20 +162,5 @@ public class CopyClient {
 			// Trigger the config state update.
 			persist.setAdditionalConfiguration();
 		}
-	}
-
-	public String getDomainFromClientName() {
-		String[] splittedClientName = clientToCopy.getName().split("\\.");
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 1; i < splittedClientName.length; i++) {
-			sb.append(splittedClientName[i]);
-
-			if (i != splittedClientName.length - 1) {
-				sb.append(".");
-			}
-		}
-
-		return sb.toString();
 	}
 }

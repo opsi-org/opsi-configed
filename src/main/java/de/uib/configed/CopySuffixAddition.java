@@ -74,7 +74,7 @@ public class CopySuffixAddition {
 			clientName = clientName.concat(numberSuffix.toString());
 		}
 
-		while (clientExists(clientName.concat("." + getDomainFromClientName()))) {
+		while (clientExists(clientName.concat("." + Globals.getDomainFromClientName(this.clientName)))) {
 			numberSuffix += 1;
 			clientName = replaceNumberSuffix(clientName, numberSuffix);
 		}
@@ -103,27 +103,12 @@ public class CopySuffixAddition {
 	}
 
 	private boolean clientHasCopy(String clientName) {
-		return clientExists(clientName.concat(COPY_SUFFIX + "." + getDomainFromClientName()));
+		return clientExists(clientName.concat(COPY_SUFFIX + "." + Globals.getDomainFromClientName(this.clientName)));
 	}
 
 	private String getNameFromClientName() {
 		String[] splittedClientName = clientName.split("\\.");
 		return splittedClientName[0];
-	}
-
-	private String getDomainFromClientName() {
-		String[] splittedClientName = clientName.split("\\.");
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 1; i < splittedClientName.length; i++) {
-			sb.append(splittedClientName[i]);
-
-			if (i != splittedClientName.length - 1) {
-				sb.append(".");
-			}
-		}
-
-		return sb.toString();
 	}
 
 	private static boolean clientExists(String clientName) {

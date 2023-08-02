@@ -775,4 +775,16 @@ public final class Globals {
 
 		return t.indexOf("password") > -1 || t.startsWith("secret");
 	}
+
+	public static String getDomainFromClientName(String clientName) {
+		StringBuilder sb = new StringBuilder();
+		String[] splittedClientName = clientName.split("\\.");
+		for (int i = 1; i < splittedClientName.length; i++) {
+			sb.append(splittedClientName[i]);
+			if (i != splittedClientName.length - 1) {
+				sb.append(".");
+			}
+		}
+		return sb.toString();
+	}
 }

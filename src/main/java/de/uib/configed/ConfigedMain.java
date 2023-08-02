@@ -4817,8 +4817,9 @@ public class ConfigedMain implements ListSelectionListener {
 				proceed = false;
 			}
 
-			CopyClient copyClient = new CopyClient(selectedClient.get(), newClientName);
-			String newClientNameWithDomain = newClientName + "." + copyClient.getDomainFromClientName();
+			HostInfo clientToCopy = selectedClient.get();
+			String newClientNameWithDomain = newClientName + "."
+					+ Globals.getDomainFromClientName(clientToCopy.getName());
 			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {
@@ -4828,6 +4829,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "copy client with new name " + newClientName);
 			if (proceed) {
+				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
 				refreshClientList(newClientNameWithDomain);
 			}
