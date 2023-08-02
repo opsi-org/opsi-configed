@@ -4829,9 +4829,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "copy client with new name " + newClientName);
 			if (proceed) {
+				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
-				refreshClientList(newClientNameWithDomain);
+				refreshClientList();
+				activateGroup(false, activatedGroupModel.getGroupName());
+				setClient(newClientNameWithDomain);
 			}
 			mainFrame.setCursor(null);
 		}

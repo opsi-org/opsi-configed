@@ -91,7 +91,6 @@ public class CopyClient {
 				clientToCopy.getInDepot(), newDescription, newInventoryNumber, newNotes, newIpAddress, newSystemUUID,
 				newMacAddress, clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(),
 				clientToCopy.getWanConfig(), "", "");
-		persist.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 	}
 
 	private void copyGroups() {
