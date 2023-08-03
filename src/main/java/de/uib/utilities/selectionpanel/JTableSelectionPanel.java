@@ -361,6 +361,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table.getSelectedRow();
 	}
 
+	public int[] getSelectedRows() {
+		return table.getSelectedRows();
+	}
+
 	public Rectangle getCellRect(int row, int col, boolean includeSpacing) {
 		return table.getCellRect(row, col, includeSpacing);
 	}

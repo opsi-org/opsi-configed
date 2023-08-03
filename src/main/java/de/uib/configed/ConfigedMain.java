@@ -332,6 +332,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private boolean sessioninfoFinished;
 
+	private int[] previousSelectedClients;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			ConfigedMain.host = host;
@@ -1224,12 +1226,17 @@ public class ConfigedMain implements ListSelectionListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
 
+		if ((previousSelectedClients != null
+				&& Arrays.equals(previousSelectedClients, selectionPanel.getSelectedRows()))
+				|| selectionPanel.getSelectedRows().length == 0) {
+			return;
+		}
+
+		previousSelectedClients = selectionPanel.getSelectedRows();
 		actOnListSelection();
 	}
 
