@@ -3076,7 +3076,6 @@ public class OpsiserviceNOMPersistenceController {
 		productpropertiesRequestRefresh();
 		depot2product2properties = null;
 		productGroups = null;
-		depotChange();
 	}
 
 	public List<Map<String, Object>> getAllProducts() {

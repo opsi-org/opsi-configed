@@ -778,7 +778,6 @@ public class ConfigedMain implements ListSelectionListener {
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts();
-		persistenceController.configOptionsRequestRefresh();
 
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();
@@ -3221,7 +3220,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		case VIEW_PRODUCT_PROPERTIES:
 			result = setProductPropertiesPage();
-
 			break;
 
 		case VIEW_HOST_PROPERTIES:
@@ -3490,17 +3488,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void reloadData() {
 		checkSaveAll(true);
+
 		int saveViewIndex = getViewIndex();
-
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
-
 		List<String> selValuesList = selectionPanel.getSelectedValues();
-
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
-
-		// deactivate temporarily listening to list selection events
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
@@ -3522,17 +3515,8 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.softwareAuditOnClientsRequestRefresh();
 
 			persistenceController.productDataRequestRefresh();
-
-			Logging.info(this, "reloadData _1");
-
-			// calls again persist.productDataRequestRefresh()
+			OpsiDataBackend.getInstance().setReloadRequested();
 			mainFrame.panelProductProperties.reload();
-			Logging.info(this, "reloadData _2");
-
-			// if variable modelDataValid in GenTableModel has no function , the following
-			// statement is sufficient:
-
-			// only for licenses, will be handled in another method
 
 			persistenceController.configOptionsRequestRefresh();
 
@@ -3547,9 +3531,6 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.fProductGroup2MembersRequestRefresh();
 			persistenceController.auditHardwareOnHostRequestRefresh();
 
-			// clearing softwareMap in OpsiDataBackend
-			OpsiDataBackend.getInstance().setReloadRequested();
-
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -3562,10 +3543,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			fetchDepots();
 
-			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
 
-			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
@@ -3584,12 +3563,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			// no action before gui initialized
 			if (selectionPanel != null) {
-				// reactivate selection listener
-
 				Logging.debug(this, " reset the values, particularly in list ");
-
 				selectionPanel.addListSelectionListener(ConfigedMain.this);
 				setSelectedClientsCollectionOnPanel(clientsLeft);
 
@@ -3600,10 +3575,8 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-
 			mainFrame.reloadServerMenu();
 		}
-
 		mainFrame.disactivateLoadingPane();
 	}
 
