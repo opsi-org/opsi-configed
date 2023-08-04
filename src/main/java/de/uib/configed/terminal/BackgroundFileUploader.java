@@ -30,8 +30,11 @@ import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
 public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
+	private static final int MAX_CHUNK_SIZE = 600_000;
+	private static final int MIN_CHUNK_SIZE = 8000;
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
+	private static final int LATENCY_WINDOW_SIZE = 10;
 
 	private FileUploadQueue queue;
 	private Terminal terminal;
@@ -60,7 +63,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 		}
 	}
 
-	@SuppressWarnings("java:S134")
+	@SuppressWarnings({ "java:S134", "java:S3518" })
 	@Override
 	protected Void doInBackground() {
 		File file = null;
@@ -79,6 +82,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 				int chunk = 0;
 				int offset = 0;
 				int chunkSize = DEFAULT_CHUNK_SIZE;
+				double[] latencyMeasurements = new double[LATENCY_WINDOW_SIZE];
+				int currentLatencyIndex = 0;
+				int numLatencyMeasurements = 0;
 
 				if (channel.size() < DEFAULT_CHUNK_SIZE) {
 					chunkSize = (int) channel.size();
@@ -115,9 +121,19 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 					buff.clear();
 
+					long startWaitingTime = System.currentTimeMillis();
 					while (!last && terminal.getMessagebus().isBusy()) {
 						wait(DEFAULT_BUSY_WAIT_IN_MS);
 					}
+					double latency = System.currentTimeMillis() - startWaitingTime;
+					latencyMeasurements[currentLatencyIndex] = latency;
+					numLatencyMeasurements = Math.min(numLatencyMeasurements + 1, LATENCY_WINDOW_SIZE);
+					double movingAverageLatency = calculateMovingAverageLatency(numLatencyMeasurements,
+							latencyMeasurements);
+					double scalingFactor = 1.0 + (0.1 * (latency / movingAverageLatency));
+					chunkSize = modifyChunkSizeBasedOnScalingFactor(chunkSize, scalingFactor);
+					buff = ByteBuffer.allocate(chunkSize);
+					currentLatencyIndex = (currentLatencyIndex + 1) % LATENCY_WINDOW_SIZE;
 				}
 			} catch (IOException ex) {
 				Logging.warning("cannot upload file to server: ", ex);
@@ -127,6 +143,19 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 		}
 
 		return null;
+	}
+
+	private static double calculateMovingAverageLatency(int numLatencyMeasurements, double[] latencyMeasurements) {
+		double sum = 0;
+		for (int i = 0; i < numLatencyMeasurements; i++) {
+			sum += latencyMeasurements[i];
+		}
+		return sum / numLatencyMeasurements;
+	}
+
+	private static int modifyChunkSizeBasedOnScalingFactor(int chunkSize, double scalingFactor) {
+		int newBufferSize = (int) (chunkSize * scalingFactor);
+		return Math.min(Math.max(newBufferSize, MIN_CHUNK_SIZE), MAX_CHUNK_SIZE);
 	}
 
 	private void sendFileUploadRequest(File file, String fileId) {
