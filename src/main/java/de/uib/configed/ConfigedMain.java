@@ -677,7 +677,7 @@ public class ConfigedMain implements ListSelectionListener {
 		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
 				&& isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsLocalboot != null) {
-			if (productsToUpdate.size() < 20) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsLocalboot.updateTable(clientId,
 						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING));
 			} else {
@@ -686,7 +686,7 @@ public class ConfigedMain implements ListSelectionListener {
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
 				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsNetboot != null) {
-			if (productsToUpdate.size() < 20) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsNetboot.updateTable(clientId,
 						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING));
 			} else {

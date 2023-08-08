@@ -263,15 +263,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public synchronized void updateTable(String clientId) {
-		Logging.devel(this, "updating data");
-
 		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId);
-		for (Map<String, Object> productInfo : productInfos) {
-			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-					POJOReMapper.remap(productInfo, new TypeReference<>() {
-					}));
+		if (!productInfos.isEmpty()) {
+			for (Map<String, Object> productInfo : productInfos) {
+				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+						POJOReMapper.remap(productInfo, new TypeReference<>() {
+						}));
+			}
+		} else {
+			allClientsProductStates.get(clientId).clear();
 		}
 
+		produceVisualStatesFromExistingEntries();
+		completeVisualStatesByDefaults();
 		fireTableDataChanged();
 	}
 
