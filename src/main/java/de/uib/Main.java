@@ -63,8 +63,6 @@ public class Main {
 
 	private static Options options;
 
-	private static boolean initialized;
-
 	private static void createOptions() {
 		options = new Options();
 
