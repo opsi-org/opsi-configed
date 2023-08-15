@@ -49,7 +49,7 @@ public class ByteUnitConverter {
 			result = ByteUnit.KILO_BYTE;
 		} else if (bytes > ONE_MB_IN_BYTES && bytes < ONE_GB_IN_BYTES) {
 			result = ByteUnit.MEGA_BYTE;
-		} else if (bytes < ONE_GB_IN_BYTES && bytes < ONE_TB_IN_BYTES) {
+		} else if (bytes > ONE_GB_IN_BYTES && bytes < ONE_TB_IN_BYTES) {
 			result = ByteUnit.GIGA_BYTE;
 		} else {
 			result = ByteUnit.TERA_BYTE;
