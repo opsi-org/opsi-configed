@@ -3387,8 +3387,10 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
+		String methodName = ServerFacade.isOpsi43() && attributes.length != 0 ? "productOnClient_getObjectsWithSequence"
+				: "productOnClient_getObjects";
+		List<Map<String, Object>> productOnClients = exec
+				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -3427,8 +3429,10 @@ public class OpsiserviceNOMPersistenceController {
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
+		String methodName = ServerFacade.isOpsi43() && attributes.length != 0 ? "productOnClient_getObjectsWithSequence"
+				: "productOnClient_getObjects";
+		List<Map<String, Object>> productOnClients = exec
+				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
