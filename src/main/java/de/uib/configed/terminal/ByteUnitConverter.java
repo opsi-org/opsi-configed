@@ -15,33 +15,6 @@ public class ByteUnitConverter {
 	private static final int ONE_GB_IN_BYTES = 1_000_000_000;
 	private static final long ONE_TB_IN_BYTES = 1_000_000_000_000L;
 
-	public enum ByteUnit {
-		KILO_BYTE {
-			@Override
-			public String toString() {
-				return "KB";
-			}
-		},
-		MEGA_BYTE {
-			@Override
-			public String toString() {
-				return "MB";
-			}
-		},
-		GIGA_BYTE {
-			@Override
-			public String toString() {
-				return "GB";
-			}
-		},
-		TERA_BYTE {
-			@Override
-			public String toString() {
-				return "TB";
-			}
-		}
-	}
-
 	public ByteUnit detectByteUnit(int bytes) {
 		ByteUnit result = null;
 
