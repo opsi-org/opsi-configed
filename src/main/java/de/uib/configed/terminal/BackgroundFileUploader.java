@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
-@SuppressWarnings("java:S109")
 public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int MAX_CHUNK_SIZE = 1_500_000;
 	private static final int MIN_CHUNK_SIZE = 8000;
