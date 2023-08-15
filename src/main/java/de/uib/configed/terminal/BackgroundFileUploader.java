@@ -30,7 +30,7 @@ import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
 public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
-	private static final int MAX_CHUNK_SIZE = 600_000;
+	private static final int MAX_CHUNK_SIZE = 1_500_000;
 	private static final int MIN_CHUNK_SIZE = 8000;
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
@@ -130,7 +130,12 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 					numLatencyMeasurements = Math.min(numLatencyMeasurements + 1, LATENCY_WINDOW_SIZE);
 					double movingAverageLatency = calculateMovingAverageLatency(numLatencyMeasurements,
 							latencyMeasurements);
-					double scalingFactor = 1.0 + (0.1 * (latency / movingAverageLatency));
+					double scalingFactor = 0.0;
+					if (latency < movingAverageLatency) {
+						scalingFactor = 1.0 - (0.1 * (latency / movingAverageLatency));
+					} else {
+						scalingFactor = 1.0 + (0.1 * (latency / movingAverageLatency));
+					}
 					chunkSize = modifyChunkSizeBasedOnScalingFactor(chunkSize, scalingFactor);
 					buff = ByteBuffer.allocate(chunkSize);
 					currentLatencyIndex = (currentLatencyIndex + 1) % LATENCY_WINDOW_SIZE;
@@ -154,8 +159,8 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	}
 
 	private static int modifyChunkSizeBasedOnScalingFactor(int chunkSize, double scalingFactor) {
-		int newBufferSize = (int) (chunkSize * scalingFactor);
-		return Math.min(Math.max(newBufferSize, MIN_CHUNK_SIZE), MAX_CHUNK_SIZE);
+		int newChunkSize = (int) (chunkSize * scalingFactor);
+		return Math.min(Math.max(newChunkSize, MIN_CHUNK_SIZE), MAX_CHUNK_SIZE);
 	}
 
 	private void sendFileUploadRequest(File file, String fileId) {
