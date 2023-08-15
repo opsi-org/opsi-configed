@@ -3418,10 +3418,6 @@ public class OpsiserviceNOMPersistenceController {
 		return getLocalBootProductStates(clientIds, attributes);
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
-		return getMapOfLocalbootProductStatesAndActions(clientIds, new String[0]);
-	}
-
 	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds, String[] attributes) {
 		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
@@ -3455,10 +3451,6 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		return getNetBootProductStatesNOM(clientIds, attributes);
-	}
-
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		return getMapOfNetbootProductStatesAndActions(clientIds, new String[0]);
 	}
 
 	private void updateProductOnClient(String pcname, String productname, int producttype,
