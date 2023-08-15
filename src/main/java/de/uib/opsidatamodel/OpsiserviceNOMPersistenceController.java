@@ -3356,8 +3356,8 @@ public class OpsiserviceNOMPersistenceController {
 		return getProductStatesNOM(clientIds);
 	}
 
-	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds) {
-		return getLocalBootProductStatesNOM(clientIds);
+	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds, String[] attributes) {
+		return getLocalBootProductStatesNOM(clientIds, attributes);
 	}
 
 	private Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
@@ -3379,8 +3379,9 @@ public class OpsiserviceNOMPersistenceController {
 		return result;
 	}
 
-	private Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
-		String[] callAttributes = new String[] {};
+	private Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds,
+			String[] attributes) {
+		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
@@ -3404,18 +3405,23 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	@SuppressWarnings("java:S1168")
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
+	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds,
+			String[] attributes) {
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return new HashMap<>();
 		}
 
-		return getLocalBootProductStates(clientIds);
+		return getLocalBootProductStates(clientIds, attributes);
 	}
 
-	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
-		String[] callAttributes = new String[] {};
+	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
+		return getMapOfLocalbootProductStatesAndActions(clientIds, new String[0]);
+	}
+
+	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds, String[] attributes) {
+		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
@@ -3436,14 +3442,19 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	@SuppressWarnings("java:S1168")
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
+	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds,
+			String[] attributes) {
 		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return new HashMap<>();
 		}
 
-		return getNetBootProductStatesNOM(clientIds);
+		return getNetBootProductStatesNOM(clientIds, attributes);
+	}
+
+	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
+		return getMapOfNetbootProductStatesAndActions(clientIds, new String[0]);
 	}
 
 	private void updateProductOnClient(String pcname, String productname, int producttype,
@@ -6441,7 +6452,7 @@ public class OpsiserviceNOMPersistenceController {
 			}
 
 			// key names from ProductState
-			productOnClientsDisplayFieldsLocalbootProducts.put("productId", true);
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
 					configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
@@ -6582,7 +6593,7 @@ public class OpsiserviceNOMPersistenceController {
 			productOnClientsDisplayFieldsNetbootProducts = new LinkedHashMap<>();
 
 			// key names from ProductState
-			productOnClientsDisplayFieldsNetbootProducts.put("productId", true);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
 
 			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
 					configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);

@@ -111,6 +111,7 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -2776,10 +2777,9 @@ public class ConfigedMain implements ListSelectionListener {
 		if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
 				|| localbootStatesAndActionsUpdate) {
 			localbootStatesAndActionsUpdate = false;
-
+			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
 			localbootStatesAndActions = persistenceController
-					.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
-
+					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
 		}
 
@@ -2858,9 +2858,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
 			// we reload since at the moment we do not track changes if anyDataChanged
-			netbootStatesAndActions = persistenceController
-					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
-
+			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
+			netbootStatesAndActions = persistenceController.getMapOfNetbootProductStatesAndActions(getSelectedClients(),
+					attributes.toArray(String[]::new));
 			istmForSelectedClientsNetboot = null;
 		}
 		long endmillis = System.currentTimeMillis();
@@ -2915,6 +2915,22 @@ public class ConfigedMain implements ListSelectionListener {
 		setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 
 		return true;
+	}
+
+	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
+		List<String> attributes = new ArrayList<>();
+		for (String v : productDisplayFields) {
+			if (ProductState.KEY_VERSION_INFO.equals(v)) {
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PACKAGE_VERSION));
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
+				continue;
+			}
+			if (ProductState.key2servicekey.containsKey(v)) {
+				attributes.add(ProductState.key2servicekey.get(v));
+			}
+		}
+
+		return attributes;
 	}
 
 	private static int[] getTableColumnWidths(JTable table) {
