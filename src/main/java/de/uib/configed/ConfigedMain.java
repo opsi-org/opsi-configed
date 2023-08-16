@@ -2861,9 +2861,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
 			// we reload since at the moment we do not track changes if anyDataChanged
-			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
-			netbootStatesAndActions = persistenceController.getMapOfNetbootProductStatesAndActions(getSelectedClients(),
-					attributes.toArray(String[]::new));
+			netbootStatesAndActions = persistenceController
+					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
 			istmForSelectedClientsNetboot = null;
 		}
 		long endmillis = System.currentTimeMillis();

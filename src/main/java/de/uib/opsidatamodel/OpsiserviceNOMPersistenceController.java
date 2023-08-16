@@ -3418,8 +3418,8 @@ public class OpsiserviceNOMPersistenceController {
 		return getLocalBootProductStates(clientIds, attributes);
 	}
 
-	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds, String[] attributes) {
-		String[] callAttributes = attributes;
+	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
+		String[] callAttributes = new String[0];
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
@@ -3440,15 +3440,14 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	@SuppressWarnings("java:S1168")
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds,
-			String[] attributes) {
+	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
 		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return new HashMap<>();
 		}
 
-		return getNetBootProductStatesNOM(clientIds, attributes);
+		return getNetBootProductStatesNOM(clientIds);
 	}
 
 	private void updateProductOnClient(String pcname, String productname, int producttype,
