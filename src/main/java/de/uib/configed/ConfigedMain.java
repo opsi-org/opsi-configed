@@ -2781,6 +2781,7 @@ public class ConfigedMain implements ListSelectionListener {
 			if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
 				attributes.add("actionSequence");
 			}
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
 			localbootStatesAndActions = persistenceController
 					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
