@@ -66,7 +66,7 @@ public class Messagebus implements MessagebusListener {
 
 	public boolean connect() throws InterruptedException {
 		if (messagebusWebSocket != null && isConnected()) {
-			Logging.info(this, "messagebus is already connected");
+			Logging.info(this, "Messagebus is already connected");
 			return true;
 		}
 
@@ -132,7 +132,7 @@ public class Messagebus implements MessagebusListener {
 		try {
 			uri = new URI(produceURL());
 		} catch (URISyntaxException ex) {
-			Logging.warning(this, "inavlid URI: " + uri, ex);
+			Logging.warning(this, "Inavlid URI: " + uri, ex);
 		}
 
 		return uri;
@@ -144,13 +144,13 @@ public class Messagebus implements MessagebusListener {
 
 		if (!hasPort(host)) {
 			host = host + ":4447";
-			Logging.info(this, "host doesn't have specified port (using default): " + host);
+			Logging.info(this, "Host doesn't have specified port (using default): " + host);
 		} else {
-			Logging.info(this, "host does have specified port (using specified port): " + host);
+			Logging.info(this, "Host does have specified port (using specified port): " + host);
 		}
 
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
-		Logging.info(this, "connecting to messagebus using the following URL: " + url);
+		Logging.info(this, "Connecting to messagebus using the following URL: " + url);
 
 		return url;
 	}
@@ -159,10 +159,10 @@ public class Messagebus implements MessagebusListener {
 		boolean result = false;
 
 		if (host.contains("[") && host.contains("]")) {
-			Logging.info(this, "host is IPv6: " + host);
+			Logging.info(this, "Host is IPv6: " + host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;
 		} else {
-			Logging.info(this, "host is either IPv4 or FQDN: " + host);
+			Logging.info(this, "Host is either IPv4 or FQDN: " + host);
 			result = host.contains(":");
 		}
 
@@ -226,8 +226,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("operation", "add");
 		message.put("channels", channels);
 
-		Logging.debug(this, "channel subscription request: " + message.toString());
-
+		Logging.debug(this, "Sending channel subscription request: " + message.toString());
 		sendMessage(message);
 	}
 
@@ -252,8 +251,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("cols", terminal.getColumnCount());
 		message.put("rows", terminal.getRowCount());
 
-		Logging.debug(this, "terminal open request: " + message.toString());
-
+		Logging.debug(this, "Sending terminal open request: " + message.toString());
 		sendMessage(message);
 
 		terminal.lock();
@@ -275,7 +273,7 @@ public class Messagebus implements MessagebusListener {
 				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
 				send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
 			} catch (JsonProcessingException ex) {
-				Logging.warning(this, "error occurred while processing msgpack: ", ex);
+				Logging.warning(this, "Error occurred while processing msgpack: ", ex);
 			}
 		} else {
 			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
@@ -294,9 +292,9 @@ public class Messagebus implements MessagebusListener {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
-			Logging.info(this, "connection to messagebus closed");
+			Logging.info(this, "Connection to messagebus closed");
 		} else {
-			Logging.info(this, "messagebus not connected");
+			Logging.info(this, "Messagebus not connected");
 		}
 	}
 
@@ -373,7 +371,7 @@ public class Messagebus implements MessagebusListener {
 
 	private void onEvent(Map<String, Object> message) {
 		try {
-			// Sleep for a little because otherwise we cannot get the needed Data from the Server
+			// Sleep for a little because otherwise we cannot get the needed data from the server
 			Thread.sleep(5);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
