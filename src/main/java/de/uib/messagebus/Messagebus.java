@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.messagebus.event.EventDispatcher;
+import de.uib.messagebus.event.WebSocketEvents;
 import de.uib.messagebus.event.handler.FileEventHandler;
 import de.uib.messagebus.event.handler.HostEventHandler;
 import de.uib.messagebus.event.handler.ProductOnClientEventHandler;
@@ -181,34 +182,37 @@ public class Messagebus implements MessagebusListener {
 	private void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
-		channels.add("event:host_connected");
-		channels.add("event:host_disconnected");
+		channels.add(WebSocketEvents.HOST_CONNECTED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_DISCONNECTED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_CREATED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_DELETED.asChannelEvent());
 
-		channels.add("event:host_created");
-		channels.add("event:host_deleted");
-
-		channels.add("event:productOnClient_created");
-		channels.add("event:productOnClient_updated");
-		channels.add("event:productOnClient_deleted");
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.asChannelEvent());
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.asChannelEvent());
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.asChannelEvent());
 
 		makeChannelSubscriptionRequest(channels);
 	}
 
 	private void registerEventHandlers() {
-		eventDispatcher.registerHandler("terminal_data_read", new TerminalEventHandler());
-		eventDispatcher.registerHandler("terminal_open_event", new TerminalEventHandler());
-		eventDispatcher.registerHandler("terminal_close_event", new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_OPEN_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_CLOSE_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_DATA_READ.toString(), new TerminalEventHandler());
 
-		eventDispatcher.registerHandler("file_upload_result", new FileEventHandler(this));
+		eventDispatcher.registerHandler(WebSocketEvents.FILE_UPLOAD_RESULT.toString(), new FileEventHandler(this));
 
-		eventDispatcher.registerHandler("host_connected", new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler("host_disconnected", new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler("host_created", new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler("host_deleted", new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_CONNECTED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_DISCONNECTED.toString(),
+				new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_CREATED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_DELETED.toString(), new HostEventHandler(configedMain));
 
-		eventDispatcher.registerHandler("productOnClient_created", new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler("productOnClient_updated", new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler("productOnClient_deleted", new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.toString(),
+				new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.toString(),
+				new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.toString(),
+				new ProductOnClientEventHandler(configedMain));
 	}
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
@@ -358,9 +362,9 @@ public class Messagebus implements MessagebusListener {
 	public void onMessageReceived(Map<String, Object> message) {
 		Logging.trace(this, "Messagebus message received: " + message.toString());
 		String type = (String) message.get("type");
-		if ("channel_subscription_event".equals(type)) {
+		if (WebSocketEvents.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
-		} else if ("event".equals(type)) {
+		} else if (WebSocketEvents.GENERAL_EVENT.toString().equals(type)) {
 			onEvent(message);
 		} else {
 			eventDispatcher.dispatch(type, message);
@@ -379,6 +383,6 @@ public class Messagebus implements MessagebusListener {
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
 				new TypeReference<Map<String, Object>>() {
 				});
-		eventDispatcher.dispatch((String) message.get("event"), eventData);
+		eventDispatcher.dispatch((String) message.get(WebSocketEvents.GENERAL_EVENT.toString()), eventData);
 	}
 }

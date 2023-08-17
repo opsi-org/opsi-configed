@@ -14,12 +14,14 @@ import java.util.function.Consumer;
 
 import de.uib.configed.terminal.Terminal;
 import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.event.WebSocketEvents;
 
 public class FileEventHandler implements EventHandler {
 	Map<String, Consumer<Map<String, Object>>> eventHandlers = new HashMap<>();
 
 	public FileEventHandler(Messagebus messagebus) {
-		eventHandlers.put("file_upload_result", eventData -> onFileUploadResult(eventData, messagebus));
+		eventHandlers.put(WebSocketEvents.FILE_UPLOAD_RESULT.toString(),
+				eventData -> onFileUploadResult(eventData, messagebus));
 	}
 
 	@Override
