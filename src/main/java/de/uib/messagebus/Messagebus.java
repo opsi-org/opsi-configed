@@ -6,7 +6,6 @@
 
 package de.uib.messagebus;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -29,7 +28,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
-import de.uib.configed.terminal.WebSocketInputStream;
+import de.uib.messagebus.event.EventDispatcher;
+import de.uib.messagebus.event.handler.FileEventHandler;
+import de.uib.messagebus.event.handler.HostEventHandler;
+import de.uib.messagebus.event.handler.ProductOnClientEventHandler;
+import de.uib.messagebus.event.handler.TerminalEventHandler;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -46,12 +49,14 @@ public class Messagebus implements MessagebusListener {
 	private boolean disconnecting;
 	private boolean reconnecting;
 	private boolean initialSubscriptionReceived;
+	private EventDispatcher eventDispatcher;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+		this.eventDispatcher = new EventDispatcher();
 	}
 
 	public WebSocketClientEndpoint getWebSocket() {
@@ -93,8 +98,8 @@ public class Messagebus implements MessagebusListener {
 				waitForInitialChannelSubscritionEvent(10000)) {
 			connected = true;
 			Logging.notice(this, "Connected to messagebus");
+			registerEventHandlers();
 			makeStandardChannelSubscriptions();
-
 		}
 		return connected;
 	}
@@ -187,6 +192,23 @@ public class Messagebus implements MessagebusListener {
 		channels.add("event:productOnClient_deleted");
 
 		makeChannelSubscriptionRequest(channels);
+	}
+
+	private void registerEventHandlers() {
+		eventDispatcher.registerHandler("terminal_data_read", new TerminalEventHandler());
+		eventDispatcher.registerHandler("terminal_open_event", new TerminalEventHandler());
+		eventDispatcher.registerHandler("terminal_close_event", new TerminalEventHandler());
+
+		eventDispatcher.registerHandler("file_upload_result", new FileEventHandler(this));
+
+		eventDispatcher.registerHandler("host_connected", new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler("host_disconnected", new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler("host_created", new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler("host_deleted", new HostEventHandler(configedMain));
+
+		eventDispatcher.registerHandler("productOnClient_created", new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler("productOnClient_updated", new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler("productOnClient_deleted", new ProductOnClientEventHandler(configedMain));
 	}
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
@@ -334,57 +356,14 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		String type = (String) message.get("type");
 		Logging.trace(this, "Messagebus message received: " + message.toString());
-
-		if (type.startsWith("terminal_")) {
-			switch (type) {
-			case "terminal_data_read":
-				onTerminalDataRead((byte[]) message.get("data"));
-				break;
-			case "terminal_open_event":
-				Terminal terminal = Terminal.getInstance();
-				terminal.setTerminalId((String) message.get("terminal_id"));
-				terminal.setTerminalChannel((String) message.get("back_channel"));
-				terminal.unlock();
-				break;
-			case "terminal_close_event":
-				Terminal.getInstance().close();
-				break;
-			case "terminal_resize_event":
-				break;
-			default:
-				Logging.warning(this, "unhandled terminal type response caught: " + type);
-				break;
-			}
-		} else if ("file_upload_result".equals(type)) {
-			String filePath = (String) message.get("path");
-
-			message.clear();
-			message.put("type", "terminal_data_write");
-			message.put("id", UUID.randomUUID().toString());
-			message.put("sender", "@");
-			message.put("channel", Terminal.getInstance().getTerminalChannel());
-			message.put("created", System.currentTimeMillis());
-			message.put("expires", System.currentTimeMillis() + 10000);
-			message.put("terminal_id", Terminal.getInstance().getTerminalId());
-			message.put("data", filePath.getBytes(StandardCharsets.UTF_8));
-
-			sendMessage(message);
-		} else if ("channel_subscription_event".equals(type)) {
+		String type = (String) message.get("type");
+		if ("channel_subscription_event".equals(type)) {
 			initialSubscriptionReceived = true;
 		} else if ("event".equals(type)) {
 			onEvent(message);
 		} else {
-			Logging.warning(this, "unexpected message type " + type);
-		}
-	}
-
-	private void onTerminalDataRead(byte[] data) {
-		try {
-			WebSocketInputStream.write(data);
-		} catch (IOException e) {
-			Logging.error(this, "failed to write message: ", e);
+			eventDispatcher.dispatch(type, message);
 		}
 	}
 
@@ -397,51 +376,9 @@ public class Messagebus implements MessagebusListener {
 		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
-		};
-		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"), typeRef);
-
-		switch ((String) message.get("event")) {
-		case "host_connected":
-			Map<String, Object> connectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-			String connectedClientId = (String) connectedHostData.get("id");
-			configedMain.addClientToConnectedList(connectedClientId);
-			break;
-
-		case "host_disconnected":
-			Map<String, Object> disconnectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-			String disconnectedClientId = (String) disconnectedHostData.get("id");
-			configedMain.removeClientFromConnectedList(disconnectedClientId);
-			break;
-
-		case "host_created":
-			configedMain.addClientToTable((String) eventData.get("id"));
-			break;
-
-		case "host_deleted":
-			configedMain.removeClientFromTable((String) eventData.get("id"));
-			break;
-
-		case "productOnClient_created":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		case "productOnClient_updated":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		case "productOnClient_deleted":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		default:
-			break;
-		}
+		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
+				new TypeReference<Map<String, Object>>() {
+				});
+		eventDispatcher.dispatch((String) message.get("event"), eventData);
 	}
 }

@@ -638,10 +638,10 @@ public class ConfigedMain implements ListSelectionListener {
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
-	public void updateProduct(Map<String, String> data) {
-		String productId = data.get("productId");
-		String clientId = data.get("clientId");
-		String productType = data.get("productType");
+	public void updateProduct(Map<String, Object> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
 
 		// get the data for the updated client
 
