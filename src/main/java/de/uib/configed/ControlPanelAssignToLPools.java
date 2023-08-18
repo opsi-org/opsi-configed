@@ -48,6 +48,7 @@ import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
@@ -167,7 +168,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.buttonShowAssignedNotExisting
 				.setEnabled(!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
 		if (thePanel.fMissingSoftwareInfo == null) {
-			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
+			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Utils.getMasterFrame(), this);
 		}
 
 		if (!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
@@ -368,9 +369,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					Logging.info(
 							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
 
-					FTextArea dialog = new FTextArea(Globals.frame1, Globals.APPNAME + " " + title, true, new String[] {
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
+					FTextArea dialog = new FTextArea(Utils.getMasterFrame(), Globals.APPNAME + " " + title, true,
+							new String[] {
+									Configed.getResourceValue(
+											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
+									Configed.getResourceValue(
+											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
 							400, 200);
 					dialog.setMessage(info + "\n\n" + option);
 					dialog.setVisible(true);
@@ -500,7 +504,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		if (!Main.FONT) {
-			comboLP0.setFont(Globals.defaultFontBig);
+			comboLP0.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
@@ -517,7 +521,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		if (!Main.FONT) {
-			comboLP1.setFont(Globals.defaultFontBig);
+			comboLP1.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP1, (row,
 				column) -> new DefaultComboBoxModel<>(persistenceController.getProductIds().toArray(new String[0]))));
@@ -643,8 +647,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			col.setHeaderValue("");
 
 			col.setCellRenderer(
-					new BooleanIconTableCellRenderer(Globals.createImageIcon("images/minibarpointerred.png", ""),
-							Globals.createImageIcon("images/minibarpointervoid.png", "")));
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
+							Utils.createImageIcon("images/minibarpointervoid.png", "")));
 		}
 
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
@@ -664,10 +668,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// -- Softwarename --> LicencePool
 
-		Logging.info(this, "frame Softwarename --> LicencePool  in " + Globals.frame1);
+		Logging.info(this, "frame Softwarename --> LicencePool  in " + Utils.getMasterFrame());
 
 		final ControlPanelAssignToLPools contr = this;
-		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Globals.frame1, contr);
+		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Utils.getMasterFrame(), contr);
 		thePanel.fSoftwarename2LicencePool.setTableModel(); // test
 		thePanel.setDisplaySimilarExist(thePanel.fSoftwarename2LicencePool.checkExistNamesWithVariantLicencepools());
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);

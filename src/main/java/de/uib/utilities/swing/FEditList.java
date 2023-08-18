@@ -227,7 +227,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	protected void commit() {
 		Logging.debug(this, "FEditList.commit");
 
-		if (Globals.forbidEditingTargetSpecific()) {
+		if (forbidEditingTargetSpecific()) {
 			Logging.debug(this, "commit: forbidden");
 			cancel();
 		} else {

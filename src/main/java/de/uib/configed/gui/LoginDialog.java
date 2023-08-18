@@ -47,6 +47,7 @@ import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
+import utils.Utils;
 
 public class LoginDialog extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
@@ -166,7 +167,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		MessageFormat messageFormatTitle = new MessageFormat(Configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
-		setIconImage(Globals.mainIcon);
+		setIconImage(Utils.getMainIcon());
 
 		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
 
@@ -192,8 +193,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
 		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());

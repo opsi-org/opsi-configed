@@ -38,7 +38,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 		super.addChangeListener(this);
 
 		if (!Main.FONT) {
-			super.setFont(Globals.defaultFont);
+			super.setFont(Globals.DEFAULT_FONT);
 		}
 
 		produceLabels();

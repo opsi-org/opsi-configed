@@ -41,6 +41,7 @@ import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
 import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
@@ -216,11 +217,11 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		JLabel orangeWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning") + "</html>");
-		orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
+		orangeWarningLabel.setIcon(Utils.createImageIcon("images/warning_orange.png", ""));
 
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
-		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
+		redWarningLabel.setIcon(Utils.createImageIcon("images/warning_red.png", ""));
 
 		JLabel warningLevelAbsolute = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
@@ -251,16 +252,16 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
 		if (!Main.FONT) {
-			clientTitle.setFont(Globals.defaultFontBold);
-			checksumTitle.setFont(Globals.defaultFontBold);
+			clientTitle.setFont(Globals.DEFAULT_FONT_BIG);
+			checksumTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		checksumTitle.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		if (!Main.FONT) {
-			checksum.setFont(Globals.defaultFontBold);
+			checksum.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		if (!Main.FONT) {
-			customerTitle.setFont(Globals.defaultFontBold);
+			customerTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));

@@ -59,6 +59,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -77,6 +78,7 @@ import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
@@ -135,7 +137,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private JPanel titlePane;
 
-	private Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
+	private Color backgroundColorEditFieldsSelected = Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR;
 
 	private JPopupMenu popupMenu;
 
@@ -209,7 +211,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		this.editing = editing;
 
-		if (!Globals.isServerFullPermission()) {
+		if (!isServerFullPermission()) {
 			this.editing = false;
 		}
 
@@ -234,6 +236,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public PanelGenEditTable() {
 		this("", 0, true);
+	}
+
+	private static boolean isServerFullPermission() {
+		if (PersistenceControllerFactory.getPersistenceController() == null) {
+			return false;
+		}
+		return PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
 	}
 
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {
@@ -290,7 +299,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
 				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png");
 
-		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
+		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		if (!editing) {
 			buttonCommit.setVisible(false);
 		}
@@ -298,7 +307,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
 
-		buttonCancel.setPreferredSize(Globals.smallButtonDimension);
+		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		if (!editing) {
 			buttonCancel.setVisible(false);
 		}
@@ -309,7 +318,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		label = new JLabel(title);
 		if (!Main.FONT) {
-			label.setFont(Globals.defaultFontStandardBold);
+			label.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 		if (title == null || title.isEmpty()) {
 			label.setVisible(false);
@@ -317,12 +326,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		JLabel labelRowCount = new JLabel(title);
 		if (!Main.FONT) {
-			labelRowCount.setFont(Globals.defaultFontStandardBold);
+			labelRowCount.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		JLabel labelMarkedCount = new JLabel("");
 		if (!Main.FONT) {
-			labelMarkedCount.setFont(Globals.defaultFont);
+			labelMarkedCount.setFont(Globals.DEFAULT_FONT);
 		}
 
 		titlePane = new PanelLinedComponents();
@@ -647,7 +656,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_PDF:
 				JMenuItemFormatted menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
-						Globals.createImageIcon("images/acrobat_reader16.png", ""));
+						Utils.createImageIcon("images/acrobat_reader16.png", ""));
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
@@ -664,7 +673,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void addPopupItemReload() {
 		JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
 				Configed.getResourceValue("PanelGenEditTable.reload"),
-				Globals.createImageIcon("images/reload16.png", ""));
+				Utils.createImageIcon("images/reload16.png", ""));
 
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> reload());
@@ -1005,8 +1014,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			for (int j = 0; j < cols.length; j++) {
 				theTable.getColumnModel().getColumn(cols[j])
-						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
-								Globals.defaultTableCellBgColor1, Globals.defaultTableCellBgColor2,
+						.setCellRenderer(new TableCellRendererConfigured(null, Globals.LIGHT_BLACK,
+								Globals.DEFAULT_TABLE_CELL_BG_COLOR_1, Globals.DEFAULT_TABLE_CELL_BG_COLOR_2,
 								backgroundColorEditFieldsSelected));
 			}
 		}
@@ -1352,7 +1361,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 							.toString();
 				}
 
-				if (keyValue.equals(Globals.pseudokey(partialkeys))) {
+				if (keyValue.equals(Utils.pseudokey(partialkeys))) {
 					found = true;
 				} else {
 					viewrow++;

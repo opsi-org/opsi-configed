@@ -35,6 +35,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	// tab edit licence
@@ -113,7 +114,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.defaultFontBig);
+			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
@@ -178,14 +179,14 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
 		if (!Main.FONT) {
-			comboLicenceTypes.setFont(Globals.defaultFontBig);
+			comboLicenceTypes.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.defaultFontBig);
+			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
@@ -337,7 +338,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void addLicence() {
 		Object[] a = new Object[6];
-		a[0] = "l_" + Globals.getSeconds();
+		a[0] = "l_" + Utils.getSeconds();
 		a[1] = "";
 		a[2] = LicenceEntry.LICENCE_TYPES[0];
 		a[3] = "1";
@@ -387,9 +388,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void addContract() {
 		Object[] a = new Object[6];
-		a[0] = "c_" + Globals.getSeconds();
+		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
-		a[2] = Globals.getDate();
+		a[2] = Utils.getDate();
 		a[3] = Globals.ZERODATE;
 		a[4] = Globals.ZERODATE;
 		a[5] = "";

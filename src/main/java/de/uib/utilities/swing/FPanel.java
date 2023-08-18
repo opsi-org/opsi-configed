@@ -18,6 +18,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class FPanel extends SecondaryFrame {
 	public static final RunningInstances<JFrame> runningInstances = new RunningInstances<>(JFrame.class,
@@ -30,7 +31,7 @@ public class FPanel extends SecondaryFrame {
 	public FPanel(String title, JPanel panel, boolean checkLeave) {
 		super();
 		this.checkLeave = checkLeave;
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(Globals.APPNAME + " " + title);
 
 		super.setSize(new Dimension(300, 300));

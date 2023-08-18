@@ -23,6 +23,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class JTextHideField extends JPanel {
 	private JPasswordField invisibleField;
@@ -66,7 +67,7 @@ public class JTextHideField extends JPanel {
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);
 
-		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
+		button = new JButton(Utils.createImageIcon("images/eye_blue_open.png", "show"));
 		button.addActionListener((ActionEvent actionEvent) -> {
 			if (!multiValue) {
 				toggleHidden();

@@ -60,7 +60,7 @@ public class TimeEditor extends JPanel {
 		setPreferredSize(new Dimension(250, 22));
 		JLabel labelTime = new JLabel(" hh:mm");
 		if (!Main.FONT) {
-			labelTime.setFont(Globals.defaultFontBig);
+			labelTime.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		hours = new ArrayList<>();

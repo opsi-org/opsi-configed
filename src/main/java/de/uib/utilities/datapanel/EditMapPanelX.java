@@ -50,6 +50,7 @@ import de.uib.utilities.table.ListModelProducer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
@@ -200,13 +201,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 				popupItemDeleteEntry1 = new JMenuItemFormatted(
 						removingSpecificValuesPropertyHandler.getRemovalMenuText(),
-						Globals.createImageIcon("images/no-value.png", ""));
+						Utils.createImageIcon("images/no-value.png", ""));
 				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
-						Globals.createImageIcon("images/fixed-value.png", ""));
+						Utils.createImageIcon("images/fixed-value.png", ""));
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
@@ -315,7 +316,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					if (propertyName != null && defaultsMap != null && defaultsMap.get(propertyName) != null) {
 						tooltip = "default: ";
 
-						if (Globals.isKeyForSecretValue(propertyName)) {
+						if (Utils.isKeyForSecretValue(propertyName)) {
 							tooltip = tooltip + Globals.STARRED_STRING;
 						} else {
 							tooltip = tooltip + defaultsMap.get(propertyName);
@@ -359,7 +360,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						}
 					}
 
-					if (vColIndex == 1 && Globals.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
+					if (vColIndex == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
 						if (jc instanceof JLabel) {
 							((JLabel) jc).setText(Globals.STARRED_STRING);
 						} else if (jc instanceof JTextComponent) {

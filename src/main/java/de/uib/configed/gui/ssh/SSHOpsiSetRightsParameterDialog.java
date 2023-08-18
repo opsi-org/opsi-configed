@@ -27,7 +27,9 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -66,8 +68,8 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		inputPanel.add(jLabelInfo);
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonDoAction.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
@@ -76,13 +78,13 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
