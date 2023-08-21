@@ -85,7 +85,7 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		if (!Main.FONT) {
-			jTextArea1.setFont(Globals.defaultFontBig);
+			jTextArea1.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		scrollpane.getViewport().add(jTextArea1, null);

@@ -226,7 +226,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		if (!Main.THEMES) {
 			splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
-			setBackground(Globals.backNimbus);
+			setBackground(Globals.BACK_NIMBUS);
 		}
 
 		tree = new XTree();

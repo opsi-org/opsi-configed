@@ -21,11 +21,11 @@ import java.util.function.Function;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
+import utils.Utils;
 
 public class MapTableModel extends AbstractTableModel {
 
@@ -407,7 +407,7 @@ public class MapTableModel extends AbstractTableModel {
 				// produces as well rowModiTime
 
 				if (rowModiTime > -1 && row != rowModiTime) {
-					setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
+					setValueAt(Utils.getNowTimeListValue(), rowModiTime, 1);
 				}
 			}
 		}

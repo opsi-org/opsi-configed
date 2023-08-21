@@ -46,11 +46,11 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 		Color foreground;
 
 		if (isSelected) {
-			background = Globals.nimbusSelectionBackground;
+			background = Globals.NIMBUS_SELECTION_BACKGROUND;
 			foreground = Globals.CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR;
 		} else {
-			background = Globals.nimbusBackground;
-			foreground = Globals.nimbusSelectionBackground;
+			background = Globals.NIMBUS_BACKGROUND;
+			foreground = Globals.NIMBUS_SELECTION_BACKGROUND;
 		}
 
 		if (!Main.THEMES) {
@@ -92,7 +92,7 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 		setToolTipText(selectedTooltip);
 
 		if (!Main.FONT) {
-			setFont(Globals.defaultFont);
+			setFont(Globals.DEFAULT_FONT);
 		}
 
 		if (!Main.THEMES) {

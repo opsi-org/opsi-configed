@@ -23,6 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
+import utils.Utils;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
@@ -156,11 +157,11 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		fieldGroupActivated = new JTextField("");
 
-		fieldGroupActivated.setPreferredSize(Globals.counterfieldDimension);
+		fieldGroupActivated.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupActivated.setEditable(false);
 
 		labelAllClientsCount = new JLabel("");
-		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
+		labelAllClientsCount.setPreferredSize(Globals.LABEL_DIMENSION);
 
 		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
@@ -169,21 +170,21 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
 		fieldActivatedClientsCount = new JTextField("");
-		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
+		fieldActivatedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldActivatedClientsCount.setEditable(false);
 
 		fieldSelectedClientsNames = new JTextField("");
 
-		fieldSelectedClientsNames.setPreferredSize(Globals.counterfieldDimension);
+		fieldSelectedClientsNames.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		fieldInvolvedDepots = new JTextField("");
-		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
+		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
-		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
+		connectedIcon = Utils.createImageIcon("images/network-wireless-connected-100.png", "");
+		disconnectedIcon = Utils.createImageIcon("images/network-wireless-disconnected.png", "");
 
 		connectionStateLabel = new JLabel();
 

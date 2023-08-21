@@ -26,8 +26,8 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 		if (!Main.THEMES) {
 			super.setOpaque(true);
-			super.setForeground(Globals.lightBlack);
-			super.setTextSelectionColor(Globals.lightBlack);
+			super.setForeground(Globals.LIGHT_BLACK);
+			super.setTextSelectionColor(Globals.LIGHT_BLACK);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));

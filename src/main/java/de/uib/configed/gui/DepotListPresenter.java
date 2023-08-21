@@ -31,6 +31,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
+import utils.Utils;
 
 public class DepotListPresenter extends JPanel implements ActionListener {
 	private DepotsList depotslist;
@@ -129,23 +130,23 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		}
 
 		if (!Main.FONT) {
-			labelDepotServer.setFont(Globals.defaultFontStandardBold);
+			labelDepotServer.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
-		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectDepotsWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
-		Globals.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
+		Utils.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
 		buttonSelectDepotsWithEqualProperties.addActionListener(this);
 		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectDepotsAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectDepotsAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectDepotsAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
-		Globals.formatButtonSmallText(buttonSelectDepotsAll);
+		Utils.formatButtonSmallText(buttonSelectDepotsAll);
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
 
-		searchPane.setFieldFont(Globals.defaultFont);
+		searchPane.setFieldFont(Globals.DEFAULT_FONT);
 		searchPane.setFieldBackground(getMyColor());
 		if (!multidepot) {
 			searchPane.setEnabled(false);
@@ -167,7 +168,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
 		if (!Main.FONT) {
-			depotslist.setFont(Globals.defaultFont);
+			depotslist.setFont(Globals.DEFAULT_FONT);
 		}
 
 		if (!Main.THEMES) {

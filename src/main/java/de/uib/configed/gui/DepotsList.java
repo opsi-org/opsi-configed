@@ -27,7 +27,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	public DepotsList() {
 		if (!Main.THEMES) {
 			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
+			super.setSelectionBackground(Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR);
 			super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
 		}
 

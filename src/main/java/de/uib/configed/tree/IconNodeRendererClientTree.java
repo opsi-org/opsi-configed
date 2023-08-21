@@ -26,8 +26,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 		if (!Main.THEMES) {
 			super.setOpaque(true);
-			super.setForeground(Globals.lightBlack);
-			super.setTextSelectionColor(Globals.lightBlack);
+			super.setForeground(Globals.LIGHT_BLACK);
+			super.setTextSelectionColor(Globals.LIGHT_BLACK);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
@@ -59,13 +59,13 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				// client
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFontStandardBold);
+						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}
 
 					setIcon(node.getLeafIcon());
 				} else {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFont);
+						setFont(Globals.DEFAULT_FONT);
 					}
 					setIcon(node.getNonSelectedLeafIcon());
 				}
@@ -85,11 +85,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFontStandardBold);
+						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}
 				} else {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFont);
+						setFont(Globals.DEFAULT_FONT);
 					}
 				}
 			}
