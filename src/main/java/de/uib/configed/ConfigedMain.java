@@ -332,7 +332,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private boolean sessioninfoFinished;
 
-	private int[] previousSelectedClients;
+	private String[] previousSelectedClients;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -1230,13 +1230,12 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		if ((previousSelectedClients != null
-				&& Arrays.equals(previousSelectedClients, selectionPanel.getSelectedRows()))
-				|| selectionPanel.getSelectedRows().length == 0) {
+		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, getSelectedClients()))
+				|| getSelectedClients().length == 0) {
 			return;
 		}
 
-		previousSelectedClients = selectionPanel.getSelectedRows();
+		previousSelectedClients = getSelectedClients();
 		actOnListSelection();
 	}
 
@@ -2370,6 +2369,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (activePaths.size() == 1
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				} else {
 					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
@@ -3571,8 +3571,10 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
 			if (selectionPanel != null) {
+				// reactivate selection listener
 				Logging.debug(this, " reset the values, particularly in list ");
-				selectionPanel.addListSelectionListener(ConfigedMain.this);
+				selectionPanel.removeListSelectionListener(this);
+				selectionPanel.addListSelectionListener(this);
 				setSelectedClientsCollectionOnPanel(clientsLeft);
 
 				// no list select item is provided
