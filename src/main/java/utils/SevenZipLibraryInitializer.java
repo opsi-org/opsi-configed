@@ -36,7 +36,7 @@ public final class SevenZipLibraryInitializer {
 
 	private static File createUniqueTempDir(String prefix) {
 		String tempDir = System.getProperty("java.io.tmpdir");
-		String uniqueDirPath = tempDir + prefix + System.nanoTime();
+		String uniqueDirPath = tempDir + File.separator + prefix + System.nanoTime();
 		File uniqueDir = new File(uniqueDirPath);
 		uniqueDir.mkdirs();
 		return uniqueDir;
