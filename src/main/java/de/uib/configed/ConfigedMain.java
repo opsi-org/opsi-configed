@@ -1228,8 +1228,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, getSelectedClients()))
-				|| getSelectedClients().length == 0) {
+		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, getSelectedClients()))) {
 			return;
 		}
 
