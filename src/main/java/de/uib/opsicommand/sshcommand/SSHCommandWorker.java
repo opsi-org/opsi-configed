@@ -25,6 +25,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
+import utils.Utils;
 
 // first parameter class is return type of doInBackground
 // second is element type of the list which is used by process
@@ -81,7 +82,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			caller.disconnect();
 			caller.interruptChannel();
 			interruptChannelWorker = true;
-			Globals.threadSleep(this, 50);
+			Utils.threadSleep(this, 50);
 		}
 	}
 
@@ -107,7 +108,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 				caller.disconnect();
 				caller.interruptChannel();
 				interruptChannelWorker = true;
-				Globals.threadSleep(this, 50);
+				Utils.threadSleep(this, 50);
 			};
 
 			Logging.info(this, "doInBackground start waiting for answer");
@@ -130,7 +131,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					Logging.info(this, "doInBackground i " + i);
 
 					int timeStepMillis = 1000;
-					Globals.threadSleep(this, timeStepMillis);
+					Utils.threadSleep(this, timeStepMillis);
 
 					if (i < 0) {
 						break;
@@ -166,7 +167,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 							Logging.debug(this, " doInBackground publish " + progress + ": " + line);
 							publish(line);
 							progress++;
-							Globals.threadSleep(this, timeStepMillis);
+							Utils.threadSleep(this, timeStepMillis);
 						}
 					} else {
 
@@ -194,7 +195,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					break;
 				}
 			}
-			Globals.threadSleep(this, 1000);
+			Utils.threadSleep(this, 1000);
 
 			if (outputDialog != null) {
 				caller.setDialog(outputDialog);

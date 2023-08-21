@@ -33,7 +33,9 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
 
@@ -69,7 +71,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		autocompletion.doButtonAction();
 		doSetActionGetVersions();
 		showAdvancedSettings();
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 
 		initFrame();
 	}
@@ -207,7 +209,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jButtonAdvancedSettings.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonAdvancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
 		}
 
@@ -220,7 +222,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 		jButtonSetRights.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
 		}
 
@@ -231,7 +233,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jButtonToPackageManager.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
 				if (main != null) {
 					new SSHPackageManagerInstallParameterDialog(main, filename);
@@ -241,15 +243,15 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 		jButtonExec = new JButton();
 		jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jButtonExec.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExec.setEnabled(false);
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExec.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonCancel = new JButton();
 		jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonCancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonCancel.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonCancel.addActionListener(actionEvent -> cancel());
 		buttonPanel.add(jButtonCancel);
 		buttonPanel.add(jButtonToPackageManager);

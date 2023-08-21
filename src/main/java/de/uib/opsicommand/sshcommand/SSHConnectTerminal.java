@@ -30,10 +30,10 @@ import com.jcraft.jsch.Session;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHConnectTerminal extends SSHConnect {
 
@@ -147,7 +147,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				initInputFieldFromDialog();
 				initKillProcessButtonFromDialog();
 
-				Globals.threadSleep(this, 1000);
+				Utils.threadSleep(this, 1000);
 
 				exec(SOME_COMMAND + "\n");
 			} catch (JSchException | IOException e) {

@@ -47,6 +47,7 @@ import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import utils.ExtractorUtil;
+import utils.Utils;
 
 public class LogFrame extends JFrame implements WindowListener {
 
@@ -229,16 +230,16 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
+		jMenuHelpDoc.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
+		jMenuHelpSupport.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Globals.showAboutAction(this));
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpDoc);
 		jMenuHelp.add(jMenuHelpForum);
@@ -269,12 +270,11 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void guiInit() {
-
 		this.addWindowListener(this);
 		if (!Main.FONT) {
-			this.setFont(Globals.defaultFont);
+			this.setFont(Globals.DEFAULT_FONT);
 		}
-		this.setIconImage(Globals.mainIcon);
+		this.setIconImage(Utils.getMainIcon());
 
 		setupIcons();
 
@@ -483,9 +483,9 @@ public class LogFrame extends JFrame implements WindowListener {
 		openFile();
 
 		if (fileName != null && !fileName.isEmpty()) {
-			Logging.info(this, "usedmemory " + Globals.usedMemory());
+			Logging.info(this, "usedmemory " + Utils.usedMemory());
 			logPane.setMainText(readFile(fileName));
-			Logging.info(this, "usedmemory " + Globals.usedMemory());
+			Logging.info(this, "usedmemory " + Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
 			logPane.removeAllHighlights();

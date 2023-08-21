@@ -27,6 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
+import utils.Utils;
 
 public abstract class AbstractExportTable {
 	protected JTable theTable;
@@ -161,7 +162,7 @@ public abstract class AbstractExportTable {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
 			chooser.addChoosableFileFilter(exFilter);
-			chooser.setPreferredSize(Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
@@ -195,7 +196,7 @@ public abstract class AbstractExportTable {
 
 				try {
 					if (file.exists() && askForOverwrite) {
-						int option = JOptionPane.showConfirmDialog(Globals.frame1,
+						int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
 								Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 								Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
@@ -226,7 +227,7 @@ public abstract class AbstractExportTable {
 		File defaultFile = new File(writeToFile);
 
 		JFileChooser chooser = new JFileChooser(exportDirectory);
-		chooser.setPreferredSize(Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 

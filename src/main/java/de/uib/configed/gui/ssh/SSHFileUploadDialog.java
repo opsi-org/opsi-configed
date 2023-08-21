@@ -35,7 +35,9 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 
@@ -166,22 +168,22 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jFileChooserLocal.setDialogTitle(Globals.APPNAME + " "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
 
-		jButtonFileChooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		jButtonFileChooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
-		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
+		jButtonFileChooser = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener(actionEvent -> chooseFileDialog());
 		JButton jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);

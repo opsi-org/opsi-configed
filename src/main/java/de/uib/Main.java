@@ -309,12 +309,12 @@ public class Main {
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
 		if (!THEMES) {
-			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+			fErrorOutOfMemory.setContentBackground(Globals.DARK_ORANGE);
 		}
 		// we activate it in case of an appropriate error
 
 		if (!FONT) {
-			fErrorOutOfMemory.setFont(Globals.defaultFontBig);
+			fErrorOutOfMemory.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");

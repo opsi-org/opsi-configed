@@ -11,11 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class AuditSoftwareXLicencePool extends Relation {
 	/*
@@ -60,11 +60,9 @@ public class AuditSoftwareXLicencePool extends Relation {
 	}
 
 	private static String produceSWident(Map<String, Object> m) {
-		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
-				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
-				Globals.getStringValue(m.get(SWAuditEntry.SUB_VERSION)),
-				Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
-				Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
+		return Utils.pseudokey(new String[] { getStringValue(m.get(SWAuditEntry.NAME)),
+				getStringValue(m.get(SWAuditEntry.VERSION)), getStringValue(m.get(SWAuditEntry.SUB_VERSION)),
+				getStringValue(m.get(SWAuditEntry.LANGUAGE)), getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
@@ -96,9 +94,17 @@ public class AuditSoftwareXLicencePool extends Relation {
 		String swIdent = "" + produceSWident(m);
 		rowmap.put(SW_ID, swIdent);
 
-		rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, Globals.getStringValue(m.get(LicencepoolEntry.ID_SERVICE_KEY)));
+		rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, getStringValue(m.get(LicencepoolEntry.ID_SERVICE_KEY)));
 		add(rowmap);
 
 		return rowmap;
+	}
+
+	private static String getStringValue(Object s) {
+		if (s == null) {
+			return "";
+		}
+
+		return s.toString();
 	}
 }

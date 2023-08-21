@@ -17,7 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.uib.configed.Globals;
+import utils.Utils;
 
 public class ListCellRendererByIndex extends StandardListCellRenderer {
 
@@ -50,13 +50,13 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 				if (imagesBase != null && key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + key + ".png";
 
-					image = Globals.createImageIcon(imageFileString, stringval);
+					image = Utils.createImageIcon(imageFileString, stringval);
 
 					if (image == null) {
 						// try with gif
 						imageFileString = imagesBase + "/" + stringval + ".gif";
 
-						image = Globals.createImageIcon(imageFileString, stringval);
+						image = Utils.createImageIcon(imageFileString, stringval);
 
 					}
 
@@ -94,7 +94,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		JComponent jc = (JComponent) c;
 
 		if (jc instanceof JLabel) {
-			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + tooltip + " ", FILL_LENGTH));
+			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + tooltip + " ", FILL_LENGTH));
 		}
 
 		return jc;

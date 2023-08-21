@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import de.uib.configed.Globals;
+import utils.Utils;
 
 public class TableCellRendererByIndex extends StandardTableCellRenderer {
 	private Map<String, String> mapOfStrings;
@@ -51,8 +51,8 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 
 			((JLabel) result).setIcon(selectedIcon);
-			((JLabel) result).setToolTipText(
-					Globals.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
+			((JLabel) result)
+					.setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
 		}
 
 		return result;

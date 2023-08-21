@@ -185,14 +185,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		jLabelDepot.setText(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 		if (!Main.FONT) {
-			jComboDepots.setFont(Globals.defaultFontBig);
+			jComboDepots.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
 		jComboPrimaryGroup.setMaximumRowCount(10);
 		if (!Main.FONT) {
-			jComboPrimaryGroup.setFont(Globals.defaultFontBig);
+			jComboPrimaryGroup.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel jLabelNetboot = new JLabel();
@@ -200,7 +200,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
 		if (!Main.FONT) {
-			jComboNetboot.setFont(Globals.defaultFontBig);
+			jComboNetboot.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel jLabelNotes = new JLabel();
@@ -247,12 +247,12 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel labelInfoMac = new JLabel(Configed.getResourceValue("NewClientDialog.infoMac"));
 		if (!Main.FONT) {
-			labelInfoMac.setFont(Globals.defaultFontBig);
+			labelInfoMac.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 		if (!Main.FONT) {
-			labelInfoIP.setFont(Globals.defaultFontBig);
+			labelInfoIP.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel jLabelSystemUUID = new JLabel();

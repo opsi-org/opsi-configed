@@ -27,6 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
+import utils.Utils;
 
 public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 
@@ -67,7 +68,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 	}
 
 	private void createGUI(Component owner) {
-		setIconImage(Globals.mainIcon);
+		setIconImage(Utils.getMainIcon());
 
 		progressBar = new JProgressBar();
 
@@ -76,8 +77,8 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		progressBar.setMaximum(JPROGRESSBAR_MAX_VALUE);
 
 		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new MyPainter(Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new MyPainter(Globals.opsiLogoLightBlue));
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new MyPainter(Globals.OPSI_LOGO_BLUE));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new MyPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 		progressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		infoLabel = new JLabel();
@@ -89,7 +90,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		ImageIcon icon = Globals.createImageIcon("images/configed_icon.png", "");
+		ImageIcon icon = Utils.createImageIcon("images/configed_icon.png", "");
 		JLabel iconLabel = new JLabel(icon);
 
 		layout.setHorizontalGroup(

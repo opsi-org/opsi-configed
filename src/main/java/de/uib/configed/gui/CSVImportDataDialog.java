@@ -38,6 +38,7 @@ import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class CSVImportDataDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -64,8 +65,8 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
 						Configed.getResourceValue("FGeneralDialog.ok") },
-				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
-						Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") },
+				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", ""),
+						Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") },
 				2, 1000, 600, true, null);
 
 		this.format = format;
@@ -136,12 +137,12 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 		if (!Main.FONT) {
-			importOptionsLabel.setFont(Globals.defaultFontBold);
+			importOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 		if (!Main.FONT) {
-			splittingOptionsLabel.setFont(Globals.defaultFontBold);
+			splittingOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();

@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
+import utils.Utils;
 
 public class SWAuditEntry extends AbstractTableEntry {
 	/*
@@ -132,10 +132,9 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		super.put(key2serverKey.get(SUB_VERSION), subversion);
 
-		ident = Globals.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
+		ident = Utils.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
 				super.get(ARCHITECTURE) });
-
-		identReduced = Globals.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
+		identReduced = Utils.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
 
 		super.put(ID, ident);
 	}
