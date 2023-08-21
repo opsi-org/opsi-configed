@@ -2533,39 +2533,30 @@ public class OpsiserviceNOMPersistenceController {
 		}
 	}
 
-	public String getLastSoftwareAuditModification(String clientId) {
+	public String getLastSoftwareAuditModification(Map<String, List<SWAuditClientEntry>> entries, String clientId) {
 		String result = "";
 
-		Map<String, List<SWAuditClientEntry>> entries = new HashMap<>();
-		if (clientId != null && !clientId.isEmpty()) {
-			List<String> clients = new ArrayList<>();
-			clients.add(clientId);
-			entries = retrieveSoftwareAuditOnClients(clients);
+		if (entries == null || entries.isEmpty()) {
+			return result;
 		}
 
-		if (!entries.isEmpty() && entries.get(clientId) != null && !entries.get(clientId).isEmpty()) {
-			result = entries.get(clientId).get(0).getLastModification();
+		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
+		if (!entries.isEmpty() && swAuditClientEntries != null && !swAuditClientEntries.isEmpty()) {
+			result = swAuditClientEntries.get(0).getLastModification();
 		}
 
 		return result;
 	}
 
-	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId) {
+	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(Map<String, List<SWAuditClientEntry>> entries, String clientId) {
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
-		if (clientId == null || clientId.isEmpty()) {
+		if (entries == null || entries.isEmpty()) {
 			return result;
 		}
 
-		List<String> clients = new ArrayList<>();
-		clients.add(clientId);
-		List<SWAuditClientEntry> entries = retrieveSoftwareAuditOnClients(clients).get(clientId);
-
-		if (entries == null) {
-			return result;
-		}
-
-		for (SWAuditClientEntry entry : entries) {
+		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
+		for (SWAuditClientEntry entry : swAuditClientEntries) {
 			if (entry.getSWid() != null && entry.getSWid() != -1) {
 				result.put("" + entry.getSWid(),
 						entry.getExpandedMap(getInstalledSoftwareInformation(), getSWident(entry.getSWid())));
@@ -2575,7 +2566,7 @@ public class OpsiserviceNOMPersistenceController {
 		return result;
 	}
 
-	private Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
+	public Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());

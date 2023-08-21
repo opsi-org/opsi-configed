@@ -3107,9 +3107,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (firstSelectedClient == null || !checkOneClientSelected()) {
 			mainFrame.setSoftwareAudit();
 		} else {
-			// retrieve data and check with softwaretable
-			persistenceController.getSoftwareAudit(firstSelectedClient);
-
 			mainFrame.setSoftwareAudit(firstSelectedClient);
 		}
 

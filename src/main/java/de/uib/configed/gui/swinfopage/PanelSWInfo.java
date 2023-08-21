@@ -8,6 +8,7 @@ package de.uib.configed.gui.swinfopage;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,15 +188,18 @@ public class PanelSWInfo extends JPanel {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
+						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController
-								.retrieveSoftwareAuditData(hostId);
+								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(hostId);
+							scanInfo = "Scan " + persistenceController
+									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
 
 						}
