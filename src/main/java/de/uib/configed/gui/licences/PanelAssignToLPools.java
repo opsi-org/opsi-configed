@@ -32,6 +32,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 
@@ -90,102 +91,102 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		JLabel titleWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
 		if (!Main.FONT) {
-			titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
+			titleWindowsSoftware.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		JLabel titleWindowsSoftware2 = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
 		if (!Main.FONT) {
-			titleWindowsSoftware2.setFont(Globals.defaultFont);
+			titleWindowsSoftware2.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JLabel labelSelectedLicencePoolId = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
 		if (!Main.FONT) {
-			labelSelectedLicencePoolId.setFont(Globals.defaultFont);
+			labelSelectedLicencePoolId.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldSelectedLicencePoolId = new JLabel("");
 		fieldSelectedLicencePoolId.setPreferredSize(new Dimension(250, Globals.LINE_HEIGHT));
 		if (!Main.FONT) {
-			fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
+			fieldSelectedLicencePoolId.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
 		if (!Main.FONT) {
-			labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
+			labelCountAllWindowsSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldCountAllWindowsSoftware = new JLabel("");
-		fieldCountAllWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
+		fieldCountAllWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 		if (!Main.FONT) {
-			fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
+			fieldCountAllWindowsSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
 		if (!Main.FONT) {
-			labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+			labelCountDisplayedWindowsSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldCountDisplayedWindowsSoftware = new JLabel("");
-		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
+		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 		if (!Main.FONT) {
-			fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+			fieldCountDisplayedWindowsSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
 		if (!Main.FONT) {
-			labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
+			labelCountNotAssignedSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldCountNotAssignedSoftware = new JLabel("");
-		fieldCountNotAssignedSoftware.setPreferredSize(Globals.shortlabelDimension);
+		fieldCountNotAssignedSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 		if (!Main.FONT) {
-			fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
+			fieldCountNotAssignedSoftware.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
 		if (!Main.FONT) {
-			labelCountAssignedStatus.setFont(Globals.defaultFont);
+			labelCountAssignedStatus.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldCountAssignedStatus = new JLabel("");
-		fieldCountAssignedStatus.setPreferredSize(Globals.shortlabelDimension);
+		fieldCountAssignedStatus.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 		if (!Main.FONT) {
-			fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
+			fieldCountAssignedStatus.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
 		if (!Main.FONT) {
-			labelCountAssignedInEditing.setFont(Globals.defaultFont);
+			labelCountAssignedInEditing.setFont(Globals.DEFAULT_FONT);
 		}
 
 		fieldCountAssignedInEditing = new JLabel("");
-		fieldCountAssignedInEditing.setPreferredSize(Globals.shortlabelDimension);
+		fieldCountAssignedInEditing.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 		if (!Main.FONT) {
-			fieldCountAssignedInEditing.setFont(Globals.defaultFontStandardBold);
+			fieldCountAssignedInEditing.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		buttonShowAssignedNotExisting = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"),
-				Globals.createImageIcon("images/edit-table-delete-row-16x16.png", ""));
+				Utils.createImageIcon("images/edit-table-delete-row-16x16.png", ""));
 
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 		if (!Main.FONT) {
-			buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
+			buttonShowAssignedNotExisting.setFont(Globals.DEFAULT_FONT);
 		}
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
-			fMissingSoftwareInfo.setLocationRelativeTo(Globals.frame1);
+			fMissingSoftwareInfo.setLocationRelativeTo(Utils.getMasterFrame());
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
@@ -194,17 +195,17 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelSupplementSimilar.setVisible(true);
 		if (!Main.FONT) {
-			labelSupplementSimilar.setFont(Globals.defaultFont);
+			labelSupplementSimilar.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JButton buttonSupplementSimilar = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
-				Globals.createImageIcon("images/edit-table-insert-row-under.png", ""));
+				Utils.createImageIcon("images/edit-table-insert-row-under.png", ""));
 
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
 		if (!Main.FONT) {
-			buttonSupplementSimilar.setFont(Globals.defaultFont);
+			buttonSupplementSimilar.setFont(Globals.DEFAULT_FONT);
 		}
 
 		buttonSupplementSimilar.addActionListener((ActionEvent e) -> buttonSupplementSimilarAction());
@@ -212,7 +213,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSimilarEntriesExist = new JLabel();
 		labelSimilarEntriesExist.setVisible(true);
 		if (!Main.FONT) {
-			labelSimilarEntriesExist.setFont(Globals.defaultFont);
+			labelSimilarEntriesExist.setFont(Globals.DEFAULT_FONT);
 		}
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(
@@ -239,7 +240,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRadiobuttonsPreselectionForName2Pool.addChangeListener(this);
 
 		JPanel panelWorkNamebased = new JPanel();
-		panelWorkNamebased.setBorder(new LineBorder(Globals.blueGrey, 3, true));
+		panelWorkNamebased.setBorder(new LineBorder(Globals.BLUE_GREY, 3, true));
 		if (!Main.THEMES) {
 			panelWorkNamebased.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
@@ -478,7 +479,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 		panelLicencepools.setResetFilterModeOnNewSearch(false);
-		panelLicencepools.setMasterFrame(Globals.frame1);
+		panelLicencepools.setMasterFrame(Utils.getMasterFrame());
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
@@ -486,11 +487,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelProductId2LPool.setMasterFrame(Globals.frame1);
+		panelProductId2LPool.setMasterFrame(Utils.getMasterFrame());
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFiltering(true, false);
-		panelRegisteredSoftware.setMasterFrame(Globals.frame1);
+		panelRegisteredSoftware.setMasterFrame(Utils.getMasterFrame());
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
@@ -555,7 +556,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private void buttonSupplementSimilarAction() {
 
 		if (!fSoftwarename2LicencePool.isVisible()) {
-			fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
+			fSoftwarename2LicencePool.setLocationRelativeTo(Utils.getMasterFrame());
 		}
 
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
@@ -572,11 +573,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	public void setDisplaySimilarExist(boolean b) {
 		Logging.info(this, "setDisplaySimilarExist " + b);
 		if (b) {
-			labelSimilarEntriesExist.setIcon(Globals.createImageIcon("images/checked_box_filled_i_14.png", ""));
+			labelSimilarEntriesExist.setIcon(Utils.createImageIcon("images/checked_box_filled_i_14.png", ""));
 			labelSimilarEntriesExist
 					.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesExist"));
 		} else {
-			labelSimilarEntriesExist.setIcon(Globals.createImageIcon("images/checked_box_blue_empty_14.png", ""));
+			labelSimilarEntriesExist.setIcon(Utils.createImageIcon("images/checked_box_blue_empty_14.png", ""));
 			labelSimilarEntriesExist.setToolTipText(
 					Configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesDontExist"));
 		}

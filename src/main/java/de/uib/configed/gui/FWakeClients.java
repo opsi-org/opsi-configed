@@ -23,6 +23,7 @@ import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
@@ -32,7 +33,7 @@ public class FWakeClients extends FShowList {
 	public FWakeClients(JFrame master, String title) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
 		if (!Main.FONT) {
-			super.setFont(Globals.defaultFont);
+			super.setFont(Globals.DEFAULT_FONT);
 		}
 		super.setMessage("");
 		super.setButtonsEnabled(true);
@@ -101,7 +102,7 @@ public class FWakeClients extends FShowList {
 				persistenceController.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 			}
 
-			Globals.threadSleep(this, 1000L * delaySecs);
+			Utils.threadSleep(this, 1000L * delaySecs);
 			turn++;
 		}
 

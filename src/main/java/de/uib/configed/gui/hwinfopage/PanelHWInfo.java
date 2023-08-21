@@ -47,6 +47,7 @@ import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
+import utils.Utils;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
@@ -130,7 +131,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		table.setDragEnabled(true);
 		if (!Main.THEMES) {
-			table.setBackground(Globals.nimbusBackground);
+			table.setBackground(Globals.NIMBUS_BACKGROUND);
 		}
 		JPanel embed = new JPanel();
 		GroupLayout layoutEmbed = new GroupLayout(embed);
@@ -247,7 +248,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {
-		return Globals.createImageIcon(path, "");
+		return Utils.createImageIcon(path, "");
 
 	}
 

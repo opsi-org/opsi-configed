@@ -15,8 +15,8 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /**
  * A {@code ConnectionHandler} class handles connection with the server and
@@ -180,8 +180,8 @@ public class ConnectionHandler {
 			return null;
 		}
 
-		Logging.info(this, "certificate verification is disabled: " + Globals.disableCertificateVerification);
-		CertificateValidator certValidator = !Globals.disableCertificateVerification
+		Logging.info(this, "certificate verification is disabled: " + Utils.isCertificateVerificationDisabled());
+		CertificateValidator certValidator = !Utils.isCertificateVerificationDisabled()
 				? CertificateValidatorFactory.createSecure()
 				: CertificateValidatorFactory.createInsecure();
 

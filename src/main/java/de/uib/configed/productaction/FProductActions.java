@@ -16,6 +16,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
 public class FProductActions extends SecondaryFrame {
 
@@ -28,7 +29,7 @@ public class FProductActions extends SecondaryFrame {
 
 		define();
 
-		super.setGlobals(Globals.getMap());
+		super.setGlobals(Utils.getMap());
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FProductAction.title"));
 	}
 

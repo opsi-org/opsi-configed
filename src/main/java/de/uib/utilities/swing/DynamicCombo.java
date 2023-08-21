@@ -51,7 +51,7 @@ public class DynamicCombo extends JPanel {
 		table.setModel(tablemodel);
 		if (!Main.THEMES) {
 			table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			table.setSelectionForeground(Globals.lightBlack);
+			table.setSelectionForeground(Globals.LIGHT_BLACK);
 		}
 		table.setShowGrid(false);
 

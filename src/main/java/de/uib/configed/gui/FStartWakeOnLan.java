@@ -42,6 +42,7 @@ import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
+import utils.Utils;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
@@ -85,7 +86,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		this.main = main;
 
 		setCalToNow();
-		super.setLocationRelativeTo(Globals.frame1);
+		super.setLocationRelativeTo(Utils.getMasterFrame());
 	}
 
 	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {
@@ -195,7 +196,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 		scrollpane.setViewportView(contentPane);
 
-		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
+		labelTimeYetToWait = new JLabel(giveTimeSpan(0), SwingConstants.RIGHT);
 		labelTimeYetToWait.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
 
 		waitingProgressBar = new JProgressBar();
@@ -204,8 +205,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		waitingProgressBar.setEnabled(true);
 
 		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 		waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		fieldTaskname = new JTextField();
@@ -451,6 +452,38 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	}
 
+	private static String giveTimeSpan(final long millis) {
+		long seconds;
+		long remseconds;
+		String remSecondsS;
+		long minutes;
+		long remminutes;
+		String remMinutesS;
+		long hours;
+		String hoursS;
+
+		seconds = millis / 1000;
+		minutes = seconds / 60;
+		remseconds = seconds % 60;
+
+		hours = minutes / 60;
+		remminutes = minutes % 60;
+
+		remSecondsS = formatlNumberUpTo99(remseconds);
+		remMinutesS = formatlNumberUpTo99(remminutes);
+		hoursS = formatlNumberUpTo99(hours);
+
+		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
+	}
+
+	private static String formatlNumberUpTo99(long n) {
+		if (n < 10) {
+			return "0" + n;
+		} else {
+			return "" + n;
+		}
+	}
+
 	// implementing WaitingSleeper
 	@Override
 	public void actAfterWaiting() {
@@ -484,7 +517,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return "   " + Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
+		return "   " + giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override

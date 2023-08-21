@@ -12,8 +12,8 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer {
 
@@ -30,9 +30,9 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 	public ConnectionStatusTableCellRenderer() {
 		super();
 
-		trueIcon = Globals.createImageIcon("images/new_network-connect2.png", "");
-		falseIcon = Globals.createImageIcon("images/new_network-disconnect.png", "");
-		messagebusIcon = Globals.createImageIcon("images/ok22.png", "");
+		trueIcon = Utils.createImageIcon("images/new_network-connect2.png", "");
+		falseIcon = Utils.createImageIcon("images/new_network-disconnect.png", "");
+		messagebusIcon = Utils.createImageIcon("images/ok22.png", "");
 	}
 
 	@Override

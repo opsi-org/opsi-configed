@@ -47,7 +47,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		super.setProportionOfTotalWidth(0.5);
 
 		if (!Main.THEMES) {
-			super.setForeground(Globals.blue);
+			super.setForeground(Globals.BLUE);
 		}
 
 		textPanes = new LogPane[idents.length];
@@ -172,7 +172,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void setFileChooser(String fn) {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
-			chooser.setPreferredSize(Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));

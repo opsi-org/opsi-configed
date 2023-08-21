@@ -374,7 +374,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
+			URL opsiImageURL = getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -394,6 +394,19 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
+			}
+		}
+
+		private URL getImageResourceURL(String relPath) {
+			String resourceS = Globals.IMAGE_BASE + relPath;
+
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			URL imgURL = cl.getResource(resourceS);
+			if (imgURL != null) {
+				return imgURL;
+			} else {
+				Logging.warning("Couldn't find file  " + relPath);
+				return null;
 			}
 		}
 

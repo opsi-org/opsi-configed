@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
 	/*
@@ -122,7 +122,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public static String produceKey(String hostId, String licencePoolId, String licenceId) {
-		return Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
+		return Utils.pseudokey(new String[] { hostId, licencePoolId, licenceId });
 	}
 
 	public String getPseudoKey() {

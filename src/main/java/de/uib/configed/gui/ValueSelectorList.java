@@ -30,6 +30,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
+import utils.Utils;
 
 public class ValueSelectorList extends JPanel implements ActionListener {
 	private DepotsList valueList;
@@ -104,23 +105,23 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		if (!Main.FONT) {
-			labelValue.setFont(Globals.defaultFontStandardBold);
+			labelValue.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
-		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectValuesWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
-		Globals.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
+		Utils.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
 		buttonSelectValuesWithEqualProperties.addActionListener(this);
 		buttonSelectValuesWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectValuesAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectValuesAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectValuesAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
-		Globals.formatButtonSmallText(buttonSelectValuesAll);
+		Utils.formatButtonSmallText(buttonSelectValuesAll);
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
 
-		searchPane.setFieldFont(Globals.defaultFont);
+		searchPane.setFieldFont(Globals.DEFAULT_FONT);
 		searchPane.setFieldBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		if (!multidepot) {
 			searchPane.setEnabled(false);
@@ -141,7 +142,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
 		if (!Main.FONT) {
-			valueList.setFont(Globals.defaultFont);
+			valueList.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
 			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

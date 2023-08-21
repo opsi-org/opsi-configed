@@ -24,7 +24,6 @@ import javax.swing.event.TableModelListener;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
@@ -50,6 +49,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import utils.Utils;
 
 public class LicenseDisplayer {
 	@FXML
@@ -90,7 +90,7 @@ public class LicenseDisplayer {
 		Scene scene = new Scene(root);
 		stage = new Stage();
 
-		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
+		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Utils.getMainIcon()), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
 

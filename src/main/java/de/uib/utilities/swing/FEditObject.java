@@ -35,10 +35,13 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
+import utils.Utils;
 
 public class FEditObject extends JDialog implements ActionListener, KeyListener, DocumentListener {
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
@@ -69,7 +72,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 
 		if (initialValue != null) {
 			this.initialValue = initialValue;
@@ -244,7 +247,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	public void setDataChanged(boolean b) {
 		Logging.debug(this, "setDataChanged " + b);
 
-		if (Globals.forbidEditingTargetSpecific() && b) {
+		if (forbidEditingTargetSpecific() && b) {
 			return;
 		}
 
@@ -297,7 +300,22 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	public void enter() {
 		Logging.debug(this, "enter");
+	}
 
+	public boolean forbidEditingTargetSpecific() {
+		boolean forbidEditing = false;
+
+		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
+
+		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
+			forbidEditing = !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
+		} else {
+			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+		}
+
+		Logging.debug("forbidEditing " + forbidEditing);
+
+		return forbidEditing;
 	}
 
 	@Override
@@ -326,7 +344,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected void commit() {
 		Logging.debug(this, "FEditObject.commit");
 
-		if (Globals.forbidEditingTargetSpecific()) {
+		if (forbidEditingTargetSpecific()) {
 			cancel();
 		} else {
 			setStartValue(getValue());
