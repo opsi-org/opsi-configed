@@ -7,6 +7,7 @@
 package de.uib.configed.tree;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -114,6 +115,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private Set<String> directlyAllowedGroups;
 
 	private ConfigedMain configedMain;
+	private boolean mouseClicked;
 
 	static {
 
@@ -262,6 +264,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		mouseClicked = false;
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
 
@@ -303,17 +306,24 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		TreePath selectedPath = getSelectionPath();
+		EventQueue.invokeLater(() -> {
+			if (mouseClicked) {
+				mouseClicked = false;
+				return;
+			}
+			TreePath selectedPath = getSelectionPath();
 
-		if (selectedPath != null && getSelectionRows().length == 1) {
-			configedMain.treeClientsSelectAction(selectedPath);
-		}
+			if (selectedPath != null && getSelectionRows().length == 1) {
+				configedMain.treeClientsSelectAction(selectedPath);
+			}
+		});
 	}
 
 	// interface MouseListener
 	@Override
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
+		mouseClicked = true;
 
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		configedMain.treeClientsMouseAction(e);
