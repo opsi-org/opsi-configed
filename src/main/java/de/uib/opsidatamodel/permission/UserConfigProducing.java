@@ -17,11 +17,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
+import utils.Utils;
 
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
@@ -350,7 +350,7 @@ public class UserConfigProducing {
 		} else {
 			Logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username " + username
 					+ ": " + (readyObjects.size() - 1));
-			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
+			List<Object> timeVal = Utils.getNowTimeListValue("set by role prototype");
 
 			Map<String, Object> itemModifyTime = OpsiserviceNOMPersistenceController
 					.createNOMitem(ConfigOption.UNICODE_TYPE);

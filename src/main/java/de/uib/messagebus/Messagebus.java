@@ -36,6 +36,7 @@ import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 @SuppressWarnings("java:S1258")
 public class Messagebus implements MessagebusListener {
@@ -111,11 +112,7 @@ public class Messagebus implements MessagebusListener {
 				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
 				return false;
 			}
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException ie) {
-				Thread.currentThread().interrupt();
-			}
+			Utils.threadSleep(this, 50);
 		}
 		return true;
 	}
@@ -389,12 +386,8 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private void onEvent(Map<String, Object> message) {
-		try {
-			// Sleep for a little because otherwise we cannot get the needed Data from the Server
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
+		// Sleep for a little because otherwise we cannot get the needed Data from the Server
+		Utils.threadSleep(this, 5);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {

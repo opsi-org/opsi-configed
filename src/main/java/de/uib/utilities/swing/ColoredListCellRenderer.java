@@ -23,7 +23,7 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 		CellAlternatingColorizer.colorize(c, isSelected, index % 2 == 0, true);
 
 		if (!Main.FONT) {
-			c.setFont(Globals.defaultFont);
+			c.setFont(Globals.DEFAULT_FONT);
 		}
 
 		return c;

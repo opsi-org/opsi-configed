@@ -49,6 +49,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
+import utils.Utils;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
@@ -137,38 +138,38 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private void setLoglevelStyles() {
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
-		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
+		StyleConstants.setForeground(logLevelStyles[1], Globals.LOG_COLOR_ESSENTIAL);
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
-		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
+		StyleConstants.setForeground(logLevelStyles[2], Globals.LOG_COLOR_CRITICAL);
 
 		logLevelStyles[3] = styleContext.addStyle("loglevel error", null);
-		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
+		StyleConstants.setForeground(logLevelStyles[3], Globals.LOG_COLOR_ERROR);
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
-		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
+		StyleConstants.setForeground(logLevelStyles[4], Globals.LOG_COLOR_WARNING);
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
-		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
+		StyleConstants.setForeground(logLevelStyles[5], Globals.LOG_COLOR_NOTICE);
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
 		if (FlatLaf.isLafDark()) {
-			StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfoDark);
+			StyleConstants.setForeground(logLevelStyles[6], Globals.LOG_COLOR_INFO_DARK);
 		} else {
-			StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfoLight);
+			StyleConstants.setForeground(logLevelStyles[6], Globals.LOG_COLOR_INFO_LIGHT);
 		}
 
 		logLevelStyles[7] = styleContext.addStyle("loglevel debug", null);
 		if (FlatLaf.isLafDark()) {
-			StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebugDark);
+			StyleConstants.setForeground(logLevelStyles[7], Globals.LOG_COLOR_DEBUG_DARK);
 		} else {
-			StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebugLight);
+			StyleConstants.setForeground(logLevelStyles[7], Globals.LOG_COLOR_DEBUG_LIGHT);
 		}
 		logLevelStyles[8] = styleContext.addStyle("loglevel debug2", null);
-		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace);
+		StyleConstants.setForeground(logLevelStyles[8], Globals.LOG_COLOR_TRACE);
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
-		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret);
+		StyleConstants.setForeground(logLevelStyles[9], Globals.LOG_COLOR_SECRET);
 	}
 
 	private void initComponents(String defaultText) {
@@ -196,7 +197,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.setEditable(true);
 		if (!Main.FONT) {
-			jTextPane.setFont(Globals.defaultFont);
+			jTextPane.setFont(Globals.DEFAULT_FONT);
 		}
 
 		jTextPane.addKeyListener(this);
@@ -209,7 +210,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 		if (!Main.FONT) {
-			labelSearch.setFont(Globals.defaultFont);
+			labelSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
 		jComboBoxSearch = new JComboBox<>();
@@ -219,7 +220,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
 		if (!Main.FONT) {
-			buttonSearch.setFont(Globals.defaultFont);
+			buttonSearch.setFont(Globals.DEFAULT_FONT);
 		}
 		buttonSearch.addActionListener(this);
 		buttonSearch.addKeyListener(this);
@@ -229,17 +230,17 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jCheckBoxCaseSensitive.setSelected(false);
 		jCheckBoxCaseSensitive.addActionListener(this);
 
-		buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
+		buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(this);
 
-		buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
+		buttonFontMinus = new JButton(Utils.createImageIcon("images/font-minus.png", ""));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 		if (!Main.FONT) {
-			labelLevel.setFont(Globals.defaultFont);
+			labelLevel.setFont(Globals.DEFAULT_FONT);
 		}
 
 		Logging.info(this, "levels minL, maxL " + MIN_LEVEL + ", " + MAX_LEVEL);
@@ -248,13 +249,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 		if (!Main.FONT) {
-			labelDisplayRestriction.setFont(Globals.defaultFont);
+			labelDisplayRestriction.setFont(Globals.DEFAULT_FONT);
 		}
 
 		comboModelTypes = new DefaultComboBoxModel<>();
 		comboType = new JComboBox<>(comboModelTypes);
 		if (!Main.FONT) {
-			comboType.setFont(Globals.defaultFont);
+			comboType.setFont(Globals.DEFAULT_FONT);
 		}
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
@@ -809,7 +810,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void setMainText(String s) {
 		Logging.info(this, "setMainText ...");
-		Logging.info(this, "usedmemory " + Globals.usedMemory());
+		Logging.info(this, "usedmemory " + Utils.usedMemory());
 		if (s == null) {
 			Logging.warning(this, "wont set main text, argument s is null");
 			return;
@@ -833,7 +834,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel.setValue(showLevel);
 		buildDocument();
-		Logging.info(this, "usedmemory " + Globals.usedMemory());
+		Logging.info(this, "usedmemory " + Utils.usedMemory());
 
 		jTextPane.setCaretPosition(0);
 		jTextPane.getCaret().setVisible(true);

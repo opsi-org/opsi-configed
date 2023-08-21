@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitingCycle;
+import utils.Utils;
 
 public class IconButton extends JButton {
 
@@ -100,7 +101,7 @@ public class IconButton extends JButton {
 			imagesForAnimation = new ImageIcon[imageURLsForAnimatedWaiting.length];
 
 			for (int i = 0; i < imageURLsForAnimatedWaiting.length; i++) {
-				imagesForAnimation[i] = Globals.createImageIcon(imageURLsForAnimatedWaiting[i], "");
+				imagesForAnimation[i] = Utils.createImageIcon(imageURLsForAnimatedWaiting[i], "");
 			}
 		}
 	}
@@ -143,13 +144,13 @@ public class IconButton extends JButton {
 	 * given) a disabled icon)
 	 */
 	private void createIconButton(boolean enabled) {
-		setIcon(Globals.createImageIcon(this.imageURLActive, ""));
+		setIcon(Utils.createImageIcon(this.imageURLActive, ""));
 		setToolTipText(description);
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(enabled);
-		setSelectedIcon(Globals.createImageIcon(this.imageURLOver, ""));
+		setSelectedIcon(Utils.createImageIcon(this.imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
-			setDisabledIcon(Globals.createImageIcon(this.imageURLDisabled, ""));
+			setDisabledIcon(Utils.createImageIcon(this.imageURLDisabled, ""));
 		}
 	}
 
@@ -166,13 +167,13 @@ public class IconButton extends JButton {
 	 */
 	public void createIconButton(String desc, String imageURLActive, String imageURLOver, String imageURLDisabled,
 			boolean enabled) {
-		setIcon(Globals.createImageIcon(imageURLActive, ""));
+		setIcon(Utils.createImageIcon(imageURLActive, ""));
 		setToolTipText(desc);
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(enabled);
-		setSelectedIcon(Globals.createImageIcon(imageURLOver, ""));
+		setSelectedIcon(Utils.createImageIcon(imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
-			setDisabledIcon(Globals.createImageIcon(imageURLDisabled, ""));
+			setDisabledIcon(Utils.createImageIcon(imageURLDisabled, ""));
 		}
 	}
 
@@ -207,7 +208,7 @@ public class IconButton extends JButton {
 	 * set the default icon as internal value by location
 	 */
 	public void setDefaultIcon(String desc) {
-		defaultIcon = Globals.createImageIcon(desc, "");
+		defaultIcon = Utils.createImageIcon(desc, "");
 	}
 
 	/**
@@ -221,7 +222,7 @@ public class IconButton extends JButton {
 	 * set the running action icon as internal value by location
 	 */
 	public void setRunningActionIcon(String desc) {
-		runningActionIcon = Globals.createImageIcon(desc, "");
+		runningActionIcon = Utils.createImageIcon(desc, "");
 	}
 
 	/**

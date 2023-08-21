@@ -17,6 +17,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
 public class FDriverUpload extends SecondaryFrame {
 
@@ -30,7 +31,7 @@ public class FDriverUpload extends SecondaryFrame {
 		this.main = main;
 
 		init();
-		super.setGlobals(Globals.getMap());
+		super.setGlobals(Utils.getMap());
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
 	}
 

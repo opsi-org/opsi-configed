@@ -18,6 +18,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /**
  * This class is responsible for copying the client. By creating a new client
@@ -54,7 +55,7 @@ public class CopyClient {
 			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
 		this.clientToCopy = clientToCopy;
 		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + Globals.getDomainFromClientName(clientToCopy.getName());
+		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
 		this.newDescription = newDescription;
 		this.newInventoryNumber = newInventoryNumber;
 		this.newNotes = newNotes;
@@ -87,7 +88,7 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		persist.createClient(newClientName, Globals.getDomainFromClientName(clientToCopy.getName()),
+		persist.createClient(newClientName, Utils.getDomainFromClientName(clientToCopy.getName()),
 				clientToCopy.getInDepot(), newDescription, newInventoryNumber, newNotes, newIpAddress, newSystemUUID,
 				newMacAddress, clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(),
 				clientToCopy.getWanConfig(), "", "");

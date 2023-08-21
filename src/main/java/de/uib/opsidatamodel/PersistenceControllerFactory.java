@@ -6,10 +6,10 @@
 
 package de.uib.opsidatamodel;
 
-import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public final class PersistenceControllerFactory {
 
@@ -49,7 +49,7 @@ public final class PersistenceControllerFactory {
 
 		if (connected) {
 			persistenceController.checkMultiFactorAuthentication();
-			Globals.isMultiFactorAuthenticationEnabled = persistenceController.usesMultiFactorAuthentication();
+			Utils.setMultiFactorAuthenticationEnabled(persistenceController.usesMultiFactorAuthentication());
 			persistenceController.checkConfiguration();
 			persistenceController.retrieveOpsiModules();
 		}
@@ -57,7 +57,7 @@ public final class PersistenceControllerFactory {
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& !Globals.disableCertificateVerification) {
+				&& !Utils.isCertificateVerificationDisabled()) {
 			CertificateManager.updateCertificate();
 		}
 

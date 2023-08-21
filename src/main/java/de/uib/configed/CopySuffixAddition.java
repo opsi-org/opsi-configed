@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import utils.Utils;
 
 /**
  * This class is responsible for adding a suffix to a client's name.
@@ -74,7 +75,7 @@ public class CopySuffixAddition {
 			clientName = clientName.concat(numberSuffix.toString());
 		}
 
-		while (clientExists(clientName.concat("." + Globals.getDomainFromClientName(this.clientName)))) {
+		while (clientExists(clientName.concat("." + Utils.getDomainFromClientName(this.clientName)))) {
 			numberSuffix += 1;
 			clientName = replaceNumberSuffix(clientName, numberSuffix);
 		}
@@ -103,7 +104,7 @@ public class CopySuffixAddition {
 	}
 
 	private boolean clientHasCopy(String clientName) {
-		return clientExists(clientName.concat(COPY_SUFFIX + "." + Globals.getDomainFromClientName(this.clientName)));
+		return clientExists(clientName.concat(COPY_SUFFIX + "." + Utils.getDomainFromClientName(this.clientName)));
 	}
 
 	private String getNameFromClientName() {

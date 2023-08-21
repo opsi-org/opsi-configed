@@ -32,7 +32,7 @@ public class OpenSaveDialog implements ActionListener {
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
 
 		if (!Main.FONT) {
-			saveBtn.setFont(Globals.defaultFont);
+			saveBtn.setFont(Globals.DEFAULT_FONT);
 		}
 
 		saveBtn.addActionListener(this);
@@ -40,7 +40,7 @@ public class OpenSaveDialog implements ActionListener {
 		openBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.open"));
 
 		if (!Main.FONT) {
-			openBtn.setFont(Globals.defaultFont);
+			openBtn.setFont(Globals.DEFAULT_FONT);
 		}
 		openBtn.addActionListener(this);
 

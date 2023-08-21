@@ -18,6 +18,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
+import utils.Utils;
 
 public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	protected static final int FILL_LENGTH = 20;
@@ -49,9 +50,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		if (jc instanceof JLabel) {
 			String tooltipText = null;
 			if (tooltipPrefix != null && !tooltipPrefix.isEmpty()) {
-				tooltipText = Globals.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
+				tooltipText = Utils.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
 			} else {
-				tooltipText = Globals.fillStringToLength(value + " ", FILL_LENGTH);
+				tooltipText = Utils.fillStringToLength(value + " ", FILL_LENGTH);
 			}
 
 			((JLabel) jc).setToolTipText(tooltipText);
@@ -59,18 +60,18 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (Main.THEMES) {
 			if (isSelected) {
-				jc.setBackground(Globals.opsiBlue);
+				jc.setBackground(Globals.OPSI_BLUE);
 				if (FlatLaf.isLafDark()) {
-					jc.setForeground(Globals.opsiForegroundDark);
+					jc.setForeground(Globals.OPSI_FOREGROUND_DARK);
 				} else {
-					jc.setForeground(Globals.opsiBackgroundLight);
+					jc.setForeground(Globals.OPSI_BACKGROUND_LIGHT);
 				}
 			} else if (FlatLaf.isLafDark()) {
-				jc.setBackground(Globals.opsiBackgroundDark);
-				jc.setForeground(Globals.opsiForegroundDark);
+				jc.setBackground(Globals.OPSI_BACKGROUND_DARK);
+				jc.setForeground(Globals.OPSI_FOREGROUND_DARK);
 			} else {
-				jc.setBackground(Globals.opsiBackgroundLight);
-				jc.setForeground(Globals.opsiForegroundLight);
+				jc.setBackground(Globals.OPSI_BACKGROUND_LIGHT);
+				jc.setForeground(Globals.OPSI_FOREGROUND_LIGHT);
 			}
 
 			if (row % 2 != 0) {

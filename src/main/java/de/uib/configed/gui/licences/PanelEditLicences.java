@@ -21,6 +21,7 @@ import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelEditLicences extends MultiTablePanel {
 	public PanelGenEditTable panelKeys;
@@ -44,7 +45,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelKeys.setMasterFrame(Globals.frame1);
+		panelKeys.setMasterFrame(Utils.getMasterFrame());
 		panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelKeys.showFilterIcon(true);
@@ -55,7 +56,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelSoftwarelicences.setMasterFrame(Globals.frame1);
+		panelSoftwarelicences.setMasterFrame(Utils.getMasterFrame());
 		panelSoftwarelicences.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicences.setFiltering(true);
 		panelSoftwarelicences.showFilterIcon(true);
@@ -65,7 +66,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelLicencecontracts.setMasterFrame(Globals.frame1);
+		panelLicencecontracts.setMasterFrame(Utils.getMasterFrame());
 		panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered

@@ -26,6 +26,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
@@ -67,8 +68,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		owner.setVisible(true);
 
 		jButton1.setEnabled(false);
-		jButton1.setIcon(Globals.createImageIcon("images/cancel.png", ""));
-		jButton2.setIcon(Globals.createImageIcon("images/edit-delete.png", ""));
+		jButton1.setIcon(Utils.createImageIcon("images/cancel.png", ""));
+		jButton2.setIcon(Utils.createImageIcon("images/edit-delete.png", ""));
 
 		initDataStructure();
 	}

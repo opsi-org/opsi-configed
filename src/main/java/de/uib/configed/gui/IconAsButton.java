@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.Globals;
+import utils.Utils;
 
 /**
  * a button-like panel
@@ -72,17 +72,17 @@ public class IconAsButton extends JPanel implements MouseListener {
 		tooltipActive = desc;
 		tooltipInactive = desc;
 
-		iconInactive = Globals.createImageIcon(inactive, description);
+		iconInactive = Utils.createImageIcon(inactive, description);
 		if (active != null) {
-			iconActive = Globals.createImageIcon(active, description);
+			iconActive = Utils.createImageIcon(active, description);
 		}
 
 		if (over != null) {
-			iconOver = Globals.createImageIcon(over, description);
+			iconOver = Utils.createImageIcon(over, description);
 		}
 
 		if (disabled != null) {
-			iconDisabled = Globals.createImageIcon(disabled, description);
+			iconDisabled = Utils.createImageIcon(disabled, description);
 		}
 
 		if (label != null) {

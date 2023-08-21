@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -42,17 +43,50 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
-
 	private static final String ANSI_ESCAPE_1 = "\u001B";
-
 	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
 	public static final String ANSI_CODE_END_2 = "[0;0;0m";
 
 	// user info not really ansi code !!
 	public static final String ANSI_CODE_INFO = "[0;info;0m";
 	public static final String ANSI_CODE_ERROR = "[0;error;0m";
-
-	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
+	private static final Map<String, Color> ANSI_CODE_COLORS = new HashMap<>();
+	static {
+		ANSI_CODE_COLORS.put("[0;info;0m", Globals.GREYED);
+		ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[0;30;40m", Globals.PRIMARY_FOREGROUND_COLOR);
+		ANSI_CODE_COLORS.put("[1;30;40m", Globals.PRIMARY_FOREGROUND_COLOR);
+		ANSI_CODE_COLORS.put("[0;40;40m", Globals.PRIMARY_FOREGROUND_COLOR);
+		ANSI_CODE_COLORS.put("[1;40;40m", Globals.PRIMARY_FOREGROUND_COLOR);
+		ANSI_CODE_COLORS.put("[0;31;40m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[1;31;40m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[0;41;40m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[1;41;40m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[0;32;40m", Globals.OK_COLOR);
+		ANSI_CODE_COLORS.put("[1;32;40m", Globals.OK_COLOR);
+		ANSI_CODE_COLORS.put("[0;42;40m", Globals.OK_COLOR);
+		ANSI_CODE_COLORS.put("[1;42;40m", Globals.OK_COLOR);
+		ANSI_CODE_COLORS.put("[0;33;40m", Globals.DARK_ORANGE);
+		ANSI_CODE_COLORS.put("[1;33;40m", Globals.DARK_ORANGE);
+		ANSI_CODE_COLORS.put("[0;43;40m", Globals.DARK_ORANGE);
+		ANSI_CODE_COLORS.put("[1;43;40m", Globals.DARK_ORANGE);
+		ANSI_CODE_COLORS.put("[0;34;40m", Globals.BLUE);
+		ANSI_CODE_COLORS.put("[1;34;40m", Globals.BLUE);
+		ANSI_CODE_COLORS.put("[0;44;40m", Globals.BLUE);
+		ANSI_CODE_COLORS.put("[1;44;40m", Globals.BLUE);
+		ANSI_CODE_COLORS.put("[0;35;40m", Color.MAGENTA);
+		ANSI_CODE_COLORS.put("[1;35;40m", Color.MAGENTA);
+		ANSI_CODE_COLORS.put("[0;45;40m", Color.MAGENTA);
+		ANSI_CODE_COLORS.put("[1;45;40m", Color.MAGENTA);
+		ANSI_CODE_COLORS.put("[0;36;40m", Color.CYAN);
+		ANSI_CODE_COLORS.put("[1;36;40m", Color.CYAN);
+		ANSI_CODE_COLORS.put("[0;46;40m", Color.CYAN);
+		ANSI_CODE_COLORS.put("[1;46;40m", Color.CYAN);
+		ANSI_CODE_COLORS.put("[0;37;40m", Globals.LIGHT_BLACK);
+		ANSI_CODE_COLORS.put("[1;37;40m", Globals.LIGHT_BLACK);
+		ANSI_CODE_COLORS.put("[0;47;40m", Globals.LIGHT_BLACK);
+		ANSI_CODE_COLORS.put("[1;47;40m", Globals.LIGHT_BLACK);
+	}
 
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
@@ -116,7 +150,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		}
 
 		if (SSHCommandFactory.sshColoredOutput && !line.trim().replace("\\t", "").replace(" ", "").isEmpty()) {
-			for (Entry<String, Color> entry : ansiCodeColors.entrySet()) {
+			for (Entry<String, Color> entry : ANSI_CODE_COLORS.entrySet()) {
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
 			}
 		}

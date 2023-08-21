@@ -129,6 +129,8 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 public class ConfigedMain implements ListSelectionListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -144,9 +146,6 @@ public class ConfigedMain implements ListSelectionListener {
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
-
-	// Are themes enabled?
-	public static final boolean THEMES = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -1455,10 +1454,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void startLicencesFrame() {
 		licencesFrame = new LicencesFrame(this);
-
-		Globals.frame1 = licencesFrame;
-
-		licencesFrame.setGlobals(Globals.getMap());
+		Utils.setMasterFrame(licencesFrame);
+		licencesFrame.setGlobals(Utils.getMap());
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
@@ -2050,8 +2047,8 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new BooleanIconTableCellRenderer(
-					Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
+			column.setCellRenderer(
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/checked_withoutbox.png", ""), null));
 		}
 	}
 
@@ -2284,8 +2281,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelLocalbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// List of the properties map of all selected clients
@@ -2301,8 +2297,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelNetbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// array of the properties map of all selected clients
@@ -3127,8 +3122,8 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < Globals.getLogTypes().length; i++) {
-				logfiles.put(Globals.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (int i = 0; i < Utils.getLogTypes().length; i++) {
+				logfiles.put(Utils.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 
 			mainFrame.setLogfilePanel(logfiles);
@@ -4231,6 +4226,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
+
 		if (resetLocalbootProducts) {
 			persistenceController.resetLocalbootProducts(getSelectedClients(), withDependencies);
 		}
@@ -4240,6 +4237,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
+		mainFrame.setCursor(null);
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -4818,7 +4816,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			HostInfo clientToCopy = selectedClient.get();
 			String newClientNameWithDomain = newClientName + "."
-					+ Globals.getDomainFromClientName(clientToCopy.getName());
+					+ Utils.getDomainFromClientName(clientToCopy.getName());
 			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {

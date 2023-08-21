@@ -21,7 +21,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
@@ -42,9 +44,9 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		super.setTitle(title);
 		if (!Main.FONT) {
-			super.setFont(Globals.defaultFont);
+			super.setFont(Globals.DEFAULT_FONT);
 		}
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 
 		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -71,15 +73,15 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 
-		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
 		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonHelp"));
 
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));
 
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction3();
@@ -93,10 +95,10 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		JButton jButtonReload = new JButton();
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
-		jButtonReload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
+		jButtonReload.setIcon(Utils.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				configedMain.reload();
@@ -106,14 +108,14 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonReload);
 		buttonPanel.add(jButtonExecute);
 
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 	}
 
 	protected void consolidate() {

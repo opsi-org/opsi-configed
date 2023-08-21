@@ -9,8 +9,8 @@ package de.uib.configed.type.licences;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
 	/*
@@ -36,8 +36,7 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
 		}
 
-		String pseudokey = Globals
-				.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
+		String pseudokey = Utils.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
 		entry.put(ID_KEY, pseudokey);
 
 		return entry;
