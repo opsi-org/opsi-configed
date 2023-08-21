@@ -34,6 +34,7 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
+import utils.SevenZipLibraryInitializer;
 
 public class Main {
 
@@ -296,6 +297,8 @@ public class Main {
 
 		// Turn on antialiasing for text (not for applets)
 		System.setProperty("swing.aatext", "true");
+
+		SevenZipLibraryInitializer.init();
 
 		if (isLogviewer) {
 			Logviewer.main(cmd);
