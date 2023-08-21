@@ -6,7 +6,6 @@
 
 package de.uib.messagebus;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -29,7 +28,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
-import de.uib.configed.terminal.WebSocketInputStream;
+import de.uib.messagebus.event.EventDispatcher;
+import de.uib.messagebus.event.WebSocketEvents;
+import de.uib.messagebus.event.handler.FileEventHandler;
+import de.uib.messagebus.event.handler.HostEventHandler;
+import de.uib.messagebus.event.handler.ProductOnClientEventHandler;
+import de.uib.messagebus.event.handler.TerminalEventHandler;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -47,12 +51,14 @@ public class Messagebus implements MessagebusListener {
 	private boolean disconnecting;
 	private boolean reconnecting;
 	private boolean initialSubscriptionReceived;
+	private EventDispatcher eventDispatcher;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+		this.eventDispatcher = new EventDispatcher();
 	}
 
 	public WebSocketClientEndpoint getWebSocket() {
@@ -61,7 +67,7 @@ public class Messagebus implements MessagebusListener {
 
 	public boolean connect() throws InterruptedException {
 		if (messagebusWebSocket != null && isConnected()) {
-			Logging.info(this, "messagebus is already connected");
+			Logging.info(this, "Messagebus is already connected");
 			return true;
 		}
 
@@ -94,8 +100,8 @@ public class Messagebus implements MessagebusListener {
 				waitForInitialChannelSubscritionEvent(10000)) {
 			connected = true;
 			Logging.notice(this, "Connected to messagebus");
+			registerEventHandlers();
 			makeStandardChannelSubscriptions();
-
 		}
 		return connected;
 	}
@@ -123,7 +129,7 @@ public class Messagebus implements MessagebusListener {
 		try {
 			uri = new URI(produceURL());
 		} catch (URISyntaxException ex) {
-			Logging.warning(this, "inavlid URI: " + uri, ex);
+			Logging.warning(this, "Inavlid URI: " + uri, ex);
 		}
 
 		return uri;
@@ -135,13 +141,13 @@ public class Messagebus implements MessagebusListener {
 
 		if (!hasPort(host)) {
 			host = host + ":4447";
-			Logging.info(this, "host doesn't have specified port (using default): " + host);
+			Logging.info(this, "Host doesn't have specified port (using default): " + host);
 		} else {
-			Logging.info(this, "host does have specified port (using specified port): " + host);
+			Logging.info(this, "Host does have specified port (using specified port): " + host);
 		}
 
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
-		Logging.info(this, "connecting to messagebus using the following URL: " + url);
+		Logging.info(this, "Connecting to messagebus using the following URL: " + url);
 
 		return url;
 	}
@@ -150,10 +156,10 @@ public class Messagebus implements MessagebusListener {
 		boolean result = false;
 
 		if (host.contains("[") && host.contains("]")) {
-			Logging.info(this, "host is IPv6: " + host);
+			Logging.info(this, "Host is IPv6: " + host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;
 		} else {
-			Logging.info(this, "host is either IPv4 or FQDN: " + host);
+			Logging.info(this, "Host is either IPv4 or FQDN: " + host);
 			result = host.contains(":");
 		}
 
@@ -173,17 +179,37 @@ public class Messagebus implements MessagebusListener {
 	private void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
-		channels.add("event:host_connected");
-		channels.add("event:host_disconnected");
+		channels.add(WebSocketEvents.HOST_CONNECTED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_DISCONNECTED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_CREATED.asChannelEvent());
+		channels.add(WebSocketEvents.HOST_DELETED.asChannelEvent());
 
-		channels.add("event:host_created");
-		channels.add("event:host_deleted");
-
-		channels.add("event:productOnClient_created");
-		channels.add("event:productOnClient_updated");
-		channels.add("event:productOnClient_deleted");
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.asChannelEvent());
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.asChannelEvent());
+		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.asChannelEvent());
 
 		makeChannelSubscriptionRequest(channels);
+	}
+
+	private void registerEventHandlers() {
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_OPEN_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_CLOSE_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_DATA_READ.toString(), new TerminalEventHandler());
+
+		eventDispatcher.registerHandler(WebSocketEvents.FILE_UPLOAD_RESULT.toString(), new FileEventHandler(this));
+
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_CONNECTED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_DISCONNECTED.toString(),
+				new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_CREATED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.HOST_DELETED.toString(), new HostEventHandler(configedMain));
+
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.toString(),
+				new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.toString(),
+				new ProductOnClientEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.toString(),
+				new ProductOnClientEventHandler(configedMain));
 	}
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
@@ -197,8 +223,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("operation", "add");
 		message.put("channels", channels);
 
-		Logging.debug(this, "channel subscription request: " + message.toString());
-
+		Logging.debug(this, "Sending channel subscription request: " + message.toString());
 		sendMessage(message);
 	}
 
@@ -223,8 +248,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("cols", terminal.getColumnCount());
 		message.put("rows", terminal.getRowCount());
 
-		Logging.debug(this, "terminal open request: " + message.toString());
-
+		Logging.debug(this, "Sending terminal open request: " + message.toString());
 		sendMessage(message);
 
 		terminal.lock();
@@ -246,7 +270,7 @@ public class Messagebus implements MessagebusListener {
 				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
 				send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
 			} catch (JsonProcessingException ex) {
-				Logging.warning(this, "error occurred while processing msgpack: ", ex);
+				Logging.warning(this, "Error occurred while processing msgpack: ", ex);
 			}
 		} else {
 			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
@@ -265,9 +289,9 @@ public class Messagebus implements MessagebusListener {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
-			Logging.info(this, "connection to messagebus closed");
+			Logging.info(this, "Connection to messagebus closed");
 		} else {
-			Logging.info(this, "messagebus not connected");
+			Logging.info(this, "Messagebus not connected");
 		}
 	}
 
@@ -331,110 +355,24 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		String type = (String) message.get("type");
 		Logging.trace(this, "Messagebus message received: " + message.toString());
-
-		if (type.startsWith("terminal_")) {
-			switch (type) {
-			case "terminal_data_read":
-				onTerminalDataRead((byte[]) message.get("data"));
-				break;
-			case "terminal_open_event":
-				Terminal terminal = Terminal.getInstance();
-				terminal.setTerminalId((String) message.get("terminal_id"));
-				terminal.setTerminalChannel((String) message.get("back_channel"));
-				terminal.unlock();
-				break;
-			case "terminal_close_event":
-				Terminal.getInstance().close();
-				break;
-			case "terminal_resize_event":
-				break;
-			default:
-				Logging.warning(this, "unhandled terminal type response caught: " + type);
-				break;
-			}
-		} else if ("file_upload_result".equals(type)) {
-			String filePath = (String) message.get("path");
-
-			message.clear();
-			message.put("type", "terminal_data_write");
-			message.put("id", UUID.randomUUID().toString());
-			message.put("sender", "@");
-			message.put("channel", Terminal.getInstance().getTerminalChannel());
-			message.put("created", System.currentTimeMillis());
-			message.put("expires", System.currentTimeMillis() + 10000);
-			message.put("terminal_id", Terminal.getInstance().getTerminalId());
-			message.put("data", filePath.getBytes(StandardCharsets.UTF_8));
-
-			sendMessage(message);
-		} else if ("channel_subscription_event".equals(type)) {
+		String type = (String) message.get("type");
+		if (WebSocketEvents.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
-		} else if ("event".equals(type)) {
+		} else if (WebSocketEvents.GENERAL_EVENT.toString().equals(type)) {
 			onEvent(message);
 		} else {
-			Logging.warning(this, "unexpected message type " + type);
-		}
-	}
-
-	private void onTerminalDataRead(byte[] data) {
-		try {
-			WebSocketInputStream.write(data);
-		} catch (IOException e) {
-			Logging.error(this, "failed to write message: ", e);
+			eventDispatcher.dispatch(type, message);
 		}
 	}
 
 	private void onEvent(Map<String, Object> message) {
 		// Sleep for a little because otherwise we cannot get the needed Data from the Server
 		Utils.threadSleep(this, 5);
-
 		ObjectMapper objectMapper = new ObjectMapper();
-		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
-		};
-		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"), typeRef);
-
-		switch ((String) message.get("event")) {
-		case "host_connected":
-			Map<String, Object> connectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-			String connectedClientId = (String) connectedHostData.get("id");
-			configedMain.addClientToConnectedList(connectedClientId);
-			break;
-
-		case "host_disconnected":
-			Map<String, Object> disconnectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-			String disconnectedClientId = (String) disconnectedHostData.get("id");
-			configedMain.removeClientFromConnectedList(disconnectedClientId);
-			break;
-
-		case "host_created":
-			configedMain.addClientToTable((String) eventData.get("id"));
-			break;
-
-		case "host_deleted":
-			configedMain.removeClientFromTable((String) eventData.get("id"));
-			break;
-
-		case "productOnClient_created":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		case "productOnClient_updated":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		case "productOnClient_deleted":
-			configedMain.updateProduct(
-					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-					}));
-			break;
-
-		default:
-			break;
-		}
+		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
+				new TypeReference<Map<String, Object>>() {
+				});
+		eventDispatcher.dispatch((String) message.get(WebSocketEvents.GENERAL_EVENT.toString()), eventData);
 	}
 }
