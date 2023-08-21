@@ -13,12 +13,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /**
  * {@code CertificateDownloader} downloads certificate file from the specified
@@ -69,7 +71,9 @@ public final class CertificateDownloader {
 		File tmpCertFile = null;
 
 		try {
-			tmpCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
+			tmpCertFile = Files.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION)
+					.toFile();
+			Utils.restrictAccessToFile(tmpCertFile);
 		} catch (IOException e) {
 			Logging.error("unable to create tmp certificate file", e);
 		}

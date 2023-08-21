@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -45,6 +46,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
 
@@ -135,7 +137,9 @@ public class ExporterToPDF extends AbstractExportTable {
 				}
 			} else {
 				try {
-					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
+					temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
+							.toFile();
+					Utils.restrictAccessToFile(temp);
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
 					Logging.error("Failed to create temp file", e);
