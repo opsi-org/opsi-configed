@@ -31,6 +31,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.DynamicCombo;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
 	private JSplitPane splitPane;
@@ -83,7 +84,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		comboClient = new DynamicCombo();
 		if (!Main.FONT) {
-			comboClient.setFont(Globals.defaultFontBig);
+			comboClient.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		comboClient.setPreferredSize(new Dimension(200, 20));
 		buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
@@ -124,7 +125,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // searchpane
 		);
-		panelUsage.setMasterFrame(Globals.frame1);
+		panelUsage.setMasterFrame(Utils.getMasterFrame());
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelUsage.setFiltering(true);

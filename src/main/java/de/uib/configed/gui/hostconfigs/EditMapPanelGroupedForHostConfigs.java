@@ -37,6 +37,7 @@ import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
@@ -420,8 +421,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
 						Configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Utils.createImageIcon("images/cancel16_small.png", "") },
 				2, 600, 600, true, null) {
 
 			@Override
@@ -506,8 +507,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
 						Configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Utils.createImageIcon("images/cancel16_small.png", "") },
 				2, 600, 600,
 				// lazylayout, i.e, we have a chance to define components and use them for the
 				true,

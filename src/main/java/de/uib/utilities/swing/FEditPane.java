@@ -24,9 +24,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.script.CmdLauncher;
+import utils.Utils;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
@@ -76,7 +76,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		setDataChanged(false);
 
 		cmdLauncher = new CmdLauncher();
-		if (Globals.isWindows()) {
+		if (Utils.isWindows()) {
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		} else {
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);

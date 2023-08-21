@@ -47,6 +47,7 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
+import utils.Utils;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
@@ -91,16 +92,16 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
-		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 
 		buttonSelectWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
-		Globals.formatButtonSmallText(buttonSelectWithEqualProperties);
+		Utils.formatButtonSmallText(buttonSelectWithEqualProperties);
 		buttonSelectWithEqualProperties.addActionListener(this);
 
-		buttonSelectAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
-		Globals.formatButtonSmallText(buttonSelectAll);
+		Utils.formatButtonSmallText(buttonSelectAll);
 		buttonSelectAll.addActionListener(this);
 
 		GroupLayout layoutPanelDepots = new GroupLayout(panelDepots);
@@ -120,8 +121,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		if (!Main.THEMES) {
-			buttonSelectAll.setForeground(Globals.blue);
-			buttonSelectWithEqualProperties.setForeground(Globals.blue);
+			buttonSelectAll.setForeground(Globals.BLUE);
+			buttonSelectWithEqualProperties.setForeground(Globals.BLUE);
 		}
 
 		// jLabelProductProperties = new JLabel (
@@ -129,7 +130,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 		if (!Main.FONT) {
-			jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
+			jLabelEditDepotProductProperties.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		IconButton buttonSetValuesFromPackage = new IconButton(
@@ -189,7 +190,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	@Override
 	public void setTitlePanelActivated(boolean actived) {
 		if (!Main.THEMES) {
-			jLabelEditDepotProductProperties.setForeground(actived ? Globals.lightBlack : Globals.greyed);
+			jLabelEditDepotProductProperties.setForeground(actived ? Globals.LIGHT_BLACK : Globals.GREYED);
 		}
 	}
 

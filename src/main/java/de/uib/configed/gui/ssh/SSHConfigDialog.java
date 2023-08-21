@@ -82,7 +82,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
-		if (Globals.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 	}
@@ -335,15 +335,15 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		jButtonSave = new IconButton(Configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
 				"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
-		jButtonSave.setPreferredSize(Globals.smallButtonDimension);
+		jButtonSave.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		IconButton jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
 				"images/cancel.png", "images/cancel_over.png", " ", true);
-		jButtonClose.setPreferredSize(Globals.smallButtonDimension);
+		jButtonClose.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		jButtonKill = new IconButton(Configed.getResourceValue("SSHConnection.Config.StopUsing"),
 				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
-		jButtonKill.setPreferredSize(Globals.smallButtonDimension);
+		jButtonKill.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		jButtonKill.addActionListener(actionEvent -> doAction2());
 
@@ -352,15 +352,16 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		buttonPanel.add(new JLabel("            "));
 
-		Logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
-		if (!(Globals.isGlobalReadOnly())) {
+		Logging.info(this, "actionlistener for button1 "
+				+ PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
 		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 				"images/folder_16.png", " ", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 
@@ -665,7 +666,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
-		chooser.setPreferredSize(Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 

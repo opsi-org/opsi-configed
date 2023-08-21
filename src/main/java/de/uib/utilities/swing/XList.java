@@ -22,8 +22,8 @@ public class XList extends JList<String> {
 
 	private void configure() {
 		if (!Main.THEMES) {
-			setSelectionBackground(Globals.nimbusSelectionBackground);
-			setBackground(Globals.nimbusBackground);
+			setSelectionBackground(Globals.NIMBUS_SELECTION_BACKGROUND);
+			setBackground(Globals.NIMBUS_BACKGROUND);
 		}
 	}
 

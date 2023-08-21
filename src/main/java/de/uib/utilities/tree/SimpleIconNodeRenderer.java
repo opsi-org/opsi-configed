@@ -32,16 +32,16 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			super.setOpaque(true);
 		}
 
-		standard = Globals.defaultFontBig;
+		standard = Globals.DEFAULT_FONT_BIG;
 
-		emphasized = Globals.defaultFontStandardBold;
+		emphasized = Globals.DEFAULT_FONT_STANDARD_BOLD;
 
 		if (!Main.FONT) {
 			super.setFont(standard);
 		}
 		if (!Main.THEMES) {
-			super.setForeground(Globals.lightBlack);
-			super.setTextSelectionColor(Globals.lightBlack);
+			super.setForeground(Globals.LIGHT_BLACK);
+			super.setTextSelectionColor(Globals.LIGHT_BLACK);
 			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));

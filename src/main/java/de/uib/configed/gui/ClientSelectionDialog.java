@@ -79,6 +79,7 @@ import de.uib.utilities.observer.swing.AbstractValueChangeListener;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
+import utils.Utils;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
@@ -219,16 +220,16 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		JLabel saveNameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryName"));
 		if (!Main.FONT) {
-			saveNameLabel.setFont(Globals.defaultFont);
+			saveNameLabel.setFont(Globals.DEFAULT_FONT);
 		}
 		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 		if (!Main.FONT) {
-			saveDescriptionLabel.setFont(Globals.defaultFont);
+			saveDescriptionLabel.setFont(Globals.DEFAULT_FONT);
 		}
 
 		saveButton = new JButton(Configed.getResourceValue("ClientSelectionDialog.inquirySave"));
 		if (!Main.FONT) {
-			saveButton.setFont(Globals.defaultFont);
+			saveButton.setFont(Globals.DEFAULT_FONT);
 		}
 		saveButton.addActionListener(actionEvent -> save());
 
@@ -335,7 +336,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		layout.setHorizontalGroup(hMainGroup);
 
 		// columns headline
-		Font font = Globals.defaultFontStandardBold;
+		Font font = Globals.DEFAULT_FONT_STANDARD_BOLD;
 		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
 		if (!Main.FONT) {
 			negationLabel.setFont(font);
@@ -371,7 +372,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		newElementBox = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 		if (!Main.FONT) {
-			newElementBox.setFont(Globals.defaultFont);
+			newElementBox.setFont(Globals.DEFAULT_FONT);
 		}
 
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
@@ -510,10 +511,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.HOST_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
-		result.topLabel.setIcon(Globals.createImageIcon("images/client_small.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/client_small.png",
 				Configed.getResourceValue("ClientSelectionDialog.client")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 		result.groupList
 				.add(createSimpleGroup(new GroupElement(manager.getBackend().getGroups().toArray(new String[0]))));
@@ -532,10 +533,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SOFTWARE_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwareGroup") + ":");
-		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/package.png",
 				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -561,10 +562,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.PROPERTIES_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyGroup"));
-		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/package.png",
 				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -572,7 +573,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
 		if (!Main.THEMES) {
-			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+			propertyIdGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
 		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
@@ -580,7 +581,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
 		if (!Main.THEMES) {
-			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+			propertyValueGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
 		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
@@ -596,10 +597,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SOFTWARE_WITH_PROPERTIES_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesGroup"));
-		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/package.png",
 				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -619,7 +620,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
 		if (!Main.THEMES) {
-			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+			propertyIdGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
 		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
@@ -627,7 +628,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
 		if (!Main.THEMES) {
-			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+			propertyValueGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
 		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
@@ -642,10 +643,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.HARDWARE_GROUP;
 		result.topLabel.setText(hardware);
-		result.topLabel.setIcon(Globals.createImageIcon("images/hwaudit.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/hwaudit.png",
 				Configed.getResourceValue("ClientSelectionDialog.hardwareName")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
@@ -666,10 +667,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SW_AUDIT_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.swAuditGroup") + ":");
-		result.topLabel.setIcon(Globals.createImageIcon("images/swaudit.png",
+		result.topLabel.setIcon(Utils.createImageIcon("images/swaudit.png",
 				Configed.getResourceValue("ClientSelectionDialog.swauditName")));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		result.groupList.add(createSimpleGroup(new SwAuditNameElement()));
@@ -707,7 +708,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
 		if (!Main.FONT) {
-			result.topLabel.setFont(Globals.defaultFontStandardBold);
+			result.topLabel.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
 				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);

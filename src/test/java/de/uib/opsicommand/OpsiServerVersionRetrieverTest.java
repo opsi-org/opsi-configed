@@ -21,7 +21,6 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpStatusCode;
 
 import de.uib.Utils;
-import de.uib.configed.Globals;
 
 @TestMethodOrder(OrderAnnotation.class)
 class OpsiServerVersionRetrieverTest {
@@ -29,7 +28,7 @@ class OpsiServerVersionRetrieverTest {
 
 	@BeforeAll
 	static void setup() {
-		Globals.disableCertificateVerification = true;
+		utils.Utils.setDisableCertificateVerification(true);
 		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
 	}
 

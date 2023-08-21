@@ -26,6 +26,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class RequirementsTableModel extends AbstractTableModel {
 
@@ -224,7 +225,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
 							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"))) {
 
-				((JLabel) cell).setIcon(Globals.createImageIcon("images/warning.png", "warning"));
+				((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
 
 				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
 
@@ -247,7 +248,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 		public void colorize(Component cell, int row, int col) {
 			if (!Main.THEMES) {
-				cell.setForeground(Globals.lightBlack);
+				cell.setForeground(Globals.LIGHT_BLACK);
 			}
 
 			int kindOfRow = row % 3;
