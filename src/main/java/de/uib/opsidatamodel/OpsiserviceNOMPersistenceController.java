@@ -3145,30 +3145,34 @@ public class OpsiserviceNOMPersistenceController {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
 		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
 		if (localbootProductNames == null) {
-			Map<String, List<String>> productOrderingResult = exec
-					.getMapOfStringLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
+			if (ServerFacade.isOpsi43()) {
+				localbootProductNames = new ArrayList<>(dataStub.getDepot2LocalbootProducts().get(depotId).keySet());
+			} else {
+				Map<String, List<String>> productOrderingResult = exec
+						.getMapOfStringLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
 
-			List<String> sortedProducts = productOrderingResult.get("sorted");
-			if (sortedProducts == null) {
-				sortedProducts = new ArrayList<>();
-			}
+				List<String> sortedProducts = productOrderingResult.get("sorted");
+				if (sortedProducts == null) {
+					sortedProducts = new ArrayList<>();
+				}
 
-			List<String> notSortedProducts = productOrderingResult.get("not_sorted");
-			if (notSortedProducts == null) {
-				notSortedProducts = new ArrayList<>();
-			}
+				List<String> notSortedProducts = productOrderingResult.get("not_sorted");
+				if (notSortedProducts == null) {
+					notSortedProducts = new ArrayList<>();
+				}
 
-			Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
+				Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
 
-			notSortedProducts.removeAll(sortedProducts);
-			Logging.info(this, "missing: " + notSortedProducts);
+				notSortedProducts.removeAll(sortedProducts);
+				Logging.info(this, "missing: " + notSortedProducts);
 
-			localbootProductNames = sortedProducts;
-			localbootProductNames.addAll(notSortedProducts);
+				localbootProductNames = sortedProducts;
+				localbootProductNames.addAll(notSortedProducts);
 
-			// we don't have a productsgroupsFullPermission)
-			if (permittedProducts != null) {
-				localbootProductNames.retainAll(permittedProducts);
+				// we don't have a productsgroupsFullPermission)
+				if (permittedProducts != null) {
+					localbootProductNames.retainAll(permittedProducts);
+				}
 			}
 		}
 
