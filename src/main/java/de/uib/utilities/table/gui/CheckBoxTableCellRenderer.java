@@ -38,16 +38,16 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 			int row, int column) {
 
 		if (!Main.THEMES) {
-			setForeground(Globals.lightBlack);
+			setForeground(Globals.LIGHT_BLACK);
 		}
 
 		if (!Main.THEMES) {
 			if (isSelected) {
-				setBackground(Globals.defaultTableCellSelectedBgColorNotEditable);
+				setBackground(Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR_NOT_EDITABLE);
 			} else if (row % 2 == 0) {
-				setBackground(Globals.defaultTableCellBgColor2);
+				setBackground(Globals.DEFAULT_TABLE_CELL_BG_COLOR_2);
 			} else {
-				setBackground(Globals.defaultTableCellBgColor1);
+				setBackground(Globals.DEFAULT_TABLE_CELL_BG_COLOR_1);
 			}
 		}
 

@@ -36,7 +36,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		super();
 
 		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
-		listForegroundColor = Globals.lightBlack;
+		listForegroundColor = Globals.LIGHT_BLACK;
 
 	}
 

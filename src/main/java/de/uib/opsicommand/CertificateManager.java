@@ -37,6 +37,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public final class CertificateManager {
 	private static KeyStore ks;
@@ -46,7 +47,6 @@ public final class CertificateManager {
 	}
 
 	public static X509Certificate instantiateCertificate(File certificateFile) {
-
 		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
 			return null;
 		}
@@ -187,8 +187,9 @@ public final class CertificateManager {
 	private static X509Certificate createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
-			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
-					"." + Globals.CERTIFICATE_FILE_EXTENSION);
+			certificateFile = Files
+					.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION).toFile();
+			Utils.restrictAccessToFile(certificateFile);
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
 			Logging.warning("error on getting certificateFile", e);

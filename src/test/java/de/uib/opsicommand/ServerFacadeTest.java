@@ -41,7 +41,7 @@ class ServerFacadeTest {
 
 	@BeforeAll
 	static void setup() {
-		Globals.disableCertificateVerification = true;
+		utils.Utils.setDisableCertificateVerification(true);
 		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
 	}
 

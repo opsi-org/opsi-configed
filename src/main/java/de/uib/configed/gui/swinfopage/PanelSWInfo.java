@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.swinfopage;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,7 +152,7 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		if (!Main.FONT) {
-			labelSuperTitle.setFont(Globals.defaultFontBold);
+			labelSuperTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
@@ -214,7 +215,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		if (!Main.THEMES) {
-			checkWithMsUpdates.setForeground(Globals.blue);
+			checkWithMsUpdates.setForeground(Globals.BLUE);
 		}
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
@@ -225,7 +226,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		if (!Main.THEMES) {
-			checkWithMsUpdates2.setForeground(Globals.blue);
+			checkWithMsUpdates2.setForeground(Globals.BLUE);
 		}
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
@@ -513,7 +514,7 @@ public class PanelSWInfo extends JPanel {
 		this.hostId = "" + hostId;
 		title = this.hostId;
 
-		String timeS = "" + Globals.getToday();
+		String timeS = "" + new Timestamp(System.currentTimeMillis());
 		String[] parts = timeS.split(":");
 		if (parts.length > 2) {
 			timeS = parts[0] + ":" + parts[1];

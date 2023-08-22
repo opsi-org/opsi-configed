@@ -61,6 +61,7 @@ import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -85,6 +86,7 @@ import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
 
@@ -418,10 +420,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
-		save.setEnabled(!Globals.isGlobalReadOnly());
+		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		if (!Main.FONT) {
-			save.setFont(Globals.defaultFont);
+			save.setFont(Globals.DEFAULT_FONT);
 		}
 
 		save.addActionListener((ActionEvent e) -> {
@@ -434,10 +436,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
-		itemOnDemand.setEnabled(!Globals.isGlobalReadOnly());
+		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 
 		if (!Main.FONT) {
-			itemOnDemand.setFont(Globals.defaultFont);
+			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController.fireOpsiclientdEventOnSelectedClients(
 				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
@@ -446,11 +448,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-		itemSaveAndExecute.setEnabled(!Globals.isGlobalReadOnly());
+		itemSaveAndExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 		// dies bit get its intended context
-		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
+		itemSaveAndExecute.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		if (!Main.FONT) {
-			itemSaveAndExecute.setFont(Globals.defaultFont);
+			itemSaveAndExecute.setFont(Globals.DEFAULT_FONT);
 		}
 		itemSaveAndExecute.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save and execute menu item");
@@ -465,9 +467,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
+		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
 		if (!Main.FONT) {
-			reload.setFont(Globals.defaultFont);
+			reload.setFont(Globals.DEFAULT_FONT);
 		}
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
@@ -477,9 +479,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenuItem createReport = new JMenuItemFormatted();
 		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
-		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
+		createReport.setIcon(Utils.createImageIcon("images/acrobat_reader16.png", ""));
 		if (!Main.FONT) {
-			createReport.setFont(Globals.defaultFont);
+			createReport.setFont(Globals.DEFAULT_FONT);
 		}
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
@@ -488,7 +490,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		if (!Main.FONT) {
-			sub.setFont(Globals.defaultFont);
+			sub.setFont(Globals.DEFAULT_FONT);
 		}
 		popup.addSeparator();
 		popup.add(sub);
@@ -506,7 +508,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			JMenuItem item = new JCheckBoxMenuItem();
 			item.setText(InstallationStateTableModel.getColumnTitle(columnName));
 			if (!Main.FONT) {
-				item.setFont(Globals.defaultFont);
+				item.setFont(Globals.DEFAULT_FONT);
 			}
 			((JCheckBoxMenuItem) item).setState(checkColumns.get(columnName));
 			item.addItemListener((ItemEvent e) -> {
@@ -943,8 +945,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		infoPane.setProductAdvice(productHint);
 
-		Globals.checkCollection(this, "editableProductProperties ", editableProductProperties);
-		Globals.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
+		Utils.checkCollection(this, "editableProductProperties ", editableProductProperties);
+		Utils.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
 
 		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
 

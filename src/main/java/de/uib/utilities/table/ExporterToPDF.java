@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -45,6 +46,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
 
@@ -135,7 +137,9 @@ public class ExporterToPDF extends AbstractExportTable {
 				}
 			} else {
 				try {
-					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
+					temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
+							.toFile();
+					Utils.restrictAccessToFile(temp);
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
 					Logging.error("Failed to create temp file", e);
@@ -374,7 +378,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
+			URL opsiImageURL = getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -394,6 +398,19 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
+			}
+		}
+
+		private URL getImageResourceURL(String relPath) {
+			String resourceS = Globals.IMAGE_BASE + relPath;
+
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			URL imgURL = cl.getResource(resourceS);
+			if (imgURL != null) {
+				return imgURL;
+			} else {
+				Logging.warning("Couldn't find file  " + relPath);
+				return null;
 			}
 		}
 

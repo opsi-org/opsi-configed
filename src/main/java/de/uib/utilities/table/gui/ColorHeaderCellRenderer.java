@@ -34,7 +34,7 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
 		if (!Main.THEMES) {
-			cell.setBackground(Globals.defaultTableHeaderBgColor);
+			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
 		}
 
 		if (cell instanceof JComponent) {

@@ -130,6 +130,8 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 public class ConfigedMain implements ListSelectionListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -145,9 +147,6 @@ public class ConfigedMain implements ListSelectionListener {
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
-
-	// Are themes enabled?
-	public static final boolean THEMES = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -639,10 +638,10 @@ public class ConfigedMain implements ListSelectionListener {
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
-	public void updateProduct(Map<String, String> data) {
-		String productId = data.get("productId");
-		String clientId = data.get("clientId");
-		String productType = data.get("productType");
+	public void updateProduct(Map<String, Object> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
 
 		// get the data for the updated client
 
@@ -1132,7 +1131,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-
 		checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
@@ -1226,12 +1224,9 @@ public class ConfigedMain implements ListSelectionListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
-
 		actOnListSelection();
 	}
 
@@ -1460,10 +1455,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void startLicencesFrame() {
 		licencesFrame = new LicencesFrame(this);
-
-		Globals.frame1 = licencesFrame;
-
-		licencesFrame.setGlobals(Globals.getMap());
+		Utils.setMasterFrame(licencesFrame);
+		licencesFrame.setGlobals(Utils.getMap());
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
@@ -1782,33 +1775,16 @@ public class ConfigedMain implements ListSelectionListener {
 		return model;
 	}
 
-	/**
-	 * selects a client
-	 *
-	 * @param clientName
-	 */
 	public void setClient(String clientName) {
-		Logging.info(this, "setClient " + clientName);
-
-		if (clientName == null) {
-			setSelectedClientsOnPanel(new String[] {});
-		} else {
-			setSelectedClientsOnPanel(new String[] { clientName });
-			// implies:
-
-			actOnListSelection();
-		}
+		setClients(new String[] { clientName });
 	}
 
 	public void setClients(String[] clientNames) {
-		Logging.info(this, "setClients " + clientNames);
-
+		Logging.info(this, "setClients " + Arrays.toString(clientNames));
 		if (clientNames == null) {
 			setSelectedClientsOnPanel(new String[] {});
 		} else {
 			setSelectedClientsOnPanel(clientNames);
-			// implies:
-
 			actOnListSelection();
 		}
 	}
@@ -1886,7 +1862,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setSelectedClientsArray " + a.length);
 		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
 
-		selectedClients = a;
+		selectedClients = a.clone();
 		if (selectedClients.length == 0) {
 			firstSelectedClient = "";
 		} else {
@@ -2072,8 +2048,8 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new BooleanIconTableCellRenderer(
-					Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
+			column.setCellRenderer(
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/checked_withoutbox.png", ""), null));
 		}
 	}
 
@@ -2306,8 +2282,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelLocalbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// List of the properties map of all selected clients
@@ -2323,8 +2298,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelNetbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// array of the properties map of all selected clients
@@ -2365,6 +2339,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (activePaths.size() == 1
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				} else {
 					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
@@ -3166,8 +3141,8 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < Globals.getLogTypes().length; i++) {
-				logfiles.put(Globals.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (int i = 0; i < Utils.getLogTypes().length; i++) {
+				logfiles.put(Utils.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 
 			mainFrame.setLogfilePanel(logfiles);
@@ -3606,10 +3581,9 @@ public class ConfigedMain implements ListSelectionListener {
 			// no action before gui initialized
 			if (selectionPanel != null) {
 				// reactivate selection listener
-
 				Logging.debug(this, " reset the values, particularly in list ");
-
-				selectionPanel.addListSelectionListener(ConfigedMain.this);
+				selectionPanel.removeListSelectionListener(this);
+				selectionPanel.addListSelectionListener(this);
 				setSelectedClientsCollectionOnPanel(clientsLeft);
 
 				// no list select item is provided
@@ -3619,7 +3593,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-
 			mainFrame.reloadServerMenu();
 		}
 
@@ -4272,6 +4245,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
+
 		if (resetLocalbootProducts) {
 			persistenceController.resetLocalbootProducts(getSelectedClients(), withDependencies);
 		}
@@ -4281,6 +4256,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
+		mainFrame.setCursor(null);
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -4802,79 +4778,81 @@ public class ConfigedMain implements ListSelectionListener {
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
 				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
 
-		if (selectedClient.isPresent()) {
-			JPanel additionalPane = new JPanel();
-			additionalPane.setOpaque(false);
-			GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
-			additionalPane.setLayout(additionalPaneLayout);
+		if (!selectedClient.isPresent()) {
+			return;
+		}
 
-			JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-			JTextField jTextHostname = new JTextField(new CheckedDocument(new char[] { '-', '0', '1', '2', '3', '4',
-					'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-					'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
-			jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-			CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
-			jTextHostname.setText(copySuffixAddition.add());
+		JPanel additionalPane = new JPanel();
+		additionalPane.setOpaque(false);
+		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
+		additionalPane.setLayout(additionalPaneLayout);
 
-			additionalPaneLayout.setHorizontalGroup(additionalPaneLayout
-					.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
-			additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jLabelHostname)
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jTextHostname));
+		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
+		JTextField jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
+		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+		jTextHostname.setText(copySuffixAddition.add());
 
-			additionalPane.add(jLabelHostname);
-			additionalPane.add(jTextHostname);
-			additionalPane.setVisible(true);
+		additionalPaneLayout.setHorizontalGroup(additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jLabelHostname)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jTextHostname));
 
-			FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
-					Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
-					new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") },
-					null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+		additionalPane.add(jLabelHostname);
+		additionalPane.add(jTextHostname);
+		additionalPane.setVisible(true);
 
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-			message.append("\n\n");
-			message.append(selectedClient.get().getName());
+		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") },
+				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
-			fAskCopyClient.setMessage(message.toString());
-			fAskCopyClient.setLocationRelativeTo(getMainFrame());
-			fAskCopyClient.setAlwaysOnTop(true);
-			fAskCopyClient.setVisible(true);
+		StringBuilder message = new StringBuilder("");
+		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+		message.append("\n\n");
+		message.append(selectedClient.get().getName());
 
-			if (fAskCopyClient.getResult() == 2) {
-				String newClientName = jTextHostname.getText();
+		fAskCopyClient.setMessage(message.toString());
+		fAskCopyClient.setLocationRelativeTo(getMainFrame());
+		fAskCopyClient.setAlwaysOnTop(true);
+		fAskCopyClient.setVisible(true);
 
-				if (newClientName.isEmpty()) {
-					return;
-				}
-
-				HostInfo clientToCopy = selectedClient.get();
-				String[] splittedClientName = clientToCopy.getName().split("\\.");
-				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
-						+ splittedClientName[2];
-
-				// if client already exists ask if they want to override
-				if (persistenceController.getHostInfoCollections().getOpsiHostNames()
-						.contains(newClientNameWithDomain)) {
-					boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-
-					if (!overwriteExistingHost) {
-						return;
-					}
-				}
-
-				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-
-				Logging.info(this, "copy client with new name " + newClientName);
-				copyClient.copy();
-
-				refreshClientList(newClientName);
+		if (fAskCopyClient.getResult() == 2) {
+			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			String newClientName = jTextHostname.getText();
+			boolean proceed = true;
+			if (newClientName.isEmpty()) {
+				proceed = false;
 			}
+
+			HostInfo clientToCopy = selectedClient.get();
+			String newClientNameWithDomain = newClientName + "."
+					+ Utils.getDomainFromClientName(clientToCopy.getName());
+			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
+				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
+				if (!overwriteExistingHost) {
+					proceed = false;
+				}
+			}
+
+			Logging.info(this, "copy client with new name " + newClientName);
+			if (proceed) {
+				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
+				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+				copyClient.copy();
+				refreshClientList();
+				activateGroup(false, activatedGroupModel.getGroupName());
+				setClient(newClientNameWithDomain);
+			}
+			mainFrame.setCursor(null);
 		}
 	}
 

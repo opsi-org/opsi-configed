@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class NavigationPanel extends JPanel implements ActionListener {
 
@@ -60,26 +61,26 @@ public class NavigationPanel extends JPanel implements ActionListener {
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 		nextButton = new JButton();
-		nextButton.setIcon(Globals.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
+		nextButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
 
 		nextButton.setToolTipText("nächste Datenzeile");
 		nextButton.setPreferredSize(navButtonDimension);
 		nextButton.addActionListener(this);
 
 		previousButton = new JButton();
-		previousButton.setIcon(Globals.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
+		previousButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
 		previousButton.setToolTipText("vorherige Datenzeile");
 		previousButton.setPreferredSize(navButtonDimension);
 		previousButton.addActionListener(this);
 
 		firstButton = new JButton();
-		firstButton.setIcon(Globals.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
+		firstButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
 		firstButton.setToolTipText("erste Datenzeile");
 		firstButton.setPreferredSize(navButtonDimension);
 		firstButton.addActionListener(this);
 
 		lastButton = new JButton();
-		lastButton.setIcon(Globals.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
+		lastButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
 		lastButton.setToolTipText("letzte Datenzeile");
 		lastButton.setPreferredSize(navButtonDimension);
 		lastButton.addActionListener(this);

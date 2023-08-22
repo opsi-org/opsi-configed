@@ -20,6 +20,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.JTextShowField;
+import utils.Utils;
 
 public class PanelHWByAuditDriver extends JPanel {
 
@@ -72,8 +73,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
 		JLabel labelProduct = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
-		JButton buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
-		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
+		JButton buttonUploadDrivers = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
@@ -141,7 +142,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
-		setBorder(BorderFactory.createLineBorder(Globals.greyed));
+		setBorder(BorderFactory.createLineBorder(Globals.GREYED));
 	}
 
 	public void emptyByAuditStrings() {
@@ -206,7 +207,7 @@ public class PanelHWByAuditDriver extends JPanel {
 			fDriverUpload = new FDriverUpload(main);
 		}
 
-		fDriverUpload.setSize(Globals.helperFormDimension);
+		fDriverUpload.setSize(Globals.HELPER_FORM_DIMENSION);
 		fDriverUpload.setVisible(true);
 		fDriverUpload.centerOnParent();
 

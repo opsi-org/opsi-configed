@@ -20,6 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class MyListCellRenderer extends DefaultListCellRenderer {
 	private static final int FILL_LENGTH = 30;
@@ -63,7 +64,7 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 				tooltipText = key;
 			}
 
-			tooltipText = Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH);
+			tooltipText = Utils.fillStringToLength(tooltipText + " ", FILL_LENGTH);
 
 			String depot = (String) value;
 			if (!persistenceController.hasDepotPermission(depot)) {

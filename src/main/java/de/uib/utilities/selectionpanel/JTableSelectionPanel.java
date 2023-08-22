@@ -62,6 +62,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
+import utils.Utils;
 
 public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
 
@@ -145,11 +146,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		if (!Main.FONT) {
-			labelSearch.setFont(Globals.defaultFont);
+			labelSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
-		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
@@ -157,9 +158,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		checkmarkSearch.setChangeStateAutonomously(false);
 
 		fieldSearch = new JTextField("");
-		fieldSearch.setPreferredSize(Globals.textfieldDimension);
+		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		if (!Main.FONT) {
-			fieldSearch.setFont(Globals.defaultFont);
+			fieldSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
 		if (!Main.THEMES) {
@@ -203,8 +204,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
 
-		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
-		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
+		Icon markAllIcon = Utils.createImageIcon("images/selection-all.png", "");
+		Icon invertSelectionIcon = Utils.createImageIcon("images/selection-invert.png", "");
 		buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
 		buttonInvertSelection = new JButton("", invertSelectionIcon);
@@ -238,11 +239,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
-		comboSearchMode.setPreferredSize(Globals.buttonDimension);
+		comboSearchMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		comboSearch = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
-		comboSearch.setPreferredSize(Globals.buttonDimension);
+		comboSearch.setPreferredSize(Globals.BUTTON_DIMENSION);
 	}
 
 	private void setupLayout() {
@@ -314,11 +315,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon("images/opsi-logo.png", ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		if (!Main.FONT) {
-			missingData1.setFont(Globals.defaultFontTitle);
+			missingData1.setFont(Globals.DEFAULT_FONT_TILTE);
 		}
 
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));

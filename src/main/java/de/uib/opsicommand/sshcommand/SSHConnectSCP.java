@@ -21,10 +21,10 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /***
 if more then one command have to be executed (e.g. also a set-rights) use SSHConnectExec. 
@@ -164,7 +164,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				interruptChannel(channel);
 				disconnect();
 				interruptChannel = true;
-				Globals.threadSleep(this, 50);
+				Utils.threadSleep(this, 50);
 			}
 			publishInfo(SEPARATING_LINE);
 		}
@@ -198,7 +198,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				publish("Set target filename … " + command.getTargetFilename());
 				publish("Set overwrite mode … " + command.isOverwriteMode());
 				publish(" ");
-				Globals.threadSleep(this, 2000);
+				Utils.threadSleep(this, 2000);
 
 				publish("Copying finish ");
 				channel.disconnect();

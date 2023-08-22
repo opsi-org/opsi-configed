@@ -40,6 +40,7 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
@@ -323,17 +324,17 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		});
 
 		showPanel();
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());
 		}
 
 		final SSHCommandControlDialog caller = this;
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
 		}
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(jTextPaneCommands));
@@ -342,7 +343,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		updateLists(true);
 		updateSelectedCommand();
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			buttonDelete.addActionListener((ActionEvent actionEvent) -> {
 				String menu = (String) jComboBoxMenuText.getSelectedItem();
 				factory.deleteSSHCommandByMenu(menu);
@@ -354,7 +355,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 			});
 		}
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			buttonSave.addActionListener(actionEvent -> doAction2());
 			buttonClose.addActionListener(actionEvent -> doAction1());
 		}
@@ -364,7 +365,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 		initLayout();
 
-		setComponentsEnabledRO(!Globals.isGlobalReadOnly());
+		setComponentsEnabledRO(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 	}
 
 	/**
@@ -645,7 +646,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	}
 
 	private void checkAllTexts() {
-		if (!Globals.isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			if (jComboBoxMenuText.getSelectedItem() != null
 					&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(SSHCommandFactory.MENU_NEW)) {
 				Logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());

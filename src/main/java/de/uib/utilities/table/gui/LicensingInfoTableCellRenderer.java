@@ -19,6 +19,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
+import utils.Utils;
 
 public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 	protected LicensingInfoMap licensingInfoMap;
@@ -56,9 +57,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			jc.setText("");
 
 			if (value.equals(true)) {
-				jc.setIcon(Globals.createImageIcon("images/checked_withoutbox.png", ""));
+				jc.setIcon(Utils.createImageIcon("images/checked_withoutbox.png", ""));
 			} else {
-				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
+				jc.setIcon(Utils.createImageIcon("images/checked_void.png", ""));
 			}
 
 		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
@@ -80,7 +81,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 					if (!Main.THEMES) {
-						jc.setBackground(Globals.darkOrange);
+						jc.setBackground(Globals.DARK_ORANGE);
 					}
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
@@ -95,7 +96,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 					if (!Main.THEMES) {
-						jc.setBackground(Globals.darkOrange);
+						jc.setBackground(Globals.DARK_ORANGE);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
@@ -122,7 +123,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
 						&& prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
-					jc.setFont(Globals.defaultFontBold);
+					jc.setFont(Globals.DEFAULT_FONT_BIG);
 				}
 			}
 		} else {
