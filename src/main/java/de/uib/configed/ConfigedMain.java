@@ -642,22 +642,21 @@ public class ConfigedMain implements ListSelectionListener {
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
 
-		// get the data for the updated client
-
-		Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
-
-		int selectedView = getViewIndex();
-
-		if (selectedView == VIEW_LOCALBOOT_PRODUCTS && productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
-				&& istmForSelectedClientsLocalboot != null) {
-			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
-				&& istmForSelectedClientsNetboot != null) {
-			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-		} else {
-			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
-					+ "not open or configed not yet initialized");
+		if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
+			int selectedView = getViewIndex();
+			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+					&& istmForSelectedClientsLocalboot != null) {
+				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+					&& istmForSelectedClientsNetboot != null) {
+				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+			} else {
+				Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
+						+ "not open or configed not yet initialized");
+			}
 		}
 	}
 
