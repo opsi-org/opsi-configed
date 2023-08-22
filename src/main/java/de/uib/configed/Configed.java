@@ -6,14 +6,12 @@
 
 package de.uib.configed;
 
-import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -39,9 +37,9 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
+import utils.Utils;
 
 public final class Configed {
-
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
 	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
@@ -108,13 +106,6 @@ public final class Configed {
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			Logging.debug("they are equal");
-		}
-
-		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-		if (resource == null) {
-			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-		} else {
-			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		startConfiged();
@@ -226,13 +217,13 @@ public final class Configed {
 
 	private static void addMissingArgs() {
 		if (host == null) {
-			host = Globals.getCLIparam("Host: ", false);
+			host = Utils.getCLIParam("Host: ");
 		}
 		if (user == null) {
-			user = Globals.getCLIparam("User: ", false);
+			user = Utils.getCLIParam("User: ");
 		}
 		if (password == null) {
-			password = Globals.getCLIparam("Password: ", true);
+			password = Utils.getCLIPasswordParam("Password: ");
 		}
 	}
 
@@ -392,7 +383,7 @@ public final class Configed {
 		}
 
 		if (cmd.hasOption("disable-certificate-verification")) {
-			Globals.disableCertificateVerification = true;
+			Utils.setDisableCertificateVerification(true);
 		}
 	}
 
@@ -518,13 +509,6 @@ public final class Configed {
 			Main.endApp(Main.NO_ERROR);
 		} else {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
-		}
-
-		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-		if (resource == null) {
-			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-		} else {
-			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}
 
 		new Configed(host, user, password, client, clientgroup, tab);

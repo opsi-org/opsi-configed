@@ -37,6 +37,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream;
+import utils.Utils;
 
 /**
  * Provides communication layer with the server for the
@@ -296,7 +297,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private static void enableFeaturesBasedOnServerVersion() {
 		if (!versionRetriever.isServerVersionAtLeast("4.2")) {
 			// The way we check the certificate does not work before opsi server version 4.2
-			Globals.disableCertificateVerification = true;
+			Utils.setDisableCertificateVerification(true);
 		}
 	}
 
@@ -326,8 +327,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Globals.isMultiFactorAuthenticationEnabled);
-			if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
+			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Utils.isMultiFactorAuthenticationEnabled());
+			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				password = ConfigedMain.password;
 				conStat = new ConnectionState(ConnectionState.UNAUTHORIZED);

@@ -427,7 +427,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return false;
 		}
 
-		if (Globals.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			return false;
 		}
 

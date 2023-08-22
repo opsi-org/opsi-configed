@@ -28,6 +28,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 // tab new licence
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
@@ -251,9 +252,9 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 	private void addContract() {
 		Object[] a = new Object[6];
-		a[0] = "c_" + Globals.getSeconds();
+		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
-		a[2] = Globals.getDate();
+		a[2] = Utils.getDate();
 		a[3] = Globals.ZERODATE;
 		a[4] = Globals.ZERODATE;
 		a[5] = "";

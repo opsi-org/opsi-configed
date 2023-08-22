@@ -7,6 +7,7 @@
 package de.uib.configed.tree;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -55,6 +56,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
+import utils.Utils;
 
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
 
@@ -114,6 +116,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private Set<String> directlyAllowedGroups;
 
 	private ConfigedMain configedMain;
+	private boolean mouseClicked;
 
 	static {
 
@@ -262,6 +265,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		mouseClicked = false;
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
 
@@ -303,17 +307,24 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		TreePath selectedPath = getSelectionPath();
+		EventQueue.invokeLater(() -> {
+			if (mouseClicked) {
+				mouseClicked = false;
+				return;
+			}
+			TreePath selectedPath = getSelectionPath();
 
-		if (selectedPath != null && getSelectionRows().length == 1) {
-			configedMain.treeClientsSelectAction(selectedPath);
-		}
+			if (selectedPath != null && getSelectionRows().length == 1) {
+				configedMain.treeClientsSelectAction(selectedPath);
+			}
+		});
 	}
 
 	// interface MouseListener
 	@Override
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
+		mouseClicked = true;
 
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		configedMain.treeClientsMouseAction(e);
@@ -346,8 +357,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			n.setToolTipText(x.toString());
 		}
 
-		n.setIcon(Globals.createImageIcon("images/client_small.png", "client"));
-		n.setNonSelectedLeafIcon(Globals.createImageIcon("images/client_small_unselected.png", "client"));
+		n.setIcon(Utils.createImageIcon("images/client_small.png", "client"));
+		n.setNonSelectedLeafIcon(Utils.createImageIcon("images/client_small_unselected.png", "client"));
 		n.setDisabledLeafIcon();
 
 		return n;
@@ -357,9 +368,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		GroupNode n = new GroupNode(x);
 		n.setToolTipText(description);
 		n.setEnabled(true);
-		n.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
-		n.setClosedIcon(Globals.createImageIcon("images/group_small_unselected.png", "group unselected"));
-		n.setEmphasizedIcon(Globals.createImageIcon("images/group_small_1selected.png", "group 1selected"));
+		n.setIcon(Utils.createImageIcon("images/group_small.png", "group"));
+		n.setClosedIcon(Utils.createImageIcon("images/group_small_unselected.png", "group unselected"));
+		n.setEmphasizedIcon(Utils.createImageIcon("images/group_small_1selected.png", "group 1selected"));
 		n.setDisabledLeafIcon();
 
 		return n;

@@ -33,6 +33,7 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import utils.Utils;
 
 public class ControllerHWinfoMultiClients {
 
@@ -160,14 +161,14 @@ public class ControllerHWinfoMultiClients {
 
 		// Icon iconConfigure =
 
-		JButton buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
+		JButton buttonConfigureColumns = new JButton("", Utils.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
-		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
+		buttonConfigureColumns.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
-		JButton buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton("", Utils.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
-		buttonReload.setPreferredSize(Globals.smallButtonDimension);
+		buttonReload.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "action performed " + actionEvent);
@@ -176,8 +177,8 @@ public class ControllerHWinfoMultiClients {
 
 		buttonConfigureColumns.addActionListener(this::configureColumns);
 
-		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
-		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
+		JButton buttonCopySelection = new JButton("", Utils.createImageIcon("images/memorize_selection.png", ""));
+		buttonCopySelection.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCopySelection.setEnabled(false);
 
 		buttonCopySelection.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.getSelection"));

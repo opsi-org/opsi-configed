@@ -15,8 +15,8 @@ import java.util.TreeSet;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SimpleTreeModel extends DefaultTreeModel {
 	public final SimpleIconNode rootNode;
@@ -113,8 +113,8 @@ public class SimpleTreeModel extends DefaultTreeModel {
 	private SimpleIconNode createNode(SimpleTreePath path, SimpleTreePath partialPath, int i) {
 		// node must be created
 		SimpleIconNode node = new SimpleIconNode(path.get(i - 1));
-		node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
-		node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
+		node.setIcon(Utils.createImageIcon("images/opentable_small.png", "open table"));
+		node.setNonSelectedIcon(Utils.createImageIcon("images/closedtable_small.png", "closed table"));
 
 		if (tooltips != null) {
 			String key = partialPath.dottedString(0, partialPath.size());

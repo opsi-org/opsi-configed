@@ -105,7 +105,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		super.pack();
 		super.setSize(frameWidth, frameHeight);
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 
 		super.setVisible(true);
 	}

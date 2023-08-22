@@ -40,7 +40,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
@@ -91,6 +90,8 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 /**
  * PersistenceController implementation for the New Object Model (opsi 4.0)
@@ -590,9 +591,9 @@ public class OpsiserviceNOMPersistenceController {
 							new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
 									Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
 									Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
-							new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-									Globals.createImageIcon("images/edit-delete.png", ""),
-									Globals.createImageIcon("images/executing_command_red_16.png", "") },
+							new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+									Utils.createImageIcon("images/edit-delete.png", ""),
+									Utils.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
@@ -2142,24 +2143,41 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		Logging.info(this, "addHosts2Group hosts " + objectIds);
-
+		Logging.info(this, "addHosts2Group hosts " + objectIds + " group " + groupId);
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
+		List<Map<String, Object>> data = new ArrayList<>();
 
 		for (String ob : objectIds) {
 			Map<String, Object> item = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			item.put(Object2GroupEntry.MEMBER_KEY, ob);
 			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
-			jsonObjects.add(item);
+			data.add(item);
 		}
 
 		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
+		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
+		return exec.doCall(omc);
+	}
 
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonObjects });
+	public boolean addHost2Groups(String objectId, List<String> groupIds) {
+		if (globalReadOnly) {
+			return false;
+		}
 
+		Logging.info(this, "addHost2Groups host " + objectId + " groups " + groupIds);
+		List<Map<String, Object>> data = new ArrayList<>();
+
+		for (String groupId : groupIds) {
+			String persistentGroupId = ClientTree.translateToPersistentName(groupId);
+			Map<String, Object> item = createNOMitem(Object2GroupEntry.TYPE_NAME);
+			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+			item.put(Object2GroupEntry.MEMBER_KEY, objectId);
+			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
+			data.add(item);
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
 		return exec.doCall(omc);
 	}
 
@@ -2559,7 +2577,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	private Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
 
 		final int STEP_SIZE = 100;
@@ -2605,8 +2623,8 @@ public class OpsiserviceNOMPersistenceController {
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 
 		return client2software;
 	}
@@ -3011,12 +3029,10 @@ public class OpsiserviceNOMPersistenceController {
 
 	public Map<String, String> getEmptyLogfiles() {
 		logfiles = new HashMap<>();
-		String[] logtypes = Globals.getLogTypes();
-
+		String[] logtypes = Utils.getLogTypes();
 		for (int i = 0; i < logtypes.length; i++) {
 			logfiles.put(logtypes[i], "");
 		}
-
 		return logfiles;
 	}
 
@@ -3026,7 +3042,7 @@ public class OpsiserviceNOMPersistenceController {
 			getEmptyLogfiles();
 		}
 
-		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
+		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
 		if (i < 0) {
 			Logging.error("illegal logtype: " + logtype);
 			return logfiles;
@@ -3034,18 +3050,18 @@ public class OpsiserviceNOMPersistenceController {
 
 		Logging.debug(this, "getLogfile logtye " + logtype);
 
-		String[] logtypes = Globals.getLogTypes();
+		String[] logtypes = Utils.getLogTypes();
 
 		String s = "";
 
-		Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
+		Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Utils.getMaxLogSize(i));
 
 		try {
-			if (Globals.getMaxLogSize(i) == 0) {
+			if (Utils.getMaxLogSize(i) == 0) {
 				s = exec.getStringResult(new OpsiMethodCall("log_read", new String[] { logtype, clientId }));
 			} else {
 				s = exec.getStringResult(new OpsiMethodCall("log_read",
-						new String[] { logtype, clientId, String.valueOf(Globals.getMaxLogSize(i)) }));
+						new String[] { logtype, clientId, String.valueOf(Utils.getMaxLogSize(i)) }));
 			}
 
 		} catch (OutOfMemoryError e) {
@@ -3296,7 +3312,7 @@ public class OpsiserviceNOMPersistenceController {
 					// productInfo.getProductId()
 					);
 					aProductInfo.put(ProductState.KEY_VERSION_INFO,
-							Globals.ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
+							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
 
 					aProductInfo.put(ProductState.KEY_PRODUCT_PRIORITY, productInfo.getPriority());
 
@@ -3515,27 +3531,11 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		boolean result = true;
-
-		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
-
-		for (int i = 0; i < selectedClients.length; i++) {
-			for (String product : localbootProductNames) {
-				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
-				productOnClientItem.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-				productOnClientItem.put("clientId", selectedClients[i]);
-				productOnClientItem.put("productId", product);
-
-				deleteProductItems.add(productOnClientItem);
-			}
-		}
-
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
+				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		Logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
-
-		result = resetProducts(deleteProductItems, withDependencies);
-
+		boolean result = resetProducts(deleteProductItems, withDependencies);
 		Logging.debug(this, "resetLocalbootProducts result " + result);
-
 		return result;
 	}
 
@@ -3544,28 +3544,33 @@ public class OpsiserviceNOMPersistenceController {
 			return false;
 		}
 
-		boolean result = true;
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
+		boolean result = resetProducts(deleteProductItems, withDependencies);
+		Logging.debug(this, "resetNetbootProducts result " + result);
+		return result;
+	}
 
+	private List<Map<String, Object>> produceDeleteProductItems(String[] selectedClients, String productType) {
 		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
+		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(
+				Arrays.asList(selectedClients));
 
-		for (int i = 0; i < selectedClients.length; i++) {
-			for (String product : netbootProductNames) {
+		for (final String clientId : selectedClients) {
+			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
+					.filter(m -> clientId.equals(m.get("clientId"))).map(m -> (String) m.get("productId"))
+					.collect(Collectors.toList());
+			for (final String product : modifiedProductsOnClient) {
 				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
-				productOnClientItem.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-				productOnClientItem.put("clientId", selectedClients[i]);
+				productOnClientItem.put("productType", productType);
+				productOnClientItem.put("clientId", clientId);
 				productOnClientItem.put("productId", product);
-
 				deleteProductItems.add(productOnClientItem);
 			}
 		}
 
-		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
-
-		result = resetProducts(deleteProductItems, withDependencies);
-
-		Logging.debug(this, "resetNetbootProducts result " + result);
-
-		return result;
+		return deleteProductItems;
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
@@ -3597,6 +3602,13 @@ public class OpsiserviceNOMPersistenceController {
 		Logging.debug(this, "resetProducts result " + result);
 
 		return result;
+	}
+
+	public List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
+		String[] callAttributes = new String[] {};
+		HashMap<String, Object> callFilter = new HashMap<>();
+		callFilter.put("clientId", clientIds);
+		return retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects");
 	}
 
 	public void retrieveProductDependencies() {
@@ -4025,6 +4037,20 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		return productProperties.get(pcname).get(productname);
+	}
+
+	public Map<String, ConfigName2ConfigValue> getProductsProperties(String pcname) {
+		Logging.debug(this, "getProductsProperties for host " + pcname);
+
+		Set<String> pcs = new TreeSet<>();
+		pcs.add(pcname);
+		retrieveProductProperties(pcs);
+
+		if (productProperties.get(pcname) == null) {
+			return new HashMap<>();
+		}
+
+		return productProperties.get(pcname);
 	}
 
 	// collect productPropertyState updates and deletions
@@ -4552,7 +4578,7 @@ public class OpsiserviceNOMPersistenceController {
 							Logging.warning(this,
 									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
 
-							Globals.threadSleep(this, 1000);
+							Utils.threadSleep(this, 1000);
 							break;
 						}
 					}
@@ -4786,7 +4812,7 @@ public class OpsiserviceNOMPersistenceController {
 			return;
 		}
 
-		if (Globals.checkCollection(this, "configStateCollection", configStateCollection)
+		if (Utils.checkCollection(this, "configStateCollection", configStateCollection)
 				&& !configStateCollection.isEmpty()) {
 			boolean configsChanged = false;
 
@@ -5390,7 +5416,7 @@ public class OpsiserviceNOMPersistenceController {
 				softwareL2LPool.remove("type");
 
 				rowsSoftwareL2LPool
-						.put(Globals.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
+						.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
 								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
 			}
 		}
@@ -5413,7 +5439,7 @@ public class OpsiserviceNOMPersistenceController {
 			}
 		}
 
-		return Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId });
+		return Utils.pseudokey(new String[] { softwareLicenseId, licensePoolId });
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
@@ -5442,7 +5468,7 @@ public class OpsiserviceNOMPersistenceController {
 
 			for (StringValuedRelationElement element : dataStub.getLicencePoolXOpsiProduct()) {
 				rowsLicencePoolXOpsiProduct
-						.put(Globals.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
+						.put(Utils.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
 								element.get(LicencePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
 			}
 		}
@@ -5880,8 +5906,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	public List<String> getServerConfigStrings(String key) {
 		getConfigOptions();
-
-		return Globals.takeAsStringList(configDefaultValues.get(key));
+		return takeAsStringList(configDefaultValues.get(key));
 	}
 
 	public Map<String, LicencepoolEntry> getLicencepools() {
@@ -5930,7 +5955,7 @@ public class OpsiserviceNOMPersistenceController {
 						rowMap.put("licensePoolId", pool);
 						rowMap.put("used_by_opsi", false);
 						rowMap.put("SWinventory_used", false);
-						String pseudokey = Globals.pseudokey(new String[] { clientEntry.getKey(), pool });
+						String pseudokey = Utils.pseudokey(new String[] { clientEntry.getKey(), pool });
 						rowsLicencesReconciliation.put(pseudokey, rowMap);
 					}
 				}
@@ -5965,7 +5990,7 @@ public class OpsiserviceNOMPersistenceController {
 					licencePoolUsagecountSWInvent.put(licencePoolId, setOfUsingClients.size());
 
 					for (String client : swId2clients.get(softwareIdent)) {
-						String pseudokey = Globals.pseudokey(new String[] { client, licencePoolId });
+						String pseudokey = Utils.pseudokey(new String[] { client, licencePoolId });
 
 						if (rowsLicencesReconciliation.get(pseudokey) == null) {
 							Logging.warning(
@@ -6090,7 +6115,7 @@ public class OpsiserviceNOMPersistenceController {
 
 				if (listOfUsingClients != null) {
 					for (String client : listOfUsingClients) {
-						String pseudokey = Globals.pseudokey(new String[] { client, licencePoolId });
+						String pseudokey = Utils.pseudokey(new String[] { client, licencePoolId });
 
 						if (rowsLicencesReconciliation.get(pseudokey) == null) {
 							Logging.warning(
@@ -6165,7 +6190,7 @@ public class OpsiserviceNOMPersistenceController {
 			resultMap = exec.getMapResult(omc0);
 
 			if (!resultMap.isEmpty()) {
-				result = Globals.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
+				result = Utils.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
@@ -6189,7 +6214,7 @@ public class OpsiserviceNOMPersistenceController {
 			resultMap = exec.getMapResult(omc);
 
 			if (!resultMap.isEmpty()) {
-				result = Globals.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
+				result = Utils.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
@@ -6425,8 +6450,8 @@ public class OpsiserviceNOMPersistenceController {
 					"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
 							+ configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
-			List<String> configuredByService = Globals
-					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
+			List<String> configuredByService = takeAsStringList(
+					serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
 			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
@@ -6574,8 +6599,8 @@ public class OpsiserviceNOMPersistenceController {
 		if (productOnClientsDisplayFieldsNetbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-			List<String> configuredByService = Globals
-					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
+			List<String> configuredByService = takeAsStringList(
+					serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
 
 			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
@@ -6672,7 +6697,7 @@ public class OpsiserviceNOMPersistenceController {
 		if (hostDisplayFields == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-			List<String> configuredByService = Globals.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+			List<String> configuredByService = takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 
 			// check if have to initialize the server property
 			configuredByService = produceHostDisplayFields(configuredByService);
@@ -6694,7 +6719,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	public List<String> getDisabledClientMenuEntries() {
 		getConfigOptions();
-		return Globals.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
+		return takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
@@ -6705,8 +6730,22 @@ public class OpsiserviceNOMPersistenceController {
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
-		List<String> result = Globals.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
+		List<String> result = takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
 		Logging.debug(this, "getOpsiclientdExtraEvents() " + result);
+		return result;
+	}
+
+	private static List<String> takeAsStringList(List<Object> list) {
+		List<String> result = new ArrayList<>();
+
+		if (list == null) {
+			return result;
+		}
+
+		for (Object val : list) {
+			result.add((String) val);
+		}
+
 		return result;
 	}
 

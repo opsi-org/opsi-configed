@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
@@ -46,6 +45,8 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 public class DataStubNOM {
 
@@ -383,7 +384,7 @@ public class DataStubNOM {
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+				String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
 						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
@@ -437,7 +438,7 @@ public class DataStubNOM {
 
 				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+				String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";
@@ -755,7 +756,7 @@ public class DataStubNOM {
 	}
 
 	private void retrieveSoftwareIdentOnClients(final List<String> clients) {
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count: " + clients.size());
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
@@ -800,8 +801,8 @@ public class DataStubNOM {
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 			}
 
-			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
