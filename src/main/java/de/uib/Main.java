@@ -76,7 +76,7 @@ public class Main {
 		options.addOption(null, "help", false, "Give this help");
 		options.addOption("v", "version", false, "Tell configed version");
 
-		// Configed specific options 
+		// Configed specific options
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
 		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
 		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
@@ -185,8 +185,8 @@ public class Main {
 
 		// After setting locale then we can use localization values
 		List<String> existingLocales = Messages.getLocaleNames();
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
+		Logging.info("Available locales: " + existingLocales);
+
 	}
 
 	public static void endApp(int exitcode) {

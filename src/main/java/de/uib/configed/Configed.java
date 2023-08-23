@@ -199,12 +199,12 @@ public final class Configed {
 			if (Messages.messagesBundle != null) {
 				result = Messages.messagesBundle.getString(key);
 			} else {
-				Logging.error("Messages.messagesBundle is null...");
+				Logging.debug("Messages.messagesBundle is null...");
 			}
 		}
 
 		if (showLocalizationStrings) {
-			Logging.info("LOCALIZE " + key + " by " + result);
+			Logging.essential("Localization of '" + key + "': " + result);
 			result = "" + result + "[[" + key + "]]";
 		}
 
