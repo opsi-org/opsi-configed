@@ -37,7 +37,10 @@ public final class CopyrightInfos {
 		infos.add(Configed.getResourceValue("CopyrightInfos.thanksTo"));
 		infos.add("");
 		infos.add("commons-io Apache library");
-		infos.add("http://www.apache.org/licenses/");
+		infos.add("https://www.apache.org/licenses/");
+		infos.add("");
+		infos.add("commons-compress Apache library");
+		infos.add("https://www.apache.org/licenses/");
 		infos.add("");
 		infos.add("KDE oxygen icon library");
 		infos.add("licensed by a Creative Commons Public License");
@@ -59,6 +62,8 @@ public final class CopyrightInfos {
 		infos.add("FontAwesomeFX Icon Package");
 		infos.add("licenced by Apache 2.0 licenses");
 		infos.add("");
+		infos.add("XZ for Java");
+		infos.add("https://github.com/tukaani-project/xz-java/blob/master/COPYING");
 	}
 
 	private CopyrightInfos() {
