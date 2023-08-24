@@ -2794,7 +2794,7 @@ public class ConfigedMain implements ListSelectionListener {
 				|| localbootStatesAndActionsUpdate) {
 			localbootStatesAndActionsUpdate = false;
 			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
-			if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
+			if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
 				attributes.add("actionSequence");
 			}
 			// Remove uneeded attributes

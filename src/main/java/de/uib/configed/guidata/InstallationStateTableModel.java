@@ -32,6 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -1219,7 +1220,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			return combinedVisualValues.get(ProductState.KEY_POSITION).get(actualProduct);
+			return ServerFacade.isOpsi43() ? combinedVisualValues.get(ProductState.KEY_POSITION).get(actualProduct)
+					: productNamesInDeliveryOrder.indexOf(actualProduct);
 
 		case 12:
 			return actualProductVersion();
