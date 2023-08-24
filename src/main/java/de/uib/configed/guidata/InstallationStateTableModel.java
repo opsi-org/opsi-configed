@@ -25,10 +25,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -227,7 +230,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, String productId, Map<String, String> stateAndAction) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -235,21 +238,46 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// Don't apply update if something has been changed on the product on the client by the user
-		if (collectChangedStates.containsKey(clientId) && collectChangedStates.get(clientId).containsKey(productId)) {
+		if (collectChangedStates.containsKey(clientId)
+				&& collectChangedStates.get(clientId).containsKey(productIds.first())) {
 			return;
 		}
 
 		// add update to list
-		allClientsProductStates.get(clientId).put(productId, stateAndAction);
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId);
+		for (Map<String, Object> productInfo : productInfos) {
+			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+					POJOReMapper.remap(productInfo, new TypeReference<>() {
+					}));
+		}
 
 		// TODO refactoring needed in these methods...
 		// It seems to me that too many unnecessary operations are made in these methods
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();
 
-		int row = getRowFromProductID(productId);
+		int firstRow = getRowFromProductID(productIds.first());
+		int lastRow = getRowFromProductID(productIds.last());
 
-		fireTableRowsUpdated(row, row);
+		fireTableRowsUpdated(firstRow, lastRow);
+	}
+
+	@Override
+	public synchronized void updateTable(String clientId) {
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId);
+		if (!productInfos.isEmpty()) {
+			for (Map<String, Object> productInfo : productInfos) {
+				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+						POJOReMapper.remap(productInfo, new TypeReference<>() {
+						}));
+			}
+		} else {
+			allClientsProductStates.get(clientId).clear();
+		}
+
+		produceVisualStatesFromExistingEntries();
+		completeVisualStatesByDefaults();
+		fireTableDataChanged();
 	}
 
 	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {
