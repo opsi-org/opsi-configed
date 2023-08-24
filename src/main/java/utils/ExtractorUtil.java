@@ -24,6 +24,7 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
 public final class ExtractorUtil {
+
 	private ExtractorUtil() {
 	}
 
