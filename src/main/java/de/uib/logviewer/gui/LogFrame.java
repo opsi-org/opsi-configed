@@ -54,12 +54,6 @@ import utils.Utils;
 
 public class LogFrame extends JFrame implements WindowListener {
 	private static String fileName = "";
-
-	private JMenuBar jMenuBar = new JMenuBar();
-	private JMenu jMenuFile;
-	private JMenu jMenuView;
-	private JMenu jMenuHelp;
-
 	private StandaloneLogPane logPane;
 
 	private IconButton iconButtonOpen;
@@ -71,9 +65,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	public LogFrame() {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
 		baseContainer = super.getContentPane();
-
 		guiInit();
 
 		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
@@ -95,59 +87,53 @@ public class LogFrame extends JFrame implements WindowListener {
 	//------------------------------------------------------------------------------------------
 	//menus
 
-	private void setupMenuFile() {
-		jMenuFile = new JMenu();
-
+	private JMenu setupMenuFile() {
 		JMenuItem jMenuFileOpen = new JMenuItem();
-		JMenuItem jMenuFileClose = new JMenuItem();
-		JMenuItem jMenuFileSave = new JMenuItem();
-		JMenuItem jMenuFileReload = new JMenuItem();
-		JMenuItem jMenuFileExit = new JMenuItem();
-
-		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
-
 		jMenuFileOpen.setText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
+		JMenuItem jMenuFileClose = new JMenuItem();
 		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
 
+		JMenuItem jMenuFileSave = new JMenuItem();
 		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.save());
 
+		JMenuItem jMenuFileReload = new JMenuItem();
 		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		JMenu jMenuTheme = createJMenuTheme();
-		JMenu jMenuLanguage = createJMenuLanguage();
-
+		JMenuItem jMenuFileExit = new JMenuItem();
 		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
 
+		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		jMenuFile.add(jMenuFileOpen);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
 		if (Main.THEMES) {
-			jMenuFile.add(jMenuTheme);
+			jMenuFile.add(createJMenuTheme());
 		}
-		jMenuFile.add(jMenuLanguage);
+		jMenuFile.add(createJMenuLanguage());
 		jMenuFile.add(jMenuFileExit);
+		return jMenuFile;
 	}
 
 	private JMenu createJMenuTheme() {
 		JMenu jMenuTheme = new JMenu("Theme");
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = Messages.getSelectedTheme();
-		Logging.debug(this, "selectedLocale " + selectedTheme);
+		Logging.debug(this, "Selected theme " + selectedTheme);
 
 		for (final String themeName : Messages.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
-			Logging.debug(this, "selectedTheme " + themeName);
+			Logging.debug(this, "Selected theme " + themeName);
 			themeItem.setSelected(selectedTheme.equals(themeName));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
@@ -156,7 +142,6 @@ public class LogFrame extends JFrame implements WindowListener {
 				UserPreferences.set(UserPreferences.THEME, themeName);
 				Messages.setTheme(themeName);
 				Main.setOpsiLaf();
-
 				restartLogFrame();
 			});
 		}
@@ -169,7 +154,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		ButtonGroup groupLanguages = new ButtonGroup();
 
 		String selectedLocale = Messages.getSelectedLocale();
-		Logging.debug(this, "selectedLocale " + selectedLocale);
+		Logging.debug(this, "Selected locale " + selectedLocale);
 
 		for (final String localeName : Messages.getLocaleInfo().keySet()) {
 			ImageIcon localeIcon = null;
@@ -179,7 +164,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
-			Logging.debug(this, "selectedLocale " + selectedLocale);
+			Logging.debug(this, "Selected locale " + selectedLocale);
 			menuItem.setSelected(selectedLocale.equals(localeName));
 			jMenuLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
@@ -195,22 +180,18 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void restartLogFrame() {
+		// We put it into to special thread to avoid invokeAndWait runtime error.
 		new Thread() {
 			@Override
 			public void run() {
 				LogFrame.this.dispose();
-
-				Logging.info(this, "init new logviewer");
+				Logging.info(this, "Initialize new logviewer");
 				Logviewer.init();
-
 			}
 		}.start();
-
-		// we put it into to special thread to avoid invokeAndWait runtime error
 	}
 
-	private void setupMenuView() {
-
+	private JMenu setupMenuView() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> logPane.increaseFontSize());
@@ -219,15 +200,13 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> logPane.reduceFontSize());
 
-		jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
+		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
 		jMenuView.add(jMenuViewFontsizeMinus);
-
+		return jMenuView;
 	}
 
-	private void setupMenuHelp() {
-		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
-
+	private JMenu setupMenuHelp() {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
@@ -240,10 +219,12 @@ public class LogFrame extends JFrame implements WindowListener {
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
+		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 		jMenuHelp.add(jMenuHelpDoc);
 		jMenuHelp.add(jMenuHelpForum);
 		jMenuHelp.add(jMenuHelpSupport);
 		jMenuHelp.add(jMenuHelpAbout);
+		return jMenuHelp;
 	}
 
 	private void setupIcons() {
@@ -278,7 +259,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		setupIcons();
 
 		JPanel iconPane = new JPanel();
-
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
 		iconPane.setLayout(layoutIconPane1);
 
@@ -308,13 +288,10 @@ public class LogFrame extends JFrame implements WindowListener {
 										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		setupMenuFile();
-		setupMenuView();
-		setupMenuHelp();
-		jMenuBar.add(jMenuFile);
-		jMenuBar.add(jMenuView);
-		jMenuBar.add(jMenuHelp);
-
+		JMenuBar jMenuBar = new JMenuBar();
+		jMenuBar.add(setupMenuFile());
+		jMenuBar.add(setupMenuView());
+		jMenuBar.add(setupMenuHelp());
 		this.setJMenuBar(jMenuBar);
 
 		initLogpane();
@@ -329,7 +306,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void initLogpane() {
-		//only one LogPane
 		logPane = new StandaloneLogPane();
 		logPane.setMainText("");
 		logPane.setTitle("unknown");
@@ -385,27 +361,17 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		private void saveToFile(String filename, String[] logfilelines) {
-			FileWriter fWriter = null;
-			try {
-				fWriter = new FileWriter(filename, StandardCharsets.UTF_8);
-			} catch (IOException ex) {
-				Logging.error("Error opening file: " + filename + "\n --- ; stop saving to file", ex);
-				return;
-			}
-			int i = 0;
-			while (i < logfilelines.length) {
-				try {
+			try (FileWriter fWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
+				int i = 0;
+				while (i < logfilelines.length) {
 					fWriter.write(logfilelines[i] + "\n");
 					LogFrame.this.setTitle(filename);
-				} catch (IOException ex) {
-					Logging.error("Error writing file: " + filename + "\n --- " + ex);
+					i++;
 				}
-				i++;
-			}
-			try {
-				fWriter.close();
 			} catch (IOException ex) {
-				Logging.error("Error closing file: " + filename + "\n --- " + ex);
+				Logging.error(
+						"Error encountered while trying to save to file: " + filename + "\n --- ; stop saving to file",
+						ex);
 			}
 		}
 	}
@@ -445,7 +411,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		try {
 			super.paint(g);
 		} catch (ClassCastException ex) {
-			Logging.info(this, "the ugly well known exception " + ex);
+			Logging.info(this, "The ugly well known exception " + ex);
 		}
 	}
 
@@ -479,9 +445,9 @@ public class LogFrame extends JFrame implements WindowListener {
 		openFile();
 
 		if (fileName != null && !fileName.isEmpty()) {
-			Logging.info(this, "usedmemory " + Utils.usedMemory());
+			Logging.info(this, "Used memory " + Utils.usedMemory());
 			logPane.setMainText(readFile(fileName));
-			Logging.info(this, "usedmemory " + Utils.usedMemory());
+			Logging.info(this, "Used memory " + Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
 			logPane.removeAllHighlights();
@@ -547,7 +513,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private String readNotCompressedFile(File file) {
-		Logging.info(this, "start readNotCompressedFile");
+		Logging.info(this, "Start readNotCompressedFile");
 		String result = "";
 		try {
 			InputStream fis = new FileInputStream(file);
