@@ -3621,17 +3621,28 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public Map<String, String> getProductInfos(String productId, String clientId) {
-
 		String[] callAttributes = new String[] {};
-
 		HashMap<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put("clientId", clientId);
-
 		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productOnClient_getHashes").get(0);
-
 		return new ProductState(POJOReMapper.giveEmptyForNull(retrievedMap), true);
+	}
+
+	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
+		String[] callAttributes = new String[] {};
+		HashMap<String, Object> callFilter = new HashMap<>();
+		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
+		callFilter.put("clientId", clientId);
+		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getHashes"));
+	}
+
+	public List<Map<String, Object>> getProductInfos(String clientId) {
+		String[] callAttributes = new String[] {};
+		HashMap<String, Object> callFilter = new HashMap<>();
+		callFilter.put("clientId", clientId);
+		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getHashes"));
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStates() {

@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -330,6 +332,9 @@ public class ConfigedMain implements ListSelectionListener {
 	private Set<String> connectedHostsByMessagebus;
 
 	private boolean sessioninfoFinished;
+
+	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
+	private Timer timer;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -642,22 +647,59 @@ public class ConfigedMain implements ListSelectionListener {
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
 
-		if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
-			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
-			int selectedView = getViewIndex();
-			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
-					&& istmForSelectedClientsLocalboot != null) {
-				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
-					&& istmForSelectedClientsNetboot != null) {
-				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-			} else {
-				Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
-						+ "not open or configed not yet initialized");
-			}
+		Map<String, TreeSet<String>> clientProducts = productsToUpdate.containsKey(clientId)
+				? productsToUpdate.get(clientId)
+				: new HashMap<>();
+		TreeSet<String> productIds = clientProducts.computeIfAbsent(productType, v -> new TreeSet<>());
+		productIds.add(productId);
+		clientProducts.put(productType, productIds);
+		productsToUpdate.put(clientId, clientProducts);
+
+		if (timer != null) {
+			timer.cancel();
 		}
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+					updateProductTableForClient(clientId, productType);
+					productsToUpdate.clear();
+				}
+			}
+		}, 200);
+	}
+
+	private void updateProductTableForClient(String clientId, String productType) {
+		int selectedView = getViewIndex();
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsLocalboot != null) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsLocalboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsLocalboot.updateTable(clientId);
+			}
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsNetboot != null) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsNetboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsNetboot.updateTable(clientId);
+			}
+		} else {
+			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
+					+ "not open or configed not yet initialized");
+		}
+	}
+
+	private boolean isProductsUpdatedForClient(String clientId, String productType) {
+		return productsToUpdate.get(clientId) != null && productsToUpdate.get(clientId).get(productType) != null
+				&& !productsToUpdate.get(clientId).get(productType).isEmpty();
 	}
 
 	public void addClientToConnectedList(String clientId) {
