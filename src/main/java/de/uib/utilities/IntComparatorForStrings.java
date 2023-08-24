@@ -11,31 +11,20 @@ import java.util.Comparator;
 import de.uib.utilities.logging.Logging;
 
 public class IntComparatorForStrings implements Comparator<String> {
-
 	@Override
 	public int compare(String o1, String o2) {
-		int i1 = Integer.MAX_VALUE;
-		int i2 = Integer.MIN_VALUE;
-
-		try {
-			i1 = Integer.parseInt(o1);
-		} catch (NumberFormatException ex) {
-			Logging.debug("o1 no number " + o1);
-		}
-
-		try {
-			i2 = Integer.parseInt(o2);
-		} catch (NumberFormatException ex) {
-			Logging.debug("o2 no number " + o2);
-		}
-
-		if (i1 < i2) {
-			return -1;
-		} else if (i1 > i2) {
-			return +1;
-		} else {
-			return 0;
-		}
+		Integer i1 = o1.isBlank() ? -1 : convStrToInt(o1);
+		Integer i2 = o2.isBlank() ? -1 : convStrToInt(o2);
+		return i1.compareTo(i2);
 	}
 
+	private static Integer convStrToInt(String str) {
+		Integer result = 0;
+		try {
+			result = Integer.parseInt(str);
+		} catch (NumberFormatException ex) {
+			Logging.debug("not a number " + str);
+		}
+		return result;
+	}
 }

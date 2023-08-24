@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -296,7 +298,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		// products/states/actionrequests exist
 
 		for (Entry<String, List<Map<String, String>>> client : clientAllProductRows.entrySet()) {
-			Map<String, Map<String, String>> productRows = new HashMap<>();
+			Map<String, Map<String, String>> productRows = new LinkedHashMap<>();
 
 			allClientsProductStates.put(client.getKey(), productRows);
 			// for each client we build the productstates map
@@ -314,7 +316,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private void produceVisualStatesFromExistingEntries() {
-
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
 			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
@@ -322,6 +323,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
+			int position = 0;
 			for (String productId : client.getValue().keySet()) {
 				Map<String, String> stateAndAction = client.getValue().get(productId);
 
@@ -345,17 +347,16 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				}
 
 				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
-
 				stateAndAction.put(ProductState.KEY_ACTION_SEQUENCE, priority);
+				position++;
+				stateAndAction.put(ProductState.KEY_POSITION, String.valueOf(position));
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-
 					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
 						Logging.debug(this, "before mixtovisualstate product " + productId + " value "
 								+ stateAndAction.get(colKey));
 					}
-
 					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 				}
 
@@ -406,10 +407,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private static String mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
 		String oldValue = visualStates.get(productId);
-
 		String resultValue = oldValue;
 		if (oldValue == null) {
-
 			resultValue = mixinValue;
 			visualStates.put(productId, resultValue);
 		} else {
@@ -418,7 +417,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				visualStates.put(productId, resultValue);
 			}
 		}
-
 		return resultValue;
 	}
 
@@ -1222,7 +1220,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			return productNamesInDeliveryOrder.indexOf(actualProduct);
+			return ServerFacade.isOpsi43() ? combinedVisualValues.get(ProductState.KEY_POSITION).get(actualProduct)
+					: productNamesInDeliveryOrder.indexOf(actualProduct);
 
 		case 12:
 			return actualProductVersion();
