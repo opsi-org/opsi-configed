@@ -54,6 +54,9 @@ import utils.Utils;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
+	private static final int DEFAULT_WIDTH = 1212;
+	private static final int DEFAULT_HEIGHT = 511;
+
 	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
@@ -500,7 +503,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		GeneralFrame externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(logPane);
 		externalView.setup();
-		externalView.setSize(size);
+		if (size.equals(new Dimension(0, 0))) {
+			externalView.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		} else {
+			externalView.setSize(size);
+		}
 		externalView.setLocationRelativeTo(Main.getMainFrame());
 		externalView.setVisible(true);
 	}
