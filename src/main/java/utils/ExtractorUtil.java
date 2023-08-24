@@ -36,7 +36,6 @@ public final class ExtractorUtil {
 				retrieveInputStream(file))) {
 			ArchiveEntry entry = null;
 			while ((entry = ais.getNextEntry()) != null) {
-				Logging.devel("\n");
 				if (!entry.isDirectory()) {
 					byte[] content = new byte[(int) entry.getSize()];
 					int bytesRead = ais.read(content);
@@ -94,7 +93,6 @@ public final class ExtractorUtil {
 		try (SevenZFile sevenZFile = new SevenZFile(file)) {
 			SevenZArchiveEntry entry = null;
 			while ((entry = sevenZFile.getNextEntry()) != null) {
-				Logging.devel("\n");
 				if (!entry.isDirectory()) {
 					byte[] content = new byte[(int) entry.getSize()];
 					int bytesRead = sevenZFile.read(content);
