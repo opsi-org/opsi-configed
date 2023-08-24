@@ -655,6 +655,10 @@ public class ConfigedMain implements ListSelectionListener {
 		clientProducts.put(productType, productIds);
 		productsToUpdate.put(clientId, clientProducts);
 
+		if (timer != null) {
+			timer.cancel();
+		}
+
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
