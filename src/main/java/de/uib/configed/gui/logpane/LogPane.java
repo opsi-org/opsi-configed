@@ -479,23 +479,29 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// set text did not run
 		// probably we already are in a floating instance
 
-		LogPane copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new LogPane("", false);
-
-		externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setup();
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Main.getMainFrame());
-
+		LogPane copyOfMe = new LogPane("", false);
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
 				maxExistingLevel);
 		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
+		externalize(copyOfMe, title);
+	}
 
+	public void externalize(String title, Dimension size) {
+		externalize(this, title, size);
+	}
+
+	public void externalize(LogPane logPane, String title) {
+		externalize(logPane, title, this.getSize());
+	}
+
+	public void externalize(LogPane logPane, String title, Dimension size) {
+		GeneralFrame externalView = new GeneralFrame(null, title, false);
+		externalView.addPanel(logPane);
+		externalView.setup();
+		externalView.setSize(size);
+		externalView.setLocationRelativeTo(Main.getMainFrame());
 		externalView.setVisible(true);
 	}
 

@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -50,13 +53,9 @@ import utils.ExtractorUtil;
 import utils.Utils;
 
 public class LogFrame extends JFrame implements WindowListener {
-
 	private static String fileName = "";
 
-	//menu system
-
 	private JMenuBar jMenuBar = new JMenuBar();
-
 	private JMenu jMenuFile;
 	private JMenu jMenuView;
 	private JMenu jMenuHelp;
@@ -332,7 +331,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void initLogpane() {
 		//only one LogPane
 		logPane = new StandaloneLogPane();
-
 		logPane.setMainText("");
 		logPane.setTitle("unknown");
 		setTitle(null);
@@ -347,7 +345,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private class StandaloneLogPane extends LogPane {
-
 		public StandaloneLogPane() {
 			super("", true);
 		}
@@ -463,7 +460,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private static String openFile() {
-
 		JFileChooser chooser = new JFileChooser(fileName);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
@@ -506,7 +502,6 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private String readFile(String fileName) {
 		String result = "";
-
 		File file = new File(fileName);
 
 		if (file.isDirectory()) {
@@ -518,9 +513,14 @@ public class LogFrame extends JFrame implements WindowListener {
 					|| fileName.endsWith(".ini")) {
 				result = readNotCompressedFile(file);
 			} else {
-				//unknown extension
-				result = ExtractorUtil.unzip(file);
-				if (result == null) {
+				TreeMap<String, String> files = new TreeMap<>(ExtractorUtil.unzip(file));
+				if (!files.isEmpty()) {
+					Entry<String, String> firstFile = files.firstEntry();
+					setFileName(firstFile.getKey());
+					result = firstFile.getValue();
+					files.remove(firstFile.getKey());
+					openRestFilesFromZIP(files);
+				} else {
 					Logging.warning("Tried unzipping file, could not do it, open it as text");
 					result = readNotCompressedFile(file);
 				}
@@ -532,6 +532,18 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		return result;
+	}
+
+	private void openRestFilesFromZIP(Map<String, String> files) {
+		if (files == null || files.isEmpty()) {
+			return;
+		}
+		for (Entry<String, String> entry : files.entrySet()) {
+			StandaloneLogPane externalLogPane = new StandaloneLogPane();
+			externalLogPane.setTitle(entry.getKey());
+			externalLogPane.setText(entry.getValue());
+			externalLogPane.externalize(entry.getKey(), logPane.getSize());
+		}
 	}
 
 	private String readNotCompressedFile(File file) {
@@ -567,7 +579,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		return sb.toString();
 	}
 
-	// Resets filename to empty name
 	private static void resetFileName() {
 		fileName = "";
 	}
