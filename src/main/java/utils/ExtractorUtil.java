@@ -24,9 +24,6 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
 public final class ExtractorUtil {
-
-	// Private constructor to hide public one, 
-	// Must not be instanciated
 	private ExtractorUtil() {
 	}
 

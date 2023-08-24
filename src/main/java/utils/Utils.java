@@ -10,7 +10,12 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.Console;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -290,6 +296,29 @@ public final class Utils {
 
 	public static boolean isCertificateVerificationDisabled() {
 		return disableCertificateVerification;
+	}
+
+	public static void restrictAccessToFile(File file) {
+		try {
+			Logging.info(
+					"Restricting file's " + file.getAbsolutePath() + " access to only allow owner to modify/read file");
+			String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+			Logging.info("Detected operating system " + osName);
+			if (osName.contains("win")) {
+				boolean readablePermissionChanged = file.setReadable(true, true);
+				boolean writablePermissionChanged = file.setWritable(true, true);
+				Logging.info("Readable permission for file " + file.getAbsolutePath() + " changed "
+						+ readablePermissionChanged);
+				Logging.info("Writable permission for file " + file.getAbsolutePath() + " changed "
+						+ writablePermissionChanged);
+			} else {
+				Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-------");
+				Files.setPosixFilePermissions(file.toPath(), permissions);
+				Logging.info("Changed file's " + file.getAbsolutePath() + " permission");
+			}
+		} catch (IOException e) {
+			Logging.error("Unable to set default permissions on temp file", e);
+		}
 	}
 
 	public static String getDomainFromClientName(String clientName) {
