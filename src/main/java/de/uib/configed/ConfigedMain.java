@@ -1270,7 +1270,8 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		String[] currentSelectedClients = selectionPanel.getSelectedValues().toArray(String[]::new);
-		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))) {
+		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))
+				|| currentSelectedClients.length == 0) {
 			return;
 		}
 
