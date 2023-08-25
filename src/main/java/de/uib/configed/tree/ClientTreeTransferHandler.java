@@ -23,7 +23,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Globals;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
@@ -59,8 +59,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
 
-		if (Globals.isGlobalReadOnly() || !support.isDataFlavorSupported(DataFlavor.stringFlavor)
-				|| !support.isDrop()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()
+				|| !support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
 			return false;
 		}
 

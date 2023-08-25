@@ -12,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import de.uib.configed.Globals;
+import utils.Utils;
 
 public class JComboBoxSimpleToolTip extends JComboBox<String> {
 
@@ -37,7 +37,7 @@ public class JComboBoxSimpleToolTip extends JComboBox<String> {
 
 			setText(val);
 
-			String tooltipText = Globals.fillStringToLength(val + " ", FILL_LENGTH);
+			String tooltipText = Utils.fillStringToLength(val + " ", FILL_LENGTH);
 
 			setToolTipText(tooltipText);
 

@@ -47,6 +47,7 @@ import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -225,7 +226,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private void defineChoosers() {
 		comboChooseDepot = new JComboBox<>();
-		comboChooseDepot.setSize(Globals.textfieldDimension);
+		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 
@@ -237,7 +238,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		});
 
 		comboChooseWinProduct = new JComboBox<>();
-		comboChooseWinProduct.setSize(Globals.textfieldDimension);
+		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			Logging.info(this, "winProduct  " + winProduct);
@@ -246,7 +247,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		chooserDriverPath = new JFileChooser();
 		chooserDriverPath.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		chooserDriverPath.setPreferredSize(Globals.filechooserSize);
+		chooserDriverPath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDriverPath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
@@ -256,7 +257,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				Globals.APPNAME + " " + Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
 		chooserServerpath = new JFileChooser();
-		chooserServerpath.setPreferredSize(Globals.filechooserSize);
+		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
@@ -306,8 +307,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
-		JButton buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectDriverFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallSelectDriverFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectDriverFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
@@ -316,23 +317,23 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		if (!Main.THEMES) {
-			fieldServerPath.setForeground(Globals.greyed);
+			fieldServerPath.setForeground(Globals.GREYED);
 		}
 
-		JButton buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		JButton buttonShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
+		JButton buttonShowDrivers = new JButton("", Utils.createImageIcon("images/show-menu.png", ""));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		JButton btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
+		JButton btnCreateDrivers = new JButton("", Utils.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
 				// id not needed
@@ -407,7 +408,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
 		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(new LineBorder(Globals.blueGrey, 1, true));
+		panelButtonGroup.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelDriverLocationType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -451,16 +452,16 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				);
 
 		driverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				Globals.createImageIcon("images/checked_withoutbox.png", ""),
-				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
+				Utils.createImageIcon("images/checked_withoutbox.png", ""),
+				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
 
 		serverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
-				Globals.createImageIcon("images/checked_withoutbox.png", "Z"),
-				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
+				Utils.createImageIcon("images/checked_withoutbox.png", "Z"),
+				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
 
-		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setEnabled(false);
-		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
 		// buttonUploadDrivers.setDisabledIcon(
 
 		buttonUploadDrivers.setEnabled(false);

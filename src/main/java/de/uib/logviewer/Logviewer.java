@@ -8,16 +8,15 @@ package de.uib.logviewer;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.net.URL;
 
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 
-import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
+import utils.Utils;
 
 public final class Logviewer {
 
@@ -34,14 +33,6 @@ public final class Logviewer {
 
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this.getClass(), imageHandled);
-
-		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-		if (resource == null) {
-			Logging.warning(this.getClass(), "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-		} else {
-			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			imageHandled = "setIconImage";
-		}
 
 		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
 
@@ -72,7 +63,7 @@ public final class Logviewer {
 
 		// for passing it to message frames everywhere
 
-		Globals.frame1 = logFrame;
+		Utils.setMasterFrame(logFrame);
 
 		//rearranging visual components
 		logFrame.pack();
@@ -98,16 +89,7 @@ public final class Logviewer {
 	 * main-Methode
 	 */
 	public static void main(CommandLine cmd) {
-
 		processArgs(cmd);
-
-		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-		if (resource == null) {
-			Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-		} else {
-			Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-		}
-
 		new Logviewer();
 	}
 }

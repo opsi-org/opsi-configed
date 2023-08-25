@@ -16,8 +16,10 @@ import javax.swing.JTable;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
+import utils.Utils;
 
 public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 
@@ -41,8 +43,8 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 		// we use data panel :
 		if (column == 1) {
 			String key = "" + table.getValueAt(row, 0);
-			if (Globals.isKeyForSecretValue(key)) {
-				if (Globals.isGlobalReadOnly()) {
+			if (Utils.isKeyForSecretValue(key)) {
+				if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 					Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 					return null;
 				}

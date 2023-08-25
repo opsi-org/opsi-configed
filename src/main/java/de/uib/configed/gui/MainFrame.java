@@ -134,6 +134,7 @@ import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 public class MainFrame extends JFrame
 		implements WindowListener, KeyListener, MouseListener, ActionListener, ComponentListener {
@@ -305,9 +306,9 @@ public class MainFrame extends JFrame
 	private JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	private JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
-			Configed.getResourceValue("PopupMenuTrait.reload"), Globals.createImageIcon("images/reload16.png", ""));
+			Configed.getResourceValue("PopupMenuTrait.reload"), Utils.createImageIcon("images/reload16.png", ""));
 	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
-			Globals.createImageIcon("images/acrobat_reader16.png", ""));
+			Utils.createImageIcon("images/acrobat_reader16.png", ""));
 
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
@@ -808,7 +809,7 @@ public class MainFrame extends JFrame
 		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
 			if (!Main.FONT) {
-				item.setFont(Globals.defaultFont);
+				item.setFont(Globals.DEFAULT_FONT);
 			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
@@ -915,7 +916,7 @@ public class MainFrame extends JFrame
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
 			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.lightBlack);
+				jMenuSSHConnection.setForeground(Globals.LIGHT_BLACK);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
 		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
@@ -954,7 +955,7 @@ public class MainFrame extends JFrame
 
 		jMenuServer.removeAll();
 		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
-		boolean isReadOnly = Globals.isGlobalReadOnly();
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		Logging.info(this, "setupMenuServer add configpage");
@@ -1007,7 +1008,7 @@ public class MainFrame extends JFrame
 				Logging.info(this, "ssh parent menu text " + parentMenuName);
 				if (parentMenuName.equals(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 					parentMenu.setText("");
-					parentMenu.setIcon(Globals.createImageIcon("images/burger_menu_09.png", "..."));
+					parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
 				}
 
 				if (!(parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
@@ -1149,7 +1150,7 @@ public class MainFrame extends JFrame
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItemFormatted(entry.getValue());
 			if (!Main.FONT) {
-				item.setFont(Globals.defaultFont);
+				item.setFont(Globals.DEFAULT_FONT);
 			}
 
 			item.addActionListener((ActionEvent e) -> configedMain
@@ -1236,15 +1237,15 @@ public class MainFrame extends JFrame
 		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		jMenuHelpDoc.setText(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener(actionEvent -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
+		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 		jMenuHelp.add(jMenuHelpDoc);
 
 		jMenuHelpForum.setText(Configed.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener(actionEvent -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		jMenuHelpSupport.setText(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener(actionEvent -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
+		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelp.addSeparator();
@@ -1253,7 +1254,7 @@ public class MainFrame extends JFrame
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + ServerFacade.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		if (!Main.THEMES) {
-			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
+			jMenuHelpOpsiVersion.setForeground(Globals.LIGHT_BLACK);
 		}
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
@@ -1304,7 +1305,7 @@ public class MainFrame extends JFrame
 		jMenuHelp.addSeparator();
 
 		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Globals.showAboutAction(this));
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -1553,7 +1554,7 @@ public class MainFrame extends JFrame
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		popupSelectionToggleClientFilter.setState(false);
 		if (!Main.FONT) {
-			popupSelectionToggleClientFilter.setFont(Globals.defaultFontBig);
+			popupSelectionToggleClientFilter.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		popupSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
@@ -1586,7 +1587,7 @@ public class MainFrame extends JFrame
 		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
 			if (!Main.FONT) {
-				item.setFont(Globals.defaultFont);
+				item.setFont(Globals.DEFAULT_FONT);
 			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
@@ -1718,9 +1719,9 @@ public class MainFrame extends JFrame
 	private void guiInit() {
 		this.addWindowListener(this);
 		if (!Main.FONT) {
-			this.setFont(Globals.defaultFont);
+			this.setFont(Globals.DEFAULT_FONT);
 		}
-		this.setIconImage(Globals.mainIcon);
+		this.setIconImage(Utils.getMainIcon());
 
 		JPanel allPanel = new JPanel();
 		allPanel.addComponentListener(this);
@@ -1755,23 +1756,23 @@ public class MainFrame extends JFrame
 		clientPane = new JPanel();
 
 		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
-		clientPane.setBorder(Globals.createPanelBorder());
+		clientPane.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
 
-		labelHost = new JLabel(Globals.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
-		labelHost.setPreferredSize(Globals.buttonDimension);
+		labelHost = new JLabel(Utils.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
+		labelHost.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		labelHostID = new JLabel("");
 		if (!Main.FONT) {
-			labelHostID.setFont(Globals.defaultFontStandardBold);
+			labelHostID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
-		labelClientDescription.setPreferredSize(Globals.buttonDimension);
+		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
 		JLabel labelClientInventoryNumber = new JLabel(Configed.getResourceValue("MainFrame.jLabelInventoryNumber"));
-		labelClientInventoryNumber.setPreferredSize(Globals.buttonDimension);
+		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
 		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
 		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
 		labelClientSystemUUID.setVisible(ServerFacade.isOpsi43());
@@ -1783,7 +1784,7 @@ public class MainFrame extends JFrame
 		JTextArea jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		if (!Main.FONT) {
-			jFieldInDepot.setFont(Globals.defaultFontBig);
+			jFieldInDepot.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		if (!Main.THEMES) {
 			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
@@ -1791,18 +1792,18 @@ public class MainFrame extends JFrame
 
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
-		jTextFieldDescription.setPreferredSize(Globals.textfieldDimension);
+		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		if (!Main.FONT) {
-			jTextFieldDescription.setFont(Globals.defaultFontBig);
+			jTextFieldDescription.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		jTextFieldDescription.addKeyListener(this);
 		jTextFieldDescription.addMouseListener(this);
 
 		jTextFieldInventoryNumber = new JTextEditorField("");
 		jTextFieldInventoryNumber.setEditable(true);
-		jTextFieldInventoryNumber.setPreferredSize(Globals.textfieldDimension);
+		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		if (!Main.FONT) {
-			jTextFieldInventoryNumber.setFont(Globals.defaultFontBig);
+			jTextFieldInventoryNumber.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		jTextFieldInventoryNumber.addKeyListener(this);
 		jTextFieldInventoryNumber.addMouseListener(this);
@@ -1813,14 +1814,14 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 		if (!Main.FONT) {
-			jTextAreaNotes.setFont(Globals.defaultFontBig);
+			jTextAreaNotes.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		GraphicsEnvironment.getLocalGraphicsEnvironment();
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
 
 		JScrollPane scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setPreferredSize(Globals.textfieldDimension);
+		scrollpaneNotes.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -1849,9 +1850,9 @@ public class MainFrame extends JFrame
 		final Icon selectedIcon;
 		final Icon nullIcon;
 
-		unselectedIcon = Globals.createImageIcon("images/checked_not.png", "");
-		selectedIcon = Globals.createImageIcon("images/checked.png", "");
-		nullIcon = Globals.createImageIcon("images/checked_box_mixed.png", "");
+		unselectedIcon = Utils.createImageIcon("images/checked_not.png", "");
+		selectedIcon = Utils.createImageIcon("images/checked.png", "");
+		nullIcon = Utils.createImageIcon("images/checked_box_mixed.png", "");
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
@@ -2064,7 +2065,7 @@ public class MainFrame extends JFrame
 		}
 
 		if (!Main.FONT) {
-			treeClients.setFont(Globals.defaultFont);
+			treeClients.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
@@ -2127,25 +2128,25 @@ public class MainFrame extends JFrame
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)));
 
-		jButtonServerConfiguration = new JButton("", Globals.createImageIcon("images/opsiconsole_deselected.png", ""));
-		jButtonServerConfiguration.setSelectedIcon(Globals.createImageIcon("images/opsiconsole.png", ""));
-		jButtonServerConfiguration.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonServerConfiguration = new JButton("", Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
+		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
+		jButtonServerConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 
-		jButtonDepotsConfiguration = new JButton("", Globals.createImageIcon("images/opsidepots_deselected.png", ""));
-		jButtonDepotsConfiguration.setSelectedIcon(Globals.createImageIcon("images/opsidepots.png", ""));
-		jButtonDepotsConfiguration.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonDepotsConfiguration = new JButton("", Utils.createImageIcon("images/opsidepots_deselected.png", ""));
+		jButtonDepotsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsidepots.png", ""));
+		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 
-		jButtonClientsConfiguration = new JButton("", Globals.createImageIcon("images/opsiclients_deselected.png", ""));
-		jButtonClientsConfiguration.setSelectedIcon(Globals.createImageIcon("images/opsiclients.png", ""));
-		jButtonClientsConfiguration.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonClientsConfiguration = new JButton("", Utils.createImageIcon("images/opsiclients_deselected.png", ""));
+		jButtonClientsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiclients.png", ""));
+		jButtonClientsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 
-		jButtonLicences = new JButton("", Globals.createImageIcon("images/licences_deselected.png", ""));
+		jButtonLicences = new JButton("", Utils.createImageIcon("images/licences_deselected.png", ""));
 		jButtonLicences.setEnabled(false);
-		jButtonLicences.setSelectedIcon(Globals.createImageIcon("images/licences.png", ""));
-		jButtonLicences.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonLicences.setSelectedIcon(Utils.createImageIcon("images/licences.png", ""));
+		jButtonLicences.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonLicences.setToolTipText(Configed.getResourceValue("MainFrame.labelLicences"));
 
 		jButtonServerConfiguration.addActionListener(this);
@@ -2153,24 +2154,24 @@ public class MainFrame extends JFrame
 		jButtonClientsConfiguration.addActionListener(this);
 		jButtonLicences.addActionListener(this);
 
-		jButtonWorkOnGroups = new JButton("", Globals.createImageIcon("images/group_all_unselected_40.png", ""));
-		jButtonWorkOnGroups.setSelectedIcon(Globals.createImageIcon("images/group_all_selected_40.png", ""));
-		jButtonWorkOnGroups.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
+		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
+		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
 
 		jButtonWorkOnGroups.setEnabled(persistenceController.isWithLocalImaging());
 		jButtonWorkOnGroups.addActionListener(this);
 
-		jButtonWorkOnProducts = new JButton("", Globals.createImageIcon("images/packagebutton.png", ""));
-		jButtonWorkOnProducts.setSelectedIcon(Globals.createImageIcon("images/packagebutton.png", ""));
-		jButtonWorkOnProducts.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
+		jButtonWorkOnProducts.setSelectedIcon(Utils.createImageIcon("images/packagebutton.png", ""));
+		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 
 		jButtonWorkOnProducts.addActionListener(this);
 
-		jButtonDashboard = new JButton("", Globals.createImageIcon("images/dash_unselected.png", ""));
-		jButtonDashboard.setSelectedIcon(Globals.createImageIcon("images/dash_selected.png", ""));
-		jButtonDashboard.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonDashboard = new JButton("", Utils.createImageIcon("images/dash_unselected.png", ""));
+		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
+		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 
 		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
@@ -2185,15 +2186,15 @@ public class MainFrame extends JFrame
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
 				jButtonOpsiLicenses = new JButton("",
-						Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+						Utils.createImageIcon("images/opsi-licenses-error-small.png", ""));
 				break;
 			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
 				jButtonOpsiLicenses = new JButton("",
-						Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+						Utils.createImageIcon("images/opsi-licenses-warning-small.png", ""));
 				break;
 
 			case LicensingInfoMap.STATE_OKAY:
-				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+				jButtonOpsiLicenses = new JButton("", Utils.createImageIcon("images/opsi-licenses.png", ""));
 				break;
 
 			default:
@@ -2202,15 +2203,15 @@ public class MainFrame extends JFrame
 			}
 
 		} else {
-			jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+			jButtonOpsiLicenses = new JButton("", Utils.createImageIcon("images/opsi-licenses.png", ""));
 		}
 
-		jButtonOpsiLicenses.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
 		jButtonOpsiLicenses.addActionListener(this);
 
 		JPanel iconPaneTargets = new JPanel();
-		iconPaneTargets.setBorder(new LineBorder(Globals.blueGrey, 1, true));
+		iconPaneTargets.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
 		iconPaneTargets.setLayout(layoutIconPaneTargets);
@@ -2240,7 +2241,7 @@ public class MainFrame extends JFrame
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		JPanel iconPaneExtraFrames = new JPanel();
-		iconPaneExtraFrames.setBorder(new LineBorder(Globals.blueGrey, 1, true));
+		iconPaneExtraFrames.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
 		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
@@ -2414,7 +2415,7 @@ public class MainFrame extends JFrame
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
-				Globals.createImageIcon("images/clientselection.png", ""), panelClientSelection,
+				Utils.createImageIcon("images/clientselection.png", ""), panelClientSelection,
 				Configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
 		panelLocalbootProductSettings = new PanelGroupedProductSettings(
@@ -2426,12 +2427,12 @@ public class MainFrame extends JFrame
 				configedMain.getDisplayFieldsNetbootProducts());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				Globals.createImageIcon("images/package.png", ""), panelLocalbootProductSettings,
+				Utils.createImageIcon("images/package.png", ""), panelLocalbootProductSettings,
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				Globals.createImageIcon("images/bootimage.png", ""), panelNetbootProductSettings,
+				Utils.createImageIcon("images/bootimage.png", ""), panelNetbootProductSettings,
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
@@ -2459,13 +2460,13 @@ public class MainFrame extends JFrame
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				Globals.createImageIcon("images/config_pro.png", ""), panelHostConfig,
+				Utils.createImageIcon("images/config_pro.png", ""), panelHostConfig,
 				Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				Globals.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
+				Utils.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
 				Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(configedMain) {
@@ -2480,7 +2481,7 @@ public class MainFrame extends JFrame
 
 		labelNoSoftware = new JLabel();
 		if (!Main.FONT) {
-			labelNoSoftware.setFont(Globals.defaultFontBig);
+			labelNoSoftware.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
@@ -2496,10 +2497,10 @@ public class MainFrame extends JFrame
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
+				Utils.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
 				Configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
 
-		showLogfiles = new PanelTabbedDocuments(Globals.getLogTypes(),
+		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
 				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles")) {
 			@Override
 			public void loadDocument(String logtype) {
@@ -2510,14 +2511,14 @@ public class MainFrame extends JFrame
 		};
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"),
-				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
+				Utils.createImageIcon("images/logfile.png", ""), showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
 
 			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
 
-			String logtype = Globals.getLogType(showLogfiles.getSelectedIndex());
+			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
 
 			// logfile empty?
 			if (!configedMain.logfileExists(logtype)) {
@@ -2528,7 +2529,7 @@ public class MainFrame extends JFrame
 		panelProductProperties = new PanelProductProperties(configedMain);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""), panelProductProperties,
+				Utils.createImageIcon("images/config_pro.png", ""), panelProductProperties,
 				Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
@@ -2541,7 +2542,7 @@ public class MainFrame extends JFrame
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""), panelHostProperties,
+				Utils.createImageIcon("images/config_pro.png", ""), panelHostProperties,
 				Configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
@@ -2613,7 +2614,7 @@ public class MainFrame extends JFrame
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-		if (Globals.isGlobalReadOnly() && b) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly() && b) {
 			return;
 		}
 
@@ -2716,9 +2717,9 @@ public class MainFrame extends JFrame
 		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
 
 		if (!configedMain.isFilterClientList()) {
-			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter_disabled-32.png", ""));
+			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter_disabled-32.png", ""));
 		} else {
-			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));
+			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
 		}
 	}
 
@@ -2947,8 +2948,8 @@ public class MainFrame extends JFrame
 				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
-				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""), null,
-						Globals.createImageIcon("images/document-view16.png", "") },
+				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", ""), null,
+						Utils.createImageIcon("images/document-view16.png", "") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
 			@Override
 			public void doAction2() {
@@ -3064,7 +3065,7 @@ public class MainFrame extends JFrame
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
 					new String[] { Configed.getResourceValue("Dashboard.close") },
-					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
+					new Icon[] { Utils.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
@@ -3530,11 +3531,10 @@ public class MainFrame extends JFrame
 	}
 
 	public void setLogview(String logtype) {
-		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
+		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
 		if (i < 0) {
 			return;
 		}
-
 		showLogfiles.setSelectedIndex(i);
 	}
 
@@ -3601,7 +3601,7 @@ public class MainFrame extends JFrame
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean gb = !Globals.isGlobalReadOnly();
+		boolean gb = !PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 
 		labelHost.setEnabled(singleClient);
 

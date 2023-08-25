@@ -18,7 +18,6 @@ import java.util.Map;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ErrorCode;
-import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
@@ -29,6 +28,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import utils.Utils;
 
 /**
  * Abstract class to manage batch export of SWAudit data, subclasses implement
@@ -67,7 +67,7 @@ public abstract class AbstractSWExporter {
 
 	public void addMissingArgs() {
 		if (server == null) {
-			server = Globals.getCLIparam("Host (default: localhost): ", false);
+			server = Utils.getCLIParam("Host (default: localhost): ");
 		}
 
 		if (server.isEmpty()) {
@@ -75,7 +75,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (user == null) {
-			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
+			user = Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : ");
 		}
 
 		if (user.isEmpty()) {
@@ -83,11 +83,11 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (password == null) {
-			password = Globals.getCLIparam("Password: ", true);
+			password = Utils.getCLIPasswordParam("Password: ");
 		}
 
 		if (clientsFile == null) {
-			clientsFile = Globals.getCLIparam("File with client names: ", false);
+			clientsFile = Utils.getCLIParam("File with client names: ");
 		}
 
 		if (clientsFile.isEmpty()) {
@@ -98,7 +98,7 @@ public abstract class AbstractSWExporter {
 		String userHomeS = userHome.toString();
 
 		if (outDir == null) {
-			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
+			outDir = Utils.getCLIParam("Export directory (default: " + userHomeS + "): ");
 		}
 
 		if (outDir.isEmpty()) {
