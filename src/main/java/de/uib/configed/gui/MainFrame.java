@@ -2211,7 +2211,6 @@ public class MainFrame extends JFrame
 		jButtonOpsiLicenses.addActionListener(this);
 
 		JPanel iconPaneTargets = new JPanel();
-		iconPaneTargets.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
 		iconPaneTargets.setLayout(layoutIconPaneTargets);
@@ -2241,7 +2240,6 @@ public class MainFrame extends JFrame
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		JPanel iconPaneExtraFrames = new JPanel();
-		iconPaneExtraFrames.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
 		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
