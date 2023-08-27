@@ -48,6 +48,8 @@ public final class Globals {
 	public static final Color OPSI_MAGENTA = new Color(203, 30, 88);
 	public static final Color OPSI_BLUE = new Color(63, 90, 166);
 
+	public static final Color OPSI_DARK_BLUE = new Color(45, 65, 120);
+
 	// Logging colors
 	public static final Color LOG_COLOR_ESSENTIAL = new Color(41, 121, 255);
 	public static final Color LOG_COLOR_CRITICAL = new Color(226, 0, 102);
@@ -67,38 +69,30 @@ public final class Globals {
 
 	// New colors
 
-	public static final Color opsiDarkGrey = new Color(63, 63, 62);
+	public static final Color OPSI_BLUE_2 = new Color(42, 60, 111);
+	public static final Color OPSI_DARK_BLUE_2 = new Color(30, 43, 80);
 
-	public static final Color opsiGrey = new Color(178, 178, 178);
-	public static final Color opsiLightGrey = new Color(228, 228, 227);
+	public static final Color OPSI_LIGHT_BLUE = new Color(159, 172, 210);
+	public static final Color OPSI_LIGHT_BLUE_2 = new Color(141, 154, 192);
 
-	public static final Color opsiMagenta = new Color(203, 30, 88);
-
-	public static final Color opsiBlue = new Color(63, 90, 166);
-	public static final Color opsiDarkBlue = new Color(45, 65, 120);
-
-	public static final Color opsiBlue2 = new Color(42, 60, 111);
-	public static final Color opsiDarkBlue2 = new Color(30, 43, 80);
-
-	public static final Color opsiLightBlue = new Color(159, 172, 210);
-	public static final Color opsiLightBlue2 = new Color(141, 154, 192);
+	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
+	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
+	public static final Color OPSI_LIGHT_MAGENTA = new Color(220, 105, 144);
+	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(229, 155, 181);
 
 	public static final Font DEFAULT_FONT = new Font("SansSerif", 0, 11);
 	public static final Font DEFAULT_FONT_STANDARD_BOLD = new Font("SansSerif", Font.BOLD, 11);
 	public static final Font DEFAULT_FONT_SMALL = new Font("SansSerif", 0, 9);
 	public static final Font DEFAULT_FONT_SMALL_BOLD = new Font("SansSerif", Font.BOLD, 9);
 
-	public static final Color opsiForegroundLight = new Color(0, 0, 0);
-	public static final Color opsiForegroundDark = new Color(225, 225, 225);
+	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
+	public static final Color OPSI_OK_DARK = new Color(36, 107, 50);
 
-	public static final Color opsiOK = LOG_COLOR_NOTICE;
-	public static final Color opsiOKDark = new Color(36, 107, 50);
+	public static final Color OPSI_WARNING = LOG_COLOR_WARNING;
+	public static final Color OPSI_WARNING_DARK = new Color(187, 136, 25);
 
-	public static final Color opsiWARNING = LOG_COLOR_WARNING;
-	public static final Color opsiWARNINGDark = new Color(187, 136, 25);
-
-	public static final Color opsiERROR = LOG_COLOR_ERROR;
-	public static final Color opsiERRORDark = new Color(170, 33, 38);
+	public static final Color OPSI_ERROR = LOG_COLOR_ERROR;
+	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
 
 	// End new colors
 
@@ -135,9 +129,9 @@ public final class Globals {
 	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
 
-	public static final Color FAILED_COLOR = opsiERROR;
-	public static final Color ACTION_COLOR = opsiWARNING;
-	public static final Color OK_COLOR = opsiOK;
+	public static final Color FAILED_COLOR = OPSI_ERROR;
+	public static final Color ACTION_COLOR = OPSI_WARNING;
+	public static final Color OK_COLOR = OPSI_OK;
 	public static final Color UNKNOWN_COLOR = LOG_COLOR_SECRET;
 
 	public static final Color DARK_ORANGE = new Color(218, 180, 4);

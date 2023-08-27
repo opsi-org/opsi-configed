@@ -84,9 +84,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 
 					if (Main.THEMES && FlatLaf.isLafDark()) {
-						jc.setBackground(Globals.opsiWARNINGDark);
+						jc.setBackground(Globals.OPSI_WARNING_DARK);
 					} else {
-						jc.setBackground(Globals.opsiWARNING);
+						jc.setBackground(Globals.OPSI_WARNING);
 					}
 
 					jc.setToolTipText(
@@ -96,9 +96,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 
 					if (Main.THEMES && FlatLaf.isLafDark()) {
-						jc.setBackground(Globals.opsiERRORDark);
+						jc.setBackground(Globals.OPSI_ERROR_DARK);
 					} else {
-						jc.setBackground(Globals.opsiERROR);
+						jc.setBackground(Globals.OPSI_ERROR);
 					}
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
@@ -107,9 +107,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 
 					if (Main.THEMES && FlatLaf.isLafDark()) {
-						jc.setBackground(Globals.opsiWARNINGDark);
+						jc.setBackground(Globals.OPSI_WARNING_DARK);
 					} else {
-						jc.setBackground(Globals.opsiWARNING);
+						jc.setBackground(Globals.OPSI_WARNING);
 					}
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
@@ -118,18 +118,18 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
 
 					if (Main.THEMES && FlatLaf.isLafDark()) {
-						jc.setBackground(Globals.opsiERRORDark);
+						jc.setBackground(Globals.OPSI_ERROR_DARK);
 					} else {
-						jc.setBackground(Globals.opsiERROR);
+						jc.setBackground(Globals.OPSI_ERROR);
 					}
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
 					if (Main.THEMES && FlatLaf.isLafDark()) {
-						jc.setBackground(Globals.opsiOKDark);
+						jc.setBackground(Globals.OPSI_OK_DARK);
 					} else {
-						jc.setBackground(Globals.opsiOK);
+						jc.setBackground(Globals.OPSI_OK);
 					}
 				}
 			}

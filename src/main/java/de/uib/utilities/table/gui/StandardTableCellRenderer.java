@@ -69,37 +69,37 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorizeTableCellThemeDark(Component component, boolean isSelected, boolean isRowEven) {
-		component.setForeground(Globals.opsiForegroundDark);
+		component.setForeground(Globals.OPSI_FOREGROUND_DARK);
 
 		if (!isSelected) {
 			if (isRowEven) {
 				component.setBackground(Globals.OPSI_BACKGROUND_DARK);
 			} else {
-				component.setBackground(Globals.opsiDarkGrey);
+				component.setBackground(Globals.OPSI_DARK_GREY);
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiDarkBlue2);
+				component.setBackground(Globals.OPSI_DARK_BLUE_2);
 			} else {
-				component.setBackground(Globals.opsiBlue2);
+				component.setBackground(Globals.OPSI_BLUE_2);
 			}
 		}
 	}
 
 	public static void colorizeTableCellThemeLight(Component component, boolean isSelected, boolean isRowEven) {
-		component.setForeground(Globals.opsiForegroundLight);
+		component.setForeground(Globals.OPSI_FOREGROUND_LIGHT);
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiLightGrey);
+				component.setBackground(Globals.OPSI_LIGHT_GREY);
 			} else {
 				component.setBackground(Globals.OPSI_BACKGROUND_LIGHT);
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiLightBlue2);
+				component.setBackground(Globals.OPSI_LIGHT_BLUE_2);
 			} else {
-				component.setBackground(Globals.opsiLightBlue);
+				component.setBackground(Globals.OPSI_LIGHT_BLUE);
 			}
 		}
 	}
