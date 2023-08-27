@@ -190,7 +190,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
-		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
 					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
 							.keySet());
