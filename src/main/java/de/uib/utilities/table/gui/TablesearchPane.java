@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.Collator;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -44,6 +45,7 @@ import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
+import utils.Utils;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	private static final int BLINK_RATE = 0;
@@ -123,7 +125,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, int prefColNo,
 			String savedStatesObjectTag) {
-		comparator = Globals.getCollator();
+		comparator = getCollator();
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
@@ -178,6 +180,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		initComponents();
 		setupLayout();
 		setNarrow(false);
+	}
+
+	private static Collator getCollator() {
+		Collator alphaCollator = Collator.getInstance();
+		alphaCollator.setStrength(Collator.IDENTICAL);
+		return alphaCollator;
 	}
 
 	/**
@@ -311,11 +319,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		if (!Main.FONT) {
-			labelSearch.setFont(Globals.defaultFont);
+			labelSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
-		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
 		try {
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
@@ -328,8 +336,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch.addActionListener(this);
 		checkmarkSearch.setChangeStateAutonomously(false);
 
-		selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
-		unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
+		selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
+		unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16_blockselect.png", "");
 
 		boolean active = true;
 
@@ -351,10 +359,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
 
 		fieldSearch = new JTextField("");
-		fieldSearch.setPreferredSize(Globals.textfieldDimension);
+		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		if (!Main.FONT) {
-			fieldSearch.setFont(Globals.defaultFontBig);
+			fieldSearch.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		if (!Main.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
@@ -428,16 +436,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		});
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
-		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
+		comboSearchFields.setPreferredSize(Globals.LOWER_BUTTON_DIMENSION);
 		if (!Main.FONT) {
-			comboSearchFields.setFont(Globals.defaultFont);
+			comboSearchFields.setFont(Globals.DEFAULT_FONT);
 		}
 
 		setSearchFieldsAll();
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		if (!Main.FONT) {
-			labelSearchMode.setFont(Globals.defaultFont);
+			labelSearchMode.setFont(Globals.DEFAULT_FONT);
 		}
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
@@ -453,17 +461,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFieldsMode = new JComboBoxToolTip();
 		if (!Main.FONT) {
-			comboSearchFieldsMode.setFont(Globals.defaultFont);
+			comboSearchFieldsMode.setFont(Globals.DEFAULT_FONT);
 		}
 
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);
+		comboSearchFieldsMode.setPreferredSize(Globals.LOWER_BUTTON_DIMENSION);
 
-		Icon unselectedIconFilter = Globals.createImageIcon("images/filter_14x14_open.png", "");
-		Icon selectedIconFilter = Globals.createImageIcon("images/filter_14x14_closed.png", "");
-		Icon nullIconFilter = Globals.createImageIcon("images/filter_14x14_inwork.png", "");
+		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
+		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
+		Icon nullIconFilter = Utils.createImageIcon("images/filter_14x14_inwork.png", "");
 
 		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
@@ -476,8 +484,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon unselectedIcon;
 		Icon selectedIcon;
 
-		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
-		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
+		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
+		selectedIcon = Utils.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
 		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
@@ -490,8 +498,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkAllColumns.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
 		checkmarkAllColumns.addActionListener(this);
 
-		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
-		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
+		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
+		selectedIcon = Utils.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
 		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {

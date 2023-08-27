@@ -18,6 +18,7 @@ import javax.swing.JList;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
+import utils.Utils;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
 
@@ -28,10 +29,10 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
-	private Color selectedEven = Globals.defaultTableSelectedRowDark;
-	private Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	private Color unselectedEven = Globals.defaultTableCellBgColor2;
-	private Color unselectedUneven = Globals.defaultTableCellBgColor1;
+	private Color selectedEven = Globals.DEFAULT_TABLE_SELECTION_ROW_DARK;
+	private Color selectedUneven = Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT;
+	private Color unselectedEven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_2;
+	private Color unselectedUneven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_1;
 
 	public StandardListCellRenderer() {
 		super();
@@ -64,11 +65,11 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		if (!Main.FONT) {
-			jc.setFont(Globals.defaultFont);
+			jc.setFont(Globals.DEFAULT_FONT);
 		}
 
 		if (jc instanceof JLabel) {
-			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
+			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}
 
 		return jc;

@@ -8,8 +8,8 @@ package de.uib.utilities.thread;
 
 import javax.swing.SwingWorker;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class WaitingCycle extends SwingWorker<Void, Integer> {
 	private int maxWaitSecs;
@@ -33,7 +33,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			Logging.debug(this, " WaitingCycle waits signal " + waitSecs);
 			// === serves like an external task
 			waitSecs++;
-			Globals.threadSleep(this, 1000);
+			Utils.threadSleep(this, 1000);
 
 			setProgress(100 * waitSecs / maxWaitSecs);
 

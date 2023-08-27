@@ -41,6 +41,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControllerHWinfoColumnConfiguration {
 
@@ -195,9 +196,9 @@ public class ControllerHWinfoColumnConfiguration {
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_USE_IN_QUERY));
 		col.setMaxWidth(80);
 
-		Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
+		Icon iconChecked = Utils.createImageIcon("images/checked_box_blue_14.png", "");
+		Icon iconUnchecked = Utils.createImageIcon("images/checked_box_blue_empty_14.png", "");
+		Icon iconEmpty = Utils.createImageIcon("images/checked_void.png", "");
 
 		col.setCellRenderer(new BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
 

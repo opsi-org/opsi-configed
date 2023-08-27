@@ -17,9 +17,9 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -84,7 +84,7 @@ public class SSHConnectExec extends SSHConnect {
 			return;
 		}
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			Logging.info(this, "starting, sshcommand isMultiCommand " + sshcommand.isMultiCommand());
 
 			if (sshcommand instanceof SSHCommandTemplate) {

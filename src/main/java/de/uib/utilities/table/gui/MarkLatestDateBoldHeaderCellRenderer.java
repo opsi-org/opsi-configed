@@ -32,7 +32,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (!Main.THEMES) {
-			cell.setBackground(Globals.defaultTableHeaderBgColor);
+			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
 		}
 
 		JComponent jc = (JComponent) cell;
@@ -40,7 +40,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 		if (value != null) {
 			String latestDate = licensingInfoMap.getLatestDate();
 			if (value.toString().equals(latestDate) && !Main.FONT) {
-				jc.setFont(Globals.defaultFontBold);
+				jc.setFont(Globals.DEFAULT_FONT_BIG);
 			}
 		}
 

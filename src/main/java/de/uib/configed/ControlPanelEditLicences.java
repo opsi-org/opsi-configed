@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -35,6 +36,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	// tab edit licence
@@ -113,7 +115,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.defaultFontBig);
+			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
@@ -178,26 +180,22 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
 		if (!Main.FONT) {
-			comboLicenceTypes.setFont(Globals.defaultFontBig);
+			comboLicenceTypes.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.defaultFontBig);
+			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
-					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
-
-			if (poolIds.size() <= 1) {
-				poolIds.add("");
-			}
-			// hack, since combo box shows nothing otherwise
-
-			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
+			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
+					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+							.keySet());
+			choicesAllHosts.set(0, "");
+			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);
@@ -337,7 +335,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void addLicence() {
 		Object[] a = new Object[6];
-		a[0] = "l_" + Globals.getSeconds();
+		a[0] = "l_" + Utils.getSeconds();
 		a[1] = "";
 		a[2] = LicenceEntry.LICENCE_TYPES[0];
 		a[3] = "1";
@@ -387,9 +385,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void addContract() {
 		Object[] a = new Object[6];
-		a[0] = "c_" + Globals.getSeconds();
+		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
-		a[2] = Globals.getDate();
+		a[2] = Utils.getDate();
 		a[3] = Globals.ZERODATE;
 		a[4] = Globals.ZERODATE;
 		a[5] = "";

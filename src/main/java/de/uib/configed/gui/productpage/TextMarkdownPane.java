@@ -14,8 +14,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
@@ -47,10 +47,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 		String link = event.getURL().toString();
 
 		if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-
-			// Open Link in Browser
-			Globals.showExternalDocument(link);
-
+			Utils.showExternalDocument(link);
 		} else if (event.getEventType().equals(HyperlinkEvent.EventType.ENTERED)) {
 			// Activate tooltip if mouse on link
 			setToolTipText(link);

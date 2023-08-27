@@ -22,6 +22,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class PanelMountShare extends JPanel {
 	private static List<PanelMountShare> instances = new ArrayList<>();
@@ -51,7 +52,7 @@ public class PanelMountShare extends JPanel {
 		this.np = np;
 		this.leftBound = leftBound;
 
-		isWindows = Globals.isWindows();
+		isWindows = Utils.isWindows();
 		smbMounted = false;
 
 		initComponents();
@@ -60,8 +61,8 @@ public class PanelMountShare extends JPanel {
 
 	private void initComponents() {
 
-		buttonMountShare = new JButton("", Globals.createImageIcon("images/windows16.png", ""));
-		buttonMountShare.setSelectedIcon(Globals.createImageIcon("images/windows16.png", ""));
+		buttonMountShare = new JButton("", Utils.createImageIcon("images/windows16.png", ""));
+		buttonMountShare.setSelectedIcon(Utils.createImageIcon("images/windows16.png", ""));
 		buttonMountShare.setPreferredSize(Globals.graphicButtonDimension);
 		if (isWindows) {
 			buttonMountShare.setToolTipText(

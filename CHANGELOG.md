@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.22.12] - 2023-08-24
+### Fixed
+- Show actual clientlist in column "boundToHost" in licence management
+
+# [4.2.22.11] - 2023-08-21
+### Fixed
+- Open several opsi-logviewers with zip-files now possible again
+
 ## [4.2.22.10] - 2023-07-25
 ### Fixed
 - Show Selection box for report in Product table correctly

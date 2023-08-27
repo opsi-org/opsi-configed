@@ -13,8 +13,8 @@ import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
@@ -39,8 +39,8 @@ public class FDepotselectionList extends FGeneralDialog {
 	}
 
 	private void init() {
-		jButton1.setIcon(Globals.createImageIcon("images/cancel16.png", ""));
-		jButton2.setIcon(Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""));
+		jButton1.setIcon(Utils.createImageIcon("images/cancel16.png", ""));
+		jButton2.setIcon(Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""));
 		scrollpane.getViewport().add(depotsList);
 	}
 

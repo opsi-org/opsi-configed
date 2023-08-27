@@ -17,6 +17,7 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
+import utils.Utils;
 
 public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	protected static final int FILL_LENGTH = 20;
@@ -48,9 +49,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		if (jc instanceof JLabel) {
 			String tooltipText = null;
 			if (tooltipPrefix != null && !tooltipPrefix.isEmpty()) {
-				tooltipText = Globals.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
+				tooltipText = Utils.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
 			} else {
-				tooltipText = Globals.fillStringToLength(value + " ", FILL_LENGTH);
+				tooltipText = Utils.fillStringToLength(value + " ", FILL_LENGTH);
 			}
 
 			((JLabel) jc).setToolTipText(tooltipText);
@@ -72,7 +73,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiBackgroundDark);
+				component.setBackground(Globals.OPSI_BACKGROUND_DARK);
 			} else {
 				component.setBackground(Globals.opsiDarkGrey);
 			}
@@ -92,7 +93,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			if (isRowEven) {
 				component.setBackground(Globals.opsiLightGrey);
 			} else {
-				component.setBackground(Globals.opsiBackgroundLight);
+				component.setBackground(Globals.OPSI_BACKGROUND_LIGHT);
 			}
 		} else {
 			if (isRowEven) {

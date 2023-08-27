@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -111,6 +113,7 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -129,6 +132,8 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 public class ConfigedMain implements ListSelectionListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -144,9 +149,6 @@ public class ConfigedMain implements ListSelectionListener {
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
-
-	// Are themes enabled?
-	public static final boolean THEMES = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -331,6 +333,11 @@ public class ConfigedMain implements ListSelectionListener {
 	private Set<String> connectedHostsByMessagebus;
 
 	private boolean sessioninfoFinished;
+
+	private String[] previousSelectedClients;
+
+	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
+	private Timer timer;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -638,28 +645,64 @@ public class ConfigedMain implements ListSelectionListener {
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
-	public void updateProduct(Map<String, String> data) {
-		String productId = data.get("productId");
-		String clientId = data.get("clientId");
-		String productType = data.get("productType");
+	public void updateProduct(Map<String, Object> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
 
-		// get the data for the updated client
+		Map<String, TreeSet<String>> clientProducts = productsToUpdate.containsKey(clientId)
+				? productsToUpdate.get(clientId)
+				: new HashMap<>();
+		TreeSet<String> productIds = clientProducts.computeIfAbsent(productType, v -> new TreeSet<>());
+		productIds.add(productId);
+		clientProducts.put(productType, productIds);
+		productsToUpdate.put(clientId, clientProducts);
 
-		Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
+		if (timer != null) {
+			timer.cancel();
+		}
 
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+					updateProductTableForClient(clientId, productType);
+					productsToUpdate.clear();
+				}
+			}
+		}, 200);
+	}
+
+	private void updateProductTableForClient(String clientId, String productType) {
 		int selectedView = getViewIndex();
-
-		if (selectedView == VIEW_LOCALBOOT_PRODUCTS && productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsLocalboot != null) {
-			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsLocalboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsLocalboot.updateTable(clientId);
+			}
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsNetboot != null) {
-			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsNetboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsNetboot.updateTable(clientId);
+			}
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
 					+ "not open or configed not yet initialized");
 		}
+	}
+
+	private boolean isProductsUpdatedForClient(String clientId, String productType) {
+		return productsToUpdate.get(clientId) != null && productsToUpdate.get(clientId).get(productType) != null
+				&& !productsToUpdate.get(clientId).get(productType).isEmpty();
 	}
 
 	public void addClientToConnectedList(String clientId) {
@@ -778,7 +821,6 @@ public class ConfigedMain implements ListSelectionListener {
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts();
-		persistenceController.configOptionsRequestRefresh();
 
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();
@@ -1131,7 +1173,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-
 		checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
@@ -1225,12 +1266,17 @@ public class ConfigedMain implements ListSelectionListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
 
+		String[] currentSelectedClients = selectionPanel.getSelectedValues().toArray(String[]::new);
+		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))
+				|| currentSelectedClients.length == 0) {
+			return;
+		}
+
+		previousSelectedClients = currentSelectedClients;
 		actOnListSelection();
 	}
 
@@ -1459,10 +1505,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void startLicencesFrame() {
 		licencesFrame = new LicencesFrame(this);
-
-		Globals.frame1 = licencesFrame;
-
-		licencesFrame.setGlobals(Globals.getMap());
+		Utils.setMasterFrame(licencesFrame);
+		licencesFrame.setGlobals(Utils.getMap());
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
@@ -1781,33 +1825,16 @@ public class ConfigedMain implements ListSelectionListener {
 		return model;
 	}
 
-	/**
-	 * selects a client
-	 *
-	 * @param clientName
-	 */
 	public void setClient(String clientName) {
-		Logging.info(this, "setClient " + clientName);
-
-		if (clientName == null) {
-			setSelectedClientsOnPanel(new String[] {});
-		} else {
-			setSelectedClientsOnPanel(new String[] { clientName });
-			// implies:
-
-			actOnListSelection();
-		}
+		setClients(new String[] { clientName });
 	}
 
 	public void setClients(String[] clientNames) {
-		Logging.info(this, "setClients " + clientNames);
-
+		Logging.info(this, "setClients " + Arrays.toString(clientNames));
 		if (clientNames == null) {
 			setSelectedClientsOnPanel(new String[] {});
 		} else {
 			setSelectedClientsOnPanel(clientNames);
-			// implies:
-
 			actOnListSelection();
 		}
 	}
@@ -1885,7 +1912,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setSelectedClientsArray " + a.length);
 		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
 
-		selectedClients = a;
+		selectedClients = a.clone();
 		if (selectedClients.length == 0) {
 			firstSelectedClient = "";
 		} else {
@@ -2071,8 +2098,8 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new BooleanIconTableCellRenderer(
-					Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
+			column.setCellRenderer(
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/checked_withoutbox.png", ""), null));
 		}
 	}
 
@@ -2305,8 +2332,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelLocalbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// List of the properties map of all selected clients
@@ -2322,8 +2348,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.panelNetbootProductSettings.initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
-				persistenceController.getProductVersion(productname)
-						+ Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persistenceController.getProductPackageVersion(productname) + "   "
 						+ persistenceController.getProductLockedInfo(productname),
 				// array of the properties map of all selected clients
@@ -2364,6 +2389,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (activePaths.size() == 1
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				} else {
 					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 						clearTree();
@@ -2776,10 +2802,16 @@ public class ConfigedMain implements ListSelectionListener {
 		if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
 				|| localbootStatesAndActionsUpdate) {
 			localbootStatesAndActionsUpdate = false;
+			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
+			if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
+				attributes.add("actionSequence");
+			}
+			// Remove uneeded attributes
+			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
 			localbootStatesAndActions = persistenceController
-					.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
-
+					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
 		}
 
@@ -2806,9 +2838,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
 		String localbootProductsSavedStateObjTag = "localbootProducts";
-
 		if (istmForSelectedClientsLocalboot == null) {
-			// we rebuild only if we reloaded
 			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 					collectChangedLocalbootStates,
 					persistenceController.getAllLocalbootProductNames(depotRepresentative), localbootStatesAndActions,
@@ -2860,7 +2890,6 @@ public class ConfigedMain implements ListSelectionListener {
 			// we reload since at the moment we do not track changes if anyDataChanged
 			netbootStatesAndActions = persistenceController
 					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
-
 			istmForSelectedClientsNetboot = null;
 		}
 		long endmillis = System.currentTimeMillis();
@@ -2915,6 +2944,22 @@ public class ConfigedMain implements ListSelectionListener {
 		setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 
 		return true;
+	}
+
+	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
+		List<String> attributes = new ArrayList<>();
+		for (String v : productDisplayFields) {
+			if (ProductState.KEY_VERSION_INFO.equals(v)) {
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PACKAGE_VERSION));
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
+				continue;
+			}
+			if (ProductState.key2servicekey.containsKey(v)) {
+				attributes.add(ProductState.key2servicekey.get(v));
+			}
+		}
+
+		return attributes;
 	}
 
 	private static int[] getTableColumnWidths(JTable table) {
@@ -3125,9 +3170,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (firstSelectedClient == null || !checkOneClientSelected()) {
 			mainFrame.setSoftwareAudit();
 		} else {
-			// retrieve data and check with softwaretable
-			persistenceController.getSoftwareAudit(firstSelectedClient);
-
 			mainFrame.setSoftwareAudit(firstSelectedClient);
 		}
 
@@ -3147,8 +3189,8 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < Globals.getLogTypes().length; i++) {
-				logfiles.put(Globals.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (int i = 0; i < Utils.getLogTypes().length; i++) {
+				logfiles.put(Utils.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 
 			mainFrame.setLogfilePanel(logfiles);
@@ -3221,7 +3263,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		case VIEW_PRODUCT_PROPERTIES:
 			result = setProductPropertiesPage();
-
 			break;
 
 		case VIEW_HOST_PROPERTIES:
@@ -3490,17 +3531,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void reloadData() {
 		checkSaveAll(true);
+
 		int saveViewIndex = getViewIndex();
-
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
-
 		List<String> selValuesList = selectionPanel.getSelectedValues();
-
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
-
-		// deactivate temporarily listening to list selection events
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
@@ -3522,17 +3558,8 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.softwareAuditOnClientsRequestRefresh();
 
 			persistenceController.productDataRequestRefresh();
-
-			Logging.info(this, "reloadData _1");
-
-			// calls again persist.productDataRequestRefresh()
+			OpsiDataBackend.getInstance().setReloadRequested();
 			mainFrame.panelProductProperties.reload();
-			Logging.info(this, "reloadData _2");
-
-			// if variable modelDataValid in GenTableModel has no function , the following
-			// statement is sufficient:
-
-			// only for licenses, will be handled in another method
 
 			persistenceController.configOptionsRequestRefresh();
 
@@ -3547,9 +3574,6 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.fProductGroup2MembersRequestRefresh();
 			persistenceController.auditHardwareOnHostRequestRefresh();
 
-			// clearing softwareMap in OpsiDataBackend
-			OpsiDataBackend.getInstance().setReloadRequested();
-
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -3562,10 +3586,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			fetchDepots();
 
-			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
 
-			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
@@ -3584,13 +3606,11 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			// no action before gui initialized
 			if (selectionPanel != null) {
 				// reactivate selection listener
-
 				Logging.debug(this, " reset the values, particularly in list ");
-
-				selectionPanel.addListSelectionListener(ConfigedMain.this);
+				selectionPanel.removeListSelectionListener(this);
+				selectionPanel.addListSelectionListener(this);
 				setSelectedClientsCollectionOnPanel(clientsLeft);
 
 				// no list select item is provided
@@ -3600,10 +3620,8 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-
 			mainFrame.reloadServerMenu();
 		}
-
 		mainFrame.disactivateLoadingPane();
 	}
 
@@ -4253,6 +4271,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
+
 		if (resetLocalbootProducts) {
 			persistenceController.resetLocalbootProducts(getSelectedClients(), withDependencies);
 		}
@@ -4262,6 +4282,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
+		mainFrame.setCursor(null);
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -4783,79 +4804,81 @@ public class ConfigedMain implements ListSelectionListener {
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
 				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
 
-		if (selectedClient.isPresent()) {
-			JPanel additionalPane = new JPanel();
-			additionalPane.setOpaque(false);
-			GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
-			additionalPane.setLayout(additionalPaneLayout);
+		if (!selectedClient.isPresent()) {
+			return;
+		}
 
-			JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-			JTextField jTextHostname = new JTextField(new CheckedDocument(new char[] { '-', '0', '1', '2', '3', '4',
-					'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-					'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
-			jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-			CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
-			jTextHostname.setText(copySuffixAddition.add());
+		JPanel additionalPane = new JPanel();
+		additionalPane.setOpaque(false);
+		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
+		additionalPane.setLayout(additionalPaneLayout);
 
-			additionalPaneLayout.setHorizontalGroup(additionalPaneLayout
-					.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
-			additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jLabelHostname)
-					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
-					.addComponent(jTextHostname));
+		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
+		JTextField jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
+		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+		jTextHostname.setText(copySuffixAddition.add());
 
-			additionalPane.add(jLabelHostname);
-			additionalPane.add(jTextHostname);
-			additionalPane.setVisible(true);
+		additionalPaneLayout.setHorizontalGroup(additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jLabelHostname)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+				.addComponent(jTextHostname));
 
-			FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
-					Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
-					new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") },
-					null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+		additionalPane.add(jLabelHostname);
+		additionalPane.add(jTextHostname);
+		additionalPane.setVisible(true);
 
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-			message.append("\n\n");
-			message.append(selectedClient.get().getName());
+		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") },
+				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
-			fAskCopyClient.setMessage(message.toString());
-			fAskCopyClient.setLocationRelativeTo(getMainFrame());
-			fAskCopyClient.setAlwaysOnTop(true);
-			fAskCopyClient.setVisible(true);
+		StringBuilder message = new StringBuilder("");
+		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+		message.append("\n\n");
+		message.append(selectedClient.get().getName());
 
-			if (fAskCopyClient.getResult() == 2) {
-				String newClientName = jTextHostname.getText();
+		fAskCopyClient.setMessage(message.toString());
+		fAskCopyClient.setLocationRelativeTo(getMainFrame());
+		fAskCopyClient.setAlwaysOnTop(true);
+		fAskCopyClient.setVisible(true);
 
-				if (newClientName.isEmpty()) {
-					return;
-				}
-
-				HostInfo clientToCopy = selectedClient.get();
-				String[] splittedClientName = clientToCopy.getName().split("\\.");
-				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
-						+ splittedClientName[2];
-
-				// if client already exists ask if they want to override
-				if (persistenceController.getHostInfoCollections().getOpsiHostNames()
-						.contains(newClientNameWithDomain)) {
-					boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-
-					if (!overwriteExistingHost) {
-						return;
-					}
-				}
-
-				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-
-				Logging.info(this, "copy client with new name " + newClientName);
-				copyClient.copy();
-
-				refreshClientList(newClientName);
+		if (fAskCopyClient.getResult() == 2) {
+			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			String newClientName = jTextHostname.getText();
+			boolean proceed = true;
+			if (newClientName.isEmpty()) {
+				proceed = false;
 			}
+
+			HostInfo clientToCopy = selectedClient.get();
+			String newClientNameWithDomain = newClientName + "."
+					+ Utils.getDomainFromClientName(clientToCopy.getName());
+			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
+				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
+				if (!overwriteExistingHost) {
+					proceed = false;
+				}
+			}
+
+			Logging.info(this, "copy client with new name " + newClientName);
+			if (proceed) {
+				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
+				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+				copyClient.copy();
+				refreshClientList();
+				activateGroup(false, activatedGroupModel.getGroupName());
+				setClient(newClientNameWithDomain);
+			}
+			mainFrame.setCursor(null);
 		}
 	}
 

@@ -18,6 +18,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelLicencesReconciliation;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelLicencesReconciliation extends MultiTablePanel {
 
@@ -37,7 +38,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 		panelReconciliation = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, // editing
 				0, true, null, true);
-		panelReconciliation.setMasterFrame(Globals.frame1);
+		panelReconciliation.setMasterFrame(Utils.getMasterFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered

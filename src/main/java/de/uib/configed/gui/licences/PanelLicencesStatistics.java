@@ -18,6 +18,7 @@ import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelLicencesStatistics extends MultiTablePanel {
 
@@ -36,7 +37,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 		panelStatistics = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
 				0, true, null, true);
-		panelStatistics.setMasterFrame(Globals.frame1);
+		panelStatistics.setMasterFrame(Utils.getMasterFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered

@@ -16,10 +16,10 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SWAuditClientEntry {
 
@@ -112,22 +112,24 @@ public class SWAuditClientEntry {
 			.getPersistenceController();
 
 	public SWAuditClientEntry(final Map<String, Object> m) {
-
 		data = new HashMap<>();
-		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));
+		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
 		this.software = persistenceController.getSoftwareList();
 		this.software2Number = persistenceController.getSoftware2Number();
 		produceSWid();
-		data.put(LICENCE_KEY, Globals.produceNonNull(m.get(LICENCE_KEY)));
-		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
+		data.put(LICENCE_KEY, produceNonNull(m.get(LICENCE_KEY)));
+		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
+	}
 
+	private static String produceNonNull(Object o) {
+		return o != null ? o.toString() : "";
 	}
 
 	public static String produceSWident(List<String> keys, List<String> values) {
 		// from db columns
 
-		return Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
+		return Utils.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
 				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
 				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
 				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
@@ -207,7 +209,7 @@ public class SWAuditClientEntry {
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		return Globals.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
+		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),

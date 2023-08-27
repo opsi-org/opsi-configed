@@ -15,10 +15,10 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public final class CellAlternatingColorizer {
 
-	private static final Color selectedEven = Globals.defaultTableSelectedRowDark;
-	private static final Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	private static final Color unselectedEven = Globals.defaultTableCellBgColor2;
-	private static final Color unselectedUneven = Globals.defaultTableCellBgColor1;
+	private static final Color selectedEven = Globals.DEFAULT_TABLE_SELECTION_ROW_DARK;
+	private static final Color selectedUneven = Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT;
+	private static final Color unselectedEven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_2;
+	private static final Color unselectedUneven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_1;
 
 	// private constructor to hide the implicit public one
 	private CellAlternatingColorizer() {
@@ -33,7 +33,7 @@ public final class CellAlternatingColorizer {
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
 		if (textColoring && !Main.THEMES) {
-			cell.setForeground(Globals.lightBlack);
+			cell.setForeground(Globals.LIGHT_BLACK);
 		}
 
 		if (!Main.THEMES) {
@@ -57,8 +57,8 @@ public final class CellAlternatingColorizer {
 
 	public static void colorizeSecret(Component cell) {
 		if (!Main.THEMES) {
-			cell.setBackground(Globals.defaultTableSelectedRowBright);
-			cell.setForeground(Globals.defaultTableSelectedRowBright);
+			cell.setBackground(Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT);
+			cell.setForeground(Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT);
 		}
 	}
 
@@ -67,24 +67,24 @@ public final class CellAlternatingColorizer {
 
 		if (!Main.THEMES) {
 			if (textColoring) {
-				cell.setForeground(Globals.lightBlack);
+				cell.setForeground(Globals.LIGHT_BLACK);
 			}
 
 			if (isSelected) {
 				if (rowEven) {
-					cell.setBackground(Globals.defaultTableSelectedRowDark);
+					cell.setBackground(Globals.DEFAULT_TABLE_SELECTION_ROW_DARK);
 				} else {
-					cell.setBackground(Globals.defaultTableSelectedRowBright);
+					cell.setBackground(Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT);
 				}
 			} else {
 				if (rowEven && colEven) {
-					cell.setBackground(Globals.defaultTableCellBgColor00);
+					cell.setBackground(Globals.DEFAULT_TABLE_CELL_BG_COLOR_00);
 				} else if (rowEven) {
-					cell.setBackground(Globals.defaultTableCellBgColor01);
+					cell.setBackground(Globals.DEFAULT_TABLE_CELL_BG_COLOR_01);
 				} else if (colEven) {
-					cell.setBackground(Globals.defaultTableCellBgColor10);
+					cell.setBackground(Globals.DEFAULT_TABLE_CELL_BG_COLOR_10);
 				} else {
-					cell.setBackground(Globals.defaultTableCellBgColor11);
+					cell.setBackground(Globals.DEFAULT_TABLE_CELL_GB_COLOR_11);
 				}
 			}
 		} else {

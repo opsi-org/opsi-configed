@@ -56,6 +56,7 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
+import utils.Utils;
 
 public class HealthCheckDialog extends FGeneralDialog {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
@@ -72,7 +73,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	public HealthCheckDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok") },
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") }, 1, 700, 500, true,
+				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") }, 1, 700, 500, true,
 				null);
 	}
 
@@ -214,7 +215,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
-				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Globals.createImageIcon("images/save.png", ""));
+				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Utils.createImageIcon("images/save.png", ""));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
@@ -424,7 +425,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 					String imagePath = (boolean) healthInfo.get("showDetails")
 							? "images/arrows/arrow_green_16x16-down.png"
 							: "images/arrows/arrow_green_16x16-right.png";
-					StyleConstants.setIcon(iconStyle, Globals.createImageIcon(imagePath, ""));
+					StyleConstants.setIcon(iconStyle, Utils.createImageIcon(imagePath, ""));
 					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
 							iconStyle);
 				} else {
@@ -461,15 +462,15 @@ public class HealthCheckDialog extends FGeneralDialog {
 		switch (token) {
 		case "OK":
 			style = styleContext.addStyle("ok", null);
-			StyleConstants.setForeground(style, Globals.logColorNotice);
+			StyleConstants.setForeground(style, Globals.LOG_COLOR_NOTICE);
 			break;
 		case "WARNING":
 			style = styleContext.addStyle("warning", null);
-			StyleConstants.setForeground(style, Globals.logColorWarning);
+			StyleConstants.setForeground(style, Globals.LOG_COLOR_WARNING);
 			break;
 		case "ERROR":
 			style = styleContext.addStyle("error", null);
-			StyleConstants.setForeground(style, Globals.logColorError);
+			StyleConstants.setForeground(style, Globals.LOG_COLOR_ERROR);
 			break;
 		default:
 			Logging.notice(this, "unsupported token: " + token);

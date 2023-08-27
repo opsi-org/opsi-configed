@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
@@ -65,7 +65,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		timeoutReached = elapsedMillis >= waitingSleeper.getWaitingMillis();
 		while (!ready && !timeoutReached && !stopped) {
-			Globals.threadSleep(this, timeStepMillis);
+			Utils.threadSleep(this, timeStepMillis);
 
 			long nowMillis = System.currentTimeMillis();
 

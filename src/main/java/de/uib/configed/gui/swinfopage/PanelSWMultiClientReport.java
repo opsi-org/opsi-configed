@@ -27,6 +27,7 @@ import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.PanelStateSwitch;
+import utils.Utils;
 
 public class PanelSWMultiClientReport extends JPanel {
 
@@ -99,13 +100,13 @@ public class PanelSWMultiClientReport extends JPanel {
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
 		if (!Main.FONT) {
-			labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
+			labelSwauditMultiClientReport1.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
 		if (!Main.FONT) {
-			labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
+			labelSwauditMultiClientReport2.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		JLabel labelFilenamePrefix = new JLabel(
@@ -128,7 +129,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 		if (!Main.FONT) {
-			labelAskForOverwrite.setFont(Globals.defaultFont);
+			labelAskForOverwrite.setFont(Globals.DEFAULT_FONT);
 		}
 		JCheckBox checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
@@ -162,7 +163,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		chooserDirectory = new JFileChooser();
-		chooserDirectory.setPreferredSize(Globals.filechooserSize);
+		chooserDirectory.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserDirectory.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
@@ -174,8 +175,8 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
 
-		JButton buttonCallSelectExportDirectory = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallSelectExportDirectory = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectExportDirectory.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectExportDirectory.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectExportDirectory
 				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
@@ -184,11 +185,11 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
 		if (!Main.FONT) {
-			labelWithMsUpdates.setFont(Globals.defaultFont);
+			labelWithMsUpdates.setFont(Globals.DEFAULT_FONT);
 		}
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
 		if (!Main.FONT) {
-			labelWithMsUpdates2.setFont(Globals.defaultFont);
+			labelWithMsUpdates2.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);

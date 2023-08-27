@@ -30,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /*
 *	PanelStateSwitch.java
@@ -129,12 +130,12 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initComponents() {
-		primaryFont = Globals.defaultFont;
+		primaryFont = Globals.DEFAULT_FONT;
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<>();
 
-		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
-		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
+		ImageIcon activatedIcon = Utils.createImageIcon("images/checked_withoutbox.png", "");
+		ImageIcon deactivatedIcon = Utils.createImageIcon("images/checked_empty_withoutbox.png", "");
 
 		for (Enum<E> val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
