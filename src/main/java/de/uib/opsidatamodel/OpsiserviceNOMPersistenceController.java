@@ -3799,9 +3799,7 @@ public class OpsiserviceNOMPersistenceController {
 		boolean starting = true;
 
 		for (Map<String, Object> map : properties) {
-			Object retrievedValues = ((JSONArray) map.get("values")).toList();
-
-			List<?> valueList = (List<?>) retrievedValues;
+			List<?> valueList = (List<?>) map.get("values");
 
 			Set<String> values = new HashSet<>();
 
