@@ -79,9 +79,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_DARK_BLUE_2);
+				component.setBackground(Globals.OPSI_DARK_MAGENTA_2);
 			} else {
-				component.setBackground(Globals.OPSI_BLUE_2);
+				component.setBackground(Globals.OPSI_MAGENTA_2);
 			}
 		}
 	}
@@ -97,9 +97,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_LIGHT_BLUE_2);
+				component.setBackground(Globals.OPSI_LIGHT_MAGENTA_2);
 			} else {
-				component.setBackground(Globals.OPSI_LIGHT_BLUE);
+				component.setBackground(Globals.OPSI_LIGHT_MAGENTA);
 			}
 		}
 	}
