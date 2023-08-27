@@ -77,8 +77,8 @@ public final class Globals {
 
 	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
 	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
-	public static final Color OPSI_LIGHT_MAGENTA = new Color(220, 105, 144);
-	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(229, 155, 181);
+	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
+	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
 
 	public static final Font DEFAULT_FONT = new Font("SansSerif", 0, 11);
 	public static final Font DEFAULT_FONT_STANDARD_BOLD = new Font("SansSerif", Font.BOLD, 11);
