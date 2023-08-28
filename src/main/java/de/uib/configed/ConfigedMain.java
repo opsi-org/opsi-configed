@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -111,6 +113,7 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -330,6 +333,11 @@ public class ConfigedMain implements ListSelectionListener {
 	private Set<String> connectedHostsByMessagebus;
 
 	private boolean sessioninfoFinished;
+
+	private String[] previousSelectedClients;
+
+	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
+	private Timer timer;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -642,22 +650,59 @@ public class ConfigedMain implements ListSelectionListener {
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
 
-		if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
-			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
-			int selectedView = getViewIndex();
-			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
-					&& istmForSelectedClientsLocalboot != null) {
-				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
-					&& istmForSelectedClientsNetboot != null) {
-				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-			} else {
-				Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
-						+ "not open or configed not yet initialized");
-			}
+		Map<String, TreeSet<String>> clientProducts = productsToUpdate.containsKey(clientId)
+				? productsToUpdate.get(clientId)
+				: new HashMap<>();
+		TreeSet<String> productIds = clientProducts.computeIfAbsent(productType, v -> new TreeSet<>());
+		productIds.add(productId);
+		clientProducts.put(productType, productIds);
+		productsToUpdate.put(clientId, clientProducts);
+
+		if (timer != null) {
+			timer.cancel();
 		}
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+					updateProductTableForClient(clientId, productType);
+					productsToUpdate.clear();
+				}
+			}
+		}, 200);
+	}
+
+	private void updateProductTableForClient(String clientId, String productType) {
+		int selectedView = getViewIndex();
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsLocalboot != null) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsLocalboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsLocalboot.updateTable(clientId);
+			}
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsNetboot != null) {
+			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+				istmForSelectedClientsNetboot.updateTable(clientId,
+						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING));
+			} else {
+				istmForSelectedClientsNetboot.updateTable(clientId);
+			}
+		} else {
+			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
+					+ "not open or configed not yet initialized");
+		}
+	}
+
+	private boolean isProductsUpdatedForClient(String clientId, String productType) {
+		return productsToUpdate.get(clientId) != null && productsToUpdate.get(clientId).get(productType) != null
+				&& !productsToUpdate.get(clientId).get(productType).isEmpty();
 	}
 
 	public void addClientToConnectedList(String clientId) {
@@ -776,7 +821,6 @@ public class ConfigedMain implements ListSelectionListener {
 		hostDisplayFields = persistenceController.getHostDisplayFields();
 		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts();
-		persistenceController.configOptionsRequestRefresh();
 
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();
@@ -1225,6 +1269,14 @@ public class ConfigedMain implements ListSelectionListener {
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+
+		String[] currentSelectedClients = selectionPanel.getSelectedValues().toArray(String[]::new);
+		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))
+				|| currentSelectedClients.length == 0) {
+			return;
+		}
+
+		previousSelectedClients = currentSelectedClients;
 		actOnListSelection();
 	}
 
@@ -2750,10 +2802,16 @@ public class ConfigedMain implements ListSelectionListener {
 		if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
 				|| localbootStatesAndActionsUpdate) {
 			localbootStatesAndActionsUpdate = false;
+			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
+			if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
+				attributes.add("actionSequence");
+			}
+			// Remove uneeded attributes
+			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
 			localbootStatesAndActions = persistenceController
-					.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
-
+					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
 		}
 
@@ -2780,9 +2838,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
 		String localbootProductsSavedStateObjTag = "localbootProducts";
-
 		if (istmForSelectedClientsLocalboot == null) {
-			// we rebuild only if we reloaded
 			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 					collectChangedLocalbootStates,
 					persistenceController.getAllLocalbootProductNames(depotRepresentative), localbootStatesAndActions,
@@ -2834,7 +2890,6 @@ public class ConfigedMain implements ListSelectionListener {
 			// we reload since at the moment we do not track changes if anyDataChanged
 			netbootStatesAndActions = persistenceController
 					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
-
 			istmForSelectedClientsNetboot = null;
 		}
 		long endmillis = System.currentTimeMillis();
@@ -2889,6 +2944,22 @@ public class ConfigedMain implements ListSelectionListener {
 		setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 
 		return true;
+	}
+
+	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
+		List<String> attributes = new ArrayList<>();
+		for (String v : productDisplayFields) {
+			if (ProductState.KEY_VERSION_INFO.equals(v)) {
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PACKAGE_VERSION));
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
+				continue;
+			}
+			if (ProductState.key2servicekey.containsKey(v)) {
+				attributes.add(ProductState.key2servicekey.get(v));
+			}
+		}
+
+		return attributes;
 	}
 
 	private static int[] getTableColumnWidths(JTable table) {
@@ -3099,9 +3170,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (firstSelectedClient == null || !checkOneClientSelected()) {
 			mainFrame.setSoftwareAudit();
 		} else {
-			// retrieve data and check with softwaretable
-			persistenceController.getSoftwareAudit(firstSelectedClient);
-
 			mainFrame.setSoftwareAudit(firstSelectedClient);
 		}
 
@@ -3195,7 +3263,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		case VIEW_PRODUCT_PROPERTIES:
 			result = setProductPropertiesPage();
-
 			break;
 
 		case VIEW_HOST_PROPERTIES:
@@ -3464,17 +3531,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void reloadData() {
 		checkSaveAll(true);
+
 		int saveViewIndex = getViewIndex();
-
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
-
 		List<String> selValuesList = selectionPanel.getSelectedValues();
-
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
-
-		// deactivate temporarily listening to list selection events
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
@@ -3496,17 +3558,8 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.softwareAuditOnClientsRequestRefresh();
 
 			persistenceController.productDataRequestRefresh();
-
-			Logging.info(this, "reloadData _1");
-
-			// calls again persist.productDataRequestRefresh()
+			OpsiDataBackend.getInstance().setReloadRequested();
 			mainFrame.panelProductProperties.reload();
-			Logging.info(this, "reloadData _2");
-
-			// if variable modelDataValid in GenTableModel has no function , the following
-			// statement is sufficient:
-
-			// only for licenses, will be handled in another method
 
 			persistenceController.configOptionsRequestRefresh();
 
@@ -3521,9 +3574,6 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.fProductGroup2MembersRequestRefresh();
 			persistenceController.auditHardwareOnHostRequestRefresh();
 
-			// clearing softwareMap in OpsiDataBackend
-			OpsiDataBackend.getInstance().setReloadRequested();
-
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -3536,10 +3586,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			fetchDepots();
 
-			// configuratio
 			persistenceController.getHostInfoCollections().getAllDepots();
 
-			// sets visual view index, therefore:
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
@@ -3558,7 +3606,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			// no action before gui initialized
 			if (selectionPanel != null) {
 				// reactivate selection listener
 				Logging.debug(this, " reset the values, particularly in list ");
@@ -3575,7 +3622,6 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerMenu();
 		}
-
 		mainFrame.disactivateLoadingPane();
 	}
 

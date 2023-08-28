@@ -23,10 +23,12 @@ import org.apache.commons.compress.archivers.StreamingNotSupportedException;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.codehaus.plexus.util.IOUtil;
 
 import de.uib.utilities.logging.Logging;
 
 public final class ExtractorUtil {
+
 	private ExtractorUtil() {
 	}
 
@@ -39,9 +41,7 @@ public final class ExtractorUtil {
 			ArchiveEntry entry = null;
 			while ((entry = ais.getNextEntry()) != null) {
 				if (!entry.isDirectory()) {
-					byte[] content = new byte[(int) entry.getSize()];
-					int bytesRead = ais.read(content);
-					files.put(entry.getName(), new String(content, 0, bytesRead));
+					files.put(entry.getName(), IOUtil.toString(ais));
 				}
 			}
 		} catch (StreamingNotSupportedException e) {
