@@ -98,10 +98,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					&& tree.hasFocus()) {
 				setFont(getFont()
 						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
-				if (Main.THEMES) {
-					setBorderSelectionColor(tree.isPathSelected(tree.getLeadSelectionPath()) ? getTextSelectionColor()
-							: getTextNonSelectionColor());
-				}
+			} else {
+				setFont(getFont().deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, -1)));
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
