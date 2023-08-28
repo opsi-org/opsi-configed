@@ -618,18 +618,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		setGroupEditing(false);
 
-		panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
+		if (!Main.THEMES) {
+			panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
+		}
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
-
-		JPanel separatingPlace = new JPanel();
-		if (!Main.THEMES) {
-			separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
-			separatingPlace.setBackground(Globals.FAILED_COLOR);
-		}
-		separatingPlace.setOpaque(true);
-		separatingPlace.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6));
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -637,8 +631,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-
-				.addComponent(separatingPlace, 1, 1, 1)
 				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -685,11 +677,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
-				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(separatingPlace, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-		);
+				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 	}
 

@@ -48,7 +48,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -79,7 +78,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -389,8 +387,6 @@ public class MainFrame extends JFrame
 
 	private FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
-
-	private JPanel jPanel3 = new JPanel();
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
@@ -1758,7 +1754,6 @@ public class MainFrame extends JFrame
 		clientPane = new JPanel();
 
 		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
-		clientPane.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
@@ -2035,9 +2030,6 @@ public class MainFrame extends JFrame
 				.addGap(Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2)
 				.addComponent(labelClientNotes)
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		jPanel3.setBorder(BorderFactory.createEtchedBorder());
-		jPanel3.setLayout(new BorderLayout());
 
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
