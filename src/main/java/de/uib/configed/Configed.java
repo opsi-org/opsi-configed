@@ -58,6 +58,8 @@ public final class Configed {
 	private static Properties extraLocalization;
 	private static boolean showLocalizationStrings;
 
+	private static ConfigedMain configedMain;
+
 	private static String host;
 	private static String user;
 	private static String password;
@@ -126,7 +128,7 @@ public final class Configed {
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
 		SwingUtilities.invokeLater(configedMain::init);
 
