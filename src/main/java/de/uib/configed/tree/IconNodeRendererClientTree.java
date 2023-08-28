@@ -7,12 +7,10 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.awt.Insets;
 import java.awt.font.TextAttribute;
 import java.util.Collections;
 
 import javax.swing.JTree;
-import javax.swing.border.EmptyBorder;
 
 import de.uib.Main;
 import de.uib.configed.ConfigedMain;
@@ -30,7 +28,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			super.setTextSelectionColor(Globals.LIGHT_BLACK);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
-		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 	}
 
 	@Override
