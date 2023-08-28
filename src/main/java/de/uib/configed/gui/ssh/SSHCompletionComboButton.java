@@ -90,7 +90,7 @@ public class SSHCompletionComboButton {
 		if (persistenceController == null) {
 			Logging.info(this, "init PersistenceController null");
 		} else {
-			opsiRepo = OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue;
+			opsiRepo = OpsiserviceNOMPersistenceController.getConfigedWorkbenchDefaultValue();
 		}
 
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/') {

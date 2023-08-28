@@ -135,20 +135,20 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		} else {
 
-			if (!connectionInfo.getHost().equals(ConfigedMain.host)) {
-				Logging.info(this,
-						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.host + "<");
+			if (!connectionInfo.getHost().equals(ConfigedMain.getHost())) {
+				Logging.info(this, "compareStates 5 >" + connectionInfo.getHost() + "<     <>    >"
+						+ ConfigedMain.getHost() + "<");
 				return false;
 			}
 			if (!connectionInfo.getPort().equals(jTextFieldPort.getText())) {
 				Logging.debug(this, "compareStates 6");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(ConfigedMain.user)) {
+			if (!connectionInfo.getUser().equals(ConfigedMain.getUser())) {
 				Logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if (!connectionInfo.getPassw().equals(ConfigedMain.password) && !connectionInfo.usesKeyfile()) {
+			if (!connectionInfo.getPassw().equals(ConfigedMain.getPassword()) && !connectionInfo.usesKeyfile()) {
 				Logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -179,8 +179,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		if (jCheckBoxUseOutputColor != null) {
 			Logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
-					+ SSHCommandFactory.sshColoredOutput + " != " + jCheckBoxUseOutputColor.isSelected());
-			if (SSHCommandFactory.sshColoredOutput != jCheckBoxUseOutputColor.isSelected()) {
+					+ SSHCommandFactory.hasColoredOutput() + " != " + jCheckBoxUseOutputColor.isSelected());
+			if (SSHCommandFactory.hasColoredOutput() != jCheckBoxUseOutputColor.isSelected()) {
 				Logging.debug(this, "compareStates 12");
 				return false;
 			}
@@ -188,9 +188,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		if (jCheckBoxExecInBackground != null) {
 			Logging.debug(this,
 					"compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
-							+ SSHCommandFactory.sshAlwaysExecInBackground + " != "
+							+ SSHCommandFactory.alwaysExecInBackground() + " != "
 							+ jCheckBoxExecInBackground.isSelected());
-			if (SSHCommandFactory.sshAlwaysExecInBackground != jCheckBoxExecInBackground.isSelected()) {
+			if (SSHCommandFactory.alwaysExecInBackground() != jCheckBoxExecInBackground.isSelected()) {
 				Logging.debug(this, "compareStates 13");
 				return false;
 			}
@@ -249,7 +249,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
 		if (host == null) {
-			host = ConfigedMain.host;
+			host = ConfigedMain.getHost();
 		}
 
 		jComboBoxHost.addItem(host);
@@ -433,14 +433,14 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jCheckBoxUseOutputColor.setText(Configed.getResourceValue("SSHConnection.Config.coloredOutput"));
 		jCheckBoxUseOutputColor.setToolTipText(Configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
 		jCheckBoxUseOutputColor.setSelected(true);
-		SSHCommandFactory.sshColoredOutput = true;
+		SSHCommandFactory.setColoredOutput(true);
 		jCheckBoxUseOutputColor.addItemListener(itemEvent -> checkComponentStates());
 
 		jCheckBoxExecInBackground = new JCheckBox();
 		jCheckBoxExecInBackground.setText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
 		jCheckBoxExecInBackground
 				.setToolTipText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
-		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.sshAlwaysExecInBackground);
+		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.alwaysExecInBackground());
 		jCheckBoxExecInBackground.addItemListener(itemEvent -> checkComponentStates());
 
 		Logging.debug(this, "sshConfigDialog building layout ");
@@ -610,7 +610,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			if (!jComboBoxUseDefaultState) {
 				// state has changed
 
-				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
+				connectionInfo.setUserData(ConfigedMain.getHost(), ConfigedMain.getUser(), ConfigedMain.getPassword(),
 						SSHConnect.PORT_SSH);
 			}
 
@@ -643,8 +643,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 
-		SSHCommandFactory.sshColoredOutput = jCheckBoxUseOutputColor.isSelected();
-		SSHCommandFactory.sshAlwaysExecInBackground = jCheckBoxExecInBackground.isSelected();
+		SSHCommandFactory.setColoredOutput(jCheckBoxUseOutputColor.isSelected());
+		SSHCommandFactory.setAlwaysExecInBackground(jCheckBoxExecInBackground.isSelected());
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		checkComponentStates();
 		Logging.info(this, "request focus");
@@ -705,7 +705,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private static void checkComponents() {
 		if (jCheckBoxDefault.isSelected()) {
-			connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
+			connectionInfo.setUserData(ConfigedMain.getHost(), ConfigedMain.getUser(), ConfigedMain.getPassword(),
 					SSHConnect.PORT_SSH);
 
 		}

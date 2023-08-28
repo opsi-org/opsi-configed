@@ -36,10 +36,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			value = LicensingInfoMap.DISPLAY_INFINITE;
 		}
 
-		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-		JLabel jc = (JLabel) cell;
-
+		JLabel jc = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		String latestChange = licensingInfoMap.getLatestDate();
@@ -120,10 +117,8 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
 				String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
 						.toString();
-
-				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-						&& prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
-					jc.setFont(Globals.DEFAULT_FONT_BIG);
+				if (clientNum != null && prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
+					jc.setFont(Globals.DEFAULT_FONT_BOLD);
 				}
 			}
 		} else {

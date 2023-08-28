@@ -41,23 +41,23 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private static final int MIN_V_SIZE = 80;
 
-	public JLabel fieldSelectedLicencePoolId;
+	private JLabel fieldSelectedLicencePoolId;
 
-	public JLabel fieldCountAssignedStatus;
-	public JLabel fieldCountAssignedInEditing;
+	private JLabel fieldCountAssignedStatus;
+	private JLabel fieldCountAssignedInEditing;
 
-	public JLabel fieldCountAllWindowsSoftware;
-	public JLabel fieldCountDisplayedWindowsSoftware;
-	public JLabel fieldCountNotAssignedSoftware;
+	private JLabel fieldCountAllWindowsSoftware;
+	private JLabel fieldCountDisplayedWindowsSoftware;
+	private JLabel fieldCountNotAssignedSoftware;
 
-	public JButton buttonShowAssignedNotExisting;
+	private JButton buttonShowAssignedNotExisting;
 
-	public PanelRegisteredSoftware panelRegisteredSoftware;
-	public PanelGenEditTable panelLicencepools;
-	public PanelGenEditTable panelProductId2LPool;
+	private PanelRegisteredSoftware panelRegisteredSoftware;
+	private PanelGenEditTable panelLicencepools;
+	private PanelGenEditTable panelProductId2LPool;
 
-	public FGlobalSoftwareInfo fMissingSoftwareInfo;
-	public FSoftwarename2LicencePool fSoftwarename2LicencePool;
+	private FGlobalSoftwareInfo fMissingSoftwareInfo;
+	private FSoftwarename2LicencePool fSoftwarename2LicencePool;
 
 	private PanelStateSwitch<Softwarename2LicencepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
 	private JLabel labelSimilarEntriesExist;
@@ -588,22 +588,78 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, " stateChanged " + e);
 		Logging.info(this,
-				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicencePool.modelSWnames.getFilterInfo());
+				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicencePool.getModelSWnames().getFilterInfo());
 		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(panelRegisteredSoftware.getSelectedRow(),
 				panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 		Logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
-		fSoftwarename2LicencePool.modelSWnames.requestReload();
-		fSoftwarename2LicencePool.modelSWnames.reset();
-		if (fSoftwarename2LicencePool.modelSWxLicencepool == null) {
+		fSoftwarename2LicencePool.getModelSWnames().requestReload();
+		fSoftwarename2LicencePool.getModelSWnames().reset();
+		if (fSoftwarename2LicencePool.getModelSWxLicencepool() == null) {
 			return;
 		}
 
-		fSoftwarename2LicencePool.modelSWxLicencepool.requestReload();
-		fSoftwarename2LicencePool.modelSWnames.reset();
+		fSoftwarename2LicencePool.getModelSWxLicencepool().requestReload();
+		fSoftwarename2LicencePool.getModelSWnames().reset();
 
-		if (fSoftwarename2LicencePool.modelSWnames.getRowCount() > 0) {
-			fSoftwarename2LicencePool.panelSWnames.setSelectedRow(0);
-			fSoftwarename2LicencePool.panelSWnames.moveToValue(resetToSWname, 0, true);
+		if (fSoftwarename2LicencePool.getModelSWnames().getRowCount() > 0) {
+			fSoftwarename2LicencePool.getPanelSWnames().setSelectedRow(0);
+			fSoftwarename2LicencePool.getPanelSWnames().moveToValue(resetToSWname, 0, true);
 		}
+	}
+
+	public JLabel getFieldSelectedLicencePoolId() {
+		return fieldSelectedLicencePoolId;
+	}
+
+	public JLabel getFieldCountAssignedStatus() {
+		return fieldCountAssignedStatus;
+	}
+
+	public JLabel getFieldCountAssignedInEditing() {
+		return fieldCountAssignedInEditing;
+	}
+
+	public JLabel getFieldCountAllWindowsSoftware() {
+		return fieldCountAllWindowsSoftware;
+	}
+
+	public JLabel getFieldCountDisplayedWindowsSoftware() {
+		return fieldCountDisplayedWindowsSoftware;
+	}
+
+	public JLabel getFieldCountNotAssignedSoftware() {
+		return fieldCountNotAssignedSoftware;
+	}
+
+	public JButton getButtonShowAssignedNotExisting() {
+		return buttonShowAssignedNotExisting;
+	}
+
+	public PanelRegisteredSoftware getPanelRegisteredSoftware() {
+		return panelRegisteredSoftware;
+	}
+
+	public PanelGenEditTable getPanelLicencepools() {
+		return panelLicencepools;
+	}
+
+	public PanelGenEditTable getPanelProductId2LPool() {
+		return panelProductId2LPool;
+	}
+
+	public FGlobalSoftwareInfo getFMissingSoftwareInfo() {
+		return fMissingSoftwareInfo;
+	}
+
+	public void setFMissingSoftwareInfo(FGlobalSoftwareInfo fMissingSoftwareInfo) {
+		this.fMissingSoftwareInfo = fMissingSoftwareInfo;
+	}
+
+	public FSoftwarename2LicencePool getFSoftwarename2LicencePool() {
+		return fSoftwarename2LicencePool;
+	}
+
+	public void setFSoftwarename2LicencePool(FSoftwarename2LicencePool fSoftwarename2LicencePool) {
+		this.fSoftwarename2LicencePool = fSoftwarename2LicencePool;
 	}
 }

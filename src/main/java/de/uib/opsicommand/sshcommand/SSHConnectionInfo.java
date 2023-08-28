@@ -138,7 +138,7 @@ public final class SSHConnectionInfo {
 
 	public void checkUserData() {
 		if (getHost() == null) {
-			setHost(ConfigedMain.host);
+			setHost(ConfigedMain.getHost());
 		}
 
 		if (getPort() == null) {
@@ -146,14 +146,14 @@ public final class SSHConnectionInfo {
 		}
 
 		if (getUser() == null) {
-			setUser(ConfigedMain.user);
+			setUser(ConfigedMain.getUser());
 		}
 
 		if (getPassw() == null) {
 			if (usesKeyfile()) {
 				setPassw("");
 			} else {
-				setPassw(ConfigedMain.password);
+				setPassw(ConfigedMain.getPassword());
 			}
 		}
 

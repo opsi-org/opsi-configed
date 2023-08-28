@@ -237,7 +237,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				fileName = fileName.concat(".zip");
 			}
 
-			String dirname = ConfigedMain.host;
+			String dirname = ConfigedMain.getHost();
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");
@@ -246,9 +246,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 			saveDiagnosticDataToFile();
 
 			List<File> files = new ArrayList<>();
-			files.add(new File(Configed.savedStatesLocationName,
+			files.add(new File(Configed.getSavedStatesLocationName(),
 					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
-			files.add(new File(Configed.savedStatesLocationName,
+			files.add(new File(Configed.getSavedStatesLocationName(),
 					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
 			files.add(new File(Logging.getCurrentLogfilePath()));
 			zipFiles(fileName, files);
@@ -256,13 +256,13 @@ public class HealthCheckDialog extends FGeneralDialog {
 	}
 
 	private void saveDiagnosticDataToFile() {
-		String dirname = ConfigedMain.host;
+		String dirname = ConfigedMain.getHost();
 
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}
 
-		File diagnosticDataFile = new File(Configed.savedStatesLocationName,
+		File diagnosticDataFile = new File(Configed.getSavedStatesLocationName(),
 				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
 
 		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {

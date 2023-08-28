@@ -492,7 +492,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 			if (!newData.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { newData });
 
-				persistenceController.exec.doCall(omc);
+				persistenceController.getExecutioner().doCall(omc);
 			}
 
 			Logging.info(this, "readyObjects for userparts " + newData.size());

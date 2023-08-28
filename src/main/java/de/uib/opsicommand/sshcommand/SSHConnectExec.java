@@ -165,7 +165,7 @@ public class SSHConnectExec extends SSHConnect {
 			finalDialog.appendLater("\n\n\n" + LocalDate.now() + " " + LocalTime.now());
 			finalDialog.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
 					+ "]\n" + defaultCommandsString + "\n\n");
-			if (SSHCommandFactory.sshAlwaysExecInBackground) {
+			if (SSHCommandFactory.alwaysExecInBackground()) {
 				multiDialog.setVisible(false);
 				finalDialog.setVisible(false);
 			}
@@ -178,12 +178,12 @@ public class SSHConnectExec extends SSHConnect {
 			final SSHConnectExec caller = this;
 			foundError = false;
 
-			if (!SSHCommandFactory.sshAlwaysExecInBackground) {
+			if (!SSHCommandFactory.alwaysExecInBackground()) {
 				finalDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 				finalDialog.setVisible(true);
 			}
 
-			pmethodHandler.canceled = false;
+			pmethodHandler.setCanceled(false);
 			boolean foundErrorInCommandList = false;
 			List<SSHCommand> commandList = commandToExec.getCommands();
 			for (SSHCommand co : commandToExec.getCommands()) {
@@ -192,7 +192,7 @@ public class SSHConnectExec extends SSHConnect {
 					// ???????? sollte hier eigentlich stehen?!
 					// # nein! co wird vom phander verändert
 					co = pmethodHandler.parseParameter(co, caller);
-					if (!pmethodHandler.canceled) {
+					if (!pmethodHandler.isCanceled()) {
 						if (co instanceof SSHSFTPCommand) {
 							SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
 							sftp.exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
@@ -268,7 +268,7 @@ public class SSHConnectExec extends SSHConnect {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground) {
+			if (SSHCommandFactory.alwaysExecInBackground()) {
 				outputDialog.setVisible(false);
 			}
 
@@ -295,7 +295,7 @@ public class SSHConnectExec extends SSHConnect {
 				return task.get();
 			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground && withGui && outputDialog != null) {
+			if (SSHCommandFactory.alwaysExecInBackground() && withGui && outputDialog != null) {
 				outputDialog.setVisible(false);
 			}
 

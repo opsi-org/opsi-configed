@@ -78,8 +78,8 @@ public final class Configed {
 
 	private static boolean optionCLIuserConfigProducing;
 
-	public static SavedStates savedStates;
-	public static String savedStatesLocationName;
+	private static SavedStates savedStates;
+	private static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
 	private static Integer refreshMinutes;
@@ -196,8 +196,8 @@ public final class Configed {
 		}
 
 		if (result == null) {
-			if (Messages.messagesBundle != null) {
-				result = Messages.messagesBundle.getString(key);
+			if (Messages.getMessagesBundle() != null) {
+				result = Messages.getMessagesBundle().getString(key);
 			} else {
 				Logging.error("Messages.messagesBundle is null...");
 			}
@@ -374,7 +374,7 @@ public final class Configed {
 			String no = cmd.getOptionValue("collect_queries_until_no");
 
 			try {
-				OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
+				OpsiMethodCall.setMaxCollectSize(Integer.parseInt(no));
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
 				Main.showHelp();
@@ -512,5 +512,21 @@ public final class Configed {
 		}
 
 		new Configed(host, user, password, client, clientgroup, tab);
+	}
+
+	public static SavedStates getSavedStates() {
+		return savedStates;
+	}
+
+	public static void setSavedStates(SavedStates savedStates) {
+		Configed.savedStates = savedStates;
+	}
+
+	public static String getSavedStatesLocationName() {
+		return savedStatesLocationName;
+	}
+
+	public static void setSavedStatesLocationName(String savedStatesLocationName) {
+		Configed.savedStatesLocationName = savedStatesLocationName;
 	}
 }

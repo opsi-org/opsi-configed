@@ -100,7 +100,7 @@ public class Main {
 		options.addOption(null, "ssh-passphrase", true,
 				"Passphrase for given sshkey used for authentication on ssh server");
 		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
-				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
+				+ OpsiMethodCall.getMaxCollecSize() + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "localizationfile", true,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", false,
@@ -147,7 +147,7 @@ public class Main {
 	private static void parseArgs(CommandLine cmd) {
 
 		if (cmd.hasOption("d")) {
-			Logging.logDirectoryName = cmd.getOptionValue("d");
+			Logging.setLogDirectoryName(cmd.getOptionValue("d"));
 		}
 
 		if (cmd.hasOption("loglevel")) {
@@ -190,9 +190,9 @@ public class Main {
 	}
 
 	public static void endApp(int exitcode) {
-		if (Configed.savedStates != null) {
+		if (Configed.getSavedStates() != null) {
 			try {
-				Configed.savedStates.store("states on finishing configed");
+				Configed.getSavedStates().store("states on finishing configed");
 			} catch (IOException iox) {
 				Logging.debug("could not store saved states, " + iox);
 			}

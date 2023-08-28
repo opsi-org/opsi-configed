@@ -24,9 +24,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelEditLicences extends MultiTablePanel {
-	public PanelGenEditTable panelKeys;
-	public PanelGenEditTable panelSoftwarelicences;
-	public PanelGenEditTable panelLicencecontracts;
+	private PanelGenEditTable panelKeys;
+	private PanelGenEditTable panelSoftwarelicences;
+	private PanelGenEditTable panelLicencecontracts;
 
 	private int splitPaneHMargin = 1;
 
@@ -123,5 +123,18 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	public PanelGenEditTable getPanelKeys() {
+		return panelKeys;
+	}
+
+	public PanelGenEditTable getPanelSoftwarelicences() {
+		return panelSoftwarelicences;
+	}
+
+	public PanelGenEditTable getPanelLicencecontracts() {
+		return panelLicencecontracts;
+
 	}
 }

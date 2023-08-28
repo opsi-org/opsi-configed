@@ -47,7 +47,7 @@ public class SwExporter implements ActionListener {
 
 		// save states now
 
-		Configed.savedStates.setProperty("swaudit_export_file_prefix",
+		Configed.getSavedStates().setProperty("swaudit_export_file_prefix",
 				showSoftwareLogMultiClientReport.getExportfilePrefix());
 
 		String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator

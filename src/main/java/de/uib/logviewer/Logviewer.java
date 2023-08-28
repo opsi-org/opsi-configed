@@ -27,12 +27,16 @@ public final class Logviewer {
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
 		Logging.essential(this.getClass(), "starting " + getClass().getName());
-		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
+
+		String imageHandled = "(we start image retrieving)";
+		Logging.info(this.getClass(), imageHandled);
+
+		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.getLogDirectoryName());
 
 		if (fileName != null) {
 			LogFrame.setFileName(fileName);
 		} else {
-			Logging.info(" --  fileName " + Logging.logDirectoryName);
+			Logging.info(" --  fileName " + Logging.getLogDirectoryName());
 		}
 
 		SwingUtilities.invokeLater(Logviewer::init);
