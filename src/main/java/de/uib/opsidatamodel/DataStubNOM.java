@@ -632,7 +632,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> li = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getHashes");
+					"auditSoftware_getObjects");
 
 			Iterator<Map<String, Object>> iter = li.iterator();
 
@@ -787,7 +787,7 @@ public class DataStubNOM {
 				}
 
 				List<Map<String, Object>> softwareAuditOnClients = persistenceController
-						.retrieveListOfMapsNOM(callAttributes, callFilter, "auditSoftwareOnClient_getHashes");
+						.retrieveListOfMapsNOM(callAttributes, callFilter, "auditSoftwareOnClient_getObjects");
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size "
 						+ softwareAuditOnClients.size());
