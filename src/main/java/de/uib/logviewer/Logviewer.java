@@ -8,17 +8,15 @@ package de.uib.logviewer;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.net.URL;
 
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 
-import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
+import utils.Utils;
 
 public final class Logviewer {
 
@@ -31,35 +29,18 @@ public final class Logviewer {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		Logging.essential(this, "starting " + getClass().getName());
+		Logging.essential(this.getClass(), "starting " + getClass().getName());
 
 		String imageHandled = "(we start image retrieving)";
-		Logging.info(this, imageHandled);
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-				imageHandled = "setIconImage";
-			}
-		} catch (Exception ex) {
-			Logging.warning(this, "imageHandled failed: " + ex.toString());
-		}
+		Logging.info(this.getClass(), imageHandled);
 
-		Logging.info(this, "--  wantedDirectory " + Logging.logDirectoryName);
+		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
 
 		// set wanted fileName
+		LogFrame.setFileName(fileName);
 		if (fileName != null) {
-			if (new File(fileName).isDirectory()) {
-				Logging.info(this, "This is a directory: " + fileName);
-				LogFrame.setFileName("");
-			} else if (!new File(fileName).exists()) {
-				Logging.info(this, "File does not exist: " + fileName);
-				LogFrame.setFileName("");
-			} else {
-				LogFrame.setFileName(fileName);
-			}
+
+			LogFrame.setFileName(fileName);
 		} else {
 			Logging.info(" --  fileName " + Logging.logDirectoryName);
 		}
@@ -82,7 +63,7 @@ public final class Logviewer {
 
 		// for passing it to message frames everywhere
 
-		Globals.frame1 = logFrame;
+		Utils.setMasterFrame(logFrame);
 
 		//rearranging visual components
 		logFrame.pack();
@@ -108,27 +89,7 @@ public final class Logviewer {
 	 * main-Methode
 	 */
 	public static void main(CommandLine cmd) {
-
 		processArgs(cmd);
-
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.warning("imageHandled failed: ", ex);
-		}
-
-		// Turn on antialiasing for text 
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex.toString());
-		}
-
 		new Logviewer();
 	}
 }

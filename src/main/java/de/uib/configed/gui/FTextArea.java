@@ -22,17 +22,6 @@ public class FTextArea extends FGeneralDialog {
 
 	private JTextArea jTextArea1 = new JTextArea();
 
-	public FTextArea(JFrame owner, String title, boolean modal) {
-		super(owner, title, modal);
-		initFTextArea();
-	}
-
-	public FTextArea(JFrame owner, String title, String message, boolean modal) {
-		super(owner, title, modal);
-		initFTextArea();
-		setMessage(message);
-	}
-
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
 		initFTextArea();
@@ -96,7 +85,7 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		if (!Main.FONT) {
-			jTextArea1.setFont(Globals.defaultFontBig);
+			jTextArea1.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		scrollpane.getViewport().add(jTextArea1, null);
@@ -122,5 +111,4 @@ public class FTextArea extends FGeneralDialog {
 			jTextArea1.requestFocus();
 		}
 	}
-
 }

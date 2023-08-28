@@ -46,8 +46,8 @@ public class ColumnIdent {
 
 		configIdent = hwClass + "_" + tableType;
 
-		Logging.debug(this, "from '" + tableValue + "' we get " + " col name " + dbColumnName + " type " + tableType
-				+ " hw class " + hwClass);
+		Logging.debug(this.getClass(), "from '" + tableValue + "' we get " + " col name " + dbColumnName + " type "
+				+ tableType + " hw class " + hwClass);
 
 	}
 

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
@@ -65,9 +66,11 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 		installedOSComparisonBarChart.getData().clear();
 		installedOSComparisonBarChart.getData().add(data);
 
-		ComponentStyler.styleBarChartComponent(installedOSComparisonBarChart);
-		installedOSNoDataText
-				.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+		if (Main.THEMES) {
+			ComponentStyler.styleBarChartComponent(installedOSComparisonBarChart);
+			installedOSNoDataText
+					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+		}
 	}
 
 	@Override

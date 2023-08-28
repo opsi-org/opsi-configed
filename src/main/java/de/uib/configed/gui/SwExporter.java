@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +19,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -30,7 +32,7 @@ public class SwExporter implements ActionListener {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
+	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
 			ConfigedMain configedMain) {
 		this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
 		this.panelSWInfo = panelSWInfo;
@@ -61,23 +63,13 @@ public class SwExporter implements ActionListener {
 
 		panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
 
-		List<String> clientsWithoutScan = new ArrayList<>();
-
-		for (String client : configedMain.getSelectedClients()) {
-			Map<String, Map<String, Object>> tableData = persistenceController.retrieveSoftwareAuditData(client);
-			if (tableData == null || tableData.isEmpty()) {
-				clientsWithoutScan.add(client);
-			}
-		}
-
-		Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-
 		for (String client : configedMain.getSelectedClients()) {
 			panelSWInfo.setHost(client);
-
 			panelSWInfo.updateModel();
 
-			String scandate = persistenceController.getLastSoftwareAuditModification(client);
+			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+					.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(client)));
+			String scandate = persistenceController.getLastSoftwareAuditModification(swAuditClientEntries, client);
 			if (scandate != null) {
 				int timePos = scandate.indexOf(' ');
 				if (timePos >= 0) {
@@ -90,10 +82,7 @@ public class SwExporter implements ActionListener {
 			String filepath = filepathStart + client + "__scan_" + scandate + extension;
 			Logging.debug(this, "actionPerformed, write to " + filepath);
 			panelSWInfo.setWriteToFile(filepath);
-
 			panelSWInfo.export();
 		}
-
-		Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
 	}
 }

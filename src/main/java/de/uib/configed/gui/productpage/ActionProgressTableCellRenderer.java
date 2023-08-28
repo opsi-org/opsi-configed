@@ -15,11 +15,11 @@ import javax.swing.JTable;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.opsidatamodel.productstate.ActionProgress;
+import utils.Utils;
 
 public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-	ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
-			String tooltipPrefix) {
-		super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
+	ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String tooltipPrefix) {
+		super(mapOfStringValues, tooltipPrefix);
 	}
 
 	// overwrite the renderer in order to get the behaviour:
@@ -33,19 +33,18 @@ public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByI
 		if (!isValueNull(value)) {
 			result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
 
-			((JLabel) result)
-					.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
+			((JLabel) result).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 
 		} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
 			result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
 					row, column);
 
 			((JLabel) result).setToolTipText(
-					Globals.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
+					Utils.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
 		} else {
 			result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
 
-			((JLabel) result).setToolTipText(Globals.fillStringToLength(
+			((JLabel) result).setToolTipText(Utils.fillStringToLength(
 					tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ", FILL_LENGTH));
 		}
 

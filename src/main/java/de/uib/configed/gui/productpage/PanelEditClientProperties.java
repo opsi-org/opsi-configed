@@ -8,7 +8,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -37,10 +36,10 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		if (!Main.FONT) {
-			jLabelProductProperties.setFont(Globals.defaultFontBold);
+			jLabelProductProperties.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		if (!Main.THEMES) {
-			jLabelProductProperties.setForeground(Globals.lightBlack);
+			jLabelProductProperties.setForeground(Globals.LIGHT_BLACK);
 		}
 
 		buttonSetValuesFromServerDefaults = new IconButton(
@@ -103,23 +102,9 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
 		if (!Main.THEMES) {
-			jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
+			jLabelProductProperties.setForeground(activated ? Globals.LIGHT_BLACK : Globals.GREYED);
 		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
 		buttonRemoveSpecificValues.setEnabled(activated);
-	}
-
-	public void setSpecificPropertiesExisting(String productName, Map<String, Boolean> specificPropertiesExisting) {
-
-		setPropertyResetActivated(false);
-		if (specificPropertiesExisting != null && productName != null
-				&& specificPropertiesExisting.get(productName) != null) {
-			setPropertyResetActivated(specificPropertiesExisting.get(productName));
-		}
-	}
-
-	private void setPropertyResetActivated(boolean b) {
-
-		buttonRemoveSpecificValues.setEnabled(b);
 	}
 }

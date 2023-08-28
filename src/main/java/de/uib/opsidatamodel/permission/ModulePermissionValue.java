@@ -26,7 +26,7 @@ public class ModulePermissionValue {
 	private Boolean booleanValue;
 
 	public ModulePermissionValue(Object ob, ExtendedDate defaultExpires) {
-		Logging.info(this, "value object given: " + ob);
+		Logging.info(this.getClass(), "value object given: " + ob);
 		booleanValue = null;
 		expiresDate = ExtendedDate.ZERO;
 		maxClients = ExtendedInteger.ZERO;
@@ -36,7 +36,7 @@ public class ModulePermissionValue {
 			if (booleanValue == null) {
 				expiresDate = retrieveExpiresDate(ob);
 				maxClients = retrieveMaxClients(ob);
-				Logging.debug(this, "maxClients directly given " + maxClients);
+				Logging.debug(this.getClass(), "maxClients directly given " + maxClients);
 			} else if (Boolean.TRUE.equals(booleanValue)) {
 				maxClients = ExtendedInteger.INFINITE;
 			} else {
@@ -101,19 +101,11 @@ public class ModulePermissionValue {
 		return result;
 	}
 
-	private ExtendedDate retrieveExpiresDate(Object ob) {
+	private static ExtendedDate retrieveExpiresDate(Object ob) {
 		ExtendedDate result = null;
 
 		if (ob != null) {
-			try {
-				result = new ExtendedDate(ob);
-			} catch (ClassCastException ex) {
-				Logging.warning(this, "not a String: " + ob, ex);
-			} catch (Exception ex) {
-				Logging.debug(this, "DateParseException for " + ob);
-				Logging.debug(this, "thrown exception: " + ex);
-			}
-
+			result = new ExtendedDate(ob);
 		}
 
 		if (result == null || result.getDate() == null) {
@@ -139,5 +131,4 @@ public class ModulePermissionValue {
 	public String toString() {
 		return "  :" + getBoolean() + " maxClients: " + getMaxClients() + ";  expires  " + getExpires();
 	}
-
 }

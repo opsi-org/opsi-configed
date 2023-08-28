@@ -58,7 +58,7 @@ public class SSHCompletionComboButton {
 	}
 
 	public SSHCompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
-		Logging.info(this, "instance created");
+		Logging.info(this.getClass(), "instance created");
 		this.searchSpecificFiles = searchSpecificFiles;
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
@@ -72,20 +72,12 @@ public class SSHCompletionComboButton {
 		initButton();
 	}
 
-	public SSHCompletionComboButton(String searchSpecificFiles, String comboboxDefaultPath) {
-		this(null, searchSpecificFiles, comboboxDefaultPath);
-	}
-
-	public SSHCompletionComboButton(String searchSpecificFiles) {
-		this(null, searchSpecificFiles, null);
-	}
-
 	private final void enableComponents(boolean value) {
 		combobox.setEnabled(value);
 		button.setEnabled(value);
 	}
 
-	public String getBasicPath() {
+	private String getBasicPath() {
 		String basicSearchPath = (String) combobox.getSelectedItem();
 		if (basicSearchPath != null) {
 			return basicSearchPath.trim();
@@ -105,17 +97,15 @@ public class SSHCompletionComboButton {
 			opsiRepo = opsiRepo + "/";
 		}
 
+		defaultvalues = new ArrayList<>();
+
 		if (comboboxDefaultPath != null) {
-			defaultvalues = new ArrayList<>();
 			defaultvalues.add(comboboxDefaultPath);
 			defaultvalues.add(ROOT_DIRECTORY);
 			defaultvalues.add(opsiRepo);
-
 		} else {
-			defaultvalues = new ArrayList<>();
 			defaultvalues.add(opsiRepo);
 			defaultvalues.add(ROOT_DIRECTORY);
-
 		}
 		// Is element in defaultValues?
 		if (defvalues != null) {
@@ -204,11 +194,7 @@ public class SSHCompletionComboButton {
 		setComboDefault(null);
 	}
 
-	public void setSearchSpecificFiles(String fileEndString) {
-		searchSpecificFiles = fileEndString;
-	}
-
-	public void setComboDefault(String value) {
+	private void setComboDefault(String value) {
 		comboboxDefaultPath = value;
 	}
 
@@ -266,41 +252,34 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				try {
-					EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
-					SSHConnectExec ssh = new SSHConnectExec();
-					String result = ssh.exec(getFiles, false);
-					if (result == null || result.isEmpty()) {
-						result = ROOT_DIRECTORY;
-					}
 
-					getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-						/** Sets the command specific error text **/
-						@Override
-						public String getErrorText() {
-							// no file found
-							return ROOT_DIRECTORY;
-						}
-					};
-					try {
-						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
-						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-						String tempResult = ssh.exec(getFiles, false);
-						if (tempResult != null && !"null".equals(tempResult.trim())) {
-							result += tempResult;
-						}
-
-					} catch (Exception ei) {
-						Logging.warning(this, "Could not find .opsi files in directory " + curdir
-								+ " (It may be the rights are setted wrong.)", ei);
-					}
-					setItems(result, curdir);
-					enableComponents(true);
-				} catch (Exception e) {
-					Logging.error("getDirectoriesAndFilesIn failed", e);
+				EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
+				SSHConnectExec ssh = new SSHConnectExec();
+				String result = ssh.exec(getFiles, false);
+				if (result == null || result.isEmpty()) {
+					result = ROOT_DIRECTORY;
 				}
+
+				getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					/** Sets the command specific error text **/
+					@Override
+					public String getErrorText() {
+						// no file found
+						return ROOT_DIRECTORY;
+					}
+				};
+
+				////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
+				// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
+				String tempResult = ssh.exec(getFiles, false);
+				if (tempResult != null && !"null".equals(tempResult.trim())) {
+					result += tempResult;
+				}
+
+				setItems(result, curdir);
+				enableComponents(true);
 			}
 		}.start();
 	}
@@ -342,7 +321,7 @@ public class SSHCompletionComboButton {
 		}
 	}
 
-	public class ItemElementListener extends DefaultListCellRenderer {
+	private class ItemElementListener extends DefaultListCellRenderer {
 		private SSHCompletionComboButton autocompletion;
 
 		public ItemElementListener(SSHCompletionComboButton autocompletion) {

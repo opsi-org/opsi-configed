@@ -46,8 +46,10 @@ import de.uib.configed.ControlPanelEnterLicence;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
 
@@ -168,7 +170,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		}
 
 		jTextFieldLicenceID.setEnabled(true);
-		jTextFieldLicenceID.setText("l_" + Globals.getSeconds());
+		jTextFieldLicenceID.setText("l_" + Utils.getSeconds());
 
 		jTextFieldEndOfLicence.setEnabled(true);
 		jTextFieldEndOfLicence.setText("");
@@ -242,7 +244,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		}
 
 		jTextFieldLicenceID.setEnabled(true);
-		jTextFieldLicenceID.setText("l_" + Globals.getSeconds());
+		jTextFieldLicenceID.setText("l_" + Utils.getSeconds());
 		jTextFieldLicenceType.setEnabled(true);
 		jTextFieldLicenceType.setText("CONCURRENT");
 		jTextFieldLicenceType.setEditable(false);
@@ -261,13 +263,13 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, false // searchpane
 		);
 
-		panelKeys.setMasterFrame(Globals.frame1);
+		panelKeys.setMasterFrame(Utils.getMasterFrame());
 
 		panelLicencepools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), MAX_WIDTH, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
-		panelLicencepools.setMasterFrame(Globals.frame1);
+		panelLicencepools.setMasterFrame(Utils.getMasterFrame());
 
 		panelLicencecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
@@ -275,17 +277,17 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelLicencecontracts.setMasterFrame(Globals.frame1);
+		panelLicencecontracts.setMasterFrame(Utils.getMasterFrame());
 
 		JLabel jLabelLicencePool = new JLabel();
 		jButtonCreateStandard = new JButton();
-		jButtonCreateStandard.setPreferredSize(Globals.buttonDimension);
+		jButtonCreateStandard.setPreferredSize(Globals.BUTTON_DIMENSION);
 		jButtonCreateVolume = new JButton();
-		jButtonCreateVolume.setPreferredSize(Globals.buttonDimension);
+		jButtonCreateVolume.setPreferredSize(Globals.BUTTON_DIMENSION);
 		jButtonCreateOEM = new JButton();
-		jButtonCreateOEM.setPreferredSize(Globals.buttonDimension);
+		jButtonCreateOEM.setPreferredSize(Globals.BUTTON_DIMENSION);
 		jButtonCreateConcurrent = new JButton();
-		jButtonCreateConcurrent.setPreferredSize(Globals.buttonDimension);
+		jButtonCreateConcurrent.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		JLabel jLabelTask = new JLabel();
 		JLabel jLabelConfigure = new JLabel();
@@ -302,7 +304,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		comboClient = new JComboBox<>();
 		if (!Main.FONT) {
-			comboClient.setFont(Globals.defaultFontBig);
+			comboClient.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		comboClient.setPreferredSize(new Dimension(200, 20));
@@ -354,7 +356,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldLicenceContract = new JTextField();
 
 		jButtonSend = new JButton();
-		jButtonSend.setPreferredSize(Globals.buttonDimension);
+		jButtonSend.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		JLabel jLabelLKey = new JLabel();
 		jTextFieldLKey = new JTextField();
@@ -391,11 +393,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
 		if (!Main.FONT) {
-			jLabelTask.setFont(Globals.defaultFontBold);
+			jLabelTask.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
 		if (!Main.FONT) {
-			jLabelConfigure.setFont(Globals.defaultFontStandardBold);
+			jLabelConfigure.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		panelLicenceModel.setBorder(BorderFactory.createEtchedBorder());
@@ -409,8 +411,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jLabelSLid3info.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
 
-		de.uib.utilities.swing.Containership cs = new de.uib.utilities.swing.Containership(this);
-		cs.doForAllContainedCompisOfClass("setFont", new Object[] { Globals.defaultFont }, JTextField.class);
+		Containership cs = new Containership(this);
+		cs.doForAllContainedCompisOfClass("setFont", new Object[] { Globals.DEFAULT_FONT }, JTextField.class);
 
 		GroupLayout panelLicenceModelLayout = new GroupLayout(panelLicenceModel);
 		panelLicenceModel.setLayout(panelLicenceModelLayout);
@@ -638,7 +640,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	}
 
-	public void saveCurrentLicenceData() {
+	private void saveCurrentLicenceData() {
 		HashMap<String, String> m = new HashMap<>();
 
 		m.put(LicenceEntry.ID_KEY, jTextFieldLicenceID.getText());

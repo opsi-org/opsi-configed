@@ -65,11 +65,6 @@ public class SelectionManager {
 		return new SoftwareNameElement(backend.getProductIDs());
 	}
 
-	/** Get the non-localized hardware list from the backend */
-	public Map<String, List<AbstractSelectElement>> getHardwareList() {
-		return backend.getHardwareList();
-	}
-
 	/** Get the localized hardware list from the backend */
 	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
 		return backend.getLocalizedHardwareList();
@@ -77,13 +72,6 @@ public class SelectionManager {
 
 	public OpsiDataBackend getBackend() {
 		return backend;
-	}
-
-	/**
-	 * Next search, the manager should not use the loaded search data anymore.
-	 */
-	public void setChanged() {
-		isSerializedLoaded = false;
 	}
 
 	/** Save this group operation in the manager for a later build. */
@@ -162,7 +150,7 @@ public class SelectionManager {
 	}
 
 	/** Get the top operation and build it before, if necessary. */
-	public AbstractSelectOperation getTopOperation() {
+	private AbstractSelectOperation getTopOperation() {
 		if (isSerializedLoaded) {
 			return loadedSearch;
 		}
@@ -181,7 +169,7 @@ public class SelectionManager {
 
 		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
-		boolean withMySQL = controller.isWithMySQL()
+		boolean withMySQL = controller.canCallMySQL()
 				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
@@ -199,7 +187,7 @@ public class SelectionManager {
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
-	public List<String> selectClientsSQL(AbstractSelectOperation operation) {
+	private List<String> selectClientsSQL(AbstractSelectOperation operation) {
 		String json = serializer.getJson(operation);
 		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();
@@ -216,15 +204,11 @@ public class SelectionManager {
 
 	// Filter the clients and get the matching clients back with old backend,
 	// it should be checked before if operation is null
-	public List<String> selectClientsLocal(AbstractSelectOperation operation) {
+	private List<String> selectClientsLocal(AbstractSelectOperation operation) {
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
 		Logging.info(this, "selectClients, operation " + operation.getClassName());
 		Logging.info(this, "" + ((AbstractSelectGroupOperation) operation).getChildOperations().size());
 		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
-	}
-
-	public void saveSearch(String name) {
-		saveSearch(name, "");
 	}
 
 	/** Save the current operation tree with the serializer */

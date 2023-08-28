@@ -60,23 +60,18 @@ public class OpsiProductInfo extends OpsiPackage {
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICE_KEY_PRIORITY));
 		} catch (NumberFormatException ex) {
-			Logging.info(this, "no priority " + m.get(SERVICE_KEY_PRIORITY));
+			Logging.info(this.getClass(), "no priority " + m.get(SERVICE_KEY_PRIORITY));
 		}
 
 		hasUserLoginScript = m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
 				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty();
 
-		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
-				+ ", hasUserLoginScript " + hasUserLoginScript);
-
+		Logging.debug(this.getClass(), "created with description " + description + "\n," + " possible actions "
+				+ possibleActions + ", hasUserLoginScript " + hasUserLoginScript);
 	}
 
 	public List<String> getPossibleActions() {
 		return possibleActions;
-	}
-
-	public boolean hasLoginScript() {
-		return hasUserLoginScript;
 	}
 
 	public String getProductName() {

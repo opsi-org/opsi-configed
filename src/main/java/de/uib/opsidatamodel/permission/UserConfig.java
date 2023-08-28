@@ -86,14 +86,12 @@ public class UserConfig {
 
 	private String username;
 
-	private UserConfig prototypeConfig;
-
 	private Map<String, Boolean> booleanMap;
 	private Map<String, List<Object>> valuesMap;
 	private Map<String, List<Object>> possibleValuesMap;
 
 	public UserConfig(String userName) {
-		Logging.info(this, "create for " + userName);
+		Logging.info(this.getClass(), "create for " + userName);
 		this.username = userName;
 		booleanMap = new LinkedHashMap<>();
 		valuesMap = new LinkedHashMap<>();
@@ -173,10 +171,6 @@ public class UserConfig {
 		return userBoolKeys.contains(key);
 	}
 
-	public boolean hasListConfig(String key) {
-		return userListKeys.contains(key);
-	}
-
 	public void setBooleanValue(String key, Boolean val) {
 		if (!getUserBoolKeys().contains(key)) {
 			Logging.error("UserConfig.USER_BOOL_KEYS " + UserConfig.userBoolKeys);
@@ -244,18 +238,6 @@ public class UserConfig {
 		return possibleValuesMap.get(key);
 	}
 
-	public UserConfig getPrototype() {
-		if (prototypeConfig == null) {
-			return archeoPrototypeConfig;
-		}
-
-		return prototypeConfig;
-	}
-
-	public void setPrototype(UserConfig prototype) {
-		this.prototypeConfig = prototype;
-	}
-
 	public static UserConfig getCurrentUserConfig() {
 		if (currentConfig == null) {
 			return archeoPrototypeConfig;
@@ -283,24 +265,8 @@ public class UserConfig {
 		return result;
 	}
 
-	public static String getPartKeyFromUserconfigKey(String key) {
-		String partKey = null;
-
-		String user = getUserFromKey(key);
-
-		if (user != null) {
-			String userStart = UserConfig.KEY_USER_ROOT + ".{" + user + ".}.";
-			partKey = key.substring(userStart.length());
-
-			return partKey;
-		}
-
-		return partKey;
-	}
-
 	@Override
 	public String toString() {
 		return getClass().getName() + ": user " + username + ":: " + booleanMap + " :: " + valuesMap;
 	}
-
 }

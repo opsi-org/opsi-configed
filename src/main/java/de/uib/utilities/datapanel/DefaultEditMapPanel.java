@@ -108,7 +108,8 @@ public class DefaultEditMapPanel extends JPanel {
 		this.reloadable = reloadable;
 
 		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
+		Logging.debug(this.getClass(),
+				"DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
@@ -131,7 +132,6 @@ public class DefaultEditMapPanel extends JPanel {
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
@@ -175,7 +175,6 @@ public class DefaultEditMapPanel extends JPanel {
 		/* Not needed */}
 
 	public void setValues(Map<String, Object> data) {
-
 		if (data == null) {
 			return;
 		}
@@ -194,16 +193,11 @@ public class DefaultEditMapPanel extends JPanel {
 	public void setVoid() {
 		for (String key : names) {
 			mapTableModel.removeEntryFromStoredMaps(key);
-
 		}
 
 		mapTableModel.unsetWrite();
 		setValues(defaultsMap);
 		mapTableModel.setWrite();
-	}
-
-	public MapTableModel getTableModel() {
-		return mapTableModel;
 	}
 
 	public List<String> getNames() {
@@ -240,10 +234,6 @@ public class DefaultEditMapPanel extends JPanel {
 
 	public void setReadOnlyEntries(Set<String> keys) {
 		mapTableModel.setReadOnlyEntries(keys);
-	}
-
-	public void setShowOnlyValues(List<Object> showOnly) {
-		mapTableModel.setShowOnlyValues(showOnly);
 	}
 
 	public void setEditDenier(Function<String, Boolean> disallow) {

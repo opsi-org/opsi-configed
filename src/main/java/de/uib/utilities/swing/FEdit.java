@@ -36,6 +36,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
@@ -65,8 +66,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public FEdit(String initialText, String hint) {
 		super((Dialog) null);
 
-		Logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
-		super.setIconImage(Globals.mainIcon);
+		Logging.debug(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
+		super.setIconImage(Utils.getMainIcon());
 
 		if (initialText != null) {
 			this.initialText = initialText;
@@ -89,7 +90,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		labelHint = new JLabel();
 		if (!Main.FONT) {
-			labelHint.setFont(Globals.defaultFontStandardBold);
+			labelHint.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
 		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
@@ -174,15 +175,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
-
-	}
-
-	public void setAreaDimension(Dimension dim) {
-		areaDimension = dim;
-	}
-
-	public void addToArea(JComponent c) {
-		editingArea.add(c);
 	}
 
 	public void setCaller(JTextComponent c) {

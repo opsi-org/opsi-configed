@@ -7,15 +7,19 @@
 package de.uib.configed;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import utils.Utils;
 
 /**
  * This class is responsible for adding a suffix to a client's name.
  */
 public class CopySuffixAddition {
 	private static final String COPY_SUFFIX = "-copy";
+	private static final Pattern numberSuffixPattern = Pattern.compile("\\d+$");
 	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -47,7 +51,11 @@ public class CopySuffixAddition {
 		String clientToCopyName = getNameFromClientName();
 
 		if (clientToCopyName.contains(COPY_SUFFIX)) {
-			clientNameBuilder.append(replaceNumberSuffix(clientToCopyName));
+			if (containsNumberSuffix(clientToCopyName)) {
+				clientNameBuilder.append(replaceNumberSuffix(clientToCopyName, generateNumberSuffix(clientToCopyName)));
+			} else {
+				clientNameBuilder.append(clientToCopyName.concat(generateNumberSuffix(clientToCopyName).toString()));
+			}
 		} else if (clientHasCopy(clientToCopyName)) {
 			clientNameBuilder.append(clientToCopyName);
 			clientNameBuilder.append(COPY_SUFFIX);
@@ -60,53 +68,48 @@ public class CopySuffixAddition {
 		return clientNameBuilder.toString();
 	}
 
-	private String replaceNumberSuffix(String clientName) {
-		if (Character.isDigit(clientName.charAt(clientName.length() - 1))) {
-			Integer currentNumberSuffix = Integer
-					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
-			clientName = clientName.replace(currentNumberSuffix.toString(),
-					generateNumberSuffix(clientName).toString());
-		} else {
-			clientName = clientName.concat(generateNumberSuffix(clientName).toString());
-		}
-
-		return clientName;
-	}
-
 	private Integer generateNumberSuffix(String clientName) {
-		Integer numberSuffix = 1;
+		Integer numberSuffix = retrieveNumberSuffix(clientName);
 
-		if (Character.isDigit(clientName.charAt(clientName.length() - 1))) {
-			Integer currentNumberSuffix = Integer
-					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
-			numberSuffix = currentNumberSuffix;
-		} else {
+		if (!containsNumberSuffix(clientName)) {
 			clientName = clientName.concat(numberSuffix.toString());
 		}
 
-		while (clientExists(clientName.concat("." + getDomainFromClientName()))) {
+		while (clientExists(clientName.concat("." + Utils.getDomainFromClientName(this.clientName)))) {
 			numberSuffix += 1;
-			Integer currentNumberSuffix = Integer
-					.valueOf(Character.getNumericValue(clientName.charAt(clientName.length() - 1)));
-			clientName = clientName.replace(currentNumberSuffix.toString(), numberSuffix.toString());
+			clientName = replaceNumberSuffix(clientName, numberSuffix);
 		}
 
 		return numberSuffix;
 	}
 
+	private static String replaceNumberSuffix(String clientName, Integer numberSuffix) {
+		Matcher matcher = numberSuffixPattern.matcher(clientName);
+		if (matcher.find()) {
+			StringBuilder sb = new StringBuilder(clientName);
+			sb.replace(matcher.start(), matcher.end(), numberSuffix.toString());
+			clientName = sb.toString();
+		}
+		return clientName;
+	}
+
+	private static boolean containsNumberSuffix(String clientName) {
+		Matcher matcher = numberSuffixPattern.matcher(clientName);
+		return matcher.find();
+	}
+
+	private static Integer retrieveNumberSuffix(String clientName) {
+		Matcher matcher = numberSuffixPattern.matcher(clientName);
+		return matcher.find() ? Integer.valueOf(matcher.group()) : 1;
+	}
+
 	private boolean clientHasCopy(String clientName) {
-		return clientExists(clientName.concat(COPY_SUFFIX + "." + getDomainFromClientName()));
+		return clientExists(clientName.concat(COPY_SUFFIX + "." + Utils.getDomainFromClientName(this.clientName)));
 	}
 
 	private String getNameFromClientName() {
 		String[] splittedClientName = clientName.split("\\.");
 		return splittedClientName[0];
-	}
-
-	@SuppressWarnings("java:S109")
-	private String getDomainFromClientName() {
-		String[] splittedClientName = clientName.split("\\.");
-		return splittedClientName[1] + "." + splittedClientName[2];
 	}
 
 	private static boolean clientExists(String clientName) {

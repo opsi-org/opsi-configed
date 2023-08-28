@@ -10,8 +10,8 @@ import java.util.List;
 
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 
 public class HostOperation extends AbstractSelectGroupOperation implements ExecutableOperation {
 	public HostOperation(AbstractSelectOperation operation) {
@@ -23,7 +23,7 @@ public class HostOperation extends AbstractSelectGroupOperation implements Execu
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
+	public boolean doesMatch(OpsiDataClient client) {
 		return ((ExecutableOperation) getChildOperations().get(0)).doesMatch(client);
 	}
 }

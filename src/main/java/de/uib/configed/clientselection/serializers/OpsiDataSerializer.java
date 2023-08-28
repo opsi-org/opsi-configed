@@ -153,12 +153,8 @@ public class OpsiDataSerializer {
 		Logging.info(this, "deserialize serialized " + serialized);
 		AbstractSelectOperation result = null;
 
-		try {
-			Map<String, Object> data = decipher(serialized);
-			result = deserialize(data);
-		} catch (Exception e) {
-			Logging.error("deserialize error " + e.getMessage(), e);
-		}
+		Map<String, Object> data = decipher(serialized);
+		result = deserialize(data);
 
 		return result;
 	}
@@ -168,13 +164,9 @@ public class OpsiDataSerializer {
 	 */
 	public AbstractSelectOperation load(String name) {
 		Logging.info(this, "load " + name);
-		try {
-			Map<String, Object> data = getData(name);
-			return deserialize(data);
-		} catch (Exception e) {
-			Logging.error(e.getMessage(), e);
-			return null;
-		}
+
+		Map<String, Object> data = getData(name);
+		return deserialize(data);
 	}
 
 	/**

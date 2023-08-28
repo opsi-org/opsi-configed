@@ -26,7 +26,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -34,9 +33,11 @@ import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
+import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import utils.PopupMouseListener;
+import utils.Utils;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
@@ -258,8 +259,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				}
 			}
 		};
-		tree.addMouseListener(popupListenerForRolepath);
 
+		tree.addMouseListener(popupListenerForRolepath);
 	}
 
 	@Override
@@ -336,7 +337,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 					}
 				}
-
 			}
 		}
 
@@ -421,8 +421,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
 						Configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Utils.createImageIcon("images/cancel16_small.png", "") },
 				2, 600, 600, true, null) {
 
 			@Override
@@ -480,7 +480,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				// Map<String, List<Object>> serverconfigValuesMap,
 				persistenceController.getConfigDefaultValues(),
 
-				// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
+				// Map<String, ListCellOptions> configOptionsMap
 				persistenceController.getConfigOptions());
 
 		List<Object> newData = up.produce();
@@ -490,8 +490,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		} else {
 
 			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { AbstractExecutioner.jsonArray(newData) });
+				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { newData });
 
 				persistenceController.exec.doCall(omc);
 			}
@@ -508,8 +507,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
 						Configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Utils.createImageIcon("images/cancel16_small.png", "") },
 				2, 600, 600,
 				// lazylayout, i.e, we have a chance to define components and use them for the
 				true,
@@ -564,7 +563,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 			List<String> propertyNames = partialPanels.get(key).getNames();
 			Logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
-				((de.uib.utilities.datapanel.EditMapPanelX) partialPanels.get(key)).removeProperty(name);
+				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
 			}
 
 			removeSubpanelClass(key);
@@ -587,5 +586,4 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
 	}
-
 }

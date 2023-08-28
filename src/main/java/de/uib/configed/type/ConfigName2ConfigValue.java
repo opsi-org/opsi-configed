@@ -24,7 +24,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 	public ConfigName2ConfigValue(Map<String, Object> oldValues) {
 		super(oldValues);
-		build();
+		super.build();
 	}
 
 	private void buildX() {
@@ -59,8 +59,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			} else {
 				list = (List<?>) entry.getValue();
 			}
-
-			classnames.put(entry.getKey(), "List");
 
 			if (configOptions != null && configOptions.get(entry.getKey()) != null) {
 				ConfigOption configOption = configOptions.get(entry.getKey());

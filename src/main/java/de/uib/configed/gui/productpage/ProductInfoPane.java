@@ -29,6 +29,7 @@ import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
+import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
@@ -91,7 +92,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		// do this so that you can mark and copy content of the label
 		if (!Main.FONT) {
-			jLabelProductID.setFont(Globals.defaultFontStandardBold);
+			jLabelProductID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
@@ -100,17 +101,17 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		}
 
 		if (!Main.FONT) {
-			jLabelProductName.setFont(Globals.defaultFontBold);
+			jLabelProductName.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		if (!Main.FONT) {
-			jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
+			jLabelLabelProductVersion.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
 		if (!Main.FONT) {
-			jLabelProductVersion.setFont(Globals.defaultFontBold);
+			jLabelProductVersion.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
@@ -119,7 +120,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		}
 
 		if (!Main.FONT) {
-			jTextAreaProductInfo.setFont(Globals.defaultFont);
+			jTextAreaProductInfo.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
 			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
@@ -130,7 +131,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		if (!Main.FONT) {
-			jTextAreaProductAdvice.setFont(Globals.defaultFont);
+			jTextAreaProductAdvice.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
 			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
@@ -142,25 +143,25 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		if (!Main.FONT) {
-			dependenciesTextLabel.setFont(Globals.defaultFontBold);
+			dependenciesTextLabel.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		if (!Main.THEMES) {
-			dependenciesTextLabel.setForeground(Globals.greyed);
+			dependenciesTextLabel.setForeground(Globals.GREYED);
 		}
 
 		if (!Main.FONT) {
-			depotForDependenciesLabel.setFont(Globals.defaultFontBold);
+			depotForDependenciesLabel.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		if (!Main.THEMES) {
-			depotForDependenciesLabel.setForeground(Globals.greyed);
+			depotForDependenciesLabel.setForeground(Globals.GREYED);
 		}
 
 		dependenciesActivateButton.setText("▶");
 		if (!Main.FONT) {
-			dependenciesActivateButton.setFont(Globals.defaultFont);
+			dependenciesActivateButton.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
-			dependenciesActivateButton.setForeground(Globals.lightBlack);
+			dependenciesActivateButton.setForeground(Globals.LIGHT_BLACK);
 		}
 		dependenciesActivateButton.addActionListener(this);
 
@@ -168,10 +169,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		propertiesActivateButton.setText("▼");
 		if (!Main.FONT) {
-			propertiesActivateButton.setFont(Globals.defaultFont);
+			propertiesActivateButton.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
-			propertiesActivateButton.setForeground(Globals.lightBlack);
+			propertiesActivateButton.setForeground(Globals.LIGHT_BLACK);
 		}
 		propertiesActivateButton.addActionListener(this);
 
@@ -403,7 +404,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	@Override
 	public void dataHaveChanged(Object source) {
 
-		if (source instanceof de.uib.utilities.datapanel.EditMapPanelX) {
+		if (source instanceof EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}
 	}

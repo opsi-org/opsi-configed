@@ -21,12 +21,12 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import de.uib.configed.Globals;
-import de.uib.configed.gui.logpane.UnderlineHighlighter;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.script.CmdLauncher;
+import utils.Utils;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
@@ -41,7 +41,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
-		Logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.info(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
 		singleLine = false;
@@ -71,12 +71,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		searcher = new LinkSearcher(textpane);
 		searcher.setCaseSensitivity(true);
-		Highlighter highlighter = new UnderlineHighlighter(null);
+		Highlighter highlighter = new DefaultHighlighter();
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
 
 		cmdLauncher = new CmdLauncher();
-		if (Globals.isWindows()) {
+		if (Utils.isWindows()) {
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		} else {
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);

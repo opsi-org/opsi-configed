@@ -39,6 +39,7 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
+import utils.Utils;
 
 public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
@@ -85,10 +86,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SSHDeployClientAgentParameterDialog() {
-		this(null);
-	}
-
 	public SSHDeployClientAgentParameterDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
 		configedMain = m;
@@ -104,9 +101,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
-		Logging.info(this, "SSHDeployClientAgentParameterDialog build");
+		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
 
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 	}
 
 	private void getDefaultAuthData() {
@@ -177,7 +174,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		winAuthPanel.setBorder(new LineBorder(Globals.blueGrey, 2, true));
+		winAuthPanel.setBorder(new LineBorder(Globals.BLUE_GREY, 2, true));
 		inputPanel.setPreferredSize(new Dimension(376, 220));
 
 		jCheckBoxApplySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
@@ -254,7 +251,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jTextFieldPassword = new JPasswordField("nt123", 15);
 		jTextFieldPassword.setEchoChar('*');
 
-		jButtonShowPassword = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
+		jButtonShowPassword = new JButton(Utils.createImageIcon("images/eye_blue_open.png", ""));
 
 		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 		jButtonShowPassword.setToolTipText(
@@ -304,7 +301,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonHelp"));
 		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonHelp"));
 
@@ -312,14 +309,14 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
@@ -368,7 +365,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		updateCommand();
 	}
 
-	public void changeEchoChar() {
+	private void changeEchoChar() {
 		if (aktive) {
 			aktive = false;
 			jTextFieldPassword.setEchoChar('*');
@@ -378,13 +375,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void setComponentsEditable(boolean value) {
-		jTextFieldUser.setEnabled(value);
-		jTextFieldPassword.setEnabled(value);
-	}
-
 	// /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 
@@ -400,14 +392,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 
 		commandDeployClientAgent.finish(finalAction);
-		try {
-			new SSHConnectExec(commandDeployClientAgent);
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
-		}
+
+		new SSHConnectExec(commandDeployClientAgent);
 	}
 
-	public void doCopySelectedClients() {
+	private void doCopySelectedClients() {
 		String[] clientsList = configedMain.getSelectedClients();
 		if (clientsList.length > 0) {
 			StringBuilder clients = new StringBuilder();
@@ -419,7 +408,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	public void doActionHelp() {
+	private void doActionHelp() {
 		SSHConnectionExecDialog dia = commandDeployClientAgent.startHelpDialog();
 		dia.setVisible(true);
 	}

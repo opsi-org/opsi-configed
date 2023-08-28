@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
+import utils.Utils;
 
 public class SWAuditEntry extends AbstractTableEntry {
 	/*
@@ -100,7 +100,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	private static Map<String, String> locale = new StringIdentityMap(KEYS);
 
-	private String lastseen = "";
 	private String ident;
 	private String identReduced;
 
@@ -133,14 +132,9 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		super.put(key2serverKey.get(SUB_VERSION), subversion);
 
-		ident = Globals.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
+		ident = Utils.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
 				super.get(ARCHITECTURE) });
-
-		identReduced = Globals.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
-
-		if (entry.get("lastseen") != null) {
-			lastseen = entry.get("lastseen").toString();
-		}
+		identReduced = Utils.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
 
 		super.put(ID, ident);
 	}
@@ -161,24 +155,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 		return KEYS_FOR_GUI_TABLES;
 	}
 
-	public static String getDisplayKey(int i) {
-		return locale.get(KEYS.get(i));
-	}
-
-	public String[] getData() {
-		String[] data = new String[KEYS.size()];
-
-		for (int i = 0; i < KEYS.size(); i++) {
-			data[i] = get(KEYS.get(i));
-		}
-
-		return data;
-	}
-
-	public String getLastseen() {
-		return lastseen;
-	}
-
 	public String getIdent() {
 		return ident;
 	}
@@ -186,5 +162,4 @@ public class SWAuditEntry extends AbstractTableEntry {
 	public String getIdentReduced() {
 		return identReduced;
 	}
-
 }

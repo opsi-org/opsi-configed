@@ -7,6 +7,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
@@ -25,10 +26,11 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
-	private GroupLayout thisLayout;
+
 	private JDialog main;
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
@@ -47,7 +49,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
-		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 		setGapSize(lg, rg, ug, og);
@@ -57,18 +59,10 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
 		super();
-		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 
-	}
-
-	public JPanel getPanel() {
-		return this;
-	}
-
-	public GroupLayout getGrouplayout() {
-		return thisLayout;
 	}
 
 	/** Init components **/
@@ -120,9 +114,9 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		setComponentsEnabledRO();
 	}
 
-	public void setComponentsEnabledRO() {
-		jButtonTestParam.setEnabled(!Globals.isGlobalReadOnly());
-		jButtonAddParam.setEnabled(!Globals.isGlobalReadOnly());
+	private void setComponentsEnabledRO() {
+		jButtonTestParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		jButtonAddParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 	}
 
 	public JButton getButtonAdd() {
@@ -146,7 +140,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
-		thisLayout = new GroupLayout(this);
+
+		GroupLayout thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
 				.createParallelGroup()
@@ -228,7 +223,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 			JOptionPane.showMessageDialog(main, showThisText,
 					Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
-		} catch (Exception ble) {
+		} catch (HeadlessException ble) {
 			Logging.warning(this, "Testing parameter-method failed.", ble);
 		}
 		if (caller != null) {

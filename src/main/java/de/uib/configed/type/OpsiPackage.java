@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.ProductPackageVersionSeparator;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable<OpsiPackage> {
@@ -51,17 +51,12 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	private String representation;
 	private String lockedText;
 
-	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
-		this(productId, productVersion, packageVersion, productType, false);
-		// compatibility to usages without locked parameter
-	}
-
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType,
 			boolean locked) {
 		this.productId = productId;
 		this.productVersion = productVersion;
 		this.packageVersion = packageVersion;
-		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+		this.versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING)) {
 			this.productType = 0;
@@ -77,7 +72,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 			this.lockedText = "";
 		}
 
-		Logging.debug(this, "created : " + productId + ", " + productType + ", " + versionInfo);
+		Logging.debug(this.getClass(), "created : " + productId + ", " + productType + ", " + versionInfo);
 
 		representation = buildRepresentation();
 	}
@@ -87,7 +82,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 				"" + m.get(SERVICE_KEY_PACKAGE_VERSION), "" + m.get(SERVICE_KEY_PRODUCT_TYPE),
 				Boolean.TRUE.equals(m.get(SERVICE_KEY_LOCKED)));
 
-		Logging.debug(this, "built from " + m);
+		Logging.debug(this.getClass(), "built from " + m);
 	}
 
 	public String getProductId() {
@@ -111,7 +106,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public static String produceVersionInfo(String productVersion, String packageVersion) {
-		return productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+		return productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 	}
 
 	public int getProductType() {
@@ -168,5 +163,4 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public boolean equals(Object o) {
 		return o == null || representation.equals(o.toString());
 	}
-
 }

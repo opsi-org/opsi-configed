@@ -45,6 +45,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public static final String VALUE_NO_LICENCE_POOL = "---";
@@ -75,10 +76,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		SHOW_ALL_NAMES, SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS, SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL
 	}
 
-	public enum Softwarename2LicencepoolChangeOption {
-		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
-	}
-
 	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
@@ -92,7 +89,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
 
 				Configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
-				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 700, 800);
+				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", "") }, 1, 700, 800);
 
 		this.myController = myController;
 
@@ -150,8 +147,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void initLayout() {
 		JButton buttonRemoveAllAssignments = new JButton();
-		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
-		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
+		buttonRemoveAllAssignments.setIcon(Utils.createImageIcon("images/list-remove-14.png", ""));
+		buttonRemoveAllAssignments.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
@@ -159,8 +156,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
-		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
+		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Utils.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool"));
 		buttonSetAllAssignmentsToGloballySelectedPool
@@ -168,8 +165,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
-		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
+		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Utils.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 
@@ -455,10 +452,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(buttonActive);
 	}
 
-	public String getGlobalLicencePool() {
-		return globalLicencePool;
-	}
-
 	private Map<String, Map<String, String>> produceModelSWxLicencepool(String swName) {
 		Logging.info(this, "produceModelSWxLicencepool for swName: " + swName);
 
@@ -488,8 +481,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				+ " and classes " + classNamesSWxLicencepool);
 
 		MapTableUpdateItemFactory updateItemFactoySWxLicencepool = new MapTableUpdateItemFactory(
-				columnNamesSWxLicencepool, classNamesSWxLicencepool, 0 // keycol
-		);
+				columnNamesSWxLicencepool, 0);
 
 		modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
 				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, new MapRetriever() {
@@ -553,9 +545,4 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
 	}
-
-	public void exit() {
-		super.leave();
-	}
-
 }

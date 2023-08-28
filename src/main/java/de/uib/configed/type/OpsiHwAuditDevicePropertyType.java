@@ -10,17 +10,12 @@ public class OpsiHwAuditDevicePropertyType {
 	private String opsiDbColumnName;
 	private String opsiDbColumnType;
 
-	private String uiName;
 	private String hwClassName;
 
 	private Boolean displayed;
 
 	public OpsiHwAuditDevicePropertyType(String hwClass) {
 		this.hwClassName = hwClass;
-	}
-
-	public String getHwClassName() {
-		return hwClassName;
 	}
 
 	public void setOpsiDbColumnName(String s) {
@@ -39,14 +34,6 @@ public class OpsiHwAuditDevicePropertyType {
 		return opsiDbColumnType;
 	}
 
-	public void setUiName(String s) {
-		uiName = s;
-	}
-
-	public String getUiName() {
-		return uiName;
-	}
-
 	public void setDisplayed(boolean b) {
 		displayed = b;
 	}
@@ -59,5 +46,4 @@ public class OpsiHwAuditDevicePropertyType {
 	public String toString() {
 		return hwClassName + ": " + opsiDbColumnName + " (" + displayed + ")";
 	}
-
 }

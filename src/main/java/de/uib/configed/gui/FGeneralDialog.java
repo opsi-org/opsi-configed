@@ -38,6 +38,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
+import utils.Utils;
 
 public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
 
@@ -84,12 +85,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, false);
 		this.owner = owner;
 
-		Logging.info(this, "created by constructor 1, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(title);
 		if (!Main.FONT) {
-			super.setFont(Globals.defaultFont);
+			super.setFont(Globals.DEFAULT_FONT);
 		}
 		checkAdditionalPane();
 		super.setLocationRelativeTo(owner);
@@ -99,13 +100,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, modal);
 		this.owner = owner;
 
-		Logging.info(this, "created by constructor 2, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
 		if (!Main.FONT) {
-			super.setFont(Globals.defaultFont);
+			super.setFont(Globals.DEFAULT_FONT);
 		}
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
 		guiInit();
@@ -134,7 +135,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
 		this.owner = owner;
-		Logging.info(this, "created by constructor 3  owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 3  owner " + owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
@@ -165,7 +166,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		registerWithRunningInstances();
 
-		setIconImage(Globals.mainIcon);
+		setIconImage(Utils.getMainIcon());
 
 		glass = new FadingMirror();
 		setGlassPane(glass);
@@ -187,7 +188,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		setTitle(title);
 		if (!Main.FONT) {
-			setFont(Globals.defaultFont);
+			setFont(Globals.DEFAULT_FONT);
 		}
 
 		additionalPane = addPane;
@@ -375,7 +376,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.setOpaque(false);
 
 		if (!Main.FONT) {
-			jButton1.setFont(Globals.defaultFont);
+			jButton1.setFont(Globals.DEFAULT_FONT);
 		}
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
@@ -389,7 +390,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		if (noOfButtons > 1) {
 			if (!Main.FONT) {
-				jButton2.setFont(Globals.defaultFont);
+				jButton2.setFont(Globals.DEFAULT_FONT);
 			}
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
@@ -404,7 +405,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 		if (noOfButtons > 2) {
 			if (!Main.FONT) {
-				jButton3.setFont(Globals.defaultFont);
+				jButton3.setFont(Globals.DEFAULT_FONT);
 			}
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
@@ -608,7 +609,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		glass.begin();
 	}
 
-	public static class FadingMirror extends JPanel implements ActionListener {
+	private static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1F;
 		private float step = 0.3F;
 		private Timer fadeTimer;

@@ -33,7 +33,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -73,7 +75,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
-		if (Globals.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 
@@ -183,23 +185,23 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel.close();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
-		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
 		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
-			if (!(Globals.isGlobalReadOnly())) {
+			if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 				doAction3();
 			}
 		});
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
@@ -261,23 +263,19 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			new Thread() {
 				@Override
 				public void run() {
-					try {
-						Logging.info(this, "doAction3 wget ");
-						new SSHConnectExec(commandWget, jButtonExecute);
-					} catch (Exception e) {
-						Logging.warning(this, "doAction3, exception occurred", e);
-					}
+					Logging.info(this, "doAction3 wget ");
+					new SSHConnectExec(commandWget, jButtonExecute);
 				}
 			}.start();
 		}
 	}
 
-	public void doActionHelp() {
+	private void doActionHelp() {
 		SSHConnectionExecDialog dia = commandWget.startHelpDialog();
 		dia.setVisible(true);
 	}
 
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

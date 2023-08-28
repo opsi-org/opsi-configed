@@ -35,10 +35,13 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
+import utils.Utils;
 
 public class FEditObject extends JDialog implements ActionListener, KeyListener, DocumentListener {
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
@@ -63,14 +66,13 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected IconButton buttonRemove;
 
 	protected boolean editable = true;
-	private boolean finished;
 
 	protected JTextField extraField;
 	private JLabel extraLabel;
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		super.setIconImage(Globals.mainIcon);
+		super.setIconImage(Utils.getMainIcon());
 
 		if (initialValue != null) {
 			this.initialValue = initialValue;
@@ -126,7 +128,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		extraLabel = new JLabel("");
 		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraLabel.setVisible(false);
-
 	}
 
 	public void setDividerLocation(double loc) {
@@ -246,7 +247,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	public void setDataChanged(boolean b) {
 		Logging.debug(this, "setDataChanged " + b);
 
-		if (Globals.forbidEditingTargetSpecific() && b) {
+		if (forbidEditingTargetSpecific() && b) {
 			return;
 		}
 
@@ -285,19 +286,11 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		setDataChanged(false);
 		buttonAdd.setEnabled(false);
 		buttonRemove.setEnabled(false);
-		initExtraField();
+		extraField.setText("");
 	}
 
 	public boolean init() {
 		return init(areaDimension);
-	}
-
-	public boolean isFinished() {
-		return finished;
-	}
-
-	protected void initExtraField() {
-		extraField.setText("");
 	}
 
 	public void setExtraLabel(String s) {
@@ -307,18 +300,22 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	public void enter() {
 		Logging.debug(this, "enter");
-
 	}
 
-	public void deactivate() {
-		leave();
-	}
+	public boolean forbidEditingTargetSpecific() {
+		boolean forbidEditing = false;
 
-	protected void leave() {
+		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
 
-		setVisible(false);
-		finished = true;
+		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
+			forbidEditing = !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
+		} else {
+			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+		}
 
+		Logging.debug("forbidEditing " + forbidEditing);
+
+		return forbidEditing;
 	}
 
 	@Override
@@ -347,12 +344,12 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected void commit() {
 		Logging.debug(this, "FEditObject.commit");
 
-		if (Globals.forbidEditingTargetSpecific()) {
+		if (forbidEditingTargetSpecific()) {
 			cancel();
 		} else {
 			setStartValue(getValue());
 			if (leaveOnCommit) {
-				leave();
+				setVisible(false);
 			}
 		}
 	}
@@ -360,7 +357,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected void cancel() {
 
 		setStartValue(initialValue);
-		leave();
+		setVisible(false);
 	}
 
 	// -------------

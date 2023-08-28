@@ -9,8 +9,11 @@ package de.uib.opsidatamodel.productstate;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import de.uib.configed.Globals;
 
@@ -39,24 +42,17 @@ public class ActionRequest {
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
-	private static List<Integer> states;
-	private static List<Integer> possibleRequests;
+	private static Set<Integer> states;
 	private static List<String> labels;
 	private static String[] choiceLabels;
-	private static List<String> serviceValues;
 	private static List<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
 
 	// instance variable
 	private int state = INVALID;
-
-	// constructor
-	public ActionRequest() {
-	}
 
 	public ActionRequest(int t) {
 		if (existsState(t)) {
@@ -71,7 +67,7 @@ public class ActionRequest {
 			return;
 		}
 
-		states = new ArrayList<>();
+		states = new HashSet<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -82,14 +78,6 @@ public class ActionRequest {
 		states.add(ALWAYS);
 		states.add(ONCE);
 		states.add(CUSTOM);
-
-		possibleRequests = new ArrayList<>();
-		possibleRequests.add(SETUP);
-		possibleRequests.add(UPDATE);
-		possibleRequests.add(UNINSTALL);
-		possibleRequests.add(ALWAYS);
-		possibleRequests.add(ONCE);
-		possibleRequests.add(CUSTOM);
 
 		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -123,15 +111,14 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new ArrayList<>(serviceValue2state.keySet());
 		scriptKeys = new ArrayList<>();
 
 		scriptKey2label = new HashMap<>();
 
-		for (String request : serviceValues) {
-			scriptKeys.add(request + "Script");
+		for (Entry<String, Integer> stateEntry : serviceValue2state.entrySet()) {
+			scriptKeys.add(stateEntry.getKey() + "Script");
 
-			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
+			scriptKey2label.put(stateEntry.getKey() + "Script", state2label.get(stateEntry.getValue()));
 		}
 
 		label2state = new HashMap<>();
@@ -158,18 +145,6 @@ public class ActionRequest {
 		label2displayLabel.put("once", "once");
 		label2displayLabel.put("custom", "custom");
 
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("none", "none");
-		displayLabel2label.put("setup", "setup");
-		displayLabel2label.put("update", "update");
-		displayLabel2label.put("uninstall", "uninstall");
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("once", "once");
-		displayLabel2label.put("custom", "custom");
-
 		choiceLabels = new String[] { label2displayLabel.get("none"), label2displayLabel.get("setup"),
 				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
 				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
@@ -183,16 +158,6 @@ public class ActionRequest {
 		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
 		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
 
-	}
-
-	public static List<Integer> getPossibleRequests() {
-		checkCollections();
-		return possibleRequests;
-	}
-
-	public static List<String> getServiceValues() {
-		checkCollections();
-		return serviceValues;
 	}
 
 	public static List<String> getScriptKeys() {
@@ -222,13 +187,13 @@ public class ActionRequest {
 		return label2textColor;
 	}
 
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -270,16 +235,6 @@ public class ActionRequest {
 		return label2displayLabel.get(getLabel(state));
 	}
 
-	public static String getStaticString(String label) {
-		Integer state = label2state.get(label);
-
-		if (state == null) {
-			return null;
-		}
-
-		return state2label.get(state);
-	}
-
 	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
@@ -292,18 +247,9 @@ public class ActionRequest {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static ActionRequest produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionRequest produceFromLabel(String label) {

@@ -148,7 +148,7 @@ public class LinkSearcher {
 				try {
 					highlighter.addHighlight(startIndex + posInLine, startIndex + posInLine + len, painter);
 				} catch (BadLocationException e) {
-					// Nothing to do
+					Logging.warning(this, "could not find location for highlighter", e);
 				}
 			}
 			startIndex = endIndex + 1;

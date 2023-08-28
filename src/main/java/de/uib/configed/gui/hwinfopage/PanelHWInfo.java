@@ -7,14 +7,16 @@
 package de.uib.configed.gui.hwinfopage;
 
 import java.awt.Dimension;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -37,6 +39,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.utilities.logging.Logging;
@@ -44,12 +47,13 @@ import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
+import utils.Utils;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
-	private static final List<String> hwClassesForByAudit = new ArrayList<>();
+	private static final Set<String> hwClassesForByAudit = new HashSet<>();
 	static {
 		hwClassesForByAudit.add(CLASS_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(CLASS_BASE_BOARD);
@@ -110,7 +114,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		panelByAuditInfo = new PanelHWByAuditDriver(main);
 
-		tree = new XTree(null);
+		tree = new XTree();
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -127,7 +131,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		table.setDragEnabled(true);
 		if (!Main.THEMES) {
-			table.setBackground(Globals.nimbusBackground);
+			table.setBackground(Globals.NIMBUS_BACKGROUND);
 		}
 		JPanel embed = new JPanel();
 		GroupLayout layoutEmbed = new GroupLayout(embed);
@@ -224,7 +228,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void floatExternal() {
 		PanelHWInfo copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new PanelHWInfo(false, main);
 		copyOfMe.setHardwareConfig(hwConfig);
@@ -233,7 +237,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
@@ -244,7 +248,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {
-		return Globals.createImageIcon(path, "");
+		return Utils.createImageIcon(path, "");
 
 	}
 
@@ -265,34 +269,30 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		rootPath = tree.getPathForRow(0);
 	}
 
-	private String addUnit(String value, String unit) {
+	private static String addUnit(String value, String unit) {
 		if (value.isEmpty()) {
 			return value;
 		}
 
-		BigInteger v = null;
-
-		try {
-			v = new BigInteger(value);
-		} catch (Exception e) {
-			Logging.warning(this, "could not create BigInteger from value " + value, e);
-			return value + " " + unit;
-		}
+		String result = "";
+		BigDecimal v = new BigDecimal(value);
 
 		int mult = 1000;
 		if ("byte".equalsIgnoreCase(unit)) {
 			mult = 1024;
 		}
 		// TODO: nano, micro
-		if (v.compareTo(BigInteger.valueOf((long) mult * mult * mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
-		} else if (v.compareTo(BigInteger.valueOf((long) mult * mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
-		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
+		if (v.compareTo(BigDecimal.valueOf((long) mult * mult * mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
+		} else if (v.compareTo(BigDecimal.valueOf((long) mult * mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
+		} else if (v.compareTo(BigDecimal.valueOf(mult)) >= 0) {
+			result = ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
 		} else {
-			return value + " " + unit;
+			result = value + " " + unit;
 		}
+
+		return result;
 	}
 
 	private void expandRows(List<Integer> rows) {
@@ -566,48 +566,63 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				displayNames.get(displayName).add(devices.get(j));
 			}
 
-			int num = 0;
-			String[] names = new String[devices.size()];
-			Iterator<String> iter = displayNames.keySet().iterator();
-			while (iter.hasNext()) {
-				String displayName = iter.next();
-				List<Map<String, Object>> devs = displayNames.get(displayName);
+			String[] names = createNamesArray(devices, displayNames);
 
-				for (int j = 0; j < devs.size(); j++) {
-					Map<String, Object> dev = devs.get(j);
-					String dn = displayName;
-					if (devs.size() > 1) {
-						dn += " (" + j + ")";
-					}
-
-					dev.put("displayName", dn);
-					names[num] = dn;
-					num++;
-				}
-			}
-
-			Arrays.sort(names);
-
-			for (int j = 0; j < names.length; j++) {
-				for (int k = 0; k < devices.size(); k++) {
-					if (names[j].equals(devices.get(k).get("displayName"))) {
-						IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
-						iconNode.setClosedIcon(classIcon);
-						iconNode.setLeafIcon(classIcon);
-						iconNode.setOpenIcon(classIcon);
-						iconNode.setDeviceInfo(devices.get(k));
-						classNode.add(iconNode);
-						scanNodes(iconNode);
-						break;
-					}
-				}
-			}
+			createIconNodes(names, devices, classIcon, classNode);
 		}
 
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
 
+	}
+
+	private static String[] createNamesArray(List<Map<String, Object>> devices,
+			Map<String, List<Map<String, Object>>> displayNames) {
+
+		String[] names = new String[devices.size()];
+
+		int num = 0;
+
+		for (Entry<String, List<Map<String, Object>>> displayEntry : displayNames.entrySet()) {
+			List<Map<String, Object>> devs = displayEntry.getValue();
+
+			for (int j = 0; j < devs.size(); j++) {
+				Map<String, Object> dev = devs.get(j);
+				String dn = displayEntry.getKey();
+				if (devs.size() > 1) {
+					dn += " (" + j + ")";
+				}
+
+				dev.put("displayName", dn);
+				names[num] = dn;
+				num++;
+			}
+		}
+
+		return names;
+
+	}
+
+	private void createIconNodes(String[] names, List<Map<String, Object>> devices, Icon classIcon,
+			IconNode classNode) {
+
+		Arrays.sort(names);
+
+		for (int j = 0; j < names.length; j++) {
+			for (int k = 0; k < devices.size(); k++) {
+				if (names[j].equals(devices.get(k).get("displayName"))) {
+					IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
+					iconNode.setClosedIcon(classIcon);
+					iconNode.setLeafIcon(classIcon);
+					iconNode.setOpenIcon(classIcon);
+					iconNode.setDeviceInfo(devices.get(k));
+					classNode.add(iconNode);
+					scanNodes(iconNode);
+					break;
+				}
+			}
+		}
 	}
 
 	private void getLocalizedHashMap() {

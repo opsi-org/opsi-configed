@@ -35,7 +35,9 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 
@@ -71,10 +73,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected int frameHeight = 410;
 	private int frameWidth = 700;
 
-	public SSHFileUploadDialog() {
-		this(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
-	}
-
 	public SSHFileUploadDialog(String title, CommandSFTPUpload com) {
 		super(null, title, false);
 		this.command = com;
@@ -96,7 +94,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
-		Logging.info(this, "SSHFileUploadDialog build");
+		Logging.info(this.getClass(), "SSHFileUploadDialog build");
 	}
 
 	protected void showDialog() {
@@ -170,22 +168,22 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jFileChooserLocal.setDialogTitle(Globals.APPNAME + " "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
 
-		jButtonFileChooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		jButtonFileChooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
-		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
+		jButtonFileChooser = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener(actionEvent -> chooseFileDialog());
 		JButton jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
@@ -243,122 +241,111 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void initGUI() {
-		try {
-			inputPanelLayout = new GroupLayout(inputPanel);
-			getContentPane().add(inputPanel, BorderLayout.CENTER);
-			getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-			inputPanel.setLayout(inputPanelLayout);
 
-			initGUIAdditional();
-			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
-					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jRadioButtonLocal,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-									.addGap(Globals.GAP_SIZE * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(
-											jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+		inputPanelLayout = new GroupLayout(inputPanel);
+		getContentPane().add(inputPanel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		inputPanel.setLayout(inputPanelLayout);
 
-									// parallelGroup can be overwritten by child
-									.addGroup(inputPanelLayout.createSequentialGroup().addGroup(horizontalParallelGroup)
-									// classes
-									)).addGap(Globals.GAP_SIZE))
-					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
-									.addGroup(GroupLayout.Alignment.LEADING,
-											inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
-													.addComponent(jTextFieldLocalPath, Globals.BUTTON_WIDTH,
-															Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-													.addGap(Globals.GAP_SIZE)
-													.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
-															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-													.addGap(Globals.GAP_SIZE))
-									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
-											.addGroup(inputPanelLayout.createParallelGroup()
-													.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
-															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-													.addComponent(
-															wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-															GroupLayout.PREFERRED_SIZE))
-											.addGap(Globals.GAP_SIZE)
-											.addGroup(inputPanelLayout.createParallelGroup()
-													.addComponent(jTextFieldURL, Globals.BUTTON_WIDTH,
-															Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-													.addComponent(
-															wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-															GroupLayout.PREFERRED_SIZE)))
-									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-											.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
-							.addGap(Globals.GAP_SIZE))
-					.addGap(Globals.GAP_SIZE));
-			inputPanelLayout
-					.setVerticalGroup(
-							inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-									.addComponent(jLabelmodulesFrom, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
-									.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(Globals.GAP_SIZE)
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-											.addGap(Globals.GAP_SIZE * 3)
-											.addComponent(jTextFieldLocalPath, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addGap(Globals.GAP_SIZE * 3))
-									.addGap(Globals.GAP_SIZE)
-									.addComponent(jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(Globals.GAP_SIZE)
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-											.addGap(Globals.GAP_SIZE * 3)
-											.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addGap(Globals.GAP_SIZE * 3))
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-											.addGap(Globals.GAP_SIZE * 3)
-											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE)
-											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE)
-											.addGap(Globals.GAP_SIZE * 3))
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+		initGUIAdditional();
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+						.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
+								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jRadioButtonLocal,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+								.addGap(Globals.GAP_SIZE * 2)
+								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jRadioButtonFromServer,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-											.addGap(Globals.GAP_SIZE)
-											.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addGap(Globals.GAP_SIZE * 2)
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-											.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(jComboBoxSetRights, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addGap(Globals.GAP_SIZE)
-									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-											.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(jCheckBoxOverwriteExisting, GroupLayout.PREFERRED_SIZE,
-													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addGap(Globals.GAP_SIZE)
+								// parallelGroup can be overwritten by child
+								.addGroup(inputPanelLayout.createSequentialGroup().addGroup(horizontalParallelGroup)
+								// classes
+								)).addGap(Globals.GAP_SIZE))
+				.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
+								.addGroup(GroupLayout.Alignment.LEADING,
+										inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+												.addComponent(jTextFieldLocalPath, Globals.BUTTON_WIDTH,
+														Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE))
+								.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+										.addGroup(inputPanelLayout.createParallelGroup()
+												.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(Globals.GAP_SIZE)
+										.addGroup(inputPanelLayout.createParallelGroup()
+												.addComponent(jTextFieldURL, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+														Short.MAX_VALUE)
+												.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE)))
+								.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+						.addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE));
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelmodulesFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
+				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGap(Globals.GAP_SIZE * 3)
+						.addComponent(jTextFieldLocalPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE * 3))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(
+						inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addGap(Globals.GAP_SIZE * 3)
+								.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE * 3))
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGap(Globals.GAP_SIZE * 3)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE * 3))
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 
-									// parallelGroup can be overwritten by child classes
-									.addGroup(verticalParallelGroup));
-		} catch (Exception e) {
-			Logging.error("Error", e);
-		}
+						.addGap(Globals.GAP_SIZE).addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE * 2)
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxOverwriteExisting, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+
+				// parallelGroup can be overwritten by child classes
+				.addGroup(verticalParallelGroup));
 	}
 
 	// // /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 
@@ -380,36 +367,33 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	private void uploadNoOptionSelected() {
 		String modulesServerPath = doAction1AdditionalSetPath();
-		try {
-			SSHCommandTemplate fullcommand = new SSHCommandTemplate();
-			fullcommand.setMainName("FileUpload");
-			if (jRadioButtonFromServer.isSelected()) {
-				CommandWget wget = new CommandWget();
-				wget = doAction1AdditionalSetWget(wget, modulesServerPath);
 
-				wget.setUrl(jTextFieldURL.getText());
+		SSHCommandTemplate fullcommand = new SSHCommandTemplate();
+		fullcommand.setMainName("FileUpload");
+		if (jRadioButtonFromServer.isSelected()) {
+			CommandWget wget = new CommandWget();
+			wget = doAction1AdditionalSetWget(wget, modulesServerPath);
 
-				if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-					wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
-							+ wgetAuthPanel.getPw() + " ");
-				} else {
-					wget.setAuthentication(" ");
-				}
+			wget.setUrl(jTextFieldURL.getText());
 
-				fullcommand.addCommand(wget);
+			if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+				wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
+						+ wgetAuthPanel.getPw() + " ");
 			} else {
-				command.setOverwriteMode(jCheckBoxOverwriteExisting.isSelected());
-				fullcommand.addCommand(command);
+				wget.setAuthentication(" ");
 			}
 
-			if (jComboBoxSetRights.isSelected()) {
-				fullcommand.addCommand(new CommandOpsiSetRights(""));
-			}
-
-			new SSHConnectExec(fullcommand);
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
+			fullcommand.addCommand(wget);
+		} else {
+			command.setOverwriteMode(jCheckBoxOverwriteExisting.isSelected());
+			fullcommand.addCommand(command);
 		}
+
+		if (jComboBoxSetRights.isSelected()) {
+			fullcommand.addCommand(new CommandOpsiSetRights(""));
+		}
+
+		new SSHConnectExec(fullcommand);
 	}
 
 	protected CommandWget doAction1AdditionalSetWget(CommandWget c, String path) {

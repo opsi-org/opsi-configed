@@ -24,17 +24,6 @@ public class FShowList extends FTextArea {
 
 	private JTextArea jTextArea1 = new JTextArea();
 
-	public FShowList(JFrame owner, String title, boolean modal) {
-		super(owner, title, modal);
-		initFShowList();
-	}
-
-	public FShowList(JFrame owner, String title, String message, boolean modal) {
-		this(owner, title, modal);
-		this.owner = owner;
-		setMessage(message);
-	}
-
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
 		initFShowList();
@@ -128,5 +117,4 @@ public class FShowList extends FTextArea {
 			// Do nothing on other key events
 		}
 	}
-
 }

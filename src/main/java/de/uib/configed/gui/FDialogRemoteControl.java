@@ -50,14 +50,8 @@ public class FDialogRemoteControl extends FEditStringList {
 		this.editableFields = editable;
 	}
 
-	public String getValue(String key) {
+	private String getValue(String key) {
 		return meanings.get(key);
-	}
-
-	// hack to modify settings from superclass
-	@Override
-	protected void initExtraField() {
-		checkSelected();
 	}
 
 	@Override
@@ -96,7 +90,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		checkSelected();
 	}
 
-	public void appendLog(final String s) {
+	private void appendLog(final String s) {
 		SwingUtilities.invokeLater(() -> {
 			if (s == null) {
 				loggingArea.setText("");
@@ -145,7 +139,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		values.put("%host%", targetClient);
 		String hostName = targetClient;
 		Logging.info(this, " targetClient " + targetClient);
-		if (targetClient.indexOf(".") > 0) {
+		if (targetClient.contains(".")) {
 			String[] parts = targetClient.split("\\.");
 			Logging.info(this, " targetClient " + Arrays.toString(parts));
 			hostName = parts[0];

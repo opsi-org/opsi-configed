@@ -25,14 +25,15 @@ import javax.swing.JTextField;
 
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHConnectTerminal extends SSHConnect {
 
@@ -146,10 +147,10 @@ public class SSHConnectTerminal extends SSHConnect {
 				initInputFieldFromDialog();
 				initKillProcessButtonFromDialog();
 
-				Globals.threadSleep(this, 1000);
+				Utils.threadSleep(this, 1000);
 
 				exec(SOME_COMMAND + "\n");
-			} catch (Exception e) {
+			} catch (JSchException | IOException e) {
 				Logging.error(this, "SSHConnectTerminal connect exception", e);
 			}
 		}
@@ -160,7 +161,6 @@ public class SSHConnectTerminal extends SSHConnect {
 			Logging.warning(this, "connection forbidden.");
 
 		} else {
-
 			try {
 				Logging.info(this, "exec out " + out);
 				Logging.info(this, "exec text " + text);
@@ -184,11 +184,9 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			} catch (IOException ioe) {
 				Logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
-			} catch (Exception e) {
-				Logging.error(this, "SSHConnectTerminal exec exception", e);
 			}
-			Logging.info(this, " exec finished  " + text);
 
+			Logging.info(this, " exec finished  " + text);
 		}
 	}
 
@@ -232,7 +230,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			} else {
 				Logging.warning(this, "Pipe closed");
 			}
-		} catch (Exception e2) {
+		} catch (IOException e2) {
 			Logging.error("Error", e2);
 		}
 	}

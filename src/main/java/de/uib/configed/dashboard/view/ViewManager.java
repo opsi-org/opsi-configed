@@ -19,10 +19,6 @@ public final class ViewManager {
 		views.put(name, view);
 	}
 
-	public static void removeView(String name) {
-		views.remove(name);
-	}
-
 	public static void displayView(String name) {
 		views.get(name).display();
 	}

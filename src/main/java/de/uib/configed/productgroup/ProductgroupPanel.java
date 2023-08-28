@@ -108,7 +108,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	abstract static class AbstractDocumentListener implements DocumentListener {
+	private abstract static class AbstractDocumentListener implements DocumentListener {
 
 		private boolean enabled = true;
 
@@ -156,10 +156,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	public void setSearchFields(List<String> fieldList) {
 		searchPane.setSearchFields(fieldList);
-	}
-
-	public void markAllSearchResults() {
-		searchPane.markAll();
 	}
 
 	public void setGuiIsFiltered(boolean b) {
@@ -368,17 +364,17 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				"images/apply_disabled.png", // active
 				true); // setEnabled
 		buttonCommit.addActionListener(this);
-		buttonCommit.setPreferredSize(Globals.newSmallButton);
+		buttonCommit.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonCancel = new IconButton(Configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
-		buttonCancel.setPreferredSize(Globals.newSmallButton);
+		buttonCancel.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonDelete = new IconButton(Configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
 				"images/edit-delete.png", "images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
-		buttonDelete.setPreferredSize(Globals.newSmallButton);
+		buttonDelete.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
 				"images/reload_blue16.png", "images/reload_blue16.png", " ", true);
@@ -386,7 +382,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
 		buttonReloadProductStates.addActionListener(this);
-		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
+		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
 		buttonSaveAndExecute = new IconButton(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
@@ -395,12 +391,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setToolTipText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		buttonSaveAndExecute.addActionListener(this);
-		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
+		buttonSaveAndExecute.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonSaveAndExecute.setVisible(true);
 
 		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 		if (!Main.FONT) {
-			labelCollectiveAction.setFont(Globals.defaultFont);
+			labelCollectiveAction.setFont(Globals.DEFAULT_FONT);
 		}
 
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
@@ -409,7 +405,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
 		buttonCollectiveAction.addActionListener(this);
-		buttonCollectiveAction.setPreferredSize(Globals.newSmallButton);
+		buttonCollectiveAction.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonCollectiveAction.setVisible(true);
 
 		comboAggregatedEditing = new JComboBoxToolTip();
@@ -440,7 +436,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
 		if (!Main.FONT) {
-			listChooseAction.setFont(Globals.defaultFontSmallBold);
+			listChooseAction.setFont(Globals.DEFAULT_FONT_SMALL_BOLD);
 		}
 
 		if (!Main.THEMES) {
@@ -468,10 +464,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 		labelStrip.setOpaque(true);
 		if (!Main.FONT) {
-			labelStrip.setFont(Globals.defaultFont);
+			labelStrip.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
-			labelStrip.setForeground(Globals.lightBlack);
+			labelStrip.setForeground(Globals.LIGHT_BLACK);
 		}
 
 		JPanel surroundScrollChooseAction = new JPanel();
@@ -497,7 +493,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		comboAggregatedEditing.setValues(values);
 		if (!Main.FONT) {
-			comboAggregatedEditing.setFont(Globals.defaultFont);
+			comboAggregatedEditing.setFont(Globals.DEFAULT_FONT);
 		}
 
 		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
@@ -507,12 +503,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonEditDialog.setToolTips(Configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
 				Configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
-		buttonEditDialog.setPreferredSize(Globals.newSmallButton);
+		buttonEditDialog.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
 
 		if (!Main.FONT) {
-			labelSelectedGroup.setFont(Globals.defaultFont);
+			labelSelectedGroup.setFont(Globals.DEFAULT_FONT);
 		}
 
 		groupsEditField = saveNameEditor;
@@ -541,8 +537,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			}
 		});
 
-		groupsCombo.setPreferredSize(Globals.buttonDimension);
-		saveNameEditor.setPreferredSize(Globals.buttonDimension);
+		groupsCombo.setPreferredSize(Globals.BUTTON_DIMENSION);
+		saveNameEditor.setPreferredSize(Globals.BUTTON_DIMENSION);
 		if (!Main.THEMES) {
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
@@ -550,13 +546,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
 		if (!Main.FONT) {
-			labelSave.setFont(Globals.defaultFont);
+			labelSave.setFont(Globals.DEFAULT_FONT);
 		}
 
 		descriptionField = new JTextField("");
-		descriptionField.setPreferredSize(Globals.buttonDimension);
+		descriptionField.setPreferredSize(Globals.BUTTON_DIMENSION);
 		if (!Main.FONT) {
-			descriptionField.setFont(Globals.defaultFont);
+			descriptionField.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
 			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
@@ -622,7 +618,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		setGroupEditing(false);
 
-		panelEdit.setBorder(Globals.createPanelBorder());
+		panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
@@ -818,7 +814,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
-			buttonEditDialog.setActivated(!b);
 		}
 	}
 
@@ -830,7 +825,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 
-			cancel();
+			clearChanges();
 		} else if (e.getSource() == buttonDelete) {
 
 			setDeleted(true);
@@ -940,7 +935,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		setMembers();
 	}
 
-	public void setDataChanged(boolean b) {
+	private void setDataChanged(boolean b) {
 
 		if (buttonCommit != null) {
 			buttonCommit.setEnabled(b);
@@ -1001,7 +996,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	public void commit() {
+	private void commit() {
 		Logging.debug(this, "commit");
 		String newGroupID = groupsEditField.getText();
 		if (save()) {
@@ -1010,9 +1005,4 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			enterExistingGroup();
 		}
 	}
-
-	public void cancel() {
-		clearChanges();
-	}
-
 }

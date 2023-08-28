@@ -12,7 +12,6 @@ import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
 
 public class LicencePoolXOpsiProduct extends Relation {
 	/*
@@ -52,20 +51,16 @@ public class LicencePoolXOpsiProduct extends Relation {
 
 	public void integrateRawFromService(Map<String, Object> m) {
 		String licensePoolId = (String) m.get(ID_KEY);
-		try {
 
-			List<?> productList = (List<?>) m.get(PRODUCTS_KEY);
+		List<?> productList = (List<?>) m.get(PRODUCTS_KEY);
 
-			for (Object p : productList) {
-				String productId = (String) p;
-				StringValuedRelationElement rowmap = new StringValuedRelationElement();
-				rowmap.setAllowedAttributes(LICENCE_ATTRIBUTES);
-				rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, licensePoolId);
-				rowmap.put(PRODUCT_ID_KEY, productId);
-				add(rowmap);
-			}
-		} catch (Exception ex) {
-			Logging.error("integrateRawFromService " + m + " exception " + ex);
+		for (Object p : productList) {
+			String productId = (String) p;
+			StringValuedRelationElement rowmap = new StringValuedRelationElement();
+			rowmap.setAllowedAttributes(LICENCE_ATTRIBUTES);
+			rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, licensePoolId);
+			rowmap.put(PRODUCT_ID_KEY, productId);
+			add(rowmap);
 		}
 	}
 }

@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.Main;
-import de.uib.configed.Globals;
+import de.uib.configed.type.HostGroupRelation;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -51,13 +52,13 @@ public class SavedSearchQuery {
 
 	private void addMissingArgs() {
 		if (host == null) {
-			host = Globals.getCLIparam("Host: ", false);
+			host = Utils.getCLIParam("Host: ");
 		}
 		if (user == null) {
-			user = Globals.getCLIparam("User: ", false);
+			user = Utils.getCLIParam("User: ");
 		}
 		if (password == null) {
-			password = Globals.getCLIparam("Password: ", true);
+			password = Utils.getCLIPasswordParam("Password: ");
 		}
 	}
 
@@ -113,7 +114,7 @@ public class SavedSearchQuery {
 			Main.endApp(5);
 		}
 
-		List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
+		List<String> groupAttributes = new HostGroupRelation().getAttributes();
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 

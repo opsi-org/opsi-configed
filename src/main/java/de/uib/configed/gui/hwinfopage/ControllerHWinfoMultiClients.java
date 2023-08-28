@@ -33,12 +33,12 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import utils.Utils;
 
 public class ControllerHWinfoMultiClients {
 
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
-	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
@@ -91,16 +91,6 @@ public class ControllerHWinfoMultiClients {
 
 				super.reload();
 			}
-
-			@Override
-			protected Object modifyHeaderValue(Object s) {
-				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
-					return ((String) s).substring(DELETE_PREFIX.length());
-
-				}
-
-				return s;
-			}
 		};
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
@@ -116,6 +106,7 @@ public class ControllerHWinfoMultiClients {
 
 		List<String> columnNames = persistenceController.getClient2HwRowsColumnNames();
 		List<String> classNames = persistenceController.getClient2HwRowsJavaclassNames();
+
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 
@@ -170,14 +161,14 @@ public class ControllerHWinfoMultiClients {
 
 		// Icon iconConfigure =
 
-		JButton buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
+		JButton buttonConfigureColumns = new JButton("", Utils.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
-		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
+		buttonConfigureColumns.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
-		JButton buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton("", Utils.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
-		buttonReload.setPreferredSize(Globals.smallButtonDimension);
+		buttonReload.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "action performed " + actionEvent);
@@ -186,8 +177,8 @@ public class ControllerHWinfoMultiClients {
 
 		buttonConfigureColumns.addActionListener(this::configureColumns);
 
-		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
-		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
+		JButton buttonCopySelection = new JButton("", Utils.createImageIcon("images/memorize_selection.png", ""));
+		buttonCopySelection.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCopySelection.setEnabled(false);
 
 		buttonCopySelection.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.getSelection"));

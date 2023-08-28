@@ -20,6 +20,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilterCondition;
+import de.uib.utilities.table.gui.CheckBoxTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -38,6 +39,9 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 	private boolean initialized;
 
+	private int indexUsedByOpsi;
+	private int indexSWInventoryUsed;
+
 	public ControlPanelLicencesReconciliation() {
 		thePanel = new PanelLicencesReconciliation(this);
 
@@ -53,6 +57,35 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	public final void init() {
 		updateCollection = new ArrayList<TableEditItem>();
 
+		initPanels();
+
+		// special treatment of columns
+		initTreatmentOfColumns();
+
+		// updates
+		thePanel.panelReconciliation.setUpdateController(new MapItemsUpdateController(thePanel.panelReconciliation,
+				modelLicencesReconciliation, new MapBasedUpdater() {
+					@Override
+					public String sendUpdate(Map<String, Object> rowmap) {
+						return "";
+					}
+
+					@Override
+					public boolean sendDelete(Map<String, Object> rowmap) {
+						modelLicencesReconciliation.requestReload();
+						return false;
+					}
+				}, updateCollection));
+
+		Integer[] searchCols = new Integer[2];
+		searchCols[0] = 0;
+		searchCols[1] = 1;
+
+		thePanel.panelReconciliation.setSearchColumns(searchCols);
+		thePanel.panelReconciliation.setSearchSelectMode(true);
+	}
+
+	private void initPanels() {
 		List<String> columnNames;
 		List<String> classNames;
 
@@ -72,11 +105,11 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 		columnNames.add("licensePoolId");
 		columnNames.add("used_by_opsi");
-		final int index_used_by_opsi = columnNames.size() - 1;
+		indexUsedByOpsi = columnNames.size() - 1;
 		columnNames.add("SWinventory_used");
-		final int index_SWinventory_used = columnNames.size() - 1;
+		indexSWInventoryUsed = columnNames.size() - 1;
 		Logging.debug(this, "columnNames: " + columnNames);
-		Logging.debug(this, "cols index_used_by_opsi  " + index_used_by_opsi + " , " + index_SWinventory_used);
+		Logging.debug(this, "cols index_used_by_opsi  " + indexUsedByOpsi + " , " + indexSWInventoryUsed);
 
 		classNames.add("java.lang.String");
 
@@ -84,7 +117,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames.add("java.lang.Boolean");
 		classNames.add("java.lang.Boolean");
 		MapTableUpdateItemFactory updateItemFactoryLicencesReconciliation = new MapTableUpdateItemFactory(
-				modelLicencesReconciliation, columnNames, classNames, 0);
+				modelLicencesReconciliation, columnNames, 0);
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
@@ -111,7 +144,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 			@Override
 			public boolean test(List<Object> row) {
-				return ((Boolean) row.get(index_used_by_opsi)) || ((Boolean) row.get(index_SWinventory_used));
+				return ((Boolean) row.get(indexUsedByOpsi)) || ((Boolean) row.get(indexSWInventoryUsed));
 			}
 		});
 
@@ -124,43 +157,19 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		thePanel.panelReconciliation.setTableModel(modelLicencesReconciliation);
 		modelLicencesReconciliation.setEditableColumns(new int[] {});
 		thePanel.panelReconciliation.setEmphasizedColumns(new int[] {});
+	}
 
-		// --- PopupMenu
-
-		// special treatment of columns
+	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.panelReconciliation.getColumnModel().getColumn(index_used_by_opsi);
-		col.setCellRenderer(new de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
+		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexUsedByOpsi);
+		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
-		col = thePanel.panelReconciliation.getColumnModel().getColumn(index_SWinventory_used);
-		col.setCellRenderer(new de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
+		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexSWInventoryUsed);
+		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
-
-		// updates
-		thePanel.panelReconciliation.setUpdateController(new MapItemsUpdateController(thePanel.panelReconciliation,
-				modelLicencesReconciliation, new MapBasedUpdater() {
-					@Override
-					public String sendUpdate(Map<String, Object> rowmap) {
-						return "";
-					}
-
-					@Override
-					public boolean sendDelete(Map<String, Object> rowmap) {
-						modelLicencesReconciliation.requestReload();
-						return false;
-					}
-				}, updateCollection));
-
-		Integer[] searchCols = new Integer[2];
-		searchCols[0] = 0;
-		searchCols[1] = 1;
-
-		thePanel.panelReconciliation.setSearchColumns(searchCols);
-		thePanel.panelReconciliation.setSearchSelectMode(true);
-
 	}
 }

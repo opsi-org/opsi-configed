@@ -18,7 +18,7 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 				new CommandRepositoryUpload());
 		super.setVisible(true);
 
-		Logging.info(this, "SSHRepositoryUploadDialog build");
+		Logging.info(this.getClass(), "SSHRepositoryUploadDialog build");
 		frameHeight = DEFAULT_HEIGHT;
 		super.showDialog();
 	}

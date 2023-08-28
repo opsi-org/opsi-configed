@@ -40,13 +40,15 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
+import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
@@ -120,7 +122,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	}
 
-	private void setSoftwareIdsFromLicencePool(final String poolID) {
+	public void setSoftwareIdsFromLicencePool(final String poolID) {
 		Logging.info(this,
 				"setSoftwareIdsFromLicencePool " + poolID + " should be thePanel.panelLicencepools.getSelectedRow() "
 						+ thePanel.panelLicencepools.getSelectedRow());
@@ -166,7 +168,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.buttonShowAssignedNotExisting
 				.setEnabled(!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
 		if (thePanel.fMissingSoftwareInfo == null) {
-			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
+			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Utils.getMasterFrame(), this);
 		}
 
 		if (!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
@@ -199,12 +201,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				missingSoftwareMap.put(ID, rowMap);
 			}
 
-			thePanel.fMissingSoftwareInfo.setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, 0), // dummy
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
-					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
+			thePanel.fMissingSoftwareInfo.setTableModel(
+					new GenTableModel(new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames, 0), // dummy
+							new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
+									thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
+							0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}
 
@@ -352,7 +353,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						+ persistenceController.getFSoftware2LicencePool(key));
 			}
 
-			if (newAssociation != null && newAssociation) {
+			if (Boolean.TRUE.equals(newAssociation)) {
 				String otherPool = persistenceController.getFSoftware2LicencePool(key);
 
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
@@ -368,9 +369,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					Logging.info(
 							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
 
-					FTextArea dialog = new FTextArea(Globals.frame1, Globals.APPNAME + " " + title, true, new String[] {
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
+					FTextArea dialog = new FTextArea(Utils.getMasterFrame(), Globals.APPNAME + " " + title, true,
+							new String[] {
+									Configed.getResourceValue(
+											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
+									Configed.getResourceValue(
+											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
 							400, 200);
 					dialog.setMessage(info + "\n\n" + option);
 					dialog.setVisible(true);
@@ -382,11 +386,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						cancelSelectionKeys.add(key);
 					} else {
 						// or delete the assignment to the licence pool
-						List<String> removeKeys = removeKeysFromOtherLicencePool.get(otherPool);
-						if (removeKeys == null) {
-							removeKeys = new ArrayList<>();
-							removeKeysFromOtherLicencePool.put(otherPool, removeKeys);
-						}
+						List<String> removeKeys = removeKeysFromOtherLicencePool.computeIfAbsent(otherPool,
+								s -> new ArrayList<>());
 						removeKeys.add(key);
 					}
 				}
@@ -409,17 +410,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		// --- panelLicencepools
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
@@ -466,11 +463,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		classNames = new ArrayList<>();
+		List<String> classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persistenceController.getRelationsProductId2LPool())),
@@ -507,7 +504,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		if (!Main.FONT) {
-			comboLP0.setFont(Globals.defaultFontBig);
+			comboLP0.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
@@ -524,7 +521,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		if (!Main.FONT) {
-			comboLP1.setFont(Globals.defaultFontBig);
+			comboLP1.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP1, (row,
 				column) -> new DefaultComboBoxModel<>(persistenceController.getProductIds().toArray(new String[0]))));
@@ -649,9 +646,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			col.setMaxWidth(12);
 			col.setHeaderValue("");
 
-			col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(
-					Globals.createImageIcon("images/minibarpointerred.png", ""),
-					Globals.createImageIcon("images/minibarpointervoid.png", "")));
+			col.setCellRenderer(
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
+							Utils.createImageIcon("images/minibarpointervoid.png", "")));
 		}
 
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
@@ -666,22 +663,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col.setMaxWidth(60);
 
 		// updates
-		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
-				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this::updateLicencepool) {
-
-			@Override
-			public boolean cancelChanges() {
-				setSoftwareIdsFromLicencePool(null);
-				return true;
-			}
-		});
+		thePanel.panelRegisteredSoftware.setUpdateController(new SelectionMemorizerUpdateController(
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this));
 
 		// -- Softwarename --> LicencePool
 
-		Logging.info(this, "frame Softwarename --> LicencePool  in " + Globals.frame1);
+		Logging.info(this, "frame Softwarename --> LicencePool  in " + Utils.getMasterFrame());
 
 		final ControlPanelAssignToLPools contr = this;
-		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Globals.frame1, contr);
+		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Utils.getMasterFrame(), contr);
 		thePanel.fSoftwarename2LicencePool.setTableModel(); // test
 		thePanel.setDisplaySimilarExist(thePanel.fSoftwarename2LicencePool.checkExistNamesWithVariantLicencepools());
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);
@@ -734,7 +724,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 	}
 
-	private boolean updateLicencepool(String poolId, List<String> softwareIds) {
+	public boolean updateLicencepool(String poolId, List<String> softwareIds) {
 
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);

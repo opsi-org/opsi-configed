@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVScanner {
-	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
 
 	private CSVFormat format;
 	private BufferedReader reader;
@@ -21,10 +20,6 @@ public class CSVScanner {
 	private StringBuilder field = new StringBuilder();
 	private List<List<CSVToken>> tokens = new ArrayList<>();
 	private boolean inQuotes;
-
-	public CSVScanner(Reader reader) {
-		this(reader, DEFAULT_FORMAT);
-	}
 
 	public CSVScanner(Reader reader, CSVFormat format) {
 		if (reader instanceof BufferedReader) {

@@ -35,7 +35,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.Autocomplete;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private JTextField jTextFieldCommand;
@@ -56,7 +58,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private class TerminatingPanel extends JPanel {
 		JButton jButtonClose;
 
-		TerminatingPanel(ActionListener closeListener) {
+		public TerminatingPanel(ActionListener closeListener) {
 			super();
 
 			if (!Main.THEMES) {
@@ -80,7 +82,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 							.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 							.addGap(Globals.GAP_SIZE));
-
 		}
 	}
 
@@ -89,7 +90,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		// THEME color question
 		if (!Main.THEMES) {
-			output.setBackground(Globals.lightBlack);
+			output.setBackground(Globals.LIGHT_BLACK);
 		}
 		output.addMouseListener(new MouseAdapter() {
 			@Override
@@ -132,11 +133,11 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		super.setSize(this.thissize);
 		super.setMaximumSize(new Dimension(900, 700));
 
-		setComponentsEnabledRO(!Globals.isGlobalReadOnly());
+		setComponentsEnabledRO(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
-		Logging.info(this, "SSHConnectionTerminalDialog build ");
+		Logging.info(this.getClass(), "SSHConnectionTerminalDialog build ");
 		super.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -149,10 +150,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			}
 		});
 		setOutSize();
-	}
-
-	public SSHConnectionTerminalDialog(String title) {
-		this(title, null);
 	}
 
 	private void setComponentsEnabledRO(boolean value) {
@@ -174,7 +171,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			int counter = 0;
 			while (!jTextFieldCommand.hasFocus() && counter < timeoutRuns) {
 				counter++;
-				Globals.threadSleep(this, 100);
+				Utils.threadSleep(this, 100);
 				jTextFieldCommand.requestFocus();
 				Logging.info(this, "repeated requestFocus " + counter + " times");
 			}
@@ -308,19 +305,19 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jComboBoxPrivat.addItemListener(itemEvent -> applyPrivate());
 		}
 
 		changeEchoChar((char) 0);
 		passwordMode = true;
 		final SSHConnectionTerminalDialog caller = this;
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
 		}
 
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(jTextFieldCommand));
@@ -335,7 +332,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				Configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
-		if (!(Globals.isGlobalReadOnly())) {
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecuteCommand.addActionListener((ActionEvent actionEvent) -> {
 				String text = getInputField().getText() + "\n";
 				if (terminal != null) {
@@ -389,7 +386,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	}
 
-	public void removeAutocompleteListener() {
+	private void removeAutocompleteListener() {
 		if (autoComplete != null) {
 			jTextFieldCommand.getDocument().removeDocumentListener(autoComplete);
 		}
@@ -458,7 +455,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.revalidate();
 	}
 
-	public void changeEchoChar(char c) {
+	private void changeEchoChar(char c) {
 
 		Logging.debug(this, "changeEchoChar char " + c);
 		((JPasswordField) jTextFieldCommand).setEchoChar(c);

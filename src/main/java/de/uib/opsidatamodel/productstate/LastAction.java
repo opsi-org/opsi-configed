@@ -8,12 +8,14 @@ package de.uib.opsidatamodel.productstate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.Globals;
 
-public class LastAction {
+public final class LastAction {
 	public static final String KEY = "lastAction";
 
 	// conflicting entries from several clients
@@ -36,20 +38,14 @@ public class LastAction {
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
-	private static Map<String, String> label2displayLabel;
-	private static Map<String, String> displayLabel2label;
 
-	private static List<Integer> states;
+	private static Set<Integer> states;
 	private static List<String> labels;
 
 	// instance variable
 	private int state = INVALID;
 
-	// constructor
-	public LastAction() {
-	}
-
-	public LastAction(int t) {
+	private LastAction(int t) {
 		if (existsState(t)) {
 			state = t;
 		} else {
@@ -62,7 +58,7 @@ public class LastAction {
 			return;
 		}
 
-		states = new ArrayList<>();
+		states = new HashSet<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -109,45 +105,15 @@ public class LastAction {
 		label2state.put("always", ALWAYS);
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
-
-		label2displayLabel = new HashMap<>();
-		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		label2displayLabel.put("not_available", "not_available");
-		label2displayLabel.put("none", "none");
-		label2displayLabel.put("setup", "setup");
-		label2displayLabel.put("update", "update");
-		label2displayLabel.put("uninstall", "uninstall");
-		label2displayLabel.put("always", "always");
-		label2displayLabel.put("once", "once");
-		label2displayLabel.put("custom", "custom");
-
-		displayLabel2label = new HashMap<>();
-		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		displayLabel2label.put("not_available", "not_available");
-		displayLabel2label.put("none", "none");
-		displayLabel2label.put("setup", "setup");
-		displayLabel2label.put("update", "update");
-		displayLabel2label.put("uninstall", "uninstall");
-		displayLabel2label.put("always", "always");
-		displayLabel2label.put("once", "once");
-		displayLabel2label.put("custom", "custom");
 	}
 
-	public static Map<String, String> getLabel2DisplayLabel() {
-		checkCollections();
-
-		return label2displayLabel;
-	}
-
-	public static boolean existsState(int state) {
+	private static boolean existsState(int state) {
 		checkCollections();
 
 		return states.contains(state);
 	}
 
-	public static boolean existsLabel(String label) {
+	private static boolean existsLabel(String label) {
 		checkCollections();
 
 		return labels.contains(label);
@@ -169,7 +135,7 @@ public class LastAction {
 		return labels;
 	}
 
-	public static Integer getVal(String label) {
+	private static Integer getVal(String label) {
 		checkCollections();
 
 		if (label == null || label.isEmpty()) {
@@ -183,30 +149,15 @@ public class LastAction {
 		return label2state.get(label);
 	}
 
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return label2displayLabel.get(getLabel(state));
-	}
-
 	// instance methods
 
 	public int getVal() {
 		return state;
 	}
 
-	public String getString() {
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
-	}
-
-	// getting instances
-	public static LastAction produceFromDisplayLabel(String display) {
-		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static LastAction produceFromLabel(String label) {

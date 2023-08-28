@@ -21,9 +21,9 @@ import java.util.TreeSet;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
@@ -49,6 +49,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import utils.Utils;
 
 public class LicenseDisplayer {
 	@FXML
@@ -69,14 +70,9 @@ public class LicenseDisplayer {
 	private Stage stage;
 
 	public void loadData() {
-		message = "";
-		showInfo();
-
 		StringBuilder mess = new StringBuilder();
-
 		mess.append(showLicenceContractWarnings());
 		mess.append(calculateVariantLicencepools());
-
 		message = mess.toString();
 		showInfo();
 	}
@@ -94,7 +90,7 @@ public class LicenseDisplayer {
 		Scene scene = new Scene(root);
 		stage = new Stage();
 
-		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
+		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Utils.getMainIcon()), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
 
@@ -104,7 +100,9 @@ public class LicenseDisplayer {
 
 		Platform.runLater(() -> {
 			loadData();
-			styleAccordingToSelectedTheme();
+			if (Main.THEMES) {
+				styleAccordingToSelectedTheme();
+			}
 		});
 	}
 
@@ -128,16 +126,12 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
-
 		stage.show();
 		loadData();
 	}
 
 	private void centerAndShowStage() {
-
-		// center stage on mainframe after show()-call to have sizes of the stage
 		Rectangle mainRectangle = ConfigedMain.getMainFrame().getBounds();
-
 		stage.setX(mainRectangle.getX() + mainRectangle.getWidth() / 2 - stage.getWidth() / 2);
 		stage.setY(mainRectangle.getY() + mainRectangle.getHeight() / 2 - stage.getHeight() / 2);
 	}
@@ -203,7 +197,6 @@ public class LicenseDisplayer {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
 				0, new int[] {}, (TableModelListener) null, updateCollection) {
-
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -214,9 +207,7 @@ public class LicenseDisplayer {
 
 				for (int i = 0; i < getRowCount(); i++) {
 					String swName = (String) getValueAt(i, 0);
-
 					if (checkExistNamesWithVariantLicencepools(swName)) {
-
 						namesWithVariantPools.add(swName);
 						foundVariantLicencepools++;
 					}
@@ -252,9 +243,7 @@ public class LicenseDisplayer {
 	private Set<String> getRangeSWxLicencepool(String swName) {
 		// nearly done in produceModelSWxLicencepool, but we collect the range of the
 		// model-map
-
 		Set<String> range = new HashSet<>();
-
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
@@ -264,13 +253,11 @@ public class LicenseDisplayer {
 				range.add(licpool);
 			}
 		}
-
 		return range;
 	}
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
 		Set<String> range = getRangeSWxLicencepool(name);
-
 		if (range.size() > 1) {
 			Logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
 			return true;

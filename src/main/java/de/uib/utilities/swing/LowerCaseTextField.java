@@ -15,14 +15,6 @@ import javax.swing.text.PlainDocument;
 public class LowerCaseTextField extends JTextField {
 	// from apidoc
 
-	public LowerCaseTextField() {
-		super();
-	}
-
-	public LowerCaseTextField(String s) {
-		super(s);
-	}
-
 	@Override
 	protected Document createDefaultModel() {
 		return new LowerCaseDocument();

@@ -23,6 +23,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class JTextHideField extends JPanel {
 	private JPasswordField invisibleField;
@@ -31,15 +32,11 @@ public class JTextHideField extends JPanel {
 	private boolean hiddenMode;
 	private boolean multiValue;
 
-	private static class FixedDocument extends PlainDocument {
+	private static final class FixedDocument extends PlainDocument {
 
 		private String fixed = "xxx";
 
-		FixedDocument() {
-			super();
-		}
-
-		void setFixed(String s) {
+		private void setFixed(String s) {
 			fixed = s;
 		}
 
@@ -70,7 +67,7 @@ public class JTextHideField extends JPanel {
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);
 
-		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
+		button = new JButton(Utils.createImageIcon("images/eye_blue_open.png", "show"));
 		button.addActionListener((ActionEvent actionEvent) -> {
 			if (!multiValue) {
 				toggleHidden();
@@ -101,7 +98,7 @@ public class JTextHideField extends JPanel {
 
 	}
 
-	public void setHidden() {
+	private void setHidden() {
 		if (!hiddenMode) {
 			toggleHidden();
 		}
@@ -123,7 +120,7 @@ public class JTextHideField extends JPanel {
 		}
 	}
 
-	public void toggleHidden() {
+	private void toggleHidden() {
 		hiddenMode = !hiddenMode;
 		visibleField.setVisible(!hiddenMode);
 		invisibleField.setVisible(hiddenMode);

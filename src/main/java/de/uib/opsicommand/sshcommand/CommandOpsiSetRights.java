@@ -47,7 +47,8 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 			d = d + "/";
 		}
 
-		Logging.info(this, "CommandOpsiSetRights dir " + dir);
+		Logging.info(this.getClass(), "CommandOpsiSetRights dir " + dir);
+
 		sshCommand.add(this);
 		sshCommandOriginal.add(this);
 	}

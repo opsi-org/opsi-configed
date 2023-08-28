@@ -11,18 +11,18 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.util.Map;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 import de.uib.utilities.swing.SecondaryFrame;
-import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
 
 public class LicencesFrame extends SecondaryFrame {
 
 	private TabbedPaneX panel;
 
-	public LicencesFrame(TabController controller) {
+	public LicencesFrame(ConfigedMain configedMain) {
 		super();
-		panel = new TabbedPaneX(controller);
+		panel = new TabbedPaneX(configedMain);
 		init();
 	}
 
@@ -45,21 +45,10 @@ public class LicencesFrame extends SecondaryFrame {
 		setExtendedState(Frame.NORMAL);
 	}
 
-	public TabbedPaneX getMainPanel() {
-		return panel;
-	}
-
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
 	public void addTab(LicencesTabStatus s, String title, Component c) {
 		panel.addTab(s, title, c);
-	}
-
-	/**
-	 * removes a tab
-	 */
-	public void removeTab(LicencesTabStatus s) {
-		panel.removeTab(s);
 	}
 }

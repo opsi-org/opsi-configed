@@ -19,18 +19,15 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
-
 	private ConfigedMain main;
-
-	private VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
 
 		if (!Main.THEMES) {
 			super.setOpaque(true);
-			super.setForeground(Globals.lightBlack);
-			super.setTextSelectionColor(Globals.lightBlack);
+			super.setForeground(Globals.LIGHT_BLACK);
+			super.setTextSelectionColor(Globals.LIGHT_BLACK);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
@@ -39,7 +36,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (!Main.THEMES) {
@@ -61,23 +57,22 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			if (!node.getAllowsChildren()) {
 				// client
-
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFontStandardBold);
+						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}
 
 					setIcon(node.getLeafIcon());
 				} else {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFont);
+						setFont(Globals.DEFAULT_FONT);
 					}
 					setIcon(node.getNonSelectedLeafIcon());
 				}
 			} else {
 				// group
 
-				String visualText = modifier.modify(stringValue);
+				String visualText = modify(stringValue);
 
 				setText(visualText);
 
@@ -90,18 +85,17 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFontStandardBold);
+						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}
 				} else {
 					if (!Main.FONT) {
-						setFont(Globals.defaultFont);
+						setFont(Globals.DEFAULT_FONT);
 					}
 				}
 			}
 
-			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+			if (tree.getLeadSelectionPath() != null && node.equals(tree.getLeadSelectionPath().getLastPathComponent())
 					&& tree.hasFocus()) {
-
 				setFont(getFont()
 						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
 			}
@@ -110,5 +104,23 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		}
 
 		return this;
+	}
+
+	private static String modify(final String in) {
+		if (in == null) {
+			return null;
+		}
+
+		int l = in.length();
+		int i = l - 1;
+		while (i > 0 && in.charAt(i) == '_') {
+			i--;
+		}
+
+		if (i == l - 1) {
+			return in;
+		}
+
+		return in.substring(0, i + 1);
 	}
 }

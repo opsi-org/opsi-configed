@@ -12,16 +12,11 @@ import java.awt.Component;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class XCellEditor extends DefaultCellEditor {
-
-	public XCellEditor(JTextField textfield) {
-		super(textfield);
-	}
 
 	public XCellEditor(JComboBox<?> combo) {
 		super(combo);
@@ -36,10 +31,10 @@ public class XCellEditor extends DefaultCellEditor {
 		Color foreground;
 
 		if (isSelected) {
-			background = Globals.nimbusSelectionBackground;
+			background = Globals.NIMBUS_SELECTION_BACKGROUND;
 			foreground = Globals.X_CELL_EDITOR_SELECTED_FOREGROUND;
 		} else {
-			background = Globals.nimbusBackground;
+			background = Globals.NIMBUS_BACKGROUND;
 			foreground = Globals.X_CELL_EDITOR_NOT_SELECTED_FOREGROUND;
 		}
 

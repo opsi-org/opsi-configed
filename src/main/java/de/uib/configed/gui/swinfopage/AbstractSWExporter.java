@@ -12,12 +12,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
+import de.uib.configed.ErrorCode;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
@@ -28,6 +29,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import utils.Utils;
 
 /**
  * Abstract class to manage batch export of SWAudit data, subclasses implement
@@ -66,7 +68,7 @@ public abstract class AbstractSWExporter {
 
 	public void addMissingArgs() {
 		if (server == null) {
-			server = Globals.getCLIparam("Host (default: localhost): ", false);
+			server = Utils.getCLIParam("Host (default: localhost): ");
 		}
 
 		if (server.isEmpty()) {
@@ -74,7 +76,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (user == null) {
-			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
+			user = Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : ");
 		}
 
 		if (user.isEmpty()) {
@@ -82,22 +84,22 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (password == null) {
-			password = Globals.getCLIparam("Password: ", true);
+			password = Utils.getCLIPasswordParam("Password: ");
 		}
 
 		if (clientsFile == null) {
-			clientsFile = Globals.getCLIparam("File with client names: ", false);
+			clientsFile = Utils.getCLIParam("File with client names: ");
 		}
 
 		if (clientsFile.isEmpty()) {
-			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
+			finish(ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
 		File userHome = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		String userHomeS = userHome.toString();
 
 		if (outDir == null) {
-			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
+			outDir = Utils.getCLIParam("Export directory (default: " + userHomeS + "): ");
 		}
 
 		if (outDir.isEmpty()) {
@@ -115,11 +117,11 @@ public abstract class AbstractSWExporter {
 		Messages.setLocale("en");
 		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
 		if (persistenceController == null) {
-			finish(de.uib.configed.ErrorCode.INITIALIZATION_ERROR);
-		}
-
-		if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			finish(de.uib.configed.ErrorCode.CONNECTION_ERROR);
+			finish(ErrorCode.INITIALIZATION_ERROR);
+		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
+			finish(ErrorCode.CONNECTION_ERROR);
+		} else {
+			// Continue, Configed won't be closed
 		}
 
 		Logging.info(this, "starting");
@@ -147,14 +149,13 @@ public abstract class AbstractSWExporter {
 
 	}
 
-	public void finish(int exitcode) {
-		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
+	private static void finish(int exitcode) {
+		Logging.error(ErrorCode.tell(exitcode));
 		Main.endApp(exitcode);
 	}
 
-	public void setWriteToFile(String path) {
+	private void setWriteToFile(String path) {
 		exportFilename = path;
-
 	}
 
 	public void setHost(String hostId) {
@@ -167,7 +168,6 @@ public abstract class AbstractSWExporter {
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
-
 	}
 
 	private void initModel(String hostId) {
@@ -191,8 +191,10 @@ public abstract class AbstractSWExporter {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
+						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController
-								.retrieveSoftwareAuditData(theHost);
+								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
@@ -200,7 +202,8 @@ public abstract class AbstractSWExporter {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(theHost);
+							scanInfo = "Scan " + persistenceController
+									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}
 
 						return tableData;
@@ -212,11 +215,10 @@ public abstract class AbstractSWExporter {
 
 	protected abstract String getExtension();
 
-	public void updateModel() {
+	private void updateModel() {
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 	}
-
 }

@@ -20,7 +20,7 @@ import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class JMenuItemFormatted extends JMenuItem {
-	private Font specialFont = Globals.defaultFontBig;
+	private Font specialFont = Globals.DEFAULT_FONT_BIG;
 
 	public JMenuItemFormatted() {
 		super();

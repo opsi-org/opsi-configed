@@ -37,7 +37,6 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		initComponents();
 		initLayout();
 		this.close();
-		this.close();
 		instance = this;
 	}
 
@@ -62,21 +61,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 
 	}
 
-	public void setLabelNeedAuthenticationSize(Dimension size) {
-		jLabelNeedAuthentication.setSize(size);
-		jLabelNeedAuthentication.setPreferredSize(size);
-	}
-
-	public void setLabelNeedAuthenticationSize(int width, int height) {
-		setLabelNeedAuthenticationSize(new Dimension(width, height));
-	}
-
 	public void setLabelSizes(int width, int height) {
 		setLabelSizes(new Dimension(width, height));
-		setLabelSizes(new Dimension(width, height));
 	}
 
-	public void setLabelSizes(Dimension size) {
+	private void setLabelSizes(Dimension size) {
 		jLabeluser.setPreferredSize(size);
 		jLabelPassword.setPreferredSize(size);
 	}

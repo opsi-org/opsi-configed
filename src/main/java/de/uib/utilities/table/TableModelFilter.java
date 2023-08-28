@@ -25,7 +25,7 @@ public class TableModelFilter {
 		this.inverted = inverted;
 		this.inUse = used;
 
-		Logging.info(this, "TableModelFilter constructed : " + this);
+		Logging.info(this.getClass(), "TableModelFilter constructed : " + this);
 	}
 
 	public TableModelFilter() {
@@ -42,10 +42,6 @@ public class TableModelFilter {
 
 	public void setInUse(boolean b) {
 		inUse = b;
-	}
-
-	public void setInverted(boolean b) {
-		inverted = b;
 	}
 
 	public boolean test(List<Object> row) {

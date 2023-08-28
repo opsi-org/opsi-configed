@@ -18,7 +18,6 @@ public class RetrievedMap extends HashMap<String, Object> {
 	public RetrievedMap(Map<String, Object> retrieved) {
 		super();
 		this.retrieved = retrieved;
-		classnames = new HashMap<>();
 		build();
 	}
 
@@ -31,7 +30,6 @@ public class RetrievedMap extends HashMap<String, Object> {
 		while (iter.hasNext()) {
 			String key = iter.next();
 			Object value = retrieved.get(key);
-			classnames.put(key, value.getClass().getName());
 			put(key, value);
 		}
 	}
@@ -43,9 +41,4 @@ public class RetrievedMap extends HashMap<String, Object> {
 	public void rebuild() {
 		build();
 	}
-
-	public Map<String, String> getClassnames() {
-		return classnames;
-	}
-
 }

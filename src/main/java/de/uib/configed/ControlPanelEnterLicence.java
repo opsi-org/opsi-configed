@@ -28,6 +28,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 // tab new licence
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
@@ -86,20 +87,24 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	public final void init() {
 		updateCollection = new ArrayList<TableEditItem>();
 
+		initPanels();
+		initPopupMenu();
+		// special treatment of columns
+		initTreatmentOfColumns();
+		// updates
+		setPanelLicenceContractsUpdateController();
+	}
+
+	private void initPanels() {
 		List<String> columnNames;
-		List<String> classNames;
 
 		// panelKeys
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
 				new int[] { 0, 1 }, thePanel.panelKeys, updateCollection);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
@@ -112,32 +117,14 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencekeys.setEditableColumns(new int[] { 2 });
 		thePanel.panelKeys.setEmphasizedColumns(new int[] { 2 });
 
-		thePanel.panelKeys.setUpdateController(
-				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
-					@Override
-					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.editRelationSoftwareL2LPool(
-								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
-								(String) rowmap.get("licenseKey"));
-					}
-
-					@Override
-					public boolean sendDelete(Map<String, Object> rowmap) {
-						modelLicencekeys.requestReload();
-						return persistenceController.deleteRelationSoftwareL2LPool(
-								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
-					}
-				}, updateCollection));
+		setPanelKeysUpdateController();
 
 		// panelLicencepools
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, classNames, 0);
+				columnNames, 0);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, configedMain.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
@@ -156,15 +143,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames,
-				classNames, 0);
+		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames, 0);
 		modelLicencecontracts = new GenTableModel(updateItemFactoryLicencecontracts,
 				configedMain.licenceContractsTableProvider, 0, thePanel.panelLicencecontracts, updateCollection);
 		updateItemFactoryLicencecontracts.setSource(modelLicencecontracts);
@@ -177,14 +156,18 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 		thePanel.panelLicencecontracts.setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
 
+	}
+
+	private void initPopupMenu() {
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
 
 		thePanel.panelLicencecontracts.addPopupItem(menuItemAddContract);
+	}
 
-		// special treatment of columns
+	private void initTreatmentOfColumns() {
 		TableColumn col;
 
 		col = thePanel.panelLicencecontracts.getColumnModel().getColumn(2);
@@ -227,8 +210,28 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);
+	}
 
-		// updates
+	private void setPanelKeysUpdateController() {
+		thePanel.panelKeys.setUpdateController(
+				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
+					public String sendUpdate(Map<String, Object> rowmap) {
+						return persistenceController.editRelationSoftwareL2LPool(
+								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
+								(String) rowmap.get("licenseKey"));
+					}
+
+					@Override
+					public boolean sendDelete(Map<String, Object> rowmap) {
+						modelLicencekeys.requestReload();
+						return persistenceController.deleteRelationSoftwareL2LPool(
+								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
+					}
+				}, updateCollection));
+	}
+
+	private void setPanelLicenceContractsUpdateController() {
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
 					@Override
@@ -245,14 +248,13 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 						return persistenceController.deleteLicenceContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));
-
 	}
 
 	private void addContract() {
 		Object[] a = new Object[6];
-		a[0] = "c_" + Globals.getSeconds();
+		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
-		a[2] = Globals.getDate();
+		a[2] = Utils.getDate();
 		a[3] = Globals.ZERODATE;
 		a[4] = Globals.ZERODATE;
 		a[5] = "";

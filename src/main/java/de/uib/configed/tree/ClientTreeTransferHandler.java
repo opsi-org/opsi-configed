@@ -23,7 +23,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Globals;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
@@ -59,7 +59,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
 
-		if (Globals.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -81,8 +81,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			Logging.warning(this, " unsupported data flavor " + ex);
 		} catch (IOException ex) {
 			Logging.warning(this, " transferable io exception " + ex);
-		} catch (Exception ex) {
-			Logging.warning(this, "canImport " + ex);
 		}
 
 		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
@@ -333,22 +331,17 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			String importID = null;
 			String sourceParentID = null;
-			try {
-				// if values not got from transferable, the following reduces
 
-				if (value.split("\t").length > 1) {
-					// probably an import from the JTable
+			// if values not got from transferable, the following reduces
+			if (value.split("\t").length > 1) {
+				// probably an import from the JTable
 
-					// we assume a table source with first fieldvalue being a clientID
-					importID = value.split("\t")[0];
-				} else {
-					String[] parts = value.split(",");
+				// we assume a table source with first fieldvalue being a clientID
+				importID = value.split("\t")[0];
+			} else {
+				String[] parts = value.split(",");
 
-					importID = parts[parts.length - 1];
-
-				}
-			} catch (Exception ex) {
-				Logging.info(this, " no tree parts got " + ex);
+				importID = parts[parts.length - 1];
 			}
 
 			Logging.debug(this, "importData " + i + " values[i] " + importID);

@@ -13,7 +13,6 @@ import de.uib.utilities.logging.Logging;
 public class OpsiSoftwareEqualsOperation extends OpsiDataStringEqualsOperation {
 	public OpsiSoftwareEqualsOperation(String key, String data, AbstractSelectElement element) {
 		super(OpsiDataClient.SOFTWARE_MAP, key, data, element);
-		Logging.debug(this, "created  for key, data, element " + key + ", " + data + ", " + element);
+		Logging.debug(this.getClass(), "created  for key, data, element " + key + ", " + data + ", " + element);
 	}
-
 }

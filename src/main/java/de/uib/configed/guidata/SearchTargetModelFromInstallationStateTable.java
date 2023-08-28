@@ -17,8 +17,6 @@ import de.uib.utilities.table.gui.SearchTargetModel;
 
 public class SearchTargetModelFromInstallationStateTable implements SearchTargetModel {
 
-	public static final String FILTER_BY_SELECTION = "filterBySelection";
-
 	private JTable table;
 
 	private int[] viewRowfilter = new int[0];
@@ -27,14 +25,10 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	private boolean filtered;
 
-	public SearchTargetModelFromInstallationStateTable() {
-		this(null, null);
-	}
-
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelGroupedProductSettings panelProductSettings) {
 
 		this.table = table;
-		Logging.info(this, "table null? " + (table == null));
+		Logging.info(this.getClass(), "table null? " + (table == null));
 
 		this.panelProductSettings = panelProductSettings;
 	}
@@ -188,5 +182,4 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public int getListSelectionMode() {
 		return table.getSelectionModel().getSelectionMode();
 	}
-
 }

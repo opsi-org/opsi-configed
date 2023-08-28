@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.Globals;
+import utils.Utils;
 
 /**
  * a button-like panel
@@ -67,26 +67,22 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	}
 
-	public IconAsButton(String desc, String imageRelPath) {
-		this(desc, imageRelPath, imageRelPath, imageRelPath, imageRelPath);
-	}
-
 	private void setDisplay(String desc, String inactive, String over, String active, String disabled) {
 		description = desc;
 		tooltipActive = desc;
 		tooltipInactive = desc;
 
-		iconInactive = Globals.createImageIcon(inactive, description);
+		iconInactive = Utils.createImageIcon(inactive, description);
 		if (active != null) {
-			iconActive = Globals.createImageIcon(active, description);
+			iconActive = Utils.createImageIcon(active, description);
 		}
 
 		if (over != null) {
-			iconOver = Globals.createImageIcon(over, description);
+			iconOver = Utils.createImageIcon(over, description);
 		}
 
 		if (disabled != null) {
-			iconDisabled = Globals.createImageIcon(disabled, description);
+			iconDisabled = Utils.createImageIcon(disabled, description);
 		}
 
 		if (label != null) {
@@ -100,11 +96,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 		label.setToolTipText(s);
 		this.tooltipActive = s;
 		this.tooltipInactive = s;
-	}
-
-	public void setToolTips(String tipActive, String tipInactive) {
-		this.tooltipActive = tipActive;
-		this.tooltipInactive = tipInactive;
 	}
 
 	@Override
@@ -177,7 +168,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
-	public void fireActionPerformed(ActionEvent e) {
+	private void fireActionPerformed(ActionEvent e) {
 		for (int i = 0; i < actionListeners.size(); i++) {
 			(actionListeners.get(i)).actionPerformed(e);
 		}

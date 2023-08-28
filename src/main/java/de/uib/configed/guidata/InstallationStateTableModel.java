@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,14 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
+import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -58,7 +63,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private static final String FAILED_DISPLAY_STRING = "failed";
 	private static final String SUCCESS_DISPLAY_STRING = "success";
 
-	public static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
+	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
 		defaultDisplayValues.add(NONE_DISPLAY_STRING);
 		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
@@ -98,7 +103,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private final String[] selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
-	protected NavigableSet<String> tsProductNames;
+	private NavigableSet<String> tsProductNames;
 	private List<String> productNamesInDeliveryOrder;
 
 	private Set<String> missingProducts = new HashSet<>();
@@ -116,11 +121,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this, "creating an InstallationStateTableModel ");
+		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
-			Logging.info(this, " statesAndActions null ");
+			Logging.info(this.getClass(), " statesAndActions null ");
 		} else {
-			Logging.info(this, " statesAndActions " + statesAndActions.size());
+			Logging.info(this.getClass(), " statesAndActions " + statesAndActions.size());
 		}
 
 		this.main = main;
@@ -153,17 +158,17 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		tsProductNames.addAll(productNamesInDeliveryOrder);
 		productsV = new ArrayList<>(tsProductNames);
 
-		Logging.debug(this, "tsProductNames " + tsProductNames);
+		Logging.debug(this.getClass(), "tsProductNames " + tsProductNames);
 
 		initalizeProductStates(statesAndActions);
 	}
 
 	// collects titles for the columns prepared in this class
-	public static void restartColumnDict() {
+	public static synchronized void restartColumnDict() {
 		columnDict = null;
 	}
 
-	public static String getColumnTitle(String column) {
+	public static synchronized String getColumnTitle(String column) {
 		if (columnDict == null) {
 			columnDict = new HashMap<>();
 			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));
@@ -174,7 +179,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
-			columnDict.put("installationInfo", Configed.getResourceValue("InstallationStateTableModel.report"));
+			columnDict.put(ProductState.KEY_INSTALLATION_INFO,
+					Configed.getResourceValue("InstallationStateTableModel.report"));
 			// combines the following three
 			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
 					Configed.getResourceValue("InstallationStateTableModel.actionProgress"));
@@ -225,7 +231,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, String productId, Map<String, String> stateAndAction) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -233,21 +239,46 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// Don't apply update if something has been changed on the product on the client by the user
-		if (collectChangedStates.containsKey(clientId) && collectChangedStates.get(clientId).containsKey(productId)) {
+		if (collectChangedStates.containsKey(clientId)
+				&& collectChangedStates.get(clientId).containsKey(productIds.first())) {
 			return;
 		}
 
 		// add update to list
-		allClientsProductStates.get(clientId).put(productId, stateAndAction);
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId);
+		for (Map<String, Object> productInfo : productInfos) {
+			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+					POJOReMapper.remap(productInfo, new TypeReference<>() {
+					}));
+		}
 
 		// TODO refactoring needed in these methods...
 		// It seems to me that too many unnecessary operations are made in these methods
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();
 
-		int row = getRowFromProductID(productId);
+		int firstRow = getRowFromProductID(productIds.first());
+		int lastRow = getRowFromProductID(productIds.last());
 
-		fireTableRowsUpdated(row, row);
+		fireTableRowsUpdated(firstRow, lastRow);
+	}
+
+	@Override
+	public synchronized void updateTable(String clientId) {
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId);
+		if (!productInfos.isEmpty()) {
+			for (Map<String, Object> productInfo : productInfos) {
+				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+						POJOReMapper.remap(productInfo, new TypeReference<>() {
+						}));
+			}
+		} else {
+			allClientsProductStates.get(clientId).clear();
+		}
+
+		produceVisualStatesFromExistingEntries();
+		completeVisualStatesByDefaults();
+		fireTableDataChanged();
 	}
 
 	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {
@@ -267,7 +298,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		// products/states/actionrequests exist
 
 		for (Entry<String, List<Map<String, String>>> client : clientAllProductRows.entrySet()) {
-			Map<String, Map<String, String>> productRows = new HashMap<>();
+			Map<String, Map<String, String>> productRows = new LinkedHashMap<>();
 
 			allClientsProductStates.put(client.getKey(), productRows);
 			// for each client we build the productstates map
@@ -285,7 +316,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private void produceVisualStatesFromExistingEntries() {
-
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
 			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
@@ -293,6 +323,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
+			int position = 0;
 			for (String productId : client.getValue().keySet()) {
 				Map<String, String> stateAndAction = client.getValue().get(productId);
 
@@ -316,17 +347,16 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				}
 
 				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
-
 				stateAndAction.put(ProductState.KEY_ACTION_SEQUENCE, priority);
+				position++;
+				stateAndAction.put(ProductState.KEY_POSITION, String.valueOf(position));
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-
 					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
 						Logging.debug(this, "before mixtovisualstate product " + productId + " value "
 								+ stateAndAction.get(colKey));
 					}
-
 					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 				}
 
@@ -377,10 +407,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private static String mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
 		String oldValue = visualStates.get(productId);
-
 		String resultValue = oldValue;
 		if (oldValue == null) {
-
 			resultValue = mixinValue;
 			visualStates.put(productId, resultValue);
 		} else {
@@ -389,7 +417,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				visualStates.put(productId, resultValue);
 			}
 		}
-
 		return resultValue;
 	}
 
@@ -398,7 +425,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return false;
 		}
 
-		if (Globals.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -855,12 +882,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 
-		Set<String> aSetOfClients = product2setOfClientsWithNewAction.get(product);
-
-		if (aSetOfClients == null) {
-			aSetOfClients = new HashSet<>();
-			product2setOfClientsWithNewAction.put(product, aSetOfClients);
-		}
+		Set<String> aSetOfClients = product2setOfClientsWithNewAction.computeIfAbsent(product, s -> new HashSet<>());
 
 		aSetOfClients.add(clientId);
 
@@ -1145,7 +1167,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// continues to work
 	@Override
 	public Object getValueAt(int row, int displayCol) {
-		return retrieveValueAt(row, displayCol);
+		Object value = retrieveValueAt(row, displayCol);
+		return value == null ? "" : value;
 	}
 
 	private Object retrieveValueAt(int row, int displayCol) {
@@ -1197,7 +1220,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			return productNamesInDeliveryOrder.indexOf(actualProduct);
+			return ServerFacade.isOpsi43() ? combinedVisualValues.get(ProductState.KEY_POSITION).get(actualProduct)
+					: productNamesInDeliveryOrder.indexOf(actualProduct);
 
 		case 12:
 			return actualProductVersion();
@@ -1313,6 +1337,5 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 			main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 		}
-
 	}
 }

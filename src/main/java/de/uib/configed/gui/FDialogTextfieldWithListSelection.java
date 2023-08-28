@@ -19,15 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener {
+public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 	private JList<String> theList;
 	private JScrollPane scrollpaneForList;
 	private JTextField theField;
@@ -56,8 +54,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		if (defs.getListData() != null && !defs.getListData().isEmpty()) {
 			theList.setSelectedIndex(0);
 		}
-
-		theList.addListSelectionListener(this);
 	}
 
 	@Override
@@ -141,7 +137,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		}
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		theList.addListSelectionListener(this);
 		theList.setCellRenderer(new StandardListCellRenderer());
 
 		theField = new JTextField();
@@ -196,10 +191,4 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	public String getSelectedListelement() {
 		return selectedListElement;
 	}
-
-	// interface ListSelectionListener
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		/* Not needed */}
-
 }

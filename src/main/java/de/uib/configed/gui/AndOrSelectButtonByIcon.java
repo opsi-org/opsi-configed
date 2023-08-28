@@ -14,13 +14,13 @@ import de.uib.utilities.logging.Logging;
 /**
  * Select AND or OR Created for the ClientSelectionDialog.
  */
-public class AndOrSelectButtonByIcon extends IconAsButton {
+public class AndOrSelectButtonByIcon extends IconAsButton implements ActionListener {
 
 	public AndOrSelectButtonByIcon() {
 		super("and/or", "images/boolean_and_or_disabled.png", "images/boolean_and_or_over.png",
 				"images/boolean_and_or.png", null);
 
-		super.addActionListener(new ButtonActionListener());
+		super.addActionListener(this);
 	}
 
 	public boolean isAndSelected() {
@@ -41,12 +41,10 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 		setActivated(true);
 	}
 
-	private class ButtonActionListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Logging.debug(this, "actionPerformed  " + e + " activated " + activated);
-			setActivated(!activated);
-
-		}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Logging.debug(this, "actionPerformed  " + e + " activated " + activated);
+		setActivated(!activated);
 	}
+
 }

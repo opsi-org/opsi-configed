@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
+import de.uib.Main;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.DataObserver;
@@ -29,6 +30,7 @@ import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -159,11 +161,13 @@ public class MainView implements View {
 	private JFXPanel fxPanel;
 	private Scene scene;
 	private DataObserver observer;
+	private ChangeListener<String> depotSelectionListener;
 
 	private DepotInfo depotInfo;
 
 	private LicenseDisplayer licenseDisplayer;
 
+	@SuppressWarnings("java:S4968")
 	public MainView(JFXPanel fxPanel) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
 				Messages.getResource());
@@ -185,6 +189,9 @@ public class MainView implements View {
 		depotInfo = new DepotInfo(this);
 		observer.subscribe(DATA_CHANGED_SERVICE, depotInfo);
 		observer.subscribe(NEW_DEPOT_SELECTED_SERVICE, depotInfo);
+
+		depotSelectionListener = (ObservableValue<? extends String> observable, String oldValue,
+				String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue);
 	}
 
 	public void init() {
@@ -243,9 +250,15 @@ public class MainView implements View {
 
 			return null;
 		}
+
+		private void setBlurriness(int iterations) {
+			BoxBlur blurriness = new BoxBlur();
+			blurriness.setIterations(iterations);
+			dashboardSceneVBox.setEffect(blurriness);
+		}
 	}
 
-	@SuppressWarnings("squid:S4968")
+	@SuppressWarnings("java:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
@@ -267,24 +280,19 @@ public class MainView implements View {
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
 		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
 
-		selectedDepotComboBox.getSelectionModel().selectedItemProperty()
-				.addListener((ObservableValue<? extends String> observableValue, String oldValue,
-						String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));
+		selectedDepotComboBox.getSelectionModel().selectedItemProperty().removeListener(depotSelectionListener);
+		selectedDepotComboBox.getSelectionModel().selectedItemProperty().addListener(depotSelectionListener);
 	}
 
 	@Override
 	public void display() {
 		Platform.runLater(() -> {
 			fxPanel.setScene(scene);
-			styleAccordingToSelectedTheme();
+			if (Main.THEMES) {
+				styleAccordingToSelectedTheme();
+			}
 		});
 		loadData();
-	}
-
-	public void setBlurriness(int iterations) {
-		BoxBlur blurriness = new BoxBlur();
-		blurriness.setIterations(iterations);
-		dashboardSceneVBox.setEffect(blurriness);
 	}
 
 	private void displayLicenseInfo() {

@@ -18,12 +18,13 @@ import javax.swing.SwingWorker;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /***
 if more then one command have to be executed (e.g. also a set-rights) use SSHConnectExec. 
@@ -34,6 +35,8 @@ This class those the Right SwingWorker to execute it.
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectSCP extends SSHConnectExec {
+	public static final String SEPARATING_LINE = "-".repeat(147);
+
 	private SSHConnectionExecDialog outputDialog;
 
 	public SSHConnectSCP(String commandInfo) {
@@ -161,7 +164,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				interruptChannel(channel);
 				disconnect();
 				interruptChannel = true;
-				Globals.threadSleep(this, 50);
+				Utils.threadSleep(this, 50);
 			}
 			publishInfo(SEPARATING_LINE);
 		}
@@ -195,7 +198,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				publish("Set target filename … " + command.getTargetFilename());
 				publish("Set overwrite mode … " + command.isOverwriteMode());
 				publish(" ");
-				Globals.threadSleep(this, 2000);
+				Utils.threadSleep(this, 2000);
 
 				publish("Copying finish ");
 				channel.disconnect();
@@ -230,8 +233,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 				Logging.warning(this, "SSH IOException", ex);
 				foundError = true;
 				publishError(ex.toString());
-			} catch (Exception e) {
-				Logging.warning(this, "SSH Exception", e);
+			} catch (SftpException e) {
+				Logging.warning(this, "SftpException Exception", e);
 				foundError = true;
 				publishError(e.getMessage());
 				Thread.currentThread().interrupt();

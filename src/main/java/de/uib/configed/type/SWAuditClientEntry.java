@@ -8,16 +8,18 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SWAuditClientEntry {
 
@@ -48,11 +50,11 @@ public class SWAuditClientEntry {
 	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 
-	private static List<String> notFoundSoftwareIDs;
+	private static Set<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 
-	public static final List<String> KEYS = new LinkedList<>();
+	public static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(SWAuditEntry.ID);
 		KEYS.add(SWAuditEntry.NAME);
@@ -110,54 +112,28 @@ public class SWAuditClientEntry {
 			.getPersistenceController();
 
 	public SWAuditClientEntry(final Map<String, Object> m) {
-
 		data = new HashMap<>();
-		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));
+		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
 		this.software = persistenceController.getSoftwareList();
 		this.software2Number = persistenceController.getSoftware2Number();
 		produceSWid();
-		data.put(LICENCE_KEY, Globals.produceNonNull(m.get(LICENCE_KEY)));
-		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
+		data.put(LICENCE_KEY, produceNonNull(m.get(LICENCE_KEY)));
+		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
+	}
 
+	private static String produceNonNull(Object o) {
+		return o != null ? o.toString() : "";
 	}
 
 	public static String produceSWident(List<String> keys, List<String> values) {
 		// from db columns
 
-		String result = "";
-		try {
-			result = Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
-		} catch (Exception ex) {
-			Logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys + " -- " + values);
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.NAME));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.VERSION));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUB_VERSION));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.LANGUAGE));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))));
-
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE));
-			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))));
-
-		}
-
-		return result;
+		return Utils.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
+				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 	}
 
 	private void updateSoftware() {
@@ -166,7 +142,7 @@ public class SWAuditClientEntry {
 			persistenceController.installedSoftwareInformationRequestRefresh();
 			software = persistenceController.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
-			notFoundSoftwareIDs = new ArrayList<>();
+			notFoundSoftwareIDs = new HashSet<>();
 		} else {
 			Logging.warning(this, "updateSoftware: doing nothing since we just updated");
 		}
@@ -223,7 +199,7 @@ public class SWAuditClientEntry {
 			if (swId == -1) {
 				Logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null) {
-					notFoundSoftwareIDs = new ArrayList<>();
+					notFoundSoftwareIDs = new HashSet<>();
 				}
 				notFoundSoftwareIDs.add(swIdent);
 			}
@@ -233,7 +209,7 @@ public class SWAuditClientEntry {
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		return Globals.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
+		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
@@ -245,13 +221,8 @@ public class SWAuditClientEntry {
 		return data.get(SWAuditEntry.ID);
 	}
 
-	public String getLicenceKey() {
-		return data.get(data.get(LICENCE_KEY));
-	}
-
 	public String getLastModification() {
 		return lastModificationS;
-
 	}
 
 	public Integer getSWid() {
@@ -277,22 +248,8 @@ public class SWAuditClientEntry {
 		return dataMap;
 	}
 
-	public String[] getExpandedData(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<>(data);
-		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-
-		String[] result = new String[KEYS.size()];
-
-		for (int i = 0; i < KEYS.size(); i++) {
-			result[i] = dataMap.get(KEYS.get(i));
-		}
-
-		return result;
-	}
-
 	@Override
 	public String toString() {
 		return "<" + data.toString() + ", swIdent= " + swIdent + ">";
 	}
-
 }

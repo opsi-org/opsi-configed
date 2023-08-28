@@ -6,6 +6,7 @@
 
 package de.uib.utilities.table;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
@@ -26,7 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public abstract class AbstractExportTable {
 	protected JTable theTable;
@@ -53,11 +54,6 @@ public abstract class AbstractExportTable {
 		askForOverwrite = true;
 	}
 
-	public void setTableAndClassNames(JTable table, List<String> classNames) {
-		this.theTable = table;
-		this.classNames = classNames;
-	}
-
 	public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
 	}
@@ -75,7 +71,6 @@ public abstract class AbstractExportTable {
 		);
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
-
 	}
 
 	public void addMenuItemsTo(JPopupMenu popup) {
@@ -94,10 +89,6 @@ public abstract class AbstractExportTable {
 			execute(null, onlySelected);
 		});
 		return menuItem;
-	}
-
-	public void setPanelTable(PanelGenEditTable panelTable) {
-		theTable = panelTable.getTheTable();
 	}
 
 	public void setClient(String clientID) {
@@ -171,7 +162,7 @@ public abstract class AbstractExportTable {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
 			chooser.addChoosableFileFilter(exFilter);
-			chooser.setPreferredSize(Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
@@ -187,25 +178,25 @@ public abstract class AbstractExportTable {
 
 			int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				try {
-					filename = chooser.getSelectedFile().getAbsolutePath();
+				filename = chooser.getSelectedFile().getAbsolutePath();
 
-					File file = new File(filename);
+				File file = new File(filename);
 
-					if (file.isDirectory()) {
-						filename = filename + File.separator + defaultExportFilename;
-					} else {
-						if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
-							filename = filename + ".csv";
-						}
+				if (file.isDirectory()) {
+					filename = filename + File.separator + defaultExportFilename;
+				} else {
+					if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
+						filename = filename + ".csv";
 					}
+				}
 
-					Logging.debug(this, "filename " + filename);
+				Logging.debug(this, "filename " + filename);
 
-					file = new File(filename);
+				file = new File(filename);
 
+				try {
 					if (file.exists() && askForOverwrite) {
-						int option = JOptionPane.showConfirmDialog(Globals.frame1,
+						int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
 								Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 								Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
@@ -214,18 +205,13 @@ public abstract class AbstractExportTable {
 							filename = null;
 						}
 					}
-				} catch (Exception exception) {
+				} catch (HeadlessException exception) {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
 							exception);
 				}
 			}
 		} else {
-			try {
-				exportDirectory = new File(filename).getParentFile();
-			} catch (Exception e) {
-				filename = null;
-				Logging.error("Problem mit dem Verzeichnis von " + filename + " : " + e);
-			}
+			exportDirectory = new File(filename).getParentFile();
 		}
 
 		Logging.debug(this, "export to " + filename);
@@ -241,7 +227,7 @@ public abstract class AbstractExportTable {
 		File defaultFile = new File(writeToFile);
 
 		JFileChooser chooser = new JFileChooser(exportDirectory);
-		chooser.setPreferredSize(Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 
@@ -256,12 +242,9 @@ public abstract class AbstractExportTable {
 		}
 
 		if (fileName != null) {
-			try {
-				exportDirectory = new File(fileName).getParentFile();
-			} catch (Exception ex) {
-				Logging.error("directory not found for " + fileName + " : " + ex);
-			}
+			exportDirectory = new File(fileName).getParentFile();
 		}
+
 		return fileName;
 	}
 }

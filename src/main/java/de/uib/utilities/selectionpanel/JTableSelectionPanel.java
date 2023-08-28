@@ -21,10 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -50,7 +48,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -65,6 +62,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
+import utils.Utils;
 
 public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
 
@@ -99,8 +97,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private int lastCountOfSearchWords;
 
-	private NavigableMap<String, Integer> rowIndexMap;
-
 	public JTableSelectionPanel(ConfigedMain main) {
 		super();
 		this.main = main;
@@ -117,20 +113,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		table = new JTable() {
-			@Override
-			public Object getValueAt(int row, int col) {
-				try {
-					return super.getValueAt(row, col);
-				} catch (Exception ex) {
-					Logging.debug(this, "thrown exception: " + ex);
-					// after change of model (deleting of rows) the row sorter tries to rebuild
-					// itself but fails if no values are supplied
-					// we get a null pointer exception
-					return "";
-				}
-			}
-		};
+		table = new JTable();
 
 		table.setDragEnabled(true);
 		table.setShowGrid(true);
@@ -163,11 +146,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		if (!Main.FONT) {
-			labelSearch.setFont(Globals.defaultFont);
+			labelSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
-		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
@@ -175,9 +158,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		checkmarkSearch.setChangeStateAutonomously(false);
 
 		fieldSearch = new JTextField("");
-		fieldSearch.setPreferredSize(Globals.textfieldDimension);
+		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		if (!Main.FONT) {
-			fieldSearch.setFont(Globals.defaultFont);
+			fieldSearch.setFont(Globals.DEFAULT_FONT);
 		}
 
 		if (!Main.THEMES) {
@@ -221,8 +204,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
 
-		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
-		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
+		Icon markAllIcon = Utils.createImageIcon("images/selection-all.png", "");
+		Icon invertSelectionIcon = Utils.createImageIcon("images/selection-invert.png", "");
 		buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
 		buttonInvertSelection = new JButton("", invertSelectionIcon);
@@ -256,11 +239,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
-		comboSearchMode.setPreferredSize(Globals.buttonDimension);
+		comboSearchMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		comboSearch = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
-		comboSearch.setPreferredSize(Globals.buttonDimension);
+		comboSearch.setPreferredSize(Globals.BUTTON_DIMENSION);
 	}
 
 	private void setupLayout() {
@@ -332,11 +315,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon("images/opsi-logo.png", ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		if (!Main.FONT) {
-			missingData1.setFont(Globals.defaultFontTitle);
+			missingData1.setFont(Globals.DEFAULT_FONT_TILTE);
 		}
 
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
@@ -371,15 +354,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.addMouseListener(l);
 	}
 
-	public int convertRowIndexToModel(int i) {
-
-		return table.convertRowIndexToModel(i);
-	}
-
-	public int convertRowIndexToView(int i) {
-		return table.convertRowIndexToView(i);
-	}
-
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
 	}
@@ -392,7 +366,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table.getCellRect(row, col, includeSpacing);
 	}
 
-	public Map<Integer, Integer> getSelectionMap() {
+	private Map<Integer, Integer> getSelectionMap() {
 		Map<Integer, Integer> selectionMap = new HashMap<>();
 		int selectedKeysCount = 0;
 
@@ -404,7 +378,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return selectionMap;
-
 	}
 
 	public Set<String> getSelectedSet() {
@@ -439,23 +412,18 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
-		try {
-			Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
+		Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
 
-			for (int j = 0; j < table.getColumnCount(); j++) {
-				Logging.info(this, "initColumnName col " + j);
-				Logging.info(this, "initColumnName name  " + table.getColumnName(j));
-				comboSearchItems.add(table.getColumnName(j));
-			}
+		for (int j = 0; j < table.getColumnCount(); j++) {
+			Logging.info(this, "initColumnName col " + j);
+			Logging.info(this, "initColumnName name  " + table.getColumnName(j));
+			comboSearchItems.add(table.getColumnName(j));
+		}
 
-			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
+		comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
 
-			if (oldSelected != null) {
-				comboSearch.setSelectedItem(oldSelected);
-			}
-
-		} catch (Exception ex) {
-			Logging.info(this, "initColumnNames " + ex);
+		if (oldSelected != null) {
+			comboSearch.setSelectedItem(oldSelected);
 		}
 	}
 
@@ -547,34 +515,17 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		setSelectedValues(valueSet);
 	}
 
-	public void selectAll() {
-		selectionmodel.setSelectionInterval(0, table.getRowCount());
-	}
-
 	public void initSortKeys() {
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
+	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
 		return table.getRowSorter().getSortKeys();
 	}
 
 	public void setSortKeys(List<? extends RowSorter.SortKey> orderingKeys) {
 		table.getRowSorter().setSortKeys(orderingKeys);
-	}
-
-	public void buildRowIndexByCol(int i) {
-		int row = 0;
-
-		rowIndexMap = new TreeMap<>();
-
-		while (row < getTableModel().getRowCount()) {
-			rowIndexMap.put((String) getTableModel().getValueAt(row, i), row);
-		}
-	}
-
-	public void setValueForKey(Object value, String key, int colInModelTerms) {
-		getTableModel().setValueAt(value, rowIndexMap.get(key), colInModelTerms);
 	}
 
 	public Set<String> getColumnValues(int col) {
@@ -627,14 +578,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	public TableColumnModel getColumnModel() {
 		return table.getColumnModel();
-	}
-
-	public ListSelectionModel getListSelectionModel() {
-		return table.getSelectionModel();
-	}
-
-	public void listvalueChanged(ListSelectionEvent e) {
-		main.valueChanged(e);
 	}
 
 	public void addListSelectionListener(ListSelectionListener lisel) {
@@ -825,7 +768,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
-
 	}
 
 	public void addSelectedRow(int row) {
@@ -852,7 +794,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setRowSelectionInterval(row, row);
 
 		scrollRowToVisible(row);
-
 	}
 
 	private void searchTheNextRow() {
@@ -930,10 +871,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				setSelectedRow(foundrow);
 			}
 		}
-	}
-
-	public TableCellRenderer getDefaultRenderer(Class<?> columnClass) {
-		return table.getDefaultRenderer(columnClass);
 	}
 
 	private void searchOnDocumentChange() {

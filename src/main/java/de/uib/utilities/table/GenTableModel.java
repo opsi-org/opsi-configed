@@ -20,13 +20,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.provider.TableProvider;
+import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel {
 
-	public static final String DEFAULT_FILTER_NAME = "default";
+	private static final String DEFAULT_FILTER_NAME = "default";
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
@@ -36,9 +36,9 @@ public class GenTableModel extends AbstractTableModel {
 	private List<String> classNames;
 	private List<List<Object>> rows;
 
-	private List<Integer> addedRows;
+	private Set<Integer> addedRows;
 	// rows which are added and not yet saved
-	private List<Integer> updatedRows;
+	private Set<Integer> updatedRows;
 	// rows which are updated and not yet saved
 
 	private List<Integer> finalCols;
@@ -53,9 +53,8 @@ public class GenTableModel extends AbstractTableModel {
 	private boolean modelDataValid;
 	private boolean modelStructureValid;
 
-	private TableProvider tableProvider;
+	private DefaultTableProvider tableProvider;
 	private TableUpdateItemInterface itemFactory;
-	private int saveUpdatesSize;
 
 	private final ChainedTableModelFilter chainedFilter;
 	private TableModelFilter workingFilter;
@@ -68,7 +67,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	private CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
 		this.keyCol = keyCol;
 		this.updates = updates;
@@ -80,8 +79,8 @@ public class GenTableModel extends AbstractTableModel {
 		initColumns();
 		setRows(dataProvider.getRows());
 
-		addedRows = new ArrayList<>();
-		updatedRows = new ArrayList<>();
+		addedRows = new HashSet<>();
+		updatedRows = new HashSet<>();
 
 		this.finalCols = new ArrayList<>();
 		if (finalColumns == null) {
@@ -111,29 +110,9 @@ public class GenTableModel extends AbstractTableModel {
 		setFilter(chainedFilter);
 	}
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			TableModelListener l, List<TableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
-	}
-
-	public void clear() {
-		colsLength = 0;
-		rowsLength = 0;
-		colEditable = new boolean[0];
-		if (columnNames != null) {
-			columnNames.clear();
-		}
-
-		if (classNames != null) {
-			classNames.clear();
-		}
-
-		if (rows != null) {
-			rows.clear();
-		}
-
-		clearUpdates();
-		fireTableStructureChanged();
 	}
 
 	private void initColumns() {
@@ -167,10 +146,6 @@ public class GenTableModel extends AbstractTableModel {
 		return keyCol;
 	}
 
-	public void setKeyCol(int keyCol) {
-		this.keyCol = keyCol;
-	}
-
 	public List<Integer> getFinalCols() {
 		return finalCols;
 	}
@@ -201,16 +176,6 @@ public class GenTableModel extends AbstractTableModel {
 		invalidate();
 	}
 
-	public void removeUpdates() {
-		int newSize = updates.size();
-		for (int i = newSize - 1; i >= saveUpdatesSize; i--) {
-
-			updates.remove(i);
-		}
-		updatedRows.clear();
-		invalidate();
-	}
-
 	private void setFilter(TableModelFilter filter) {
 		Logging.info(this, "setFilter " + filter);
 		workingFilter = filter;
@@ -225,13 +190,6 @@ public class GenTableModel extends AbstractTableModel {
 		chainedFilter.set(DEFAULT_FILTER_NAME, new TableModelFilter(cond));
 
 		// TableModelFilter
-	}
-
-	/**
-	 * tell if some filter is working
-	 */
-	public boolean isFiltered() {
-		return workingFilter != null && workingFilter.isInUse();
 	}
 
 	public void clearFilter() {
@@ -408,18 +366,9 @@ public class GenTableModel extends AbstractTableModel {
 
 	}
 
-	public void toggleFilter(String name) {
-		setUsingFilter(name, !isUsingFilter(name));
-	}
-
 	private void clearUpdates() {
 		addedRows.clear();
 		updatedRows.clear();
-		if (updates == null) {
-			saveUpdatesSize = 0;
-		} else {
-			saveUpdatesSize = updates.size();
-		}
 	}
 
 	/**
@@ -487,58 +436,9 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	public List<Object> getRow(int row) {
-		return rows.get(row);
-	}
-
-	public RowStringMap getRowStringMap(int row) {
-		RowStringMap result = new RowStringMap();
-
-		for (int col = 0; col < getColumnNames().size(); col++) {
-			result.put(getColumnName(col), "" + getValueAt(row, col));
-		}
-
-		return result;
-	}
-
-	public RowMap<String, Object> getRowMap(int row) {
-		RowMap<String, Object> result = new RowMap<>();
-
-		for (int col = 0; col < getColumnNames().size(); col++) {
-			Object value = getValueAt(row, col);
-			if (value == null) {
-				value = "";
-			} else {
-				value = "" + value;
-			}
-
-			result.put(getColumnName(col), value);
-		}
-
-		return result;
-	}
-
-	public List<Object> getColumn(int col) {
-		List<Object> result = new ArrayList<>();
-		for (int row = 0; row < rowsLength; row++) {
-			result.add(getValueAt(row, col));
-		}
-
-		return result;
-	}
-
-	public List<String> getOrderedColumn(int col) {
-		TreeSet<String> set = new TreeSet<>();
-		for (int row = 0; row < rowsLength; row++) {
-			set.add((String) getValueAt(row, col));
-		}
-
-		return new ArrayList<>(set);
-	}
-
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
+		if (!addedRows.contains(row) && finalCols.contains(col)) {
 			// we cannot edit a key column but when it is not saved in the data backend
 			return false;
 		} else {
@@ -633,7 +533,7 @@ public class GenTableModel extends AbstractTableModel {
 		if (valueChanged) {
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
-			if (addedRows.indexOf(row) == -1 && updatedRows.indexOf(row) == -1) {
+			if (!addedRows.contains(row) && !updatedRows.contains(row)) {
 				List<Object> oldValues = new ArrayList<>(rows.get(row));
 
 				rows.get(row).set(col, value);
@@ -653,7 +553,7 @@ public class GenTableModel extends AbstractTableModel {
 			}
 
 			// we cannot edit a key column after it is saved in the data backend
-			if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
+			if (!addedRows.contains(row) && finalCols.indexOf(col) > -1) {
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
 				Logging.warning("key column cannot be edited after saving the data");
@@ -684,19 +584,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	public void setRow(int row, Object[] a) {
-		int col = 0;
-		if (colsLength != a.length) {
-			Logging.info("update row values less than than row elements");
-		}
-
-		while (col < colsLength && col < a.length) {
-			setValueAt(a[col], row, col);
-			col++;
-		}
-	}
-
-	public void addRow(List<Object> rowV) {
+	private void addRow(List<Object> rowV) {
 		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
@@ -708,11 +596,8 @@ public class GenTableModel extends AbstractTableModel {
 		requestReload();
 
 		rowsLength++;
-		try {
-			fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
-		} catch (Exception ex) {
-			Logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
-		}
+
+		fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
 	}
 
 	public void addRow(Object[] a) {
@@ -729,25 +614,8 @@ public class GenTableModel extends AbstractTableModel {
 		addRow(rowV);
 	}
 
-	public List<Object> produceValueRowFromSomeEntries(RowMap entries) {
-		Logging.debug(this, "produceValueRowFromSomeEntries " + entries);
-
-		List<Object> result = new ArrayList<>();
-
-		for (String col : columnNames) {
-
-			if (entries.get(col) != null) {
-				result.add(entries.get(col));
-			} else {
-				result.add(null);
-			}
-		}
-
-		return result;
-	}
-
 	private boolean checkDeletionOfAddedRow(int rowNum) {
-		if (addedRows.indexOf(rowNum) > -1) {
+		if (addedRows.contains(rowNum)) {
 
 			// deletion of added rows is not adequately managed
 			// therefore we reject it
@@ -792,7 +660,7 @@ public class GenTableModel extends AbstractTableModel {
 
 			if (updatedRows.contains(selection[i])) {
 				Logging.debug(this, "deleteRows, remove from updatedRows  " + selection[i]);
-				updatedRows.remove((Integer) selection[i]);
+				updatedRows.remove(selection[i]);
 			}
 		}
 
@@ -832,9 +700,9 @@ public class GenTableModel extends AbstractTableModel {
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row
 
-		if (updatedRows.indexOf(rowNum) > -1) {
-			Logging.debug(this, "deleteRow, remove from updatedRows  " + updatedRows.indexOf(rowNum));
-			updatedRows.remove(updatedRows.indexOf(rowNum));
+		if (updatedRows.contains(rowNum)) {
+			Logging.debug(this, "deleteRow, remove from updatedRows  " + rowNum);
+			updatedRows.remove(rowNum);
 		}
 
 		rows.remove(rowNum);
@@ -843,58 +711,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		Logging.debug(this, "deleted row " + oldValues);
 	}
-
-	public boolean isRowAdded(int rowNum) {
-		return addedRows.indexOf(rowNum) > -1;
-	}
-
-	public boolean someRowAdded(int[] rowNums) {
-		boolean result = false;
-		if (rowNums != null) {
-			int i = 0;
-			while (!result && i < rowNums.length) {
-				if (addedRows.indexOf(rowNums[i]) > -1) {
-					result = true;
-				}
-
-				i++;
-			}
-		}
-		return result;
-	}
-
-	public boolean existsStringValueInCol(String value, int col) {
-		boolean found = false;
-		int i = 0;
-		while (!found && i < getRowCount()) {
-			String compValue = "" + getValueAt(i, col);
-
-			if (compValue.equals(value)) {
-				found = true;
-			} else {
-				i++;
-			}
-
-		}
-		return found;
-	}
-
-	public boolean existsValueInCol(Object value, int col) {
-		boolean found = false;
-		int i = 0;
-		while (!found && i < getRowCount()) {
-			Object compValue = getValueAt(i, col);
-
-			if (compValue.equals(value)) {
-				found = true;
-			} else {
-				i++;
-			}
-		}
-		return found;
-	}
-
-	// interface TableModelFunctions
 
 	@Override
 	public String toString() {

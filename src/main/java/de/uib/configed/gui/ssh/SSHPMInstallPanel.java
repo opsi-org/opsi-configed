@@ -9,7 +9,6 @@ package de.uib.configed.gui.ssh;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.Main;
@@ -19,9 +18,6 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 
 public class SSHPMInstallPanel extends JPanel {
 	public boolean isOpen;
-
-	protected GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
-	protected GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 

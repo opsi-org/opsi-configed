@@ -6,8 +6,10 @@
 
 package de.uib.configed.productaction;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -39,10 +42,10 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
-public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObserver, NameProducer {
+public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	// file name conventions
 
@@ -109,20 +112,14 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		defineLayout();
 
-		persistenceController.registerDataRefreshedObserver(this);
+		persistenceController.registerPanelCompleteWinProducts(this);
 	}
 
-	private void evaluateWinProducts() {
+	public void evaluateWinProducts() {
 		retrieveWinProducts();
 
 		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
-	}
-
-	// implementation of DataRefreshedObserver
-	@Override
-	public void gotNotification(Object mesg) {
-		evaluateWinProducts();
 	}
 
 	private void retrieveWinProducts() {
@@ -141,8 +138,8 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
-		chooserFolder.setPreferredSize(Globals.filechooserSize);
-		chooserFolder.setPreferredSize(Globals.filechooserSize);
+		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
+		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
@@ -152,7 +149,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		chooserFolder.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("CompleteWinProducts.chooser"));
 
 		comboChooseDepot = new JComboBox<>();
-		comboChooseDepot.setSize(Globals.textfieldDimension);
+		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
 
@@ -168,7 +165,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		});
 
 		comboChooseWinProduct = new JComboBox<>();
-		comboChooseWinProduct.setSize(Globals.textfieldDimension);
+		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			produceTarget();
@@ -239,10 +236,10 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		final JPanel panel = this;
 
 		fieldProductKey = new JTextField("");
-		fieldProductKey.setPreferredSize(Globals.textfieldDimension);
+		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallSelectFolderWinPE = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderWinPE.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderWinPE = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderWinPE.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
@@ -259,8 +256,8 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 			}
 		});
 
-		buttonCallSelectFolderInstallFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderInstallFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderInstallFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderInstallFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
@@ -280,8 +277,8 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 			}
 		});
 
-		buttonCallExecute = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
-		buttonCallExecute.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
+		buttonCallExecute = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
+		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
@@ -349,13 +346,9 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 			String oldProductKey = null;
 
-			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
-					&& !((List<?>) propsMap.get("productkey")).isEmpty()
-					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0))) {
+			if (mapContainsProductKey(propsMap)) {
 				oldProductKey = (String) ((List<?>) propsMap.get("productkey")).get(0);
-			}
-
-			if (oldProductKey == null) {
+			} else {
 				oldProductKey = "";
 			}
 
@@ -378,14 +371,26 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 				}
 			}
 
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			rootFrame.disactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
+		} catch (HeadlessException ex) {
+			rootFrame.disactivateLoadingCursor();
+			Logging.error("Headless exception when invoking showOptionDialog", ex);
+		}
+	}
+
+	private static boolean mapContainsProductKey(Map<String, Object> propsMap) {
+		if (propsMap == null || !(propsMap.get("productkey") instanceof List)) {
+			return false;
+		} else {
+			return !((List<?>) propsMap.get("productkey")).isEmpty()
+					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0));
 		}
 	}
 
 	private void defineLayout() {
-		setBorder(Globals.createPanelBorder());
+		setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 
 		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));

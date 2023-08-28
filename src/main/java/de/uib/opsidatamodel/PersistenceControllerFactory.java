@@ -6,14 +6,10 @@
 
 package de.uib.opsidatamodel;
 
-import javax.swing.JOptionPane;
-
-import de.uib.Main;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public final class PersistenceControllerFactory {
 
@@ -38,40 +34,30 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		OpsiserviceNOMPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user,
-				password);
-		Logging.info("a PersistenceController initiated, got null? " + (persistControl == null));
+		OpsiserviceNOMPersistenceController persistenceController = new OpsiserviceNOMPersistenceController(server,
+				user, password);
+		Logging.info(
+				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
 
-		boolean connected = persistControl.makeConnection();
+		Logging.info("a PersistenceController initiated, got null? " + (persistenceController == null));
 
-		while (persistControl.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			connected = persistControl.makeConnection();
+		boolean connected = persistenceController.makeConnection();
+
+		while (persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
+			connected = persistenceController.makeConnection();
 		}
 
-		try {
-			if (connected) {
-				persistControl.checkMultiFactorAuthentication();
-				Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
-				persistControl.checkConfiguration();
-				persistControl.retrieveOpsiModules();
-			}
-		} catch (Exception ex) {
-			Logging.error("Error", ex);
-
-			String errorInfo = ex.toString();
-
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
-					JOptionPane.OK_OPTION);
-
-			Main.endApp(2);
-
-			return null;
+		if (connected) {
+			persistenceController.checkMultiFactorAuthentication();
+			Utils.setMultiFactorAuthenticationEnabled(persistenceController.usesMultiFactorAuthentication());
+			persistenceController.checkConfiguration();
+			persistenceController.retrieveOpsiModules();
 		}
 
-		staticPersistControl = persistControl;
+		staticPersistControl = persistenceController;
 
-		if (persistControl.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& !Globals.disableCertificateVerification) {
+		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED
+				&& !Utils.isCertificateVerificationDisabled()) {
 			CertificateManager.updateCertificate();
 		}
 

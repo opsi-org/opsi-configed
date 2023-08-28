@@ -13,9 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +46,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
 
@@ -62,7 +63,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
 	private OpenSaveDialog dialog;
 	private Boolean saveAction;
@@ -122,16 +122,12 @@ public class ExporterToPDF extends AbstractExportTable {
 				if (fileName == null) {
 					return;
 				} else {
-					try {
-						Logging.info(this, "filename for saving PDF: " + fileName);
-						File file = new File(fileName);
-						if (file.isDirectory()) {
-							Logging.error("no valid filename " + fileName);
-						} else {
-							filePath = file.getAbsolutePath();
-						}
-					} catch (Exception e) {
-						Logging.error("no valid filename " + fileName, e);
+					Logging.info(this, "filename for saving PDF: " + fileName);
+					File file = new File(fileName);
+					if (file.isDirectory()) {
+						Logging.error("no valid filename " + fileName);
+					} else {
+						filePath = file.getAbsolutePath();
 					}
 
 					Logging.notice(this, "selected fileName is: " + fileName);
@@ -141,7 +137,9 @@ public class ExporterToPDF extends AbstractExportTable {
 				}
 			} else {
 				try {
-					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
+					temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
+							.toFile();
+					Utils.restrictAccessToFile(temp);
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
 					Logging.error("Failed to create temp file", e);
@@ -157,20 +155,16 @@ public class ExporterToPDF extends AbstractExportTable {
 					writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 				}
 
-				try {
-					TableHeader event = new TableHeader();
-					if (metaData.containsKey("header")) {
-						event.setHeader(metaData.get("header"));
-					} else if (metaData.containsKey("title")) {
-						event.setHeader(metaData.get("title"));
-					} else {
-						Logging.warning(this, "metadata contain neither header nor title");
-					}
-
-					writer.setPageEvent(event);
-				} catch (Exception ex) {
-					Logging.error("Error PdfWriter --- " + ex);
+				TableHeader event = new TableHeader();
+				if (metaData.containsKey("header")) {
+					event.setHeader(metaData.get("header"));
+				} else if (metaData.containsKey("title")) {
+					event.setHeader(metaData.get("title"));
+				} else {
+					Logging.warning(this, "metadata contain neither header nor title");
 				}
+
+				writer.setPageEvent(event);
 
 				document.open();
 				addMetaData(metaData);
@@ -181,10 +175,10 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				document.close();
 
-			} catch (FileNotFoundException e) {
-				Logging.error("file not found: " + fileName, e);
-			} catch (Exception exp) {
-				Logging.error("file not found: " + fileName, exp);
+			} catch (FileNotFoundException ex) {
+				Logging.error("file not found: " + fileName, ex);
+			} catch (DocumentException dex) {
+				Logging.error("document exception, cannot get instance for " + document, dex);
 			}
 
 			// saveAction is not null here, open PDF if created only temp file
@@ -198,7 +192,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	public void addMetaData(Map<String, String> metaData) {
+	private static void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
@@ -230,7 +224,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		xHeaderTop = 555;
 	}
 
-	public static Paragraph addEmptyLines(int number) {
+	private static Paragraph addEmptyLines(int number) {
 		Paragraph content = new Paragraph();
 		for (int i = 0; i < number; i++) {
 			content.add(new Paragraph(" "));
@@ -238,9 +232,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		return content;
 	}
 
-	public static Paragraph addTitleLines(Map<String, String> metaData) {
-		// TODO timezone
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
+	private static Paragraph addTitleLines(Map<String, String> metaData) {
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
 
@@ -267,12 +259,12 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 
 		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", "
-				+ dateFormatter.format(new Date()), smallBold));
+				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd. MMM yyyy"))));
 		content.add(addEmptyLines(1));
 		return content;
 	}
 
-	private PdfPTable createTableDataElement(JTable theTable) {
+	private static PdfPTable createTableDataElement(JTable theTable) {
 		boolean onlySelectedRows = theTable.getSelectedRowCount() > 0;
 
 		PdfPTable table = new PdfPTable(theTable.getColumnCount());
@@ -288,8 +280,8 @@ public class ExporterToPDF extends AbstractExportTable {
 		try {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbolFont = new Font(bf, 11);
-		} catch (Exception e) {
-			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
+		} catch (DocumentException | IOException e) {
+			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :", e);
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
@@ -312,13 +304,8 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
 					value = new PdfPCell(new Phrase(" "));
-					String s = "";
-					try {
-						s = theTable.getValueAt(j, i).toString();
-					} catch (Exception ex) {
-						s = "";
-						Logging.debug(this, "thrown excpetion: " + ex);
-					}
+					String s = theTable.getValueAt(j, i).toString();
+
 					switch (s) {
 					case "∞":
 						value = new PdfPCell(new Phrase("\u221e", symbolFont));
@@ -340,11 +327,8 @@ public class ExporterToPDF extends AbstractExportTable {
 						}
 					}
 
-					if (leftAlignmentlist.contains(i)) {
-						value.setHorizontalAlignment(Element.ALIGN_LEFT);
-					} else {
-						value.setHorizontalAlignment(Element.ALIGN_CENTER);
-					}
+					value.setHorizontalAlignment(Element.ALIGN_CENTER);
+
 					value.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(value);
 				}
@@ -394,7 +378,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
+			URL opsiImageURL = getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -417,6 +401,19 @@ public class ExporterToPDF extends AbstractExportTable {
 			}
 		}
 
+		private URL getImageResourceURL(String relPath) {
+			String resourceS = Globals.IMAGE_BASE + relPath;
+
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			URL imgURL = cl.getResource(resourceS);
+			if (imgURL != null) {
+				return imgURL;
+			} else {
+				Logging.warning("Couldn't find file  " + relPath);
+				return null;
+			}
+		}
+
 		/**
 		 * Fills out the total number of pages before the document is closed.
 		 * 
@@ -430,7 +427,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	public static Image createElement(URL imageSource, float posx, float posy)
+	private static Image createElement(URL imageSource, float posx, float posy)
 			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
 			throws DocumentException {
 		Image img = null;

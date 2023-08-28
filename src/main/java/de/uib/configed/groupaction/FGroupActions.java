@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -29,9 +30,11 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
 public class FGroupActions extends SecondaryFrame {
 
@@ -58,7 +61,7 @@ public class FGroupActions extends SecondaryFrame {
 		define();
 		reload();
 
-		super.setGlobals(Globals.getMap());
+		super.setGlobals(Utils.getMap());
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
 
 		glassPane = new GlassPane();
@@ -115,7 +118,7 @@ public class FGroupActions extends SecondaryFrame {
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
-		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
+		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persistenceController.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
@@ -130,7 +133,7 @@ public class FGroupActions extends SecondaryFrame {
 		defineTopPanel(topPanel);
 
 		JPanel imageActionPanel = new JPanel();
-		imageActionPanel.setBorder(Globals.createPanelBorder());
+		imageActionPanel.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		defineImageActionPanel(imageActionPanel);
 
@@ -219,11 +222,11 @@ public class FGroupActions extends SecondaryFrame {
 		JLabel clientsCountLabel = new JLabel(Configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();
-		fieldGroupname.setPreferredSize(Globals.counterfieldDimension);
+		fieldGroupname.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupname.setEditable(false);
 
 		fieldInvolvedClientsCount = new JTextField("");
-		fieldInvolvedClientsCount.setPreferredSize(Globals.counterfieldDimension);
+		fieldInvolvedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedClientsCount.setEditable(false);
 
 		GroupLayout layout = new GroupLayout(panel);
@@ -250,7 +253,5 @@ public class FGroupActions extends SecondaryFrame {
 						.addComponent(fieldInvolvedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2));
-
 	}
-
 }

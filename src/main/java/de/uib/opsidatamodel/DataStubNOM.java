@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
@@ -40,11 +39,14 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
+import utils.ProductPackageVersionSeparator;
+import utils.Utils;
 
 public class DataStubNOM {
 
@@ -84,8 +86,6 @@ public class DataStubNOM {
 	// will only be refreshed when all product data are refreshed
 	private List<Map<String, Object>> productPropertyDepotStates;
 
-	private Set<String> hostsWithProductProperties;
-
 	private NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
 	private NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
 
@@ -110,7 +110,6 @@ public class DataStubNOM {
 
 	private Map<String, LicenceContractEntry> licenceContracts;
 
-	private NavigableMap<String, NavigableSet<String>> contractsExpired;
 	// date in sql time format, contrad ID
 	private NavigableMap<String, NavigableSet<String>> contractsToNotify;
 	// date in sql time format, contrad ID
@@ -149,7 +148,25 @@ public class DataStubNOM {
 
 	// can only return true if overriden in a subclass
 	public boolean canCallMySQL() {
-		return false;
+
+		// we cannot call MySQL if version before 4.3
+		if (ServerFacade.isOpsi43()) {
+			return false;
+		}
+
+		boolean result = false;
+
+		// test if we can access any table
+
+		String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME + " LIMIT 1 ";
+
+		Logging.info(this, "test, query " + query);
+
+		result = persistenceController.exec.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
+
+		Logging.info(this, "test result " + result);
+
+		return result;
 	}
 
 	public void product2versionInfoRequestRefresh() {
@@ -208,9 +225,8 @@ public class DataStubNOM {
 
 			Logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
 
-			persistenceController.notifyDataRefreshedObservers("product");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
-
 	}
 
 	public void productsAllDepotsRequestRefresh() {
@@ -296,18 +312,12 @@ public class DataStubNOM {
 					Logging.warning(this, "unexpected product type " + p.toString());
 				}
 
-				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());
-				if (versionInfo2Depots == null) {
-					versionInfo2Depots = new HashMap<>();
-					product2VersionInfo2Depots.put(p.getProductId(), versionInfo2Depots);
-				}
+				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots
+						.computeIfAbsent(p.getProductId(), s -> new HashMap<>());
 
-				List<String> depotsWithThisVersion = versionInfo2Depots.get(p.getVersionInfo());
+				List<String> depotsWithThisVersion = versionInfo2Depots.computeIfAbsent(p.getVersionInfo(),
+						s -> new ArrayList<>());
 
-				if (depotsWithThisVersion == null) {
-					depotsWithThisVersion = new ArrayList<>();
-					versionInfo2Depots.put(p.getVersionInfo(), depotsWithThisVersion);
-				}
 				depotsWithThisVersion.add(depot);
 
 				TreeSet<OpsiPackage> depotpackages = depot2Packages.computeIfAbsent(depot, s -> new TreeSet<>());
@@ -319,34 +329,17 @@ public class DataStubNOM {
 
 				String productName = null;
 
-				try {
-					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
-							.getProductName();
+				productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getProductName();
 
-					productRow.add(productName);
-					p.appendValues(productRow);
+				productRow.add(productName);
+				p.appendValues(productRow);
 
-					if (depotsWithThisVersion.size() == 1) {
-						productRows.add(productRow);
-					}
-				} catch (Exception ex) {
-					Logging.warning(this, "retrieveProductsAllDepots exception " + ex);
-					Logging.warning(this, "retrieveProductsAllDepots exception for package  " + p);
-					Logging.warning(this, "retrieveProductsAllDepots exception productId  " + p.getProductId());
-
-					Logging.warning(this, "retrieveProductsAllDepots exception for product2versionInfo2infos: of size "
-							+ product2versionInfo2infos.size());
-					Logging.warning(this,
-							"retrieveProductsAllDepots exception for product2versionInfo2infos.get(p.getProductId()) "
-									+ product2versionInfo2infos.get(p.getProductId()));
-					if (product2versionInfo2infos.get(p.getProductId()) == null) {
-						Logging.warning(this, "retrieveProductsAllDepots : product " + p.getProductId()
-								+ " seems not to exist in product table");
-					}
+				if (depotsWithThisVersion.size() == 1) {
+					productRows.add(productRow);
 				}
 			}
 
-			persistenceController.notifyDataRefreshedObservers("productOnDepot");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -391,7 +384,7 @@ public class DataStubNOM {
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+				String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
 						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
@@ -415,7 +408,7 @@ public class DataStubNOM {
 
 			Logging.debug(this, "retrieveAllProductPropertyDefinitions ");
 
-			persistenceController.notifyDataRefreshedObservers("productProperty");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -445,7 +438,7 @@ public class DataStubNOM {
 
 				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+				String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";
@@ -488,18 +481,16 @@ public class DataStubNOM {
 				}
 			}
 
-			persistenceController.notifyDataRefreshedObservers("productDependency");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
 	public void productPropertyStatesRequestRefresh() {
 		Logging.info(this, "productPropertyStatesRequestRefresh");
 		productPropertyStates = null;
-		hostsWithProductProperties = null;
 	}
 
 	public List<Map<String, Object>> getProductPropertyStates() {
-		retrieveProductPropertyStates();
 		return productPropertyStates;
 	}
 
@@ -515,22 +506,14 @@ public class DataStubNOM {
 
 	public void fillProductPropertyStates(Collection<String> clients) {
 		Logging.info(this, "fillProductPropertyStates for " + clients);
-		if (productPropertyStates == null) {
-			productPropertyStates = produceProductPropertyStates(clients, hostsWithProductProperties);
-		} else {
-			productPropertyStates.addAll(produceProductPropertyStates(clients, hostsWithProductProperties));
-		}
-	}
-
-	private void retrieveProductPropertyStates() {
-		produceProductPropertyStates((Collection<String>) null, hostsWithProductProperties);
+		productPropertyStates = produceProductPropertyStates(clients);
 	}
 
 	private void retrieveProductPropertyDepotStates(Set<String> depots) {
 		Logging.info(this, "retrieveProductPropertyDepotStates for depots " + depots + " depotStates == null "
 				+ (productPropertyDepotStates == null));
 		if (productPropertyDepotStates == null) {
-			productPropertyDepotStates = produceProductPropertyStates(depots, null);
+			productPropertyDepotStates = produceProductPropertyStates(depots);
 		}
 
 		Logging.info(this, "retrieveProductPropertyDepotStates ready  size " + productPropertyDepotStates.size());
@@ -538,20 +521,13 @@ public class DataStubNOM {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
-			Set<String> hosts) {
-		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
+	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients) {
+		Logging.info(this, "produceProductPropertyStates new hosts " + clients/* + " old hosts " + hosts */);
 		List<String> newClients = null;
 		if (clients == null) {
 			newClients = new ArrayList<>();
 		} else {
 			newClients = new ArrayList<>(clients);
-		}
-
-		if (hosts == null) {
-			hosts = new HashSet<>();
-		} else {
-			newClients.removeAll(hosts);
 		}
 
 		List<Map<String, Object>> result = null;
@@ -560,17 +536,13 @@ public class DataStubNOM {
 			// look if propstates is initialized
 			result = new ArrayList<>();
 		} else {
-			hosts.addAll(newClients);
-
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("objectId", AbstractExecutioner.jsonArray(newClients));
+			callFilter.put("objectId", newClients);
 
 			result = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productPropertyState_getObjects");
 		}
-
-		Logging.info(this, "produceProductPropertyStates for hosts " + hosts);
 
 		return result;
 	}
@@ -759,7 +731,7 @@ public class DataStubNOM {
 				n++;
 			}
 
-			persistenceController.notifyDataRefreshedObservers("software");
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -769,90 +741,48 @@ public class DataStubNOM {
 		softwareIdent2clients = null;
 	}
 
-	public void fillClient2Software(String client) {
-		Logging.info(this, "fillClient2Software " + client);
-		if (client2software == null) {
-			retrieveSoftwareAuditOnClients(client);
-
-			return;
-		}
-
-		if (client2software.get(client) == null) {
-			retrieveSoftwareAuditOnClients(client);
-		}
-	}
-
-	public void fillClient2Software(List<String> clients) {
-		if (clients == null) {
-			Logging.info(this, "fillClient2Software for clients null");
-		} else {
-			Logging.info(this, "fillClient2Software for clients " + clients.size());
-		}
-		retrieveSoftwareAuditOnClients(clients);
-	}
-
 	public Map<String, List<SWAuditClientEntry>> getClient2Software() {
 		Logging.info(this, "getClient2Software");
 		retrieveInstalledSoftwareInformation();
 		return client2software;
 	}
 
-	public Map<String, Set<String>> getSoftwareIdent2clients() {
+	public Map<String, Set<String>> getSoftwareIdent2clients(List<String> clients) {
+		if (softwareIdent2clients == null) {
+			retrieveSoftwareIdentOnClients(clients);
+		}
+
 		return softwareIdent2clients;
 	}
 
-	private void retrieveSoftwareAuditOnClients(String client) {
-		List<String> clients = new ArrayList<>();
-		clients.add(client);
-		retrieveSoftwareAuditOnClients(clients);
-	}
-
-	private void retrieveSoftwareAuditOnClients(final List<String> clients) {
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
-
-		retrieveInstalledSoftwareInformation();
+	private void retrieveSoftwareIdentOnClients(final List<String> clients) {
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count: " + clients.size());
-
-		List<String> newClients = new ArrayList<>(clients);
-
-		if (client2software != null) {
-			Logging.info(this,
-					"retrieveSoftwareAuditOnClients client2Software.keySet size: " + client2software.keySet().size());
-
-			newClients.removeAll(client2software.keySet());
-		}
-
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
-				+ "  new clients count: " + newClients.size());
+				+ "  new clients count: " + clients.size());
 
 		final int STEP_SIZE = 100;
 
-		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
-			while (!newClients.isEmpty()) {
+		if (softwareIdent2clients == null || !clients.isEmpty()) {
+			softwareIdent2clients = new HashMap<>();
+
+			while (!clients.isEmpty()) {
 				List<String> clientListForCall = new ArrayList<>();
 
-				for (int i = 0; i < STEP_SIZE && i < newClients.size(); i++) {
-					clientListForCall.add(newClients.get(i));
+				for (int i = 0; i < STEP_SIZE && i < clients.size(); i++) {
+					clientListForCall.add(clients.get(i));
 				}
 
-				newClients.removeAll(clientListForCall);
-
-				if (client2software == null) {
-					client2software = new HashMap<>();
-				}
-
-				if (softwareIdent2clients == null) {
-					softwareIdent2clients = new HashMap<>();
-				}
+				clients.removeAll(clientListForCall);
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 
 				String[] callAttributes = new String[] {};
 				Map<String, Object> callFilter = new HashMap<>();
 				callFilter.put("state", 1);
-				if (newClients != null) {
-					callFilter.put("clientId", AbstractExecutioner.jsonArray(clientListForCall));
+				if (clients != null) {
+					callFilter.put("clientId", clientListForCall);
 				}
 
 				List<Map<String, Object>> softwareAuditOnClients = persistenceController
@@ -861,38 +791,19 @@ public class DataStubNOM {
 				Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size "
 						+ softwareAuditOnClients.size());
 
-				for (String clientId : clientListForCall) {
-					client2software.put(clientId, new LinkedList<>());
-				}
-
 				for (Map<String, Object> item : softwareAuditOnClients) {
-
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-
-					String clientId = clientEntry.getClientId();
-					String swIdent = clientEntry.getSWident();
-
-					Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(swIdent,
+					Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWident(),
 							s -> new HashSet<>());
-
-					clientsWithThisSW.add(clientId);
-
-					// null not allowed in mysql
-					if (clientId != null) {
-						List<SWAuditClientEntry> entries = client2software.get(clientId);
-
-						entries.add(clientEntry);
-					}
-
+					clientsWithThisSW.add(clientEntry.getClientId());
 				}
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
-
 			}
 
-			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			persistenceController.notifyDataRefreshedObservers("softwareConfig");
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+			persistenceController.notifyPanelCompleteWinProducts();
 		}
 	}
 
@@ -977,7 +888,7 @@ public class DataStubNOM {
 		timeCheck.stop();
 		Logging.info(this, "retrieveHostConfigs retrieved " + hostConfigs.keySet());
 
-		persistenceController.notifyDataRefreshedObservers("configState");
+		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
 	public void licencepoolsRequestRefresh() {
@@ -1014,19 +925,12 @@ public class DataStubNOM {
 		Logging.info(this, "licenceContractsRequestRefresh");
 
 		licenceContracts = null;
-		contractsExpired = null;
 		contractsToNotify = null;
 	}
 
 	public Map<String, LicenceContractEntry> getLicenceContracts() {
 		retrieveLicenceContracts();
 		return licenceContracts;
-	}
-
-	// date in sql time format, contract ID
-	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		retrieveLicenceContracts();
-		return contractsExpired;
 	}
 
 	// date in sql time format, contract ID
@@ -1044,7 +948,6 @@ public class DataStubNOM {
 		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		licenceContracts = new HashMap<>();
 		contractsToNotify = new TreeMap<>();
-		contractsExpired = new TreeMap<>();
 
 		if (persistenceController.isWithLicenceManagement()) {
 
@@ -1062,18 +965,9 @@ public class DataStubNOM {
 
 					contractSet.add(entry.getId());
 				}
-
-				String expireDate = entry.get(TableLicenceContracts.EXPIRATION_DATE_KEY);
-				if (expireDate != null && expireDate.trim().length() > 0 && expireDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsExpired.computeIfAbsent(expireDate,
-							s -> new TreeSet<>());
-
-					contractSet.add(entry.getId());
-				}
 			}
 
 			Logging.info(this, "contractsToNotify " + contractsToNotify);
-			Logging.info(this, "contractsExpired " + contractsExpired);
 		}
 	}
 
@@ -1204,14 +1098,253 @@ public class DataStubNOM {
 		client2HwRows = null;
 	}
 
-	private void retrieveClient2HwRows() {
-		if (client2HwRows == null) {
-			client2HwRows = new HashMap<>();
+	private void retrieveClient2HwRows(String[] hosts) {
+		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
+
+		if (client2HwRows != null) {
+			Logging.info(this, "retrieveClient2HwRows client2HwRows.size() " + client2HwRows.size());
+			return;
 		}
+
+		client2HwRows = new HashMap<>();
+
+		// set default rows
+		for (String host : persistenceController.getHostInfoCollections().getOpsiHostNames()) {
+			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
+			nearlyEmptyHwRow.put("HOST.hostId", host);
+
+			String hostDescription = "";
+			String macAddress = "";
+			if (persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host) != null) {
+				hostDescription = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host)
+						.getDescription();
+				macAddress = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(host)
+						.getMacAddress();
+			}
+			nearlyEmptyHwRow.put("HOST.description", hostDescription);
+			nearlyEmptyHwRow.put("HOST.hardwareAdress", macAddress);
+
+			client2HwRows.put(host, nearlyEmptyHwRow);
+		}
+
+		TimeCheck timeCheck = new TimeCheck(this, " retrieveClient2HwRows all ");
+		timeCheck.start();
+
+		for (String hwClass : persistenceController.getHwInfoClassNames()) {
+			Logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
+
+			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
+
+			if (!client2ClassInfos.isEmpty()) {
+				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
+					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
+					// find max lastseen time as last scan time
+
+					String lastseen1 = (String) allInfosForAClient
+							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen2 = (String) client2ClassInfo.getValue()
+							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					if (lastseen1 != null && lastseen2 != null) {
+						client2ClassInfo.getValue().put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
+								maxTime(lastseen1, lastseen2));
+					}
+
+					allInfosForAClient.putAll(client2ClassInfo.getValue());
+				}
+			}
+		}
+
+		Logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
+
+		timeCheck.stop();
+		Logging.info(this, "retrieveClient2HwRows finished  ");
+		persistenceController.notifyPanelCompleteWinProducts();
+
 	}
 
-	public Map<String, Map<String, Object>> getClient2HwRows() {
-		retrieveClient2HwRows();
+	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
+		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
+
+		if (client2HwRows == null) {
+			return new HashMap<>();
+		}
+
+		// z.B. hwClass is DISK_PARTITION
+
+		List<String> specificColumns = new ArrayList<>();
+		specificColumns.add("HOST.hostId");
+
+		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
+		StringBuilder cols = new StringBuilder("");
+
+		String configTable = OpsiserviceNOMPersistenceController.HW_INFO_CONFIG + hwClass;
+
+		String lastseenCol = configTable + "." + "lastseen";
+		specificColumns.add(lastseenCol);
+		buf.append(lastseenCol);
+		buf.append(", ");
+
+		boolean foundAnEntry = false;
+
+		// build and collect database columnnames
+		for (String hwInfoCol : persistenceController.getClient2HwRowsColumnNames()) {
+			if (hwInfoCol.startsWith("HOST.")
+					|| hwInfoCol.equals(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
+				continue;
+			}
+
+			Logging.info(this,
+					"hwInfoCol " + hwInfoCol + " look for " + OpsiserviceNOMPersistenceController.HW_INFO_DEVICE
+							+ " as well as " + OpsiserviceNOMPersistenceController.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_DEVICE.length());
+
+			boolean colFound = false;
+			// check if colname is from a CONFIG or a DEVICE table
+			if (hwInfoCol.startsWith(hwClass, part0.length())) {
+				colFound = true;
+				// we found a DEVICE column name
+			} else {
+				part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_CONFIG.length());
+
+				if (hwInfoCol.startsWith(hwClass, part0.length())) {
+					colFound = true;
+					// we found a CONFIG column name
+				}
+
+			}
+
+			if (colFound) {
+				cols.append(" ");
+				cols.append(hwInfoCol);
+				cols.append(",");
+				specificColumns.add(hwInfoCol);
+				foundAnEntry = true;
+			}
+		}
+
+		if (!foundAnEntry) {
+			Logging.info(this, "no columns found for hwClass " + hwClass);
+			return new HashMap<>();
+		}
+
+		String deviceTable = OpsiserviceNOMPersistenceController.HW_INFO_DEVICE + hwClass;
+
+		String colsS = cols.toString();
+		buf.append(colsS.substring(0, colsS.length() - 1));
+
+		buf.append(" \nfrom HOST ");
+
+		buf.append(", ");
+		buf.append(deviceTable);
+		buf.append(", ");
+		buf.append(configTable);
+
+		buf.append("\n where ");
+
+		buf.append("HOST.hostId");
+		buf.append(" = ");
+		buf.append(configTable);
+		buf.append(".hostId");
+
+		buf.append("\nAND ");
+		buf.append(configTable);
+		buf.append(".hardware_id");
+		buf.append(" = ");
+		buf.append(deviceTable);
+		buf.append(".hardware_id");
+
+		buf.append("\nAND ");
+		buf.append(configTable);
+		buf.append(".state = 1 ");
+
+		String query = buf.toString();
+
+		Logging.info(this, "retrieveClient2HwRows, query " + query);
+
+		List<List<String>> rows = persistenceController.exec
+				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
+
+				);
+		Logging.info(this, "retrieveClient2HwRows, finished a request");
+		Logging.info(this, "retrieveClient2HwRows, got rows for class " + hwClass);
+		Logging.info(this, "retrieveClient2HwRows, got rows,  size  " + rows.size());
+
+		// shrink to one line per client
+
+		Map<String, Map<String, Object>> clientInfo = new HashMap<>();
+
+		for (List<String> row : rows) {
+			Map<String, Object> rowMap = clientInfo.computeIfAbsent(row.get(0), s -> new HashMap<>());
+
+			for (int i = 1; i < specificColumns.size(); i++) {
+				Object value = rowMap.get(specificColumns.get(i));
+				String valInRow = row.get(i);
+				if (valInRow == null || "null".equals(valInRow)) {
+					valInRow = "";
+				}
+
+				if (value == null) {
+					value = valInRow;
+				} else {
+					value = value + "|" + valInRow;
+				}
+
+				if (specificColumns.get(i).equals(lastseenCol)) {
+					String timeS = maxTime((String) value, row.get(i));
+					rowMap.put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
+				} else {
+					rowMap.put(specificColumns.get(i), value);
+				}
+
+			}
+
+		}
+
+		Logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
+		return clientInfo;
+
+		/*
+		 * example
+		 * SELECT HOST.hostId,
+		 * HARDWARE_DEVICE_DISK_PARTITION.name,
+		 * HARDWARE_DEVICE_DISK_PARTITION.description
+		 * 
+		 * from HOST, HARDWARE_DEVICE_DISK_PARTITION, HARDWARE_CONFIG_DISK_PARTITION
+		 * where
+		 * HOST.hostId = "vbrupertwin7-64.uib.local" and
+		 * HARDWARE_DEVICE_DISK_PARTITION.hardware_id =
+		 * HARDWARE_CONFIG_DISK_PARTITION.hardware_id
+		 * 
+		 * and HOST.hostId = HARDWARE_CONFIG_DISK_PARTITION.hostId
+		 * 
+		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1 
+		 * 
+		 */
+
+	}
+
+	private static String maxTime(String time0, String time1) {
+		if (time0 == null && time1 == null) {
+			return null;
+		}
+
+		if (time0 == null || "".equals(time0)) {
+			return time1;
+		}
+
+		if (time1 == null || "".equals(time1)) {
+			return time0;
+		}
+
+		if (time0.compareTo(time1) < 0) {
+			return time1;
+		}
+
+		return time0;
+	}
+
+	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
+		retrieveClient2HwRows(hosts);
 		return client2HwRows;
 	}
 

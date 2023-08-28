@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
@@ -36,6 +37,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
@@ -51,7 +53,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private JTextField fieldOpsiPackageName;
 
 	private String opsiWorkBenchDirectoryS;
-	private File opsiWorkBenchDirectory;
 	private String opsiPackageServerPathS;
 
 	private PanelMountShare panelMountShare;
@@ -72,7 +73,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		this.main = main;
 		this.rootFrame = rootFrame;
 
-		isWindows = Globals.isWindows();
+		isWindows = Utils.isWindows();
 
 		initComponents();
 
@@ -120,13 +121,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 					rootFrame.activateLoadingCursor();
 
-					try {
-						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
-
-						// we start at a local directory
-					} catch (Exception ex) {
-						Logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
-					}
+					File opsiWorkBenchDirectory = new File(fieldServerPath.getText());
 
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
@@ -180,7 +175,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		}
 	}
 
-	public void execute() {
+	private void execute() {
 
 		if (installProductFromWorkbench()) {
 			produceServerPath();
@@ -228,7 +223,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private void defineChoosers() {
 
 		comboChooseDepot = new JComboBox<>();
-		comboChooseDepot.setSize(Globals.textfieldDimension);
+		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
 		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
 
@@ -238,7 +233,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot.setEnabled(false);
 
 		chooserPackage = new JFileChooser();
-		chooserPackage.setPreferredSize(Globals.filechooserSize);
+		chooserPackage.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);
@@ -251,7 +246,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserServerpath = new JFileChooser();
-		chooserServerpath.setPreferredSize(Globals.filechooserSize);
+		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
@@ -280,10 +275,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		fieldOpsiPackageName = new JTextField();
 		fieldOpsiPackageName.setEditable(true);
-		fieldOpsiPackageName.setPreferredSize(Globals.textfieldDimension);
+		fieldOpsiPackageName.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserPackage = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserPackage.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserPackage = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserPackage.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserPackage.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
@@ -291,21 +286,21 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
 		if (!Main.THEMES) {
-			fieldServerPath.setForeground(Globals.greyed);
+			fieldServerPath.setForeground(Globals.GREYED);
 		}
 
-		fieldServerPath.setPreferredSize(Globals.textfieldDimension);
+		fieldServerPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		buttonCallExecute = new JButton("", Globals.createImageIcon("images/installpackage.png", ""));
+		buttonCallExecute = new JButton("", Utils.createImageIcon("images/installpackage.png", ""));
 
-		buttonCallExecute.setSelectedIcon(Globals.createImageIcon("images/installpackage.png", ""));
+		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/installpackage.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.execute"));
 
@@ -328,7 +323,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void defineLayout() {
-		setBorder(Globals.createPanelBorder());
+		setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.topic"));
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.info"));
@@ -338,7 +333,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		JLabel serverPathLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.serverpath"));
 
 		if (isWindows) {
-			serverPathLabel.setForeground(Globals.greyed);
+			serverPathLabel.setForeground(Globals.GREYED);
 			buttonCallChooserServerpath.setEnabled(false);
 		}
 

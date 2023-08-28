@@ -41,14 +41,15 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.FileX;
+import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.SecondaryFrame;
+import utils.Utils;
 
-public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
+public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
 	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
 	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
@@ -98,27 +99,23 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			boolean result = false;
 
 			if (fieldServerPath != null && fieldDriverPath != null) {
-				try {
-					targetPath = new File(fieldServerPath.getText());
-					driverPath = new File(fieldDriverPath.getText());
 
-					stateServerPath = targetPath.isDirectory();
-					serverPathChecked.setSelected(stateServerPath);
-					Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
-					Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
-					Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
+				targetPath = new File(fieldServerPath.getText());
+				driverPath = new File(fieldDriverPath.getText());
 
-					stateDriverPath = driverPath.exists();
-					driverPathChecked.setSelected(stateDriverPath);
-					Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+				stateServerPath = targetPath.isDirectory();
+				serverPathChecked.setSelected(stateServerPath);
+				Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
+				Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
+				Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
 
-					if (stateServerPath && stateDriverPath) {
-						result = true;
-					}
-				} catch (Exception ex) {
-					Logging.info(this, "checkFiles " + ex);
+				stateDriverPath = driverPath.exists();
+				driverPathChecked.setSelected(stateDriverPath);
+				Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+
+				if (stateServerPath && stateDriverPath) {
+					result = true;
 				}
-
 			}
 
 			Logging.info(this, "checkFiles " + result);
@@ -190,7 +187,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 		wLeftText = jLabelTopic.getPreferredSize().width;
@@ -214,18 +211,22 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		initComponents();
 
-		Logging.info(this, "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 
 		evaluateWinProducts();
 
 		buildPanel();
+
+		// We init the values later, since there are listeners attached to it.
+		// If we init the values earlier, null objects will be accessed
+		initValues();
 	}
 
 	private void defineChoosers() {
 		comboChooseDepot = new JComboBox<>();
-		comboChooseDepot.setSize(Globals.textfieldDimension);
+		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 
@@ -237,7 +238,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		});
 
 		comboChooseWinProduct = new JComboBox<>();
-		comboChooseWinProduct.setSize(Globals.textfieldDimension);
+		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			Logging.info(this, "winProduct  " + winProduct);
@@ -246,7 +247,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		chooserDriverPath = new JFileChooser();
 		chooserDriverPath.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		chooserDriverPath.setPreferredSize(Globals.filechooserSize);
+		chooserDriverPath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDriverPath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
@@ -256,7 +257,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				Globals.APPNAME + " " + Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
 		chooserServerpath = new JFileChooser();
-		chooserServerpath.setPreferredSize(Globals.filechooserSize);
+		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
@@ -306,8 +307,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
-		JButton buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectDriverFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallSelectDriverFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectDriverFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
@@ -316,23 +317,23 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		if (!Main.THEMES) {
-			fieldServerPath.setForeground(Globals.greyed);
+			fieldServerPath.setForeground(Globals.GREYED);
 		}
 
-		JButton buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		JButton buttonShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
+		JButton buttonShowDrivers = new JButton("", Utils.createImageIcon("images/show-menu.png", ""));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		JButton btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
+		JButton btnCreateDrivers = new JButton("", Utils.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
 				// id not needed
@@ -371,19 +372,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
 
 		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.standard"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS));
+				Configed.getResourceValue("PanelDriverUpload.type.standard"), getLocalsystemPath(DIRECTORY_DRIVERS));
 		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
 		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
+				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
 		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
+				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
 
 		radioButtons.add(buttonStandard);
 		radioButtons.add(buttonPreferred);
@@ -405,12 +405,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			});
 		}
 
-		buttonByAudit.setSelected(true);
-
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
 		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(new LineBorder(Globals.blueGrey, 1, true));
+		panelButtonGroup.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelDriverLocationType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -454,16 +452,16 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				);
 
 		driverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				Globals.createImageIcon("images/checked_withoutbox.png", ""),
-				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
+				Utils.createImageIcon("images/checked_withoutbox.png", ""),
+				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
 
 		serverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
-				Globals.createImageIcon("images/checked_withoutbox.png", "Z"),
-				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
+				Utils.createImageIcon("images/checked_withoutbox.png", "Z"),
+				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
 
-		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setEnabled(false);
-		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
 		// buttonUploadDrivers.setDisabledIcon(
 
 		buttonUploadDrivers.setEnabled(false);
@@ -642,7 +640,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
-	public void makePath(File path) {
+	private void initValues() {
+		buttonByAudit.setSelected(true);
+	}
+
+	private void makePath(File path) {
 		Logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
@@ -691,42 +693,37 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			waiter.startWaiting();
 			rootFrame.activateLoadingCursor();
 
-			try {
-				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
+			Logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-				makePath(targetPath);
+			makePath(targetPath);
 
-				stateServerPath = targetPath.exists();
-				serverPathChecked.setSelected(stateServerPath);
-				if (stateServerPath) {
-					try {
-						if (driverPath.isDirectory()) {
-							FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
-						} else {
-							FileUtils.copyFileToDirectory(driverPath, targetPath);
-						}
-					} catch (IOException iox) {
-						rootFrame.disactivateLoadingCursor();
-						Logging.error("copy error:\n" + iox, iox);
+			stateServerPath = targetPath.exists();
+			serverPathChecked.setSelected(stateServerPath);
+			if (stateServerPath) {
+				try {
+					if (driverPath.isDirectory()) {
+						FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
+					} else {
+						FileUtils.copyFileToDirectory(driverPath, targetPath);
 					}
-				} else {
-					Logging.info(this, "execute: targetPath does not exist");
+				} catch (IOException iox) {
+					rootFrame.disactivateLoadingCursor();
+					Logging.error("copy error:\n" + iox, iox);
 				}
-
-				if (stateServerPath) {
-					String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
-					Logging.info(this, "set rights for " + driverDir);
-					persistenceController.setRights(driverDir);
-				}
-
-				rootFrame.disactivateLoadingCursor();
-
-				waiter.setReady();
-			} catch (Exception ex) {
-				rootFrame.disactivateLoadingCursor();
-				Logging.error("error in uploading :\n" + ex, ex);
+			} else {
+				Logging.info(this, "execute: targetPath does not exist");
 			}
+
+			if (stateServerPath) {
+				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+						+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
+				Logging.info(this, "set rights for " + driverDir);
+				persistenceController.setRights(driverDir);
+			}
+
+			rootFrame.disactivateLoadingCursor();
+
+			waiter.setReady();
 		}
 	}
 
@@ -758,7 +755,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 
 		fieldServerPath.setText(result);
-
 	}
 
 	private void chooseServerpath() {
@@ -776,7 +772,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
 		}
-
 	}
 
 	// implements NameProducer
@@ -799,5 +794,19 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String getDefaultName() {
 		return byAuditPath;
+	}
+
+	private static String getLocalsystemPath(String[] parts) {
+		if (parts == null || parts.length == 0) {
+			return "";
+		}
+
+		StringBuilder result = new StringBuilder(parts[0]);
+
+		for (int i = 1; i < parts.length; i++) {
+			result.append(File.separator + parts[i]);
+		}
+
+		return result.toString();
 	}
 }

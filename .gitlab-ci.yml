@@ -26,7 +26,7 @@ compile_and_package:
   stage: build_and_analyze
   script:
     - mvn package
-    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun.nio.ch" > target/module.deps
+    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun" > target/module.deps
     # jdk.crypto.ec is needed for TLS (HTTPS)
     - echo "   jdk.crypto.ec" >> target/module.deps
     - cat target/module.deps
@@ -50,7 +50,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn compile sonar:sonar -Dsonar.projectKey=configed
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed -Dmockserver.logLevel=OFF -Pcoverage
   only:
     - main # or the name of your main branch
 
@@ -78,7 +78,7 @@ trigger_opsiproduct_pipeline:
   script:
     - '[ "$CI_COMMIT_TAG" = "" ] || CONFIGED_PRERELEASE_VERSION=""'
     - '[ "$CI_COMMIT_TAG" = "" ] && CONFIGED_PRERELEASE_VERSION="$CI_JOB_ID_CONFIGED"'
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=master --form "variables[CONFIGED_PRERELEASE_VERSION]=$CONFIGED_PRERELEASE_VERSION" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME_WITH_DEPS]=$CONFIGED_JAR_NAME_WITH_DEPS" --form "variables[PIPELINE_COMMIT_TAG]=$CI_COMMIT_TAG"   "https://gitlab.uib.gmbh/api/v4/projects/427/trigger/pipeline"
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_PRERELEASE_VERSION]=$CONFIGED_PRERELEASE_VERSION" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME_WITH_DEPS]=$CONFIGED_JAR_NAME_WITH_DEPS" --form "variables[PIPELINE_COMMIT_TAG]=$CI_COMMIT_TAG"   "https://gitlab.uib.gmbh/api/v4/projects/427/trigger/pipeline"
   needs:
     - set_variables
     - compile_and_package

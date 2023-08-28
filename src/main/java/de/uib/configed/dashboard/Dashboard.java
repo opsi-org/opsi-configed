@@ -16,7 +16,6 @@ import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
@@ -24,6 +23,7 @@ import de.uib.configed.dashboard.view.ViewManager;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import utils.Utils;
 
 public class Dashboard {
 	public static final String MAIN_VIEW = "main";
@@ -33,14 +33,18 @@ public class Dashboard {
 	private static final int WINDOW_HEIGHT = 1200;
 	private static final int WINDOW_WIDTH = 860;
 
-	private final JFrame frame = new JFrame();
-
+	private final JFrame frame;
 	private MainView mainView;
+
+	public Dashboard() {
+		frame = new JFrame();
+		mainView = null;
+	}
 
 	public void initAndShowGUI() {
 		final JFXPanel fxPanel = new JFXPanel();
 		frame.add(fxPanel);
-		frame.setIconImage(Globals.mainIcon);
+		frame.setIconImage(Utils.getMainIcon());
 		frame.setTitle(Configed.getResourceValue("Dashboard.title"));
 		frame.setMinimumSize(new Dimension(WINDOW_HEIGHT, WINDOW_WIDTH));
 		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());

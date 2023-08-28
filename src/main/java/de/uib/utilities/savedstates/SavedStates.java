@@ -56,7 +56,7 @@ public class SavedStates {
 		try (FileOutputStream out = new FileOutputStream(propertiesFile)) {
 			properties.store(out, comments);
 		} catch (FileNotFoundException e) {
-			Logging.error(this, "saved states file not found", e);
+			Logging.warning(this, "saved states file not found", e);
 		}
 	}
 }

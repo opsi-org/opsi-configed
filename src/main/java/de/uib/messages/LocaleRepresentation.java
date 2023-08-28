@@ -14,17 +14,10 @@ public class LocaleRepresentation {
 
 	public LocaleRepresentation(String name) {
 		if (name == null) {
-			Logging.error(this, "name must not be null");
+			Logging.error(this.getClass(), "name must not be null");
 		}
 
 		value = name;
-	}
-
-	public LocaleRepresentation(String name, String iconName) {
-		this(name);
-		if (iconName != null) {
-			value = value + "=" + iconName;
-		}
 	}
 
 	public String getName() {
