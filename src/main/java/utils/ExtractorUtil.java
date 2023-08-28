@@ -21,6 +21,7 @@ import org.apache.commons.compress.archivers.StreamingNotSupportedException;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.codehaus.plexus.util.IOUtil;
 
 import de.uib.utilities.logging.Logging;
 
@@ -31,22 +32,19 @@ public final class ExtractorUtil {
 
 	public static String unzip(File file) {
 		Logging.info("ExtractorUtil: starting extract");
-		final StringBuilder sb = new StringBuilder();
+		String result = "";
 		String archiveFormat = detectArchiveFormat(file);
 		try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
 				retrieveInputStream(file))) {
 			ArchiveEntry entry = null;
 			while ((entry = ais.getNextEntry()) != null) {
-				Logging.devel("\n");
 				if (!entry.isDirectory()) {
-					byte[] content = new byte[(int) entry.getSize()];
-					int bytesRead = ais.read(content);
-					sb.append(new String(content, 0, bytesRead));
+					result = IOUtil.toString(ais);
 				}
 			}
 		} catch (StreamingNotSupportedException e) {
 			if (e.getFormat().equals(ArchiveStreamFactory.SEVEN_Z)) {
-				sb.append(extractSevenZIP(file));
+				result = extractSevenZIP(file);
 			} else {
 				Logging.error("Archive format " + archiveFormat + " does not support streaming", e);
 			}
@@ -56,7 +54,7 @@ public final class ExtractorUtil {
 			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
 		}
 
-		return sb.toString();
+		return result;
 	}
 
 	private static String detectArchiveFormat(File file) {
@@ -95,7 +93,6 @@ public final class ExtractorUtil {
 		try (SevenZFile sevenZFile = new SevenZFile(file)) {
 			SevenZArchiveEntry entry = null;
 			while ((entry = sevenZFile.getNextEntry()) != null) {
-				Logging.devel("\n");
 				if (!entry.isDirectory()) {
 					byte[] content = new byte[(int) entry.getSize()];
 					int bytesRead = sevenZFile.read(content);
