@@ -51,11 +51,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		PersistenceControllerFactory.getPersistenceController().relationsAuditSoftwareToLicencePoolsRequestRefresh();
 		super.reset();
 
-		if (controller.thePanel.fSoftwarename2LicencePool != null) {
+		if (controller.getPanel().getFSoftwarename2LicencePool() != null) {
 			Logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
 
 			// does not solve the task
-			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
+			controller.getPanel().getFSoftwarename2LicencePool().getPanelSWnames().reset();
 		}
 
 	}
@@ -78,8 +78,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		Logging.info(this, " got name " + nameVal);
 
-		if (controller.thePanel.fSoftwarename2LicencePool != null) {
-			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.moveToValue(nameVal, 0);
+		if (controller.getPanel().getFSoftwarename2LicencePool() != null) {
+			controller.getPanel().getFSoftwarename2LicencePool().getPanelSWnames().moveToValue(nameVal, 0);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 				controller.validateWindowsSoftwareKeys();
 
-				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
+				if (controller.getPanel().getFSoftwarename2LicencePool().isVisible()) {
 					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
 					// the data is not refreshed

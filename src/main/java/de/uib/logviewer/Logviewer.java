@@ -34,7 +34,7 @@ public final class Logviewer {
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this.getClass(), imageHandled);
 
-		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.logDirectoryName);
+		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.getLogDirectoryName());
 
 		// set wanted fileName
 		LogFrame.setFileName(fileName);
@@ -42,7 +42,7 @@ public final class Logviewer {
 
 			LogFrame.setFileName(fileName);
 		} else {
-			Logging.info(" --  fileName " + Logging.logDirectoryName);
+			Logging.info(" --  fileName " + Logging.getLogDirectoryName());
 		}
 
 		SwingUtilities.invokeLater(Logviewer::init);

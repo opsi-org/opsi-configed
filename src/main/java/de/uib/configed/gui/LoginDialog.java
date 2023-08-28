@@ -407,9 +407,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
 
-		ConfigedMain.host = (String) fieldHost.getSelectedItem();
-		ConfigedMain.user = fieldUser.getText();
-		ConfigedMain.password = String.valueOf(passwordField.getPassword());
+		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
+		ConfigedMain.setUser(fieldUser.getText());
+		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
 		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
 				+ fieldUser.getText());
 

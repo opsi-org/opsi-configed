@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.13] - 2023-08-28
+### Fixed
+- Groups (specialities) available again 
+
 ## [4.2.22.12] - 2023-08-24
 ### Fixed
 - Show actual clientlist in column "boundToHost" in licence management

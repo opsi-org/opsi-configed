@@ -49,7 +49,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 		List<String> columnNames;
 		List<String> classNames;
 
-		// --- panelStatistics
+		// --- getPanelStatistics()
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("licence_options");
@@ -78,16 +78,16 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 						}
 						return persistenceController.getLicenceStatistics();
 					}
-				})), 0, thePanel.panelStatistics, updateCollection);
+				})), 0, thePanel.getPanelStatistics(), updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);
 
 		tableModels.add(modelStatistics);
-		tablePanes.add(thePanel.panelStatistics);
+		tablePanes.add(thePanel.getPanelStatistics());
 
 		modelStatistics.reset();
-		thePanel.panelStatistics.setTableModel(modelStatistics);
+		thePanel.getPanelStatistics().setTableModel(modelStatistics);
 		modelStatistics.setEditableColumns(new int[] {});
-		thePanel.panelStatistics.setEmphasizedColumns(new int[] {});
+		thePanel.getPanelStatistics().setEmphasizedColumns(new int[] {});
 
 	}
 }

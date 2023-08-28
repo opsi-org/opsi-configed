@@ -29,10 +29,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
-	public PanelGenEditTable panelGlobalSoftware;
+	private PanelGenEditTable panelGlobalSoftware;
 
-	public List<String> columnNames;
-	public List<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 
 	private int keyCol;
 
@@ -141,5 +141,17 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
 
+	}
+
+	public PanelGenEditTable getPanelGlobalSoftware() {
+		return panelGlobalSoftware;
+	}
+
+	public List<String> getColumnNames() {
+		return columnNames;
+	}
+
+	public List<String> getClassNames() {
+		return classNames;
 	}
 }

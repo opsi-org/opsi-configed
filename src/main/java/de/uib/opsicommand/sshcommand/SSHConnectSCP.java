@@ -69,7 +69,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				return task.get();
 			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground) {
+			if (SSHCommandFactory.alwaysExecInBackground()) {
 				dialog.setVisible(withGui);
 			}
 

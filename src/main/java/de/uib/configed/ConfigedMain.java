@@ -155,11 +155,11 @@ public class ConfigedMain implements ListSelectionListener {
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
-	public static String host;
-	public static String user;
-	public static String password;
+	private static String host;
+	private static String user;
+	private static String password;
 
-	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
+	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	private OpsiserviceNOMPersistenceController persistenceController;
 
@@ -169,7 +169,7 @@ public class ConfigedMain implements ListSelectionListener {
 	protected DefaultTableProvider licenceContractsTableProvider;
 	protected DefaultTableProvider softwarelicencesTableProvider;
 
-	public DefaultTableProvider globalProductsTableProvider;
+	private DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -277,7 +277,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private List<JFrame> allFrames;
 
-	public LicencesFrame licencesFrame;
+	private LicencesFrame licencesFrame;
 
 	private FGroupActions groupActionFrame;
 	private FProductActions productActionFrame;
@@ -304,7 +304,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private Map<String, String> logfiles;
 
-	public Map<String, Boolean> hostDisplayFields;
+	private Map<String, Boolean> hostDisplayFields;
 
 	public enum LicencesTabStatus {
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
@@ -465,9 +465,9 @@ public class ConfigedMain implements ListSelectionListener {
 	private void initSavedStates() {
 		File savedStatesDir = null;
 
-		if (Configed.savedStatesLocationName != null) {
-			Logging.info(this, "trying to write saved states to " + Configed.savedStatesLocationName);
-			String directoryName = getSavedStatesDirectoryName(Configed.savedStatesLocationName);
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info(this, "trying to write saved states to " + Configed.getSavedStatesLocationName());
+			String directoryName = getSavedStatesDirectoryName(Configed.getSavedStatesLocationName());
 			savedStatesDir = new File(directoryName);
 			Logging.info(this, "writing saved states, created file " + savedStatesDir);
 
@@ -482,11 +482,11 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			Logging.info(this, "writing saved states, set writable");
-			Configed.savedStates = new SavedStates(
-					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
+			Configed.setSavedStates(new SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME)));
 		}
 
-		if (Configed.savedStatesLocationName == null || Configed.savedStates == null) {
+		if (Configed.getSavedStatesLocationName() == null || Configed.getSavedStates() == null) {
 			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
 
@@ -498,18 +498,18 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.warning(this, "setting file savedStatesDir writable failed");
 			}
 
-			Configed.savedStates = new SavedStates(
-					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
+			Configed.setSavedStates(new SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME)));
 		}
 
 		try {
-			Configed.savedStates.load();
+			Configed.getSavedStates().load();
 		} catch (IOException iox) {
 			Logging.warning(this, "saved states file could not be loaded", iox);
 		}
 
-		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.getProperty("saveUsageCount", "0"));
-		Configed.savedStates.setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
+		Integer oldUsageCount = Integer.valueOf(Configed.getSavedStates().getProperty("saveUsageCount", "0"));
+		Configed.getSavedStates().setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -520,21 +520,21 @@ public class ConfigedMain implements ListSelectionListener {
 
 		boolean success = true;
 
-		if (Configed.savedStatesLocationName != null) {
-			Logging.info(this, "trying to find saved states in " + Configed.savedStatesLocationName);
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info(this, "trying to find saved states in " + Configed.getSavedStatesLocationName());
 
-			savedStatesLocation = new File(Configed.savedStatesLocationName);
+			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
 			savedStatesLocation.mkdirs();
 			success = savedStatesLocation.setReadable(true);
 		}
 
 		if (!success) {
-			Logging.warning(this, "cannot not find saved states in " + Configed.savedStatesLocationName);
+			Logging.warning(this, "cannot not find saved states in " + Configed.getSavedStatesLocationName());
 		}
 
-		if (Configed.savedStatesLocationName == null || !success) {
+		if (Configed.getSavedStatesLocationName() == null || !success) {
 			Logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
-			Configed.savedStatesLocationName = getSavedStatesDefaultLocation();
+			Configed.setSavedStatesLocationName(getSavedStatesDefaultLocation());
 			savedStatesLocation = new File(getSavedStatesDefaultLocation());
 			savedStatesLocation.mkdirs();
 		}
@@ -732,7 +732,7 @@ public class ConfigedMain implements ListSelectionListener {
 		initData();
 		initSavedStates();
 
-		oldSelectedDepots = backslashPattern.matcher(Configed.savedStates.getProperty("selectedDepots", ""))
+		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
 				.replaceAll("").split(",");
 
 		// too early, raises a NPE, if the user entry does not exist
@@ -893,7 +893,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setColumnSessionInfo " + b);
 		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
 
-		mainFrame.combinedMenuItemSessionInfoColumn.show(b);
+		mainFrame.getCombinedMenuItemSessionInfoColumn().show(b);
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
@@ -907,7 +907,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		setColumnSessionInfo(!visible);
 
-		mainFrame.combinedMenuItemSessionInfoColumn.show(!visible);
+		mainFrame.getCombinedMenuItemSessionInfoColumn().show(!visible);
 	}
 
 	public void toggleColumnInventoryNumber() {
@@ -922,7 +922,7 @@ public class ConfigedMain implements ListSelectionListener {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.combinedMenuItemInventoryNumberColumn.show(!visible);
+		mainFrame.getCombinedMenuItemInventoryNumberColumn().show(!visible);
 	}
 
 	public void toggleColumnCreated() {
@@ -935,7 +935,7 @@ public class ConfigedMain implements ListSelectionListener {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.combinedMenuItemCreatedColumn.show(!visible);
+		mainFrame.getCombinedMenuItemCreatedColumn().show(!visible);
 	}
 
 	public void toggleColumnWANactive() {
@@ -949,7 +949,7 @@ public class ConfigedMain implements ListSelectionListener {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.combinedMenuItemWANactiveColumn.show(!visible);
+		mainFrame.getCombinedMenuItemWANactiveColumn().show(!visible);
 	}
 
 	public void toggleColumnUEFIactive() {
@@ -963,7 +963,7 @@ public class ConfigedMain implements ListSelectionListener {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.combinedMenuItemUefiBootColumn.show(!visible);
+		mainFrame.getCombinedMenuItemUefiBootColumn().show(!visible);
 	}
 
 	public void toggleColumnInstallByShutdownActive() {
@@ -983,7 +983,7 @@ public class ConfigedMain implements ListSelectionListener {
 				selectionPanel.moveToValue(getSelectedClients()[0], 0);
 			}
 
-			mainFrame.combinedMenuItemInstallByShutdownColumn.show(!visible);
+			mainFrame.getCombinedMenuItemInstallByShutdownColumn().show(!visible);
 		}
 	}
 
@@ -998,7 +998,7 @@ public class ConfigedMain implements ListSelectionListener {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.combinedMenuItemDepotColumn.show(!visible);
+		mainFrame.getCombinedMenuItemDepotColumn().show(!visible);
 	}
 
 	public void handleGroupActionRequest() {
@@ -1886,8 +1886,8 @@ public class ConfigedMain implements ListSelectionListener {
 		hostConfigs = null;
 		persistenceController.getEmptyLogfiles();
 
-		if (mainFrame.controllerHWinfoMultiClients != null) {
-			mainFrame.controllerHWinfoMultiClients.requestResetFilter();
+		if (mainFrame.getControllerHWinfoMultiClients() != null) {
+			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
 		}
 	}
 
@@ -2286,13 +2286,13 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private static void clearProductEditing() {
-		mainFrame.panelLocalbootProductSettings.clearEditing();
-		mainFrame.panelNetbootProductSettings.clearEditing();
+		mainFrame.getPanelLocalbootProductSettings().clearEditing();
+		mainFrame.getPanelNetbootProductSettings().clearEditing();
 	}
 
 	private static void clearListEditors() {
-		mainFrame.panelLocalbootProductSettings.clearListEditors();
-		mainFrame.panelNetbootProductSettings.clearListEditors();
+		mainFrame.getPanelLocalbootProductSettings().clearListEditors();
+		mainFrame.getPanelNetbootProductSettings().clearListEditors();
 	}
 
 	public void setProductEdited(String productname) {
@@ -2329,7 +2329,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persistenceController.hasClientSpecificProperties(productname));
 
-		mainFrame.panelLocalbootProductSettings.initEditing(productname,
+		mainFrame.getPanelLocalbootProductSettings().initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
 				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
@@ -2345,7 +2345,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 				clientProductpropertiesUpdateCollection);
 
-		mainFrame.panelNetbootProductSettings.initEditing(productname,
+		mainFrame.getPanelNetbootProductSettings().initEditing(productname,
 				persistenceController.getProductTitle(productname), persistenceController.getProductInfo(productname),
 				persistenceController.getProductHint(productname),
 				persistenceController.getProductVersion(productname) + ProductPackageVersionSeparator.FOR_DISPLAY
@@ -2652,7 +2652,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.debug(this, "selectedDepotsV: " + selectedDepotsV);
 
-		Configed.savedStates.setProperty("selectedDepots", Arrays.toString(selectedDepots));
+		Configed.getSavedStates().setProperty("selectedDepots", Arrays.toString(selectedDepots));
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
@@ -2790,7 +2790,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private boolean setLocalbootProductsPage() {
 		Logging.debug(this, "setLocalbootProductsPage() with filter "
-				+ Configed.savedStates.getProperty("filteredTableModelfilters"));
+				+ Configed.getSavedStates().getProperty("filteredTableModelfilters"));
 
 		if (!setDepotRepresentative()) {
 			return false;
@@ -2816,7 +2816,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
-		mainFrame.panelLocalbootProductSettings.initAllProperties();
+		mainFrame.getPanelLocalbootProductSettings().initAllProperties();
 
 		Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
 		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
@@ -2829,9 +2829,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
 
-		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
-		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
-				.getSortKeys();
+		Set<String> oldProductSelection = mainFrame.getPanelLocalbootProductSettings().getSelectedIDs();
+		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame
+				.getPanelLocalbootProductSettings().getSortKeys();
 
 		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
 
@@ -2846,30 +2846,31 @@ public class ConfigedMain implements ListSelectionListener {
 					getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 		}
 
-		int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
-		mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
-		mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+		int[] columnWidths = getTableColumnWidths(mainFrame.getPanelLocalbootProductSettings().getTableProducts());
+		mainFrame.getPanelLocalbootProductSettings().setTableModel(istmForSelectedClientsLocalboot);
+		mainFrame.getPanelLocalbootProductSettings().setSortKeys(currentSortKeysLocalbootProducts);
 
-		Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(localbootProductsSavedStateObjTag
+				+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
 		Set<String> savedFilter = null;
 
-		if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+		if (Configed.getSavedStates().getProperty(localbootProductsSavedStateObjTag + "."
 				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
 			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
-					.matcher(Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-							+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
+					.matcher(Configed.getSavedStates()
+							.getProperty(localbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
 					.replaceAll("").split(",")));
 		}
-		mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-		mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
+		mainFrame.getPanelLocalbootProductSettings().setGroupsData(productGroups, productGroupMembers);
+		mainFrame.getPanelLocalbootProductSettings().reduceToSet(savedFilter);
 
 		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-		mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
-		mainFrame.panelLocalbootProductSettings
+		mainFrame.getPanelLocalbootProductSettings().setSelection(oldProductSelection);
+		mainFrame.getPanelLocalbootProductSettings()
 				.setSearchFields(InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-		setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
+		setTableColumnWidths(mainFrame.getPanelLocalbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
 	}
@@ -2896,15 +2897,15 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
 				+ endmillis + " diff " + (endmillis - startmillis));
 
-		List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panelNetbootProductSettings
+		List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.getPanelNetbootProductSettings()
 				.getSortKeys();
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
-		mainFrame.panelLocalbootProductSettings.initAllProperties();
+		mainFrame.getPanelLocalbootProductSettings().initAllProperties();
 
 		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
 
-		Set<String> oldProductSelection = mainFrame.panelNetbootProductSettings.getSelectedIDs();
+		Set<String> oldProductSelection = mainFrame.getPanelNetbootProductSettings().getSelectedIDs();
 
 		// we retrieve the properties for all clients and products
 
@@ -2921,27 +2922,28 @@ public class ConfigedMain implements ListSelectionListener {
 					getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
 		}
 
-		int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
-		mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
-		mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
+		int[] columnWidths = getTableColumnWidths(mainFrame.getPanelNetbootProductSettings().getTableProducts());
+		mainFrame.getPanelNetbootProductSettings().setTableModel(istmForSelectedClientsNetboot);
+		mainFrame.getPanelNetbootProductSettings().setSortKeys(currentSortKeysNetbootProducts);
 
-		Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(netbootProductsSavedStateObjTag + "."
 				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
 		Set<String> savedFilter = null;
 
-		if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+		if (Configed.getSavedStates().getProperty(netbootProductsSavedStateObjTag + "."
 				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
 			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
-					.matcher(Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
-							+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
+					.matcher(Configed.getSavedStates()
+							.getProperty(netbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
 					.replaceAll("").split(",")));
 		}
 
-		mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-		mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
-		mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
-		setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
+		mainFrame.getPanelNetbootProductSettings().setGroupsData(productGroups, productGroupMembers);
+		mainFrame.getPanelNetbootProductSettings().reduceToSet(savedFilter);
+		mainFrame.getPanelNetbootProductSettings().setSelection(oldProductSelection);
+		setTableColumnWidths(mainFrame.getPanelNetbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
 	}
@@ -3025,7 +3027,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setProductPropertiesPage");
 
 		if (editingTarget == EditingTarget.DEPOTS) {
-			mainFrame.panelProductProperties.setProductProperties();
+			mainFrame.getPanelProductProperties().setProductProperties();
 
 			return true;
 		} else {
@@ -3047,7 +3049,7 @@ public class ConfigedMain implements ListSelectionListener {
 			hostUpdateCollection = new HostUpdateCollection();
 			addToGlobalUpdateCollection(hostUpdateCollection);
 
-			mainFrame.panelHostProperties.initMultipleHostsEditing(
+			mainFrame.getPanelHostProperties().initMultipleHostsEditing(
 					Configed.getResourceValue("PanelHostProperties.SelectHost"),
 					new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 					depotPropertiesForPermittedDepots, hostUpdateCollection,
@@ -3100,8 +3102,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
 
-			mainFrame.panelHostConfig.initEditing("  " + myServer + " (configuration server)", additionalConfigs.get(0),
-					persistenceController.getConfigOptions(), additionalConfigs,
+			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
+					additionalConfigs.get(0), persistenceController.getConfigOptions(), additionalConfigs,
 					additionalconfigurationUpdateCollection, true,
 					// editableOptions
 					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
@@ -3132,8 +3134,8 @@ public class ConfigedMain implements ListSelectionListener {
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
-			mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
-					additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
+			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
+					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
 					OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
 
 		}
@@ -3559,12 +3561,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 			persistenceController.productDataRequestRefresh();
 			OpsiDataBackend.getInstance().setReloadRequested();
-			mainFrame.panelProductProperties.reload();
+			mainFrame.getPanelProductProperties().reload();
 
 			persistenceController.configOptionsRequestRefresh();
 
-			if (mainFrame.fDialogOpsiLicensingInfo != null) {
-				mainFrame.fDialogOpsiLicensingInfo.reload();
+			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
+				mainFrame.getFDialogOpsiLicensingInfo().reload();
 			}
 
 			requestRefreshDataForClientSelection();
@@ -3580,8 +3582,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			setRebuiltClientListTableModel();
 
-			if (mainFrame.controllerHWinfoMultiClients != null) {
-				mainFrame.controllerHWinfoMultiClients.rebuildModel();
+			if (mainFrame.getControllerHWinfoMultiClients() != null) {
+				mainFrame.getControllerHWinfoMultiClients().rebuildModel();
 			}
 
 			fetchDepots();
@@ -4053,7 +4055,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 				fShowReachableInfo.setVisible(false);
 
-				mainFrame.iconButtonReachableInfo.setEnabled(true);
+				mainFrame.getIconButtonReachableInfo().setEnabled(true);
 
 				setReachableInfo(selectedClients);
 			}
@@ -4144,7 +4146,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
 
-		mainFrame.iconButtonSessionInfo.setWaitingState(true);
+		mainFrame.getIconButtonSessionInfo().setWaitingState(true);
 
 		// no old values kept
 		sessionInfo = new HashMap<>();
@@ -4167,7 +4169,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void disableSessionInfoButton() {
 		try {
-			SwingUtilities.invokeAndWait(() -> mainFrame.iconButtonSessionInfo.setEnabled(false));
+			SwingUtilities.invokeAndWait(() -> mainFrame.getIconButtonSessionInfo().setEnabled(false));
 		} catch (InvocationTargetException ex) {
 			Logging.info(this, "invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
 		} catch (InterruptedException ie) {
@@ -4202,9 +4204,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void sessionInfoFinished() {
 		Logging.info(this, "when sessioninfoFinished");
-		mainFrame.iconButtonSessionInfo.setWaitingState(false);
+		mainFrame.getIconButtonSessionInfo().setWaitingState(false);
 
-		mainFrame.iconButtonSessionInfo.setEnabled(true);
+		mainFrame.getIconButtonSessionInfo().setEnabled(true);
 
 		// update column
 		if (Boolean.TRUE.equals(
@@ -4434,7 +4436,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		String oldGroupSelection = groupName;
 		if (oldGroupSelection == null) {
-			oldGroupSelection = Configed.savedStates.getProperty("groupname");
+			oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
 		}
 
 		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
@@ -5169,5 +5171,41 @@ public class ConfigedMain implements ListSelectionListener {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
+	}
+
+	public DefaultTableProvider getGlobalProductsTableProvider() {
+		return globalProductsTableProvider;
+	}
+
+	public LicencesFrame getLicencesFrame() {
+		return licencesFrame;
+	}
+
+	public Map<String, Boolean> getHostDisplayFields() {
+		return hostDisplayFields;
+	}
+
+	public static String getHost() {
+		return host;
+	}
+
+	public static void setHost(String host) {
+		ConfigedMain.host = host;
+	}
+
+	public static String getUser() {
+		return user;
+	}
+
+	public static void setUser(String user) {
+		ConfigedMain.user = user;
+	}
+
+	public static String getPassword() {
+		return password;
+	}
+
+	public static void setPassword(String password) {
+		ConfigedMain.password = password;
 	}
 }

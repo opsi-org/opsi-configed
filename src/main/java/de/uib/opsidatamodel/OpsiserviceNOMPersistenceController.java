@@ -167,8 +167,8 @@ public class OpsiserviceNOMPersistenceController {
 	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
 	public static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
-	public static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
-	public static String packageServerDirectoryS = configedWorkbenchDefaultValue;
+	private static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
+	private static String packageServerDirectoryS = configedWorkbenchDefaultValue;
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
@@ -287,7 +287,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
-	public AbstractExecutioner exec;
+	private AbstractExecutioner exec;
 
 	/* data for checking permissions */
 	private boolean globalReadOnly;
@@ -568,16 +568,17 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		Boolean locallySavedValueUserRegister = null;
-		if (Configed.savedStates == null) {
+		if (Configed.getSavedStates() == null) {
 			Logging.trace(this, "savedStates.saveRegisterUser not initialized");
 		} else {
-			locallySavedValueUserRegister = Boolean.parseBoolean(Configed.savedStates.getProperty(KEY_USER_REGISTER));
+			locallySavedValueUserRegister = Boolean
+					.parseBoolean(Configed.getSavedStates().getProperty(KEY_USER_REGISTER));
 			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
 
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
-					Configed.savedStates.setProperty(KEY_USER_REGISTER, "true");
+					Configed.getSavedStates().setProperty(KEY_USER_REGISTER, "true");
 				}
 			} else {
 				if (locallySavedValueUserRegister != null && locallySavedValueUserRegister) {
@@ -616,7 +617,7 @@ public class OpsiserviceNOMPersistenceController {
 					case 2:
 						Logging.info(this, "setAgainUserRegistration remove warning locally ");
 						// remove from store
-						Configed.savedStates.remove(KEY_USER_REGISTER);
+						Configed.getSavedStates().remove(KEY_USER_REGISTER);
 						break;
 
 					case 3:
@@ -764,7 +765,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
+		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.getUser()) != null;
 	}
 
 	private String getOTPSecret(String userId) {
@@ -1053,23 +1054,17 @@ public class OpsiserviceNOMPersistenceController {
 
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
-
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-
 			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
-			if (
-			// has state unknown, probably because of a failed installation)
-			(includeFailedInstallations
-					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState)) ||
-			// has wrong product version
-					(InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& ((!POJOReMapper.equalsNull(clientProductVersion)
-									&& !productVersion.equals(clientProductVersion))
-									|| (!POJOReMapper.equalsNull(clientPackageVersion)
-											&& !packageVersion.equals(clientPackageVersion))))) {
+			boolean hasWrongProductVersion = (!POJOReMapper.equalsNull(clientProductVersion)
+					&& !productVersion.equals(clientProductVersion))
+					|| (!POJOReMapper.equalsNull(clientPackageVersion) && !packageVersion.equals(clientPackageVersion));
+			if ((includeFailedInstallations
+					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState))
+					|| (InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
+							&& hasWrongProductVersion)) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
-
 				result.add(client);
 			}
 		}
@@ -3200,18 +3195,24 @@ public class OpsiserviceNOMPersistenceController {
 	public List<String> getAllDepotsWithIdenticalProductStock(String depot) {
 		List<String> result = new ArrayList<>();
 
-		TreeSet<OpsiPackage> first = dataStub.getDepot2Packages().get(depot);
-		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + first);
+		TreeSet<OpsiPackage> originalProductStock = dataStub.getDepot2Packages().get(depot);
+		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + originalProductStock);
 
-		for (String testdepot : getHostInfoCollections().getAllDepots().keySet()) {
-			if (depot.equals(testdepot) || (first == null && dataStub.getDepot2Packages().get(testdepot) == null)
-					|| (first != null && first.equals(dataStub.getDepot2Packages().get(testdepot)))) {
-				result.add(testdepot);
+		for (String testDepot : getHostInfoCollections().getAllDepots().keySet()) {
+			if (depot.equals(testDepot)
+					|| areProductStocksIdentical(originalProductStock, dataStub.getDepot2Packages().get(testDepot))) {
+				result.add(testDepot);
 			}
 		}
 		Logging.info(this, "getAllDepotsWithIdenticalProductStock  result " + result);
 
 		return result;
+	}
+
+	private static boolean areProductStocksIdentical(TreeSet<OpsiPackage> firstProductStock,
+			TreeSet<OpsiPackage> secondProductStock) {
+		return (firstProductStock == null && secondProductStock == null)
+				|| (firstProductStock != null && firstProductStock.equals(secondProductStock));
 	}
 
 	public List<String> getAllNetbootProductNames(String depotId) {
@@ -3799,9 +3800,7 @@ public class OpsiserviceNOMPersistenceController {
 		boolean starting = true;
 
 		for (Map<String, Object> map : properties) {
-			Object retrievedValues = ((JSONArray) map.get("values")).toList();
-
-			List<?> valueList = (List<?>) retrievedValues;
+			List<?> valueList = (List<?>) map.get("values");
 
 			Set<String> values = new HashSet<>();
 
@@ -4295,13 +4294,15 @@ public class OpsiserviceNOMPersistenceController {
 			} else {
 				Logging.debug(this, " dependency map : ");
 
-				if ((requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
+				boolean hasRequirementType = requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
 						|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
-						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER))
-						&& ((aDependency.get("action")).equals(ActionRequest.getLabel(ActionRequest.SETUP))
-								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
-								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
-								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM)))
+						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER);
+				boolean hasActionRequest = aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
+						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
+						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
+						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
+
+				if (hasRequirementType && hasActionRequest
 						&& aDependency.get("requirementType").equals(requirementType)) {
 					result.put(aDependency.get("requiredProductId"),
 							aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
@@ -8139,5 +8140,25 @@ public class OpsiserviceNOMPersistenceController {
 	 */
 	public boolean updateSSHCommand(List<Object> jsonObjects) {
 		return doActionSSHCommand("SSHCommand_updateObjects", jsonObjects);
+	}
+
+	public static String getConfigedWorkbenchDefaultValue() {
+		return configedWorkbenchDefaultValue;
+	}
+
+	public static void setConfigedWorkbenchDefaultValue(String defaultWorkbenchValue) {
+		OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue = defaultWorkbenchValue;
+	}
+
+	public static String getPackageServerDirectoryS() {
+		return packageServerDirectoryS;
+	}
+
+	public static void setPackageServerDirectoryS(String packageServerDirectoryS) {
+		OpsiserviceNOMPersistenceController.packageServerDirectoryS = packageServerDirectoryS;
+	}
+
+	public AbstractExecutioner getExecutioner() {
+		return exec;
 	}
 }

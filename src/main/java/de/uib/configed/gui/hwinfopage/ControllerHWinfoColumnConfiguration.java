@@ -63,7 +63,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private static final int KEY_COL = 0;
 
-	public PanelGenEditTable panel;
+	private PanelGenEditTable panel;
 	private GenTableModel model;
 
 	private List<String> columnNames;
@@ -332,5 +332,9 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 
 		return result;
+	}
+
+	public PanelGenEditTable getPanel() {
+		return panel;
 	}
 }

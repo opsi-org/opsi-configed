@@ -144,7 +144,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private void produceServerPath() {
 		Logging.debug(this, "produceServerPath ");
 
-		opsiPackageServerPathS = OpsiserviceNOMPersistenceController.packageServerDirectoryS + opsiPackageNameS;
+		opsiPackageServerPathS = OpsiserviceNOMPersistenceController.getPackageServerDirectoryS() + opsiPackageNameS;
 		Logging.debug(this, "produceServerPath " + opsiPackageServerPathS);
 	}
 

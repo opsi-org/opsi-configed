@@ -430,7 +430,16 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		return this;
 	}
 
-	public boolean equals(SSHCommandTemplate com) {
+	@Override
+	public boolean equals(Object o) {
+		SSHCommandTemplate com = null;
+		if (o instanceof SSHCommandTemplate) {
+			com = (SSHCommandTemplate) o;
+		} else {
+			Logging.debug(this, "equals object is not instance of SSHCommandTemplate");
+			return false;
+		}
+
 		if (!this.getId().trim().equals(com.getId().trim())) {
 			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;
@@ -475,8 +484,13 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 
 	}
 
+	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
+
 	/**
-	 * @return empty list
+	 * * @return empty list
 	 */
 	@Override
 	public List<String> getParameterList() {

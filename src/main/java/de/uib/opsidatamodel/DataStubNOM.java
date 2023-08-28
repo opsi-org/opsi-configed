@@ -162,7 +162,8 @@ public class DataStubNOM {
 
 		Logging.info(this, "test, query " + query);
 
-		result = persistenceController.exec.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
+		result = persistenceController.getExecutioner()
+				.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 		Logging.info(this, "test result " + result);
 
@@ -1261,7 +1262,7 @@ public class DataStubNOM {
 
 		Logging.info(this, "retrieveClient2HwRows, query " + query);
 
-		List<List<String>> rows = persistenceController.exec
+		List<List<String>> rows = persistenceController.getExecutioner()
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);

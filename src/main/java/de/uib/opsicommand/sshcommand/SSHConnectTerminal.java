@@ -46,7 +46,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private ActionListener connectionKeyListener;
 	private OutputStream out;
 
-	public List<String> commandsCompgen;
+	private List<String> commandsCompgen;
 
 	public SSHConnectTerminal(ConfigedMain main) {
 		super(main);
@@ -330,5 +330,9 @@ public class SSHConnectTerminal extends SSHConnect {
 			this.channel.disconnect();
 			channel = null;
 		}
+	}
+
+	public List<String> getCommandsCompgen() {
+		return commandsCompgen;
 	}
 }

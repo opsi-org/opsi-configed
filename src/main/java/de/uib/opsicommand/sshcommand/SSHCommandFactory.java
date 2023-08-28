@@ -67,9 +67,9 @@ public final class SSHCommandFactory {
 	public static final int POSITION_DEFAULT = 0;
 
 	/** setting ssh_colored_output per default true **/
-	public static boolean sshColoredOutput = true;
+	private static boolean sshColoredOutput = true;
 	/** setting ssh_always_exec_in_background per default false **/
-	public static boolean sshAlwaysExecInBackground;
+	private static boolean sshAlwaysExecInBackground;
 	/** all static commands which need run-time parameter **/
 	private static List<SSHCommand> sshCommandsParam = new ArrayList<>();
 
@@ -577,5 +577,21 @@ public final class SSHCommandFactory {
 		} else {
 			mainFrame.updateSSHConnectedInfoMenu(status);
 		}
+	}
+
+	public static boolean hasColoredOutput() {
+		return sshColoredOutput;
+	}
+
+	public static void setColoredOutput(boolean coloredOutput) {
+		SSHCommandFactory.sshColoredOutput = coloredOutput;
+	}
+
+	public static boolean alwaysExecInBackground() {
+		return sshAlwaysExecInBackground;
+	}
+
+	public static void setAlwaysExecInBackground(boolean execInBackground) {
+		SSHCommandFactory.sshAlwaysExecInBackground = execInBackground;
 	}
 }

@@ -49,14 +49,14 @@ import utils.Utils;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public static final String VALUE_NO_LICENCE_POOL = "---";
-	public PanelGenEditTable panelSWnames;
-	public GenTableModel modelSWnames;
+	private PanelGenEditTable panelSWnames;
+	private GenTableModel modelSWnames;
 
 	private List<String> columnNames;
 	private List<String> classNames;
 
-	public PanelGenEditTable panelSWxLicencepool;
-	public GenTableModel modelSWxLicencepool;
+	private PanelGenEditTable panelSWxLicencepool;
+	private GenTableModel modelSWxLicencepool;
 	private List<String> columnNamesSWxLicencepool;
 	private List<String> classNamesSWxLicencepool;
 
@@ -365,7 +365,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					foundVariantLicencepools = checkExistNamesWithVariantLicencepools((String) getValueAt(i, 0));
 					i++;
 				}
-				myController.thePanel.setDisplaySimilarExist(foundVariantLicencepools);
+				myController.getPanel().setDisplaySimilarExist(foundVariantLicencepools);
 			}
 
 			@Override
@@ -544,5 +544,21 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
+	}
+
+	public PanelGenEditTable getPanelSWnames() {
+		return panelSWnames;
+	}
+
+	public GenTableModel getModelSWnames() {
+		return modelSWnames;
+	}
+
+	public PanelGenEditTable getPanelSWxLicencepool() {
+		return panelSWxLicencepool;
+	}
+
+	public GenTableModel getModelSWxLicencepool() {
+		return modelSWxLicencepool;
 	}
 }

@@ -64,4 +64,8 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 		);
 	}
+
+	public PanelGenEditTable getPanelStatistics() {
+		return panelStatistics;
+	}
 }

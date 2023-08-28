@@ -9,7 +9,6 @@ package de.uib.utilities;
 import de.uib.utilities.logging.Logging;
 
 public class ExtendedInteger implements Comparable<Integer> {
-
 	private static final String INFINITE_IMPORT = "infinite";
 	private static final String S_INFINITE = "INFINITE";
 	private static final String DISPLAY_INFINITE = "\u221E";
@@ -73,13 +72,17 @@ public class ExtendedInteger implements Comparable<Integer> {
 
 	@Override
 	public boolean equals(Object x) {
-		if (!(x instanceof ExtendedInteger)) {
+		if (x == null || !(x.getClass().equals(ExtendedInteger.class))) {
 			return false;
 		}
 
 		ExtendedInteger ei = (ExtendedInteger) x;
-
 		return ei.getString().equals(getString());
+	}
+
+	@Override
+	public int hashCode() {
+		return value.hashCode();
 	}
 
 	public ExtendedInteger add(ExtendedInteger ei) {

@@ -186,7 +186,7 @@ public final class ConnectionErrorReporter {
 		if (newPasswordDialog.isCancelled()) {
 			displayCancelConfigedDialog();
 		} else {
-			ConfigedMain.password = newPasswordDialog.getData().get("password");
+			ConfigedMain.setPassword(newPasswordDialog.getData().get("password"));
 		}
 	}
 

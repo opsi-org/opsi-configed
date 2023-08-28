@@ -20,6 +20,11 @@ public class TreeSetBuddy extends TreeSet<String> {
 		return super.equals(o);
 	}
 
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	public boolean equals(TreeSetBuddy other) {
 		if (other == null) {
 			return false;
