@@ -138,12 +138,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.targetModel = targetModel;
 	}
 
-	private static Collator getCollator() {
-		Collator alphaCollator = Collator.getInstance();
-		alphaCollator.setStrength(Collator.IDENTICAL);
-		return alphaCollator;
-	}
-
 	/**
 	 * @param SearchTargetModel the model for delivering data and selecting
 	 * @param boolean           modifies the search function
@@ -186,6 +180,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		initComponents();
 		setupLayout();
 		setNarrow(false);
+	}
+
+	private static Collator getCollator() {
+		Collator alphaCollator = Collator.getInstance();
+		alphaCollator.setStrength(Collator.IDENTICAL);
+		return alphaCollator;
 	}
 
 	/**

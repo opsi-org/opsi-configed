@@ -15,33 +15,6 @@ public class ByteUnitConverter {
 	private static final int ONE_GB_IN_BYTES = 1_000_000_000;
 	private static final long ONE_TB_IN_BYTES = 1_000_000_000_000L;
 
-	public enum ByteUnit {
-		KILO_BYTE {
-			@Override
-			public String toString() {
-				return "KB";
-			}
-		},
-		MEGA_BYTE {
-			@Override
-			public String toString() {
-				return "MB";
-			}
-		},
-		GIGA_BYTE {
-			@Override
-			public String toString() {
-				return "GB";
-			}
-		},
-		TERA_BYTE {
-			@Override
-			public String toString() {
-				return "TB";
-			}
-		}
-	}
-
 	public ByteUnit detectByteUnit(int bytes) {
 		ByteUnit result = null;
 
@@ -49,7 +22,7 @@ public class ByteUnitConverter {
 			result = ByteUnit.KILO_BYTE;
 		} else if (bytes > ONE_MB_IN_BYTES && bytes < ONE_GB_IN_BYTES) {
 			result = ByteUnit.MEGA_BYTE;
-		} else if (bytes < ONE_GB_IN_BYTES && bytes < ONE_TB_IN_BYTES) {
+		} else if (bytes > ONE_GB_IN_BYTES && bytes < ONE_TB_IN_BYTES) {
 			result = ByteUnit.GIGA_BYTE;
 		} else {
 			result = ByteUnit.TERA_BYTE;
@@ -63,16 +36,16 @@ public class ByteUnitConverter {
 
 		switch (byteUnitToUse) {
 		case KILO_BYTE:
-			size = bytes / 1024.0;
+			size = bytes / 1000.0;
 			break;
 		case MEGA_BYTE:
-			size = bytes / Math.pow(1024, 2);
+			size = bytes / Math.pow(1000, 2);
 			break;
 		case GIGA_BYTE:
-			size = bytes / Math.pow(1024, 3);
+			size = bytes / Math.pow(1000, 3);
 			break;
 		case TERA_BYTE:
-			size = bytes / Math.pow(1024, 4);
+			size = bytes / Math.pow(1000, 4);
 			break;
 		default:
 			Logging.warning(this, "unknown unit byte: " + byteUnitToUse);

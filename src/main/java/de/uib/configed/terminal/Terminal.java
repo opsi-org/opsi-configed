@@ -371,7 +371,7 @@ public final class Terminal {
 		}
 
 		ByteUnitConverter converter = new ByteUnitConverter();
-		ByteUnitConverter.ByteUnit byteUnit = converter.detectByteUnit(fileSize);
+		ByteUnit byteUnit = converter.detectByteUnit(fileSize);
 		String uploadedFileSize = converter.asString(converter.convertByteUnit(progress, byteUnit), byteUnit);
 		String totalFileSize = converter.asString(converter.convertByteUnit(fileSize, byteUnit), byteUnit);
 

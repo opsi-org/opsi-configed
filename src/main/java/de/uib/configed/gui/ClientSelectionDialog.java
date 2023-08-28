@@ -165,10 +165,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		});
 	}
 
-	private void setReloadRequested() {
-		manager.getBackend().setReloadRequested();
-	}
-
 	public void loadSearch(String name) {
 		Logging.info(this, "loadSearch " + name);
 
@@ -263,8 +259,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			buttonReload.setEnabled(false);
 
 			SwingUtilities.invokeLater(() -> {
-				setReloadRequested();
-
+				manager.getBackend().setReloadRequested();
+				manager.getBackend().reload();
 				main.callNewClientSelectionDialog();
 				// we lose all components of this dialog, there is nothing to reset
 			});
@@ -418,8 +414,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		buttonRestart.setEnabled(false);
 		setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
-			setReloadRequested();
-
+			manager.getBackend().setReloadRequested();
+			manager.getBackend().reload();
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
 			setCursor(null);

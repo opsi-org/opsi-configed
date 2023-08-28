@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -190,8 +191,10 @@ public abstract class AbstractSWExporter {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
+						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController
-								.retrieveSoftwareAuditData(theHost);
+								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
@@ -199,7 +202,8 @@ public abstract class AbstractSWExporter {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(theHost);
+							scanInfo = "Scan " + persistenceController
+									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}
 
 						return tableData;

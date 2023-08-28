@@ -610,6 +610,6 @@ public final class SSHCommandParameterMethods {
 	}
 
 	public void setCanceled(boolean canceled) {
-		this.canceled = canceled:
+		this.canceled = canceled;
 	}
 }
