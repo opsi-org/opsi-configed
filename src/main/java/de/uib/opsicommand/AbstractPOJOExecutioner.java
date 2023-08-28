@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -106,12 +107,14 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 		String errorMessage = null;
 
 		if (retrieved.containsKey("error") && retrieved.get("error") != null) {
-			Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
-					new TypeReference<Map<String, Object>>() {
-					});
+			if (retrieved.get("error") instanceof Map) {
+				Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
+						new TypeReference<Map<String, Object>>() {
+						});
 
-			if (error != null && error.get("class") != null && error.get("message") != null) {
-				errorMessage = " [" + error.get("class") + "] " + error.get("message");
+				if (error != null && error.get("class") != null && error.get("message") != null) {
+					errorMessage = " [" + error.get("class") + "] " + error.get("message");
+				}
 			} else {
 				errorMessage = " " + retrieved.get("error");
 			}
@@ -123,13 +126,23 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	@Override
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> responses = POJOReMapper.remap(retrieved.get("result"),
+				new TypeReference<Map<String, Object>>() {
+				});
 
-		if (retrieved.get("error") == null) {
-			List<?> list = (List<?>) retrieved.get("result");
-			result.put("result", list);
-		} else {
-			String str = "" + retrieved.get("error");
-			result.put("error", str);
+		for (Entry<String, Object> entry : responses.entrySet()) {
+			Map<String, Object> response = POJOReMapper.remap(entry.getValue(),
+					new TypeReference<Map<String, Object>>() {
+					});
+
+			if (response.get("error") == null) {
+				List<Object> list = POJOReMapper.remap(response.get("result"), new TypeReference<List<Object>>() {
+				});
+				result.put(entry.getKey(), list);
+			} else {
+				String str = "" + response.get("error");
+				result.put(entry.getKey(), str);
+			}
 		}
 
 		Logging.debug(this, "getResponses  result " + result);

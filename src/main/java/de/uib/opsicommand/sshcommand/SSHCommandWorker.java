@@ -25,6 +25,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
+import utils.Utils;
 
 // first parameter class is return type of doInBackground
 // second is element type of the list which is used by process
@@ -66,41 +67,14 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 		this.commandNumber = cn;
 	}
 
-	private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
-		String s = "checkExitCode " + exitCode;
-		Logging.debug(this, "publish " + s);
-		publishInfo(SSHConnectExec.SEPARATING_LINE);
-		if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
-			publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
-					.replace("xX0Xx", Integer.toString(this.commandNumber))
-					.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
-		}
-
-		publishInfo(s);
+	private void checkExitCode(int exitCode, Channel channel) {
 		if (exitCode == 127) {
 			Logging.info(this, "exec exit code 127 (command does not exists).");
-			Logging.debug(Configed.getResourceValue("SSHConnection.Exec.exit127"));
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exit127"));
-				Logging.info(this, "2. publish");
-			}
 		} else if (exitCode != 0) {
 			caller.foundError();
 			Logging.info(this, "exec exit code " + exitCode + ".");
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError") + " "
-					+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitError") + " "
-						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
-			}
 		} else {
-			caller.foundError();
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-			Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-			if (withGui) {
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-				publishError(Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-			}
+			// Do nothing, everything ok
 		}
 
 		if (interruptChannelWorker && caller != null) {
@@ -108,9 +82,8 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			caller.disconnect();
 			caller.interruptChannel();
 			interruptChannelWorker = true;
-			Globals.threadSleep(this, 50);
+			Utils.threadSleep(this, 50);
 		}
-
 	}
 
 	@SuppressWarnings("java:S106")
@@ -135,7 +108,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 				caller.disconnect();
 				caller.interruptChannel();
 				interruptChannelWorker = true;
-				Globals.threadSleep(this, 50);
+				Utils.threadSleep(this, 50);
 			};
 
 			Logging.info(this, "doInBackground start waiting for answer");
@@ -158,7 +131,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					Logging.info(this, "doInBackground i " + i);
 
 					int timeStepMillis = 1000;
-					Globals.threadSleep(this, timeStepMillis);
+					Utils.threadSleep(this, timeStepMillis);
 
 					if (i < 0) {
 						break;
@@ -194,7 +167,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 							Logging.debug(this, " doInBackground publish " + progress + ": " + line);
 							publish(line);
 							progress++;
-							Globals.threadSleep(this, timeStepMillis);
+							Utils.threadSleep(this, timeStepMillis);
 						}
 					} else {
 
@@ -209,7 +182,8 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					if (in.available() > 0 && !caller.isChannelInterrupted()) {
 						continue;
 					}
-					checkExitCode(channel.getExitStatus(), withGui, channel);
+
+					checkExitCode(channel.getExitStatus(), channel);
 					if (channel.getExitStatus() != 0) {
 						Logging.info(this, "exec ready (2)");
 						caller.foundError();
@@ -221,7 +195,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					break;
 				}
 			}
-			Globals.threadSleep(this, 1000);
+			Utils.threadSleep(this, 1000);
 
 			if (outputDialog != null) {
 				caller.setDialog(outputDialog);
@@ -232,7 +206,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			if (retriedTimes >= 3) {
 				retriedTimes = 1;
 				Logging.warning(this, "jsch exception", jschex);
-				publishError(jschex.toString());
 				return "";
 			} else {
 				Logging.warning(this, "jsch exception", jschex);
@@ -242,7 +215,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			}
 		} catch (IOException ex) {
 			Logging.warning(this, "SSH IOException", ex);
-			publishError(ex.toString());
 		}
 
 		if (outputDialog != null && !caller.isMultiCommand()) {
@@ -267,17 +239,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			}
 
 		}
-	}
-
-	private void publishInfo(String s) {
-		if (outputDialog != null) {
-
-			outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
-		}
-	}
-
-	private void publishError(String s) {
-		// TODO what to do if publishError?
 	}
 
 	@Override

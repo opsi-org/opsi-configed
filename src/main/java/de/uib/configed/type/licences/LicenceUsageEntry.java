@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
 	/*
@@ -47,8 +47,6 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		KEYS.add(LICENCE_KEY_KEY);
 		KEYS.add(NOTES_KEY);
 	}
-
-	private String lic4pool;
 
 	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
 			String notes) {
@@ -85,8 +83,6 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		} else {
 			super.put(NOTES_KEY, notes);
 		}
-
-		lic4pool = Globals.pseudokey(new String[] { super.get(LICENCE_ID_KEY), super.get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {
@@ -100,22 +96,12 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		}
 
 		if (super.get(LICENCE_ID_KEY) == null || super.get(LICENCE_POOL_ID_KEY) == null) {
-			Logging.warning(this, "missing values " + entry);
+			Logging.warning(this.getClass(), "missing values " + entry);
 		}
-
-		lic4pool = Globals.pseudokey(new String[] { super.get(LICENCE_ID_KEY), super.get(LICENCE_POOL_ID_KEY) });
-	}
-
-	public String getId() {
-		return get(ID_KEY);
 	}
 
 	public String getClientId() {
 		return get(CLIENT_ID_KEY);
-	}
-
-	public String getLicencekey() {
-		return get(LICENCE_KEY_KEY);
 	}
 
 	public String getLicencepool() {
@@ -124,10 +110,6 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 
 	public String getLicenceId() {
 		return get(LICENCE_ID_KEY);
-	}
-
-	public String getLic4pool() {
-		return lic4pool;
 	}
 
 	public Map<String, Object> getNOMobject() {
@@ -140,7 +122,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public static String produceKey(String hostId, String licencePoolId, String licenceId) {
-		return Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
+		return Utils.pseudokey(new String[] { hostId, licencePoolId, licenceId });
 	}
 
 	public String getPseudoKey() {

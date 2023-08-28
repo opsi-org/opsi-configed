@@ -29,7 +29,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	public SSHModulesUploadDialog() {
 		super(TITLE, new CommandModulesUpload());
 		super.setVisible(true);
-		Logging.info(this, "SSHModulesUploadDialog build");
+		Logging.info(this.getClass(), "SSHModulesUploadDialog build");
 		frameHeight = 430;
 		showDialog();
 	}

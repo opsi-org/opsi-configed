@@ -44,13 +44,11 @@ public class Graph {
 
 	public void addEdges(Map<String, List<Map<String, String>>> dependencies, Map<String, Integer> productMap) {
 		for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
-			Object fst = productMap.get(entry.getKey());
+			Integer first = productMap.get(entry.getKey());
 
-			if (fst == null) {
+			if (first == null) {
 				continue;
 			}
-
-			int first = (int) fst;
 
 			for (Map<String, String> dependenciesElement : entry.getValue()) {
 				Object sec = productMap.get(dependenciesElement.get("requiredProductId"));
@@ -67,7 +65,7 @@ public class Graph {
 		}
 	}
 
-	public boolean isPartOfPath(DefaultMutableTreeNode node, String productId) {
+	private static boolean isPartOfPath(DefaultMutableTreeNode node, String productId) {
 		while (node != null) {
 			if (node.getUserObject().equals(productId)) {
 				return true;
@@ -88,7 +86,7 @@ public class Graph {
 		return abhaengigeProdukte;
 	}
 
-	public void addRecursiveAbhaengigeProdukte(DefaultMutableTreeNode node, Map<String, Integer> productMap,
+	private void addRecursiveAbhaengigeProdukte(DefaultMutableTreeNode node, Map<String, Integer> productMap,
 			List<String> productList) {
 		List<String> childStrings = new LinkedList<>();
 
@@ -123,7 +121,7 @@ public class Graph {
 		return benoetigteProdukte;
 	}
 
-	public void addRecursiveBenoetigteProdukte(DefaultMutableTreeNode node, Map<String, Integer> productMap,
+	private void addRecursiveBenoetigteProdukte(DefaultMutableTreeNode node, Map<String, Integer> productMap,
 			List<String> productList) {
 		List<String> childStrings = new LinkedList<>();
 
@@ -149,7 +147,7 @@ public class Graph {
 		return getRecursiveSetOfTreeNodes(setOfTreeNodes, root);
 	}
 
-	public Set<String> getRecursiveSetOfTreeNodes(Set<String> setOfTreeNodes, DefaultMutableTreeNode node) {
+	private static Set<String> getRecursiveSetOfTreeNodes(Set<String> setOfTreeNodes, DefaultMutableTreeNode node) {
 		Enumeration<TreeNode> children = node.children();
 
 		while (children.hasMoreElements()) {

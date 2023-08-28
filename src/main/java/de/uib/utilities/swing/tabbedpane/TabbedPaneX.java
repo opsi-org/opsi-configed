@@ -13,24 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
 import de.uib.Main;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
 public class TabbedPaneX extends JPanel {
 	private JTabbedPane jTabbedPaneMain;
 
-	private TabController controller;
+	private ConfigedMain configedMain;
 
 	private List<LicencesTabStatus> tabOrder;
 
-	public TabbedPaneX(TabController controller) {
-		this.controller = controller;
+	public TabbedPaneX(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		init();
 	}
 
@@ -55,7 +55,7 @@ public class TabbedPaneX extends JPanel {
 			LicencesTabStatus newS = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
-			LicencesTabStatus s = controller.reactToStateChangeRequest(newS);
+			LicencesTabStatus s = configedMain.reactToStateChangeRequest(newS);
 
 			// if the controller did not accept the new index set it back
 			// observe that we get a recursion since we initiate another state change
@@ -69,30 +69,6 @@ public class TabbedPaneX extends JPanel {
 
 		add(jTabbedPaneMain, BorderLayout.CENTER);
 
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMain, with an icon and a tooltip
-	 */
-	public void addTab(LicencesTabStatus s, Component c, Icon icon, String tip) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), icon, c, tip);
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMain, with an icon
-	 */
-	public void addTab(LicencesTabStatus s, Component c, Icon icon) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), icon, c);
-	}
-
-	/**
-	 * adds a tab to the incorporated JTabbedMainprivate
-	 */
-	public void addTab(LicencesTabStatus s, Component c) {
-		tabOrder.add(s);
-		jTabbedPaneMain.addTab(s.toString(), c);
 	}
 
 	/**

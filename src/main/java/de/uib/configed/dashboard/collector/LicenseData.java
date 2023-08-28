@@ -56,13 +56,8 @@ public final class LicenseData {
 			return;
 		}
 
-		activeLicenses.clear();
-
-		for (String licence : licenses) {
-			if (!expiredLicenses.contains(licence)) {
-				activeLicenses.add(licence);
-			}
-		}
+		activeLicenses = new ArrayList<>(licenses);
+		activeLicenses.removeAll(expiredLicenses);
 	}
 
 	public static List<String> getExpiredLicenses() {

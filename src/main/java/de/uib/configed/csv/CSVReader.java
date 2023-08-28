@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import de.uib.configed.csv.exceptions.CSVException;
 
 public class CSVReader {
-	private static final CSVParser DEFAULT_PARSER = new CSVParser();
 	private static final int DEFAULT_START_LINE = 0;
 
 	private BufferedReader reader;
@@ -29,18 +28,6 @@ public class CSVReader {
 	private CSVFormat format;
 	private CSVScanner scanner;
 	private CSVParser parser;
-
-	public CSVReader(Reader reader) {
-		this(reader, DEFAULT_PARSER, DEFAULT_START_LINE, null);
-	}
-
-	public CSVReader(Reader reader, int startLine) {
-		this(reader, DEFAULT_PARSER, startLine, null);
-	}
-
-	public CSVReader(Reader reader, CSVParser parser) {
-		this(reader, parser, DEFAULT_START_LINE, null);
-	}
 
 	public CSVReader(Reader reader, CSVParser parser, int startLine) {
 		this(reader, parser, startLine, null);
@@ -117,7 +104,7 @@ public class CSVReader {
 		return lineAsMap;
 	}
 
-	public void skipTo(int startLine) throws IOException {
+	private void skipTo(int startLine) throws IOException {
 		for (int i = 1; i < startLine; i++) {
 			String line = reader.readLine();
 

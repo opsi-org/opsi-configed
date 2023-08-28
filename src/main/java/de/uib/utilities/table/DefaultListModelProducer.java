@@ -47,7 +47,7 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 	}
 
 	@Override
-	public Class<?> getClass(int row, int column) {
+	public Class<?> getClass(int row) {
 		return Object.class;
 	}
 
@@ -65,5 +65,4 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 		Logging.info(this, "value is not instance of List<O>, create List with element value");
 		return Collections.singletonList((O) value);
 	}
-
 }

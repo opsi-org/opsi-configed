@@ -17,6 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.utilities.observer.swing.AbstractValueChangeListener;
+
 public class TextInputField extends JPanel {
 	// common wrapper class for JTextField and JCombBox
 
@@ -164,7 +166,7 @@ public class TextInputField extends JPanel {
 
 	}
 
-	public void addValueChangeListener(de.uib.utilities.observer.swing.AbstractValueChangeListener listener) {
+	public void addValueChangeListener(AbstractValueChangeListener listener) {
 		combo.addActionListener(listener);
 		textfield.getDocument().addDocumentListener(listener);
 	}

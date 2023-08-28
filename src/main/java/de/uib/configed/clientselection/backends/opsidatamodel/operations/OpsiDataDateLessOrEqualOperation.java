@@ -7,8 +7,8 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.DateLessOrEqualOperation;
 
 public class OpsiDataDateLessOrEqualOperation extends DateLessOrEqualOperation implements ExecutableOperation {
@@ -26,7 +26,7 @@ public class OpsiDataDateLessOrEqualOperation extends DateLessOrEqualOperation i
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
+	public boolean doesMatch(OpsiDataClient client) {
 		return matcher.doesMatch(client);
 	}
 }

@@ -96,7 +96,7 @@ public final class Messages {
 		return messagesBundle;
 	}
 
-	public static ResourceBundle getResourceEN() throws MissingResourceException {
+	private static ResourceBundle getResourceEN() throws MissingResourceException {
 
 		messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
 				new Locale.Builder().setLanguage("en").setRegion("US").build());
@@ -141,25 +141,15 @@ public final class Messages {
 		if (characteristics != null && !characteristics.isEmpty()) {
 
 			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
-				try {
-					loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));
-					Logging.info("Locale " + loc.getLanguage() + "_" + loc.getCountry() + " set by param");
-				} catch (Exception e) {
-					Logging.info("Failed to set locale '" + characteristics + "': " + e);
-				}
+				loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));
+				Logging.info("Locale " + loc.getLanguage() + "_" + loc.getCountry() + " set by param");
 			} else if (characteristics.length() == 2) {
-				try {
-					loc = produceLocale(characteristics);
-					Logging.info("Locale " + loc + " set by param");
-				} catch (Exception e) {
-					Logging.info("Failed to set locale '" + characteristics + "': " + e);
-				}
-
+				loc = produceLocale(characteristics);
+				Logging.info("Locale " + loc + " set by param");
 			} else {
 				Logging.info("Bad format for locale, use <language>_<country> or <language>"
 						+ ", each component consisting of two chars, or just a two char <language>");
 			}
-
 		}
 
 		if (loc == null) {

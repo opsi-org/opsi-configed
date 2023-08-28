@@ -38,7 +38,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 			try {
 				double number = Double.parseDouble((String) value);
 				selectedString = decimalFormat.format(number);
-			} catch (Exception ex) {
+			} catch (NumberFormatException ex) {
 				Logging.warning(this, " format exception", ex);
 			}
 

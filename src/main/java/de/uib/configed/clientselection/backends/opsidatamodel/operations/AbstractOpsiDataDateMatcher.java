@@ -9,7 +9,6 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 import java.sql.Date;
 import java.util.Map;
 
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
@@ -20,18 +19,17 @@ public abstract class AbstractOpsiDataDateMatcher {
 	private String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
-		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this.getClass(), "created:  maptype, key, data: " + map + ", " + key + ", " + data);
 
 		this.map = map;
 		this.key = key;
 		this.data = data;
 	}
 
-	public boolean doesMatch(Client client) {
-		OpsiDataClient oClient = (OpsiDataClient) client;
-		Logging.debug(this, "doesMatch client " + oClient);
+	public boolean doesMatch(OpsiDataClient client) {
+		Logging.debug(this, "doesMatch client " + client);
 
-		Map<String, Object> realMap = oClient.getMap(map);
+		Map<String, Object> realMap = client.getMap(map);
 
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 
@@ -44,15 +42,6 @@ public abstract class AbstractOpsiDataDateMatcher {
 	}
 
 	private boolean checkData(final String realdata) {
-
-		Date date = null;
-
-		try {
-			date = Date.valueOf(data);
-		} catch (Exception ex) {
-			Logging.debug(this, "OpsiDataDateMatcher data is not a date! " + date + " " + ex);
-			return false;
-		}
 
 		if (realdata == null) {
 			Logging.debug(this, "OpsiDataDateMatcher no data found");
@@ -75,17 +64,11 @@ public abstract class AbstractOpsiDataDateMatcher {
 			realD = realD.substring(0, posBlank);
 		}
 
+		Date date = Date.valueOf(data);
+
 		// check if we have to interpret variables
-		Date realdate = null;
-
-		try {
-			realdate = Date.valueOf(realD);
-			return compare(date, realdate);
-		} catch (Exception ex) {
-			Logging.debug(this, "data is not a date! " + realdata + " " + ex);
-			return false;
-		}
-
+		Date realdate = Date.valueOf(realD);
+		return compare(date, realdate);
 	}
 
 	protected abstract boolean compare(Date date, Date realdate);

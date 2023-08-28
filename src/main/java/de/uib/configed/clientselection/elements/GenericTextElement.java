@@ -54,9 +54,4 @@ public class GenericTextElement extends AbstractSelectElement {
 	public List<String> getEnumData() {
 		return proposedData;
 	}
-
-	@Override
-	public boolean hasEnumData() {
-		return true;
-	}
 }

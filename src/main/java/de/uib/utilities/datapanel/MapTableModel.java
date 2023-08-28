@@ -21,10 +21,11 @@ import java.util.function.Function;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
+import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
+import utils.Utils;
 
 public class MapTableModel extends AbstractTableModel {
 
@@ -38,9 +39,6 @@ public class MapTableModel extends AbstractTableModel {
 	private Collection updateCollection;
 	private Collection<Map<String, Object>> storeData;
 	private boolean datachanged;
-
-	// values set cannot be set for any key
-	private List<Object> showOnlyValues;
 
 	// keys which identify readonly entries
 	private Set<String> keysOfReadOnlyEntries;
@@ -67,7 +65,6 @@ public class MapTableModel extends AbstractTableModel {
 
 	public MapTableModel() {
 		observers = new ArrayList<>();
-
 	}
 
 	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
@@ -78,10 +75,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
-	}
-
-	public Map<String, ListCellOptions> getOptionsMap() {
-		return optionsMap;
 	}
 
 	public void setMap(Map<String, Object> data) {
@@ -115,8 +108,7 @@ public class MapTableModel extends AbstractTableModel {
 		}
 
 		for (String key : keys) {
-			if (key.startsWith(de.uib.opsidatamodel.permission.UserConfig.CONFIGKEY_STR_USER)
-					&& key.endsWith(de.uib.opsidatamodel.permission.UserConfig.MODIFICATION_INFO_KEY)) {
+			if (key.startsWith(UserConfig.CONFIGKEY_STR_USER) && key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 				modifiedKey = key;
 				break;
 			}
@@ -156,10 +148,6 @@ public class MapTableModel extends AbstractTableModel {
 		resetModifiedKey();
 	}
 
-	public Collection<Map<String, Object>> getStoreData() {
-		return storeData;
-	}
-
 	/**
 	 * take a reference to a collection of maps that we will have to use for
 	 * updating the data base
@@ -170,24 +158,12 @@ public class MapTableModel extends AbstractTableModel {
 		this.updateCollection = updateCollection;
 	}
 
-	public Collection getUpdateCollection() {
-		return updateCollection;
-	}
-
 	public void setReadOnlyEntries(Set<String> keys) {
 		keysOfReadOnlyEntries = keys;
 	}
 
 	public void setEditDenier(Function<String, Boolean> disallow) {
 		editDenier = disallow;
-	}
-
-	public void setShowOnlyValues(List<Object> showOnly) {
-		showOnlyValues = showOnly;
-	}
-
-	public List<Object> getShowOnlyValues() {
-		return showOnlyValues;
 	}
 
 	public void addEntry(String key, Object newval, boolean toStore) {
@@ -206,17 +182,6 @@ public class MapTableModel extends AbstractTableModel {
 		addEntry(key, newval, true);
 	}
 
-	public void addEntry(String key) {
-		List<Object> newval = new ArrayList<>();
-		data.put(key, newval);
-		oridata.put(key, newval);
-
-		keys = new ArrayList<>(data.keySet());
-
-		putEntryIntoStoredMaps(key, newval);
-		fireTableDataChanged();
-	}
-
 	public void removeEntry(String key) {
 		data.remove(key);
 		oridata.remove(key);
@@ -226,10 +191,6 @@ public class MapTableModel extends AbstractTableModel {
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();
 
-	}
-
-	public boolean hasEntryFor(String key) {
-		return data.containsKey(key);
 	}
 
 	// table model
@@ -268,12 +229,7 @@ public class MapTableModel extends AbstractTableModel {
 			return "";
 		}
 
-		String key = null;
-		try {
-			key = keys.get(row);
-		} catch (Exception ex) {
-			return "keys " + keys + " row " + row + " : " + ex.toString();
-		}
+		String key = keys.get(row);
 
 		Object result = null;
 
@@ -367,7 +323,6 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-
 				aStoreMap.put(myKey, nullLIST);
 			}
 
@@ -452,7 +407,7 @@ public class MapTableModel extends AbstractTableModel {
 				// produces as well rowModiTime
 
 				if (rowModiTime > -1 && row != rowModiTime) {
-					setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
+					setValueAt(Utils.getNowTimeListValue(), rowModiTime, 1);
 				}
 			}
 		}
@@ -468,7 +423,6 @@ public class MapTableModel extends AbstractTableModel {
 	 * @param Object value
 	 */
 	public void setValue(String key, Object value) {
-
 		int row = keys.indexOf(key);
 
 		if (row < 0) {
@@ -480,7 +434,6 @@ public class MapTableModel extends AbstractTableModel {
 			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
-
 				Logging.error("EditMapPanel: value not allowed: " + value);
 				return;
 			}
@@ -502,12 +455,11 @@ public class MapTableModel extends AbstractTableModel {
 		this.observers = observers;
 	}
 
-	public void notifyChange() {
+	private void notifyChange() {
 
 		Logging.debug(this, "notifyChange, notify observers " + observers.size());
 		for (int i = 0; i < observers.size(); i++) {
 			(observers.get(i)).dataHaveChanged(this);
 		}
-
 	}
 }

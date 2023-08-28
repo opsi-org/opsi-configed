@@ -46,12 +46,12 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import net.sf.sevenzipjbinding.SevenZipException;
 import utils.ExtractorUtil;
+import utils.Utils;
 
 public class LogFrame extends JFrame implements WindowListener {
 
-	private static String fileName;
+	private static String fileName = "";
 
 	//menu system
 
@@ -84,7 +84,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	@Override
 	public void setTitle(String filename) {
-		if (filename == null || "".equals(filename)) {
+		if (filename == null || filename.isEmpty()) {
 			super.setTitle("opsi-logviewer (" + Globals.APPNAME + ")");
 		} else {
 			super.setTitle("opsi-logviewer (" + Globals.APPNAME + ") : " + filename);
@@ -175,12 +175,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		for (final String localeName : Messages.getLocaleInfo().keySet()) {
 			ImageIcon localeIcon = null;
 			String imageIconName = Messages.getLocaleInfo().get(localeName);
-			if (imageIconName != null && imageIconName.length() > 0) {
-				try {
-					localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
-				} catch (Exception ex) {
-					Logging.info(this, "icon not found: " + imageIconName + ", " + ex);
-				}
+			if (imageIconName != null && !imageIconName.isEmpty()) {
+				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
@@ -234,16 +230,16 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
+		jMenuHelpDoc.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
+		jMenuHelpSupport.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Globals.showAboutAction(this));
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpDoc);
 		jMenuHelp.add(jMenuHelpForum);
@@ -263,7 +259,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		iconButtonSave = new IconButton(Configed.getResourceValue("PopupMenuTrait.save"), "images/save.png",
 				"images/images/save.png", "");
 		iconButtonSave.addActionListener((ActionEvent e) -> {
-			if (fileName != null) {
+			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();
 			}
 		});
@@ -274,12 +270,11 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void guiInit() {
-
 		this.addWindowListener(this);
 		if (!Main.FONT) {
-			this.setFont(Globals.defaultFont);
+			this.setFont(Globals.DEFAULT_FONT);
 		}
-		this.setIconImage(Globals.mainIcon);
+		this.setIconImage(Utils.getMainIcon());
 
 		setupIcons();
 
@@ -341,12 +336,12 @@ public class LogFrame extends JFrame implements WindowListener {
 		logPane.setMainText("");
 		logPane.setTitle("unknown");
 		setTitle(null);
-		if (!"".equals(fileName)) {
-			StringBuilder sbf = readFile(fileName);
-			if ((sbf != null) && sbf.length() > 0) {
+		if (fileName != null && !fileName.isEmpty()) {
+			String logText = readFile(fileName);
+			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.setMainText(sbf.toString());
+				logPane.setMainText(logText);
 			}
 		}
 	}
@@ -367,7 +362,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		public void close() {
-			fileName = "";
+			resetFileName();
 			super.setMainText(fileName);
 			super.setTitle(fileName);
 			super.removeAllHighlights();
@@ -376,9 +371,44 @@ public class LogFrame extends JFrame implements WindowListener {
 		@Override
 		public void save() {
 			String fn = openFile();
-			if (!"".equals(fn) && fn != null) {
+			if (fn != null && !fn.isEmpty()) {
 				saveToFile(fn, logPane.lines);
 				super.setTitle(fn);
+			}
+		}
+
+		private String reloadFile(String fn) {
+			if (fn != null && !fn.isEmpty()) {
+				return readFile(fn);
+			} else {
+				Logging.error(this, "File does not exist: " + fn);
+				showDialog("No location: \n" + fn);
+				return "";
+			}
+		}
+
+		private void saveToFile(String filename, String[] logfilelines) {
+			FileWriter fWriter = null;
+			try {
+				fWriter = new FileWriter(filename, StandardCharsets.UTF_8);
+			} catch (IOException ex) {
+				Logging.error("Error opening file: " + filename + "\n --- ; stop saving to file", ex);
+				return;
+			}
+			int i = 0;
+			while (i < logfilelines.length) {
+				try {
+					fWriter.write(logfilelines[i] + "\n");
+					LogFrame.this.setTitle(filename);
+				} catch (IOException ex) {
+					Logging.error("Error writing file: " + filename + "\n --- " + ex);
+				}
+				i++;
+			}
+			try {
+				fWriter.close();
+			} catch (IOException ex) {
+				Logging.error("Error closing file: " + filename + "\n --- " + ex);
 			}
 		}
 	}
@@ -428,47 +458,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		LogFrame.fileName = fn;
 	}
 
-	public String reloadFile(String fn) {
-		String rs = "";
-		if (fn != null) {
-			try {
-				rs = readFile(fn).toString();
-			} catch (Exception ex) {
-				Logging.error(this, "File does not exist: " + fn);
-				showDialog("No location: \n" + fn);
-			}
-		} else {
-			Logging.error(this, "File does not exist: " + fn);
-			showDialog("No location: \n" + fn);
-		}
-		return rs;
-	}
-
-	public void saveToFile(String filename, String[] logfilelines) {
-		FileWriter fWriter = null;
-		try {
-			fWriter = new FileWriter(filename, StandardCharsets.UTF_8);
-		} catch (IOException ex) {
-			Logging.error("Error opening file: " + filename + "\n --- ; stop saving to file", ex);
-			return;
-		}
-		int i = 0;
-		while (i < logfilelines.length) {
-			try {
-				fWriter.write(logfilelines[i] + "\n");
-				setTitle(filename);
-			} catch (IOException ex) {
-				Logging.error("Error writing file: " + filename + "\n --- " + ex);
-			}
-			i++;
-		}
-		try {
-			fWriter.close();
-		} catch (IOException ex) {
-			Logging.error("Error closing file: " + filename + "\n --- " + ex);
-		}
-	}
-
 	private static void showDialog(String errorMsg) {
 		JOptionPane.showMessageDialog(null, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
@@ -493,10 +482,10 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void openFileInLogFrame() {
 		openFile();
 
-		if (fileName != null) {
-			Logging.info(this, "usedmemory " + Globals.usedMemory());
-			logPane.setMainText(readFile(fileName).toString());
-			Logging.info(this, "usedmemory " + Globals.usedMemory());
+		if (fileName != null && !fileName.isEmpty()) {
+			Logging.info(this, "usedmemory " + Utils.usedMemory());
+			logPane.setMainText(readFile(fileName));
+			Logging.info(this, "usedmemory " + Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
 			logPane.removeAllHighlights();
@@ -509,58 +498,58 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void reloadFile() {
-		if (fileName != null) {
+		if (fileName != null && !fileName.isEmpty()) {
 			logPane.reload();
 			setTitle(fileName);
 		}
 	}
 
-	private StringBuilder readFile(String fn) {
-		StringBuilder sb = new StringBuilder();
-		try {
-			File file = new File(fn);
+	private String readFile(String fileName) {
+		String result = "";
 
-			if (file.isDirectory()) {
-				Logging.error("This is not a file, it is a directory: " + fn);
-				showDialog("This is not a file, it is a directory: \n" + fn);
+		File file = new File(fileName);
+
+		if (file.isDirectory()) {
+			Logging.error("This is not a file, it is a directory: " + fileName);
+			resetFileName();
+			showDialog("This is not a file, it is a directory: \n" + fileName);
+		} else if (file.exists()) {
+			if (fileName.endsWith(".log") || fileName.endsWith(".txt") || !fileName.contains(".")
+					|| fileName.endsWith(".ini")) {
+				result = readNotCompressedFile(file);
 			} else {
-				if (file.exists()) { // TODO
-					if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini")) {
-						sb = readNotCompressedFile(file, sb);
-					} else {
-						//unknown extension
-						try {
-							sb = ExtractorUtil.unzip(file);
-						} catch (SevenZipException e) {
-							sb = readNotCompressedFile(file, sb);
-							Logging.warning("Error unzipping: ", e);
-						}
-					}
+				//unknown extension
+				result = ExtractorUtil.unzip(file);
+				if (result == null) {
+					Logging.warning("Tried unzipping file, could not do it, open it as text");
+					result = readNotCompressedFile(file);
 				}
 			}
-		} catch (Exception ex) {
-			Logging.error("Not a valid filename: " + fn, ex);
-			showDialog("Not a valid filename: " + fn);
+		} else {
+			Logging.error("This file does not exist: " + fileName);
+			resetFileName();
+			showDialog("This file does not exist: \n" + fileName);
 		}
-		return sb;
+
+		return result;
 	}
 
-	private StringBuilder readNotCompressedFile(File file, StringBuilder sb) {
+	private String readNotCompressedFile(File file) {
 		Logging.info(this, "start readNotCompressedFile");
-		InputStream fis;
+		String result = "";
 		try {
-			fis = new FileInputStream(file);
-			sb = readInputStream(fis);
+			InputStream fis = new FileInputStream(file);
+			result = readInputStream(fis);
 			fis.close();
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + ex);
 			showDialog("Error opening file: " + ex);
 		}
 
-		return sb;
+		return result;
 	}
 
-	private static StringBuilder readInputStream(InputStream fis) {
+	private static String readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;
@@ -575,6 +564,11 @@ public class LogFrame extends JFrame implements WindowListener {
 			Logging.error("Error reading file: " + ex);
 			showDialog("Error reading file: " + ex);
 		}
-		return sb;
+		return sb.toString();
+	}
+
+	// Resets filename to empty name
+	private static void resetFileName() {
+		fileName = "";
 	}
 }

@@ -15,14 +15,9 @@ public class TimeCheck {
 	private String mesg;
 	private long startmillis;
 
-	private TimeCheck(Object caller, int loglevel, String mesg) {
+	public TimeCheck(Object caller, String mesg) {
 		this.caller = caller;
 		this.mesg = shorten(mesg);
-		TimeCheck.loglevel = loglevel;
-	}
-
-	public TimeCheck(Object caller, String mesg) {
-		this(caller, Logging.LEVEL_NOTICE, mesg);
 	}
 
 	private static String shorten(String s) {

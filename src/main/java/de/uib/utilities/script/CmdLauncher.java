@@ -6,6 +6,7 @@
 
 package de.uib.utilities.script;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.uib.utilities.logging.Logging;
@@ -34,8 +35,8 @@ public class CmdLauncher {
 
 			pb.start();
 
-		} catch (Exception ex) {
-			Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+		} catch (IOException ex) {
+			Logging.error("Cannot start ProcessBuilder for command >>" + cmd + "<<", ex);
 		}
 	}
 }

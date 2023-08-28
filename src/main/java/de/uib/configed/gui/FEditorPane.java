@@ -89,10 +89,6 @@ public class FEditorPane extends FGeneralDialog {
 		}
 	}
 
-	public void insertHTMLTable(String s) {
-		insertHTMLTable(s, "");
-	}
-
 	public void insertHTMLTable(String s, String title) {
 		final String BASE_R_G = "f8f0f0";
 		final String HEADER = "<HTML>\n <head>\n  <title>" + title + "</title>\n  </head>\n"
@@ -119,8 +115,6 @@ public class FEditorPane extends FGeneralDialog {
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
 			editPane.requestFocus();
-
 		}
 	}
-
 }

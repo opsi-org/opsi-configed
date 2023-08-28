@@ -26,7 +26,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -40,13 +42,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private CommandPackageUpdater command;
 
 	public SSHPackageUpdaterDialog() {
-		this(new CommandPackageUpdater());
-	}
-
-	public SSHPackageUpdaterDialog(CommandPackageUpdater command) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
-		this.command = command;
-		Logging.info(this, "with command");
+		command = new CommandPackageUpdater();
+		Logging.info(this.getClass(), "with command");
 		retrieveRepos();
 		init();
 		initLayout();
@@ -54,13 +52,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 	private void retrieveRepos() {
 		SSHConnectExec ssh = new SSHConnectExec();
-		String result = "";
-		try {
-			result = ssh.exec(command, false /* =>without gui */ );
-		} catch (Exception e) {
-			Logging.error(this, "ssh execution error", e);
-
-		}
+		String result = ssh.exec(command, false);
 
 		if (result == null) {
 			Logging.error("retrieve repos " + "FAILED");
@@ -73,7 +65,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 				// escaping ansicodes
 				repostatus = repostatus.replace("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
-				repostatus = repostatus.replace("", "").replace("\u001B", "");
+				repostatus = repostatus.replace("\u001B", "").replace("\u001B", "");
 
 				String[] repoStatus = repostatus.split("\\(");
 				repoStatus[1] = repoStatus[1].split("\\)")[0];
@@ -101,8 +93,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		inputPanel.add(jLabelRepos);
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly())) {
+		jButtonDoAction.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
@@ -111,13 +103,13 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(!Globals.isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
@@ -149,27 +141,22 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		try {
-			command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
-			String repo = (String) jComboBoxRepos.getSelectedItem();
-			if (repo.equals(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
-				command.setRepo(null);
-			} else {
-				command.setRepo(repo);
-			}
 
-			Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
-			new SSHConnectExec(command);
-
-		} catch (Exception e) {
-			Logging.warning(this, "doAction2, exception occurred", e);
+		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
+		String repo = (String) jComboBoxRepos.getSelectedItem();
+		if (repo.equals(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
+			command.setRepo(null);
+		} else {
+			command.setRepo(repo);
 		}
 
+		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
+		new SSHConnectExec(command);
 	}
 
 	// /* This method gets called when button 1 is pressed */
-	public void cancel() {
+	private void cancel() {
 		super.doAction1();
 	}
 

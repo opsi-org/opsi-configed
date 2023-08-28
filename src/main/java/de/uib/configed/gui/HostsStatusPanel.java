@@ -20,12 +20,12 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.HostsStatusInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
+import utils.Utils;
 
-public class HostsStatusPanel extends JPanel implements HostsStatusInfo, MessagebusListener {
+public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
 
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
@@ -58,24 +58,20 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		setupLayout();
 	}
 
-	@Override
 	public void setGroupName(String s) {
 		Logging.info(this, "setGroupName " + s);
 		resetReportedClients();
 		fieldGroupActivated.setText(s);
 	}
 
-	@Override
 	public String getSelectedClientNames() {
 		return fieldSelectedClientsNames.getText();
 	}
 
-	@Override
 	public String getInvolvedDepots() {
 		return fieldInvolvedDepots.getText();
 	}
 
-	@Override
 	public String getGroupName() {
 		return fieldGroupActivated.getText();
 	}
@@ -95,7 +91,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		fieldInvolvedDepots.setToolTipText("");
 	}
 
-	@Override
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
 			String involvedDepots) {
 		Logging.info(this,
@@ -126,7 +121,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		}
 	}
 
-	@Override
 	public void setGroupClientsCount(int n) {
 		String newS = null;
 		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
@@ -163,11 +157,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 
 		fieldGroupActivated = new JTextField("");
 
-		fieldGroupActivated.setPreferredSize(Globals.counterfieldDimension);
+		fieldGroupActivated.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupActivated.setEditable(false);
 
 		labelAllClientsCount = new JLabel("");
-		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
+		labelAllClientsCount.setPreferredSize(Globals.LABEL_DIMENSION);
 
 		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
@@ -176,21 +170,21 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
 		fieldActivatedClientsCount = new JTextField("");
-		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
+		fieldActivatedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldActivatedClientsCount.setEditable(false);
 
 		fieldSelectedClientsNames = new JTextField("");
 
-		fieldSelectedClientsNames.setPreferredSize(Globals.counterfieldDimension);
+		fieldSelectedClientsNames.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		fieldInvolvedDepots = new JTextField("");
-		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
+		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
-		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
+		connectedIcon = Utils.createImageIcon("images/network-wireless-connected-100.png", "");
+		disconnectedIcon = Utils.createImageIcon("images/network-wireless-disconnected.png", "");
 
 		connectionStateLabel = new JLabel();
 

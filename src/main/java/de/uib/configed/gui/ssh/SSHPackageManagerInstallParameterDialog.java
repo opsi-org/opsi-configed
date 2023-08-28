@@ -41,10 +41,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	private JRadioButton jRadioButtonWGet;
 	private String fromMakeProductfile;
 
-	public SSHPackageManagerInstallParameterDialog() {
-		this(null);
-	}
-
 	public SSHPackageManagerInstallParameterDialog(ConfigedMain m) {
 		this(m, "");
 	}
@@ -254,13 +250,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installSettingsPanel.updateCommand(pmInstallCom);
 
 		final SSHConnectExec ssh = new SSHConnectExec();
-		try {
-			ssh.execTemplate(commands, sequential);
-			ssh.getDialog().setVisible(true);
-			Logging.info(this, "doAction3 end ");
-		} catch (Exception e) {
-			Logging.error(this, "doAction3 Exception while exec_template", e);
-		}
-	}
 
+		ssh.execTemplate(commands, sequential);
+		ssh.getDialog().setVisible(true);
+		Logging.info(this, "doAction3 end ");
+	}
 }

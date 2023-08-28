@@ -25,5 +25,5 @@ public interface ListModelProducer<O> {
 
 	List<O> toList(Object value);
 
-	Class<?> getClass(int row, int column);
+	Class<?> getClass(int row);
 }

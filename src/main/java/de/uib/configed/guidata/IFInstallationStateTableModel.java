@@ -7,6 +7,7 @@
 package de.uib.configed.guidata;
 
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.swing.table.TableModel;
 
@@ -30,5 +31,7 @@ public interface IFInstallationStateTableModel extends TableModel, ComboBoxModel
 
 	void finishCollectiveChange();
 
-	void updateTable(String clientId, String productId, Map<String, String> stateAndAction);
+	void updateTable(String clientId, TreeSet<String> productId);
+
+	void updateTable(String clientId);
 }

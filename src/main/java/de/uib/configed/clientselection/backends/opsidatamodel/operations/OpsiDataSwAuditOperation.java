@@ -9,7 +9,6 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 import java.util.List;
 
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
@@ -28,25 +27,20 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 	}
 
 	@Override
-	public boolean doesMatch(Client client) {
-		OpsiDataClient oClient = (OpsiDataClient) client;
-		List<SWAuditClientEntry> auditList = oClient.getSwAuditList();
+	public boolean doesMatch(OpsiDataClient client) {
+		List<SWAuditClientEntry> auditList = client.getSwAuditList();
 		for (SWAuditClientEntry swEntry : auditList) {
 
 			String swIdent = null;
 			Integer swIndex = swEntry.getSWid();
-			try {
-				swIdent = persistenceController.getSWident(swIndex);
-				if (swIdent == null || swIndex == null || swIndex == -1) {
-					Logging.info(this, "no swIdent for index " + swIndex);
-					return false;
-				}
-			} catch (Exception ex) {
+
+			swIdent = persistenceController.getSWident(swIndex);
+			if (swIdent == null || swIndex == null || swIndex == -1) {
 				Logging.info(this, "no swIdent for index " + swIndex);
 				return false;
 			}
 
-			oClient.setCurrentSwAuditValue(persistenceController.getInstalledSoftwareInformation().get(swIdent));
+			client.setCurrentSwAuditValue(persistenceController.getInstalledSoftwareInformation().get(swIdent));
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
 			}

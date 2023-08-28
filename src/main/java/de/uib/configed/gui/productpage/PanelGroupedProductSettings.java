@@ -97,6 +97,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 				}
 			}
 		}
+
 		activatePacketSelectionHandling(true);
 		groupPanel.findGroup(selectedIDs);
 	}
@@ -149,7 +150,5 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		Set<String> selection = getSelectedIDs();
 		noSelection();
 		setSelection(selection);
-
 	}
-
 }

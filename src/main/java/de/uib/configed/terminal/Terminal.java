@@ -54,6 +54,7 @@ import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ProgressBarPainter;
+import utils.Utils;
 
 public final class Terminal {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
@@ -160,7 +161,7 @@ public final class Terminal {
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		frame.setIconImage(Globals.mainIcon);
+		frame.setIconImage(Utils.getMainIcon());
 
 		JPanel allPane = new JPanel();
 		if (!Main.THEMES) {
@@ -208,7 +209,7 @@ public final class Terminal {
 		});
 	}
 
-	public JPanel createNorthPanel() {
+	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
@@ -230,7 +231,7 @@ public final class Terminal {
 		return northPanel;
 	}
 
-	public JPanel createSettingsPanel() {
+	private JPanel createSettingsPanel() {
 		JPanel settingsPanel = new JPanel();
 		settingsPanel.setOpaque(false);
 
@@ -250,7 +251,7 @@ public final class Terminal {
 			widget.repaint();
 		});
 
-		JButton buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
+		JButton buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
 		buttonFontPlus.addActionListener((ActionEvent e) -> {
 			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
@@ -260,7 +261,7 @@ public final class Terminal {
 			resizeTerminal();
 		});
 
-		JButton buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
+		JButton buttonFontMinus = new JButton(Utils.createImageIcon("images/font-minus.png", ""));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
 		buttonFontMinus.addActionListener((ActionEvent e) -> {
 			if ((int) settingsProvider.getTerminalFontSize() == 1) {
@@ -308,7 +309,7 @@ public final class Terminal {
 				RequestOrigin.User);
 	}
 
-	public JPanel createSouthPanel() {
+	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 		southPanel.setVisible(false);
@@ -319,8 +320,8 @@ public final class Terminal {
 
 		fileUploadProgressBar = new JProgressBar();
 		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 		fileUploadProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 		fileUploadProgressBar.setStringPainted(true);
 

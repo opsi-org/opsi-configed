@@ -30,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /*
 *	PanelStateSwitch.java
@@ -52,10 +53,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	private List<ChangeListener> changeListeners;
 
-	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Consumer<Enum<E>> enumSetter) {
-		this(null, startValue, values, null, myenum, enumSetter);
-	}
-
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter) {
 		this(title, startValue, values, null, myenum, enumSetter);
@@ -69,7 +66,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter, int hGap, int vGap) {
 
-		Logging.info(this, " my enum " + myenum);
+		Logging.info(this.getClass(), " my enum " + myenum);
 
 		this.title = title;
 
@@ -79,7 +76,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		changeListeners = new ArrayList<>();
 
 		if (labels != null && labels.length < values.length) {
-			Logging.warning(this, "missing label");
+			Logging.warning(this.getClass(), "missing label");
 		}
 
 		this.labels = new LinkedHashMap<>();
@@ -97,9 +94,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		this.enumSetter = enumSetter;
 
 		if (myenumClass != null && myenumClass.isEnum()) {
-			Logging.info(this, " type of myenum " + myenumClass.getTypeName());
+			Logging.info(this.getClass(), " type of myenum " + myenumClass.getTypeName());
 
-			Logging.info(this, " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
+			Logging.info(this.getClass(), " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
 
 			int i = 0;
 			for (Object constant : myenumClass.getEnumConstants()) {
@@ -107,13 +104,13 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					producedValue = (Enum) constant;
 				}
 				i++;
-				Logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
+				Logging.info(this.getClass(), " enum constant  " + constant + " class " + constant.getClass());
 			}
 		}
 
 		this.startValue = startValue;
 
-		Logging.info(this, " string val of start value " + startValue.toString());
+		Logging.info(this.getClass(), " string val of start value " + startValue.toString());
 
 		initComponents();
 
@@ -125,10 +122,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		changeListeners.add(cl);
 	}
 
-	public void removeChangeListener(ChangeListener cl) {
-		changeListeners.remove(cl);
-	}
-
 	protected void notifyChangeListeners(ChangeEvent e) {
 		Logging.info(this, "notifyChangeListeners " + e);
 		for (ChangeListener cl : changeListeners) {
@@ -137,12 +130,12 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initComponents() {
-		primaryFont = Globals.defaultFont;
+		primaryFont = Globals.DEFAULT_FONT;
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<>();
 
-		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
-		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
+		ImageIcon activatedIcon = Utils.createImageIcon("images/checked_withoutbox.png", "");
+		ImageIcon deactivatedIcon = Utils.createImageIcon("images/checked_empty_withoutbox.png", "");
 
 		for (Enum<E> val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));

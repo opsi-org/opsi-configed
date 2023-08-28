@@ -6,13 +6,11 @@
 
 package de.uib.configed.type.licences;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
 	/*
@@ -29,13 +27,6 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 	public static final String LICENSE_POOL_ID_KEY = "licensePoolId";
 	public static final String LICENCE_KEY_KEY = "licenseKey";
 
-	private static final List<String> KEYS = new ArrayList<>();
-	static {
-		KEYS.add(LICENCE_ID_KEY);
-		KEYS.add(LICENSE_POOL_ID_KEY);
-		KEYS.add(LICENCE_KEY_KEY);
-	}
-
 	public static LicenceUsableForEntry produceFrom(Map<String, Object> importedEntry) {
 		LicenceUsableForEntry entry = new LicenceUsableForEntry();
 		for (Entry<String, Object> imported : importedEntry.entrySet()) {
@@ -45,15 +36,10 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
 		}
 
-		String pseudokey = Globals
-				.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
+		String pseudokey = Utils.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
 		entry.put(ID_KEY, pseudokey);
 
 		return entry;
-	}
-
-	public String getId() {
-		return get(ID_KEY);
 	}
 
 	public String getLicenceId() {

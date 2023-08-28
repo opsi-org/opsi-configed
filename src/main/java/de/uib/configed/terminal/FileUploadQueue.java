@@ -38,15 +38,7 @@ public class FileUploadQueue {
 		return queue.peek();
 	}
 
-	public int size() {
-		return queue.size();
-	}
-
 	public boolean remove(File file) {
 		return queue.remove(file);
-	}
-
-	public void clear() {
-		queue.clear();
 	}
 }

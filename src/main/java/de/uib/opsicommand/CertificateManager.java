@@ -28,23 +28,25 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public final class CertificateManager {
 	private static KeyStore ks;
-	private static List<String> invalidCertificates = new ArrayList<>();
+	private static Set<String> invalidCertificates = new HashSet<>();
 
 	private CertificateManager() {
 	}
 
 	public static X509Certificate instantiateCertificate(File certificateFile) {
-
 		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
 			return null;
 		}
@@ -118,6 +120,10 @@ public final class CertificateManager {
 	}
 
 	public static List<File> getCertificates() {
+		if (Configed.savedStatesLocationName == null) {
+			return new ArrayList<>();
+		}
+
 		final PathMatcher matcher = FileSystems.getDefault()
 				.getPathMatcher("glob:**." + Globals.CERTIFICATE_FILE_EXTENSION);
 		final List<File> certificateFiles = new ArrayList<>();
@@ -167,11 +173,10 @@ public final class CertificateManager {
 
 		if (!certificateFiles.isEmpty()) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
-			X509Certificate tmpCertificate = retrieveCertificate();
+			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
 
 			for (File certificateFile : certificateFiles) {
 				X509Certificate localCertificate = instantiateCertificate(certificateFile);
-
 				if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
 					writeToCertificate(certificateFile, certificateContent);
 				}
@@ -179,12 +184,12 @@ public final class CertificateManager {
 		}
 	}
 
-	private static X509Certificate retrieveCertificate() {
-		String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
+	private static X509Certificate createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
-			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
-					"." + Globals.CERTIFICATE_FILE_EXTENSION);
+			certificateFile = Files
+					.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION).toFile();
+			Utils.restrictAccessToFile(certificateFile);
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
 			Logging.warning("error on getting certificateFile", e);

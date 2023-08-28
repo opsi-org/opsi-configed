@@ -19,5 +19,4 @@ public class StringIdentityMap extends HashMap<String, String> {
 			}
 		}
 	}
-
 }

@@ -14,6 +14,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
+import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -22,6 +23,7 @@ import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
 
@@ -88,12 +90,10 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel() {
-		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(
-				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
-				reloadable, new DefaultEditMapPanel.Actor() {
+		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
+				entryRemovable, reloadable, new DefaultEditMapPanel.Actor() {
 					@Override
 					protected void reloadData() {
 						reloadHostConfig();
@@ -123,10 +123,9 @@ public class PanelHostConfig extends JPanel {
 		);
 	}
 
-	public void initEditing(String labeltext, Map configVisualMap,
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptions, Collection collectionConfigStored,
-			AdditionalconfigurationUpdateCollection configurationUpdateCollection, boolean optionsEditable,
-			NavigableMap<String, String> classesMap) {
+	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
+			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
+			boolean optionsEditable, NavigableMap<String, String> classesMap) {
 		Logging.info(this, "initEditing "
 
 				+ " optionsEditable " + optionsEditable);

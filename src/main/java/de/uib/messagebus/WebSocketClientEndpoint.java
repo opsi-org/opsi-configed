@@ -9,14 +9,12 @@ package de.uib.messagebus;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
@@ -28,18 +26,10 @@ import de.uib.utilities.logging.Logging;
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 
-	private List<MessagebusListener> listeners = new ArrayList<>();
-
-	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
-		super(serverUri, draft);
-	}
+	private Set<MessagebusListener> listeners = new HashSet<>();
 
 	public WebSocketClientEndpoint(URI serverURI) {
 		super(serverURI);
-	}
-
-	public WebSocketClientEndpoint(URI serverUri, Map<String, String> httpHeaders) {
-		super(serverUri, httpHeaders);
 	}
 
 	public void registerListener(MessagebusListener listener) {
@@ -86,8 +76,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			Map<String, Object> message = mapper.readValue(data.array(), new TypeReference<Map<String, Object>>() {
 			});
 			long expires = (long) message.get("expires");
-			Date now = new Date();
-			if (now.getTime() >= expires) {
+			if (System.currentTimeMillis() >= expires) {
 				Logging.info("Expired message received");
 				return;
 			}

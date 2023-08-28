@@ -35,8 +35,8 @@ public final class Logging {
 	private static String logfileMarker;
 	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
-	public static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
-	public static final String RELATIVE_LOG_DIR_UNIX = ".configed";
+	private static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
+	private static final String RELATIVE_LOG_DIR_UNIX = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -79,7 +79,7 @@ public final class Logging {
 
 	private static FShowList fErrors;
 
-	private static List<LogEventObserver> logEventObservers = new ArrayList<>();
+	private static ConfigedMain configedMain;
 
 	// private constructor to hide the implicit public one
 	private Logging() {
@@ -105,10 +105,6 @@ public final class Logging {
 		} else {
 			logLevelConsole = newLevel;
 		}
-	}
-
-	public static synchronized Integer getLogLevelFile() {
-		return logLevelFile;
 	}
 
 	public static synchronized void setLogLevelFile(int newLevel) {
@@ -228,8 +224,8 @@ public final class Logging {
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
-		for (int i = 0; i < logEventObservers.size(); i++) {
-			logEventObservers.get(i).logEventOccurred();
+		if (configedMain != null) {
+			configedMain.logEventOccurred();
 		}
 	}
 
@@ -256,8 +252,12 @@ public final class Logging {
 
 		String curTime = now();
 		String context = Thread.currentThread().getName();
-		if (caller != null) {
+		if (caller instanceof Class) {
+			mesg += "   (" + ((Class<?>) caller).getName() + ")";
+		} else if (caller != null) {
 			mesg += "   (" + caller.getClass().getName() + ")";
+		} else {
+			// Do nothing if caller is null
 		}
 
 		String exMesg = "";
@@ -455,7 +455,7 @@ public final class Logging {
 		return result.toString();
 	}
 
-	public static void registLogEventObserver(LogEventObserver o) {
-		logEventObservers.add(o);
+	public static void registerConfigedMain(ConfigedMain configedMain) {
+		Logging.configedMain = configedMain;
 	}
 }

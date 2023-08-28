@@ -8,12 +8,13 @@ package de.uib.utilities.table;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,23 +25,18 @@ import de.uib.utilities.logging.Logging;
 public class ExporterToCSV extends AbstractExportTable {
 
 	private static final String CSV_SEPARATOR = ";";
-	public static final Character STRING_DELIMITER = '"';
+	private static final Character STRING_DELIMITER = '"';
 	private static final String THIS_EXTENSION = ".csv";
 
 	private DecimalFormat f = new DecimalFormat("#0.00");
 
-	public ExporterToCSV(JTable table, List<String> classNames) {
-		super(table, classNames);
+	public ExporterToCSV(JTable table) {
+		super(table, null);
+
 		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
 		defaultExportFilename = "export.csv";
 		extension = THIS_EXTENSION;
-
-	}
-
-	public ExporterToCSV(JTable table) {
-		this(table, null);
-
 	}
 
 	private static String removeStringDelimiter(Object value) {
@@ -154,13 +150,8 @@ public class ExporterToCSV extends AbstractExportTable {
 									} else if ("java.sql.Timestamp".equals(classNames.get(colI))) {
 										if (theTable.getValueAt(rowI, colI) != null
 												&& !"".equals(theTable.getValueAt(rowI, colI))) {
-											try {
-												date1 = java.sql.Timestamp
-														.valueOf((String) theTable.getValueAt(rowI, colI));
+											date1 = Timestamp.valueOf((String) theTable.getValueAt(rowI, colI));
 
-											} catch (Exception ex2) {
-												Logging.error("Error in date format:" + ex2);
-											}
 											if (date1 != null) {
 												line.append("" + date1);
 											}
@@ -185,11 +176,9 @@ public class ExporterToCSV extends AbstractExportTable {
 					}
 				}
 
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
 			}
 		}
-
 	}
-
 }

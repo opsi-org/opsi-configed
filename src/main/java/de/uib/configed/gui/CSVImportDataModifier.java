@@ -64,7 +64,7 @@ public class CSVImportDataModifier {
 		return true;
 	}
 
-	public GenTableModel updateModel(PanelGenEditTable thePanel, CSVParser parser, int startLine) {
+	private GenTableModel updateModel(PanelGenEditTable thePanel, CSVParser parser, int startLine) {
 		try {
 			CSVReader reader = null;
 
@@ -128,11 +128,9 @@ public class CSVImportDataModifier {
 
 		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, 0);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, 0);
 
-		GenTableModel createdModel = new GenTableModel(updateItemFactory, // updateItemFactory,
-				new DefaultTableProvider(source), // tableProvider
-				0,
+		GenTableModel createdModel = new GenTableModel(updateItemFactory, new DefaultTableProvider(source), 0,
 				// final columns int array
 				new int[] {},
 				// table model listener

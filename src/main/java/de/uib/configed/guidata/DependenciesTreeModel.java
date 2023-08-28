@@ -83,7 +83,7 @@ public class DependenciesTreeModel {
 
 		Logging.debug(this, mainProductId + "-tree wird erstellt");
 
-		if (graphIsInitialized && productList.contains(mainProductId)) {
+		if (graphIsInitialized && productMap.containsKey(mainProductId)) {
 			DefaultMutableTreeNode mainNode;
 
 			if (benoetigt) {

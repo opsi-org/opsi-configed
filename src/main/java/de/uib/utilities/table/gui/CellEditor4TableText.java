@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -36,36 +35,24 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	public CellEditor4TableText(FEdit fEdit, Dimension initSize) {
 		super(new JTextField());
-		editorContent = (JTextField) super.getComponent();
-
+		this.initSize = initSize;
 		if (fEdit == null) {
 			this.fEdit = new FEditText("");
 		} else {
 			this.fEdit = fEdit;
 		}
 
-		fEditInitialized = false;
-
-		this.initSize = initSize;
-
+		editorContent = (JTextField) super.getComponent();
 		editorContent.setEditable(false);
-
 		editorContent.addMouseListener(this);
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
 		editorContent.setBorder(null);
+
 	}
 
 	public CellEditor4TableText() {
 		this(null, null);
-	}
-
-	// interface
-	// ActionListener
-	public void actionPerformed(EventObject e) {
-		if (e.getSource() == editorContent) {
-			fireEditingStopped();
-		}
 	}
 
 	// interface
@@ -153,14 +140,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 			}
 		}
 
-		Point loc = null;
 		Rectangle rec = table.getCellRect(row, column, true);
-		try {
-			loc = table.getLocationOnScreen();
-		} catch (Exception ex) {
-			Logging.warning(this, "get location error " + ex);
-			loc = new Point(50, 50);
-		}
+		Point loc = table.getLocationOnScreen();
 
 		fEdit.setVisible(true);
 

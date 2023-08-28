@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +30,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
+import utils.Utils;
 
 public class ValueSelectorList extends JPanel implements ActionListener {
 	private DepotsList valueList;
@@ -91,33 +91,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		return scrollPaneValueList;
 	}
 
-	/**
-	 * gives the color for setting back color of this panel in master panel
-	 * 
-	 * @return java.awt.Color
-	 */
-	public Color getMyColor() {
-		return Globals.SECONDARY_BACKGROUND_COLOR;
-	}
-
-	/**
-	 * allows to show that a depot selection change is in progress
-	 * 
-	 * @param boolean We are in progress
-	 */
-	public void setChangedDepotSelectionActive(boolean active) {
-		if (!Main.THEMES) {
-
-			if (active) {
-				valueList.setBackground(Globals.BACKGROUND_COLOR_9);
-			} else {
-				valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			}
-
-			// colorize as hint that we have changed the depots selection
-		}
-	}
-
 	private void initComponents() {
 		labelValue = new JLabel();
 		if (multidepot) {
@@ -132,30 +105,30 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		if (!Main.FONT) {
-			labelValue.setFont(Globals.defaultFontStandardBold);
+			labelValue.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
-		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectValuesWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
-		Globals.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
+		Utils.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
 		buttonSelectValuesWithEqualProperties.addActionListener(this);
 		buttonSelectValuesWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectValuesAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectValuesAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectValuesAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
-		Globals.formatButtonSmallText(buttonSelectValuesAll);
+		Utils.formatButtonSmallText(buttonSelectValuesAll);
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
 
-		searchPane.setFieldFont(Globals.defaultFont);
-		searchPane.setFieldBackground(getMyColor());
+		searchPane.setFieldFont(Globals.DEFAULT_FONT);
+		searchPane.setFieldBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
 
 		if (!Main.THEMES) {
-			searchPane.setBackground(getMyColor());
+			searchPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		searchPane.setNarrow(true);
 
@@ -169,7 +142,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
 		if (!Main.FONT) {
-			valueList.setFont(Globals.defaultFont);
+			valueList.setFont(Globals.DEFAULT_FONT);
 		}
 		if (!Main.THEMES) {
 			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

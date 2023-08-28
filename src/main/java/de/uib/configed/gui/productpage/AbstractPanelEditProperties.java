@@ -8,7 +8,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Graphics2D;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXPanel;
@@ -48,8 +47,4 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 	public abstract JPanel getTitlePanel();
 
 	public abstract void setTitlePanelActivated(boolean actived);
-
-	public JLabel getDepotLabel() {
-		return null;
-	}
 }

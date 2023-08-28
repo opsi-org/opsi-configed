@@ -15,10 +15,9 @@ import javax.swing.JButton;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitingCycle;
+import utils.Utils;
 
 public class IconButton extends JButton {
-	/** The status if button is active */
-	private boolean activated;
 
 	/** A description used for tooltip if button is active */
 	private String tooltipActive;
@@ -102,7 +101,7 @@ public class IconButton extends JButton {
 			imagesForAnimation = new ImageIcon[imageURLsForAnimatedWaiting.length];
 
 			for (int i = 0; i < imageURLsForAnimatedWaiting.length; i++) {
-				imagesForAnimation[i] = Globals.createImageIcon(imageURLsForAnimatedWaiting[i], "");
+				imagesForAnimation[i] = Utils.createImageIcon(imageURLsForAnimatedWaiting[i], "");
 			}
 		}
 	}
@@ -145,13 +144,13 @@ public class IconButton extends JButton {
 	 * given) a disabled icon)
 	 */
 	private void createIconButton(boolean enabled) {
-		setIcon(Globals.createImageIcon(this.imageURLActive, ""));
+		setIcon(Utils.createImageIcon(this.imageURLActive, ""));
 		setToolTipText(description);
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(enabled);
-		setSelectedIcon(Globals.createImageIcon(this.imageURLOver, ""));
+		setSelectedIcon(Utils.createImageIcon(this.imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
-			setDisabledIcon(Globals.createImageIcon(this.imageURLDisabled, ""));
+			setDisabledIcon(Utils.createImageIcon(this.imageURLDisabled, ""));
 		}
 	}
 
@@ -168,13 +167,13 @@ public class IconButton extends JButton {
 	 */
 	public void createIconButton(String desc, String imageURLActive, String imageURLOver, String imageURLDisabled,
 			boolean enabled) {
-		setIcon(Globals.createImageIcon(imageURLActive, ""));
+		setIcon(Utils.createImageIcon(imageURLActive, ""));
 		setToolTipText(desc);
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(enabled);
-		setSelectedIcon(Globals.createImageIcon(imageURLOver, ""));
+		setSelectedIcon(Utils.createImageIcon(imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
-			setDisabledIcon(Globals.createImageIcon(imageURLDisabled, ""));
+			setDisabledIcon(Utils.createImageIcon(imageURLDisabled, ""));
 		}
 	}
 
@@ -190,26 +189,12 @@ public class IconButton extends JButton {
 	}
 
 	/**
-	 * Sets an image for active icon button and an image if the curser is
-	 * hovering over the button
-	 * 
-	 * @param imageURLActive the new url for the image displayed if active
-	 * @param imageURLOver   the new url for the image displayed if the cursor
-	 *                       is hovering over the button
-	 */
-	public void setNewImage(String imageURLActive, String imageURLOver) {
-		setIcon(Globals.createImageIcon(imageURLActive, ""));
-		setSelectedIcon(Globals.createImageIcon(imageURLOver, ""));
-	}
-
-	/**
 	 * Sets the tooltiptext for active button if paramaterer "a" is true <br>
 	 * and the tooltiptext for inactive button if parameter "a" is false
 	 * 
 	 * @param a sets the activate status for button used for tooltiptext
 	 */
 	public void setActivated(boolean a) {
-		activated = a;
 		if (tooltipActive != null && tooltipInactive != null) {
 			if (a) {
 				setToolTipText(tooltipActive);
@@ -220,24 +205,10 @@ public class IconButton extends JButton {
 	}
 
 	/**
-	 * @return current active status
-	 */
-	public boolean isActivated() {
-		return activated;
-	}
-
-	/**
 	 * set the default icon as internal value by location
 	 */
 	public void setDefaultIcon(String desc) {
-		defaultIcon = Globals.createImageIcon(desc, "");
-	}
-
-	/**
-	 * set the default icon as internal value
-	 */
-	public void setDefaultIcon(Icon im) {
-		defaultIcon = im;
+		defaultIcon = Utils.createImageIcon(desc, "");
 	}
 
 	/**
@@ -251,14 +222,7 @@ public class IconButton extends JButton {
 	 * set the running action icon as internal value by location
 	 */
 	public void setRunningActionIcon(String desc) {
-		runningActionIcon = Globals.createImageIcon(desc, "");
-	}
-
-	/**
-	 * set the running action icon as internal value
-	 */
-	public void setRunningActionIcon(Icon im) {
-		runningActionIcon = im;
+		runningActionIcon = Utils.createImageIcon(desc, "");
 	}
 
 	/**
@@ -307,5 +271,4 @@ public class IconButton extends JButton {
 
 		setDisabledIcon(imagesForAnimation[iconIndex]);
 	}
-
 }

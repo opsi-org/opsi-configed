@@ -12,7 +12,7 @@ import java.util.TreeSet;
 
 import de.uib.utilities.logging.Logging;
 
-public class DefaultTableProvider implements TableProvider {
+public class DefaultTableProvider {
 	private TableSource source;
 	private List<String> columnNames;
 	private List<String> classNames;
@@ -23,12 +23,6 @@ public class DefaultTableProvider implements TableProvider {
 		this.source = source;
 	}
 
-	@Override
-	public void setTableSource(TableSource source) {
-		this.source = source;
-	}
-
-	@Override
 	public List<String> getColumnNames() {
 		if (columnNames == null) {
 			columnNames = source.retrieveColumnNames();
@@ -37,7 +31,6 @@ public class DefaultTableProvider implements TableProvider {
 		return columnNames;
 	}
 
-	@Override
 	public List<String> getClassNames() {
 		if (classNames == null) {
 			classNames = source.retrieveClassNames();
@@ -47,7 +40,6 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should deliver a copy of the data
-	@Override
 	public List<List<Object>> getRows() {
 		Logging.info(this, " -- getRows()");
 
@@ -86,7 +78,6 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should set the working copy as new original values
-	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
 		if (rows == null) {
 			// TODO: request reload?
@@ -105,13 +96,11 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate returning to the original data
-	@Override
 	public void requestReturnToOriginal() {
 		rowsCopy = null;
 	}
 
 	// should initiate reloading the original data
-	@Override
 	public void requestReloadRows() {
 		rows = null;
 		rowsCopy = null;
@@ -119,14 +108,12 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate reloading the metadata
-	@Override
 	public void structureChanged() {
 		classNames = null;
 		columnNames = null;
 	}
 
 	// yields a column as ordered List
-	@Override
 	public List<String> getOrderedColumn(int col, boolean emptyAllowed) {
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
@@ -140,5 +127,4 @@ public class DefaultTableProvider implements TableProvider {
 
 		return new ArrayList<>(set);
 	}
-
 }

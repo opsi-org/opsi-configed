@@ -6,20 +6,17 @@
 
 package de.uib.configed;
 
-import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -40,9 +37,9 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
+import utils.Utils;
 
 public final class Configed {
-
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
 	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
@@ -111,17 +108,6 @@ public final class Configed {
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			Logging.debug("they are equal");
-		}
-
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
 		}
 
 		startConfiged();
@@ -204,58 +190,42 @@ public final class Configed {
 
 	public static String getResourceValue(String key) {
 		String result = null;
-		try {
-			if (extraLocalization != null) {
-				result = extraLocalization.getProperty(key);
-				if (result == null) {
-					Logging.info("extraLocalization.getProperty null for key " + key);
-				}
-			}
-
+		if (extraLocalization != null) {
+			result = extraLocalization.getProperty(key);
 			if (result == null) {
+				Logging.info("extraLocalization.getProperty null for key " + key);
+			}
+		}
+
+		if (result == null) {
+			if (Messages.messagesBundle != null) {
 				result = Messages.messagesBundle.getString(key);
+			} else {
+				Logging.error("Messages.messagesBundle is null...");
 			}
+		}
 
-			if (showLocalizationStrings) {
-				Logging.info("LOCALIZE " + key + " by " + result);
-				result = "" + result + "[[" + key + "]]";
-
-			}
-		} catch (MissingResourceException mre) {
-			// we return the key and log the problem:
-			Logging.debug("Problem: " + mre.toString());
-
-			try {
-				result = Messages.messagesEnBundle.getString(key);
-
-				if (showLocalizationStrings) {
-					Logging.info("LOCALIZE " + key + " by " + result);
-					result = "" + result + "?? [[" + key + "]]";
-
-				}
-			} catch (MissingResourceException mre2) {
-				Logging.debug("Problem: " + mre2.toString());
-
-			}
-		} catch (Exception ex) {
-			Logging.warning("Failed to message " + key, ex);
+		if (showLocalizationStrings) {
+			Logging.info("LOCALIZE " + key + " by " + result);
+			result = "" + result + "[[" + key + "]]";
 		}
 
 		if (result == null) {
 			result = key;
 		}
+
 		return result;
 	}
 
 	private static void addMissingArgs() {
 		if (host == null) {
-			host = Globals.getCLIparam("Host: ", false);
+			host = Utils.getCLIParam("Host: ");
 		}
 		if (user == null) {
-			user = Globals.getCLIparam("User: ", false);
+			user = Utils.getCLIParam("User: ");
 		}
 		if (password == null) {
-			password = Globals.getCLIparam("Password: ", true);
+			password = Utils.getCLIPasswordParam("Password: ");
 		}
 	}
 
@@ -415,7 +385,7 @@ public final class Configed {
 		}
 
 		if (cmd.hasOption("disable-certificate-verification")) {
-			Globals.disableCertificateVerification = true;
+			Utils.setDisableCertificateVerification(true);
 		}
 	}
 
@@ -541,24 +511,6 @@ public final class Configed {
 			Main.endApp(Main.NO_ERROR);
 		} else {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
-		}
-
-		try {
-			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
-			if (resource == null) {
-				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
-		}
-
-		// Turn on antialiasing for text (not for applets)
-		try {
-			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex);
 		}
 
 		new Configed(host, user, password, client, clientgroup, tab);

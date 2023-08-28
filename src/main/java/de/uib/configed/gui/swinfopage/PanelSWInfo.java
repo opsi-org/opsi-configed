@@ -6,7 +6,9 @@
 
 package de.uib.configed.gui.swinfopage;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +153,7 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		if (!Main.FONT) {
-			labelSuperTitle.setFont(Globals.defaultFontBold);
+			labelSuperTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
@@ -186,15 +188,18 @@ public class PanelSWInfo extends JPanel {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
+						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController
-								.retrieveSoftwareAuditData(hostId);
+								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(hostId);
+							scanInfo = "Scan " + persistenceController
+									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
 
 						}
@@ -214,7 +219,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		if (!Main.THEMES) {
-			checkWithMsUpdates.setForeground(Globals.blue);
+			checkWithMsUpdates.setForeground(Globals.BLUE);
 		}
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
@@ -225,7 +230,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		if (!Main.THEMES) {
-			checkWithMsUpdates2.setForeground(Globals.blue);
+			checkWithMsUpdates2.setForeground(Globals.BLUE);
 		}
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
@@ -431,22 +436,6 @@ public class PanelSWInfo extends JPanel {
 		}
 	}
 
-	public void sendToTerminal() {
-
-		SWterminalExporter exporter = new SWterminalExporter();
-
-		exporter.setHost(hostId);
-
-		if (panelTable.getSelectedRowCount() > 0) {
-			exporter.setOnlySelectedRows();
-		}
-
-		exporter.setPanelTableForExportTable(panelTable);
-
-		exporter.export();
-
-	}
-
 	public void export() {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
@@ -460,15 +449,15 @@ public class PanelSWInfo extends JPanel {
 		}
 	}
 
-	public void sendToCSV() {
+	private void sendToCSV() {
 		csvExportTable.execute(null, false);
 	}
 
-	public void sendToCSVonlySelected() {
+	private void sendToCSVonlySelected() {
 		csvExportTable.execute(null, true);
 	}
 
-	public void sendToPDF() {
+	private void sendToPDF() {
 		Logging.info(this, "create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();
@@ -529,7 +518,7 @@ public class PanelSWInfo extends JPanel {
 		this.hostId = "" + hostId;
 		title = this.hostId;
 
-		String timeS = "" + Globals.getToday();
+		String timeS = "" + new Timestamp(System.currentTimeMillis());
 		String[] parts = timeS.split(":");
 		if (parts.length > 2) {
 			timeS = parts[0] + ":" + parts[1];

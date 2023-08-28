@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
+import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
@@ -28,18 +29,17 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 
-		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
+		if (newdata instanceof ConfigName2ConfigValue) {
 
 			persistenceController.setProductProperties(pcname, productname, newdata);
 		}
 	}
 
 	public void revert() {
-		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
+		if (newdata instanceof ConfigName2ConfigValue) {
 
-			((de.uib.configed.type.ConfigName2ConfigValue) newdata).rebuild();
+			((ConfigName2ConfigValue) newdata).rebuild();
 
 		}
 	}
-
 }

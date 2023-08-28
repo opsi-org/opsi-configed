@@ -12,14 +12,9 @@ import java.io.Writer;
 import java.util.Iterator;
 
 public class CSVWriter {
-	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
 
 	private CSVFormat format;
 	private BufferedWriter writer;
-
-	public CSVWriter(Writer writer) {
-		this(writer, DEFAULT_FORMAT);
-	}
 
 	public CSVWriter(Writer writer, CSVFormat format) {
 

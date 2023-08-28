@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -118,9 +119,9 @@ public final class SSHCommandFactory {
 	/** List<SSHCommand_Template> list elements are sshcommands **/
 	private List<SSHCommandTemplate> sshCommandList;
 	/** list of known menus **/
-	private List<String> listKnownMenus;
+	private Set<String> knownMenus;
 	/** list of known parent menus **/
-	private List<String> listKnownParents;
+	private Set<String> knownParents;
 
 	/** ConfigedMain instance **/
 	private ConfigedMain configedMain;
@@ -140,7 +141,7 @@ public final class SSHCommandFactory {
 	 **/
 	private SSHCommandFactory(ConfigedMain main) {
 		this.configedMain = main;
-		Logging.info(this, "SSHComandFactory new instance");
+		Logging.info(this.getClass(), "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);
@@ -252,6 +253,7 @@ public final class SSHCommandFactory {
 
 		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 		// ArrayList! JsonArray muss nicht sortiert sein!"
+
 		return new SSHCommandTemplate(id, c, mt, ns, pmt, ttt, p);
 	}
 
@@ -268,14 +270,14 @@ public final class SSHCommandFactory {
 		}
 
 		sshCommandList = new ArrayList<>();
-		listKnownMenus = new ArrayList<>();
-		listKnownParents = new ArrayList<>();
+		knownMenus = new HashSet<>();
+		knownParents = new HashSet<>();
 
 		if (!commandlist.isEmpty()) {
-			listKnownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+			knownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		}
 
-		listKnownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+		knownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<String, Object> map : commandlist) {
 			SSHCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
@@ -288,11 +290,10 @@ public final class SSHCommandFactory {
 				List<String> commandCommands = new LinkedList<>(
 						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
 						}));
-				commandCommands.add("echo ... ");
-				commandCommands.add("echo READY");
+
 				com.setCommands(commandCommands);
 			}
-			listKnownMenus.add(com.getMenuText());
+			knownMenus.add(com.getMenuText());
 
 			String parent = com.getParentMenuText();
 
@@ -301,13 +302,13 @@ public final class SSHCommandFactory {
 			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
-			if (!listKnownParents.contains(parent)) {
-				listKnownParents.add(parent);
+			if (!knownParents.contains(parent)) {
+				knownParents.add(parent);
 			}
 
 			Logging.info(this, "parent menu text changed  " + parent);
 
-			Logging.info(this, "list_knownParents " + listKnownParents);
+			Logging.info(this, "list_knownParents " + knownParents);
 
 			sshCommandList.add(com);
 		}
@@ -323,8 +324,10 @@ public final class SSHCommandFactory {
 		if (commandlist == null) {
 			commandlist = persistenceController.retrieveCommandList();
 		}
-		Collections.sort(listKnownMenus, String::compareToIgnoreCase);
-		return listKnownMenus;
+
+		List<String> knownMenusList = new ArrayList<>(knownMenus);
+		Collections.sort(knownMenusList, String::compareToIgnoreCase);
+		return knownMenusList;
 	}
 
 	/**
@@ -336,8 +339,11 @@ public final class SSHCommandFactory {
 		if (commandlist == null) {
 			commandlist = persistenceController.retrieveCommandList();
 		}
-		Collections.sort(listKnownParents, String::compareToIgnoreCase);
-		return listKnownParents;
+
+		List<String> knownParentsList = new ArrayList<>(knownParents);
+
+		Collections.sort(knownParentsList, String::compareToIgnoreCase);
+		return knownParentsList;
 	}
 
 	/**
@@ -437,13 +443,14 @@ public final class SSHCommandFactory {
 			JSONArray jsComArrCom = new JSONArray(((SSHMultiCommand) command).getCommandsRaw());
 			jsComMap.put(COMMAND_MAP_COMMANDS, jsComArrCom);
 			jsonObjects.add(jsComMap);
-		} catch (Exception e) {
-			Logging.warning(this, "saveSSHCommand, exception occurred", e);
+		} catch (JSONException e) {
+			Logging.warning(this, "saveSSHCommand, JSONException occurred", e);
 		}
 
-		if (listKnownMenus.contains(command.getMenuText())) {
+		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
 			if (persistenceController.updateSSHCommand(jsonObjects)) {
+
 				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
@@ -451,7 +458,7 @@ public final class SSHCommandFactory {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
 			if (persistenceController.createSSHCommand(jsonObjects)) {
 				sshCommandList.add(command);
-				listKnownMenus.add(command.getMenuText());
+				knownMenus.add(command.getMenuText());
 				return true;
 			}
 		}
@@ -459,7 +466,7 @@ public final class SSHCommandFactory {
 	}
 
 	public boolean isSSHCommandEqualSavedCommand(SSHCommandTemplate command) {
-		if (listKnownMenus.contains(command.getMenuText())) {
+		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "isSSHCommandEqualSavedCommand compare command " + command.toString());
 			if (sshCommandList == null) {
 				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
@@ -502,7 +509,7 @@ public final class SSHCommandFactory {
 		jsonObjects.add(menu);
 		if (persistenceController.deleteSSHCommand(jsonObjects)) {
 			sshCommandList.remove(getSSHCommandByMenu(menu));
-			listKnownMenus.remove(menu);
+			knownMenus.remove(menu);
 		}
 	}
 
@@ -538,29 +545,24 @@ public final class SSHCommandFactory {
 	public void testConnection(String user, String host) {
 		SSHCommand command = new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false);
 		connectionState = UNKNOWN;
-		try {
-			if (connection.connect(command)) {
-				String result = connection.exec(command, false);
-				Logging.info(this, "connection.exec produces " + result);
-				if (result == null || result.trim().isEmpty()) {
-					Logging.info(this, "testConnection not allowed");
-					connectionState = CONNECTION_NOT_ALLOWED;
-					Logging.warning(this, "cannot connect to " + user + "@" + host);
-				} else {
-					Logging.info(this, "testConnection connected");
-					connectionState = CONNECTED;
-				}
-			} else {
-				Logging.info(this, "testConnection not connected");
-				connectionState = NOT_CONNECTED;
-				Logging.warning(this, "cannot connect to " + user + "@" + host);
-			}
 
-		} catch (Exception e) {
+		if (connection.connect(command)) {
+			String result = connection.exec(command, false);
+			Logging.info(this, "connection.exec produces " + result);
+			if (result == null || result.trim().isEmpty()) {
+				Logging.info(this, "testConnection not allowed");
+				connectionState = CONNECTION_NOT_ALLOWED;
+				Logging.warning(this, "cannot connect to " + user + "@" + host);
+			} else {
+				Logging.info(this, "testConnection connected");
+				connectionState = CONNECTED;
+			}
+		} else {
 			Logging.info(this, "testConnection not connected");
 			connectionState = NOT_CONNECTED;
-			Logging.warning(this, "cannot connect to " + user + "@" + host, e);
+			Logging.warning(this, "cannot connect to " + user + "@" + host);
 		}
+
 		updateConnectionInfo(connectionState);
 		Logging.info(this, "testConnection connection state " + connectionState);
 	}

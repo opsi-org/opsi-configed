@@ -7,8 +7,6 @@
 package de.uib.configed.guidata;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,11 +26,11 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class RequirementsTableModel extends AbstractTableModel {
 
-	private static List<String> rowType;
-	private static int noOfRowTypes;
+	private static final int NO_OF_ROW_TYPES = 3;
 
 	private Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
@@ -45,17 +43,8 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	static {
-		rowType = new ArrayList<>();
-		rowType.add("KEYROW");
-		rowType.add("SETUP REQUIREMENT");
-		rowType.add("UNINSTALL REQUIREMENT");
-		noOfRowTypes = rowType.size();
-
-	}
-
 	public RequirementsTableModel() {
-		Logging.info(this, "creating");
+		Logging.info(this.getClass(), "creating");
 
 		init();
 	}
@@ -103,7 +92,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		fireTableDataChanged();
-
 	}
 
 	@Override
@@ -113,7 +101,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return keyArray.length * noOfRowTypes;
+		return keyArray.length * NO_OF_ROW_TYPES;
 	}
 
 	@Override
@@ -145,9 +133,9 @@ public class RequirementsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int col) {
 
-		String myKey = (String) keyArray[row / noOfRowTypes];
+		String myKey = (String) keyArray[row / NO_OF_ROW_TYPES];
 
-		int rowTypeIndex = row % noOfRowTypes;
+		int rowTypeIndex = row % NO_OF_ROW_TYPES;
 
 		Object result = null;
 		String indent = "     ";
@@ -237,7 +225,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
 							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"))) {
 
-				((JLabel) cell).setIcon(Globals.createImageIcon("images/warning.png", "warning"));
+				((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
 
 				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
 
@@ -260,7 +248,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 		public void colorize(Component cell, int row, int col) {
 			if (!Main.THEMES) {
-				cell.setForeground(Globals.lightBlack);
+				cell.setForeground(Globals.LIGHT_BLACK);
 			}
 
 			int kindOfRow = row % 3;

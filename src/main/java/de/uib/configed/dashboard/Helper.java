@@ -14,67 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
+import de.uib.configed.Configed;
 
 public final class Helper {
 	private Helper() {
-	}
-
-	public static <T, V> List<T> combineListsFromMap(Map<V, List<T>> map) {
-
-		if (map.isEmpty()) {
-			return new ArrayList<>();
-		}
-
-		List<T> list = new ArrayList<>();
-		for (List<T> value : map.values()) {
-			list.addAll(value);
-		}
-
-		return list;
-	}
-
-	public static <T, V> Map<T, V> combineMapsFromMap(Map<T, Map<T, V>> map) {
-
-		if (map.isEmpty()) {
-			return new HashMap<>();
-		}
-
-		Map<T, V> allMaps = new HashMap<>();
-
-		for (Map<T, V> value : map.values()) {
-			allMaps.putAll(value);
-		}
-
-		return allMaps;
-	}
-
-	public static <T, V> Map<V, V> combineMapsFromMap2(Map<T, Map<V, V>> map) {
-
-		if (map.isEmpty()) {
-			return new HashMap<>();
-		}
-
-		Map<V, V> allMaps = new HashMap<>();
-
-		for (Map<V, V> value : map.values()) {
-			allMaps.putAll(value);
-		}
-
-		return allMaps;
-	}
-
-	public static <T, V> boolean listsInMapAreEmpty(Map<V, List<T>> map) {
-		if (map.isEmpty()) {
-			return true;
-		}
-
-		for (List<T> value : map.values()) {
-			if (!value.isEmpty()) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	public static <T, V> boolean mapsInMapAreEmpty(Map<T, Map<T, V>> map) {
@@ -89,6 +35,43 @@ public final class Helper {
 		}
 
 		return true;
+	}
+
+	public static <T> void fillMapOfListsForDepots(Map<String, List<T>> map, List<T> data, String depot) {
+		if (map.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			List<T> dataCombined = map.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			dataCombined.addAll(data);
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), dataCombined);
+		} else {
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), new ArrayList<>(data));
+		}
+		map.put(depot, data);
+	}
+
+	public static <T, V> void fillMapOfMapsForDepots(Map<String, Map<T, V>> map, Map<T, V> data, String depot) {
+		if (map.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			Map<T, V> dataCombined = map.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			Optional<V> firstElement = data.values().stream().findFirst();
+			if (firstElement.isPresent() && firstElement.get() instanceof Integer) {
+				handleIntegerType(dataCombined, data);
+			} else {
+				dataCombined.putAll(data);
+			}
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), dataCombined);
+		} else {
+			map.put(Configed.getResourceValue("Dashboard.selection.allDepots"), new HashMap<>(data));
+		}
+		map.put(depot, data);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T, V> void handleIntegerType(Map<T, V> dataCombined, Map<T, V> data) {
+		for (Entry<T, V> entry : data.entrySet()) {
+			Integer oldValue = dataCombined.get(entry.getKey()) == null ? 0
+					: (Integer) dataCombined.get(entry.getKey());
+			Integer newValue = oldValue + (Integer) entry.getValue();
+			dataCombined.put(entry.getKey(), (V) newValue);
+		}
 	}
 
 	public static BufferedImage toBufferedImage(Image img) {

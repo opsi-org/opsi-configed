@@ -41,6 +41,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
+import utils.Utils;
 
 public class ControllerHWinfoColumnConfiguration {
 
@@ -141,12 +142,9 @@ public class ControllerHWinfoColumnConfiguration {
 			classNames.add("java.lang.String");
 		}
 
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, KEY_COL);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
-
-				// tableProvider
-
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
 				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override
@@ -198,9 +196,9 @@ public class ControllerHWinfoColumnConfiguration {
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_USE_IN_QUERY));
 		col.setMaxWidth(80);
 
-		Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
+		Icon iconChecked = Utils.createImageIcon("images/checked_box_blue_14.png", "");
+		Icon iconUnchecked = Utils.createImageIcon("images/checked_box_blue_empty_14.png", "");
+		Icon iconEmpty = Utils.createImageIcon("images/checked_void.png", "");
 
 		col.setCellRenderer(new BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
 
@@ -238,16 +236,13 @@ public class ControllerHWinfoColumnConfiguration {
 	private void buildUpdateItem(ColumnIdent col, Boolean use) {
 		Logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);
 
-		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.getConfigIdent());
+		Map<String, Boolean> tableConfigUpdates = updateItems.computeIfAbsent(col.getConfigIdent(),
+				s -> new HashMap<>());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
 		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
-		if (tableConfigUpdates == null) {
-			tableConfigUpdates = new HashMap<>();
-			updateItems.put(col.getConfigIdent(), tableConfigUpdates);
-		}
 		tableConfigUpdates.put(col.getDBColumnName(), use);
 	}
 

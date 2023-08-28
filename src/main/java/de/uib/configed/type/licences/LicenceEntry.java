@@ -6,8 +6,6 @@
 
 package de.uib.configed.type.licences;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -39,16 +37,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	public static final String EXPIRATION_DATE_KEY = "expirationDate";
 	public static final String TYPE_KEY = "licenseType";
 
-	private static final List<String> KEYS = new ArrayList<>();
-	static {
-		KEYS.add(ID_KEY);
-		KEYS.add(LICENCE_CONTRACT_ID_KEY);
-		KEYS.add(BOUND_TO_HOST_KEY);
-		KEYS.add(MAX_INSTALLATIONS_KEY);
-		KEYS.add(EXPIRATION_DATE_KEY);
-		KEYS.add(TYPE_KEY);
-	}
-
 	public static final String VOLUME = "VOLUME";
 	public static final String OEM = "OEM";
 	public static final String RETAIL = "RETAIL";
@@ -68,14 +56,14 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		}
 
 		if (super.get(ID_KEY) == null) {
-			Logging.warning(this, "missing primary key in " + importedEntry);
+			Logging.warning(this.getClass(), "missing primary key in " + importedEntry);
 		}
 
 		if (importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
 		} else {
 			if (!(importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) instanceof Integer)) {
-				Logging.warning(this, " " + importedEntry.get(ID_KEY) + " has not an integer for "
+				Logging.warning(this.getClass(), " " + importedEntry.get(ID_KEY) + " has not an integer for "
 						+ importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY));
 			} else {
 				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY);
@@ -91,10 +79,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		}
 	}
 
-	public static List<String> getKeys() {
-		return KEYS;
-	}
-
 	private String translateTypeFromService(String servicetype) {
 		switch (servicetype) {
 		case VOLUME_SERVICE:
@@ -106,12 +90,9 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		case CONCURRENT_SERVICE:
 			return CONCURRENT;
 		default:
-			Logging.warning(this, "no case found for servicetype in translateTypeFromService");
-			break;
+			Logging.warning(this, "illlegal servicetype " + servicetype);
+			return "";
 		}
-
-		Logging.warning(this, "illlegal servicetype " + servicetype);
-		return "";
 	}
 
 	public String getId() {
@@ -127,17 +108,10 @@ public class LicenceEntry extends TreeMap<String, Object> {
 			return null;
 		}
 
-		if ("0".equals(count.trim())) {
-			return "0";
-		}
-
-		ExtendedInteger ei = new ExtendedInteger(count);
-
-		if (ei.equals(ExtendedInteger.INFINITE)) {
+		if ("0".equals(count.trim()) || new ExtendedInteger(count).equals(ExtendedInteger.INFINITE)) {
 			return "0";
 		}
 
 		return count;
 	}
-
 }
