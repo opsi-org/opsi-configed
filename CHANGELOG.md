@@ -1,6 +1,14 @@
 # Changelog
 
-## [4.2.22.11] - 2023-08-21
+## [4.2.22.13] - 2023-08-28
+### Fixed
+- Groups (specialities) available again 
+
+## [4.2.22.12] - 2023-08-24
+### Fixed
+- Show actual clientlist in column "boundToHost" in licence management
+
+# [4.2.22.11] - 2023-08-21
 ### Fixed
 - Open several opsi-logviewers with zip-files now possible again
 

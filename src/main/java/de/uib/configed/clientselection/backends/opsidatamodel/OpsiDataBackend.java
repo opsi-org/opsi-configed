@@ -427,7 +427,10 @@ public final class OpsiDataBackend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
+	}
 
+	public void reload() {
+		persistenceController.depotChange();
 	}
 
 	private void checkInitData() {

@@ -25,6 +25,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import de.uib.utilities.logging.Logging;
 
 public final class ExtractorUtil {
+
 	private ExtractorUtil() {
 	}
 

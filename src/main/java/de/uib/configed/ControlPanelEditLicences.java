@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -190,15 +191,11 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
-					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
-
-			if (poolIds.size() <= 1) {
-				poolIds.add("");
-			}
-			// hack, since combo box shows nothing otherwise
-
-			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
+			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
+					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+							.keySet());
+			choicesAllHosts.set(0, "");
+			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);
