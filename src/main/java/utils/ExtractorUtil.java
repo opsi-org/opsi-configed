@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
@@ -30,21 +32,21 @@ public final class ExtractorUtil {
 	private ExtractorUtil() {
 	}
 
-	public static String unzip(File file) {
+	public static Map<String, String> unzip(File file) {
 		Logging.info("ExtractorUtil: starting extract");
-		String result = "";
+		Map<String, String> files = new HashMap<>();
 		String archiveFormat = detectArchiveFormat(file);
 		try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
 				retrieveInputStream(file))) {
 			ArchiveEntry entry = null;
 			while ((entry = ais.getNextEntry()) != null) {
 				if (!entry.isDirectory()) {
-					result = IOUtil.toString(ais);
+					files.put(entry.getName(), IOUtil.toString(ais));
 				}
 			}
 		} catch (StreamingNotSupportedException e) {
 			if (e.getFormat().equals(ArchiveStreamFactory.SEVEN_Z)) {
-				result = extractSevenZIP(file);
+				files = extractSevenZIP(file);
 			} else {
 				Logging.error("Archive format " + archiveFormat + " does not support streaming", e);
 			}
@@ -54,7 +56,7 @@ public final class ExtractorUtil {
 			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
 		}
 
-		return result;
+		return files;
 	}
 
 	private static String detectArchiveFormat(File file) {
@@ -88,20 +90,20 @@ public final class ExtractorUtil {
 		return is;
 	}
 
-	private static String extractSevenZIP(File file) {
-		final StringBuilder sb = new StringBuilder();
+	private static Map<String, String> extractSevenZIP(File file) {
+		Map<String, String> files = new HashMap<>();
 		try (SevenZFile sevenZFile = new SevenZFile(file)) {
 			SevenZArchiveEntry entry = null;
 			while ((entry = sevenZFile.getNextEntry()) != null) {
 				if (!entry.isDirectory()) {
 					byte[] content = new byte[(int) entry.getSize()];
 					int bytesRead = sevenZFile.read(content);
-					sb.append(new String(content, 0, bytesRead));
+					files.put(entry.getName(), new String(content, 0, bytesRead));
 				}
 			}
 		} catch (IOException e) {
 			Logging.error("Unable to read 7z file " + file.getAbsolutePath(), e);
 		}
-		return sb.toString();
+		return files;
 	}
 }

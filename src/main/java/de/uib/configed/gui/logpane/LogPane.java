@@ -54,6 +54,9 @@ import utils.Utils;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
+	private static final int DEFAULT_WIDTH = 1212;
+	private static final int DEFAULT_HEIGHT = 511;
+
 	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
@@ -479,23 +482,33 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// set text did not run
 		// probably we already are in a floating instance
 
-		LogPane copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new LogPane("", false);
-
-		externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setup();
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Main.getMainFrame());
-
+		LogPane copyOfMe = new LogPane("", false);
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
 				maxExistingLevel);
 		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
+		externalize(copyOfMe, title);
+	}
 
+	public void externalize(String title, Dimension size) {
+		externalize(this, title, size);
+	}
+
+	public void externalize(LogPane logPane, String title) {
+		externalize(logPane, title, this.getSize());
+	}
+
+	public void externalize(LogPane logPane, String title, Dimension size) {
+		GeneralFrame externalView = new GeneralFrame(null, title, false);
+		externalView.addPanel(logPane);
+		externalView.setup();
+		if (size.equals(new Dimension(0, 0))) {
+			externalView.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		} else {
+			externalView.setSize(size);
+		}
+		externalView.setLocationRelativeTo(Main.getMainFrame());
 		externalView.setVisible(true);
 	}
 

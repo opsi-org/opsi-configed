@@ -132,6 +132,7 @@ public class Main {
 		formatter.printHelp(Main.USAGE_INFO, options);
 	}
 
+	@SuppressWarnings("unused")
 	private static void setGlobalValues() {
 		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
 			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
@@ -278,7 +279,6 @@ public class Main {
 		CommandLine cmd;
 		try {
 			CommandLineParser parser = new DefaultParser(false);
-
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
 			Logging.error("Problem parsing arguments", e);
