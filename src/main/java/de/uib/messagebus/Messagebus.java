@@ -137,7 +137,7 @@ public class Messagebus implements MessagebusListener {
 
 	private String produceURL() {
 		String protocol = "wss";
-		String host = ConfigedMain.host;
+		String host = ConfigedMain.getHost();
 
 		if (!hasPort(host)) {
 			host = host + ":4447";
@@ -167,7 +167,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private ServerFacade getServerFacadeExecutor() {
-		return (ServerFacade) persistenceController.exec;
+		return (ServerFacade) persistenceController.getExecutioner();
 	}
 
 	private String createEncBasicAuth() {

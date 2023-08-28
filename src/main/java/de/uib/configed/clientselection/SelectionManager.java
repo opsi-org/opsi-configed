@@ -32,10 +32,6 @@ import de.uib.utilities.logging.Logging;
  * The SelectionManager is used by the gui to create the tree of operations.
  */
 public class SelectionManager {
-	public enum ConnectionStatus {
-		AND, OR, AND_NOT, OR_NOT
-	}
-
 	private List<OperationWithStatus> groupWithStatusList;
 	private boolean hasSoftware;
 	private boolean hasHardware;
@@ -85,27 +81,27 @@ public class SelectionManager {
 
 		switch (name) {
 		case "Software":
-			groupStatus.operation = new SoftwareOperation(tmpList);
+			groupStatus.setOperation(new SoftwareOperation(tmpList));
 			break;
 
 		case "Properties":
-			groupStatus.operation = new PropertiesOperation(tmpList);
+			groupStatus.setOperation(new PropertiesOperation(tmpList));
 			break;
 
 		case "SoftwareWithProperties":
-			groupStatus.operation = new SoftwareWithPropertiesOperation(tmpList);
+			groupStatus.setOperation(new SoftwareWithPropertiesOperation(tmpList));
 			break;
 
 		case "Hardware":
-			groupStatus.operation = new HardwareOperation(tmpList);
+			groupStatus.setOperation(new HardwareOperation(tmpList));
 			break;
 
 		case "SwAudit":
-			groupStatus.operation = new SwAuditOperation(tmpList);
+			groupStatus.setOperation(new SwAuditOperation(tmpList));
 			break;
 
 		case "Host":
-			groupStatus.operation = new HostOperation(tmpList);
+			groupStatus.setOperation(new HostOperation(tmpList));
 			break;
 
 		default:
@@ -282,20 +278,20 @@ public class SelectionManager {
 		while (currentPos[0] < input.size()) {
 			OperationWithStatus currentInput = input.get(currentPos[0]);
 			Logging.debug("Position: " + currentPos[0]);
-			Logging.debug("currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen
-					+ currentInput.parenthesisClose);
-			if (currentInput.parenthesisOpen) {
-
+			Logging.debug("currentInput: " + currentInput.getOperation() + currentInput.getStatus()
+					+ currentInput.isParenthesisOpen() + currentInput.isParenthesisClosed());
+			if (currentInput.isParenthesisOpen()) {
 				// so we don't go one step deeper next time here, too
-				currentInput.parenthesisOpen = false;
+				currentInput.setParenthesisOpen(false);
 				AbstractSelectOperation operation = build(input, currentPos);
 				Logging.debug("\n" + operation.printOperation(""));
 				currentPos[0]--;
 				currentInput = input.get(currentPos[0]);
-				currentInput.operation = operation;
+				currentInput.setOperation(operation);
 			}
 
-			if (currentInput.status == ConnectionStatus.OR || currentInput.status == ConnectionStatus.OR_NOT) {
+			if (currentInput.getStatus() == ConnectionStatus.OR
+					|| currentInput.getStatus() == ConnectionStatus.OR_NOT) {
 				if (!currentAnd) {
 					orConnections.add(parseNot(currentInput));
 				} else {
@@ -309,8 +305,8 @@ public class SelectionManager {
 				currentAnd = true;
 			}
 			currentPos[0]++;
-			if (currentInput.parenthesisClose) {
-				currentInput.parenthesisClose = false;
+			if (currentInput.isParenthesisClosed()) {
+				currentInput.setParenthesisClose(false);
 				break;
 			}
 		}
@@ -345,45 +341,45 @@ public class SelectionManager {
 			}
 
 			if (!isTopOperation) {
-				result.getFirst().parenthesisOpen = true;
-				result.getLast().parenthesisClose = true;
+				result.getFirst().setParenthesisOpen(true);
+				result.getLast().setParenthesisClose(true);
 			}
 		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
 			for (AbstractSelectOperation op : ((OrOperation) operation).getChildOperations()) {
 				result.addAll(reverseBuild(op, false));
-				if (result.getLast().status == ConnectionStatus.AND) {
-					result.getLast().status = ConnectionStatus.OR;
+				if (result.getLast().getStatus() == ConnectionStatus.AND) {
+					result.getLast().setStatus(ConnectionStatus.OR);
 				} else {
-					result.getLast().status = ConnectionStatus.OR_NOT;
+					result.getLast().setStatus(ConnectionStatus.OR_NOT);
 				}
 			}
 
-			if (result.getLast().status == ConnectionStatus.OR) {
-				result.getLast().status = ConnectionStatus.AND;
+			if (result.getLast().getStatus() == ConnectionStatus.OR) {
+				result.getLast().setStatus(ConnectionStatus.AND);
 			} else {
-				result.getLast().status = ConnectionStatus.AND_NOT;
+				result.getLast().setStatus(ConnectionStatus.AND_NOT);
 			}
 
 			if (!isTopOperation) {
-				result.getFirst().parenthesisOpen = true;
-				result.getLast().parenthesisClose = true;
+				result.getFirst().setParenthesisOpen(true);
+				result.getLast().setParenthesisClose(true);
 			}
 		} else {
 			result.add(reverseParseNot(operation, ConnectionStatus.AND));
-			result.getLast().parenthesisOpen = false;
-			result.getLast().parenthesisClose = false;
+			result.getLast().setParenthesisOpen(false);
+			result.getLast().setParenthesisClose(false);
 		}
 		return result;
 	}
 
 	/* Add a NotOperation if necessary */
 	private static AbstractSelectOperation parseNot(OperationWithStatus operation) {
-		if (operation.status == ConnectionStatus.AND || operation.status == ConnectionStatus.OR) {
-			return operation.operation;
+		if (operation.getStatus() == ConnectionStatus.AND || operation.getStatus() == ConnectionStatus.OR) {
+			return operation.getOperation();
 		}
 
 		LinkedList<AbstractSelectOperation> arg = new LinkedList<>();
-		arg.add(operation.operation);
+		arg.add(operation.getOperation());
 
 		return new NotOperation(arg);
 	}
@@ -392,15 +388,15 @@ public class SelectionManager {
 	private static OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
 		OperationWithStatus ows = new OperationWithStatus();
 		if (operation instanceof NotOperation) {
-			ows.operation = ((NotOperation) operation).getChildOperations().get(0);
+			ows.setOperation(((NotOperation) operation).getChildOperations().get(0));
 			if (status == ConnectionStatus.AND) {
-				ows.status = ConnectionStatus.AND_NOT;
+				ows.setStatus(ConnectionStatus.AND_NOT);
 			} else {
-				ows.status = ConnectionStatus.OR_NOT;
+				ows.setStatus(ConnectionStatus.OR_NOT);
 			}
 		} else {
-			ows.operation = operation;
-			ows.status = status;
+			ows.setOperation(operation);
+			ows.setStatus(status);
 		}
 		return ows;
 	}
@@ -426,12 +422,5 @@ public class SelectionManager {
 				checkForGroupSearches(child);
 			}
 		}
-	}
-
-	public static class OperationWithStatus {
-		public AbstractSelectOperation operation;
-		public ConnectionStatus status;
-		public boolean parenthesisOpen;
-		public boolean parenthesisClose;
 	}
 }

@@ -199,9 +199,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void initSavedStates() {
 		if (savedStatesObjectTag != null) {
-			Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
-			Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
-			Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
+			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
+			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
+			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
 		}
 	}
 
@@ -341,9 +341,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		boolean active = true;
 
-		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(
-					Configed.savedStates.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
+		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+			active = Integer.valueOf(Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
@@ -488,9 +488,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Utils.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
-		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(
-					Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0;
+		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+			active = Integer.valueOf(Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -502,9 +502,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Utils.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
-		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
 			active = Integer.valueOf(
-					Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
+					Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -610,8 +610,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			}
 
-			if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) == null
-					|| Integer.valueOf(Configed.savedStates
+			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) == null
+					|| Integer.valueOf(Configed.getSavedStates()
 							.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0
 					|| preferredColumnIndex >= targetModel.getColumnCount()) {
 				comboSearchFields.setSelectedIndex(0);
@@ -1131,15 +1131,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
 				// all columns
 				comboSearchFields.setSelectedIndex(0);
-				if (Configed.savedStates
+				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
+							"0");
 				}
 			} else {
 				comboSearchFields.setSelectedIndex(preferredColumnIndex);
-				if (Configed.savedStates
+				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "1");
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
+							"1");
 				}
 			}
 		} else if (e.getSource() == checkmarkFullText) {
@@ -1147,13 +1149,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
 				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-				if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
+				if (Configed.getSavedStates()
+						.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
 				}
 			} else {
 				comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-				if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
+				if (Configed.getSavedStates()
+						.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
 				}
 			}
 		} else if (e.getSource() == filtermark) {
@@ -1182,15 +1186,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
 			if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
 				searchInputType = SearchInputType.PROGRESSIVE;
-				if (Configed.savedStates
+				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY,
+							"0");
 				}
 			} else {
 				searchInputType = SearchInputType.LINE;
-				if (Configed.savedStates
+				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-					Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "1");
+					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY,
+							"1");
 				}
 			}
 

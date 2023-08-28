@@ -17,7 +17,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 
 public class SSHPMInstallPanel extends JPanel {
-	public boolean isOpen;
+	protected boolean isOpen;
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 
-		workbench = OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue;
+		workbench = OpsiserviceNOMPersistenceController.getConfigedWorkbenchDefaultValue();
 		if (workbench.charAt(workbench.length() - 1) != '/') {
 			workbench = workbench + "/";
 		}

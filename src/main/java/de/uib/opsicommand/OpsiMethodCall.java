@@ -19,7 +19,7 @@ public class OpsiMethodCall {
 	public static final boolean BACKGROUND_DEFAULT = true;
 	private static final int DEFAULT_JSON_ID = 1;
 	private static final List<String> collectedCalls = new ArrayList<>();
-	public static int maxCollectSize = -1;
+	private static int maxCollectSize = -1;
 
 	private String methodname;
 
@@ -139,5 +139,13 @@ public class OpsiMethodCall {
 		map.put("params", params);
 
 		return map;
+	}
+
+	public static int getMaxCollecSize() {
+		return maxCollectSize;
+	}
+
+	public static void setMaxCollectSize(int maxCollectSize) {
+		OpsiMethodCall.maxCollectSize = maxCollectSize;
 	}
 }

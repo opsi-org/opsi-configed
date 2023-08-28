@@ -81,7 +81,7 @@ public final class SSHCommandParameterMethods {
 
 	private String[] formats;
 
-	public boolean canceled;
+	private boolean canceled;
 	private SSHConnectionOutputDialog outputDia;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -420,16 +420,16 @@ public final class SSHCommandParameterMethods {
 	private String getConfigServerName() {
 		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots) {
-			if (depot.startsWith(ConfigedMain.host)) {
-				Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
+			if (depot.startsWith(ConfigedMain.getHost())) {
+				Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
 				return depot;
 			}
 		}
 
-		Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
+		Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
 		//// peristancecontroller methods for depot :
 
-		return ConfigedMain.host;
+		return ConfigedMain.getHost();
 	}
 
 	private String getConfigSSHServerName() {
@@ -603,5 +603,13 @@ public final class SSHCommandParameterMethods {
 
 			return null;
 		}
+	}
+
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled:
 	}
 }

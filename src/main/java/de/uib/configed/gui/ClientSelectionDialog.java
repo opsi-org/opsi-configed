@@ -42,6 +42,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
+import de.uib.configed.clientselection.ConnectionStatus;
+import de.uib.configed.clientselection.OperationWithStatus;
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.clientselection.elements.DescriptionElement;
@@ -813,42 +815,42 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 * Get the status of this SimpleGroup, i.e. the logical connection to the other
 	 * groups.
 	 */
-	private SelectionManager.OperationWithStatus getInformation(SimpleGroup group) {
-		SelectionManager.OperationWithStatus info = new SelectionManager.OperationWithStatus();
-		info.operation = null;
-		info.parenthesisOpen = group.openParenthesis.isVisible();
-		info.parenthesisClose = group.closeParenthesis.isVisible();
+	private OperationWithStatus getInformation(SimpleGroup group) {
+		OperationWithStatus info = new OperationWithStatus();
+		info.setOperation(null);
+		info.setParenthesisOpen(group.openParenthesis.isVisible());
+		info.setParenthesisClose(group.closeParenthesis.isVisible());
 		boolean andSelected = group.connectionType.isAndSelected();
 		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
 		boolean notSelected = group.negateButton.isActivated();
-		info.status = getStatus(andSelected, notSelected);
+		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
 
-	private static SelectionManager.OperationWithStatus getInformation(ComplexGroup group) {
-		SelectionManager.OperationWithStatus info = new SelectionManager.OperationWithStatus();
-		info.operation = null;
-		info.parenthesisOpen = group.openParenthesis.isActivated();
-		info.parenthesisClose = group.closeParenthesis.isActivated();
+	private static OperationWithStatus getInformation(ComplexGroup group) {
+		OperationWithStatus info = new OperationWithStatus();
+		info.setOperation(null);
+		info.setParenthesisOpen(group.openParenthesis.isActivated());
+		info.setParenthesisClose(group.closeParenthesis.isActivated());
 		boolean andSelected = group.connectionType.isAndSelected();
 		boolean notSelected = group.negateButton.isActivated();
-		info.status = getStatus(andSelected, notSelected);
+		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
 
-	private static SelectionManager.ConnectionStatus getStatus(boolean andSelected, boolean notSelected) {
-		SelectionManager.ConnectionStatus conStatus;
+	private static ConnectionStatus getStatus(boolean andSelected, boolean notSelected) {
+		ConnectionStatus conStatus;
 		if (andSelected) {
 			if (notSelected) {
-				conStatus = SelectionManager.ConnectionStatus.AND_NOT;
+				conStatus = ConnectionStatus.AND_NOT;
 			} else {
-				conStatus = SelectionManager.ConnectionStatus.AND;
+				conStatus = ConnectionStatus.AND;
 			}
 		} else {
 			if (notSelected) {
-				conStatus = SelectionManager.ConnectionStatus.OR_NOT;
+				conStatus = ConnectionStatus.OR_NOT;
 			} else {
-				conStatus = SelectionManager.ConnectionStatus.OR;
+				conStatus = ConnectionStatus.OR;
 			}
 		}
 		return conStatus;
@@ -1059,16 +1061,16 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		Logging.info(this, "collectData  complexElements " + complexElements);
 		repairParentheses();
 		for (ComplexGroup complex : complexElements) {
-			SelectionManager.OperationWithStatus groupStatus;
+			OperationWithStatus groupStatus;
 			groupStatus = getInformation(complex);
 
-			List<SelectionManager.OperationWithStatus> childList = new LinkedList<>();
+			List<OperationWithStatus> childList = new LinkedList<>();
 
 			for (SimpleGroup group : complex.groupList) {
 				AbstractSelectOperation op = getOperation(group);
 				if (op != null) {
-					SelectionManager.OperationWithStatus ows = getInformation(group);
-					ows.operation = op;
+					OperationWithStatus ows = getInformation(group);
+					ows.setOperation(op);
 					childList.add(ows);
 				}
 			}
@@ -1147,12 +1149,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		complexElements.clear();
 
-		List<SelectionManager.OperationWithStatus> topList;
+		List<OperationWithStatus> topList;
 		topList = manager.operationsAsList(null);
 		Logging.debug(this, "load: size: " + topList.size());
 		for (int i = 0; i < topList.size(); i++) {
-			SelectionManager.OperationWithStatus ows = topList.get(i);
-			AbstractSelectOperation op = ows.operation;
+			OperationWithStatus ows = topList.get(i);
+			AbstractSelectOperation op = ows.getOperation();
 			if (op == null) {
 				reset();
 				return;
@@ -1178,8 +1180,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 			complexElements.add(element);
-			setConnectionTypes(element.connectionType, element.negateButton, ows.status);
-			List<SelectionManager.OperationWithStatus> subList;
+			setConnectionTypes(element.connectionType, element.negateButton, ows.getStatus());
+			List<OperationWithStatus> subList;
 			subList = manager.operationsAsList(((AbstractSelectGroupOperation) op).getChildOperations().get(0));
 			Logging.debug(this, "subload: " + subList.size());
 			setGroupValues(element, subList);
@@ -1200,19 +1202,19 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		return child;
 	}
 
-	private void setGroupValues(ComplexGroup group, List<SelectionManager.OperationWithStatus> owsList) {
+	private void setGroupValues(ComplexGroup group, List<OperationWithStatus> owsList) {
 		for (int i = 0; i < owsList.size(); i++) {
 			for (SimpleGroup simple : group.groupList) {
-				SelectionManager.OperationWithStatus ows = owsList.get(i);
-				AbstractSelectOperation op = ows.operation;
+				OperationWithStatus ows = owsList.get(i);
+				AbstractSelectOperation op = ows.getOperation();
 				if (op.getElement().getPath().equals(simple.element.getPath())) {
 					if (op.getElement().supportedOperations().size() > 1) {
 						((JComboBox<?>) simple.operationComponent).setSelectedItem(op.getOperationString());
 					}
 					setComponentData(simple.dataComponent, op.getSelectData());
-					setConnectionTypes(simple.connectionType, simple.negateButton, ows.status);
-					Logging.debug(this, "simple, open, closed: " + simple.element.getClassName() + ows.parenthesisOpen
-							+ ows.parenthesisClose);
+					setConnectionTypes(simple.connectionType, simple.negateButton, ows.getStatus());
+					Logging.debug(this, "simple, open, closed: " + simple.element.getClassName()
+							+ ows.isParenthesisOpen() + ows.isParenthesisClosed());
 
 					break;
 				}
@@ -1237,8 +1239,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
-			SelectionManager.ConnectionStatus status) {
+	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not, ConnectionStatus status) {
 		switch (status) {
 		case AND:
 			andOr.selectAnd();

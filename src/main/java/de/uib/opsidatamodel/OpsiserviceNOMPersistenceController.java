@@ -167,8 +167,8 @@ public class OpsiserviceNOMPersistenceController {
 	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
 	public static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
-	public static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
-	public static String packageServerDirectoryS = configedWorkbenchDefaultValue;
+	private static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
+	private static String packageServerDirectoryS = configedWorkbenchDefaultValue;
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
@@ -287,7 +287,7 @@ public class OpsiserviceNOMPersistenceController {
 
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
-	public AbstractExecutioner exec;
+	private AbstractExecutioner exec;
 
 	/* data for checking permissions */
 	private boolean globalReadOnly;
@@ -568,16 +568,17 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		Boolean locallySavedValueUserRegister = null;
-		if (Configed.savedStates == null) {
+		if (Configed.getSavedStates() == null) {
 			Logging.trace(this, "savedStates.saveRegisterUser not initialized");
 		} else {
-			locallySavedValueUserRegister = Boolean.parseBoolean(Configed.savedStates.getProperty(KEY_USER_REGISTER));
+			locallySavedValueUserRegister = Boolean
+					.parseBoolean(Configed.getSavedStates().getProperty(KEY_USER_REGISTER));
 			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
 
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
-					Configed.savedStates.setProperty(KEY_USER_REGISTER, "true");
+					Configed.getSavedStates().setProperty(KEY_USER_REGISTER, "true");
 				}
 			} else {
 				if (locallySavedValueUserRegister != null && locallySavedValueUserRegister) {
@@ -616,7 +617,7 @@ public class OpsiserviceNOMPersistenceController {
 					case 2:
 						Logging.info(this, "setAgainUserRegistration remove warning locally ");
 						// remove from store
-						Configed.savedStates.remove(KEY_USER_REGISTER);
+						Configed.getSavedStates().remove(KEY_USER_REGISTER);
 						break;
 
 					case 3:
@@ -764,7 +765,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
+		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.getUser()) != null;
 	}
 
 	private String getOTPSecret(String userId) {
@@ -8151,5 +8152,25 @@ public class OpsiserviceNOMPersistenceController {
 	 */
 	public boolean updateSSHCommand(List<Object> jsonObjects) {
 		return doActionSSHCommand("SSHCommand_updateObjects", jsonObjects);
+	}
+
+	public static String getConfigedWorkbenchDefaultValue() {
+		return configedWorkbenchDefaultValue;
+	}
+
+	public static void setConfigedWorkbenchDefaultValue(String defaultWorkbenchValue) {
+		OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue = defaultWorkbenchValue;
+	}
+
+	public static String getPackageServerDirectoryS() {
+		return packageServerDirectoryS;
+	}
+
+	public static void setPackageServerDirectoryS(String packageServerDirectoryS) {
+		OpsiserviceNOMPersistenceController.packageServerDirectoryS = packageServerDirectoryS;
+	}
+
+	public AbstractExecutioner getExecutioner() {
+		return exec;
 	}
 }

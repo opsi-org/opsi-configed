@@ -58,13 +58,14 @@ public class UserConfigProducing {
 		Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
-		Logging.info(this, "we have got logged in user " + ConfigedMain.user + " and configure based on it "
+		Logging.info(this, "we have got logged in user " + ConfigedMain.getUser() + " and configure based on it "
 				+ notUsingDefaultUser);
 
-		if (notUsingDefaultUser && ConfigedMain.user != null && !serverconfigValuesMap.containsKey(ConfigedMain.user)) {
+		if (notUsingDefaultUser && ConfigedMain.getUser() != null
+				&& !serverconfigValuesMap.containsKey(ConfigedMain.getUser())) {
 			Logging.info(this, "supply logged in user");
-			userparts.add(ConfigedMain.user);
-			createPropertySubclass(ConfigedMain.user, UserConfig.CONFIGKEY_STR_USER);
+			userparts.add(ConfigedMain.getUser());
+			createPropertySubclass(ConfigedMain.getUser(), UserConfig.CONFIGKEY_STR_USER);
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
@@ -263,7 +264,7 @@ public class UserConfigProducing {
 		Logging.info(this, "readyObjects for userparts " + readyObjects.size());
 
 		if (notUsingDefaultUser) {
-			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.user));
+			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.getUser()));
 		} else {
 			UserConfig.setCurrentConfig(defaultUserConfig);
 		}
