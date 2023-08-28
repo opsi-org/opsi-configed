@@ -247,8 +247,8 @@ public class HostInfoCollections {
 				String workbenchPath = retrieveWorkbenchPath(host);
 
 				if (!workbenchPath.isEmpty()) {
-					OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue = workbenchPath;
-					OpsiserviceNOMPersistenceController.packageServerDirectoryS = workbenchPath;
+					OpsiserviceNOMPersistenceController.setConfigedWorkbenchDefaultValue(workbenchPath);
+					OpsiserviceNOMPersistenceController.setPackageServerDirectoryS(workbenchPath);
 				}
 			}
 		}

@@ -60,9 +60,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private static final int MIN_FIELD_WIDTH = 40;
 	private static final int MIN_FIELD_HEIGHT = 6;
 
-	public PanelGenEditTable panelKeys;
-	public PanelGenEditTable panelLicencepools;
-	public PanelGenEditTable panelLicencecontracts;
+	private PanelGenEditTable panelKeys;
+	private PanelGenEditTable panelLicencepools;
+	private PanelGenEditTable panelLicencecontracts;
 	private int splitPaneHMargin = 1;
 
 	private String selectedLicencePool = "";
@@ -156,14 +156,14 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private boolean checkAndStart() {
 		if (panelLicencepools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.licencesFrame,
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicencecontracts.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.licencesFrame,
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
@@ -693,5 +693,18 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		deactivate();
 		panelLicencepools.addListSelectionListener(licencePoolSelectionListener);
 		panelLicencepools.moveToValue(selectedLicencePool, 0);
+	}
+
+	public PanelGenEditTable getPanelKeys() {
+		return panelKeys;
+	}
+
+	public PanelGenEditTable getPanelLicencepools() {
+		return panelLicencepools;
+	}
+
+	public PanelGenEditTable getPanelLicencecontracts() {
+		return panelLicencecontracts;
+
 	}
 }

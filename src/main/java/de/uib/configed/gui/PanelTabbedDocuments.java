@@ -70,7 +70,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					Logging.debug(this, "save with filename " + filename);
 					String pathname = openFile(filename + ".log");
 					if (pathname != null && !pathname.isEmpty()) {
-						saveToFile(pathname, lines);
+						saveToFile(pathname, getLines());
 					}
 
 				}
@@ -85,7 +85,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					}
 					String pathname = openFile(filename + ".zip");
 					if (pathname != null && !pathname.isEmpty()) {
-						saveToZipFile(pathname, filename, lines);
+						saveToZipFile(pathname, filename, getLines());
 					}
 
 				}
@@ -107,14 +107,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 						if (loadMissingDocs) {
 							for (int logNo = 0; logNo < idents.length; logNo++) {
-								if (textPanes[logNo].lines.length <= 1) {
+								if (textPanes[logNo].getLines().length <= 1) {
 									// empty
 
 									loadDocument(idents[logNo]);
 								}
 
 								Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
-										+ textPanes[logNo].lines.length);
+										+ textPanes[logNo].getLines().length);
 							}
 						}
 
@@ -237,11 +237,11 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				// load all logfiles ???
 				//
 				// save only if not empty
-				if (textPanes[logNo].lines.length > 1) {
+				if (textPanes[logNo].getLines().length > 1) {
 					ZipEntry entry = new ZipEntry(textPanes[logNo].getFilenameFromTitle());
 					out.putNextEntry(entry);
 
-					writeToOutputStream(textPanes[logNo].lines, out);
+					writeToOutputStream(textPanes[logNo].getLines(), out);
 				}
 				out.closeEntry();
 			}

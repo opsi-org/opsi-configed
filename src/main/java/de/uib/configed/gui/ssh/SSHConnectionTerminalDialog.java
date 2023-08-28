@@ -356,8 +356,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			passwordMode = false;
 		} else {
 			changeEchoChar((char) 0);
-			if (terminal.commandsCompgen != null) {
-				setAutocompleteList(terminal.commandsCompgen);
+			if (terminal.getCommandsCompgen() != null) {
+				setAutocompleteList(terminal.getCommandsCompgen());
 			}
 			passwordMode = true;
 		}

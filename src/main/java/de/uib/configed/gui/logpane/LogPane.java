@@ -104,7 +104,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private ImmutableDefaultStyledDocument document;
 
-	public String[] lines;
+	protected String[] lines;
 	private int[] lineLevels;
 	private Style[] lineStyles;
 
@@ -520,16 +520,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		int savedMaxShownLogLevel = DEFAULT_MAX_SHOW_LEVEL;
 		try {
-			if (Configed.savedStates != null) {
-				savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.getProperty("savedMaxShownLogLevel"));
+			if (Configed.getSavedStates() != null) {
+				savedMaxShownLogLevel = Integer.valueOf(Configed.getSavedStates().getProperty("savedMaxShownLogLevel"));
 			}
 		} catch (NumberFormatException ex) {
 			Logging.warning(this,
 					"savedMaxShownLogLevel could not be read, value "
-							+ Configed.savedStates.getProperty("savedMaxShownLogLevel") + ", fallback to "
+							+ Configed.getSavedStates().getProperty("savedMaxShownLogLevel") + ", fallback to "
 							+ DEFAULT_MAX_SHOW_LEVEL);
 
-			Configed.savedStates.setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
+			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
 
 		Logging.info(this, "produceInitialMaxShowLevel " + result);
@@ -602,8 +602,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			return;
 		}
 
-		if (Configed.savedStates != null) {
-			Configed.savedStates.setProperty("savedMaxShownLogLevel", String.valueOf(level));
+		if (Configed.getSavedStates() != null) {
+			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(level));
 		}
 
 		Integer oldLevel = showLevel;
@@ -959,5 +959,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else {
 			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
+	}
+
+	public String[] getLines() {
+		return lines;
 	}
 }

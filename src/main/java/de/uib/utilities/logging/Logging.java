@@ -27,8 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 
 public final class Logging {
-
-	public static String logDirectoryName;
+	private static String logDirectoryName;
 	private static String logFilenameInUse;
 
 	private static String logfileDelimiter = "configed";
@@ -457,5 +456,13 @@ public final class Logging {
 
 	public static void registerConfigedMain(ConfigedMain configedMain) {
 		Logging.configedMain = configedMain;
+	}
+
+	public static String getLogDirectoryName() {
+		return logDirectoryName;
+	}
+
+	public static void setLogDirectoryName(String logDirectoryName) {
+		Logging.logDirectoryName = logDirectoryName;
 	}
 }

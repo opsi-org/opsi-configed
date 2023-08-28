@@ -40,7 +40,7 @@ public class ControllerHWinfoMultiClients {
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
 
-	public PanelGenEditTable panel;
+	private PanelGenEditTable panel;
 	private GenTableModel model;
 
 	private ConfigedMain main;
@@ -214,7 +214,8 @@ public class ControllerHWinfoMultiClients {
 		ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration();
 
 		if (fTable == null || ((FPanel) fTable).isLeft()) {
-			fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel, true);
+			fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.getPanel(),
+					true);
 
 			fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
 					ConfigedMain.getMainFrame().getSize().height / 2));
@@ -255,5 +256,9 @@ public class ControllerHWinfoMultiClients {
 
 			return result;
 		}
+	}
+
+	public PanelGenEditTable getPanel() {
+		return panel;
 	}
 }

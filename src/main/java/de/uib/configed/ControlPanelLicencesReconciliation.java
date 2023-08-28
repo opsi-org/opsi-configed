@@ -63,8 +63,8 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		initTreatmentOfColumns();
 
 		// updates
-		thePanel.panelReconciliation.setUpdateController(new MapItemsUpdateController(thePanel.panelReconciliation,
-				modelLicencesReconciliation, new MapBasedUpdater() {
+		thePanel.getPanelReconciliation().setUpdateController(new MapItemsUpdateController(
+				thePanel.getPanelReconciliation(), modelLicencesReconciliation, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return "";
@@ -81,8 +81,8 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		searchCols[0] = 0;
 		searchCols[1] = 1;
 
-		thePanel.panelReconciliation.setSearchColumns(searchCols);
-		thePanel.panelReconciliation.setSearchSelectMode(true);
+		thePanel.getPanelReconciliation().setSearchColumns(searchCols);
+		thePanel.getPanelReconciliation().setSearchSelectMode(true);
 	}
 
 	private void initPanels() {
@@ -133,7 +133,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 				-1, new int[] { 0, 1 },
 
-				thePanel.panelReconciliation, updateCollection);
+				thePanel.getPanelReconciliation(), updateCollection);
 
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
@@ -151,23 +151,23 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		updateItemFactoryLicencesReconciliation.setSource(modelLicencesReconciliation);
 
 		tableModels.add(modelLicencesReconciliation);
-		tablePanes.add(thePanel.panelReconciliation);
+		tablePanes.add(thePanel.getPanelReconciliation());
 
 		modelLicencesReconciliation.reset();
-		thePanel.panelReconciliation.setTableModel(modelLicencesReconciliation);
+		thePanel.getPanelReconciliation().setTableModel(modelLicencesReconciliation);
 		modelLicencesReconciliation.setEditableColumns(new int[] {});
-		thePanel.panelReconciliation.setEmphasizedColumns(new int[] {});
+		thePanel.getPanelReconciliation().setEmphasizedColumns(new int[] {});
 	}
 
 	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexUsedByOpsi);
+		col = thePanel.getPanelReconciliation().getColumnModel().getColumn(indexUsedByOpsi);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
-		col = thePanel.panelReconciliation.getColumnModel().getColumn(indexSWInventoryUsed);
+		col = thePanel.getPanelReconciliation().getColumnModel().getColumn(indexSWInventoryUsed);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);

@@ -37,8 +37,8 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	public PanelGenEditTable panelUsage;
-	public PanelGenEditTable panelLicencepools;
+	private PanelGenEditTable panelUsage;
+	private PanelGenEditTable panelLicencePools;
 
 	private JButton buttonGet;
 	private JPanel panelGetAndAssignSL;
@@ -74,7 +74,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private void initSubPanel() {
 
-		panelLicencepools = new PanelGenEditTable(
+		panelLicencePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
 
@@ -100,7 +100,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 								.addGroup(panelGetAndAssignSLLayout.createSequentialGroup()
 										.addComponent(labelGetAndAssignSL).addGap(20, 20, 20).addComponent(comboClient,
 												GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-								.addComponent(panelLicencepools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE,
+								.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)
 								.addComponent(buttonGet, buttonWidth, buttonWidth, buttonWidth))
 						.addGap(20, 20, 20)));
@@ -113,7 +113,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 										.addComponent(comboClient, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(5, 5, 5)
-								.addComponent(panelLicencepools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
+								.addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
 								.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight).addGap(5, 5, 5)));
 
 	}
@@ -158,5 +158,13 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		if (evt.getSource() == buttonGet) {
 			licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem());
 		}
+	}
+
+	public PanelGenEditTable getPanelUsage() {
+		return panelUsage;
+	}
+
+	public PanelGenEditTable getPanelLicencePools() {
+		return panelLicencePools;
 	}
 }

@@ -45,11 +45,11 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private void saveFilterSet(Set<String> filterSet) {
 		if (filterSet != null) {
-			Configed.savedStates.setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
+			Configed.getSavedStates().setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
 					filterSet.toString());
 			Logging.info(this, "saveFilterSet " + filterSet);
 		} else {
-			Configed.savedStates.remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
+			Configed.getSavedStates().remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
 		}
 	}
 

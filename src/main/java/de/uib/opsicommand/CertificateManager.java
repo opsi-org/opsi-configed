@@ -120,7 +120,7 @@ public final class CertificateManager {
 	}
 
 	public static List<File> getCertificates() {
-		if (Configed.savedStatesLocationName == null) {
+		if (Configed.getSavedStatesLocationName() == null) {
 			return new ArrayList<>();
 		}
 
@@ -129,7 +129,7 @@ public final class CertificateManager {
 		final List<File> certificateFiles = new ArrayList<>();
 
 		try {
-			Files.walkFileTree(Paths.get(Configed.savedStatesLocationName), new SimpleFileVisitor<Path>() {
+			Files.walkFileTree(Paths.get(Configed.getSavedStatesLocationName()), new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 					if (matcher.matches(file)) {
@@ -147,20 +147,20 @@ public final class CertificateManager {
 
 	public static void saveCertificate(File certificateFile) {
 		try {
-			String dirname = ConfigedMain.host;
+			String dirname = ConfigedMain.getHost();
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");
 			}
 
-			File dirFile = new File(Configed.savedStatesLocationName, dirname);
+			File dirFile = new File(Configed.getSavedStatesLocationName(), dirname);
 
 			if (!dirFile.exists()) {
 				dirFile.mkdir();
 			}
 
 			Files.copy(certificateFile.toPath(),
-					new File(Configed.savedStatesLocationName, dirname + File.separator + Globals.CERTIFICATE_FILE)
+					new File(Configed.getSavedStatesLocationName(), dirname + File.separator + Globals.CERTIFICATE_FILE)
 							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
