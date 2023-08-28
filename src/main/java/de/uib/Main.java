@@ -34,7 +34,6 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import utils.SevenZipLibraryInitializer;
 
 public class Main {
 
@@ -133,6 +132,7 @@ public class Main {
 		formatter.printHelp(Main.USAGE_INFO, options);
 	}
 
+	@SuppressWarnings("unused")
 	private static void setGlobalValues() {
 		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
 			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
@@ -279,7 +279,6 @@ public class Main {
 		CommandLine cmd;
 		try {
 			CommandLineParser parser = new DefaultParser(false);
-
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
 			Logging.error("Problem parsing arguments", e);
@@ -297,8 +296,6 @@ public class Main {
 
 		// Turn on antialiasing for text (not for applets)
 		System.setProperty("swing.aatext", "true");
-
-		SevenZipLibraryInitializer.init();
 
 		if (isLogviewer) {
 			Logviewer.main(cmd);

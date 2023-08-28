@@ -2543,7 +2543,8 @@ public class OpsiserviceNOMPersistenceController {
 		return result;
 	}
 
-	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(Map<String, List<SWAuditClientEntry>> entries, String clientId) {
+	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(Map<String, List<SWAuditClientEntry>> entries,
+			String clientId) {
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
 		if (entries == null || entries.isEmpty()) {
@@ -2587,7 +2588,7 @@ public class OpsiserviceNOMPersistenceController {
 			}
 
 			List<Map<String, Object>> softwareAuditOnClients = retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftwareOnClient_getHashes");
+					"auditSoftwareOnClient_getObjects");
 
 			Logging.info(this,
 					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
@@ -2671,7 +2672,7 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, String> filterMap = new HashMap<>();
 			filterMap.put("state", "1");
 			relationsAuditHardwareOnHost = exec.getListOfMaps(
-					new OpsiMethodCall("auditHardwareOnHost_getHashes", new Object[] { new String[0], filterMap }));
+					new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { new String[0], filterMap }));
 		}
 
 		return relationsAuditHardwareOnHost;

@@ -6,79 +6,104 @@
 
 package utils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.StreamingNotSupportedException;
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.codehaus.plexus.util.IOUtil;
 
 import de.uib.utilities.logging.Logging;
-import net.sf.sevenzipjbinding.ExtractOperationResult;
-import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.ISequentialOutStream;
-import net.sf.sevenzipjbinding.SevenZip;
-import net.sf.sevenzipjbinding.SevenZipException;
-import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
 public final class ExtractorUtil {
 
 	private ExtractorUtil() {
 	}
 
-	public static String unzip(File file) {
-
+	public static Map<String, String> unzip(File file) {
 		Logging.info("ExtractorUtil: starting extract");
-		final StringBuilder sb = new StringBuilder();
-
-		try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-				// Autodetect archiveFormat
-				IInArchive inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile))) {
-
-			Logging.info("\n   Archiv Format" + inArchive.getArchiveFormat());
-			// Getting simple interface of the archive inArchive
-			ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
-
-			Logging.info("   Hash   |    Size    | Filename");
-			Logging.info("----------+------------+---------");
-
-			for (final ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
-				final int[] hash = new int[] { 0 };
-				if (!item.isFolder()) {
-
-					final long[] sizeArray = new long[1];
-					ExtractOperationResult result = item.extractSlow(new ISequentialOutStream() {
-						@Override
-						public int write(byte[] data) throws SevenZipException {
-							sb.append(new String(data, StandardCharsets.UTF_8));
-							// Consume data
-							hash[0] ^= Arrays.hashCode(data);
-							sizeArray[0] += data.length;
-
-							// Return amount of consumed data
-							return data.length;
-						}
-					});
-
-					if (result == ExtractOperationResult.OK) {
-						Logging.info(String.format("%9X | %10s | %s", hash[0], sizeArray[0], item.getPath()));
-					} else {
-						Logging.error("Error extracting item: " + result);
-					}
+		Map<String, String> files = new HashMap<>();
+		String archiveFormat = detectArchiveFormat(file);
+		try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
+				retrieveInputStream(file))) {
+			ArchiveEntry entry = null;
+			while ((entry = ais.getNextEntry()) != null) {
+				if (!entry.isDirectory()) {
+					files.put(entry.getName(), IOUtil.toString(ais));
 				}
 			}
-		} catch (FileNotFoundException ex) {
-			Logging.error("Could not find file....", ex);
-		} catch (IOException ex) {
-			if (ex instanceof SevenZipException) {
-				return "";
+		} catch (StreamingNotSupportedException e) {
+			if (e.getFormat().equals(ArchiveStreamFactory.SEVEN_Z)) {
+				files = extractSevenZIP(file);
+			} else {
+				Logging.error("Archive format " + archiveFormat + " does not support streaming", e);
 			}
-
-			Logging.warning("Could not close file, exception thrown...", ex);
+		} catch (ArchiveException e) {
+			Logging.error("Archive format is unknown " + archiveFormat, e);
+		} catch (IOException e) {
+			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
 		}
 
-		return sb.toString();
+		return files;
+	}
+
+	private static String detectArchiveFormat(File file) {
+		String archiveFormat = "";
+		try {
+			archiveFormat = ArchiveStreamFactory.detect(retrieveInputStream(file));
+		} catch (ArchiveException e) {
+			if (file.getName().contains(".tar")) {
+				archiveFormat = ArchiveStreamFactory.TAR;
+			} else {
+				Logging.error("Unable to detect archive format for file " + file.getAbsolutePath(), e);
+			}
+		}
+		return archiveFormat;
+	}
+
+	private static InputStream retrieveInputStream(File file) {
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			if (file.getName().contains(".gz")) {
+				is = new GzipCompressorInputStream(is);
+			}
+			is = new BufferedInputStream(is);
+		} catch (FileNotFoundException e) {
+			Logging.error("File not found " + file.getAbsolutePath(), e);
+			return is;
+		} catch (IOException e) {
+			Logging.error("Unable to retrieve input stream ", e);
+		}
+		return is;
+	}
+
+	private static Map<String, String> extractSevenZIP(File file) {
+		Map<String, String> files = new HashMap<>();
+		try (SevenZFile sevenZFile = new SevenZFile(file)) {
+			SevenZArchiveEntry entry = null;
+			while ((entry = sevenZFile.getNextEntry()) != null) {
+				if (!entry.isDirectory()) {
+					byte[] content = new byte[(int) entry.getSize()];
+					int bytesRead = sevenZFile.read(content);
+					files.put(entry.getName(), new String(content, 0, bytesRead));
+				}
+			}
+		} catch (IOException e) {
+			Logging.error("Unable to read 7z file " + file.getAbsolutePath(), e);
+		}
+		return files;
 	}
 }
