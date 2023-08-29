@@ -74,7 +74,7 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		if (Main.THEMES) {
 			ComponentStyler.stylePieChartComponent(clientActivityComparisonPieChart);
 			clientsActivityNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 

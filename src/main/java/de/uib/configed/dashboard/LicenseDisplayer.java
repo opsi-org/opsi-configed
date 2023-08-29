@@ -108,8 +108,8 @@ public class LicenseDisplayer {
 
 	private void styleAccordingToSelectedTheme() {
 		String panelBackgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
-		controller.mainAnchorPane.setStyle("-fx-background-color: #" + panelBackgroundColor);
-		controller.mainBorderPane.setStyle("-fx-background-color: #" + panelBackgroundColor);
+		controller.mainAnchorPane.setStyle("-fx-background-color: " + panelBackgroundColor);
+		controller.mainBorderPane.setStyle("-fx-background-color: " + panelBackgroundColor);
 
 		ComponentStyler.styleTextFlowComponent(controller.textflow);
 		ComponentStyler.styleButtonComponent(controller.closeButton);

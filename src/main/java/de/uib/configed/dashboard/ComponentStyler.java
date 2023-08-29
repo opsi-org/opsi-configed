@@ -50,8 +50,8 @@ public final class ComponentStyler {
 		String tableViewHeaderBackgroundColor = getHexColor(UIManager.getColor("TableHeader.background"));
 		String tableViewHeaderForegroundColor = getHexColor(UIManager.getColor("TableHeader.foreground"));
 
-		view.setStyle("-fx-background-color: #" + tableViewBackgroundColor + "; -fx-text-background-color: #"
-				+ tableViewForegroundColor + "; -fx-text-fill: #" + tableViewForegroundColor);
+		view.setStyle("-fx-background-color: " + tableViewBackgroundColor + "; -fx-text-background-color: "
+				+ tableViewForegroundColor + "; -fx-text-fill: " + tableViewForegroundColor);
 
 		view.setRowFactory(tableView -> new TableRow<>() {
 			@Override
@@ -59,14 +59,14 @@ public final class ComponentStyler {
 				super.updateItem(value, empty);
 				BooleanProperty isAlternateRow = new SimpleBooleanProperty((getIndex() & 1) == 1);
 				styleProperty().bind(Bindings.when(selectedProperty().and(view.focusedProperty()))
-						.then("-fx-background-color: #" + tableViewSelectionBackgroundColor
-								+ "; -fx-text-background-color: #" + tableViewSelectionForegroundColor)
+						.then("-fx-background-color: " + tableViewSelectionBackgroundColor
+								+ "; -fx-text-background-color: " + tableViewSelectionForegroundColor)
 						.otherwise(Bindings.when(selectedProperty())
-								.then("-fx-background-color: #" + tableViewSelectionInactiveBackgroundColor
-										+ "; -fx-text-background-color: #" + tableViewSelectionInactiveForegroundColor)
+								.then("-fx-background-color: " + tableViewSelectionInactiveBackgroundColor
+										+ "; -fx-text-background-color: " + tableViewSelectionInactiveForegroundColor)
 								.otherwise(Bindings.when(isAlternateRow)
-										.then("-fx-background-color: #" + tableViewLigtherBackgroundColor)
-										.otherwise("-fx-background-color: #" + tableViewBackgroundColor))));
+										.then("-fx-background-color: " + tableViewLigtherBackgroundColor)
+										.otherwise("-fx-background-color: " + tableViewBackgroundColor))));
 				Set<Node> checkBoxes = view.lookupAll(".check-box");
 				if (!checkBoxes.isEmpty()) {
 					for (Node checkBox : checkBoxes) {
@@ -78,13 +78,13 @@ public final class ComponentStyler {
 
 		Node columnHeaderBackground = view.lookup(".column-header-background");
 		if (columnHeaderBackground != null) {
-			columnHeaderBackground.setStyle("-fx-background-color: #" + tableViewHeaderBackgroundColor
-					+ "; -fx-text-fill: #" + tableViewHeaderForegroundColor);
+			columnHeaderBackground.setStyle("-fx-background-color: " + tableViewHeaderBackgroundColor
+					+ "; -fx-text-fill: " + tableViewHeaderForegroundColor);
 		}
 
 		Node columnHeader = view.lookup(".column-header");
 		if (columnHeader != null) {
-			columnHeader.setStyle("-fx-background-color: #" + tableViewHeaderBackgroundColor + "; -fx-text-fill: #"
+			columnHeader.setStyle("-fx-background-color: " + tableViewHeaderBackgroundColor + "; -fx-text-fill: "
 					+ tableViewHeaderForegroundColor);
 		}
 
@@ -107,7 +107,7 @@ public final class ComponentStyler {
 		String listSelectionInactiveForegroundColor = getHexColor(
 				UIManager.getColor("List.selectionInactiveForeground"));
 
-		view.setStyle("-fx-background-color: #" + listBackgroundColor + "; -fx-text-fill: #" + listForegroundColor);
+		view.setStyle("-fx-background-color: " + listBackgroundColor + "; -fx-text-fill: " + listForegroundColor);
 
 		view.setCellFactory(listView -> new ListCell<>() {
 			@Override
@@ -115,13 +115,13 @@ public final class ComponentStyler {
 				super.updateItem(value, empty);
 				setText((String) value);
 				styleProperty().bind(Bindings.when(selectedProperty().and(view.focusedProperty()))
-						.then("-fx-background-color: #" + listSelectionBackgroundColor
-								+ "; -fx-text-background-color: #" + listSelectionForegroundColor)
+						.then("-fx-background-color: " + listSelectionBackgroundColor + "; -fx-text-background-color: "
+								+ listSelectionForegroundColor)
 						.otherwise(Bindings.when(selectedProperty())
-								.then("-fx-background-color: #" + listSelectionInactiveBackgroundColor
-										+ "; -fx-text-background-color: #" + listSelectionInactiveForegroundColor)
-								.otherwise("-fx-background-color: #" + listBackgroundColor
-										+ "; -fx-text-background-color: #" + listForegroundColor)));
+								.then("-fx-background-color: " + listSelectionInactiveBackgroundColor
+										+ "; -fx-text-background-color: " + listSelectionInactiveForegroundColor)
+								.otherwise("-fx-background-color: " + listBackgroundColor
+										+ "; -fx-text-background-color: " + listForegroundColor)));
 			}
 		});
 
@@ -139,14 +139,14 @@ public final class ComponentStyler {
 		String scrollbarTrackColor = getHexColor(UIManager.getColor("ScrollBar.track"));
 
 		if (!scrollbarBackground.isEmpty() || !scrollbarThumbColor.isEmpty() || !scrollbarTrackColor.isEmpty()) {
-			scrollBar.setStyle("-fx-background-color: #" + scrollbarBackground);
-			scrollBar.lookup(".track").setStyle("-fx-background-color: #" + scrollbarTrackColor);
-			scrollBar.lookup(".track-background").setStyle("-fx-background-color: #" + scrollbarTrackColor);
+			scrollBar.setStyle("-fx-background-color: " + scrollbarBackground);
+			scrollBar.lookup(".track").setStyle("-fx-background-color: " + scrollbarTrackColor);
+			scrollBar.lookup(".track-background").setStyle("-fx-background-color: " + scrollbarTrackColor);
 		}
 
 		Node thumb = scrollBar.lookup(".thumb");
 		if (thumb != null && !scrollbarThumbColor.isEmpty()) {
-			thumb.setStyle("-fx-background-color: #" + scrollbarThumbColor);
+			thumb.setStyle("-fx-background-color: " + scrollbarThumbColor);
 		}
 	}
 
@@ -154,7 +154,7 @@ public final class ComponentStyler {
 		String textFieldBackgroundColor = getHexColor(UIManager.getColor("TextField.background"));
 		String textFieldForegroundColor = getHexColor(UIManager.getColor("TextField.foreground"));
 		textField.setStyle(
-				"-fx-background-color: #" + textFieldBackgroundColor + "; -fx-text-fill: #" + textFieldForegroundColor);
+				"-fx-background-color: " + textFieldBackgroundColor + "; -fx-text-fill: " + textFieldForegroundColor);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -163,14 +163,14 @@ public final class ComponentStyler {
 		String comboBoxForegroundColor = getHexColor(UIManager.getColor("ComboBox.foreground"));
 		String comboBoxSelectionBackgroundColor = getHexColor(UIManager.getColor("ComboBox.selectionBackground"));
 		String comboBoxArrowColor = getHexColor(UIManager.getColor("ComboBox.buttonArrowColor"));
-		comboBox.setStyle("-fx-background-color: #" + comboBoxBackgroundColor + "; -fx-selection-bar: #"
-				+ comboBoxSelectionBackgroundColor + "; -fx-selection-bar-non-focused: #"
-				+ comboBoxSelectionBackgroundColor + "; -fx-control-inner-background: #" + comboBoxBackgroundColor);
+		comboBox.setStyle("-fx-background-color: " + comboBoxBackgroundColor + "; -fx-selection-bar: "
+				+ comboBoxSelectionBackgroundColor + "; -fx-selection-bar-non-focused: "
+				+ comboBoxSelectionBackgroundColor + "; -fx-control-inner-background: " + comboBoxBackgroundColor);
 
 		Node listCell = comboBox.lookup(".list-cell:selected:empty");
 		if (listCell != null) {
-			listCell.setStyle("-fx-background-color: #" + comboBoxBackgroundColor + "; -fx-text-fill: #"
-					+ comboBoxForegroundColor);
+			listCell.setStyle(
+					"-fx-background-color: " + comboBoxBackgroundColor + "; -fx-text-fill: " + comboBoxForegroundColor);
 		}
 
 		Node listView = comboBox.lookup(".list-view:vertical");
@@ -180,12 +180,12 @@ public final class ComponentStyler {
 
 		Node arrowButton = comboBox.lookup(".arrow-button");
 		if (arrowButton != null) {
-			arrowButton.setStyle("-fx-background-color: #" + comboBoxBackgroundColor);
+			arrowButton.setStyle("-fx-background-color: " + comboBoxBackgroundColor);
 		}
 
 		Node arrow = comboBox.lookup(".arrow");
 		if (arrow != null) {
-			arrow.setStyle("-fx-background-color: #" + comboBoxArrowColor);
+			arrow.setStyle("-fx-background-color: " + comboBoxArrowColor);
 		}
 
 		// There is a bug in ComboBox, where when ListCell's style is changed,
@@ -203,51 +203,50 @@ public final class ComponentStyler {
 
 		Node bar = progressBar.lookup(".bar");
 		if (bar != null) {
-			bar.setStyle("-fx-background-color: #" + progressBarForegroundColor);
+			bar.setStyle("-fx-background-color: " + progressBarForegroundColor);
 		}
 
 		Node track = progressBar.lookup(".track");
 		if (track != null) {
-			track.setStyle("-fx-background-color: #" + progressBarBackgroundColor);
+			track.setStyle("-fx-background-color: " + progressBarBackgroundColor);
 		}
 	}
 
 	public static void styleTextFlowComponent(TextFlow textFlow) {
 		String textFlowBackgroundColor = getHexColor(UIManager.getColor("TextArea.background"));
 		String textFlowForegroundColor = getHexColor(UIManager.getColor("TextArea.foreground"));
-		textFlow.setStyle("-fx-background-color: #" + textFlowBackgroundColor);
+		textFlow.setStyle("-fx-background-color: " + textFlowBackgroundColor);
 		ObservableList<Node> children = textFlow.getChildren();
-		children.forEach(child -> child.setStyle("-fx-fill: #" + textFlowForegroundColor));
+		children.forEach(child -> child.setStyle("-fx-fill: " + textFlowForegroundColor));
 	}
 
 	public static void styleButtonComponent(Button button) {
 		String buttonBackgroundColor = getHexColor(UIManager.getColor("Button.background"));
 		String buttonForegroundColor = getHexColor(UIManager.getColor("Button.foreground"));
-		button.setStyle(
-				"-fx-background-color: #" + buttonBackgroundColor + "; -fx-text-fill: #" + buttonForegroundColor);
+		button.setStyle("-fx-background-color: " + buttonBackgroundColor + "; -fx-text-fill: " + buttonForegroundColor);
 	}
 
 	public static void styleCheckBoxComponent(CheckBox checkBox) {
 		String checkBoxBackgroundColor = getHexColor(UIManager.getColor("CheckBox.background"));
 		String checkBoxForegroundColor = getHexColor(UIManager.getColor("CheckBox.icon.borderColor"));
-		checkBox.setStyle("-fx-background-color: #" + checkBoxBackgroundColor + "; -fx-border-color: #"
-				+ checkBoxForegroundColor);
+		checkBox.setStyle(
+				"-fx-background-color: " + checkBoxBackgroundColor + "; -fx-border-color: " + checkBoxForegroundColor);
 	}
 
 	public static void stylePieChartComponent(PieChart pieChart) {
 		String foregroundColor = getHexColor(UIManager.getColor("Label.foreground"));
 		Set<Node> pieLabelLines = pieChart.lookupAll(".chart-pie-label-line");
 		for (Node pieLabelLine : pieLabelLines) {
-			pieLabelLine.setStyle("-fx-stroke: #" + foregroundColor + "; -fx-fill: #" + foregroundColor + ";");
+			pieLabelLine.setStyle("-fx-stroke: " + foregroundColor + "; -fx-fill: " + foregroundColor + ";");
 		}
 
 		Set<Node> pieLabels = pieChart.lookupAll(".chart-pie-label");
 		for (Node pieLabel : pieLabels) {
-			pieLabel.setStyle("-fx-fill: #" + foregroundColor);
+			pieLabel.setStyle("-fx-fill: " + foregroundColor);
 		}
 
 		Node chartPieTitle = pieChart.lookup(".chart-title");
-		chartPieTitle.setStyle("-fx-text-fill: #" + foregroundColor);
+		chartPieTitle.setStyle("-fx-text-fill: " + foregroundColor);
 	}
 
 	public static <T, V> void styleBarChartComponent(BarChart<T, V> barChart) {
@@ -259,14 +258,14 @@ public final class ComponentStyler {
 		Node chartBarVerticalLine = barChart.lookup(".chart-vertical-zero-line");
 		Node chartBarHorizontalLine = barChart.lookup(".chart-horizontal-zero-line");
 		Node chartBarTitle = barChart.lookup(".chart-title");
-		chartBar.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		chartBarVerticalLine.setStyle("-fx-stroke: #" + foregroundColor);
-		chartBarHorizontalLine.setStyle("-fx-stroke: #" + foregroundColor);
-		chartBarTitle.setStyle("-fx-text-fill: #" + foregroundColor);
+		chartBar.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		chartBarVerticalLine.setStyle("-fx-stroke: " + foregroundColor);
+		chartBarHorizontalLine.setStyle("-fx-stroke: " + foregroundColor);
+		chartBarTitle.setStyle("-fx-text-fill: " + foregroundColor);
 
 		Set<Node> chartBarAxises = barChart.lookupAll(".axis");
 		for (Node chartBarAxis : chartBarAxises) {
-			chartBarAxis.setStyle("-fx-tick-label-fill: #" + foregroundColor);
+			chartBarAxis.setStyle("-fx-tick-label-fill: " + foregroundColor);
 		}
 	}
 
@@ -274,6 +273,6 @@ public final class ComponentStyler {
 		if (color == null) {
 			return "";
 		}
-		return Integer.toHexString(color.getRGB()).substring(2);
+		return "#" + Integer.toHexString(color.getRGB()).substring(2);
 	}
 }

@@ -74,7 +74,7 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 		if (Main.THEMES) {
 			ComponentStyler.styleBarChartComponent(productStatusComparisonBarChart);
 			productStatusNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 
