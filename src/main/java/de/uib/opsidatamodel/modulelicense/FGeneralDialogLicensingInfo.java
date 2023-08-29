@@ -268,10 +268,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JCheckBox checkExtendedView = new JCheckBox("", extendedView);
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
-			extendedView = checkExtendedView.isSelected();
-			Logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
-			LicensingInfoMap.setReduced(!extendedView);
-			LicensingInfoMap.requestRefresh();
+			setExtendedView(checkExtendedView.isSelected());
 			thePanel.reload();
 		});
 
@@ -280,8 +277,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JCheckBox checkShowOnlyAvailableModules = new JCheckBox("", showOnlyAvailableModules);
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
-			showOnlyAvailableModules = checkShowOnlyAvailableModules.isSelected();
-			LicensingInfoMap.requestRefresh();
+			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());
 			thePanel.reload();
 		});
 
@@ -386,6 +382,18 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		return xPanel;
 
+	}
+
+	private static void setExtendedView(boolean isExtendedView) {
+		FGeneralDialogLicensingInfo.extendedView = isExtendedView;
+		Logging.info("extendedView " + extendedView + ", i.e. reduced " + !extendedView);
+		LicensingInfoMap.setReduced(!extendedView);
+		LicensingInfoMap.requestRefresh();
+	}
+
+	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
+		FGeneralDialogLicensingInfo.showOnlyAvailableModules = showOnlyAvailableModules;
+		LicensingInfoMap.requestRefresh();
 	}
 
 	private void buildModel() {
