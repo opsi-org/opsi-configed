@@ -2838,6 +2838,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
 		String localbootProductsSavedStateObjTag = "localbootProducts";
+
 		if (istmForSelectedClientsLocalboot == null) {
 			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 					collectChangedLocalbootStates,
