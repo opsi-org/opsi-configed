@@ -46,7 +46,7 @@ public final class ComponentStyler {
 		String tableViewSelectionInactiveBackgroundColor = getHexColor(
 				UIManager.getColor("Table.selectionInactiveBackground"));
 		String tableViewSelectionInactiveForegroundColor = getHexColor(
-				UIManager.getColor("Table.selectionInactiveForekground"));
+				UIManager.getColor("Table.selectionInactiveForeground"));
 		String tableViewHeaderBackgroundColor = getHexColor(UIManager.getColor("TableHeader.background"));
 		String tableViewHeaderForegroundColor = getHexColor(UIManager.getColor("TableHeader.foreground"));
 
