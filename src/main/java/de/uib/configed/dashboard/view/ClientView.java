@@ -46,7 +46,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -101,8 +100,6 @@ public class ClientView implements View {
 	private ComboBox<String> clientActivityStatusComboBox;
 	@FXML
 	private ComboBox<String> clientLastSeenComboBox;
-	@FXML
-	private ListView<String> clientListView;
 	@FXML
 	private TextField clientSearchbarTextField;
 	@FXML
@@ -162,6 +159,8 @@ public class ClientView implements View {
 		lastSeenTableColumn.setCellValueFactory(cellData -> cellData.getValue().lastSeenProperty());
 		clientActiveTableColumn.setCellValueFactory(cellData -> cellData.getValue().connectedWithMessagebusProperty());
 		clientActiveTableColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
+		clientActiveTableColumn.getCellFactory().call(clientActiveTableColumn)
+				.setStyle("-fx-text-background-color: #ffffff; -fx-text-fill: #ffffff");
 
 		List<String> clientStatus = new ArrayList<>();
 		clientStatus.add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
