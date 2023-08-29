@@ -11,6 +11,10 @@ import java.util.Set;
 
 import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLaf;
+
+import de.uib.configed.Globals;
+import de.uib.utilities.logging.Logging;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,35 +42,32 @@ public final class ComponentStyler {
 	@SuppressWarnings({ "java:S5612", "java:S110", "java:S1188" })
 	public static <T> void styleTableViewComponent(TableView<T> view) {
 		String tableViewBackgroundColor = getHexColor(UIManager.getColor("Table.background"));
-		String tableViewLigtherBackgroundColor = getHexColor(
-				Helper.adjustColorBrightness(UIManager.getColor("Table.background")));
-		String tableViewForegroundColor = getHexColor(UIManager.getColor("Table.foreground"));
-		String tableViewSelectionBackgroundColor = getHexColor(UIManager.getColor("Table.selectionBackground"));
-		String tableViewSelectionForegroundColor = getHexColor(UIManager.getColor("Table.selectionForeground"));
-		String tableViewSelectionInactiveBackgroundColor = getHexColor(
-				UIManager.getColor("Table.selectionInactiveBackground"));
-		String tableViewSelectionInactiveForegroundColor = getHexColor(
-				UIManager.getColor("Table.selectionInactiveForeground"));
+		String tableViewForegroundColor = FlatLaf.isLafDark() ? getHexColor(Globals.OPSI_FOREGROUND_DARK)
+				: getHexColor(Globals.OPSI_FOREGROUND_LIGHT);
+		Logging.devel("foreGround " + tableViewForegroundColor + " color "
+				+ (FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT));
 		String tableViewHeaderBackgroundColor = getHexColor(UIManager.getColor("TableHeader.background"));
 		String tableViewHeaderForegroundColor = getHexColor(UIManager.getColor("TableHeader.foreground"));
 
 		view.setStyle("-fx-background-color: " + tableViewBackgroundColor + "; -fx-text-background-color: "
-				+ tableViewForegroundColor + "; -fx-text-fill: " + tableViewForegroundColor);
+				+ tableViewForegroundColor);
 
 		view.setRowFactory(tableView -> new TableRow<>() {
 			@Override
 			protected void updateItem(T value, boolean empty) {
 				super.updateItem(value, empty);
-				BooleanProperty isAlternateRow = new SimpleBooleanProperty((getIndex() & 1) == 1);
+				BooleanProperty isEvenRow = new SimpleBooleanProperty((getIndex() & 1) == 0);
 				styleProperty().bind(Bindings.when(selectedProperty().and(view.focusedProperty()))
-						.then("-fx-background-color: " + tableViewSelectionBackgroundColor
-								+ "; -fx-text-background-color: " + tableViewSelectionForegroundColor)
+						.then("-fx-background-color: " + getTableRowColorBasedOnTheme(true, isEvenRow.get())
+								+ "; -fx-text-background-color: " + tableViewForegroundColor)
 						.otherwise(Bindings.when(selectedProperty())
-								.then("-fx-background-color: " + tableViewSelectionInactiveBackgroundColor
-										+ "; -fx-text-background-color: " + tableViewSelectionInactiveForegroundColor)
-								.otherwise(Bindings.when(isAlternateRow)
-										.then("-fx-background-color: " + tableViewLigtherBackgroundColor)
-										.otherwise("-fx-background-color: " + tableViewBackgroundColor))));
+								.then("-fx-background-color: " + getTableRowColorBasedOnTheme(true, isEvenRow.get())
+										+ "; -fx-text-background-color: " + tableViewForegroundColor)
+								.otherwise(Bindings.when(isEvenRow)
+										.then("-fx-background-color: "
+												+ getTableRowColorBasedOnTheme(false, isEvenRow.get()))
+										.otherwise("-fx-background-color: "
+												+ getTableRowColorBasedOnTheme(false, isEvenRow.get())))));
 				Set<Node> checkBoxes = view.lookupAll(".check-box");
 				if (!checkBoxes.isEmpty()) {
 					for (Node checkBox : checkBoxes) {
@@ -94,6 +95,47 @@ public final class ComponentStyler {
 				styleScrollBarComponent((ScrollBar) scrollBar);
 			}
 		}
+	}
+
+	private static String getTableRowColorBasedOnTheme(boolean isSelected, boolean isRowEven) {
+		return FlatLaf.isLafDark() ? getTableRowColorThemeDark(isSelected, isRowEven)
+				: getTableRowColorThemeLight(isSelected, isRowEven);
+	}
+
+	private static String getTableRowColorThemeDark(boolean isSelected, boolean isRowEven) {
+		String tableRowColor = "";
+		if (!isSelected) {
+			if (isRowEven) {
+				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_DARK);
+			} else {
+				tableRowColor = getHexColor(Globals.OPSI_DARK_GREY);
+			}
+		} else {
+			if (isRowEven) {
+				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA_2);
+			} else {
+				tableRowColor = getHexColor(Globals.OPSI_MAGENTA_2);
+			}
+		}
+		return tableRowColor;
+	}
+
+	private static String getTableRowColorThemeLight(boolean isSelected, boolean isRowEven) {
+		String tableRowColor = "";
+		if (!isSelected) {
+			if (isRowEven) {
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_GREY);
+			} else {
+				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_LIGHT);
+			}
+		} else {
+			if (isRowEven) {
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA_2);
+			} else {
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA);
+			}
+		}
+		return tableRowColor;
 	}
 
 	@SuppressWarnings({ "java:S5612", "java:S110" })
