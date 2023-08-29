@@ -388,11 +388,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
 							mixToVisualState(combinedVisualValues.get(key), productId, priority);
-						} else if (key.equals(ProductState.KEY_ACTION_SEQUENCE) && ServerFacade.isOpsi43()) {
+						} else {
 							mixToVisualState(combinedVisualValues.get(key), productId,
 									ProductState.getDefaultProductState().get(key));
-						} else {
-							// key has no default
 						}
 					}
 				}
