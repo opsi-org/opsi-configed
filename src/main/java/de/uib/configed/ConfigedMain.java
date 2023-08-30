@@ -2957,6 +2957,9 @@ public class ConfigedMain implements ListSelectionListener {
 				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
 				continue;
 			}
+			if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_RESULT));
+			}
 			if (ProductState.key2servicekey.containsKey(v)) {
 				attributes.add(ProductState.key2servicekey.get(v));
 			}
