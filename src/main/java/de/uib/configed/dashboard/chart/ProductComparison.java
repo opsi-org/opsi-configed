@@ -74,7 +74,7 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 		if (Main.THEMES) {
 			ComponentStyler.stylePieChartComponent(productComparisonPieChart);
 			productsNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 

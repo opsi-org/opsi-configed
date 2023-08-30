@@ -78,7 +78,7 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 		if (Main.THEMES) {
 			ComponentStyler.styleBarChartComponent(lastSeenComparisonBarChart);
 			clientsLastSeenNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 

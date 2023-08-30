@@ -239,21 +239,21 @@ public class ProductView implements View {
 
 	private void styleAccordingToSelectedTheme() {
 		String foregroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
-		productNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		localbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		netbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		installedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		failedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		unusedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		productNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		localbootProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		netbootProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		installedProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		failedProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		unusedProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
 
-		productsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		netbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		localbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		installedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		failedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		unusedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		productsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		netbootProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		localbootProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		installedProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		failedProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		unusedProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
 
-		backButton.setStyle("-fx-text-fill: #" + foregroundColor);
+		backButton.setStyle("-fx-text-fill: " + foregroundColor);
 		Color iconColor = UIManager.getColor("Label.foreground");
 		backButtonIcon
 				.setFill(javafx.scene.paint.Color.rgb(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue()));
@@ -262,19 +262,19 @@ public class ProductView implements View {
 				.getHexColor(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")));
 		String backgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
 		fxPanel.setBackground(UIManager.getColor("Panel.background"));
-		productViewAnchorPane.setStyle("-fx-background-color: #" + backgroundColor);
-		productStatusArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		productChartArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		productViewAnchorPane.setStyle("-fx-background-color: " + backgroundColor);
+		productStatusArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		productChartArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
 		String labelForegroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
-		productStatusLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
+		productStatusLabel.setStyle("-fx-text-fill: " + labelForegroundColor);
 
-		productNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		netbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		localbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		installedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		unusedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		failedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		productNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		netbootProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		localbootProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		installedProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		unusedProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		failedProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
 		ComponentStyler.styleTableViewComponent(productTableView);
 		ComponentStyler.styleListViewComponent(clientListView);

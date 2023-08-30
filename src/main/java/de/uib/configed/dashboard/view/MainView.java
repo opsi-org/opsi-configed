@@ -310,60 +310,60 @@ public class MainView implements View {
 
 	private void styleAccordingToSelectedTheme() {
 		String foregroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
-		depotTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		productTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		clientTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		installedOSTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		moduleTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		licenseTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		depotTitleText.setStyle("-fx-fill: " + foregroundColor);
+		productTitleText.setStyle("-fx-fill: " + foregroundColor);
+		clientTitleText.setStyle("-fx-fill: " + foregroundColor);
+		installedOSTitleText.setStyle("-fx-fill: " + foregroundColor);
+		moduleTitleText.setStyle("-fx-fill: " + foregroundColor);
+		licenseTitleText.setStyle("-fx-fill: " + foregroundColor);
 
-		depotTypeText.setStyle("-fx-fill: #" + foregroundColor);
-		depotDescriptionText.setStyle("-fx-fill: #" + foregroundColor);
-		selectedDepotText.setStyle("-fx-fill: #" + foregroundColor);
-		reloadingText.setStyle("-fx-fill: #" + foregroundColor);
+		depotTypeText.setStyle("-fx-fill: " + foregroundColor);
+		depotDescriptionText.setStyle("-fx-fill: " + foregroundColor);
+		selectedDepotText.setStyle("-fx-fill: " + foregroundColor);
+		reloadingText.setStyle("-fx-fill: " + foregroundColor);
 
-		depotNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		productNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		localbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		netbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		clientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		installedOSNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		moduleNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		licenseNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		depotNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		productNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		localbootProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		netbootProductNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		clientNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		installedOSNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		moduleNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		licenseNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
 
-		depotsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		clientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		productsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		netbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		localbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		installedOSsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		modulesNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		licensesNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		depotsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		clientsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		productsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		netbootProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		localbootProductsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		installedOSsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		modulesNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		licensesNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
 
-		depotTypeLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		depotDescriptionLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		depotTypeLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		depotDescriptionLabel.setStyle("-fx-text-fill: " + foregroundColor);
 
 		String lighterBackgroundColor = ComponentStyler
 				.getHexColor(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")));
 		String backgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
 		fxPanel.setBackground(UIManager.getColor("Panel.background"));
-		anchorPane.setStyle("-fx-background-color: #" + backgroundColor);
-		dashboardSceneVBox.setStyle("-fx-background-color: #" + backgroundColor);
-		depotDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		clientDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		productDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		installedOSDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		moduleDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		licenseDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		anchorPane.setStyle("-fx-background-color: " + backgroundColor);
+		dashboardSceneVBox.setStyle("-fx-background-color: " + backgroundColor);
+		depotDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		clientDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		productDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		installedOSDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		moduleDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		licenseDataDisplayAreaVBox.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
-		depotNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		clientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		productNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		netbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		localbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		installedOSNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		moduleNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		licenseNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		depotNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		clientNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		productNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		netbootProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		localbootProductNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		installedOSNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		moduleNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		licenseNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
 		ComponentStyler.styleProgressBarComponent(statusProgressBar);
 		ComponentStyler.styleComboBoxComponent(selectedDepotComboBox);

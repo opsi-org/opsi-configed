@@ -81,7 +81,7 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 		if (Main.THEMES) {
 			ComponentStyler.stylePieChartComponent(licenseStatusComparisonPieChart);
 			licenseStatusNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 

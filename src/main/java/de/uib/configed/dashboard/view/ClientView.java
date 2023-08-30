@@ -46,7 +46,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -101,8 +100,6 @@ public class ClientView implements View {
 	private ComboBox<String> clientActivityStatusComboBox;
 	@FXML
 	private ComboBox<String> clientLastSeenComboBox;
-	@FXML
-	private ListView<String> clientListView;
 	@FXML
 	private TextField clientSearchbarTextField;
 	@FXML
@@ -162,6 +159,8 @@ public class ClientView implements View {
 		lastSeenTableColumn.setCellValueFactory(cellData -> cellData.getValue().lastSeenProperty());
 		clientActiveTableColumn.setCellValueFactory(cellData -> cellData.getValue().connectedWithMessagebusProperty());
 		clientActiveTableColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
+		clientActiveTableColumn.getCellFactory().call(clientActiveTableColumn)
+				.setStyle("-fx-text-background-color: #ffffff; -fx-text-fill: #ffffff");
 
 		List<String> clientStatus = new ArrayList<>();
 		clientStatus.add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
@@ -280,45 +279,44 @@ public class ClientView implements View {
 	}
 
 	private void styleAccordingToSelectedTheme() {
-		String foregroundColor = Integer.toHexString(UIManager.getColor("Label.foreground").getRGB()).substring(2);
-		clientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		activeClientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		inactiveClientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		fourteenOrLowerDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		betweenFifteenAndThirtyDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
-		moreThanThirtyDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		String foregroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
+		clientNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		activeClientNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		inactiveClientNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		fourteenOrLowerDaysNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		betweenFifteenAndThirtyDaysNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
+		moreThanThirtyDaysNumberTitleText.setStyle("-fx-fill: " + foregroundColor);
 
-		clientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		activeClientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		inactiveClientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		fourteenOrLowerDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		betweenFifteenAndThirtyDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
-		moreThanThirtyDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		clientsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		activeClientsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		inactiveClientsNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		fourteenOrLowerDaysNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		betweenFifteenAndThirtyDaysNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
+		moreThanThirtyDaysNumberLabel.setStyle("-fx-text-fill: " + foregroundColor);
 
-		backButton.setStyle("-fx-text-fill: #" + foregroundColor);
+		backButton.setStyle("-fx-text-fill: " + foregroundColor);
 		Color iconColor = UIManager.getColor("Label.foreground");
 		backButtonIcon
 				.setFill(javafx.scene.paint.Color.rgb(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue()));
 
-		String lighterBackgroundColor = Integer
-				.toHexString(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")).getRGB())
-				.substring(2);
-		String backgroundColor = Integer.toHexString(UIManager.getColor("Panel.background").getRGB()).substring(2);
+		String lighterBackgroundColor = ComponentStyler
+				.getHexColor(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")));
+		String backgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
 		fxPanel.setBackground(UIManager.getColor("Panel.background"));
-		clientViewAnchorPane.setStyle("-fx-background-color: #" + backgroundColor);
-		clientTableArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		clientChartArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		clientViewAnchorPane.setStyle("-fx-background-color: " + backgroundColor);
+		clientTableArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		clientChartArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
-		String labelForegroundColor = Integer.toHexString(UIManager.getColor("Label.foreground").getRGB()).substring(2);
-		clientActivityLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
-		clientLastSeenLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
+		String labelForegroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
+		clientActivityLabel.setStyle("-fx-text-fill: " + labelForegroundColor);
+		clientLastSeenLabel.setStyle("-fx-text-fill: " + labelForegroundColor);
 
-		clientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		activeClientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		inactiveClientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		fourteenOrLowerDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		betweenFifteenAndThirtyDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
-		moreThanThirtyDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		clientNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		activeClientNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		inactiveClientNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		fourteenOrLowerDaysNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		betweenFifteenAndThirtyDaysNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
+		moreThanThirtyDaysNumberArea.setStyle("-fx-background-color: " + lighterBackgroundColor);
 
 		ComponentStyler.styleTableViewComponent(clientTableView);
 		ComponentStyler.styleTextFieldComponent(clientSearchbarTextField);
