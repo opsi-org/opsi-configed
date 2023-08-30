@@ -1255,21 +1255,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	/*
-	 * JTable uses this method to determine the default renderer/
-	 * editor for each cell. If we didn't implement this method,
-	 * then the last column would contain text
-	 */
-	@Override
-	public Class<? extends Object> getColumnClass(int c) {
-		Object val = retrieveValueAt(0, c);
-		if (val == null) {
-			return null;
-		} else {
-			return val.getClass();
-		}
-	}
-
-	/*
 	 * editable columns
 	 */
 	@Override
