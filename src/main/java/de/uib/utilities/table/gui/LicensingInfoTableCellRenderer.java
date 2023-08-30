@@ -13,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -80,7 +78,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 
-					if (Main.THEMES && FlatLaf.isLafDark()) {
+					if (Main.THEMES && row % 2 == 0) {
 						jc.setBackground(Globals.OPSI_WARNING_DARK);
 					} else {
 						jc.setBackground(Globals.OPSI_WARNING);
@@ -92,7 +90,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 
-					if (Main.THEMES && FlatLaf.isLafDark()) {
+					if (Main.THEMES && row % 2 == 0) {
 						jc.setBackground(Globals.OPSI_ERROR_DARK);
 					} else {
 						jc.setBackground(Globals.OPSI_ERROR);
@@ -103,7 +101,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 
-					if (Main.THEMES && FlatLaf.isLafDark()) {
+					if (Main.THEMES && row % 2 == 0) {
 						jc.setBackground(Globals.OPSI_WARNING_DARK);
 					} else {
 						jc.setBackground(Globals.OPSI_WARNING);
@@ -114,7 +112,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
 
-					if (Main.THEMES && FlatLaf.isLafDark()) {
+					if (Main.THEMES && row % 2 == 0) {
 						jc.setBackground(Globals.OPSI_ERROR_DARK);
 					} else {
 						jc.setBackground(Globals.OPSI_ERROR);
@@ -123,7 +121,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
-					if (Main.THEMES && FlatLaf.isLafDark()) {
+					if (Main.THEMES && row % 2 == 0) {
 						jc.setBackground(Globals.OPSI_OK_DARK);
 					} else {
 						jc.setBackground(Globals.OPSI_OK);
