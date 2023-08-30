@@ -14,7 +14,6 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -44,8 +43,6 @@ public final class ComponentStyler {
 		String tableViewBackgroundColor = getHexColor(UIManager.getColor("Table.background"));
 		String tableViewForegroundColor = FlatLaf.isLafDark() ? getHexColor(Globals.OPSI_FOREGROUND_DARK)
 				: getHexColor(Globals.OPSI_FOREGROUND_LIGHT);
-		Logging.devel("foreGround " + tableViewForegroundColor + " color "
-				+ (FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT));
 		String tableViewHeaderBackgroundColor = getHexColor(UIManager.getColor("TableHeader.background"));
 		String tableViewHeaderForegroundColor = getHexColor(UIManager.getColor("TableHeader.foreground"));
 
