@@ -78,11 +78,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 
-					if (Main.THEMES && row % 2 == 0) {
-						jc.setBackground(Globals.OPSI_WARNING_DARK);
-					} else {
-						jc.setBackground(Globals.OPSI_WARNING);
-					}
+					jc.setForeground(Globals.OPSI_WARNING);
 
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
@@ -90,42 +86,25 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 
-					if (Main.THEMES && row % 2 == 0) {
-						jc.setBackground(Globals.OPSI_ERROR_DARK);
-					} else {
-						jc.setBackground(Globals.OPSI_ERROR);
-					}
+					jc.setForeground(Globals.OPSI_ERROR);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 
-					if (Main.THEMES && row % 2 == 0) {
-						jc.setBackground(Globals.OPSI_WARNING_DARK);
-					} else {
-						jc.setBackground(Globals.OPSI_WARNING);
-					}
+					jc.setForeground(Globals.OPSI_WARNING);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-
-					if (Main.THEMES && row % 2 == 0) {
-						jc.setBackground(Globals.OPSI_ERROR_DARK);
-					} else {
-						jc.setBackground(Globals.OPSI_ERROR);
-					}
+					jc.setForeground(Globals.OPSI_ERROR);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
-					if (Main.THEMES && row % 2 == 0) {
-						jc.setBackground(Globals.OPSI_OK_DARK);
-					} else {
-						jc.setBackground(Globals.OPSI_OK);
-					}
+					jc.setForeground(Globals.OPSI_OK);
 				}
 			}
 
