@@ -224,7 +224,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(ActionSequence.getLabel2DisplayLabel(),
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE) + ": ");
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY) + ": ");
 
 		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE));
@@ -746,18 +746,14 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void setTableModel(IFInstallationStateTableModel istm) {
-
 		// delete old row sorter before setting new model
 		tableProducts.setRowSorter(null);
 
 		tableProducts.setModel(istm);
 
-		// try bugfix:
-
 		final Comparator<String> myComparator = Comparator.comparing(String::toString);
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
-
 			@Override
 			protected boolean useToString(int column) {
 				return true;
@@ -778,8 +774,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
-
-		// ---
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
@@ -846,7 +840,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_REQUEST)) > -1) {
-
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			JComboBox<String> actionsCombo = new JComboBox<>();

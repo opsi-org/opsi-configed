@@ -527,7 +527,6 @@ public class MainFrame extends JFrame
 		ButtonGroup groupLanguages = new ButtonGroup();
 
 		String selectedLocale = Messages.getSelectedLocale();
-		Logging.debug(this, "selectedLocale " + selectedLocale);
 
 		for (final String localeName : Messages.getLocaleInfo().keySet()) {
 			ImageIcon localeIcon = null;
@@ -537,7 +536,6 @@ public class MainFrame extends JFrame
 			}
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
-			Logging.debug(this, "selectedLocale " + selectedLocale);
 			menuItem.setSelected(selectedLocale.equals(localeName));
 			jMenuFileLanguage.add(menuItem);
 			groupLanguages.add(menuItem);

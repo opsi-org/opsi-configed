@@ -296,7 +296,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		// iterate through all clients for which a list of
 		// products/states/actionrequests exist
-
 		for (Entry<String, List<Map<String, String>>> client : clientAllProductRows.entrySet()) {
 			Map<String, Map<String, String>> productRows = new LinkedHashMap<>();
 
@@ -323,7 +322,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
-			int position = 0;
 			for (String productId : client.getValue().keySet()) {
 				Map<String, String> stateAndAction = client.getValue().get(productId);
 
@@ -347,9 +345,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				}
 
 				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
-				stateAndAction.put(ProductState.KEY_ACTION_SEQUENCE, priority);
-				position++;
-				stateAndAction.put(ProductState.KEY_POSITION, String.valueOf(position));
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
@@ -391,8 +386,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 					while (iter.hasNext()) {
 						String key = iter.next();
 
-						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)
-								|| key.equals(ProductState.KEY_ACTION_SEQUENCE)) {
+						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
 							mixToVisualState(combinedVisualValues.get(key), productId, priority);
 						} else {
 							mixToVisualState(combinedVisualValues.get(key), productId,
@@ -1220,8 +1214,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			return ServerFacade.isOpsi43() ? combinedVisualValues.get(ProductState.KEY_POSITION).get(actualProduct)
-					: productNamesInDeliveryOrder.indexOf(actualProduct);
+			return getDisplayLabelForPosition();
 
 		case 12:
 			return actualProductVersion();
@@ -1240,6 +1233,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
+	private Object getDisplayLabelForPosition() {
+		if (ServerFacade.isOpsi43()) {
+			String position = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
+			return "-1".equals(position) ? "" : position;
+		} else {
+			return productNamesInDeliveryOrder.indexOf(actualProduct);
+		}
+	}
+
 	private String actualProductVersion() {
 		String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 				.get(ProductState.KEY_VERSION_INFO);
@@ -1249,21 +1251,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return UNEQUAL_ADD_STRING + result;
 		} else {
 			return result;
-		}
-	}
-
-	/*
-	 * JTable uses this method to determine the default renderer/
-	 * editor for each cell. If we didn't implement this method,
-	 * then the last column would contain text
-	 */
-	@Override
-	public Class<? extends Object> getColumnClass(int c) {
-		Object val = retrieveValueAt(0, c);
-		if (val == null) {
-			return null;
-		} else {
-			return val.getClass();
 		}
 	}
 
