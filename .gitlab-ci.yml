@@ -31,7 +31,7 @@ compile_and_package:
     - tar -xvf opsi-dev-tools.tar.gz
     - mv opsi-dev-tool opsi-dev-cli
     - ./opsi-dev-cli -l debug transifex upload-resource src/main/resources/de/uib/messages/opsi-configed_en.properties
-    - ./opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/messages --min-review-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
+    - ./opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/messages --min-translation-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
     - mvn package
     - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun" > target/module.deps
     # jdk.crypto.ec is needed for TLS (HTTPS)
