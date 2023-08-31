@@ -263,6 +263,10 @@ public class ClientView implements View {
 			return true;
 		}
 
+		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30) {
+			return true;
+		}
+
 		return value.equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
 				&& clientLastSeen.equals(Configed.getResourceValue("Dashboard.lastSeen.never"));
 	}
