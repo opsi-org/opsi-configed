@@ -26,15 +26,14 @@ import de.uib.utilities.logging.Logging;
 public final class Messages {
 
 	public static final String APPNAME = "configed";
-	private static final String BUNDLE_NAME = "de/uib/messages/configed";
+	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
 	private static List<LocaleRepresentation> existingLocales;
 	private static List<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
-	private static ResourceBundle messagesBundle;
-	private static ResourceBundle messagesEnBundle;
+	public static ResourceBundle messagesBundle;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
 	private static String selectedTheme = availableThemes.get(0);
 
@@ -76,35 +75,29 @@ public final class Messages {
 			}
 		}
 
-		Logging.info("Messages, getSelectedLocale " + selectedLocaleString);
+		Logging.info("Selected locale: " + selectedLocaleString);
 
 		return selectedLocaleString;
 	}
 
 	public static ResourceBundle getResource() {
 		try {
-			Logging.info("Messages, getResource from " + BUNDLE_NAME);
-
+			Logging.info("Get translation resource bundle from: " + BUNDLE_NAME);
 			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
-
-			Logging.debug("Messages messages " + messagesBundle);
+			Logging.debug("Translation bundle is: " + messagesBundle);
 
 		} catch (MissingResourceException ex) {
-			messagesBundle = getResourceEN();
-			Logging.notice("missing resource, using EN resources: " + ex);
+			Logging.warning(
+					"Missing translation for locale '" + myLocale + "': " + ex + ", falling back to locale 'en_US'");
+			try {
+				Locale enUSLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
+				messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, enUSLocale);
+			} catch (MissingResourceException ex2) {
+				Logging.error("Missing translation for locale 'en_US': " + ex2);
+			}
 		}
 		return messagesBundle;
-	}
 
-	private static ResourceBundle getResourceEN() throws MissingResourceException {
-
-		messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
-				new Locale.Builder().setLanguage("en").setRegion("US").build());
-
-		List<String> myLocaleCharacteristicsEN = new ArrayList<>();
-		myLocaleCharacteristicsEN.add("en_US");
-		myLocaleCharacteristicsEN.add("en");
-		return messagesEnBundle;
 	}
 
 	private static Locale giveLocale(String selection) {
@@ -136,7 +129,7 @@ public final class Messages {
 	}
 
 	public static void setLocale(String characteristics) {
-		Logging.debug("Messages, setLocale");
+		Logging.debug("Messages setLocale: " + characteristics);
 		Locale loc = null;
 		if (characteristics != null && !characteristics.isEmpty()) {
 
@@ -155,13 +148,8 @@ public final class Messages {
 		if (loc == null) {
 			produceLocale();
 		}
-
-		try {
-			messagesBundle = getResource();
-			messagesEnBundle = getResourceEN();
-		} catch (MissingResourceException e) {
-			Logging.info("Missing messages for locale EN: " + e);
-		}
+		Logging.notice("Locale set to: " + myLocale);
+		getResource();
 	}
 
 	public static List<String> getLocaleNames() {

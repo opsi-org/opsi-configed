@@ -154,7 +154,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		ButtonGroup groupLanguages = new ButtonGroup();
 
 		String selectedLocale = Messages.getSelectedLocale();
-		Logging.debug(this, "Selected locale " + selectedLocale);
 
 		for (final String localeName : Messages.getLocaleInfo().keySet()) {
 			ImageIcon localeIcon = null;
