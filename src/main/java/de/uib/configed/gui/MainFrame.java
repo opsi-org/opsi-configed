@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -85,6 +86,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -2353,10 +2356,34 @@ public class MainFrame extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
+		if (Main.THEMES) {
+			c.weightx = 0.0;
+		} else {
+			c.weightx = 1.0;
+		}
 		c.gridx = 0;
 		c.gridy = 0;
 		iconBarPane.add(iconPane1, c);
+
+		if (Main.THEMES) {
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1.0;
+			c.gridx = 1;
+			c.gridy = 0;
+
+			String logoPath;
+
+			if (FlatLaf.isLafDark()) {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer_neg.png";
+			} else {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer.png";
+			}
+
+			ImageIcon icon = Utils.createImageIcon(logoPath, null);
+			Image image = icon.getImage().getScaledInstance(219, 60, Image.SCALE_DEFAULT);
+
+			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
+		}
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
