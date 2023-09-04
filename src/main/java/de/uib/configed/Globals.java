@@ -28,7 +28,9 @@ public final class Globals {
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2023 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
-	public static final String APPNAME = "opsi config editor";
+	public static final String APPNAME = "opsi-configed";
+	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
+
 	public static final String ICON_RESOURCE_NAME = "opsi.gif";
 
 	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";

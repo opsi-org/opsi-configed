@@ -75,7 +75,7 @@ class ServerFacadeTest {
 						request().withMethod("POST").withPath("/rpc")
 								.withHeaders(header("Authorization", "Basic " + authorization),
 										header("X-opsi-session-lifetime", "900"),
-										header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
+										header("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION),
 										header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack"),
 										header("Content-Type", "application/msgpack"))
 								.withBody(binary(requestBytes)),
@@ -103,12 +103,16 @@ class ServerFacadeTest {
 						Times.exactly(1))
 				.respond(response().withHeader("Server", "opsiconfd 4.1.0.0 (uvicorn)"));
 
-		clientServer.withSecure(true).when(request().withMethod("POST").withPath("/rpc").withHeaders(
-				header("Authorization", "Basic " + authorization), header("X-opsi-session-lifetime", "900"),
-				header("User-Agent", Globals.APPNAME + " " + Globals.VERSION), header("Accept-Encoding", "lz4, gzip"),
-				header("Accept", "application/json"), header("Content-Type", "application/json")).withBody(
-						json("{\"method\":\"accessControl_authenticated\",\"id\":1,\"params\":[]}", MatchType.STRICT)),
-				Times.exactly(1))
+		clientServer.withSecure(true)
+				.when(request().withMethod("POST").withPath("/rpc")
+						.withHeaders(header("Authorization", "Basic " + authorization),
+								header("X-opsi-session-lifetime", "900"),
+								header("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION),
+								header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/json"),
+								header("Content-Type", "application/json"))
+						.withBody(json("{\"method\":\"accessControl_authenticated\",\"id\":1,\"params\":[]}",
+								MatchType.STRICT)),
+						Times.exactly(1))
 				.respond(response().withStatusCode(HttpStatusCode.ACCEPTED_202.code())
 						.withBody(json(
 								"{\"jsonrpc\": \"2.0\", \"method\": \"accessControl_authenticated\", \"result\": true}",
@@ -149,17 +153,19 @@ class ServerFacadeTest {
 
 		byte[] responseBytes = compressWithLZ4(produceMessagePack(resultMap));
 
-		clientServer.withSecure(true).when(
-				request().withMethod("POST").withPath("/rpc")
-						.withHeaders(header("Authorization", "Basic " + authorization),
-								header("X-opsi-session-lifetime", "900"),
-								header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
-								header("Accept-Encoding", "lz4, gzip"), header("Accept",
-										"application/msgpack"),
-								header("Content-Type", "application/msgpack"), header("Content-Encoding", "lz4"))
-						.withBody(
-								"BCJNGGBwc4YAAAD/HoOmbWV0aG9ktGNvbmZpZ191cGRhdGVPYmplY3RzomlkAaZwYXJhbXPcJxChQQIA////////////////////////////////////////////////////////////////////////////////////////////////////////VFBBoUGhQQAAAAA="),
-				Times.exactly(1))
+		clientServer
+				.withSecure(true).when(
+						request().withMethod("POST").withPath("/rpc")
+								.withHeaders(header("Authorization", "Basic " + authorization),
+										header("X-opsi-session-lifetime", "900"),
+										header("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION),
+										header("Accept-Encoding", "lz4, gzip"), header("Accept",
+												"application/msgpack"),
+										header("Content-Type", "application/msgpack"),
+										header("Content-Encoding", "lz4"))
+								.withBody(
+										"BCJNGGBwc4YAAAD/HoOmbWV0aG9ktGNvbmZpZ191cGRhdGVPYmplY3RzomlkAaZwYXJhbXPcJxChQQIA////////////////////////////////////////////////////////////////////////////////////////////////////////VFBBoUGhQQAAAAA="),
+						Times.exactly(1))
 				.respond(response().withStatusCode(HttpStatusCode.ACCEPTED_202.code())
 						.withHeaders(header("Content-Encoding", "lz4"), header("Content-Type", "application/msgpack"))
 						.withBody(binary(responseBytes)));
@@ -187,7 +193,7 @@ class ServerFacadeTest {
 		clientServer.withSecure(true)
 				.when(request().withMethod("POST").withPath("/rpc").withHeaders(
 						header("Authorization", "Basic " + authorization), header("X-opsi-session-lifetime", "900"),
-						header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
+						header("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION),
 						header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack")),
 						Times.exactly(1))
 				.respond(response().withStatusCode(HttpStatusCode.BAD_REQUEST_400.code()));
@@ -218,7 +224,7 @@ class ServerFacadeTest {
 				request().withMethod("POST").withPath("/rpc")
 						.withHeaders(header("Authorization", "Basic " + authorization),
 								header("X-opsi-session-lifetime", "900"),
-								header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
+								header("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION),
 								header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack"),
 								header("Content-Type", "application/msgpack"))
 						.withBody(binary(requestBytes)),
