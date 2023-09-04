@@ -2380,7 +2380,7 @@ public class MainFrame extends JFrame
 			}
 
 			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(219, 60, Image.SCALE_DEFAULT);
+			Image image = icon.getImage().getScaledInstance(219, 60, Image.SCALE_SMOOTH);
 
 			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
 		}
