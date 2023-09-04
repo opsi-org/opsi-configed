@@ -3717,57 +3717,20 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		private void updateProductStates() {
-			updateLocalbootProductStates();
-			updateNetbootProductStates();
+			updateProductStates(collectChangedLocalbootStates, istmForSelectedClientsLocalboot,
+					OpsiPackage.TYPE_LOCALBOOT);
+			updateProductStates(collectChangedNetbootStates, istmForSelectedClientsNetboot, OpsiPackage.TYPE_NETBOOT);
 		}
 
-		private void updateLocalbootProductStates() {
-			// localboot products
-			Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
-
-			if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
-					&& !collectChangedLocalbootStates.keySet().isEmpty()) {
-
-				Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
-
+		private void updateProductStates(Map<String, Map<String, Map<String, String>>> changedProductStates,
+				IFInstallationStateTableModel installationStateTableModel, int productType) {
+			Logging.debug(this, "changedProductStates  " + changedProductStates);
+			if (changedProductStates != null && changedProductStates.keySet() != null
+					&& !changedProductStates.keySet().isEmpty()) {
+				Iterator<String> it0 = changedProductStates.keySet().iterator();
 				while (it0.hasNext()) {
 					String client = it0.next();
-					Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
-
-					Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client
-							+ " values " + clientValues);
-
-					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
-						continue;
-					}
-
-					Iterator<String> it1 = clientValues.keySet().iterator();
-					while (it1.hasNext()) {
-						String product = it1.next();
-
-						Map<String, String> productValues = clientValues.get(product);
-
-						persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_LOCALBOOT,
-								productValues);
-					}
-				}
-
-				// send the collected items
-				persistenceController.updateProductOnClients();
-			}
-		}
-
-		private void updateNetbootProductStates() {
-			// netboot products
-			Logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
-			if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
-					&& !collectChangedNetbootStates.keySet().isEmpty()) {
-				Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
-
-				while (it0.hasNext()) {
-					String client = it0.next();
-					Map<String, Map<String, String>> clientValues = collectChangedNetbootStates.get(client);
-
+					Map<String, Map<String, String>> clientValues = changedProductStates.get(client);
 					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
 						continue;
 					}
@@ -3776,22 +3739,15 @@ public class ConfigedMain implements ListSelectionListener {
 					while (it1.hasNext()) {
 						String product = it1.next();
 						Map<String, String> productValues = clientValues.get(product);
-
-						persistenceController.updateProductOnClient(client, product, OpsiPackage.TYPE_NETBOOT,
-								productValues);
+						persistenceController.updateProductOnClient(client, product, productType, productValues);
 					}
 				}
-
 				// send the collected items
 				persistenceController.updateProductOnClients();
 			}
 
-			if (istmForSelectedClientsNetboot != null) {
-				istmForSelectedClientsNetboot.clearCollectChangedStates();
-			}
-
-			if (istmForSelectedClientsLocalboot != null) {
-				istmForSelectedClientsLocalboot.clearCollectChangedStates();
+			if (installationStateTableModel != null) {
+				installationStateTableModel.clearCollectChangedStates();
 			}
 		}
 	}
