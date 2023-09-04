@@ -248,8 +248,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-					POJOReMapper.remap(productInfo, new TypeReference<>() {
-					}));
+					new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
+					})));
 		}
 
 		// TODO refactoring needed in these methods...
@@ -269,8 +269,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-						POJOReMapper.remap(productInfo, new TypeReference<>() {
-						}));
+						new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
+						})));
 			}
 		} else {
 			allClientsProductStates.get(clientId).clear();
