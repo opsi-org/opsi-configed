@@ -3690,14 +3690,13 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.info(this, "saveConfigs ");
 
 			updateProductStates();
-			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+			updateLocalbootProductTable();
 
 			Logging.info(this,
 					"we should now start working on the update collection of size  " + updateCollection.size());
 
 			updateCollection.doCall();
 			checkErrorList();
-
 			clearUpdateCollectionAndTell();
 		}
 
@@ -3748,6 +3747,16 @@ public class ConfigedMain implements ListSelectionListener {
 
 			if (installationStateTableModel != null) {
 				installationStateTableModel.clearCollectChangedStates();
+			}
+		}
+
+		private void updateLocalbootProductTable() {
+			// Update localboot product table to show new products' position,
+			// if position column is shown.
+			if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)
+					&& getViewIndex() == VIEW_LOCALBOOT_PRODUCTS) {
+				localbootStatesAndActionsUpdate = true;
+				setLocalbootProductsPage();
 			}
 		}
 	}
