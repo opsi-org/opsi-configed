@@ -2431,9 +2431,9 @@ public class MainFrame extends JFrame
 
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
-				Utils.createImageIcon("images/clientselection.png", ""), panelClientSelection,
-				Configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null,
+				panelClientSelection, Configed.getResourceValue("MainFrame.panel_Clientselection"),
+				ConfigedMain.VIEW_CLIENTS);
 
 		panelLocalbootProductSettings = new PanelGroupedProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
@@ -2443,14 +2443,12 @@ public class MainFrame extends JFrame
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				Utils.createImageIcon("images/package.png", ""), panelLocalbootProductSettings,
-				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
+				panelLocalbootProductSettings, Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				Utils.createImageIcon("images/bootimage.png", ""), panelNetbootProductSettings,
-				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), null,
+				panelNetbootProductSettings, Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panelHostConfig = new PanelHostConfig() {
@@ -2476,15 +2474,15 @@ public class MainFrame extends JFrame
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelHostConfig,
-				Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null,
+				panelHostConfig, Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
+				ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				Utils.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
-				Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null,
+				showHardwareLog, Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
+				ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(configedMain) {
 			@Override
@@ -2513,9 +2511,9 @@ public class MainFrame extends JFrame
 		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				Utils.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
-				Configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
+				showSoftwareLog, Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
+				ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
 				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles")) {
@@ -2527,8 +2525,7 @@ public class MainFrame extends JFrame
 			}
 		};
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"),
-				Utils.createImageIcon("images/logfile.png", ""), showLogfiles,
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null, showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
@@ -2545,9 +2542,8 @@ public class MainFrame extends JFrame
 
 		panelProductProperties = new PanelProductProperties(configedMain);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelProductProperties,
-				Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null,
+				panelProductProperties, Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		Logging.info(this,
@@ -2558,9 +2554,9 @@ public class MainFrame extends JFrame
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelHostProperties,
-				Configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null,
+				panelHostProperties, Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
+				ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
@@ -3483,8 +3479,7 @@ public class MainFrame extends JFrame
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		if (hardwareInfo == null) {
-			panelHWInfo.setHardwareInfo(null,
-					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
+			panelHWInfo.setHardwareInfo(null, Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 		} else {
 			panelHWInfo.setHardwareInfo(hardwareInfo, null);
 		}
