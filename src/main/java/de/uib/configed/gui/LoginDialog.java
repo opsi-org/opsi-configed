@@ -223,7 +223,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
-		jButtonCommit.setSelected(true);
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
 	}
 
