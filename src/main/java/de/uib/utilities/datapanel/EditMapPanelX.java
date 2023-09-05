@@ -134,8 +134,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
 		buildPanel();
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
@@ -379,7 +377,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		TableCellRenderer colorized = new ColorTableCellRenderer();
 
 		table.setDefaultRenderer(Object.class, colorized);
-		table.setRowHeight(Globals.LINE_HEIGHT);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 		table.setShowGrid(true);
 		table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
 

@@ -270,7 +270,7 @@ public final class Globals {
 	public static final int LINE_HEIGHT = 28;
 	public static final int SMALL_HEIGHT = 18;
 	public static final int PROGRESS_BAR_HEIGHT = 10;
-	public static final int TABLE_ROW_HEIGHT = 16;
+	public static final int TABLE_ROW_HEIGHT = 20;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;

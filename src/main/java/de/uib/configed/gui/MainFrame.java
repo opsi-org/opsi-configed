@@ -373,7 +373,7 @@ public class MainFrame extends JFrame
 	private PanelHostProperties panelHostProperties;
 	private PanelProductProperties panelProductProperties;
 
-	private PanelHWInfo showHardwareLogVersion2;
+	private PanelHWInfo panelHWInfo;
 	private JPanel showHardwareLogNotFound;
 	private ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
@@ -3426,8 +3426,8 @@ public class MainFrame extends JFrame
 	}
 
 	public void initHardwareInfo(List<Map<String, List<Map<String, Object>>>> config) {
-		if (showHardwareLogVersion2 == null) {
-			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
+		if (panelHWInfo == null) {
+			panelHWInfo = new PanelHWInfo(configedMain) {
 				@Override
 				protected void reload() {
 					super.reload();
@@ -3437,7 +3437,7 @@ public class MainFrame extends JFrame
 				}
 			};
 		}
-		showHardwareLogVersion2.setHardwareConfig(config);
+		panelHWInfo.setHardwareConfig(config);
 	}
 
 	private void showHardwareInfo() {
@@ -3483,13 +3483,13 @@ public class MainFrame extends JFrame
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		if (hardwareInfo == null) {
-			showHardwareLogVersion2.setHardwareInfo(null,
+			panelHWInfo.setHardwareInfo(null,
 					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 		} else {
-			showHardwareLogVersion2.setHardwareInfo(hardwareInfo, null);
+			panelHWInfo.setHardwareInfo(hardwareInfo, null);
 		}
 
-		showHardwareLog = showHardwareLogVersion2;
+		showHardwareLog = panelHWInfo;
 		showHardwareInfo();
 	}
 
