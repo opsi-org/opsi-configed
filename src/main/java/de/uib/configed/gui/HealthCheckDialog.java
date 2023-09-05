@@ -36,6 +36,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
@@ -232,6 +234,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
+
 			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
 			if (!fileName.endsWith(".zip")) {
 				fileName = fileName.concat(".zip");
@@ -270,21 +273,45 @@ public class HealthCheckDialog extends FGeneralDialog {
 			return;
 		}
 
-		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-		JSONObject jo = new JSONObject(persistenceController.getDiagnosticData());
-		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
+		SwingUtilities.invokeLater(() -> {
+			ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+			setCursor(Globals.WAIT_CURSOR);
+		});
+		new DiagnosticDataFileWriter(diagnosticDataFile).execute();
 	}
 
-	private void writeToFile(File file, ByteBuffer data) {
-		if (file == null) {
-			Logging.error(this, "provided file is null");
+	private class DiagnosticDataFileWriter extends SwingWorker<Void, Void> {
+		File diagnosticDataFile;
+
+		public DiagnosticDataFileWriter(File file) {
+			this.diagnosticDataFile = file;
 		}
 
-		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
-			channel.write(data);
-		} catch (IOException e) {
-			Logging.error(this, "" + e);
+		@Override
+		public Void doInBackground() {
+			OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
+			JSONObject jo = new JSONObject(persistenceController.getDiagnosticData());
+			writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
+			return null;
+		}
+
+		private void writeToFile(File file, ByteBuffer data) {
+			if (file == null) {
+				Logging.error(this, "provided file is null");
+			}
+
+			try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+				channel.write(data);
+			} catch (IOException e) {
+				Logging.error(this, "" + e);
+			}
+		}
+
+		@Override
+		public void done() {
+			ConfigedMain.getMainFrame().setCursor(null);
+			setCursor(null);
 		}
 	}
 
