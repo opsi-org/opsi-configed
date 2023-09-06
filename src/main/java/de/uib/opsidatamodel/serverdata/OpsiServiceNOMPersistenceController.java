@@ -449,6 +449,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	private Boolean acceptMySQL;
 
+	private DataUpdater dataUpdater;
+
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiServiceNOMPersistenceController(String server, String user, String password) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
@@ -458,12 +460,14 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this.getClass(), "create");
 
 		hostInfoCollections = new HostInfoCollections(this);
-
 		exec = new ServerFacade(server, user, password);
-
+		dataUpdater = new DataUpdater(exec);
 		hwAuditConf = new HashMap<>();
-
 		dataStub = new DataStubNOM(this);
+	}
+
+	public DataUpdater getDataUpdater() {
+		return dataUpdater;
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {
