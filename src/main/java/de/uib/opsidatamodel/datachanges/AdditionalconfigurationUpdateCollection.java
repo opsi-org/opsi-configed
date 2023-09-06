@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -20,7 +20,7 @@ import de.uib.utilities.logging.Logging;
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	private String[] objectIds;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean masterConfig;

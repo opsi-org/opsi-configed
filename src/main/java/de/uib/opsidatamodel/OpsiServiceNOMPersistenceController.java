@@ -103,7 +103,7 @@ import utils.Utils;
  * responses. There are several classes which implement the Executioner methods
  * in different ways dependent on the used means and protocols
  */
-public class OpsiserviceNOMPersistenceController {
+public class OpsiServiceNOMPersistenceController {
 	private static final String EMPTYFIELD = "-";
 	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
@@ -446,7 +446,7 @@ public class OpsiserviceNOMPersistenceController {
 	private Boolean acceptMySQL;
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
-	OpsiserviceNOMPersistenceController(String server, String user, String password) {
+	OpsiServiceNOMPersistenceController(String server, String user, String password) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
 		this.user = user;
@@ -6380,7 +6380,7 @@ public class OpsiserviceNOMPersistenceController {
 		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
-		Map<String, Object> itemRole = OpsiserviceNOMPersistenceController.createJSONConfig(
+		Map<String, Object> itemRole = OpsiServiceNOMPersistenceController.createJSONConfig(
 				ConfigOption.TYPE.UNICODE_CONFIG, configkey, "which role should determine this configuration", false,
 				false, selectedValuesRole, selectedValuesRole);
 
@@ -8137,7 +8137,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public static void setConfigedWorkbenchDefaultValue(String defaultWorkbenchValue) {
-		OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue = defaultWorkbenchValue;
+		OpsiServiceNOMPersistenceController.configedWorkbenchDefaultValue = defaultWorkbenchValue;
 	}
 
 	public static String getPackageServerDirectoryS() {
@@ -8145,7 +8145,7 @@ public class OpsiserviceNOMPersistenceController {
 	}
 
 	public static void setPackageServerDirectoryS(String packageServerDirectoryS) {
-		OpsiserviceNOMPersistenceController.packageServerDirectoryS = packageServerDirectoryS;
+		OpsiServiceNOMPersistenceController.packageServerDirectoryS = packageServerDirectoryS;
 	}
 
 	public AbstractExecutioner getExecutioner() {

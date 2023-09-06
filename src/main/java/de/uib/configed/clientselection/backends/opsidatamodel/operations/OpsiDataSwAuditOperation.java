@@ -13,13 +13,13 @@ import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSwAuditOperation extends SwAuditOperation implements ExecutableOperation {
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public OpsiDataSwAuditOperation(AbstractSelectOperation operation) {

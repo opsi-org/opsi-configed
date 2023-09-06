@@ -13,7 +13,7 @@ import utils.Utils;
 
 public final class PersistenceControllerFactory {
 
-	private static OpsiserviceNOMPersistenceController staticPersistControl;
+	private static OpsiServiceNOMPersistenceController staticPersistControl;
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -25,7 +25,7 @@ public final class PersistenceControllerFactory {
 	 * choose if we take the already constructed one - returned from the static
 	 * method getPersistenceController - or construct a new one
 	 */
-	public static OpsiserviceNOMPersistenceController getNewPersistenceController(String server, String user,
+	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
 			String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
@@ -34,7 +34,7 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		OpsiserviceNOMPersistenceController persistenceController = new OpsiserviceNOMPersistenceController(server,
+		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
 				user, password);
 		Logging.info(
 				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
@@ -64,7 +64,7 @@ public final class PersistenceControllerFactory {
 		return staticPersistControl;
 	}
 
-	public static OpsiserviceNOMPersistenceController getPersistenceController() {
+	public static OpsiServiceNOMPersistenceController getPersistenceController() {
 		return staticPersistControl;
 	}
 

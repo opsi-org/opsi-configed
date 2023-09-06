@@ -35,7 +35,7 @@ import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
@@ -83,7 +83,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private boolean aktive;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SSHDeployClientAgentParameterDialog(ConfigedMain m) {
@@ -111,7 +111,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				.getConfig(persistenceController.getHostInfoCollections().getConfigServer());
 
 		List<Object> resultConfigList = (List<Object>) configs
-				.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
+				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
@@ -123,7 +123,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		}
 
-		resultConfigList = (List<Object>) configs.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
+		resultConfigList = (List<Object>) configs.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 
 			Logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");

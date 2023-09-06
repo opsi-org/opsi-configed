@@ -39,7 +39,7 @@ import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
@@ -172,7 +172,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private JLabel jLabelTopic;
 	private int wLeftText;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;

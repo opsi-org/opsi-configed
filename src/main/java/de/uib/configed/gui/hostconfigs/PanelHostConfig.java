@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -57,7 +57,7 @@ public class PanelHostConfig extends JPanel {
 		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
-		OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, (String arg) -> {
+		OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, (String arg) -> {
 			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
 			return "";

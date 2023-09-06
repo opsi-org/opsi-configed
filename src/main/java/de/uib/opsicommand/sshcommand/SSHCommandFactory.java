@@ -27,7 +27,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -131,7 +131,7 @@ public final class SSHCommandFactory {
 
 	private SSHCommandParameterMethods pmethodHandler;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	/**

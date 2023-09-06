@@ -23,7 +23,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -45,7 +45,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private FDepotselectionList fDepotList;
 	private List<String> depots;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
@@ -198,8 +198,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (persistenceController.isDepotsFullPermission()) {
 			jTextFieldSelecteddepots.setEditable(true);
-			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL);
+			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL);
 		} else {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
@@ -221,16 +221,16 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (selectedDepots.isEmpty()) {
 			if (persistenceController.isDepotsFullPermission()) {
-				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
 			} else {
 				Logging.warning(this, "cannot find depot to set depotParameter");
 			}
 		} else {
-			if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+			if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = "";
-			} else if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
+			} else if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
 				StringBuilder sb = new StringBuilder();

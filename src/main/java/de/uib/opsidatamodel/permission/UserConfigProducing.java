@@ -18,7 +18,7 @@ import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 import utils.Utils;
@@ -129,7 +129,7 @@ public class UserConfigProducing {
 
 	private void createPropertySubclass(String property, String propertyType) {
 		final String propertyclass = UserConfig.START_USER_KEY + property + '}';
-		OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
+		OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
 			Logging.info(this, "createPropertySubclass for " + propertyType + " " + property);
 			return "";
 		});
@@ -148,7 +148,7 @@ public class UserConfigProducing {
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this,
 					"supplyConfigPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
-			item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
+			item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(item);
 		}
@@ -169,7 +169,7 @@ public class UserConfigProducing {
 			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 			Logging.info(this, "supplyConfigPermissionList products List " + listOptions);
 
-			item = OpsiserviceNOMPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			item = OpsiServiceNOMPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 			item.put("ident", configKeyList);
 			item.put("editable", false);
 			item.put("multiValue", true);
@@ -282,7 +282,7 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole + ", "
 				+ roleParts);
 
-		return OpsiserviceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
+		return OpsiServiceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
 				"which role should determine this users configuration", false, false, selectedValuesRole,
 				possibleValuesRole);
 	}
@@ -320,7 +320,7 @@ public class UserConfigProducing {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = OpsiserviceNOMPersistenceController.createJSONConfig(
+				Map<String, Object> itemRole = OpsiServiceNOMPersistenceController.createJSONConfig(
 						ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
@@ -353,7 +353,7 @@ public class UserConfigProducing {
 					+ ": " + (readyObjects.size() - 1));
 			List<Object> timeVal = Utils.getNowTimeListValue("set by role prototype");
 
-			Map<String, Object> itemModifyTime = OpsiserviceNOMPersistenceController
+			Map<String, Object> itemModifyTime = OpsiServiceNOMPersistenceController
 					.createNOMitem(ConfigOption.UNICODE_TYPE);
 			itemModifyTime.put("ident", startKey + UserConfig.MODIFICATION_INFO_KEY);
 			itemModifyTime.put("editable", false);
@@ -557,7 +557,7 @@ public class UserConfigProducing {
 				value = prototypeConfig.getBooleanValue(partKey);
 				userConfig.setBooleanValue(partKey, value);
 
-				Map<String, Object> item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKey, value,
+				Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(configKey, value,
 						"the primary value setting is based on the user group");
 				readyObjects.add(item);
 			} else {
@@ -588,7 +588,7 @@ public class UserConfigProducing {
 				values = prototypeConfig.getValues(partkey);
 				userConfig.setValues(partkey, values);
 
-				Map<String, Object> item = OpsiserviceNOMPersistenceController.createJSONConfig(
+				Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONConfig(
 						ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey, false, false, values, values);
 				readyObjects.add(item);
 			}

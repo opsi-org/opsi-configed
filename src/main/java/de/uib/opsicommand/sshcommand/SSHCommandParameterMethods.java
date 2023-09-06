@@ -35,7 +35,7 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
@@ -84,7 +84,7 @@ public final class SSHCommandParameterMethods {
 	private boolean canceled;
 	private SSHConnectionOutputDialog outputDia;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private SSHCommandParameterMethods(ConfigedMain main) {

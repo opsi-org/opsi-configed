@@ -18,7 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -41,7 +41,7 @@ public class BackendMySQL {
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public BackendMySQL() {

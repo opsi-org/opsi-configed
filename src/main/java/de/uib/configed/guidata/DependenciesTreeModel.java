@@ -16,7 +16,7 @@ import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -31,7 +31,7 @@ public class DependenciesTreeModel {
 
 	private boolean graphIsInitialized;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public DependenciesTreeModel() {

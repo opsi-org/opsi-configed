@@ -23,7 +23,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
@@ -43,7 +43,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	private GlassPane glassPane;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SavedSearchesDialog(JTableSelectionPanel selectionPanel, ConfigedMain configedMain) {

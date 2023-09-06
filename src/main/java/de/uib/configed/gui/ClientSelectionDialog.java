@@ -74,7 +74,7 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.swing.AbstractValueChangeListener;
@@ -130,10 +130,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);
 
-		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		OpsiServiceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 		this.withMySQL = controller.canCallMySQL()
-				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+				&& controller.getGlobalBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		Logging.info(this.getClass(), "use mysql " + withMySQL);
 

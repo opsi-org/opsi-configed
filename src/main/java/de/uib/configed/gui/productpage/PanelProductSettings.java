@@ -60,7 +60,7 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
@@ -442,7 +442,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController.fireOpsiclientdEventOnSelectedClients(
-				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
+				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
 
@@ -657,7 +657,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		mainController.requestReloadStatesAndActions();
 
 		mainController.fireOpsiclientdEventOnSelectedClients(
-				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 	}
 

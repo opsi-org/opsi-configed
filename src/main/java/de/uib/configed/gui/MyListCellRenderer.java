@@ -17,7 +17,7 @@ import javax.swing.JList;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -27,7 +27,7 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 
 	Map<String, Map<String, Object>> extendedInfo;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public void setInfo(Map<String, Map<String, Object>> extendedInfo) {

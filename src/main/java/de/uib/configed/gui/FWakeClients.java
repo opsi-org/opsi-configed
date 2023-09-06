@@ -20,14 +20,14 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public FWakeClients(JFrame master, String title) {

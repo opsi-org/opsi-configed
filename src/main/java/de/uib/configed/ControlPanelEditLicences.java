@@ -22,7 +22,7 @@ import javax.swing.table.TableColumn;
 import de.uib.Main;
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
@@ -47,7 +47,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	private GenTableModel modelSoftwarelicences;
 	private GenTableModel modelLicencecontracts;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain mainController;
 

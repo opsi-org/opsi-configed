@@ -17,7 +17,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.Logging;
@@ -37,7 +37,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencesUsage;
 	private GenTableModel modelLicencepools;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain mainController;
 

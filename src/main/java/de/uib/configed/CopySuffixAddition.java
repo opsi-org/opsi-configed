@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import utils.Utils;
 
@@ -20,7 +20,7 @@ import utils.Utils;
 public class CopySuffixAddition {
 	private static final String COPY_SUFFIX = "-copy";
 	private static final Pattern numberSuffixPattern = Pattern.compile("\\d+$");
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private String clientName;

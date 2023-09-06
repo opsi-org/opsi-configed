@@ -22,7 +22,7 @@ import de.uib.configed.ErrorCode;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -40,7 +40,7 @@ public abstract class AbstractSWExporter {
 
 	private String filenamePrefix = "report_swaudit_";
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	protected GenTableModel modelSWInfo;

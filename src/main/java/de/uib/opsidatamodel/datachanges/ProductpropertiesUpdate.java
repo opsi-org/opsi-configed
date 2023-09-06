@@ -9,7 +9,7 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public class ProductpropertiesUpdate implements UpdateCommand {
@@ -17,7 +17,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 	private String productname;
 	private Map<?, ?> newdata;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public ProductpropertiesUpdate(String pcname, String productname, Map<?, ?> newdata) {

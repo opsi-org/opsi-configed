@@ -106,7 +106,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
@@ -161,7 +161,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
-	private OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// global table providers for licence management
 	protected DefaultTableProvider licencePoolTableProvider;
@@ -1075,8 +1075,8 @@ public class ConfigedMain implements ListSelectionListener {
 				}
 
 				if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
-						OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
+						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 					// Starting JavaFX-Thread by creating a new JFXPanel, but not
 					// using it since it is not needed.
 
@@ -1596,7 +1596,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	public void setPersistenceController(OpsiserviceNOMPersistenceController persis) {
+	public void setPersistenceController(OpsiServiceNOMPersistenceController persis) {
 		persistenceController = persis;
 	}
 
@@ -3057,7 +3057,7 @@ public class ConfigedMain implements ListSelectionListener {
 					Configed.getResourceValue("PanelHostProperties.SelectHost"),
 					new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 					depotPropertiesForPermittedDepots, hostUpdateCollection,
-					OpsiserviceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+					OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 		}
 
 		return true;
@@ -3110,7 +3110,7 @@ public class ConfigedMain implements ListSelectionListener {
 					additionalConfigs.get(0), persistenceController.getConfigOptions(), additionalConfigs,
 					additionalconfigurationUpdateCollection, true,
 					// editableOptions
-					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 		} else {
 			List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
@@ -3136,11 +3136,11 @@ public class ConfigedMain implements ListSelectionListener {
 			Map<String, ListCellOptions> configOptions = persistenceController.getConfigOptions();
 
 			removeKeysStartingWith(mergedVisualMap,
-					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
 					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
-					OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
+					OpsiServiceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
 
 		}
 

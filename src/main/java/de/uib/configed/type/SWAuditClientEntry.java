@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -108,7 +108,7 @@ public class SWAuditClientEntry {
 	private List<String> software;
 	private NavigableMap<String, Integer> software2Number;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SWAuditClientEntry(final Map<String, Object> m) {

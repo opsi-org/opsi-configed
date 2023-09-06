@@ -33,7 +33,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -97,7 +97,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// (clientId -> (productId -> (product state key -> product state value)))
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	private final String[] selectedClients;

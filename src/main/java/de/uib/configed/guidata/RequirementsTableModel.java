@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -40,7 +40,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private Map<String, String> requAfterMap;
 	private Map<String, String> requDeinstallMap;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public RequirementsTableModel() {

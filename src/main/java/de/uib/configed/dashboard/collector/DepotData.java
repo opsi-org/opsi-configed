@@ -9,13 +9,13 @@ package de.uib.configed.dashboard.collector;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public final class DepotData {
 	private static Map<String, Map<String, Object>> depots = new HashMap<>();
 
-	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private DepotData() {

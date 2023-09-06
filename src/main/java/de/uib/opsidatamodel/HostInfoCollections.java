@@ -55,10 +55,10 @@ public class HostInfoCollections {
 
 	private ClientTree connectedTree;
 
-	private OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// We need the argument here since the controller is not loaded yet
-	public HostInfoCollections(OpsiserviceNOMPersistenceController pc) {
+	public HostInfoCollections(OpsiServiceNOMPersistenceController pc) {
 		this.persistenceController = pc;
 	}
 
@@ -236,7 +236,7 @@ public class HostInfoCollections {
 				allDepots.put(name, host);
 				countClients--;
 
-				boolean isMasterDepot = OpsiserviceNOMPersistenceController
+				boolean isMasterDepot = OpsiServiceNOMPersistenceController
 						.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true);
 
 				if (isMasterDepot) {
@@ -247,8 +247,8 @@ public class HostInfoCollections {
 				String workbenchPath = retrieveWorkbenchPath(host);
 
 				if (!workbenchPath.isEmpty()) {
-					OpsiserviceNOMPersistenceController.setConfigedWorkbenchDefaultValue(workbenchPath);
-					OpsiserviceNOMPersistenceController.setPackageServerDirectoryS(workbenchPath);
+					OpsiServiceNOMPersistenceController.setConfigedWorkbenchDefaultValue(workbenchPath);
+					OpsiServiceNOMPersistenceController.setPackageServerDirectoryS(workbenchPath);
 				}
 			}
 		}
@@ -280,7 +280,7 @@ public class HostInfoCollections {
 			allDepots.put(name, host);
 			countClients--;
 
-			boolean isMasterDepot = OpsiserviceNOMPersistenceController
+			boolean isMasterDepot = OpsiServiceNOMPersistenceController
 					.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
 
 			if (isMasterDepot) {
@@ -303,10 +303,10 @@ public class HostInfoCollections {
 
 			if (!hasConfig(name)) {
 				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
-						+ OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID);
+						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
 				depotId = (String) ((List<?>) (persistenceController.getConfigs().get(name)
-						.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 			}
 
 			if (depotId != null && masterDepots.keySet().contains(depotId)) {
@@ -346,9 +346,9 @@ public class HostInfoCollections {
 	private boolean hasConfig(String clientId) {
 		return persistenceController.getConfigs().get(clientId) != null
 				&& persistenceController.getConfigs().get(clientId)
-						.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID) != null
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID) != null
 				&& !((List<?>) (persistenceController.getConfigs().get(clientId)
-						.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty();
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty();
 	}
 
 	public Map<String, Set<String>> getFNode2Treeparents() {
@@ -415,7 +415,7 @@ public class HostInfoCollections {
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		persistenceController.getConfigs().get(clientName).put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID,
+		persistenceController.getConfigs().get(clientName).put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID,
 				depotList);
 
 		// set in mapPC_Infomap
@@ -444,7 +444,7 @@ public class HostInfoCollections {
 		ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 		depots.add(depotId);
 
-		config.put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
+		config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
 		for (int i = 0; i < clients.length; i++) {
 			// collect data
 			persistenceController.setAdditionalConfiguration(clients[i], config);

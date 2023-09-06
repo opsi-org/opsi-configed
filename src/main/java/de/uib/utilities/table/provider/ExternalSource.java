@@ -8,7 +8,7 @@ package de.uib.utilities.table.provider;
 
 import java.util.List;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public class ExternalSource implements TableSource {
@@ -20,7 +20,7 @@ public class ExternalSource implements TableSource {
 
 	private boolean reloadRequested;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public ExternalSource(List<String> columnNames, List<String> classNames) {

@@ -43,7 +43,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
@@ -78,7 +78,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {

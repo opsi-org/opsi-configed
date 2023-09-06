@@ -26,7 +26,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -64,7 +64,7 @@ public class LicenseDisplayer {
 	private ScrollPane scrollPane;
 
 	private String message = "";
-	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 	private LicenseDisplayer controller;
 
 	private Stage stage;

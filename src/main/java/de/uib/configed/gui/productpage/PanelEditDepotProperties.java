@@ -41,7 +41,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
@@ -63,7 +63,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	private final Map<String, Object> emptyVisualData = new HashMap<>();
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {

@@ -26,7 +26,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -60,7 +60,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private String productName = "";
 	private Map<String, Boolean> specificPropertiesExisting;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	/** Creates new ProductInfoPane */

@@ -31,7 +31,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
@@ -67,7 +67,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private int keyCol;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ControlPanelAssignToLPools myController;

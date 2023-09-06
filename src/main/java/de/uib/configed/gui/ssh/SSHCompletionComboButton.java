@@ -26,7 +26,7 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
@@ -46,7 +46,7 @@ public class SSHCompletionComboButton {
 	// will be overwritten with config
 	private String opsiRepo = "/";
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SSHCompletionComboButton() {
@@ -90,7 +90,7 @@ public class SSHCompletionComboButton {
 		if (persistenceController == null) {
 			Logging.info(this, "init PersistenceController null");
 		} else {
-			opsiRepo = OpsiserviceNOMPersistenceController.getConfigedWorkbenchDefaultValue();
+			opsiRepo = OpsiServiceNOMPersistenceController.getConfigedWorkbenchDefaultValue();
 		}
 
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/') {

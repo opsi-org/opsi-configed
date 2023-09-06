@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -38,7 +38,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencepools;
 	private GenTableModel modelLicencecontracts;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 

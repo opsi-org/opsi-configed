@@ -27,7 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
@@ -44,7 +44,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private PopupMenuTrait popupForUserpath;

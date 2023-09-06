@@ -14,7 +14,7 @@ import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
 import de.uib.configed.type.licences.LicenceContractEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public final class LicenseData {
@@ -22,7 +22,7 @@ public final class LicenseData {
 	private static List<String> activeLicenses = new ArrayList<>();
 	private static List<String> expiredLicenses = new ArrayList<>();
 
-	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private LicenseData() {

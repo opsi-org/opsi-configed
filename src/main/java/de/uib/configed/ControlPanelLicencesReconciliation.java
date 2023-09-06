@@ -14,7 +14,7 @@ import java.util.Set;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -34,7 +34,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private PanelLicencesReconciliation thePanel;
 	private GenTableModel modelLicencesReconciliation;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean initialized;
@@ -90,13 +90,13 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> classNames;
 
 		List<String> extraHostFields = persistenceController.getServerConfigStrings(
-				OpsiserviceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();
 		classNames = new ArrayList<>();
 
-		columnNames.add(OpsiserviceNOMPersistenceController.HOST_KEY);
+		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
 
 		for (String fieldName : extraHostFields) {
 			columnNames.add(fieldName);

@@ -65,7 +65,7 @@ public class DataStubNOM {
 	}
 	private static Integer classCounter = 0;
 
-	private OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
 	private Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
@@ -129,7 +129,7 @@ public class DataStubNOM {
 	private Map<String, LicenceEntry> licences;
 
 	// We need the argument here since the controller is not yet loaded when calling this constructor
-	public DataStubNOM(OpsiserviceNOMPersistenceController persistenceController) {
+	public DataStubNOM(OpsiServiceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
 		classCounter++;
 	}
@@ -1142,11 +1142,11 @@ public class DataStubNOM {
 					// find max lastseen time as last scan time
 
 					String lastseen1 = (String) allInfosForAClient
-							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+							.get(OpsiServiceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
 					String lastseen2 = (String) client2ClassInfo.getValue()
-							.get(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+							.get(OpsiServiceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
 					if (lastseen1 != null && lastseen2 != null) {
-						client2ClassInfo.getValue().put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
+						client2ClassInfo.getValue().put(OpsiServiceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
 								maxTime(lastseen1, lastseen2));
 					}
 
@@ -1178,7 +1178,7 @@ public class DataStubNOM {
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String configTable = OpsiserviceNOMPersistenceController.HW_INFO_CONFIG + hwClass;
+		String configTable = OpsiServiceNOMPersistenceController.HW_INFO_CONFIG + hwClass;
 
 		String lastseenCol = configTable + "." + "lastseen";
 		specificColumns.add(lastseenCol);
@@ -1190,14 +1190,14 @@ public class DataStubNOM {
 		// build and collect database columnnames
 		for (String hwInfoCol : persistenceController.getClient2HwRowsColumnNames()) {
 			if (hwInfoCol.startsWith("HOST.")
-					|| hwInfoCol.equals(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
+					|| hwInfoCol.equals(OpsiServiceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
 				continue;
 			}
 
 			Logging.info(this,
-					"hwInfoCol " + hwInfoCol + " look for " + OpsiserviceNOMPersistenceController.HW_INFO_DEVICE
-							+ " as well as " + OpsiserviceNOMPersistenceController.HW_INFO_CONFIG);
-			String part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_DEVICE.length());
+					"hwInfoCol " + hwInfoCol + " look for " + OpsiServiceNOMPersistenceController.HW_INFO_DEVICE
+							+ " as well as " + OpsiServiceNOMPersistenceController.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, OpsiServiceNOMPersistenceController.HW_INFO_DEVICE.length());
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -1205,7 +1205,7 @@ public class DataStubNOM {
 				colFound = true;
 				// we found a DEVICE column name
 			} else {
-				part0 = hwInfoCol.substring(0, OpsiserviceNOMPersistenceController.HW_INFO_CONFIG.length());
+				part0 = hwInfoCol.substring(0, OpsiServiceNOMPersistenceController.HW_INFO_CONFIG.length());
 
 				if (hwInfoCol.startsWith(hwClass, part0.length())) {
 					colFound = true;
@@ -1228,7 +1228,7 @@ public class DataStubNOM {
 			return new HashMap<>();
 		}
 
-		String deviceTable = OpsiserviceNOMPersistenceController.HW_INFO_DEVICE + hwClass;
+		String deviceTable = OpsiServiceNOMPersistenceController.HW_INFO_DEVICE + hwClass;
 
 		String colsS = cols.toString();
 		buf.append(colsS.substring(0, colsS.length() - 1));
@@ -1292,7 +1292,7 @@ public class DataStubNOM {
 
 				if (specificColumns.get(i).equals(lastseenCol)) {
 					String timeS = maxTime((String) value, row.get(i));
-					rowMap.put(OpsiserviceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
+					rowMap.put(OpsiServiceNOMPersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
 				} else {
 					rowMap.put(specificColumns.get(i), value);
 				}

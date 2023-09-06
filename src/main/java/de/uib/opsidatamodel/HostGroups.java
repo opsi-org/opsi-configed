@@ -17,10 +17,10 @@ import de.uib.utilities.logging.Logging;
 
 public class HostGroups extends TreeMap<String, Map<String, String>> {
 
-	OpsiserviceNOMPersistenceController persistenceController;
+	OpsiServiceNOMPersistenceController persistenceController;
 
 	public HostGroups(Map<String, Map<String, String>> source,
-			OpsiserviceNOMPersistenceController persistenceController) {
+			OpsiServiceNOMPersistenceController persistenceController) {
 		super(source);
 
 		this.persistenceController = persistenceController;

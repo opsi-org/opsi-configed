@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 /**
@@ -20,7 +20,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
  * saved in a file.
  */
 public final class HealthInfo {
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private HealthInfo() {

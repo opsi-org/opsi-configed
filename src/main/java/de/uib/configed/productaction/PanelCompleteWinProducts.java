@@ -38,7 +38,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
@@ -76,7 +76,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	private JFileChooser chooserFolder;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 	private SecondaryFrame rootFrame;

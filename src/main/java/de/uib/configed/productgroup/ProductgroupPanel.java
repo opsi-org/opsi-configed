@@ -48,7 +48,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
@@ -105,7 +105,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private JTextField descriptionField;
 	private boolean deleted;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private abstract static class AbstractDocumentListener implements DocumentListener {
