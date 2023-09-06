@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -76,7 +77,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -406,7 +406,6 @@ public class MainFrame extends JFrame
 
 	private JLabel jLabelPath = new JLabel();
 
-	private JLabel labelHost;
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
 	private CheckedLabel cbUefiBoot;
@@ -1759,12 +1758,12 @@ public class MainFrame extends JFrame
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
 
-		labelHost = new JLabel(Utils.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
-		labelHost.setPreferredSize(Globals.BUTTON_DIMENSION);
-
 		labelHostID = new JLabel("");
 		if (!Main.FONT) {
 			labelHostID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
+		} else {
+			labelHostID.setFont(labelHostID.getFont()
+					.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
 		}
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
@@ -1879,12 +1878,9 @@ public class MainFrame extends JFrame
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(labelHost, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
-						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Short.MAX_VALUE))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -1986,10 +1982,10 @@ public class MainFrame extends JFrame
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(labelHost)
 				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				/////// DESCRIPTION
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+
+				/////// DESCRIPTION		
+				.addGap(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addComponent(labelClientDescription)
 				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// INVENTORY NUMBER
@@ -3614,8 +3610,6 @@ public class MainFrame extends JFrame
 
 		// mix with global read only flag
 		boolean gb = !PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
-
-		labelHost.setEnabled(singleClient);
 
 		// resulting toggle for multi hosts editing
 		boolean b1 = false;
