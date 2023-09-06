@@ -3472,15 +3472,10 @@ public class MainFrame extends JFrame
 		showHardwareLog = showHardwareLogMultiClientReport;
 
 		showHardwareInfo();
-
 	}
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
-		if (hardwareInfo == null) {
-			panelHWInfo.setHardwareInfo(null, Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
-		} else {
-			panelHWInfo.setHardwareInfo(hardwareInfo, null);
-		}
+		panelHWInfo.setHardwareInfo(hardwareInfo);
 
 		showHardwareLog = panelHWInfo;
 		showHardwareInfo();

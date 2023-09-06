@@ -69,7 +69,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private Map<String, List<Map<String, Object>>> hwInfo;
 	private String treeRootTitle;
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
-	private String title = "HW Information";
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
@@ -204,14 +203,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-		title = "";
-		if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
-		}
-		if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
-		}
-		metaData.put("title", title);
+
+		metaData.put("title", treeRootTitle);
 		metaData.put("keywords", "hardware infos");
 
 		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
@@ -232,12 +225,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		copyOfMe = new PanelHWInfo(false, main);
 		copyOfMe.setHardwareConfig(hwConfig);
-		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
+		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
 
-		externalView = new GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
@@ -254,10 +247,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void createRoot(String name) {
 		root = new IconNode(name);
-		Icon icon = createImageIcon("hwinfo_images/DEVICE.png");
-		root.setClosedIcon(icon);
-		root.setLeafIcon(icon);
-		root.setOpenIcon(icon);
 
 		treeModel = new DefaultTreeModel(root);
 
@@ -436,10 +425,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return data;
 	}
 
-	private void setNode(IconNode node) {
-		tableModel.setData(getDataForNode(node));
-	}
-
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		// Returns the last path element of the selection.
@@ -452,9 +437,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		Logging.debug(this, "selectedPath " + selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
+		} else {
+			tableModel.setData(getDataForNode(node));
 		}
-		setNode(node);
-
 	}
 
 	public void setHardwareConfig(List<Map<String, List<Map<String, Object>>>> hwConfig) {
@@ -488,29 +473,28 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		productString = "";
 	}
 
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo, String treeRootTitle) {
+	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
 		this.hwInfo = hwInfo;
-		this.treeRootTitle = treeRootTitle;
 
-		if (hwInfo == null) {
+		if (hwInfo == null || hwInfo.isEmpty()) {
+			treeRootTitle = Configed.getResourceValue("MainFrame.NoHardwareConfiguration");
 			createRoot(treeRootTitle);
 			tableModel.setData(new ArrayList<>());
+
 			return;
 		}
 
 		List<Map<String, Object>> hwInfoSpecial = hwInfo.get(SCANPROPERTYNAME);
-		String rootname = "";
 
 		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
 				&& hwInfoSpecial.get(0).get(SCANTIME) != null) {
-			rootname = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
+			treeRootTitle = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
 		}
-		title = rootname;
 
-		createRoot(rootname);
+		createRoot(treeRootTitle);
 		tableModel.setData(new ArrayList<>());
 
 		if (hwConfig == null) {
@@ -574,7 +558,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
-
 	}
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,
