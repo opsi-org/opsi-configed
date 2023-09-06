@@ -29,6 +29,7 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -225,7 +226,7 @@ public final class SSHCommandFactory {
 	 * @return True if method exists
 	 **/
 	public boolean checkSSHCommandMethod() {
-		return persistenceController.checkSSHCommandMethod("SSHCommand_getObjects");
+		return persistenceController.checkSSHCommandMethod(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
 	}
 
 	/**

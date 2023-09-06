@@ -34,6 +34,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import net.jpountz.lz4.LZ4FrameOutputStream;
 
 class ServerFacadeTest {
@@ -60,7 +61,7 @@ class ServerFacadeTest {
 						Times.exactly(1))
 				.respond(response().withHeader("Server", "opsiconfd 4.2.0.309 (uvicorn)"));
 
-		OpsiMethodCall omc = new OpsiMethodCall("accessControl_authenticated", new Object[0]);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new Object[0]);
 		byte[] requestBytes = produceMessagePack(omc.getOMCMap());
 
 		Map<String, String> resultMap = new HashMap<>();
@@ -116,7 +117,7 @@ class ServerFacadeTest {
 
 		ServerFacade facade = new ServerFacade(Utils.HOST + ":" + Utils.PORT, Utils.USERNAME, Utils.PASSWORD);
 		Map<String, Object> result = facade
-				.retrieveResponse(new OpsiMethodCall("accessControl_authenticated", new Object[0]));
+				.retrieveResponse(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new Object[0]));
 
 		assertNotNull(result, "returned result should not equal null");
 		assertFalse(result.isEmpty(), "returned result should not be empty");
@@ -140,7 +141,7 @@ class ServerFacadeTest {
 		for (int i = 0; i < 10000; i++) {
 			list.add("A");
 		}
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", list.toArray());
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, list.toArray());
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("jsonrcp", "2.0");
@@ -211,7 +212,7 @@ class ServerFacadeTest {
 						Times.exactly(1))
 				.respond(response().withHeader("Server", "opsiconfd 4.2.0.309 (uvicorn)"));
 
-		OpsiMethodCall omc = new OpsiMethodCall("non_existing_method", new Object[0]);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.NON_EXISTING_METHOD, new Object[0]);
 		byte[] requestBytes = produceMessagePack(omc.getOMCMap());
 
 		clientServer.withSecure(true).when(

@@ -208,7 +208,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String HOST_KEY = "hostId";
 
-	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
+	private static final RPCMethodName BACKEND_LICENSING_INFO_METHOD_NAME = RPCMethodName.BACKEND_GET_LICENSING_INFO;
 
 	private static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
 	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
@@ -693,7 +693,7 @@ public class OpsiServiceNOMPersistenceController {
 					"without given values the primary value setting is false");
 			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		}
@@ -708,7 +708,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.warning(this, "readyObjects for userparts " + null);
 		} else {
 			if (!readyConfigObjects.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyConfigObjects });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
+						new Object[] { readyConfigObjects });
 				exec.doCall(omc);
 			}
 
@@ -752,7 +753,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private boolean makeConnection(AbstractExecutioner exec1) {
 		Logging.info(this, "trying to make connection");
-		boolean result = exec1.doCall(new OpsiMethodCall("accessControl_authenticated", new String[] {}));
+		boolean result = exec1.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
 
 		if (!result) {
 			Logging.info(this, "connection does not work");
@@ -764,7 +765,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public String getOpsiCACert() {
-		OpsiMethodCall omc = new OpsiMethodCall("getOpsiCACert", new Object[0]);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_OPSI_CA_CERT, new Object[0]);
 		return exec.getStringResult(omc);
 	}
 
@@ -780,7 +781,8 @@ public class OpsiServiceNOMPersistenceController {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", userId);
-		OpsiMethodCall omc = new OpsiMethodCall("user_getObjects", new Object[] { callAttributes, callFilter });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.USER_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter });
 		List<Map<String, Object>> result = exec.getListOfMaps(omc);
 
 		if (result.isEmpty()) {
@@ -810,7 +812,8 @@ public class OpsiServiceNOMPersistenceController {
 		boolean result = false;
 
 		Logging.info(this, "checkReadOnly");
-		if (exec.getBooleanResult(new OpsiMethodCall("accessControl_userIsReadOnlyUser", new String[] {}))) {
+		if (exec.getBooleanResult(
+				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}))) {
 			result = true;
 			Logging.info(this, "checkReadOnly " + globalReadOnly);
 		}
@@ -1011,27 +1014,19 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public boolean installPackage(String filename) {
-		String method = "depot_installPackage";
-
-		Logging.notice(this, method);
-
-		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, true }));
+		boolean result = exec
+				.doCall(new OpsiMethodCall(RPCMethodName.DEPOT_INSTALL_PACKAGE, new Object[] { filename, true }));
 		Logging.info(this, "installPackage result " + result);
-
 		return result;
 	}
 
 	public boolean setRights(String path) {
-		String method = "setRights";
 		Logging.info(this, "setRights for path " + path);
-
 		String[] args = new String[] { path };
-
 		if (path == null) {
 			args = new String[] {};
 		}
-
-		return exec.doCall(new OpsiMethodCall(method, args));
+		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
 	}
 
 	public List<Map<String, Object>> hostRead() {
@@ -1040,8 +1035,8 @@ public class OpsiServiceNOMPersistenceController {
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 		Logging.notice(this, "host_getObjects");
-		List<Map<String, Object>> opsiHosts = exec
-				.getListOfMaps(new OpsiMethodCall("host_getObjects", new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 		timer.stop();
 
 		return opsiHosts;
@@ -1056,7 +1051,7 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(callAttributes, callFilter,
-				"productOnClient_getObjects");
+				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS);
 
 		List<String> result = new ArrayList<>();
 
@@ -1092,8 +1087,8 @@ public class OpsiServiceNOMPersistenceController {
 			Map<String, String> callFilter = new HashMap<>();
 			callFilter.put("depotId", depot);
 
-			List<Map<String, Object>> products = exec.getListOfMaps(
-					new OpsiMethodCall("productOnDepot_getIdents", new Object[] { callReturnType, callFilter }));
+			List<Map<String, Object>> products = exec.getListOfMaps(new OpsiMethodCall(
+					RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, new Object[] { callReturnType, callFilter }));
 			List<String> productIdents = new ArrayList<>();
 
 			for (Map<String, Object> product : products) {
@@ -1342,7 +1337,8 @@ public class OpsiServiceNOMPersistenceController {
 
 		List<Map<String, Object>> jsonObjects = addWANConfigStates(clientId, wan, null);
 
-		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+				new Object[] { jsonObjects });
 		result = exec.doCall(omc);
 
 		return result;
@@ -1372,7 +1368,8 @@ public class OpsiServiceNOMPersistenceController {
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			jsonObjects.add(createUefiJSONEntry(clientId, EFI_DHCPD_FILENAME));
 
-			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+					new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		} else {
 			values.add(EFI_DHCPD_NOT);
@@ -1380,7 +1377,8 @@ public class OpsiServiceNOMPersistenceController {
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			jsonObjects.add(createUefiJSONEntry(clientId, EFI_DHCPD_NOT));
 
-			OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+					new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
@@ -1495,22 +1493,25 @@ public class OpsiServiceNOMPersistenceController {
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { clientsJsonObject });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
 			if (!configStatesJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("configState_updateObjects", new Object[] { configStatesJsonObject });
+				omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+						new Object[] { configStatesJsonObject });
 				result = exec.doCall(omc);
 			}
 
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { groupsJsonObject });
+				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
+						new Object[] { groupsJsonObject });
 				result = exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { productsNetbootJsonObject });
+				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
+						new Object[] { productsNetbootJsonObject });
 				result = exec.doCall(omc);
 			}
 		}
@@ -1558,11 +1559,8 @@ public class OpsiServiceNOMPersistenceController {
 		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
-
-		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { hostItem });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { hostItem });
 		result = exec.doCall(omc);
-
-		HostInfo hostInfo = new HostInfo(hostItem);
 
 		if (result) {
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
@@ -1598,7 +1596,7 @@ public class OpsiServiceNOMPersistenceController {
 				jsonObjects.add(itemShI);
 			}
 
-			omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
+			omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, new Object[] { jsonObjects });
 
 			result = exec.doCall(omc);
 		}
@@ -1611,7 +1609,7 @@ public class OpsiServiceNOMPersistenceController {
 			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
 			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
 			jsonObjects.add(itemGroup);
-			omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonObjects });
+			omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
@@ -1624,7 +1622,7 @@ public class OpsiServiceNOMPersistenceController {
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(itemProducts);
-			omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { jsonObjects });
+			omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
 
@@ -1632,6 +1630,7 @@ public class OpsiServiceNOMPersistenceController {
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = getHostInfoCollections().getConfigServer();
 			}
+			HostInfo hostInfo = new HostInfo(hostItem);
 			hostInfo.setInDepot(depotId);
 			hostInfo.setUefiBoot(uefiBoot);
 			hostInfo.setWanConfig(wanConfig);
@@ -1649,7 +1648,8 @@ public class OpsiServiceNOMPersistenceController {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_renameOpsiClient", new String[] { hostname, newHostname });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT,
+				new String[] { hostname, newHostname });
 		hostInfoCollections.opsiHostsRequestRefresh();
 		return exec.doCall(omc);
 	}
@@ -1660,7 +1660,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		for (String hostId : hostIds) {
-			OpsiMethodCall omc = new OpsiMethodCall("host_delete", new String[] { hostId });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new String[] { hostId });
 			exec.doCall(omc);
 		}
 		hostInfoCollections.opsiHostsRequestRefresh();
@@ -1686,7 +1686,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> deletePackageCaches(String[] hostIds) {
-		OpsiMethodCall omc = new OpsiMethodCall("hostControlSafe_opsiclientdRpc",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SAFE_OPSICLIENTD_RPC,
 				new Object[] { "cacheService_deleteCache", new Object[] {}, hostIds });
 
 		Map<String, Object> responses = exec.getMapResult(omc);
@@ -1732,7 +1732,7 @@ public class OpsiServiceNOMPersistenceController {
 			}
 
 			if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
-				OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
 						new Object[] { hostSeparationEntry.getValue().toArray(new String[0]) });
 
 				Map<String, Object> responses1 = exec1.getMapResult(omc);
@@ -1756,7 +1756,7 @@ public class OpsiServiceNOMPersistenceController {
 						&& execsByDepot.get(hostSeparationEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& !hostsToWake.isEmpty()) {
 					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
-					OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
+					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
 							new Object[] { hostsToWake.toArray(new String[0]) });
 
 					Map<String, Object> responses1 = execsByDepot.get(hostSeparationEntry.getKey()).getMapResult(omc);
@@ -1778,7 +1778,7 @@ public class OpsiServiceNOMPersistenceController {
 				"working exec for config server " + getHostInfoCollections().getConfigServer() + " " + (exec1 != null));
 
 		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
-			OpsiMethodCall omc = new OpsiMethodCall("hostControl_start", new Object[] { hostIds });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 
 			response = exec1.getMapResult(omc);
 		}
@@ -1787,7 +1787,8 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall("hostControl_fireEvent", new Object[] { event, clientIds });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_FIRE_EVENT,
+				new Object[] { event, clientIds });
 		Map<String, Object> responses = exec.getMapResult(omc);
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
@@ -1796,9 +1797,9 @@ public class OpsiServiceNOMPersistenceController {
 		OpsiMethodCall omc;
 
 		if (seconds == 0) {
-			omc = new OpsiMethodCall("hostControl_showPopup", new Object[] { message, clientIds });
+			omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP, new Object[] { message, clientIds });
 		} else {
-			omc = new OpsiMethodCall("hostControl_showPopup",
+			omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP,
 					new Object[] { message, clientIds, "True", "True", seconds });
 		}
 
@@ -1808,13 +1809,13 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> shutdownClients(String[] clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall("hostControl_shutdown", new Object[] { clientIds });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHUTDOWN, new Object[] { clientIds });
 		Map<String, Object> responses = exec.getMapResult(omc);
 		return collectErrorsFromResponsesByHost(responses, "shutdownClients");
 	}
 
 	public List<String> rebootClients(String[] clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall("hostControl_reboot", new Object[] { clientIds });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_REBOOT, new Object[] { clientIds });
 		Map<String, Object> responses = exec.getMapResult(omc);
 		return collectErrorsFromResponsesByHost(responses, "rebootClients");
 	}
@@ -1823,11 +1824,11 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "reachableInfo ");
 		Object[] callParameters = new Object[] {};
 
-		String methodName = "hostControl_reachable";
+		RPCMethodName methodName = RPCMethodName.HOST_CONTROL_REACHABLE;
 		if (clientIds != null) {
 			Logging.info(this, "reachableInfo for clientIds " + clientIds.length);
 			callParameters = new Object[] { clientIds };
-			methodName = "hostControlSafe_reachable";
+			methodName = RPCMethodName.HOST_CONTROL_SAFE_REACHABLE;
 		}
 
 		// background call, do not show waiting info
@@ -1891,11 +1892,10 @@ public class OpsiServiceNOMPersistenceController {
 		if (clientIds != null && clientIds.length > 0) {
 			callParameters = new Object[] { clientIds };
 		}
-		String methodname = "hostControl_getActiveSessions";
 
+		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
 		Map<String, Object> result0 = exec.getResponses(exec
 				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
 
@@ -1909,7 +1909,7 @@ public class OpsiServiceNOMPersistenceController {
 					} else {
 						value.append(" (opsi timeout)");
 					}
-				} else if (errorStr.indexOf(methodname) > -1) {
+				} else if (errorStr.indexOf(methodname.toString()) > -1) {
 					value.append("  (" + methodname + " not valid)");
 				} else if (errorStr.indexOf("Name or service not known") > -1) {
 					value.append(" (name or service not known)");
@@ -1958,7 +1958,7 @@ public class OpsiServiceNOMPersistenceController {
 			updates.add(hostUpdateValue);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_updateObjects", new Object[] { updates.toArray() });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { updates.toArray() });
 
 		if (exec.doCall(omc)) {
 			hostUpdates.clear();
@@ -2021,8 +2021,8 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 
 		Map<String, Map<String, String>> result = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
-				new String[] { "id", "parentGroupId", "description" },
+				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
+				"ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" });
 
 		productGroups = result;
@@ -2040,8 +2040,8 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
-				new String[] { "id", "parentGroupId", "description" },
+				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
+				"ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
@@ -2114,7 +2114,8 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, Map<String, String>> mappedRelations =
 
 				exec.getStringMappedObjectsByKey(
-						new OpsiMethodCall("objectToGroup_getObjects", new Object[] { callAttributes, callFilter }),
+						new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
+								new Object[] { callAttributes, callFilter }),
 						"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
 
 		return projectToFunction(mappedRelations, "groupId", memberIdName);
@@ -2130,8 +2131,9 @@ public class OpsiServiceNOMPersistenceController {
 		if (fObject2Groups == null) {
 			Map<String, Map<String, String>> mappedRelations =
 
-					exec.getStringMappedObjectsByKey(new OpsiMethodCall("objectToGroup_getObjects", new String[] {}),
-							"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
+					exec.getStringMappedObjectsByKey(
+							new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
+							new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
 							ClientTree.getTranslationsFromPersistentNames());
 
 			fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
@@ -2159,7 +2161,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { data });
 		return exec.doCall(omc);
 	}
 
@@ -2180,7 +2182,7 @@ public class OpsiServiceNOMPersistenceController {
 			data.add(item);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { data });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { data });
 		return exec.doCall(omc);
 	}
 
@@ -2191,7 +2193,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_create",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
 				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
 
 		return exec.doCall(omc);
@@ -2214,7 +2216,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		boolean result = true;
 		if (!deleteItems.isEmpty()) {
-			OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_deleteObjects",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS,
 					new Object[] { deleteItems.toArray() });
 
 			if (exec.doCall(omc)) {
@@ -2233,7 +2235,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_delete",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE,
 				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
 
 		return exec.doCall(omc);
@@ -2266,7 +2268,7 @@ public class OpsiServiceNOMPersistenceController {
 		String description = newgroup.get("description");
 		String notes = "";
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_createHostGroup",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_HOST_GROUP,
 				new Object[] { id, description, notes, parentId });
 		boolean result = exec.doCall(omc);
 		if (result) {
@@ -2286,7 +2288,7 @@ public class OpsiServiceNOMPersistenceController {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_delete", new String[] { groupId });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_DELETE, new String[] { groupId });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
@@ -2322,7 +2324,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.debug(this, "updateGroup " + parentGroupId);
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_updateObject", new Object[] { updateInfo });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_UPDATE_OBJECT, new Object[] { updateInfo });
 		return exec.doCall(omc);
 	}
 
@@ -2349,7 +2351,8 @@ public class OpsiServiceNOMPersistenceController {
 			map.put("description", description);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("group_createObjects", new Object[] { new Object[] { map } });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_OBJECTS,
+				new Object[] { new Object[] { map } });
 		result = exec.doCall(omc);
 
 		HashSet<String> inNewSetnotInOriSet = new HashSet<>(productSet);
@@ -2381,8 +2384,8 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this, "delete objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
-			result = result
-					&& exec.doCall(new OpsiMethodCall("objectToGroup_deleteObjects", new Object[] { object2Groups }));
+			result = result && exec.doCall(
+					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS, new Object[] { object2Groups }));
 		}
 
 		object2Groups.clear();
@@ -2396,8 +2399,8 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this, "create new objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
-			result = result
-					&& exec.doCall(new OpsiMethodCall("objectToGroup_createObjects", new Object[] { object2Groups }));
+			result = result && exec.doCall(
+					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { object2Groups }));
 		}
 
 		if (result) {
@@ -2446,8 +2449,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
 			return new ArrayList<>();
 		} else if (!hwAuditConf.containsKey("")) {
-			hwAuditConf.put("",
-					exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] {})));
+			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(
+					new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] {})));
 			if (hwAuditConf.get("") == null) {
 				Logging.warning(this, "got no hardware config");
 			}
@@ -2459,8 +2462,8 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale) {
-		return hwAuditConf.computeIfAbsent(locale, s -> exec
-				.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] { locale })));
+		return hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
+				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 	}
 
 	public List<String> getAllHwClassNames() {
@@ -2596,7 +2599,7 @@ public class OpsiServiceNOMPersistenceController {
 			}
 
 			List<Map<String, Object>> softwareAuditOnClients = retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftwareOnClient_getObjects");
+					RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS);
 
 			Logging.info(this,
 					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
@@ -2633,8 +2636,8 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(HOST_KEY, clientId);
 
-		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(
-				new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
@@ -2679,8 +2682,8 @@ public class OpsiServiceNOMPersistenceController {
 		if (relationsAuditHardwareOnHost == null) {
 			Map<String, String> filterMap = new HashMap<>();
 			filterMap.put("state", "1");
-			relationsAuditHardwareOnHost = exec.getListOfMaps(
-					new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { new String[0], filterMap }));
+			relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
+					RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
 		}
 
 		return relationsAuditHardwareOnHost;
@@ -3016,7 +3019,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		Logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 		return exec.doCall(omc);
 
@@ -3053,9 +3056,10 @@ public class OpsiServiceNOMPersistenceController {
 
 		try {
 			if (Utils.getMaxLogSize(i) == 0) {
-				s = exec.getStringResult(new OpsiMethodCall("log_read", new String[] { logtype, clientId }));
+				s = exec.getStringResult(
+						new OpsiMethodCall(RPCMethodName.LOG_READ, new String[] { logtype, clientId }));
 			} else {
-				s = exec.getStringResult(new OpsiMethodCall("log_read",
+				s = exec.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ,
 						new String[] { logtype, clientId, String.valueOf(Utils.getMaxLogSize(i)) }));
 			}
 
@@ -3092,7 +3096,7 @@ public class OpsiServiceNOMPersistenceController {
 	public List<Map<String, Object>> getAllProducts() {
 		String callReturnType = "dict";
 		Map<String, String> callFilter = new HashMap<>();
-		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
 				new Object[] { callReturnType, callFilter });
 		return exec.getListOfMaps(omc);
 	}
@@ -3102,7 +3106,7 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("depotId", depotId);
 
-		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
 				new Object[] { callReturnType, callFilter });
 		List<Map<String, Object>> result = exec.getListOfMaps(omc);
 
@@ -3115,7 +3119,7 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("depotId", depotId);
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
 				new Object[] { callReturnType, callFilter });
 		List<Map<String, Object>> result = exec.getListOfMaps(omc);
 
@@ -3128,7 +3132,7 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("depotId", depotId);
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
-		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
 				new Object[] { callReturnType, callFilter });
 		List<Map<String, Object>> result = exec.getListOfMaps(omc);
 
@@ -3142,8 +3146,8 @@ public class OpsiServiceNOMPersistenceController {
 			if (ServerFacade.isOpsi43()) {
 				localbootProductNames = new ArrayList<>(dataStub.getDepot2LocalbootProducts().get(depotId).keySet());
 			} else {
-				Map<String, List<String>> productOrderingResult = exec
-						.getMapOfStringLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
+				Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
+						new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
 
 				List<String> sortedProducts = productOrderingResult.get("sorted");
 				if (sortedProducts == null) {
@@ -3386,8 +3390,8 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
 
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -3407,8 +3411,9 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		String methodName = ServerFacade.isOpsi43() && attributes.length != 0 ? "productOnClient_getObjectsWithSequence"
-				: "productOnClient_getObjects";
+		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		List<Map<String, Object>> productOnClients = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
@@ -3445,8 +3450,8 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall("productOnClient_getObjects", new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -3505,11 +3510,9 @@ public class OpsiServiceNOMPersistenceController {
 
 		if (updateItems != null && !updateItems.isEmpty()) {
 			Logging.info(this, "updateProductOnClients  updateItems.size " + updateItems.size());
-
-			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_updateObjects", new Object[] { updateItems });
-
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_UPDATE_OBJECTS,
+					new Object[] { updateItems });
 			result = exec.doCall(omc);
-
 			// at any rate
 			updateItems.clear();
 		}
@@ -3591,7 +3594,7 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "resetProducts productItems.size " + productItems.size());
 
 		if (!productItems.isEmpty()) {
-			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_deleteObjects",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_DELETE_OBJECTS,
 					new Object[] { productItems.toArray() });
 
 			result = exec.doCall(omc);
@@ -3599,7 +3602,7 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.debug(this, "resetProducts result " + result);
 
 			if (result && withDependencies) {
-				omc = new OpsiMethodCall("productPropertyState_delete",
+				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE,
 						new Object[] { productItems.stream().map(p -> p.get("productId")).toArray(), "*",
 								productItems.stream().map(p -> p.get("clientId")).toArray() });
 
@@ -3616,7 +3619,7 @@ public class OpsiServiceNOMPersistenceController {
 		String[] callAttributes = new String[] {};
 		HashMap<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientIds);
-		return retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects");
+		return retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS);
 	}
 
 	public void retrieveProductDependencies() {
@@ -3633,14 +3636,16 @@ public class OpsiServiceNOMPersistenceController {
 		HashMap<String, Object> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		callFilter.put("clientId", clientId);
-		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects"));
+		return new ArrayList<>(
+				retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS));
 	}
 
 	public List<Map<String, Object>> getProductInfos(String clientId) {
 		String[] callAttributes = new String[] {};
 		HashMap<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientId);
-		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects"));
+		return new ArrayList<>(
+				retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS));
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStates() {
@@ -3738,7 +3743,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		Logging.info(this, "get clients connected with messagebus");
-		OpsiMethodCall omc = new OpsiMethodCall("host_getMessagebusConnectedIds", new Object[] {});
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
 
 		return new HashSet<>(exec.getStringListResult(omc));
 	}
@@ -3747,14 +3752,14 @@ public class OpsiServiceNOMPersistenceController {
 		return productHavingClientSpecificProperties.get(productname);
 	}
 
-	public List<Map<String, Object>> retrieveListOfMapsNOM(String methodName) {
+	public List<Map<String, Object>> retrieveListOfMapsNOM(RPCMethodName methodName) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
 	public List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter,
-			String methodName) {
+			RPCMethodName methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
@@ -3762,13 +3767,13 @@ public class OpsiServiceNOMPersistenceController {
 		return retrieved;
 	}
 
-	public List<Map<String, Object>> retrieveListOfMapsNOM(String methodName, Object[] data) {
+	public List<Map<String, Object>> retrieveListOfMapsNOM(RPCMethodName methodName, Object[] data) {
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(new OpsiMethodCall(methodName, data));
 		Logging.debug(this, "retrieveListOfMapsNOM: " + retrieved);
 		return retrieved;
 	}
 
-	public Map<String, Object> retrieveMapNOM(String methodName, Object[] data) {
+	public Map<String, Object> retrieveMapNOM(RPCMethodName methodName, Object[] data) {
 		Map<String, Object> retrieved = exec.getMapResult(new OpsiMethodCall(methodName, data));
 		Logging.debug(this, "retrieveMapNOM: " + retrieved);
 		return retrieved;
@@ -3791,7 +3796,7 @@ public class OpsiServiceNOMPersistenceController {
 		callFilter.put("productId", product);
 		callFilter.put("propertyId", property);
 		List<Map<String, Object>> properties = retrieveListOfMapsNOM(callAttributes, callFilter,
-				"productPropertyState_getObjects");
+				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS);
 
 		Set<String> resultSet = new HashSet<>();
 
@@ -4140,13 +4145,15 @@ public class OpsiServiceNOMPersistenceController {
 			return;
 		}
 
-		if (updateCollection != null && !updateCollection.isEmpty() && exec
-				.doCall(new OpsiMethodCall("productPropertyState_updateObjects", new Object[] { updateCollection }))) {
+		if (updateCollection != null && !updateCollection.isEmpty()
+				&& exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_UPDATE_OBJECTS,
+						new Object[] { updateCollection }))) {
 			updateCollection.clear();
 		}
 
-		if (deleteCollection != null && !deleteCollection.isEmpty() && exec
-				.doCall(new OpsiMethodCall("productPropertyState_deleteObjects", new Object[] { deleteCollection }))) {
+		if (deleteCollection != null && !deleteCollection.isEmpty()
+				&& exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE_OBJECTS,
+						new Object[] { deleteCollection }))) {
 			deleteCollection.clear();
 		}
 	}
@@ -4337,9 +4344,10 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	// lazy initializing
-	private List<String> getMethodSignature(String methodname) {
+	private List<String> getMethodSignature(RPCMethodName methodname) {
 		if (mapOfMethodSignatures == null) {
-			List<Object> methodsList = exec.getListResult(new OpsiMethodCall("backend_getInterface", new Object[] {}));
+			List<Object> methodsList = exec
+					.getListResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_INTERFACE, new Object[] {}));
 
 			if (!methodsList.isEmpty()) {
 				mapOfMethodSignatures = new HashMap<>();
@@ -4373,11 +4381,11 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
 
-		if (mapOfMethodSignatures.get(methodname) == null) {
+		if (mapOfMethodSignatures.get(methodname.toString()) == null) {
 			return NONE_LIST;
 		}
 
-		return mapOfMethodSignatures.get(methodname);
+		return mapOfMethodSignatures.get(methodname.toString());
 	}
 
 	// Will not be called in opsi 4.3 (or later) because we don't need backend-infos any more
@@ -4391,7 +4399,7 @@ public class OpsiServiceNOMPersistenceController {
 		String fontSizeSmall = "8px";
 		// are not evaluated at this moment
 
-		OpsiMethodCall omc = new OpsiMethodCall("getBackendInfos_listOfHashes", new String[] {});
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_BACKEND_INFOS_LIST_OF_HASHES, new String[] {});
 
 		List<Object> list = exec.getListResult(omc);
 
@@ -4528,7 +4536,7 @@ public class OpsiServiceNOMPersistenceController {
 				// metaConfig for wan configuration is rebuilt in
 				// getWANConfigOptions
 
-				List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM("config_getObjects");
+				List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(RPCMethodName.CONFIG_GET_OBJECTS);
 
 				Logging.info(this, "configOptions retrieved ");
 
@@ -4597,7 +4605,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.info(this, "{ole deleteItems " + deleteItems.size());
 
 			if (!deleteItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects", new Object[] { deleteItems.toArray() });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+						new Object[] { deleteItems.toArray() });
 
 				if (exec.doCall(omc)) {
 					deleteItems.clear();
@@ -4635,7 +4644,8 @@ public class OpsiServiceNOMPersistenceController {
 		List<Map<String, Object>> jsonObjects = new ArrayList<>();
 		jsonObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects", new Object[] { jsonObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+				new Object[] { jsonObjects });
 
 		return exec.doCall(omc);
 	}
@@ -4740,7 +4750,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		hostMaps.add(corrected);
 
-		exec.doCall(new OpsiMethodCall("host_createObjects", new Object[] { hostMaps }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { hostMaps }));
 	}
 
 	// collect config state updates
@@ -4851,7 +4861,7 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
 			// not used
 			if (!deleteConfigStateItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("configState_deleteObjects",
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
 						new Object[] { deleteConfigStateItems.toArray() });
 
 				if (exec.doCall(omc)) {
@@ -4861,7 +4871,7 @@ public class OpsiServiceNOMPersistenceController {
 			}
 
 			List<Object> existingConfigIds = exec
-					.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
+					.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
 			Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
 
 			Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
@@ -4876,7 +4886,8 @@ public class OpsiServiceNOMPersistenceController {
 			}
 
 			if (!createItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_createObjects", new Object[] { createItems.toArray() });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
+						new Object[] { createItems.toArray() });
 				exec.doCall(omc);
 				configsChanged = true;
 			}
@@ -4899,13 +4910,14 @@ public class OpsiServiceNOMPersistenceController {
 
 			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
 			if (!callsConfigCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigCollection }));
+				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
+						new Object[] { callsConfigCollection }));
 			}
 
 			// do call
 
 			// now we can set the values and clear the collected update items
-			exec.doCall(new OpsiMethodCall("configState_updateObjects",
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
 					new Object[] { callsConfigName2ConfigValueCollection }));
 
 			// at any rate:
@@ -5018,7 +5030,7 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
 
 			List<Object> existingConfigIds = exec
-					.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
+					.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
 
 			Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
 
@@ -5035,7 +5047,8 @@ public class OpsiServiceNOMPersistenceController {
 			}
 
 			if (!createItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_createObjects", new Object[] { createItems.toArray() });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
+						new Object[] { createItems.toArray() });
 				exec.doCall(omc);
 			}
 
@@ -5063,7 +5076,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigDeleteCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_deleteObjects", new Object[] { callsConfigDeleteCollection }));
+				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+						new Object[] { callsConfigDeleteCollection }));
 				configOptionsRequestRefresh();
 				// because of referential integrity
 				hostConfigsRequestRefresh();
@@ -5072,7 +5086,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigUpdateCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall("config_updateObjects", new Object[] { callsConfigUpdateCollection }));
+				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
+						new Object[] { callsConfigUpdateCollection }));
 				configOptionsRequestRefresh();
 			}
 
@@ -5105,7 +5120,7 @@ public class OpsiServiceNOMPersistenceController {
 	private void retrieveOpsiDefaultDomain() {
 		if (opsiDefaultDomain == null) {
 			Object[] params = new Object[] {};
-			opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall("getDomain", params));
+			opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN, params));
 		}
 	}
 
@@ -5175,7 +5190,7 @@ public class OpsiServiceNOMPersistenceController {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		readyObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -5249,8 +5264,8 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this, "editLicenceContract " + licenseContractId);
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("licenseContract_create", new String[] { licenseContractId, "",
-					notes, partner, conclusionDate, notificationDate, expirationDate });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_CREATE, new String[] {
+					licenseContractId, "", notes, partner, conclusionDate, notificationDate, expirationDate });
 
 			// the method gives the first letter instead of the complete string as return
 			// value, therefore we set it in a shortcut:
@@ -5273,7 +5288,8 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("licenseContract_delete", new String[] { licenseContractId });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_DELETE,
+					new String[] { licenseContractId });
 			return exec.doCall(omc);
 		}
 
@@ -5289,7 +5305,8 @@ public class OpsiServiceNOMPersistenceController {
 		String result = "";
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("licensePool_create", new String[] { licensePoolId, description });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_POOL_CREATE,
+					new String[] { licensePoolId, description });
 
 			if (exec.doCall(omc)) {
 				result = licensePoolId;
@@ -5310,7 +5327,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		if (withLicenceManagement) {
 			// does not get reach into the crucial data structures
-			OpsiMethodCall omc = new OpsiMethodCall("licensePool_delete", new Object[] { licensePoolId });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_POOL_DELETE, new Object[] { licensePoolId });
 			return exec.doCall(omc);
 			// comes too late
 		}
@@ -5339,20 +5356,19 @@ public class OpsiServiceNOMPersistenceController {
 		String result = "";
 
 		if (withLicenceManagement) {
-			String methodName = "softwareLicense_";
-
+			RPCMethodName methodName = null;
 			switch (licenceType) {
 			case LicenceEntry.VOLUME:
-				methodName = methodName + "createVolume";
+				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
 				break;
 			case LicenceEntry.OEM:
-				methodName = methodName + "createOEM";
+				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
 				break;
 			case LicenceEntry.CONCURRENT:
-				methodName = methodName + "createConcurrent";
+				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
 				break;
 			case LicenceEntry.RETAIL:
-				methodName = methodName + "createRetail";
+				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
 				break;
 			default:
 				Logging.notice(this, "encountered UNKNOWN license type");
@@ -5392,7 +5408,8 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("softwareLicense_delete", new Object[] { softwareLicenseId });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE,
+					new Object[] { softwareLicenseId });
 			return exec.doCall(omc);
 		}
 
@@ -5406,8 +5423,9 @@ public class OpsiServiceNOMPersistenceController {
 		if (withLicenceManagement) {
 			List<String> callAttributes = new ArrayList<>();
 			Map<String, Object> callFilter = new HashMap<>();
-			List<Map<String, Object>> softwareL2LPools = exec.getListOfMaps(new OpsiMethodCall(
-					"softwareLicenseToLicensePool_getObjects", new Object[] { callAttributes, callFilter }));
+			List<Map<String, Object>> softwareL2LPools = exec
+					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
+							new Object[] { callAttributes, callFilter }));
 
 			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
 				softwareL2LPool.remove("ident");
@@ -5428,7 +5446,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseToLicensePool_create",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
 			if (!exec.doCall(omc)) {
@@ -5446,7 +5464,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseFromLicensePool_delete",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_FROM_LICENSE_POOL_DELETE,
 					new String[] { softwareLicenseId, licensePoolId });
 
 			return exec.doCall(omc);
@@ -5491,7 +5509,8 @@ public class OpsiServiceNOMPersistenceController {
 			licensePoolProductIds.add(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			if (exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }))) {
+			if (exec.doCall(
+					new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, new Object[] { licensePool }))) {
 				result = licensePoolId;
 			} else {
 				Logging.error(this, "could not update product " + productId + " to licensepool " + licensePoolId);
@@ -5514,7 +5533,8 @@ public class OpsiServiceNOMPersistenceController {
 			licensePoolProductIds.remove(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			return exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
+			return exec
+					.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, new Object[] { licensePool }));
 		}
 
 		return false;
@@ -5524,9 +5544,8 @@ public class OpsiServiceNOMPersistenceController {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", licensePoolId);
-		return exec
-				.getListOfMaps(
-						new OpsiMethodCall("licensePool_getObjects", new Object[] { callAttributes, callFilter }))
+		return exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.LICENSE_POOL_GET_OBJECTS, new Object[] { callAttributes, callFilter }))
 				.get(0);
 	}
 
@@ -5681,7 +5700,7 @@ public class OpsiServiceNOMPersistenceController {
 				deleteItems.add(item);
 			}
 
-			OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_deleteObjects",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
 					new Object[] { deleteItems.toArray() });
 			result = exec.doCall(omc);
 
@@ -5759,7 +5778,7 @@ public class OpsiServiceNOMPersistenceController {
 				Logging.info(this, "deleteItems " + deleteItems);
 
 				if (!deleteItems.isEmpty()) {
-					OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_deleteObjects",
+					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
 							new Object[] { deleteItems.toArray() });
 					result = exec.doCall(omc);
 				}
@@ -5786,7 +5805,7 @@ public class OpsiServiceNOMPersistenceController {
 
 			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
 
-			OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_createObjects",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
 					new Object[] { createItems.toArray() });
 
 			result = exec.doCall(omc);
@@ -5866,7 +5885,7 @@ public class OpsiServiceNOMPersistenceController {
 
 				readyObjects.add(item);
 
-				OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_createObjects",
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
 						new Object[] { readyObjects }
 
 				);
@@ -6182,7 +6201,7 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, Object> resultMap = null;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc0 = new OpsiMethodCall("licenseOnClient_getOrCreateObject",
+			OpsiMethodCall omc0 = new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT,
 					new String[] { hostId, licensePoolId });
 
 			resultMap = exec.getMapResult(omc0);
@@ -6206,7 +6225,7 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, Object> resultMap = null;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_create",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_CREATE,
 					new String[] { softwareLicenseId, licensePoolId, hostId, licenseKey, notes });
 
 			resultMap = exec.getMapResult(omc);
@@ -6268,7 +6287,8 @@ public class OpsiServiceNOMPersistenceController {
 			jsonPreparedList.add(item.getNOMobject());
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_deleteObjects", new Object[] { jsonPreparedList });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE_OBJECTS,
+				new Object[] { jsonPreparedList });
 
 		result = exec.doCall(omc);
 
@@ -6299,7 +6319,7 @@ public class OpsiServiceNOMPersistenceController {
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_delete",
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE,
 					new String[] { softwareLicenseId, licensePoolId, hostId });
 
 			result = exec.doCall(omc);
@@ -6360,7 +6380,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6394,7 +6414,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		readyObjects.add(itemRole);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 		exec.doCall(omc);
 
@@ -6519,7 +6539,7 @@ public class OpsiServiceNOMPersistenceController {
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
 		readyObjects.add(item);
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects", new Object[] { readyObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, new Object[] { readyObjects });
 
 		exec.doCall(omc);
 		savedSearches.remove(name);
@@ -6537,7 +6557,7 @@ public class OpsiServiceNOMPersistenceController {
 				SavedSearch.CONFIG_KEY + "." + ob.getName() + "." + SavedSearch.DESCRIPTION_KEY, ob.getDescription(),
 				"", true));
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 		exec.doCall(omc);
 	}
@@ -6586,7 +6606,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
 
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
 
 		exec.doCall(omc);
 
@@ -6680,7 +6700,7 @@ public class OpsiServiceNOMPersistenceController {
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { item });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
 
 			exec.doCall(omc);
 		} else {
@@ -7251,7 +7271,7 @@ public class OpsiServiceNOMPersistenceController {
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { readyObjects });
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 			exec.doCall(omc);
 		} else {
@@ -7303,7 +7323,8 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
-			exec.doCall(new OpsiMethodCall("config_deleteObjects", new Object[] { defaultUserConfigsObsolete }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+					new Object[] { defaultUserConfigsObsolete }));
 		}
 
 		return true;
@@ -7380,7 +7401,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	private void retrieveIsOpsiUserAdmin() {
-		OpsiMethodCall omc = new OpsiMethodCall("accessControl_userIsAdmin", new Object[] {});
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN, new Object[] {});
 
 		Map<String, Object> json = exec.retrieveResponse(omc);
 
@@ -7421,7 +7442,7 @@ public class OpsiServiceNOMPersistenceController {
 			return opsiInformation;
 		}
 
-		String methodName = "backend_info";
+		RPCMethodName methodName = RPCMethodName.BACKEND_INFO;
 
 		if (ServerFacade.isOpsi43()) {
 			methodName = BACKEND_LICENSING_INFO_METHOD_NAME;
@@ -8025,7 +8046,7 @@ public class OpsiServiceNOMPersistenceController {
 	 * @param method name
 	 * @return True if exists
 	 */
-	public boolean checkSSHCommandMethod(String method) {
+	public boolean checkSSHCommandMethod(RPCMethodName method) {
 		// method does not exist before opsi 3.4
 		if (getMethodSignature(method) != NONE_LIST) {
 			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
@@ -8078,8 +8099,8 @@ public class OpsiServiceNOMPersistenceController {
 	public List<Map<String, Object>> retrieveCommandList() {
 		Logging.info(this, "retrieveCommandList ");
 
-		List<Map<String, Object>> sshCommands = exec.getListOfMaps(
-				new OpsiMethodCall("SSHCommand_getObjects", new Object[] { /* callAttributes, callFilter */ }));
+		List<Map<String, Object>> sshCommands = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] { /* callAttributes, callFilter */ }));
 		Logging.debug(this, "retrieveCommandList commands " + sshCommands);
 		return sshCommands;
 	}
@@ -8091,7 +8112,7 @@ public class OpsiServiceNOMPersistenceController {
 	 * @param jsonObjects to do sth
 	 * @return result true if everything is ok
 	 */
-	private boolean doActionSSHCommand(String method, List<Object> jsonObjects) {
+	private boolean doActionSSHCommand(RPCMethodName method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
 		if (globalReadOnly) {
 			return false;
@@ -8114,7 +8135,7 @@ public class OpsiServiceNOMPersistenceController {
 		if (globalReadOnly) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall("SSHCommand_deleteObjects", new Object[] { jsonObjects });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects });
 		boolean result = exec.doCall(omc);
 		Logging.info(this, "deleteSSHCommand result " + result);
 		return result;
@@ -8127,7 +8148,7 @@ public class OpsiServiceNOMPersistenceController {
 	 * @return result true if successfull
 	 */
 	public boolean createSSHCommand(List<Object> jsonObjects) {
-		return doActionSSHCommand("SSHCommand_createObjects", jsonObjects);
+		return doActionSSHCommand(RPCMethodName.SSH_COMMAND_CREATE_OBJECTS, jsonObjects);
 	}
 
 	/**
@@ -8137,7 +8158,7 @@ public class OpsiServiceNOMPersistenceController {
 	 * @return result true if successfull
 	 */
 	public boolean updateSSHCommand(List<Object> jsonObjects) {
-		return doActionSSHCommand("SSHCommand_updateObjects", jsonObjects);
+		return doActionSSHCommand(RPCMethodName.SSH_COMMAND_UPDATE_OBJECTS, jsonObjects);
 	}
 
 	public static String getConfigedWorkbenchDefaultValue() {

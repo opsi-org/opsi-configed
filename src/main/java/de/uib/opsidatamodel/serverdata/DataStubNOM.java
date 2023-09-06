@@ -163,7 +163,7 @@ public class DataStubNOM {
 		Logging.info(this, "test, query " + query);
 
 		result = persistenceController.getExecutioner()
-				.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
+				.doCall(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));
 
 		Logging.info(this, "test result " + result);
 
@@ -208,7 +208,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> retrievedList = persistenceController.retrieveListOfMapsNOM(callAttributes,
-					callFilter, "product_getObjects");
+					callFilter, RPCMethodName.PRODUCT_GET_OBJECTS);
 
 			product2versionInfo2infos = new HashMap<>();
 
@@ -284,7 +284,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> packages = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"productOnDepot_getObjects");
+					RPCMethodName.PRODUCT_ON_DEPOT_GET_OBJECTS);
 
 			depot2LocalbootProducts = new Object2Product2VersionList();
 			depot2NetbootProducts = new Object2Product2VersionList();
@@ -363,7 +363,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(callAttributes,
-					callFilter, "productProperty_getObjects");
+					callFilter, RPCMethodName.PRODUCT_PROPERTY_GET_OBJECTS);
 
 			Iterator<Map<String, Object>> iter = retrieved.iterator();
 
@@ -432,7 +432,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> retrievedList = persistenceController.retrieveListOfMapsNOM(callAttributes,
-					callFilter, "productDependency_getObjects");
+					callFilter, RPCMethodName.PRODUCT_DEPENDENCY_GET_OBJECTS);
 
 			for (Map<String, Object> dependencyItem : retrievedList) {
 				String productId = "" + dependencyItem.get(OpsiPackage.DB_KEY_PRODUCT_ID);
@@ -542,7 +542,7 @@ public class DataStubNOM {
 			callFilter.put("objectId", newClients);
 
 			result = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"productPropertyState_getObjects");
+					RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS);
 		}
 
 		return result;
@@ -632,7 +632,7 @@ public class DataStubNOM {
 			Map<String, Object> callFilter = new HashMap<>();
 
 			List<Map<String, Object>> li = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getObjects");
+					RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS);
 
 			Iterator<Map<String, Object>> iter = li.iterator();
 
@@ -786,8 +786,8 @@ public class DataStubNOM {
 					callFilter.put("clientId", clientListForCall);
 				}
 
-				List<Map<String, Object>> softwareAuditOnClients = persistenceController
-						.retrieveListOfMapsNOM(callAttributes, callFilter, "auditSoftwareOnClient_getObjects");
+				List<Map<String, Object>> softwareAuditOnClients = persistenceController.retrieveListOfMapsNOM(
+						callAttributes, callFilter, RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS);
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size "
 						+ softwareAuditOnClients.size());
@@ -828,7 +828,7 @@ public class DataStubNOM {
 
 		List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(
 				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap<>(), // callFilter
-				"auditSoftwareToLicensePool_getObjects");
+				RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS);
 
 		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool();
 
@@ -863,7 +863,7 @@ public class DataStubNOM {
 		Map<String, Object> callFilter = new HashMap<>();
 
 		List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(callAttributes, callFilter,
-				"configState_getObjects");
+				RPCMethodName.CONFIG_STATE_GET_OBJECTS);
 		hostConfigs = new HashMap<>();
 
 		for (Map<String, Object> listElement : retrieved) {
@@ -913,7 +913,7 @@ public class DataStubNOM {
 			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
 
 			List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(attributes,
-					new HashMap<>(), "licensePool_getObjects");
+					new HashMap<>(), RPCMethodName.LICENSE_POOL_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicencepoolEntry entry = new LicencepoolEntry(importedEntry);
@@ -953,7 +953,7 @@ public class DataStubNOM {
 		if (persistenceController.isWithLicenceManagement()) {
 
 			List<Map<String, Object>> retrieved = persistenceController
-					.retrieveListOfMapsNOM("licenseContract_getObjects");
+					.retrieveListOfMapsNOM(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenceContractEntry entry = new LicenceContractEntry(importedEntry);
@@ -993,7 +993,7 @@ public class DataStubNOM {
 		if (persistenceController.isWithLicenceManagement()) {
 
 			List<Map<String, Object>> retrieved = persistenceController
-					.retrieveListOfMapsNOM("softwareLicense_getObjects");
+					.retrieveListOfMapsNOM(RPCMethodName.SOFTWARE_LICENSE_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenceEntry entry = new LicenceEntry(importedEntry);
@@ -1023,7 +1023,7 @@ public class DataStubNOM {
 		if (persistenceController.isWithLicenceManagement()) {
 
 			List<Map<String, Object>> retrieved = persistenceController
-					.retrieveListOfMapsNOM("softwareLicenseToLicensePool_getObjects");
+					.retrieveListOfMapsNOM(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenceUsableForEntry entry = LicenceUsableForEntry.produceFrom(importedEntry);
@@ -1054,7 +1054,7 @@ public class DataStubNOM {
 		if (persistenceController.isWithLicenceManagement()) {
 
 			List<Map<String, Object>> retrieved = persistenceController
-					.retrieveListOfMapsNOM("licenseOnClient_getObjects");
+					.retrieveListOfMapsNOM(RPCMethodName.LICENSE_ON_CLIENT_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenceUsageEntry entry = new LicenceUsageEntry(importedEntry);
@@ -1084,7 +1084,7 @@ public class DataStubNOM {
 
 		List<Map<String, Object>> retrieved = persistenceController.retrieveListOfMapsNOM(
 				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap<>(), // callFilter
-				"licensePool_getObjects");
+				RPCMethodName.LICENSE_POOL_GET_OBJECTS);
 		// integrates two database calls
 
 		licencePoolXOpsiProduct = new LicencePoolXOpsiProduct();
@@ -1263,7 +1263,7 @@ public class DataStubNOM {
 		Logging.info(this, "retrieveClient2HwRows, query " + query);
 
 		List<List<String>> rows = persistenceController.getExecutioner()
-				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
+				.getListOfStringLists(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query })
 
 				);
 		Logging.info(this, "retrieveClient2HwRows, finished a request");
@@ -1355,7 +1355,7 @@ public class DataStubNOM {
 	}
 
 	private void retrieveHealthData() {
-		healthData = persistenceController.retrieveListOfMapsNOM("service_healthCheck", new Object[0]);
+		healthData = persistenceController.retrieveListOfMapsNOM(RPCMethodName.SERVICE_HEALTH_CHECK, new Object[0]);
 	}
 
 	public Map<String, Object> getDiagnosticData() {
@@ -1364,6 +1364,6 @@ public class DataStubNOM {
 	}
 
 	private void retrieveDiagnosticData() {
-		diagnosticData = persistenceController.retrieveMapNOM("service_getDiagnosticData", new Object[0]);
+		diagnosticData = persistenceController.retrieveMapNOM(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA, new Object[0]);
 	}
 }

@@ -31,6 +31,7 @@ import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -490,7 +491,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		} else {
 
 			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { newData });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });
 
 				persistenceController.getExecutioner().doCall(omc);
 			}
