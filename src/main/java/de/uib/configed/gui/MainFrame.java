@@ -1982,7 +1982,9 @@ public class MainFrame extends JFrame
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(labelHostID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// DESCRIPTION		
 				.addGap(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
