@@ -13,16 +13,16 @@ import java.util.function.Consumer;
 
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
-import de.uib.messagebus.event.WebSocketEvents;
+import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class TerminalEventHandler implements EventHandler {
 	Map<String, Consumer<Map<String, Object>>> eventHandlers = new HashMap<>();
 
 	public TerminalEventHandler() {
-		eventHandlers.put(WebSocketEvents.TERMINAL_DATA_READ.toString(), TerminalEventHandler::onTerminalDataRead);
-		eventHandlers.put(WebSocketEvents.TERMINAL_OPEN_EVENT.toString(), TerminalEventHandler::onTerminalOpenEvent);
-		eventHandlers.put(WebSocketEvents.TERMINAL_CLOSE_EVENT.toString(), eventData -> Terminal.getInstance().close());
+		eventHandlers.put(WebSocketEvent.TERMINAL_DATA_READ.toString(), TerminalEventHandler::onTerminalDataRead);
+		eventHandlers.put(WebSocketEvent.TERMINAL_OPEN_EVENT.toString(), TerminalEventHandler::onTerminalOpenEvent);
+		eventHandlers.put(WebSocketEvent.TERMINAL_CLOSE_EVENT.toString(), eventData -> Terminal.getInstance().close());
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.messagebus.event.EventDispatcher;
-import de.uib.messagebus.event.WebSocketEvents;
+import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.messagebus.event.handler.FileEventHandler;
 import de.uib.messagebus.event.handler.HostEventHandler;
 import de.uib.messagebus.event.handler.ProductOnClientEventHandler;
@@ -179,36 +179,36 @@ public class Messagebus implements MessagebusListener {
 	private void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
-		channels.add(WebSocketEvents.HOST_CONNECTED.asChannelEvent());
-		channels.add(WebSocketEvents.HOST_DISCONNECTED.asChannelEvent());
-		channels.add(WebSocketEvents.HOST_CREATED.asChannelEvent());
-		channels.add(WebSocketEvents.HOST_DELETED.asChannelEvent());
+		channels.add(WebSocketEvent.HOST_CONNECTED.asChannelEvent());
+		channels.add(WebSocketEvent.HOST_DISCONNECTED.asChannelEvent());
+		channels.add(WebSocketEvent.HOST_CREATED.asChannelEvent());
+		channels.add(WebSocketEvent.HOST_DELETED.asChannelEvent());
 
-		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.asChannelEvent());
-		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.asChannelEvent());
-		channels.add(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.asChannelEvent());
+		channels.add(WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.asChannelEvent());
+		channels.add(WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.asChannelEvent());
+		channels.add(WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.asChannelEvent());
 
 		makeChannelSubscriptionRequest(channels);
 	}
 
 	private void registerEventHandlers() {
-		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_OPEN_EVENT.toString(), new TerminalEventHandler());
-		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_CLOSE_EVENT.toString(), new TerminalEventHandler());
-		eventDispatcher.registerHandler(WebSocketEvents.TERMINAL_DATA_READ.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_OPEN_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_CLOSE_EVENT.toString(), new TerminalEventHandler());
+		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_DATA_READ.toString(), new TerminalEventHandler());
 
-		eventDispatcher.registerHandler(WebSocketEvents.FILE_UPLOAD_RESULT.toString(), new FileEventHandler(this));
+		eventDispatcher.registerHandler(WebSocketEvent.FILE_UPLOAD_RESULT.toString(), new FileEventHandler(this));
 
-		eventDispatcher.registerHandler(WebSocketEvents.HOST_CONNECTED.toString(), new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvents.HOST_DISCONNECTED.toString(),
+		eventDispatcher.registerHandler(WebSocketEvent.HOST_CONNECTED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvent.HOST_DISCONNECTED.toString(),
 				new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvents.HOST_CREATED.toString(), new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvents.HOST_DELETED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvent.HOST_CREATED.toString(), new HostEventHandler(configedMain));
+		eventDispatcher.registerHandler(WebSocketEvent.HOST_DELETED.toString(), new HostEventHandler(configedMain));
 
-		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.toString(),
+		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString(),
 				new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.toString(),
+		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString(),
 				new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.toString(),
+		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString(),
 				new ProductOnClientEventHandler(configedMain));
 	}
 
@@ -357,9 +357,9 @@ public class Messagebus implements MessagebusListener {
 	public void onMessageReceived(Map<String, Object> message) {
 		Logging.trace(this, "Messagebus message received: " + message.toString());
 		String type = (String) message.get("type");
-		if (WebSocketEvents.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
+		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
-		} else if (WebSocketEvents.GENERAL_EVENT.toString().equals(type)) {
+		} else if (WebSocketEvent.GENERAL_EVENT.toString().equals(type)) {
 			onEvent(message);
 		} else {
 			eventDispatcher.dispatch(type, message);
@@ -373,6 +373,6 @@ public class Messagebus implements MessagebusListener {
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
 				new TypeReference<Map<String, Object>>() {
 				});
-		eventDispatcher.dispatch((String) message.get(WebSocketEvents.GENERAL_EVENT.toString()), eventData);
+		eventDispatcher.dispatch((String) message.get(WebSocketEvent.GENERAL_EVENT.toString()), eventData);
 	}
 }
