@@ -17,8 +17,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ProductData {
 	private static Map<String, List<String>> products = new HashMap<>();

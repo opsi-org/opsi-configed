@@ -94,9 +94,9 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public final class OpsiDataBackend {

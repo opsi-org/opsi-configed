@@ -40,7 +40,7 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 

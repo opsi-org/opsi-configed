@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.uib.configed.tree.ClientTree;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 

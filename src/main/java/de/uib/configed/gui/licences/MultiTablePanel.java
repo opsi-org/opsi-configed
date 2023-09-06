@@ -7,7 +7,7 @@
 package de.uib.configed.gui.licences;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 
 public class MultiTablePanel extends TabClientAdapter {

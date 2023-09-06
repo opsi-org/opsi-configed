@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ModuleData {
 	private static List<String> modules = new ArrayList<>();

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 
 public class SSHPMInstallPanel extends JPanel {
 	protected boolean isOpen;

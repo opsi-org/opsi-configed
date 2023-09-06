@@ -37,8 +37,8 @@ import de.uib.messagebus.event.handler.TerminalEventHandler;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 

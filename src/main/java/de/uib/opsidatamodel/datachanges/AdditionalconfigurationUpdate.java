@@ -9,8 +9,8 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class AdditionalconfigurationUpdate implements UpdateCommand {
 	private String objectId;

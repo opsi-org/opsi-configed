@@ -23,8 +23,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {

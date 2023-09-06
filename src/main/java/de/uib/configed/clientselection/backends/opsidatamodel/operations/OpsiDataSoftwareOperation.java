@@ -15,8 +15,8 @@ import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSoftwareOperation extends SoftwareOperation implements ExecutableOperation {

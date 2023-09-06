@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;

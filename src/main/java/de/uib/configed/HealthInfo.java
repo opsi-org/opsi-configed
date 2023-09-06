@@ -11,8 +11,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 /**
  * {@link HealthInfo} processes retrieved data from {@code service_healthCheck}

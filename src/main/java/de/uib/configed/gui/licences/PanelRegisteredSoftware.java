@@ -14,7 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 

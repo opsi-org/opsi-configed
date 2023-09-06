@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsidatamodel;
+package de.uib.opsidatamodel.serverdata;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -73,6 +73,10 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.HostGroups;
+import de.uib.opsidatamodel.HostInfoCollections;
+import de.uib.opsidatamodel.RemoteControls;
+import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;

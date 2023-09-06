@@ -59,7 +59,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;

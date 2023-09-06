@@ -16,8 +16,8 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;

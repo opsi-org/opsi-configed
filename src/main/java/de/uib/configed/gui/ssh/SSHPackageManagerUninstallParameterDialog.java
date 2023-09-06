@@ -34,8 +34,8 @@ import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
 

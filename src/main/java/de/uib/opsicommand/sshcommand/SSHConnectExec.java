@@ -19,7 +19,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**

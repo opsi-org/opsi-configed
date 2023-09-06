@@ -14,8 +14,8 @@ import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
 import de.uib.configed.type.licences.LicenceContractEntry;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class LicenseData {
 	private static List<String> licenses = new ArrayList<>();

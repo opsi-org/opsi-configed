@@ -18,8 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {

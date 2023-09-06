@@ -33,14 +33,14 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**

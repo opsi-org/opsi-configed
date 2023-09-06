@@ -15,8 +15,8 @@ import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 

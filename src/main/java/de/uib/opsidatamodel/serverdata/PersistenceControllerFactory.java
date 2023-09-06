@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsidatamodel;
+package de.uib.opsidatamodel.serverdata;
 
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;

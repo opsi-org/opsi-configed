@@ -18,7 +18,7 @@ import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 import utils.Utils;

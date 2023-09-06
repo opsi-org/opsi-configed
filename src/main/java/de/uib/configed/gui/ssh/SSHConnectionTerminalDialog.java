@@ -35,7 +35,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.Autocomplete;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 

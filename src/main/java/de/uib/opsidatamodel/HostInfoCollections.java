@@ -26,6 +26,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**

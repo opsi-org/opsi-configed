@@ -38,7 +38,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import utils.Utils;

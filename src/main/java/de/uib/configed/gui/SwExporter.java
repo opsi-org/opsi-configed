@@ -20,8 +20,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsidatamodel.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SwExporter implements ActionListener {
