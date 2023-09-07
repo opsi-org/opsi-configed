@@ -189,6 +189,7 @@ public class PanelSWInfo extends JPanel {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+								.getVolatileDataRetriever()
 								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);

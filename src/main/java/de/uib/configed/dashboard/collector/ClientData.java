@@ -102,7 +102,7 @@ public final class ClientData {
 		notConnectedClientsByMessagebus.clear();
 
 		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
-				persistenceController.getMessagebusConnectedClients());
+				persistenceController.getVolatileDataRetriever().getMessagebusConnectedClients());
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 		for (String depot : depots) {
 			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()

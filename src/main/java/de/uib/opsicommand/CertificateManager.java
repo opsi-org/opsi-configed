@@ -172,7 +172,8 @@ public final class CertificateManager {
 		List<File> certificateFiles = getCertificates();
 
 		if (!certificateFiles.isEmpty()) {
-			String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
+			String certificateContent = PersistenceControllerFactory.getPersistenceController()
+					.getVolatileDataRetriever().getOpsiCACert();
 			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
 
 			for (File certificateFile : certificateFiles) {

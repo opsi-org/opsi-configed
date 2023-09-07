@@ -82,9 +82,10 @@ public class FGroupActions extends SecondaryFrame {
 	private void setImages() {
 		List<String> imagesCollection = new ArrayList<>();
 
-		imagesCollection.addAll(new TreeSet<>(persistenceController.getCommonProductPropertyValues(associatedClients,
-				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
+		imagesCollection
+				.addAll(new TreeSet<>(persistenceController.getVolatileDataRetriever().getCommonProductPropertyValues(
+						associatedClients, OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}

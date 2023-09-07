@@ -245,7 +245,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// add update to list
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId);
+		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
+				.getProductInfos(productIds, clientId);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
 					POJOReMapper.remap(productInfo, new TypeReference<>() {
@@ -265,7 +266,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public synchronized void updateTable(String clientId) {
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId);
+		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
+				.getProductInfos(clientId);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),

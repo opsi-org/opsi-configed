@@ -454,7 +454,7 @@ public final class OpsiDataBackend {
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			softwareMap = persistenceController.getMapOfProductStatesAndActions(clientNames);
+			softwareMap = persistenceController.getVolatileDataRetriever().getMapOfProductStatesAndActions(clientNames);
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
@@ -626,7 +626,8 @@ public final class OpsiDataBackend {
 			return result;
 		}
 
-		result = persistenceController.getClient2Software(Arrays.stream(clientNames).collect(Collectors.toList()));
+		result = persistenceController.getVolatileDataRetriever()
+				.getClient2Software(Arrays.stream(clientNames).collect(Collectors.toList()));
 
 		return result;
 	}

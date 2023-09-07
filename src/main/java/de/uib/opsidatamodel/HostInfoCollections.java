@@ -142,7 +142,7 @@ public class HostInfoCollections {
 			return;
 		}
 
-		List<Map<String, Object>> opsiHosts = persistenceController.hostRead();
+		List<Map<String, Object>> opsiHosts = persistenceController.getVolatileDataRetriever().hostRead();
 		HostInfo.resetInstancesCount();
 
 		opsiHostNames = new ArrayList<>();

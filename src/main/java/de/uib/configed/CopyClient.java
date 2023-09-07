@@ -109,7 +109,7 @@ public class CopyClient {
 	}
 
 	private void copyProducts() {
-		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist
+		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist.getVolatileDataRetriever()
 				.getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
 
 		if (mapOfProductStatesAndActions.isEmpty()) {

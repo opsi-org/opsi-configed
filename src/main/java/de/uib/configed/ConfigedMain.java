@@ -772,7 +772,7 @@ public class ConfigedMain implements ListSelectionListener {
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
-		connectedHostsByMessagebus = persistenceController.getMessagebusConnectedClients();
+		connectedHostsByMessagebus = persistenceController.getVolatileDataRetriever().getMessagebusConnectedClients();
 
 		if (ServerFacade.isOpsi43()) {
 			initMessagebus();
@@ -2664,7 +2664,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private boolean checkSynchronous(Set<String> depots) {
 
-		if (depots.size() > 1 && !persistenceController.areDepotsSynchronous(depots)) {
+		if (depots.size() > 1 && !persistenceController.getVolatileDataRetriever().areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
@@ -2810,7 +2810,7 @@ public class ConfigedMain implements ListSelectionListener {
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
 			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
-			localbootStatesAndActions = persistenceController
+			localbootStatesAndActions = persistenceController.getVolatileDataRetriever()
 					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
 		}
@@ -2890,7 +2890,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
 			// we reload since at the moment we do not track changes if anyDataChanged
-			netbootStatesAndActions = persistenceController
+			netbootStatesAndActions = persistenceController.getVolatileDataRetriever()
 					.getMapOfNetbootProductStatesAndActions(getSelectedClients());
 			istmForSelectedClientsNetboot = null;
 		}
@@ -3159,7 +3159,8 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			mainFrame.setHardwareInfo(persistenceController.getHardwareInfo(firstSelectedClient));
+			mainFrame.setHardwareInfo(
+					persistenceController.getVolatileDataRetriever().getHardwareInfo(firstSelectedClient));
 		}
 
 		return true;
@@ -4236,9 +4237,10 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this, "thread started");
 
 				if (onlySelectedClients) {
-					sessionInfo.putAll(persistenceController.sessionInfo(getSelectedClients()));
+					sessionInfo
+							.putAll(persistenceController.getVolatileDataRetriever().sessionInfo(getSelectedClients()));
 				} else {
-					sessionInfo = persistenceController.sessionInfo(null);
+					sessionInfo = persistenceController.getVolatileDataRetriever().sessionInfo(null);
 				}
 
 				sessioninfoFinished = true;
@@ -4247,7 +4249,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public String getBackendInfos() {
-		return persistenceController.getBackendInfos();
+		return persistenceController.getVolatileDataRetriever().getBackendInfos();
 	}
 
 	public Map<String, RemoteControl> getRemoteControls() {
@@ -5018,8 +5020,9 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "selectClientsNotCurrentProductInstalled product " + productId + ", " + productVersion
 				+ ", " + packageVersion);
 
-		List<String> clientsToSelect = persistenceController.getClientsWithOtherProductVersion(productId,
-				productVersion, packageVersion, includeClientsWithBrokenInstallation);
+		List<String> clientsToSelect = persistenceController.getVolatileDataRetriever()
+				.getClientsWithOtherProductVersion(productId, productVersion, packageVersion,
+						includeClientsWithBrokenInstallation);
 
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally " + clientsToSelect.size());
 

@@ -8,16 +8,13 @@ package de.uib.opsidatamodel.serverdata;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,7 +27,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
@@ -85,14 +81,12 @@ import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
 import utils.ProductPackageVersionSeparator;
 import utils.Utils;
@@ -451,6 +445,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	private DataUpdater dataUpdater;
 
+	private VolatileDataRetriever volatileDataRetriever;
+
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiServiceNOMPersistenceController(String server, String user, String password) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
@@ -462,12 +458,17 @@ public class OpsiServiceNOMPersistenceController {
 		hostInfoCollections = new HostInfoCollections(this);
 		exec = new ServerFacade(server, user, password);
 		dataUpdater = new DataUpdater(exec);
+		volatileDataRetriever = new VolatileDataRetriever(exec);
 		hwAuditConf = new HashMap<>();
 		dataStub = new DataStubNOM(this);
 	}
 
 	public DataUpdater getDataUpdater() {
 		return dataUpdater;
+	}
+
+	public VolatileDataRetriever getVolatileDataRetriever() {
+		return volatileDataRetriever;
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {
@@ -764,11 +765,6 @@ public class OpsiServiceNOMPersistenceController {
 		return result;
 	}
 
-	public String getOpsiCACert() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_OPSI_CA_CERT, new Object[0]);
-		return exec.getStringResult(omc);
-	}
-
 	public boolean usesMultiFactorAuthentication() {
 		return isMultiFactorAuthenticationEnabled;
 	}
@@ -791,7 +787,6 @@ public class OpsiServiceNOMPersistenceController {
 
 		Map<String, Object> userDetails = result.get(0);
 		String otpSecret = null;
-
 		if (userDetails.containsKey("otpSecret")) {
 			otpSecret = (String) userDetails.get("otpSecret");
 		}
@@ -1027,86 +1022,6 @@ public class OpsiServiceNOMPersistenceController {
 			args = new String[] {};
 		}
 		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
-	}
-
-	public List<Map<String, Object>> hostRead() {
-		String[] callAttributes = new String[] {};
-		Map<?, ?> callFilter = new HashMap<>();
-
-		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
-		Logging.notice(this, "host_getObjects");
-		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
-		timer.stop();
-
-		return opsiHosts;
-	}
-
-	public List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
-			String packageVersion, boolean includeFailedInstallations) {
-		String[] callAttributes = new String[] {};
-
-		HashMap<String, String> callFilter = new HashMap<>();
-		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
-		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-
-		List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(callAttributes, callFilter,
-				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS);
-
-		List<String> result = new ArrayList<>();
-
-		for (Map<String, Object> m : retrievedList) {
-			String client = (String) m.get("clientId");
-			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
-			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
-			boolean hasWrongProductVersion = (!POJOReMapper.equalsNull(clientProductVersion)
-					&& !productVersion.equals(clientProductVersion))
-					|| (!POJOReMapper.equalsNull(clientPackageVersion) && !packageVersion.equals(clientPackageVersion));
-			if ((includeFailedInstallations
-					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState))
-					|| (InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& hasWrongProductVersion)) {
-				Logging.debug("getClientsWithOtherProductVersion hit " + m);
-				result.add(client);
-			}
-		}
-
-		Logging.info(this, "getClientsWithOtherProductVersion globally " + result.size());
-
-		// should be done otherwere by preselection of depots
-
-		return result;
-	}
-
-	public boolean areDepotsSynchronous(Iterable<String> depots) {
-		String lastIdent = null;
-
-		for (String depot : depots) {
-			String callReturnType = "dict";
-			Map<String, String> callFilter = new HashMap<>();
-			callFilter.put("depotId", depot);
-
-			List<Map<String, Object>> products = exec.getListOfMaps(new OpsiMethodCall(
-					RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, new Object[] { callReturnType, callFilter }));
-			List<String> productIdents = new ArrayList<>();
-
-			for (Map<String, Object> product : products) {
-				productIdents.add(product.get("productId") + ";" + product.get("productVersion") + ";"
-						+ product.get("packageVersion"));
-			}
-
-			Collections.sort(productIdents);
-			String ident = String.join("|", productIdents);
-
-			if (lastIdent != null && !ident.equals(lastIdent)) {
-				return false;
-			}
-
-			lastIdent = ident;
-		}
-
-		return true;
 	}
 
 	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
@@ -1885,62 +1800,6 @@ public class OpsiServiceNOMPersistenceController {
 				});
 	}
 
-	public Map<String, String> sessionInfo(String[] clientIds) {
-		Map<String, String> result = new HashMap<>();
-
-		Object[] callParameters = new Object[] {};
-		if (clientIds != null && clientIds.length > 0) {
-			callParameters = new Object[] { clientIds };
-		}
-
-		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> result0 = exec.getResponses(exec
-				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-		for (Entry<String, Object> resultEntry : result0.entrySet()) {
-			StringBuilder value = new StringBuilder();
-
-			if (resultEntry.getValue() instanceof String) {
-				String errorStr = (String) resultEntry.getValue();
-				value = new StringBuilder("no response");
-				if (errorStr.indexOf("Opsi timeout") > -1) {
-					int i = errorStr.indexOf("(");
-					if (i > -1) {
-						value.append("   " + errorStr.substring(i + 1, errorStr.length() - 1));
-					} else {
-						value.append(" (opsi timeout)");
-					}
-				} else if (errorStr.indexOf(methodname.toString()) > -1) {
-					value.append("  (" + methodname + " not valid)");
-				} else if (errorStr.indexOf("Name or service not known") > -1) {
-					value.append(" (name or service not known)");
-				} else {
-					Logging.notice(this, "unexpected output occured in session Info");
-				}
-			} else if (resultEntry.getValue() instanceof List) {
-				List<?> sessionlist = (List<?>) resultEntry.getValue();
-				for (Object element : sessionlist) {
-					Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
-					});
-
-					String username = "" + session.get("UserName");
-					String logondomain = "" + session.get("LogonDomain");
-
-					if (!value.toString().isEmpty()) {
-						value.append("; ");
-					}
-
-					value.append(username + " (" + logondomain + "\\" + username + ")");
-				}
-			} else {
-				Logging.warning(this, "resultEntry's value is neither a String nor a List");
-			}
-
-			result.put(resultEntry.getKey(), value.toString());
-		}
-
-		return result;
-	}
-
 	// executes all updates collected by setHostDescription ...
 	public void updateHosts() {
 		if (globalReadOnly) {
@@ -2067,32 +1926,10 @@ public class OpsiServiceNOMPersistenceController {
 		fProductGroup2Members = null;
 	}
 
-	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
-			String originVar, String imageVar) {
-		Map<String, Set<String>> result = new TreeMap<>();
-
-		Iterator<String> iter = mappedRelation.keySet().iterator();
-
-		while (iter.hasNext()) {
-			String key = iter.next();
-
-			Map<String, String> relation = mappedRelation.get(key);
-			String originValue = relation.get(originVar);
-			String imageValue = relation.get(imageVar);
-			if (imageValue != null) {
-				Set<String> assignedSet = result.computeIfAbsent(originValue, arg -> new TreeSet<>());
-				assignedSet.add(imageValue);
-			}
-		}
-
-		return result;
-	}
-
 	public Map<String, Set<String>> getFGroup2Members() {
 		if (fGroup2Members == null) {
 			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
 		}
-
 		return fGroup2Members;
 	}
 
@@ -2100,25 +1937,7 @@ public class OpsiServiceNOMPersistenceController {
 		if (fProductGroup2Members == null) {
 			fProductGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
 		}
-
 		return fProductGroup2Members;
-	}
-
-	// returns the function that yields for a given groupId all objects which belong
-	// to the group
-	private Map<String, Set<String>> retrieveFGroup2Members(String groupType, String memberIdName) {
-		String[] callAttributes = new String[] {};
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("groupType", groupType);
-
-		Map<String, Map<String, String>> mappedRelations =
-
-				exec.getStringMappedObjectsByKey(
-						new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
-								new Object[] { callAttributes, callFilter }),
-						"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
-
-		return projectToFunction(mappedRelations, "groupId", memberIdName);
 	}
 
 	public void fObject2GroupsRequestRefresh() {
@@ -2129,18 +1948,44 @@ public class OpsiServiceNOMPersistenceController {
 	// client belongs
 	public Map<String, Set<String>> getFObject2Groups() {
 		if (fObject2Groups == null) {
-			Map<String, Map<String, String>> mappedRelations =
-
-					exec.getStringMappedObjectsByKey(
-							new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
-							new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-							ClientTree.getTranslationsFromPersistentNames());
-
+			Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
+					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
+					new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
+					ClientTree.getTranslationsFromPersistentNames());
 			fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
 
 		}
-
 		return fObject2Groups;
+	}
+
+	// returns the function that yields for a given groupId all objects which belong
+	// to the group
+	private Map<String, Set<String>> retrieveFGroup2Members(String groupType, String memberIdName) {
+		String[] callAttributes = new String[] {};
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("groupType", groupType);
+		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
+				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
+						new Object[] { callAttributes, callFilter }),
+				"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
+		return projectToFunction(mappedRelations, "groupId", memberIdName);
+	}
+
+	private Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
+			String originVar, String imageVar) {
+		Map<String, Set<String>> result = new TreeMap<>();
+		Iterator<String> iter = mappedRelation.keySet().iterator();
+		while (iter.hasNext()) {
+			String key = iter.next();
+			Map<String, String> relation = mappedRelation.get(key);
+			String originValue = relation.get(originVar);
+			String imageValue = relation.get(imageVar);
+			if (imageValue != null) {
+				Set<String> assignedSet = result.computeIfAbsent(originValue, arg -> new TreeSet<>());
+				assignedSet.add(imageValue);
+			}
+		}
+		return result;
 	}
 
 	public boolean addHosts2Group(List<String> objectIds, String groupId) {
@@ -2489,56 +2334,6 @@ public class OpsiServiceNOMPersistenceController {
 		dataStub.softwareAuditOnClientsRequestRefresh();
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getClient2Software(List<String> clients) {
-		return retrieveSoftwareAuditOnClients(clients);
-	}
-
-	public void getSoftwareAudit(String clientId) {
-		List<String> clients = new ArrayList<>();
-		clients.add(clientId);
-		List<SWAuditClientEntry> entries = retrieveSoftwareAuditOnClients(clients).get(clientId);
-
-		if (entries == null) {
-			return;
-		}
-
-		for (SWAuditClientEntry entry : entries) {
-			if (entry.getSWid() != null) {
-				int i = entry.getSWid();
-
-				Logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
-				if (i == -1) {
-					Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
-					int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message") + " "
-									+ entry.getSWident()
-									+ Configed.getResourceValue(
-											"PersistenceController.reloadSoftwareInformation.question")
-									+ Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.info"),
-							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.title"),
-							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-					switch (returnedOption) {
-					case JOptionPane.NO_OPTION:
-						break;
-
-					case JOptionPane.YES_OPTION:
-						installedSoftwareInformationRequestRefresh();
-						softwareAuditOnClientsRequestRefresh();
-						return;
-
-					case JOptionPane.CANCEL_OPTION:
-						return;
-
-					default:
-						Logging.warning(this, "no case found for returnedOption in getSoftwareAuditOnce");
-						break;
-					}
-				}
-			}
-		}
-	}
-
 	public String getLastSoftwareAuditModification(Map<String, List<SWAuditClientEntry>> entries, String clientId) {
 		String result = "";
 
@@ -2571,107 +2366,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		return result;
-	}
-
-	public Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
-		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
-
-		final int STEP_SIZE = 100;
-
-		while (!clients.isEmpty()) {
-			List<String> clientListForCall = new ArrayList<>();
-
-			for (int i = 0; i < STEP_SIZE && i < clients.size(); i++) {
-				clientListForCall.add(clients.get(i));
-			}
-
-			clients.removeAll(clientListForCall);
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
-
-			String[] callAttributes = new String[] {};
-			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("state", 1);
-			if (clients != null) {
-				callFilter.put("clientId", clientListForCall);
-			}
-
-			List<Map<String, Object>> softwareAuditOnClients = retrieveListOfMapsNOM(callAttributes, callFilter,
-					RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS);
-
-			Logging.info(this,
-					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
-
-			for (String clientId : clientListForCall) {
-				client2software.put(clientId, new LinkedList<>());
-			}
-
-			for (Map<String, Object> item : softwareAuditOnClients) {
-				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-				String clientId = clientEntry.getClientId();
-
-				if (clientId != null) {
-					List<SWAuditClientEntry> entries = client2software.get(clientId);
-					entries.add(clientEntry);
-				}
-			}
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
-		}
-
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
-
-		return client2software;
-	}
-
-	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {
-		if (clientId == null) {
-			return new HashMap<>();
-		}
-
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put(HOST_KEY, clientId);
-
-		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
-
-		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
-		Map<String, List<Map<String, Object>>> result = new HashMap<>();
-		for (Map<String, Object> hardwareInfo : hardwareInfos) {
-			if (result.containsKey(hardwareInfo.get("hardwareClass"))) {
-				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareInfo.get("hardwareClass"));
-				hardwareClassInfos.add(hardwareInfo);
-			} else {
-				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
-				hardwareClassInfos.add(hardwareInfo);
-				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
-			}
-			Object lastSeenStr = hardwareInfo.get("lastseen");
-			LocalDateTime lastSeen = scanTime;
-			if (lastSeenStr != null) {
-				lastSeen = LocalDateTime.parse(lastSeenStr.toString(), timeFormatter);
-			}
-			if (scanTime.compareTo(lastSeen) < 0) {
-				scanTime = lastSeen;
-			}
-		}
-
-		List<Map<String, Object>> scanProperties = new ArrayList<>();
-		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put("scantime", scanTime.format(timeFormatter));
-		scanProperties.add(scanProperty);
-		result.put("SCANPROPERTIES", scanProperties);
-
-		if (result.size() > 1) {
-			return result;
-		}
-
-		return new HashMap<>();
 	}
 
 	public void auditHardwareOnHostRequestRefresh() {
@@ -3093,52 +2787,6 @@ public class OpsiServiceNOMPersistenceController {
 		productGroups = null;
 	}
 
-	public List<Map<String, Object>> getAllProducts() {
-		String callReturnType = "dict";
-		Map<String, String> callFilter = new HashMap<>();
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
-				new Object[] { callReturnType, callFilter });
-		return exec.getListOfMaps(omc);
-	}
-
-	public List<String> getAllProductNames(String depotId) {
-		String callReturnType = "dict";
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("depotId", depotId);
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
-				new Object[] { callReturnType, callFilter });
-		List<Map<String, Object>> result = exec.getListOfMaps(omc);
-
-		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
-	}
-
-	public List<String> getProvidedLocalbootProducts(String depotId) {
-		String callReturnType = "dict";
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("depotId", depotId);
-		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
-				new Object[] { callReturnType, callFilter });
-		List<Map<String, Object>> result = exec.getListOfMaps(omc);
-
-		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
-	}
-
-	public List<String> getProvidedNetbootProducts(String depotId) {
-		String callReturnType = "dict";
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("depotId", depotId);
-		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
-				new Object[] { callReturnType, callFilter });
-		List<Map<String, Object>> result = exec.getListOfMaps(omc);
-
-		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
-	}
-
 	public List<String> getAllLocalbootProductNames(String depotId) {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
 		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
@@ -3370,111 +3018,6 @@ public class OpsiServiceNOMPersistenceController {
 		return possibleActions;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
-
-		if (clientIds == null || clientIds.length == 0) {
-			return new HashMap<>();
-		}
-
-		return getProductStatesNOM(clientIds);
-	}
-
-	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds, String[] attributes) {
-		return getLocalBootProductStatesNOM(clientIds, attributes);
-	}
-
-	private Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
-		String[] callAttributes = new String[] {};
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
-
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
-
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-		for (Map<String, Object> m : productOnClients) {
-			String client = (String) m.get("clientId");
-
-			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
-		}
-		return result;
-	}
-
-	private Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds,
-			String[] attributes) {
-		String[] callAttributes = attributes;
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
-		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-
-		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
-				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
-				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
-		List<Map<String, Object>> productOnClients = exec
-				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
-
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-
-		for (Map<String, Object> m : productOnClients) {
-
-			String client = (String) m.get("clientId");
-			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
-
-			Map<String, String> aState = new ProductState(POJOReMapper.giveEmptyForNull(m), true);
-			states1Client.add(aState);
-		}
-
-		return result;
-	}
-
-	@SuppressWarnings("java:S1168")
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds,
-			String[] attributes) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
-
-		if (clientIds == null || clientIds.length == 0) {
-			return new HashMap<>();
-		}
-
-		return getLocalBootProductStates(clientIds, attributes);
-	}
-
-	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
-		String[] callAttributes = new String[0];
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
-		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
-
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-		for (Map<String, Object> m : productOnClients) {
-
-			String client = (String) m.get("clientId");
-			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
-
-		}
-		return result;
-	}
-
-	@SuppressWarnings("java:S1168")
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
-
-		if (clientIds == null || clientIds.length == 0) {
-			return new HashMap<>();
-		}
-
-		return getNetBootProductStatesNOM(clientIds);
-	}
-
 	private void updateProductOnClient(String pcname, String productname, int producttype,
 			Map<String, String> updateValues, List<Map<String, Object>> updateItems) {
 		Map<String, Object> values = new HashMap<>();
@@ -3584,6 +3127,15 @@ public class OpsiServiceNOMPersistenceController {
 		return deleteProductItems;
 	}
 
+	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
+		String[] callAttributes = new String[] {};
+		HashMap<String, Object> callFilter = new HashMap<>();
+		callFilter.put("clientId", clientIds);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter });
+		return exec.getListOfMaps(omc);
+	}
+
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
 		if (globalReadOnly) {
 			return false;
@@ -3615,13 +3167,6 @@ public class OpsiServiceNOMPersistenceController {
 		return result;
 	}
 
-	public List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
-		String[] callAttributes = new String[] {};
-		HashMap<String, Object> callFilter = new HashMap<>();
-		callFilter.put("clientId", clientIds);
-		return retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS);
-	}
-
 	public void retrieveProductDependencies() {
 		dataStub.getDepot2product2dependencyInfos();
 	}
@@ -3629,23 +3174,6 @@ public class OpsiServiceNOMPersistenceController {
 	public Map<String, Map<String, Object>> getProductGlobalInfos(String depotId) {
 		checkProductGlobalInfos(depotId);
 		return productGlobalInfos;
-	}
-
-	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
-		String[] callAttributes = new String[] {};
-		HashMap<String, Object> callFilter = new HashMap<>();
-		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
-		callFilter.put("clientId", clientId);
-		return new ArrayList<>(
-				retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS));
-	}
-
-	public List<Map<String, Object>> getProductInfos(String clientId) {
-		String[] callAttributes = new String[] {};
-		HashMap<String, Object> callFilter = new HashMap<>();
-		callFilter.put("clientId", clientId);
-		return new ArrayList<>(
-				retrieveListOfMapsNOM(callAttributes, callFilter, RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS));
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStates() {
@@ -3736,18 +3264,6 @@ public class OpsiServiceNOMPersistenceController {
 		return new TreeSet<>(endResultSet);
 	}
 
-	public Set<String> getMessagebusConnectedClients() {
-		// no messagebus available if not at least opsi 4.3
-		if (!ServerFacade.isOpsi43()) {
-			return new HashSet<>();
-		}
-
-		Logging.info(this, "get clients connected with messagebus");
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
-
-		return new HashSet<>(exec.getStringListResult(omc));
-	}
-
 	public Boolean hasClientSpecificProperties(String productname) {
 		return productHavingClientSpecificProperties.get(productname);
 	}
@@ -3762,7 +3278,6 @@ public class OpsiServiceNOMPersistenceController {
 			RPCMethodName methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
-
 		Logging.debug(this, "retrieveListOfMapsNOM: " + retrieved);
 		return retrieved;
 	}
@@ -3777,51 +3292,6 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, Object> retrieved = exec.getMapResult(new OpsiMethodCall(methodName, data));
 		Logging.debug(this, "retrieveMapNOM: " + retrieved);
 		return retrieved;
-	}
-
-	/**
-	 * Collects the common property values of some product for a client
-	 * collection,<br \> needed for local imaging handling <br \>
-	 *
-	 * @param List<String> clients -
-	 * @param String       product
-	 * @param String       property
-	 */
-	public List<String> getCommonProductPropertyValues(List<String> clients, String product, String property) {
-		Logging.info(this, "getCommonProductPropertyValues for product, property, clients " + product + ", " + property
-				+ "  -- " + clients);
-		String[] callAttributes = new String[] {};
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("objectId", clients);
-		callFilter.put("productId", product);
-		callFilter.put("propertyId", property);
-		List<Map<String, Object>> properties = retrieveListOfMapsNOM(callAttributes, callFilter,
-				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS);
-
-		Set<String> resultSet = new HashSet<>();
-
-		boolean starting = true;
-
-		for (Map<String, Object> map : properties) {
-			List<?> valueList = (List<?>) map.get("values");
-
-			Set<String> values = new HashSet<>();
-
-			for (int i = 0; i < valueList.size(); i++) {
-				values.add((String) valueList.get(i));
-			}
-
-			if (starting) {
-				resultSet = values;
-				starting = false;
-			} else {
-				resultSet.retainAll(values);
-			}
-		}
-
-		Logging.info(this, "getCommonProductPropertyValues " + resultSet);
-
-		return new ArrayList<>(resultSet);
 	}
 
 	/**
@@ -4386,124 +3856,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		return mapOfMethodSignatures.get(methodname.toString());
-	}
-
-	// Will not be called in opsi 4.3 (or later) because we don't need backend-infos any more
-	public String getBackendInfos() {
-		String bgColor0 = "#dedeff";
-		String bgColor1 = "#ffffff";
-		String bgColor = "";
-
-		String titleSize = "14px";
-		String fontSizeBig = "10px";
-		String fontSizeSmall = "8px";
-		// are not evaluated at this moment
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_BACKEND_INFOS_LIST_OF_HASHES, new String[] {});
-
-		List<Object> list = exec.getListResult(omc);
-
-		StringBuilder buf = new StringBuilder("");
-
-		Map<String, List<Map<String, Object>>> backends = new HashMap<>();
-
-		for (int i = 0; i < list.size(); i++) {
-			Map<String, Object> listEntry = exec.getMapFromItem(list.get(i));
-
-			String backendName = "UNKNOWN";
-
-			if (listEntry.containsKey("name")) {
-				backendName = (String) listEntry.get("name");
-			}
-
-			if (!backends.containsKey(backendName)) {
-				backends.put(backendName, new ArrayList<>());
-			}
-
-			backends.get(backendName).add(listEntry);
-		}
-
-		buf.append("<table border='0' cellspacing='0' cellpadding='0'>\n");
-
-		Iterator<String> backendIterator = backends.keySet().iterator();
-		while (backendIterator.hasNext()) {
-			String backendName = backendIterator.next();
-
-			buf.append("<tr><td bgcolor='#fbeca5' color='#000000'  width='100%'  colspan='3'  align='left'>");
-			buf.append("<font size='" + titleSize + "'><b>" + backendName + "</b></font></td></tr>");
-
-			List<Map<String, Object>> backendEntries = backends.get(backendName);
-
-			for (int i = 0; i < backendEntries.size(); i++) {
-				Map<String, Object> listEntry = backendEntries.get(i);
-
-				Iterator<String> eIt = listEntry.keySet().iterator();
-
-				boolean entryIsEven = false;
-
-				while (eIt.hasNext()) {
-					String key = eIt.next();
-					if ("name".equals(key)) {
-						continue;
-					}
-
-					entryIsEven = !entryIsEven;
-					if (entryIsEven) {
-						bgColor = bgColor0;
-					} else {
-						bgColor = bgColor1;
-					}
-
-					Object value = listEntry.get(key);
-					buf.append("<tr height='8px'>");
-					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-							+ fontSizeBig + "'>" + key + "</font></td>");
-
-					if ("config".equals(key)) {
-						buf.append("<td colspan='2'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-								+ fontSizeBig + "'>&nbsp;</font></td>");
-						buf.append("</tr>");
-
-						Map<String, Object> configItems = exec.getMapFromItem(value);
-
-						if (!configItems.isEmpty()) {
-							Iterator<String> configItemsIterator = configItems.keySet().iterator();
-
-							while (configItemsIterator.hasNext()) {
-								String configKey = configItemsIterator.next();
-
-								Object jO = configItems.get(configKey);
-
-								String configVal = "";
-
-								configVal = jO.toString();
-
-								buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
-								buf.append("<td width='200px'  bgcolor='" + bgColor
-										+ "' align='left' valign='top'><font size='" + fontSizeSmall + "'>" + configKey
-										+ "</font></td>");
-								buf.append("<td width='200px'  bgcolor='" + bgColor
-										+ "' align='left' valign='top'><font size='" + fontSizeSmall + "'>" + configVal
-										+ "</font></td>");
-								buf.append("</tr>");
-							}
-						}
-					} else {
-						buf.append("<td width='300px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-								+ fontSizeBig + "'>" + value + "</font></td>");
-						buf.append("</tr>");
-					}
-				}
-				buf.append("<tr height='10px'><td bgcolor='" + bgColor + "' colspan='3'></td></tr>");
-			}
-
-			buf.append(
-					"<tr><td bgcolor='#ffffff' color='#000000' width='100%' height='30px' colspan='3'>&nbsp;</td></tr>");
-		}
-
-		buf.append("</table>\n");
-
-		return buf.toString();
 	}
 
 	public Map<String, ListCellOptions> getConfigOptions() {
@@ -5526,7 +4878,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
 			// Replace old product list with actualized list
 			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
@@ -5540,7 +4891,7 @@ public class OpsiServiceNOMPersistenceController {
 		return false;
 	}
 
-	private Map<String, Object> getLicensePool(String licensePoolId) {
+	public Map<String, Object> getLicensePool(String licensePoolId) {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", licensePoolId);
@@ -8089,20 +7440,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		return diagnosticData;
-	}
-
-	/**
-	 * Exec the python-opsi command "SSHCommand_getObjects"
-	 *
-	 * @return command objects
-	 */
-	public List<Map<String, Object>> retrieveCommandList() {
-		Logging.info(this, "retrieveCommandList ");
-
-		List<Map<String, Object>> sshCommands = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] { /* callAttributes, callFilter */ }));
-		Logging.debug(this, "retrieveCommandList commands " + sshCommands);
-		return sshCommands;
 	}
 
 	/**

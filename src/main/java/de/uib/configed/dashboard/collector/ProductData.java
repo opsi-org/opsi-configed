@@ -73,7 +73,8 @@ public final class ProductData {
 			return;
 		}
 
-		List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProducts();
+		List<Map<String, Object>> allProductsInDepot = persistenceController.getVolatileDataRetriever()
+				.getAllProducts();
 
 		for (String depot : depots) {
 			Helper.fillMapOfListsForDepots(products,
@@ -139,7 +140,7 @@ public final class ProductData {
 					.collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
-					.getMapOfProductStatesAndActions(clientIds);
+					.getVolatileDataRetriever().getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
