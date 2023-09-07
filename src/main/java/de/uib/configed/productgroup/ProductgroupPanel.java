@@ -620,35 +620,32 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
 
-		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
-				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(searchPane,
+		layoutMain.setVerticalGroup(
+				layoutMain.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+								.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 
-						.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)
-						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addComponent(panelEdit,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+						).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+						.addComponent(panelEdit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE));
 
 		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutMain.createSequentialGroup()
 
-						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGroup(
 						layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
