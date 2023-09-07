@@ -274,7 +274,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 		}
 
 		SwingUtilities.invokeLater(() -> {
-			ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getMainFrame()
+					.activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.saveDataAsZip"));
 			setCursor(Globals.WAIT_CURSOR);
 		});
 		new DiagnosticDataFileWriter(diagnosticDataFile).execute();
@@ -310,7 +311,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		@Override
 		public void done() {
-			ConfigedMain.getMainFrame().setCursor(null);
+			ConfigedMain.getMainFrame().disactivateLoadingPane();
 			setCursor(null);
 		}
 	}
