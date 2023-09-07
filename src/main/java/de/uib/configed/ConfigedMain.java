@@ -679,20 +679,37 @@ public class ConfigedMain implements ListSelectionListener {
 		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
 				&& isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsLocalboot != null) {
+			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
+			if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
+				attributes.add("actionSequence");
+			}
+			// Remove uneeded attributes
+			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+
 			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsLocalboot.updateTable(clientId,
-						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING));
+						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING),
+						attributes.toArray(new String[0]));
 			} else {
-				istmForSelectedClientsLocalboot.updateTable(clientId);
+				istmForSelectedClientsLocalboot.updateTable(clientId, attributes.toArray(new String[0]));
 			}
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
 				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
 				&& istmForSelectedClientsNetboot != null) {
+
+			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
+
+			// Remove uneeded attributes
+			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+
 			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsNetboot.updateTable(clientId,
-						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING));
+						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING),
+						attributes.toArray(new String[0]));
 			} else {
-				istmForSelectedClientsNetboot.updateTable(clientId);
+				istmForSelectedClientsNetboot.updateTable(clientId, attributes.toArray(new String[0]));
 			}
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
