@@ -231,7 +231,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -245,7 +245,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// add update to list
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId);
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId,
+				attributes);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
 					new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
@@ -264,8 +265,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId) {
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId);
+	public synchronized void updateTable(String clientId, String[] attributes) {
+		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId, attributes);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),

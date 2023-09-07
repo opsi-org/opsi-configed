@@ -3375,7 +3375,6 @@ public class OpsiserviceNOMPersistenceController {
 	private Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
 
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
@@ -3395,7 +3394,6 @@ public class OpsiserviceNOMPersistenceController {
 			String[] attributes) {
 		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
@@ -3433,7 +3431,6 @@ public class OpsiserviceNOMPersistenceController {
 	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[0];
 		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Arrays.asList(clientIds));
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
@@ -3620,19 +3617,19 @@ public class OpsiserviceNOMPersistenceController {
 		return productGlobalInfos;
 	}
 
-	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
-		String[] callAttributes = new String[] {};
+	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId, String[] callAttributes) {
 		HashMap<String, Object> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		callFilter.put("clientId", clientId);
-		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects"));
+		return new ArrayList<>(
+				retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjectsWithSequence"));
 	}
 
-	public List<Map<String, Object>> getProductInfos(String clientId) {
-		String[] callAttributes = new String[] {};
+	public List<Map<String, Object>> getProductInfos(String clientId, String[] callAttributes) {
 		HashMap<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientId);
-		return new ArrayList<>(retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects"));
+		return new ArrayList<>(
+				retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjectsWithSequence"));
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStates() {
