@@ -91,8 +91,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
-	private int preferredColumnIndex;
-
 	private boolean withRegEx = true;
 	private boolean selectMode = true;
 	private boolean resetFilterModeOnNewSearch = true;
@@ -114,20 +112,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private boolean filteredMode;
 
 	/**
-	 * main constructor
-	 * 
 	 * @param SearchTargetModel the model for delivering data and selecting
 	 * @param boolean           modifies the search function
-	 * @param int               gives the single column ( in natural counting)
-	 *                          in the case of single column search
 	 * @param String            saving of states is activated, the keys are
 	 *                          tagged with the parameter
 	 */
-	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, int prefColNo,
-			String savedStatesObjectTag) {
+	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
 		comparator = getCollator();
 		this.withRegEx = withRegEx;
-		this.preferredColumnIndex = prefColNo;
 
 		filtering = true;
 
@@ -136,17 +128,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		init();
 
 		this.targetModel = targetModel;
-	}
-
-	/**
-	 * @param SearchTargetModel the model for delivering data and selecting
-	 * @param boolean           modifies the search function
-	 * @param String            saving of states is activated, the keys are
-	 *                          tagged with the parameter
-	 */
-	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
-		this(targetModel, withRegEx, 0, savedStatesObjectTag);
-
 	}
 
 	/**
@@ -525,37 +506,34 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.setLayout(layoutTablesearchPane);
 
 		int checkedLabelWidth = 18;
-		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(layoutTablesearchPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-						.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-						.addComponent(labelFilterMarkGap, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2,
-								Globals.HGAP_SIZE / 2)
-						.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-						.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-						.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
+		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createSequentialGroup()
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 
@@ -610,16 +588,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			}
 
-			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) == null
-					|| Integer.valueOf(Configed.getSavedStates()
-							.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0
-					|| preferredColumnIndex >= targetModel.getColumnCount()) {
-				comboSearchFields.setSelectedIndex(0);
-			} else {
-				comboSearchFields.setSelectedIndex(preferredColumnIndex);
-			}
+			comboSearchFields.setSelectedIndex(0);
 		}
-
 	}
 
 	public void setSearchFields(List<String> fieldList) {
@@ -1128,16 +1098,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		if (e.getSource() == checkmarkAllColumns) {
 			Logging.debug(this, "actionPerformed on checkmarkAllColumns");
 
+			comboSearchFields.setSelectedIndex(0);
 			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
 				// all columns
-				comboSearchFields.setSelectedIndex(0);
+
 				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
 					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
 							"0");
 				}
 			} else {
-				comboSearchFields.setSelectedIndex(preferredColumnIndex);
 				if (Configed.getSavedStates()
 						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
 					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
