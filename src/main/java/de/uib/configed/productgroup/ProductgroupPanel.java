@@ -394,11 +394,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonSaveAndExecute.setVisible(true);
 
-		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		if (!Main.FONT) {
-			labelCollectiveAction.setFont(Globals.DEFAULT_FONT);
-		}
-
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
