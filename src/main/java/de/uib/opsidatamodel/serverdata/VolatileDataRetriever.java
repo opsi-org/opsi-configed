@@ -37,7 +37,7 @@ import utils.Utils;
 /**
  * Provides methods for retrieving data from the server using RPC methods,
  * without storing the retrieved data internally.
- * <p/>
+ * <p>
  * For retrieving persistent data (i.e. data that is stored internally using
  * {@link CacheManager}) use {@link PersistentDataRetriever}.
  */
@@ -63,7 +63,7 @@ public class VolatileDataRetriever {
 
 	/**
 	 * Retrieve available backends.
-	 * <p/>
+	 * <p>
 	 * This methods is only a viable option for servers/depots, that has opsi
 	 * 4.2 or lower; Due to the RPC method deprecation in opsi 4.3.
 	 * 
@@ -222,7 +222,7 @@ public class VolatileDataRetriever {
 
 	/**
 	 * Retrieve a set of clients, that are connected to messagebus.
-	 * <p/>
+	 * <p>
 	 * This method is only a viable option for servers/depots with opsi 4.3
 	 * version or higher, since messagebus technology in opsi was introduce with
 	 * opsi 4.3.
