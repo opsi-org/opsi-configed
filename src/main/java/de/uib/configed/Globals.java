@@ -250,7 +250,6 @@ public final class Globals {
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
 
-	public static final int SMALL_GAP_SIZE = 2;
 	public static final int GAP_SIZE = 10;
 	public static final int MIN_GAP_SIZE = 5;
 	public static final int VGAP_SIZE = 10;
