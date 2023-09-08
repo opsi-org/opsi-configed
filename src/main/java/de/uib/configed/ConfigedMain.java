@@ -1408,11 +1408,12 @@ public class ConfigedMain implements ListSelectionListener {
 		// rearranging visual components
 		mainFrame.validate();
 
-		// set splitpanes before making the frame visible
-		mainFrame.initSplitPanes();
 
 		// center the frame:
 		locateAndDisplay();
+		
+		// set splitpanes before making the frame visible
+		mainFrame.initSplitPanes();
 
 		// init visual states
 		Logging.debug(configedMain, "mainframe nearly initialized");

@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -144,7 +143,6 @@ public class MainFrame extends JFrame
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
-	public static final int F_HEIGHT = 600;
 
 	private static final int F_WIDTH_RIGHTHANDED = 200;
 
@@ -482,9 +480,9 @@ public class MainFrame extends JFrame
 	// This shall be called after MainFrame is made visible
 	public void initSplitPanes() {
 		panelClientSelection.setDividerLocation(0.8);
-		panelLocalbootProductSettings.setDividerLocation(0.75);
-		panelNetbootProductSettings.setDividerLocation(0.75);
-		panelProductProperties.setDividerLocation(0.75);
+		panelLocalbootProductSettings.setDividerLocation(0.8);
+		panelNetbootProductSettings.setDividerLocation(0.8);
+		panelProductProperties.setDividerLocation(0.8);
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -1752,8 +1750,6 @@ public class MainFrame extends JFrame
 
 		// clientPane
 		clientPane = new JPanel();
-
-		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
 
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
