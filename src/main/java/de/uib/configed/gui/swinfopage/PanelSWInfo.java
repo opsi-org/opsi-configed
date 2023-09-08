@@ -79,9 +79,6 @@ public class PanelSWInfo extends JPanel {
 
 	private boolean askForOverwrite = true;
 
-	private int hGap = Globals.HGAP_SIZE / 2;
-	private int vGap = Globals.VGAP_SIZE / 2;
-
 	private ConfigedMain mainController;
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -156,10 +153,7 @@ public class PanelSWInfo extends JPanel {
 			labelSuperTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
-		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
-
-		}, true) {
-
+		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true) {
 		};
 
 		panelTable.setTitle("");
@@ -249,38 +243,42 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
-		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()
+
+				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, 300)
+
+				.addGap(0, 50, 50)
+
+				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+
+				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
+
+		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+
 				.addGroup(layoutSubPanelTitle.createParallelGroup()
 						.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutSubPanelTitle.createSequentialGroup()
-								.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(hGap, hGap, hGap).addGap(hGap, hGap, hGap)
-								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(hGap, hGap, hGap)
-				.addGroup(layoutSubPanelTitle.createSequentialGroup()
-						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(hGap, hGap, hGap).addGap(hGap, hGap, hGap).addComponent(checkWithMsUpdates2,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(hGap, hGap, hGap));
-		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(vGap, vGap, vGap)
-				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(vGap, vGap, vGap)
-
-				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+								GroupLayout.PREFERRED_SIZE))
+
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+
+				.addGroup(layoutSubPanelTitle.createParallelGroup()
 						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(vGap, vGap, vGap).addGap(vGap, vGap, vGap));
+								GroupLayout.PREFERRED_SIZE)));
 
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
@@ -325,24 +323,18 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup().addGap(hGap, hGap, hGap)
-				.addGroup(layoutEmbed.createParallelGroup()
-
-						.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-
-						.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGap(hGap, hGap, hGap));
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createParallelGroup()
+				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
 
-				.addGap(vGap, vGap, vGap)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(vGap, vGap, vGap));
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 
 		if (withPopup) {
 			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
