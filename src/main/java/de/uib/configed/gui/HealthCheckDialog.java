@@ -70,6 +70,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private JButton jButtonCollapseAll;
 	private JButton jButtonExpandAll;
 
+	private GlassPane glassPane;
+
 	private Map<String, Map<String, Object>> healthData;
 
 	public HealthCheckDialog() {
@@ -77,6 +79,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok") },
 				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") }, 1, 700, 500, true,
 				null);
+
+		glassPane = new GlassPane();
+		super.setGlassPane(glassPane);
 	}
 
 	@Override
@@ -276,7 +281,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		SwingUtilities.invokeLater(() -> {
 			ConfigedMain.getMainFrame()
 					.activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.saveDataAsZip"));
-			setCursor(Globals.WAIT_CURSOR);
+			glassPane.activate(true);
 		});
 		new DiagnosticDataFileWriter(diagnosticDataFile).execute();
 	}
@@ -312,7 +317,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		@Override
 		public void done() {
 			ConfigedMain.getMainFrame().disactivateLoadingPane();
-			setCursor(null);
+			glassPane.activate(false);
 		}
 	}
 
