@@ -87,9 +87,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private PanelHWByAuditDriver panelByAuditInfo;
 
-	private int hGap = Globals.HGAP_SIZE / 2;
-	private int vGap = Globals.VGAP_SIZE / 2;
-
 	private boolean withPopup;
 
 	private ConfigedMain main;
@@ -136,13 +133,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutEmbed = new GroupLayout(embed);
 		embed.setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(hGap, hGap, hGap));
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(vGap, vGap, vGap)
+		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(vGap, vGap, vGap));
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 
 		JScrollPane jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -152,19 +151,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
 
-		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addGroup(layoutBase.createParallelGroup()
-						.addGroup(layoutBase.createSequentialGroup().addGap(hGap - 2, hGap - 2, hGap - 2)
-								.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(hGap - 2, hGap - 2, hGap - 2)
+						.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-						).addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGap(hGap, hGap, hGap));
-
-		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(vGap, vGap, vGap)
+		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(vGap / 2, vGap / 2, vGap / 2)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
