@@ -113,7 +113,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	// right pane
 	private ProductInfoPane infoPane;
-	private DefaultEditMapPanel propertiesPanel;
+	private EditMapPanelX propertiesPanel;
 
 	private ListCellRenderer<Object> standardListCellRenderer;
 
@@ -354,8 +354,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		((EditMapPanelX) propertiesPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
+		propertiesPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
@@ -1031,9 +1030,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void clearListEditors() {
-		if (propertiesPanel instanceof EditMapPanelX) {
-			((EditMapPanelX) propertiesPanel).cancelOldCellEditing();
-		}
+		propertiesPanel.cancelOldCellEditing();
 	}
 
 	public void clearEditing() {
