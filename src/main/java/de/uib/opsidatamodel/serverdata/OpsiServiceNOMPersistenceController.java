@@ -7,7 +7,6 @@
 package de.uib.opsidatamodel.serverdata;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,7 +46,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
-import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.RemoteControl;
@@ -56,7 +54,6 @@ import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.SavedSearch;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
-import de.uib.configed.type.licences.LicenceContractEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicencePoolXOpsiProduct;
 import de.uib.configed.type.licences.LicenceStatisticsRow;
@@ -73,16 +70,13 @@ import de.uib.opsidatamodel.HostGroups;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.RemoteControls;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
@@ -103,7 +97,7 @@ import utils.Utils;
  */
 public class OpsiServiceNOMPersistenceController {
 	private static final String EMPTYFIELD = "-";
-	private static final List<String> NONE_LIST = new ArrayList<>() {
+	protected static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
 			return -1;
@@ -263,9 +257,6 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	// opsi module information
-	private static final int CLIENT_COUNT_WARNING_LIMIT = 10;
-	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
-
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
@@ -323,7 +314,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private HostInfoCollections hostInfoCollections;
 
-	private String theDepot = "";
+	protected String theDepot = "";
 
 	private String opsiDefaultDomain;
 
@@ -439,13 +430,12 @@ public class OpsiServiceNOMPersistenceController {
 	private List<Map<String, Object>> healthData;
 	private Map<String, Object> diagnosticData;
 
-	private DataStubNOM dataStub;
-
 	private Boolean acceptMySQL;
 
 	private DataUpdater dataUpdater;
 
 	private VolatileDataRetriever volatileDataRetriever;
+	private PersistentDataRetriever persistentDataRetriever;
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiServiceNOMPersistenceController(String server, String user, String password) {
@@ -455,12 +445,12 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.debug(this.getClass(), "create");
 
-		hostInfoCollections = new HostInfoCollections(this);
+		// hostInfoCollections = new HostInfoCollections(this);
 		exec = new ServerFacade(server, user, password);
 		dataUpdater = new DataUpdater(exec);
 		volatileDataRetriever = new VolatileDataRetriever(exec);
+		persistentDataRetriever = new PersistentDataRetriever(exec, this);
 		hwAuditConf = new HashMap<>();
-		dataStub = new DataStubNOM(this);
 	}
 
 	public DataUpdater getDataUpdater() {
@@ -469,6 +459,10 @@ public class OpsiServiceNOMPersistenceController {
 
 	public VolatileDataRetriever getVolatileDataRetriever() {
 		return volatileDataRetriever;
+	}
+
+	public PersistentDataRetriever getPersistentDataRetriever() {
+		return persistentDataRetriever;
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {
@@ -530,14 +524,6 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	// ---------------------------------------------------------------
-
-	public boolean canCallMySQL() {
-		if (acceptMySQL == null) {
-			acceptMySQL = dataStub.canCallMySQL();
-		}
-
-		return acceptMySQL;
-	}
 
 	public HostInfoCollections getHostInfoCollections() {
 		return hostInfoCollections;
@@ -662,10 +648,10 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public final void checkConfiguration() {
-		retrieveOpsiModules();
+		persistentDataRetriever.retrieveOpsiModules();
 		Logging.info(this, "checkConfiguration, modules " + opsiModules);
 
-		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+		Map<String, List<Object>> serverPropertyMap = persistentDataRetriever.getConfigDefaultValues();
 
 		globalReadOnly = checkReadOnlyBySystemuser();
 
@@ -675,7 +661,7 @@ public class OpsiServiceNOMPersistenceController {
 		productgroupsFullPermission = true;
 		createClientPermission = true;
 
-		keyUserRegisterValue = isUserRegisterActivated();
+		keyUserRegisterValue = persistentDataRetriever.isUserRegisterActivated();
 		boolean correctedUserRegisterVal = setAgainUserRegistration(keyUserRegisterValue);
 
 		boolean setUserRegisterVal = !keyUserRegisterValue && correctedUserRegisterVal;
@@ -703,7 +689,8 @@ public class OpsiServiceNOMPersistenceController {
 
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
 				getHostInfoCollections().getConfigServer(), getHostInfoCollections().getDepotNamesList(),
-				getHostGroupIds(), getProductGroups().keySet(), getConfigDefaultValues(), getConfigOptions()).produce();
+				getHostGroupIds(), persistentDataRetriever.getProductGroups().keySet(),
+				persistentDataRetriever.getConfigDefaultValues(), persistentDataRetriever.getConfigOptions()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
@@ -763,35 +750,6 @@ public class OpsiServiceNOMPersistenceController {
 		result = result && getConnectionState().getState() == ConnectionState.CONNECTED;
 		Logging.info(this, "tried to make connection result " + result);
 		return result;
-	}
-
-	public boolean usesMultiFactorAuthentication() {
-		return isMultiFactorAuthenticationEnabled;
-	}
-
-	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.getUser()) != null;
-	}
-
-	private String getOTPSecret(String userId) {
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("id", userId);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.USER_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> result = exec.getListOfMaps(omc);
-
-		if (result.isEmpty()) {
-			return null;
-		}
-
-		Map<String, Object> userDetails = result.get(0);
-		String otpSecret = null;
-		if (userDetails.containsKey("otpSecret")) {
-			otpSecret = (String) userDetails.get("otpSecret");
-		}
-
-		return otpSecret;
 	}
 
 	// we delegate method calls to the executioner
@@ -869,7 +827,7 @@ public class OpsiServiceNOMPersistenceController {
 	private void checkPermissions() {
 		UserOpsipermission.ActionPrivilege serverActionPermission;
 
-		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+		Map<String, List<Object>> serverPropertyMap = persistentDataRetriever.getConfigDefaultValues();
 
 		// variable for simplifying the use of the map
 		String configKey = null;
@@ -1024,19 +982,6 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
 	}
 
-	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
-		HashMap<String, ConfigOption> result = new HashMap<>();
-		getConfigOptions();
-		for (Entry<String, ConfigOption> configOption : configOptions.entrySet()) {
-			if (configOption.getKey().startsWith(s) && configOption.getKey().length() > s.length()) {
-				String xKey = configOption.getKey().substring(s.length());
-				result.put(xKey, configOption.getValue());
-			}
-		}
-
-		return result;
-	}
-
 	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
@@ -1086,9 +1031,10 @@ public class OpsiServiceNOMPersistenceController {
 
 				result = true;
 			}
-		} else if (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).get(0);
+		} else if (persistentDataRetriever.getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
+				&& !((List<?>) persistentDataRetriever.getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
+			String configValue = (String) ((List<?>) persistentDataRetriever.getConfigDefaultValues()
+					.get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -1148,46 +1094,9 @@ public class OpsiServiceNOMPersistenceController {
 		return tested;
 	}
 
-	private Map<String, ConfigOption> getWANConfigOptions() {
-		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
-				CONFIG_KEY + "." + WAN_PARTKEY);
-
-		Logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
-
-		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
-				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
-
-		notWanConfiguration = new HashMap<>();
-		wanConfiguration = new HashMap<>();
-
-		List<Object> values = null;
-
-		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
-			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				notWanConfiguration.put(notWanConfigOption.getKey(), null);
-				wanConfiguration.put(notWanConfigOption.getKey(), null);
-			} else {
-				Boolean b = (Boolean) notWanConfigOption.getValue().getDefaultValues().get(0);
-
-				values = new ArrayList<>();
-				values.add(b);
-				notWanConfiguration.put(notWanConfigOption.getKey(), values);
-
-				values = new ArrayList<>();
-				values.add(!b);
-				wanConfiguration.put(notWanConfigOption.getKey(), values);
-			}
-		}
-
-		Logging.info(this, "getWANConfigOptions wanConfiguration " + wanConfiguration);
-		Logging.info(this, "getWANConfigOptions notWanConfiguration  " + notWanConfiguration);
-
-		return allWanConfigOptions;
-	}
-
 	private List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
 			List<Map<String, Object>> jsonObjects) {
-		getWANConfigOptions();
+		persistentDataRetriever.getWANConfigOptions();
 
 		Logging.debug(this,
 				"addWANConfigState  wanConfiguration " + wanConfiguration + "\n " + wanConfiguration.size());
@@ -1755,12 +1664,13 @@ public class OpsiServiceNOMPersistenceController {
 
 		Map<String, Object> producedLicencingInfo;
 
-		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicencingInfoOpsiAdmin().get("result"),
+		if (persistentDataRetriever.isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
+			producedLicencingInfo = POJOReMapper.remap(
+					persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin().get("result"),
 					new TypeReference<Map<String, Object>>() {
 					});
 		} else {
-			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
+			producedLicencingInfo = persistentDataRetriever.getOpsiLicencingInfoNoOpsiAdmin();
 		}
 
 		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
@@ -1768,31 +1678,18 @@ public class OpsiServiceNOMPersistenceController {
 				});
 	}
 
-	private Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin() {
-		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
-
-		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable()) {
-			Object[] callParameters = {};
-			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
-					OpsiMethodCall.BACKGROUND_DEFAULT);
-
-			licencingInfoNoOpsiAdmin = exec.getMapResult(omc);
-		}
-
-		return licencingInfoNoOpsiAdmin;
-	}
-
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 
 		Map<String, Object> producedLicencingInfo;
 
-		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicencingInfoOpsiAdmin().get("result"),
+		if (persistentDataRetriever.isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
+			producedLicencingInfo = POJOReMapper.remap(
+					persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin().get("result"),
 					new TypeReference<Map<String, Object>>() {
 					});
 		} else {
-			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
+			producedLicencingInfo = persistentDataRetriever.getOpsiLicencingInfoNoOpsiAdmin();
 		}
 
 		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
@@ -1870,50 +1767,6 @@ public class OpsiServiceNOMPersistenceController {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
-	public Map<String, Map<String, String>> getProductGroups() {
-		if (productGroups != null) {
-			return productGroups;
-		}
-
-		String[] callAttributes = new String[] {};
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
-
-		Map<String, Map<String, String>> result = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" });
-
-		productGroups = result;
-
-		return productGroups;
-	}
-
-	public Map<String, Map<String, String>> getHostGroups() {
-		if (hostGroups != null) {
-			return hostGroups;
-		}
-
-		String[] callAttributes = new String[] {};
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-
-		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }), this);
-
-		Logging.debug(this, "getHostGroups " + hostGroups);
-
-		hostGroups = hostGroups.addSpecialGroups();
-		Logging.debug(this, "getHostGroups " + hostGroups);
-		hostGroups.alterToWorkingVersion();
-
-		Logging.debug(this, "getHostGroups rebuilt" + hostGroups);
-
-		return hostGroups;
-	}
-
 	public void hostGroupsRequestRefresh() {
 		hostGroups = null;
 	}
@@ -1928,64 +1781,22 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Map<String, Set<String>> getFGroup2Members() {
 		if (fGroup2Members == null) {
-			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
+			fGroup2Members = persistentDataRetriever.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP,
+					"clientId");
 		}
 		return fGroup2Members;
 	}
 
 	public Map<String, Set<String>> getFProductGroup2Members() {
 		if (fProductGroup2Members == null) {
-			fProductGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
+			fProductGroup2Members = persistentDataRetriever
+					.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
 		}
 		return fProductGroup2Members;
 	}
 
 	public void fObject2GroupsRequestRefresh() {
 		fObject2Groups = null;
-	}
-
-	// returns the function that yields for a given clientId all groups to which the
-	// client belongs
-	public Map<String, Set<String>> getFObject2Groups() {
-		if (fObject2Groups == null) {
-			Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
-					new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-					ClientTree.getTranslationsFromPersistentNames());
-			fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
-
-		}
-		return fObject2Groups;
-	}
-
-	// returns the function that yields for a given groupId all objects which belong
-	// to the group
-	private Map<String, Set<String>> retrieveFGroup2Members(String groupType, String memberIdName) {
-		String[] callAttributes = new String[] {};
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("groupType", groupType);
-		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
-						new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
-		return projectToFunction(mappedRelations, "groupId", memberIdName);
-	}
-
-	private Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
-			String originVar, String imageVar) {
-		Map<String, Set<String>> result = new TreeMap<>();
-		Iterator<String> iter = mappedRelation.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			Map<String, String> relation = mappedRelation.get(key);
-			String originValue = relation.get(originVar);
-			String imageValue = relation.get(imageVar);
-			if (imageValue != null) {
-				Set<String> assignedSet = result.computeIfAbsent(originValue, arg -> new TreeSet<>());
-				assignedSet.add(imageValue);
-			}
-		}
-		return result;
 	}
 
 	public boolean addHosts2Group(List<String> objectIds, String groupId) {
@@ -2256,7 +2067,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> getHostGroupIds() {
-		Set<String> groups = getHostGroups().keySet();
+		Set<String> groups = persistentDataRetriever.getHostGroups().keySet();
 		groups.remove(ClientTree.DIRECTORY_NAME);
 
 		return new ArrayList<>(groups);
@@ -2274,64 +2085,9 @@ public class OpsiServiceNOMPersistenceController {
 		opsiHwClassNames = null;
 	}
 
-	// partial version of produceHwAuditDeviceClasses()
-	private static List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
-		List<String> result = new ArrayList<>();
-
-		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
-
-			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
-
-			result.add(hwClass);
-		}
-
-		return result;
-	}
-
-	private List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf() {
-		if (hwAuditConf == null) {
-			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
-			return new ArrayList<>();
-		} else if (!hwAuditConf.containsKey("")) {
-			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(
-					new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] {})));
-			if (hwAuditConf.get("") == null) {
-				Logging.warning(this, "got no hardware config");
-			}
-		} else {
-			// hwAuditConf already contains key "" and is initialized
-		}
-
-		return hwAuditConf.get("");
-	}
-
-	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale) {
-		return hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
-				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
-	}
-
-	public List<String> getAllHwClassNames() {
-		if (opsiHwClassNames == null) {
-			opsiHwClassNames = produceHwClasses(getOpsiHWAuditConf());
-		}
-
-		Logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
-
-		return opsiHwClassNames;
-	}
-
-	public Map<String, OpsiHwAuditDeviceClass> getHwAuditDeviceClasses() {
-		if (hwAuditDeviceClasses == null) {
-			produceHwAuditDeviceClasses();
-		}
-
-		return hwAuditDeviceClasses;
-	}
-
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
-		dataStub.softwareAuditOnClientsRequestRefresh();
+		// persistentDataRetriever.softwareAuditOnClientsRequestRefresh();
 	}
 
 	public String getLastSoftwareAuditModification(Map<String, List<SWAuditClientEntry>> entries, String clientId) {
@@ -2361,7 +2117,8 @@ public class OpsiServiceNOMPersistenceController {
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
 			if (entry.getSWid() != null && entry.getSWid() != -1) {
 				result.put("" + entry.getSWid(),
-						entry.getExpandedMap(getInstalledSoftwareInformation(), getSWident(entry.getSWid())));
+						entry.getExpandedMap(persistentDataRetriever.getInstalledSoftwareInformation(),
+								persistentDataRetriever.getSWident(entry.getSWid())));
 			}
 		}
 
@@ -2372,200 +2129,16 @@ public class OpsiServiceNOMPersistenceController {
 		relationsAuditHardwareOnHost = null;
 	}
 
-	public List<Map<String, Object>> getHardwareOnClient() {
-		if (relationsAuditHardwareOnHost == null) {
-			Map<String, String> filterMap = new HashMap<>();
-			filterMap.put("state", "1");
-			relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
-					RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
-		}
-
-		return relationsAuditHardwareOnHost;
-	}
-
 	/* multiclient hwinfo */
-
-	public List<String> getClient2HwRowsColumnNames() {
-		retrieveClient2HwRowsColumnNames();
-		return client2HwRowsColumnNames;
-	}
-
-	public List<String> getClient2HwRowsJavaclassNames() {
-		retrieveClient2HwRowsColumnNames();
-		return client2HwRowsJavaclassNames;
-	}
-
-	private void produceHwAuditDeviceClasses() {
-		hwAuditDeviceClasses = new TreeMap<>();
-
-		if (getOpsiHWAuditConf().isEmpty()) {
-			Logging.error(this, "no hwaudit config found ");
-			return;
-		}
-
-		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
-			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
-				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
-						+ hwAuditClass.get("Class"));
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
-									+ hwAuditClass.get("Class").getClass());
-				}
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Values is of class "
-									+ hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY).getClass());
-				}
-
-				continue;
-			}
-			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
-
-			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
-			firstSeen.setOpsiDbColumnType("timestamp");
-			OpsiHwAuditDevicePropertyType lastSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.LAST_SEEN_COL_NAME);
-			lastSeen.setOpsiDbColumnType("timestamp");
-
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
-			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
-
-			hwAuditDeviceClass.setLinuxQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.LINUX_KEY));
-			hwAuditDeviceClass.setWmiQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.WMI_KEY));
-
-			Logging.info(this, "hw audit class " + hwClass);
-
-			for (Object m : (List<?>) hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY)) {
-				if (!(m instanceof Map)) {
-					Logging.warning(this, "getAllHwClassNames illegal VALUES item, m " + m);
-					continue;
-				}
-
-				Map<?, ?> ma = (Map<?, ?>) m;
-
-				if ("i".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
-					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
-					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
-					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-
-					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
-					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
-
-				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
-					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
-					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
-					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-
-					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
-					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
-				} else {
-					Logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
-							+ " " + ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY));
-				}
-			}
-
-			hwAuditDeviceClass.addHostRelatedProperty(firstSeen);
-			hwAuditDeviceClass.addHostRelatedProperty(lastSeen);
-
-			Logging.info(this, "hw audit class " + hwAuditDeviceClass);
-		}
-
-		Logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
-	}
-
-	private String cutClassName(String columnName) {
-		String result = null;
-
-		if (!columnName.startsWith("HOST") && columnName.startsWith(HW_INFO_CONFIG)) {
-			result = columnName.substring(HW_INFO_CONFIG.length());
-			result = result.substring(0, result.indexOf('.'));
-		} else if (columnName.startsWith(HW_INFO_DEVICE)) {
-			result = columnName.substring(HW_INFO_DEVICE.length());
-			result = result.substring(0, result.indexOf('.'));
-		} else {
-			Logging.warning(this, "cutClassName " + "unexpected columnName " + columnName);
-		}
-
-		return result;
-	}
-
-	private void retrieveClient2HwRowsColumnNames() {
-		getConfigOptions();
-
-		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
-				+ (client2HwRowsColumnNames == null));
-		if (client2HwRowsColumnNames == null || hwInfoClassNames == null || client2HwRowsJavaclassNames == null) {
-			hostColumnNames = new ArrayList<>();
-
-			// todo make static variables
-			hostColumnNames.add("HOST.hostId");
-			hostColumnNames.add("HOST.description");
-			hostColumnNames.add("HOST.hardwareAdress");
-			hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
-
-			getConfigOptions();
-			// there is produced client2HwRowsColumnNames
-
-			client2HwRowsColumnNames = new ArrayList<>(hostColumnNames);
-
-			for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-				OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
-
-				for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHostProperties()) {
-					if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-						String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-						client2HwRowsColumnNames.add(col);
-					}
-				}
-
-				for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHwItemProperties()) {
-					if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-						String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-						client2HwRowsColumnNames.add(col);
-					}
-				}
-			}
-			client2HwRowsJavaclassNames = new ArrayList<>();
-			Set<String> hwInfoClasses = new HashSet<>();
-
-			for (String columnName : client2HwRowsColumnNames) {
-				Logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
-				client2HwRowsJavaclassNames.add("java.lang.String");
-				String className = cutClassName(columnName);
-				if (className != null) {
-					hwInfoClasses.add(className);
-				}
-			}
-
-			hwInfoClassNames = new ArrayList<>(hwInfoClasses);
-
-			Logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
-
-		}
-	}
-
-	public List<String> getHwInfoClassNames() {
-		retrieveClient2HwRowsColumnNames();
-		Logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
-		return hwInfoClassNames;
-	}
 
 	public void client2HwRowsRequestRefresh() {
 		hostColumnNames = null;
 		client2HwRowsColumnNames = null;
-		dataStub.client2HwRowsRequestRefresh();
+		// persistentDataRetriever.client2HwRowsRequestRefresh();
 	}
 
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
-		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows(hosts);
+		Map<String, Map<String, Object>> client2HwRows = persistentDataRetriever.getClient2HwRows(hosts);
 
 		for (String host : hosts) {
 			Logging.info(this, "getClient2HwRows host " + host);
@@ -2622,7 +2195,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems) {
-		getConfigOptions();
+		persistentDataRetriever.getConfigOptions();
 
 		List<Object> readyObjects = new ArrayList<>();
 
@@ -2781,54 +2354,10 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void productDataRequestRefresh() {
-		dataStub.productDataRequestRefresh();
+		//persistentDataRetriever.productDataRequestRefresh();
 		productpropertiesRequestRefresh();
 		depot2product2properties = null;
 		productGroups = null;
-	}
-
-	public List<String> getAllLocalbootProductNames(String depotId) {
-		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
-		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
-		if (localbootProductNames == null) {
-			if (ServerFacade.isOpsi43()) {
-				localbootProductNames = new ArrayList<>(dataStub.getDepot2LocalbootProducts().get(depotId).keySet());
-			} else {
-				Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
-						new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
-
-				List<String> sortedProducts = productOrderingResult.get("sorted");
-				if (sortedProducts == null) {
-					sortedProducts = new ArrayList<>();
-				}
-
-				List<String> notSortedProducts = productOrderingResult.get("not_sorted");
-				if (notSortedProducts == null) {
-					notSortedProducts = new ArrayList<>();
-				}
-
-				Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
-
-				notSortedProducts.removeAll(sortedProducts);
-				Logging.info(this, "missing: " + notSortedProducts);
-
-				localbootProductNames = sortedProducts;
-				localbootProductNames.addAll(notSortedProducts);
-
-				// we don't have a productsgroupsFullPermission)
-				if (permittedProducts != null) {
-					localbootProductNames.retainAll(permittedProducts);
-				}
-			}
-		}
-
-		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
-
-		return new ArrayList<>(localbootProductNames);
-	}
-
-	public List<String> getAllLocalbootProductNames() {
-		return getAllLocalbootProductNames(theDepot);
 	}
 
 	public void retrieveProducts() {
@@ -2838,8 +2367,9 @@ public class OpsiServiceNOMPersistenceController {
 	private void retrieveDepotProducts(String depotId) {
 		Logging.debug(this, "retrieveDepotProducts for " + depotId);
 
-		if (dataStub.getDepot2NetbootProducts().get(depotId) != null) {
-			netbootProductNames = new ArrayList<>(dataStub.getDepot2NetbootProducts().get(depotId).keySet());
+		if (persistentDataRetriever.getDepot2NetbootProducts().get(depotId) != null) {
+			netbootProductNames = new ArrayList<>(
+					persistentDataRetriever.getDepot2NetbootProducts().get(depotId).keySet());
 		} else {
 			netbootProductNames = new ArrayList<>();
 		}
@@ -2850,18 +2380,18 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		// for localboot products, we have to look for ordering information
-		localbootProductNames = getAllLocalbootProductNames(depotId);
+		localbootProductNames = persistentDataRetriever.getAllLocalbootProductNames(depotId);
 	}
 
 	public List<String> getAllDepotsWithIdenticalProductStock(String depot) {
 		List<String> result = new ArrayList<>();
 
-		TreeSet<OpsiPackage> originalProductStock = dataStub.getDepot2Packages().get(depot);
+		TreeSet<OpsiPackage> originalProductStock = persistentDataRetriever.getDepot2Packages().get(depot);
 		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + originalProductStock);
 
 		for (String testDepot : getHostInfoCollections().getAllDepots().keySet()) {
-			if (depot.equals(testDepot)
-					|| areProductStocksIdentical(originalProductStock, dataStub.getDepot2Packages().get(testDepot))) {
+			if (depot.equals(testDepot) || areProductStocksIdentical(originalProductStock,
+					persistentDataRetriever.getDepot2Packages().get(testDepot))) {
 				result.add(testDepot);
 			}
 		}
@@ -2909,18 +2439,6 @@ public class OpsiServiceNOMPersistenceController {
 		return winProducts;
 	}
 
-	public Map<String, Map<String, OpsiProductInfo>> getProduct2versionInfo2infos() {
-		return dataStub.getProduct2versionInfo2infos();
-	}
-
-	public Object2Product2VersionList getDepot2LocalbootProducts() {
-		return dataStub.getDepot2LocalbootProducts();
-	}
-
-	public Object2Product2VersionList getDepot2NetbootProducts() {
-		return dataStub.getDepot2NetbootProducts();
-	}
-
 	private void retrieveProductGlobalInfos(String depotId) {
 
 		Logging.info(this, "retrieveProductGlobalInfos , depot " + depotId);
@@ -2928,24 +2446,26 @@ public class OpsiServiceNOMPersistenceController {
 		productGlobalInfos = new HashMap<>();
 		possibleActions = new HashMap<>();
 
-		for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
-			if (dataStub.getProduct2versionInfo2infos().get(productId) == null) {
+		for (String productId : persistentDataRetriever.getProduct2versionInfo2infos().keySet()) {
+			if (persistentDataRetriever.getProduct2versionInfo2infos().get(productId) == null) {
 				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + productId);
 			}
 
-			if (dataStub.getProduct2versionInfo2infos().get(productId) != null) {
+			if (persistentDataRetriever.getProduct2versionInfo2infos().get(productId) != null) {
 				String versionInfo = null;
-				Map<String, OpsiProductInfo> productAllInfos = dataStub.getProduct2versionInfo2infos().get(productId);
+				Map<String, OpsiProductInfo> productAllInfos = persistentDataRetriever.getProduct2versionInfo2infos()
+						.get(productId);
 
 				// look for associated product on depot info
-				HashMap<String, List<String>> product2VersionList = dataStub.getDepot2LocalbootProducts().get(depotId);
+				HashMap<String, List<String>> product2VersionList = persistentDataRetriever.getDepot2LocalbootProducts()
+						.get(depotId);
 				if (product2VersionList != null && product2VersionList.get(productId) != null
 						&& !product2VersionList.get(productId).isEmpty()) {
 					versionInfo = product2VersionList.get(productId).get(0);
 				}
 
 				if (versionInfo == null) {
-					product2VersionList = dataStub.getDepot2NetbootProducts().get(depotId);
+					product2VersionList = persistentDataRetriever.getDepot2NetbootProducts().get(depotId);
 
 					if (product2VersionList != null && product2VersionList.get(productId) != null
 							&& !product2VersionList.get(productId).isEmpty()) {
@@ -3168,7 +2688,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void retrieveProductDependencies() {
-		dataStub.getDepot2product2dependencyInfos();
+		persistentDataRetriever.getDepot2product2dependencyInfos();
 	}
 
 	public Map<String, Map<String, Object>> getProductGlobalInfos(String depotId) {
@@ -3186,21 +2706,21 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<List<Object>> getProductRows() {
-		return dataStub.getProductRows();
+		return persistentDataRetriever.getProductRows();
 	}
 
 	public Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots() {
-		return dataStub.getProduct2VersionInfo2Depots();
+		return persistentDataRetriever.getProduct2VersionInfo2Depots();
 	}
 
 	public NavigableSet<String> getProductIds() {
-		dataStub.getProduct2versionInfo2infos();
+		persistentDataRetriever.getProduct2versionInfo2infos();
 
 		if (productIds == null) {
 			productIds = new TreeSet<>();
 			productDefaultStates = new TreeMap<>();
 
-			for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
+			for (String productId : persistentDataRetriever.getProduct2versionInfo2infos().keySet()) {
 				productIds.add(productId);
 				ProductState productDefault = new ProductState(null);
 				productDefault.put("productId", productId);
@@ -3216,8 +2736,8 @@ public class OpsiServiceNOMPersistenceController {
 	private List<Map<String, String>> getProductDependencies(String depotId, String productId) {
 		List<Map<String, String>> result = null;
 
-		if (dataStub.getDepot2product2dependencyInfos().get(depotId) != null) {
-			result = dataStub.getDepot2product2dependencyInfos().get(depotId).get(productId);
+		if (persistentDataRetriever.getDepot2product2dependencyInfos().get(depotId) != null) {
+			result = persistentDataRetriever.getDepot2product2dependencyInfos().get(depotId).get(productId);
 		}
 
 		if (result == null) {
@@ -3232,8 +2752,8 @@ public class OpsiServiceNOMPersistenceController {
 	public Map<String, List<Map<String, String>>> getProductDependencies(String depotId) {
 		Map<String, List<Map<String, String>>> result = null;
 
-		if (dataStub.getDepot2product2dependencyInfos().get(depotId) != null) {
-			result = dataStub.getDepot2product2dependencyInfos().get(depotId);
+		if (persistentDataRetriever.getDepot2product2dependencyInfos().get(depotId) != null) {
+			result = persistentDataRetriever.getDepot2product2dependencyInfos().get(depotId);
 		} else {
 			result = new HashMap<>();
 		}
@@ -3342,7 +2862,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		// depot missing ??
 
-		List<Map<String, Object>> retrieved = dataStub
+		List<Map<String, Object>> retrieved = persistentDataRetriever
 				.getProductPropertyDepotStates(hostInfoCollections.getDepots().keySet());
 
 		for (Map<String, Object> map : retrieved) {
@@ -3399,8 +2919,8 @@ public class OpsiServiceNOMPersistenceController {
 		productProperties = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
 
-		dataStub.fillProductPropertyStates(clientNames);
-		List<Map<String, Object>> retrieved = dataStub.getProductPropertyStates();
+		persistentDataRetriever.fillProductPropertyStates(clientNames);
+		List<Map<String, Object>> retrieved = persistentDataRetriever.getProductPropertyStates();
 
 		Set<String> productsWithProductPropertyStates = new HashSet<>();
 
@@ -3649,11 +3169,11 @@ public class OpsiServiceNOMPersistenceController {
 	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String depotId, String productId) {
 		Map<String, ListCellOptions> result = null;
 
-		if (dataStub.getDepot2Product2PropertyDefinitions().get(depotId) == null) {
+		if (persistentDataRetriever.getDepot2Product2PropertyDefinitions().get(depotId) == null) {
 			result = new HashMap<>();
 			Logging.info("getProductPropertyOptionsMap: no productproperty definitions for depot " + depotId);
 		} else {
-			result = dataStub.getDepot2Product2PropertyDefinitions().get(depotId).get(productId);
+			result = persistentDataRetriever.getDepot2Product2PropertyDefinitions().get(depotId).get(productId);
 		}
 
 		if (result == null) {
@@ -3682,12 +3202,12 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void productPropertyDefinitionsRequestRefresh() {
-		dataStub.productPropertyDefinitionsRequestRefresh();
+		//persistentDataRetriever.productPropertyDefinitionsRequestRefresh();
 		productPropertyDefinitions = null;
 	}
 
 	public void retrieveProductPropertyDefinitions() {
-		productPropertyDefinitions = dataStub.getDepot2Product2PropertyDefinitions().get(theDepot);
+		productPropertyDefinitions = persistentDataRetriever.getDepot2Product2PropertyDefinitions().get(theDepot);
 	}
 
 	public String getProductTitle(String product) {
@@ -3809,177 +3329,8 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void productpropertiesRequestRefresh() {
-		dataStub.productPropertyStatesRequestRefresh();
+		//persistentDataRetriever.productPropertyStatesRequestRefresh();
 		productProperties = null;
-	}
-
-	// lazy initializing
-	private List<String> getMethodSignature(RPCMethodName methodname) {
-		if (mapOfMethodSignatures == null) {
-			List<Object> methodsList = exec
-					.getListResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_INTERFACE, new Object[] {}));
-
-			if (!methodsList.isEmpty()) {
-				mapOfMethodSignatures = new HashMap<>();
-
-				Iterator<Object> iter = methodsList.iterator();
-				while (iter.hasNext()) {
-					Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
-
-					String name = (String) listEntry.get("name");
-					List<String> signature = new ArrayList<>();
-
-					// should never result
-					List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
-
-					// to null
-					for (int i = 0; i < signature1.size(); i++) {
-						String element = (String) signature1.get(i);
-
-						if (element != null && element.length() > 0 && element.charAt(0) == '*') {
-							signature.add(element.substring(1));
-						} else {
-							signature.add(element);
-						}
-
-						Logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
-					}
-					mapOfMethodSignatures.put(name, signature);
-				}
-			}
-		}
-
-		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
-
-		if (mapOfMethodSignatures.get(methodname.toString()) == null) {
-			return NONE_LIST;
-		}
-
-		return mapOfMethodSignatures.get(methodname.toString());
-	}
-
-	public Map<String, ListCellOptions> getConfigOptions() {
-		getHwAuditDeviceClasses();
-
-		if (configListCellOptions == null || configOptions == null || configDefaultValues == null) {
-			Logging.debug(this, "getConfigOptions() work");
-
-			List<Map<String, Object>> deleteItems = new ArrayList<>();
-
-			boolean tryIt = true;
-
-			int tryOnceMoreCounter = 0;
-			final int STOP_REPEATING_AT_THIS = 1;
-
-			while (tryIt) {
-				tryIt = false;
-				tryOnceMoreCounter++;
-
-				configOptions = new HashMap<>();
-				configListCellOptions = new HashMap<>();
-				configDefaultValues = new HashMap<>();
-
-				remoteControls = new RemoteControls();
-				savedSearches = new SavedSearches();
-
-				OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
-						hwAuditDeviceClasses);
-
-				// metaConfig for wan configuration is rebuilt in
-				// getWANConfigOptions
-
-				List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(RPCMethodName.CONFIG_GET_OBJECTS);
-
-				Logging.info(this, "configOptions retrieved ");
-
-				for (Map<String, Object> configItem : retrievedList) {
-					// map to java type
-					for (Entry<String, Object> configItemEntry : configItem.entrySet()) {
-						if (configItemEntry.getValue() instanceof JSONArray) {
-							configItem.put(configItemEntry.getKey(), ((JSONArray) configItemEntry.getValue()).toList());
-						}
-					}
-
-					String key = (String) configItem.get("ident");
-
-					// build a ConfigOption from the retrieved item
-
-					// eliminate key produced by old version for role branch
-
-					String pseudouserProducedByOldVersion = KEY_USER_ROOT + ".{"
-							+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
-					//
-
-					if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
-						Logging.warning(this, "user entry " + key
-								+ " produced by a still somewhere running old configed version , please delete user entry "
-								+ pseudouserProducedByOldVersion);
-
-						deleteItems.add(configItem);
-
-						Logging.info(this, "deleteItem " + configItem);
-
-						continue;
-					}
-
-					ConfigOption configOption = new ConfigOption(configItem);
-
-					configOptions.put(key, configOption);
-
-					configListCellOptions.put(key, configOption);
-
-					if (configOption.getDefaultValues() == null) {
-						Logging.warning(this, "default values missing for config  " + key);
-
-						if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
-							tryIt = true;
-							Logging.warning(this,
-									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
-
-							Utils.threadSleep(this, 1000);
-							break;
-						}
-					}
-
-					configDefaultValues.put(key, configOption.getDefaultValues());
-
-					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
-						remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
-						savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-						hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
-					}
-				}
-
-				Logging.debug(this,
-						" getConfigOptions produced hwAuditDevicePropertyTypes " + hwAuditDevicePropertyTypes);
-			}
-
-			Logging.info(this, "{ole deleteItems " + deleteItems.size());
-
-			if (!deleteItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-						new Object[] { deleteItems.toArray() });
-
-				if (exec.doCall(omc)) {
-					deleteItems.clear();
-				}
-			}
-
-			getWANConfigOptions();
-			Logging.debug(this, "getConfigOptions() work finished");
-		}
-
-		return configListCellOptions;
-	}
-
-	public Map<String, RemoteControl> getRemoteControls() {
-		getConfigOptions();
-		return remoteControls;
-	}
-
-	public SavedSearches getSavedSearches() {
-		getConfigOptions();
-		return savedSearches;
 	}
 
 	private boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
@@ -4033,7 +3384,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object obj = getConfigOptions().get(key);
+		Object obj = persistentDataRetriever.getConfigOptions().get(key);
 
 		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
 		if (obj == null) {
@@ -4058,26 +3409,21 @@ public class OpsiServiceNOMPersistenceController {
 		return val;
 	}
 
-	public Map<String, List<Object>> getConfigDefaultValues() {
-		getConfigOptions();
-		return configDefaultValues;
-	}
-
 	public void configOptionsRequestRefresh() {
 		Logging.info(this, "configOptionsRequestRefresh");
 		configOptions = null;
 	}
 
 	public void hostConfigsRequestRefresh() {
-		dataStub.hostConfigsRequestRefresh();
+		//persistentDataRetriever.hostConfigsRequestRefresh();
 	}
 
 	public Map<String, Map<String, Object>> getConfigs() {
-		return dataStub.getConfigs();
+		return persistentDataRetriever.getConfigs();
 	}
 
 	public Map<String, Object> getConfig(String objectId) {
-		getConfigOptions();
+		persistentDataRetriever.getConfigOptions();
 
 		Map<String, Object> retrieved = getConfigs().get(objectId);
 
@@ -4246,7 +3592,7 @@ public class OpsiServiceNOMPersistenceController {
 
 			if (configsChanged) {
 				configOptionsRequestRefresh();
-				getConfigOptions();
+				persistentDataRetriever.getConfigOptions();
 			}
 
 			// build calls
@@ -4443,7 +3789,7 @@ public class OpsiServiceNOMPersistenceController {
 				configOptionsRequestRefresh();
 			}
 
-			getConfigOptions();
+			persistentDataRetriever.getConfigOptions();
 			configCollection.clear();
 
 			Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
@@ -4558,51 +3904,9 @@ public class OpsiServiceNOMPersistenceController {
 		return theDepot;
 	}
 
-	public Map<String, SWAuditEntry> getInstalledSoftwareInformation() {
-
-		Logging.info(this, "getInstalledSoftwareInformation");
-
-		return dataStub.getInstalledSoftwareInformation();
-	}
-
-	public NavigableMap<String, Set<String>> getName2SWIdents() {
-		return dataStub.getName2SWIdents();
-	}
-
-	public Map<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing() {
-
-		return dataStub.getInstalledSoftwareInformationForLicensing();
-	}
-
-	// only software relevant of the items for licensing
-	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo() {
-		return dataStub.getInstalledSoftwareName2SWinfo();
-	}
-
 	public void installedSoftwareInformationRequestRefresh() {
 		Logging.info(this, " call installedSoftwareInformationRequestRefresh()");
-		dataStub.installedSoftwareInformationRequestRefresh();
-	}
-
-	public String getSWident(Integer i) {
-		return dataStub.getSWident(i);
-	}
-
-	public List<String> getSoftwareList() {
-		return dataStub.getSoftwareList();
-	}
-
-	public NavigableMap<String, Integer> getSoftware2Number() {
-		return dataStub.getSoftware2Number();
-	}
-
-	public Map<String, LicenceContractEntry> getLicenceContracts() {
-		return dataStub.getLicenceContracts();
-	}
-
-	// date in sql time format, contrad ID
-	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		return dataStub.getLicenceContractsToNotify();
+		//persistentDataRetriever.installedSoftwareInformationRequestRefresh();
 	}
 
 	// returns the ID of the edited data record
@@ -4692,8 +3996,8 @@ public class OpsiServiceNOMPersistenceController {
 		Map<String, LicenceEntry> softwareLicences = new HashMap<>();
 
 		if (withLicenceManagement) {
-			dataStub.licencesRequestRefresh();
-			softwareLicences = dataStub.getLicences();
+			//persistentDataRetriever.licencesRequestRefresh();
+			softwareLicences = persistentDataRetriever.getLicences();
 		}
 		return softwareLicences;
 	}
@@ -4830,11 +4134,12 @@ public class OpsiServiceNOMPersistenceController {
 		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
 
 		if (withLicenceManagement) {
-			dataStub.licencePoolXOpsiProductRequestRefresh();
-			dataStub.getLicencePoolXOpsiProduct();
-			Logging.info(this, "licencePoolXOpsiProduct size " + dataStub.getLicencePoolXOpsiProduct().size());
+			//persistentDataRetriever.licencePoolXOpsiProductRequestRefresh();
+			persistentDataRetriever.getLicencePoolXOpsiProduct();
+			Logging.info(this,
+					"licencePoolXOpsiProduct size " + persistentDataRetriever.getLicencePoolXOpsiProduct().size());
 
-			for (StringValuedRelationElement element : dataStub.getLicencePoolXOpsiProduct()) {
+			for (StringValuedRelationElement element : persistentDataRetriever.getLicencePoolXOpsiProduct()) {
 				rowsLicencePoolXOpsiProduct
 						.put(Utils.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
 								element.get(LicencePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
@@ -4905,12 +4210,12 @@ public class OpsiServiceNOMPersistenceController {
 				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
 
 		if (relationsAuditSoftwareToLicencePools == null) {
-			dataStub.auditSoftwareXLicencePoolRequestRefresh();
+			//persistentDataRetriever.auditSoftwareXLicencePoolRequestRefresh();
 		} else {
 			return;
 		}
 
-		relationsAuditSoftwareToLicencePools = dataStub.getAuditSoftwareXLicencePool();
+		relationsAuditSoftwareToLicencePools = persistentDataRetriever.getAuditSoftwareXLicencePool();
 
 		// function softwareIdent --> pool
 		fSoftware2LicencePool = new HashMap<>();
@@ -4919,7 +4224,8 @@ public class OpsiServiceNOMPersistenceController {
 		// function pool --> list of assigned software
 		fLicencePool2UnknownSoftwareList = new HashMap<>();
 
-		softwareWithoutAssociatedLicencePool = new TreeSet<>(getInstalledSoftwareInformationForLicensing().keySet());
+		softwareWithoutAssociatedLicencePool = new TreeSet<>(
+				persistentDataRetriever.getInstalledSoftwareInformationForLicensing().keySet());
 
 		if (!withLicenceManagement) {
 			return;
@@ -4952,7 +4258,7 @@ public class OpsiServiceNOMPersistenceController {
 
 			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
 			if (softwareIds.indexOf(swKEY) == -1) {
-				if (getInstalledSoftwareInformationForLicensing().get(swKEY) == null) {
+				if (persistentDataRetriever.getInstalledSoftwareInformationForLicensing().get(swKEY) == null) {
 					Logging.warning(this, "license pool " + licencePoolKEY
 							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
 					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
@@ -5093,7 +4399,7 @@ public class OpsiServiceNOMPersistenceController {
 		boolean result = true;
 
 		if (withLicenceManagement) {
-			Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensing();
+			Map<String, SWAuditEntry> instSwI = persistentDataRetriever.getInstalledSoftwareInformationForLicensing();
 
 			List<String> oldEntries = fLicencePool2SoftwareList.computeIfAbsent(licensePoolId,
 					arg -> new ArrayList<>());
@@ -5180,10 +4486,10 @@ public class OpsiServiceNOMPersistenceController {
 					// give zero length parts as ""
 					String[] parts = ident.split(";", -1);
 					String swName = parts[1];
-					if (getName2SWIdents().get(swName) == null) {
-						getName2SWIdents().put(swName, new TreeSet<>());
+					if (persistentDataRetriever.getName2SWIdents().get(swName) == null) {
+						persistentDataRetriever.getName2SWIdents().put(swName, new TreeSet<>());
 					}
-					getName2SWIdents().get(swName).add(ident);
+					persistentDataRetriever.getName2SWIdents().get(swName).add(ident);
 
 					Logging.info(this,
 							"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
@@ -5273,13 +4579,13 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> getServerConfigStrings(String key) {
-		getConfigOptions();
+		persistentDataRetriever.getConfigOptions();
 		return takeAsStringList(configDefaultValues.get(key));
 	}
 
 	public Map<String, LicencepoolEntry> getLicencepools() {
-		dataStub.licencepoolsRequestRefresh();
-		return dataStub.getLicencepools();
+		//persistentDataRetriever.licencepoolsRequestRefresh();
+		return persistentDataRetriever.getLicencepools();
 	}
 
 	// poolId -> LicenceStatisticsRow
@@ -5294,13 +4600,13 @@ public class OpsiServiceNOMPersistenceController {
 		// result
 		Map<String, Integer> licencePoolUsagecountSWInvent = new HashMap<>();
 
-		AuditSoftwareXLicencePool auditSoftwareXLicencePool = dataStub.getAuditSoftwareXLicencePool();
+		AuditSoftwareXLicencePool auditSoftwareXLicencePool = persistentDataRetriever.getAuditSoftwareXLicencePool();
 
-		Map<String, Set<String>> swId2clients = dataStub
+		Map<String, Set<String>> swId2clients = persistentDataRetriever
 				.getSoftwareIdent2clients(getHostInfoCollections().getOpsiHostNames());
 
 		if (withLicenceManagement) {
-			Map<String, LicencepoolEntry> licencePools = dataStub.getLicencepools();
+			Map<String, LicencepoolEntry> licencePools = persistentDataRetriever.getLicencepools();
 
 			if (rowsLicencesReconciliation == null) {
 				rowsLicencesReconciliation = new HashMap<>();
@@ -5329,12 +4635,13 @@ public class OpsiServiceNOMPersistenceController {
 				}
 			}
 
-			getInstalledSoftwareInformationForLicensing();
+			persistentDataRetriever.getInstalledSoftwareInformationForLicensing();
 
 			retrieveRelationsAuditSoftwareToLicencePools();
 
 			// idents
-			for (String softwareIdent : getInstalledSoftwareInformationForLicensing().keySet()) {
+			for (String softwareIdent : persistentDataRetriever.getInstalledSoftwareInformationForLicensing()
+					.keySet()) {
 				String licencePoolId = fSoftware2LicencePool.get(softwareIdent);
 
 				if (licencePoolId != null) {
@@ -5374,18 +4681,18 @@ public class OpsiServiceNOMPersistenceController {
 		// ------------------ retrieve data for statistics
 
 		// table LICENSE_POOL
-		Map<String, LicencepoolEntry> licencePools = dataStub.getLicencepools();
+		Map<String, LicencepoolEntry> licencePools = persistentDataRetriever.getLicencepools();
 
 		// table SOFTWARE_LICENSE
 		Logging.info(this, " licences ");
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
 		Logging.info(this, " licence usabilities ");
-		List<LicenceUsableForEntry> licenceUsabilities = dataStub.getLicenceUsabilities();
+		List<LicenceUsableForEntry> licenceUsabilities = persistentDataRetriever.getLicenceUsabilities();
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " licence usages ");
-		List<LicenceUsageEntry> licenceUsages = dataStub.getLicenceUsages();
+		List<LicenceUsageEntry> licenceUsages = persistentDataRetriever.getLicenceUsages();
 
 		// software usage according to audit
 		// tables
@@ -5406,10 +4713,11 @@ public class OpsiServiceNOMPersistenceController {
 
 			// not yet initialized
 			if (count == null) {
-				count = dataStub.getLicences().get(licenceId).getMaxInstallations();
+				count = persistentDataRetriever.getLicences().get(licenceId).getMaxInstallations();
 				pool2allowedUsagesCount.put(pool, count);
 			} else {
-				ExtendedInteger result = count.add(dataStub.getLicences().get(licenceId).getMaxInstallations());
+				ExtendedInteger result = count
+						.add(persistentDataRetriever.getLicences().get(licenceId).getMaxInstallations());
 				pool2allowedUsagesCount.put(pool, result);
 			}
 		}
@@ -5524,7 +4832,7 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "retrieveLicencesUsage with refresh " + (rowsLicencesUsage == null));
 
 		if (rowsLicencesUsage == null) {
-			dataStub.licenceUsagesRequestRefresh();
+			//persistentDataRetriever.licenceUsagesRequestRefresh();
 		} else {
 			return;
 		}
@@ -5536,7 +4844,7 @@ public class OpsiServiceNOMPersistenceController {
 		rowsLicencesUsage = new HashMap<>();
 		fClient2LicencesUsageList = new HashMap<>();
 
-		for (LicenceUsageEntry m : dataStub.getLicenceUsages()) {
+		for (LicenceUsageEntry m : persistentDataRetriever.getLicenceUsages()) {
 			rowsLicencesUsage.put(m.getPseudoKey(), m);
 
 			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.computeIfAbsent(m.getClientId(),
@@ -5693,15 +5001,15 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "reconciliationInfoRequestRefresh");
 		rowsLicencesReconciliation = null;
 		Logging.info(this, "reconciliationInfoRequestRefresh installedSoftwareInformationRequestRefresh()");
-		dataStub.installedSoftwareInformationRequestRefresh();
+		// persistentDataRetriever.installedSoftwareInformationRequestRefresh();
 
 		relationsAuditSoftwareToLicencePools = null;
 
-		dataStub.softwareAuditOnClientsRequestRefresh();
-		dataStub.licencepoolsRequestRefresh();
-		dataStub.licencesRequestRefresh();
-		dataStub.licenceUsabilitiesRequestRefresh();
-		dataStub.licenceUsagesRequestRefresh();
+		// persistentDataRetriever.softwareAuditOnClientsRequestRefresh();
+		// persistentDataRetriever.licencepoolsRequestRefresh();
+		// persistentDataRetriever.licencesRequestRefresh();
+		// persistentDataRetriever.licenceUsabilitiesRequestRefresh();
+		// persistentDataRetriever.licenceUsagesRequestRefresh();
 		hostInfoCollections.opsiHostsRequestRefresh();
 	}
 
@@ -5777,17 +5085,6 @@ public class OpsiServiceNOMPersistenceController {
 		keyUserRegisterValue = null;
 	}
 
-	private final boolean isUserRegisterActivated() {
-		boolean result = false;
-
-		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
-		// dont do anything if we have not got the config
-		if (serverPropertyMap.get(KEY_USER_REGISTER) != null && !serverPropertyMap.get(KEY_USER_REGISTER).isEmpty()) {
-			result = (Boolean) ((List<?>) serverPropertyMap.get(KEY_USER_REGISTER)).get(0);
-		}
-		return result;
-	}
-
 	private final boolean checkUserRolesModule() {
 		if (Boolean.TRUE.equals(keyUserRegisterValue) && !withUserRoles) {
 			keyUserRegisterValue = false;
@@ -5813,7 +5110,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
 		if (productOnClientsDisplayFieldsLocalbootProducts == null) {
-			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+			Map<String, List<Object>> serverPropertyMap = persistentDataRetriever.getConfigDefaultValues();
 
 			Logging.debug(this,
 					"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
@@ -5966,7 +5263,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {
 		if (productOnClientsDisplayFieldsNetbootProducts == null) {
-			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+			Map<String, List<Object>> serverPropertyMap = persistentDataRetriever.getConfigDefaultValues();
 
 			List<String> configuredByService = takeAsStringList(
 					serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
@@ -6064,7 +5361,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Map<String, Boolean> getHostDisplayFields() {
 		if (hostDisplayFields == null) {
-			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+			Map<String, List<Object>> serverPropertyMap = persistentDataRetriever.getConfigDefaultValues();
 
 			List<String> configuredByService = takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 
@@ -6087,13 +5384,13 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public List<String> getDisabledClientMenuEntries() {
-		getConfigOptions();
+		persistentDataRetriever.getConfigOptions();
 		return takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
 		Logging.debug(this, "getOpsiclientdExtraEvents");
-		getConfigOptions();
+		persistentDataRetriever.getConfigOptions();
 		if (configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS) == null) {
 			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
@@ -6147,7 +5444,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	private boolean checkStandardConfigs() {
-		boolean result = getConfigOptions() != null;
+		boolean result = persistentDataRetriever.getConfigOptions() != null;
 		Logging.info(this, "checkStandardConfigs, already there " + result);
 
 		if (!result) {
@@ -6386,7 +5683,7 @@ public class OpsiServiceNOMPersistenceController {
 		// WAN_CONFIGURATION
 		// does it exist?
 
-		Map<String, ConfigOption> wanConfigOptions = getWANConfigOptions();
+		Map<String, ConfigOption> wanConfigOptions = persistentDataRetriever.getWANConfigOptions();
 		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
 			Logging.info(this, "build default wanConfigOptions");
 			readyObjects = buildWANConfigOptions(readyObjects);
@@ -6681,90 +5978,9 @@ public class OpsiServiceNOMPersistenceController {
 		return true;
 	}
 
-	private ExtendedInteger calculateModulePermission(ExtendedInteger globalMaxClients,
-			final Integer specialMaxClientNumber) {
-		Logging.info(this, "calculateModulePermission globalMaxClients " + globalMaxClients + " specialMaxClientNumber "
-				+ specialMaxClientNumber);
-		Integer maxClients = null;
-
-		if (specialMaxClientNumber != null) {
-			int compareResult = globalMaxClients.compareTo(specialMaxClientNumber);
-			Logging.info(this, "calculateModulePermission compareResult " + compareResult);
-
-			// the global max client count is reduced, a real warning and error limit exists
-			if (compareResult < 0) {
-
-				maxClients = specialMaxClientNumber;
-				globalMaxClients = new ExtendedInteger(maxClients);
-			} else {
-				maxClients = specialMaxClientNumber;
-			}
-		}
-
-		Logging.info(this, "calculateModulePermission returns " + maxClients);
-
-		if (maxClients == null) {
-			return globalMaxClients;
-		} else {
-			return new ExtendedInteger(maxClients);
-		}
-	}
-
 	// opsi module information
 	public void opsiInformationRequestRefresh() {
 		opsiInformation = new HashMap<>();
-	}
-
-	public Map<String, Object> getOpsiModulesInfos() {
-		retrieveOpsiModules();
-		return opsiModulesDisplayInfo;
-	}
-
-	public boolean isOpsiLicencingAvailable() {
-		retrieveOpsiLicensingInfoVersion();
-		return isOpsiLicencingAvailable;
-	}
-
-	private void retrieveOpsiLicensingInfoVersion() {
-		if (!hasOpsiLicencingBeenChecked) {
-			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
-					+ getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME));
-
-			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST) {
-				Logging.info(this,
-						"method " + BACKEND_LICENSING_INFO_METHOD_NAME + " not existing in this opsi service");
-				isOpsiLicencingAvailable = false;
-			} else {
-				isOpsiLicencingAvailable = true;
-			}
-
-			hasOpsiLicencingBeenChecked = true;
-		}
-	}
-
-	public boolean isOpsiUserAdmin() {
-
-		if (!hasIsOpisUserAdminBeenChecked) {
-			retrieveIsOpsiUserAdmin();
-		}
-
-		return isOpsiUserAdmin;
-	}
-
-	private void retrieveIsOpsiUserAdmin() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN, new Object[] {});
-
-		Map<String, Object> json = exec.retrieveResponse(omc);
-
-		if (json.containsKey("result") && json.get("result") != null) {
-			isOpsiUserAdmin = (Boolean) json.get("result");
-		} else {
-			Logging.warning(this, "cannot check if user is admin, fallback to false...");
-
-			isOpsiUserAdmin = false;
-		}
-
-		hasIsOpisUserAdminBeenChecked = true;
 	}
 
 	public final void opsiLicencingInfoRequestRefresh() {
@@ -6773,611 +5989,6 @@ public class OpsiServiceNOMPersistenceController {
 		licInfoMap = null;
 		LicensingInfoMap.requestRefresh();
 		Logging.info(this, "request worked");
-	}
-
-	// is not allowed to be overriden in order to prevent changes
-	public final Map<String, Object> getOpsiLicencingInfoOpsiAdmin() {
-		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable() && isOpsiUserAdmin()) {
-			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
-					new Object[] { true, false, true, false });
-
-			licencingInfoOpsiAdmin = exec.retrieveResponse(omc);
-		}
-
-		return licencingInfoOpsiAdmin;
-	}
-
-	private Map<String, Object> produceOpsiInformation() {
-		if (!opsiInformation.isEmpty()) {
-			// we are initialized
-			return opsiInformation;
-		}
-
-		RPCMethodName methodName = RPCMethodName.BACKEND_INFO;
-
-		if (ServerFacade.isOpsi43()) {
-			methodName = BACKEND_LICENSING_INFO_METHOD_NAME;
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] {});
-		opsiInformation = new HashMap<>();
-
-		// method does not exist before opsi 3.4
-		if (getMethodSignature(methodName) != NONE_LIST) {
-			opsiInformation = exec.getMapResult(omc);
-		}
-
-		return opsiInformation;
-	}
-
-	private void produceOpsiModulesInfo() {
-		// has the actual signal if a module is activ
-		opsiModules = new HashMap<>();
-
-		// opsiinformation which delivers the service information on checked modules
-
-		// displaying to the user
-
-		getHostInfoCollections().retrieveOpsiHosts();
-		Logging.info(this,
-				"getOverLimitModuleList() "
-						+ LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(), true)
-								.getCurrentOverLimitModuleList());
-
-		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
-				!FGeneralDialogLicensingInfo.isExtendedView());
-
-		List<String> availableModules = licInfoMap.getAvailableModules();
-
-		for (String mod : licInfoMap.getModules()) {
-			opsiModules.put(mod, availableModules.indexOf(mod) != -1);
-		}
-
-		Logging.info(this, "opsiModules result " + opsiModules);
-
-		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
-		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
-
-		withMySQL = canCallMySQL();
-		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
-		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
-		withUserRoles = opsiModules.get("userroles") != null && opsiModules.get("userroles");
-
-		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + withUserRoles);
-		Logging.info(this, "produceOpsiModulesInfo withUEFI " + withUEFI);
-		Logging.info(this, "produceOpsiModulesInfo withWAN " + withWAN);
-		Logging.info(this, "produceOpsiModulesInfo withLicenceManagement " + withLicenceManagement);
-		Logging.info(this, "produceOpsiModulesInfo withMySQL " + withMySQL);
-
-		// sets value to true if we use the mysql backend and informs that we are
-		// underlicensed
-	}
-
-	private void produceOpsiModulesInfoClassicOpsi43() {
-		produceOpsiInformation();
-
-		// keeps the info for displaying to the user
-		opsiModulesDisplayInfo = new HashMap<>();
-
-		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
-		// has the actual signal if a module is active
-		opsiModules = new HashMap<>();
-
-		final List<String> missingModulesPermissionInfo = new ArrayList<>();
-
-		// prepare the user info
-		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-		Logging.info(this, "opsi module information " + opsiModulesInfo);
-
-		ExtendedDate validUntil = ExtendedDate.INFINITE;
-
-		// analyse the real module info
-		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
-		opsiCountModules.keySet()
-				.removeAll(exec.getListFromItem(((JSONArray) opsiInformation.get("obsolete_modules")).toString()));
-		getHostInfoCollections().retrieveOpsiHosts();
-
-		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
-
-		int countClients = hostInfoCollections.getCountClients();
-
-		LocalDateTime today = LocalDateTime.now();
-
-		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
-
-		// read in modules
-		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-			Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
-			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
-					validUntil);
-
-			Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
-			Boolean permissionCheck = modulePermission.getBoolean();
-			opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
-			if (permissionCheck != null) {
-				opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
-			}
-
-			if (opsiModuleData.get("available") != null) {
-				opsiModulesDisplayInfo.put(opsiModuleInfo.getKey(), opsiModuleData.get("available"));
-			}
-		}
-
-		Logging.info(this, "modules resulting step 0  " + opsiModules);
-
-		// existing
-		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
-
-			if ("free".equals(opsiModuleData.get("state"))) {
-				continue;
-			}
-
-			modulePermission = new ModulePermissionValue(opsiModuleData.get("client_number"), validUntil);
-
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
-			// replace value got from modulesInfo
-			opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
-
-			if (opsiModuleData.get("client_number") != null) {
-				opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiModuleData.get("client_number"));
-			}
-		}
-
-		Logging.info(this, "modules resulting step 1 " + opsiModules);
-		Logging.info(this, "countModules is  " + opsiCountModules);
-
-		// set values for modules checked by configed
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-			ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
-			ExtendedDate expiresForThisModule = modulePermission.getExpires();
-
-			if (modulePermission.getBoolean() != null) {
-				opsiModules.put(key, modulePermission.getBoolean());
-				Logging.info(this,
-						" retrieveOpsiModules, set opsiModules for key " + key + ": " + modulePermission.getBoolean());
-			} else {
-				opsiModules.put(key, true);
-				Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
-
-				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-					opsiModules.put(key, false);
-				} else {
-
-					Integer warningLimit = null;
-					Integer stopLimit = null;
-
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
-
-					Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
-							+ maxClientsForThisModule.getNumber());
-
-					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
-
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
-
-					Integer newGlobalLimit = globalMaxClients.getNumber();
-
-					// global limit is changed by this module a real warning
-					// and error limit exists
-					if (newGlobalLimit != null) {
-						warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
-						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
-					}
-
-					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
-							+ " stopLimit " + stopLimit);
-
-					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
-						opsiModules.put(key, false);
-					} else {
-						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							LocalDateTime expiresDate = expiresForThisModule.getDate();
-
-							if (today.isAfter(expiresDate)) {
-								opsiModules.put(key, false);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		Logging.info(this, "modules resulting step 2  " + opsiModules);
-		Logging.info(this, "count Modules is  " + opsiCountModules);
-
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-			int countClientsInThisBlock = countClients;
-
-			// tests
-
-			Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
-			boolean problemToIndicate = true;
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-			ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
-			ExtendedDate expiresForThisModule = modulePermission.getExpires();
-
-			Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
-					+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
-
-			if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-				problemToIndicate = false;
-			}
-
-			if (problemToIndicate
-					&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
-				problemToIndicate = false;
-			}
-
-			Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
-
-			if (problemToIndicate) {
-				Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
-						+ " count " + countClientsInThisBlock);
-
-				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
-
-					if (today.isAfter(noticeDate)) {
-						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-					}
-				}
-
-				if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
-					int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
-					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
-
-					if (countClientsInThisBlock > stopCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount + " count clients "
-								+ countClients);
-
-						String warningText =
-
-								String.format(
-										// locale.
-										Configed.getResourceValue("Permission.modules.clientcount.error"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-
-						Logging.warning(this, warningText);
-					} else if (countClientsInThisBlock > startWarningCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
-								+ " count clients " + countClients);
-
-						String warningText =
-
-								String.format(
-										// locale,
-										Configed.getResourceValue("Permission.modules.clientcount.warning"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-						Logging.warning(this, warningText);
-					} else {
-						// Do nothing when countClientsInThisBlock <= startWarningCount
-					}
-				}
-			}
-		}
-
-		Logging.info(this, "modules resulting  " + opsiModules);
-		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
-
-		// Will be called only, when info empty
-		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
-
-		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
-		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
-
-		withMySQL = canCallMySQL();
-		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
-		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
-		withUserRoles = opsiModules.get("userroles") != null && opsiModules.get("userroles");
-
-		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
-		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
-		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
-	}
-
-	private void callOpsiLicenceMissingModules(List<String> missingModulesPermissionInfo) {
-		if (!missingModulesPermissionInfo.isEmpty()) {
-
-			SwingUtilities.invokeLater(() -> {
-				StringBuilder info = new StringBuilder();
-
-				info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
-				info.append(":\n");
-				for (String moduleInfo : missingModulesPermissionInfo) {
-					info.append(moduleInfo + "\n");
-				}
-
-				Logging.info(this, "missingModules " + info);
-				FOpsiLicenseMissingText.callInstanceWith(info.toString());
-			});
-		}
-	}
-
-	private void produceOpsiModulesInfoClassic() {
-		produceOpsiInformation();
-
-		// keeps the info for displaying to the user
-		opsiModulesDisplayInfo = new HashMap<>();
-
-		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
-		// has the actual signal if a module is active
-		opsiModules = new HashMap<>();
-
-		String opsiVersion = (String) opsiInformation.get("opsiVersion");
-		Logging.info(this, "opsi version information " + opsiVersion);
-
-		final List<String> missingModulesPermissionInfo = new ArrayList<>();
-
-		// prepare the user info
-		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-
-		opsiModulesInfo.remove("signature");
-		Logging.info(this, "opsi module information " + opsiModulesInfo);
-		opsiModulesInfo.remove("valid");
-
-		opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
-
-		ExtendedDate validUntil = ExtendedDate.INFINITE;
-
-		// analyse the real module info
-		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
-		getHostInfoCollections().retrieveOpsiHosts();
-
-		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
-
-		int countClients = hostInfoCollections.getCountClients();
-
-		LocalDateTime today = LocalDateTime.now();
-
-		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
-
-		// read in modules
-		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-			Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo.getKey());
-			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleInfo.getValue(), validUntil);
-
-			Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
-			Boolean permissionCheck = modulePermission.getBoolean();
-			opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
-			if (permissionCheck != null) {
-				opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
-			}
-		}
-
-		Logging.info(this, "modules resulting step 0  " + opsiModules);
-
-		// existing
-		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
-
-			modulePermission = new ModulePermissionValue(opsiCountModule.getValue(), validUntil);
-
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
-			// replace value got from modulesInfo
-			opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
-
-			if (opsiCountModule.getValue() != null) {
-				opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiCountModule.getValue());
-			}
-		}
-
-		Logging.info(this, "modules resulting step 1 " + opsiModules);
-		Logging.info(this, "countModules is  " + opsiCountModules);
-
-		// set values for modules checked by configed
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-			ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
-			ExtendedDate expiresForThisModule = modulePermission.getExpires();
-
-			if (modulePermission.getBoolean() != null) {
-				opsiModules.put(key, modulePermission.getBoolean());
-				Logging.info(this,
-						" retrieveOpsiModules, set opsiModules for key " + key + ": " + modulePermission.getBoolean());
-			} else {
-				opsiModules.put(key, true);
-				Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
-
-				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-					opsiModules.put(key, false);
-				} else {
-
-					Integer warningLimit = null;
-					Integer stopLimit = null;
-
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
-
-					Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
-							+ maxClientsForThisModule.getNumber());
-
-					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
-
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
-
-					Integer newGlobalLimit = globalMaxClients.getNumber();
-
-					// global limit is changed by this module a real warning
-					// and error limit exists
-					if (newGlobalLimit != null) {
-						warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
-						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
-					}
-
-					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
-							+ " stopLimit " + stopLimit);
-
-					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
-						opsiModules.put(key, false);
-					} else {
-						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							LocalDateTime expiresDate = expiresForThisModule.getDate();
-
-							if (today.isAfter(expiresDate)) {
-								opsiModules.put(key, false);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		Logging.info(this, "modules resulting step 2  " + opsiModules);
-		Logging.info(this, "count Modules is  " + opsiCountModules);
-
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
-			int countClientsInThisBlock = countClients;
-
-			// tests
-
-			Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
-			boolean problemToIndicate = true;
-			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-			ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
-			ExtendedDate expiresForThisModule = modulePermission.getExpires();
-
-			Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
-					+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
-
-			if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
-				problemToIndicate = false;
-			}
-
-			if (problemToIndicate
-					&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
-				problemToIndicate = false;
-			}
-
-			Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
-
-			if (problemToIndicate) {
-				Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
-						+ " count " + countClientsInThisBlock);
-
-				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
-
-					if (today.isAfter(noticeDate)) {
-						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-					}
-				}
-
-				if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
-					int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
-					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
-
-					if (countClientsInThisBlock > stopCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount + " count clients "
-								+ countClients);
-
-						String warningText =
-
-								String.format(
-										// locale.
-										Configed.getResourceValue("Permission.modules.clientcount.error"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-
-						Logging.warning(this, warningText);
-					} else if (countClientsInThisBlock > startWarningCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
-								+ " count clients " + countClients);
-
-						String warningText =
-
-								String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-						Logging.warning(this, warningText);
-					} else {
-						// countClientsInThisBlock small enough, so nothing to do
-					}
-				}
-			}
-		}
-
-		Logging.info(this, "modules resulting  " + opsiModules);
-		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
-
-		// Will be called only when info empty
-		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
-
-		withLicenceManagement = (opsiModules.get("license_management") != null)
-				&& opsiModules.get("license_management");
-		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
-
-		withMySQL = canCallMySQL();
-		withUEFI = (opsiModules.get("uefi") != null) && opsiModules.get("uefi");
-		withWAN = (opsiModules.get("vpn") != null) && opsiModules.get("vpn");
-		withUserRoles = (opsiModules.get("userroles") != null) && opsiModules.get("userroles");
-
-		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
-		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
-		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
-	}
-
-	public final void retrieveOpsiModules() {
-		Logging.info(this, "retrieveOpsiModules ");
-
-		licencingInfoOpsiAdmin = getOpsiLicencingInfoOpsiAdmin();
-
-		// probably old opsi service version
-		if (licencingInfoOpsiAdmin == null) {
-			if (ServerFacade.isOpsi43()) {
-				produceOpsiModulesInfoClassicOpsi43();
-			} else {
-				produceOpsiModulesInfoClassic();
-			}
-		} else {
-			produceOpsiModulesInfo();
-		}
-
-		Logging.info(this, " withMySQL " + withMySQL);
-		Logging.info(this, " withUserRoles " + withUserRoles);
-	}
-
-	public boolean isWithLocalImaging() {
-		retrieveOpsiModules();
-		return withLocalImaging;
-	}
-
-	public boolean isWithUEFI() {
-		return withUEFI;
-	}
-
-	public boolean isWithWAN() {
-		return withWAN;
-	}
-
-	public boolean isWithLicenceManagement() {
-		return withLicenceManagement;
 	}
 
 	private boolean applyUserSpecializedConfig() {
@@ -7399,7 +6010,7 @@ public class OpsiServiceNOMPersistenceController {
 	 */
 	public boolean checkSSHCommandMethod(RPCMethodName method) {
 		// method does not exist before opsi 3.4
-		if (getMethodSignature(method) != NONE_LIST) {
+		if (persistentDataRetriever.getMethodSignature(method) != NONE_LIST) {
 			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
 			return true;
 		}
@@ -7424,7 +6035,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public List<Map<String, Object>> checkHealth() {
 		if (!isHealthDataAlreadyLoaded()) {
-			healthData = dataStub.checkHealth();
+			healthData = persistentDataRetriever.checkHealth();
 		}
 
 		return healthData;
@@ -7436,7 +6047,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public Map<String, Object> getDiagnosticData() {
 		if (diagnosticData == null) {
-			diagnosticData = dataStub.getDiagnosticData();
+			diagnosticData = persistentDataRetriever.getDiagnosticData();
 		}
 
 		return diagnosticData;

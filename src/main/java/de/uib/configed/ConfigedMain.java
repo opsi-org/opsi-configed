@@ -800,7 +800,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void preloadData() {
-		persistenceController.retrieveOpsiModules();
+		persistenceController.getPersistentDataRetriever().retrieveOpsiModules();
 
 		if (depotRepresentative == null) {
 			depotRepresentative = myServer;
@@ -814,7 +814,7 @@ public class ConfigedMain implements ListSelectionListener {
 			editableDomains.add(opsiDefaultDomain);
 		}
 
-		localbootProductnames = persistenceController.getAllLocalbootProductNames();
+		localbootProductnames = persistenceController.getPersistentDataRetriever().getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getAllNetbootProductNames();
 		persistenceController.getProductIds();
 
@@ -826,13 +826,14 @@ public class ConfigedMain implements ListSelectionListener {
 			savedSearchesDialog.resetModel();
 		}
 
-		productGroups = persistenceController.getProductGroups();
+		productGroups = persistenceController.getPersistentDataRetriever().getProductGroups();
 		productGroupMembers = persistenceController.getFProductGroup2Members();
 
-		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persistenceController
+		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persistenceController.getPersistentDataRetriever()
 				.getOpsiHWAuditConf(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 		mainFrame.initHardwareInfo(hwAuditConfig);
-		Logging.info(this, "preloadData, hw classes " + persistenceController.getAllHwClassNames());
+		Logging.info(this,
+				"preloadData, hw classes " + persistenceController.getPersistentDataRetriever().getAllHwClassNames());
 		mainFrame.updateHostCheckboxenText();
 
 		persistenceController.retrieveProducts();
@@ -1002,7 +1003,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void handleGroupActionRequest() {
-		if (persistenceController.isWithLocalImaging()) {
+		if (persistenceController.getPersistentDataRetriever().isWithLocalImaging()) {
 			startGroupActionFrame();
 		} else {
 			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "not activated", true,
@@ -1057,7 +1058,7 @@ public class ConfigedMain implements ListSelectionListener {
 	public void handleLicencesManagementRequest() {
 
 		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.isWithLicenceManagement() && licencesFrame == null) {
+		if (persistenceController.getPersistentDataRetriever().isWithLicenceManagement() && licencesFrame == null) {
 			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licences.Loading"));
 		}
 		new Thread() {
@@ -1065,9 +1066,9 @@ public class ConfigedMain implements ListSelectionListener {
 			@Override
 			public void run() {
 				Logging.info(this, "handleLicencesManagementRequest called");
-				persistenceController.retrieveOpsiModules();
+				persistenceController.getPersistentDataRetriever().retrieveOpsiModules();
 
-				if (persistenceController.isWithLicenceManagement()) {
+				if (persistenceController.getPersistentDataRetriever().isWithLicenceManagement()) {
 					toggleLicencesFrame();
 				} else {
 					FOpsiLicenseMissingText
@@ -1481,7 +1482,7 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenceContracts()));
+				() -> (Map) persistenceController.getPersistentDataRetriever().getLicenceContracts()));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
@@ -1695,12 +1696,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 			treeClients.produceTreeForALL(allPCs);
 
-			treeClients.produceAndLinkGroups(persistenceController.getHostGroups());
+			treeClients.produceAndLinkGroups(persistenceController.getPersistentDataRetriever().getHostGroups());
 
 			Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
 			Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.length);
-			allowedClients = treeClients.associateClientsToGroups(allPCs, persistenceController.getFObject2Groups(),
-					permittedHostGroups);
+			allowedClients = treeClients.associateClientsToGroups(allPCs,
+					persistenceController.getPersistentDataRetriever().getFObject2Groups(), permittedHostGroups);
 
 			if (allowedClients != null) {
 				Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
@@ -1735,13 +1736,14 @@ public class ConfigedMain implements ListSelectionListener {
 
 				Logging.info(this,
 						"buildPclistTableModel, directly allowed groups " + treeClients.getDirectlyAllowedGroups());
-				treeClients.produceAndLinkGroups(persistenceController.getHostGroups());
+				treeClients.produceAndLinkGroups(persistenceController.getPersistentDataRetriever().getHostGroups());
 
 				Logging.info(this, "buildPclistTableModel, allPCs (2) " + allPCs.length);
 
 				// we got already allowedClients, therefore don't need the parameter
 				// hostgroupsPermitted
-				treeClients.associateClientsToGroups(allPCs, persistenceController.getFObject2Groups(), null);
+				treeClients.associateClientsToGroups(allPCs,
+						persistenceController.getPersistentDataRetriever().getFObject2Groups(), null);
 
 				Logging.info(this, "tree produced");
 			}
@@ -2842,8 +2844,9 @@ public class ConfigedMain implements ListSelectionListener {
 		if (istmForSelectedClientsLocalboot == null) {
 			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 					collectChangedLocalbootStates,
-					persistenceController.getAllLocalbootProductNames(depotRepresentative), localbootStatesAndActions,
-					possibleActions, persistenceController.getProductGlobalInfos(depotRepresentative),
+					persistenceController.getPersistentDataRetriever().getAllLocalbootProductNames(depotRepresentative),
+					localbootStatesAndActions, possibleActions,
+					persistenceController.getProductGlobalInfos(depotRepresentative),
 					getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 		}
 
@@ -3100,15 +3103,16 @@ public class ConfigedMain implements ListSelectionListener {
 		if (editingTarget == EditingTarget.SERVER) {
 			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
 
-			Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDefaultValues();
+			Map<String, List<Object>> defaultValuesMap = persistenceController.getPersistentDataRetriever()
+					.getConfigDefaultValues();
 
 			additionalConfigs.add(defaultValuesMap);
 
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
 
 			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
-					additionalConfigs.get(0), persistenceController.getConfigOptions(), additionalConfigs,
-					additionalconfigurationUpdateCollection, true,
+					additionalConfigs.get(0), persistenceController.getPersistentDataRetriever().getConfigOptions(),
+					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					// editableOptions
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 		} else {
@@ -3133,7 +3137,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 
-			Map<String, ListCellOptions> configOptions = persistenceController.getConfigOptions();
+			Map<String, ListCellOptions> configOptions = persistenceController.getPersistentDataRetriever()
+					.getConfigOptions();
 
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
@@ -3153,7 +3158,7 @@ public class ConfigedMain implements ListSelectionListener {
 		if (firstSelectedClient == null || getSelectedClients().length == 0) {
 			mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 		} else if (getSelectedClients().length > 1) {
-			if (persistenceController.canCallMySQL()) {
+			if (persistenceController.getPersistentDataRetriever().canCallMySQL()) {
 				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
 			} else {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
@@ -4253,7 +4258,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public Map<String, RemoteControl> getRemoteControls() {
-		return persistenceController.getRemoteControls();
+		return persistenceController.getPersistentDataRetriever().getRemoteControls();
 	}
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,

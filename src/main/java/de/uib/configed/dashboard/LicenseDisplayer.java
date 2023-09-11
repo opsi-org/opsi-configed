@@ -138,8 +138,10 @@ public class LicenseDisplayer {
 
 	private String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getPersistentDataRetriever()
+				.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getPersistentDataRetriever()
+				.getLicenceContractsToNotify();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 		Logging.info(this, "contractsToNotify " + contractsToNotify);
@@ -195,7 +197,7 @@ public class LicenseDisplayer {
 
 		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+						() -> (Map) persist.getPersistentDataRetriever().getInstalledSoftwareName2SWinfo())),
 				0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {
@@ -244,7 +246,7 @@ public class LicenseDisplayer {
 		// nearly done in produceModelSWxLicencepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
-		for (String swID : persist.getName2SWIdents().get(swName)) {
+		for (String swID : persist.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {

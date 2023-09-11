@@ -321,7 +321,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 					String theRole = null;
 
 					List<Object> values = PersistenceControllerFactory.getPersistenceController()
-							.getConfigDefaultValues().get(rolekey);
+							.getPersistentDataRetriever().getConfigDefaultValues().get(rolekey);
 
 					if (values != null && !values.isEmpty()) {
 						theRole = "" + values.get(0);
@@ -475,14 +475,14 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				// Collection<String> existingHostgroups,
 				persistenceController.getHostGroupIds(),
 				// Collection<String> existingProductgroups,
-				persistenceController.getProductGroups().keySet(),
+				persistenceController.getPersistentDataRetriever().getProductGroups().keySet(),
 
 				// data. on which changes are based
 				// Map<String, List<Object>> serverconfigValuesMap,
-				persistenceController.getConfigDefaultValues(),
+				persistenceController.getPersistentDataRetriever().getConfigDefaultValues(),
 
 				// Map<String, ListCellOptions> configOptionsMap
-				persistenceController.getConfigOptions());
+				persistenceController.getPersistentDataRetriever().getConfigOptions());
 
 		List<Object> newData = up.produce();
 

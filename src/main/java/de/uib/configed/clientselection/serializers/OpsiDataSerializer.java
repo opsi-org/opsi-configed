@@ -82,7 +82,7 @@ public class OpsiDataSerializer {
 	public List<String> getSaved() {
 		HashSet<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
-		set.addAll(persistenceController.getSavedSearches().keySet());
+		set.addAll(persistenceController.getPersistentDataRetriever().getSavedSearches().keySet());
 		return new LinkedList<>(set);
 	}
 
@@ -90,7 +90,7 @@ public class OpsiDataSerializer {
 	 * Get the saved searches map
 	 */
 	public SavedSearches getSavedSearches() {
-		return persistenceController.getSavedSearches();
+		return persistenceController.getPersistentDataRetriever().getSavedSearches();
 	}
 
 	/**
@@ -198,7 +198,8 @@ public class OpsiDataSerializer {
 	private Map<String, Object> getData(String name) {
 
 		// we take version from server and not the (possibly edited own version! )
-		searches.put(name, persistenceController.getSavedSearches().get(name).getSerialization());
+		searches.put(name,
+				persistenceController.getPersistentDataRetriever().getSavedSearches().get(name).getSerialization());
 
 		// controller.getSavedSearches().get(name)
 

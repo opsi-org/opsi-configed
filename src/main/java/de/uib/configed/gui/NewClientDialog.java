@@ -288,7 +288,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!persistenceController.isWithUEFI()) {
+		if (!persistenceController.getPersistentDataRetriever().isWithUEFI()) {
 			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
 		}
@@ -300,7 +300,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 
-		if (!persistenceController.isWithUEFI()) {
+		if (!persistenceController.getPersistentDataRetriever().isWithUEFI()) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
@@ -309,14 +309,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!persistenceController.isWithWAN()) {
+		if (!persistenceController.getPersistentDataRetriever().isWithWAN()) {
 			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 
 		jCheckWan = new JCheckBox();
 		jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
-		if (!persistenceController.isWithWAN()) {
+		if (!persistenceController.getPersistentDataRetriever().isWithWAN()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
@@ -911,8 +911,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		String group = (String) jComboPrimaryGroup.getSelectedItem();
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = persistenceController.isWithUEFI() && jCheckUefi.getSelectedObjects() != null;
-		boolean wanConfig = persistenceController.isWithWAN() && jCheckWan.getSelectedObjects() != null;
+		boolean uefiboot = persistenceController.getPersistentDataRetriever().isWithUEFI()
+				&& jCheckUefi.getSelectedObjects() != null;
+		boolean wanConfig = persistenceController.getPersistentDataRetriever().isWithWAN()
+				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,

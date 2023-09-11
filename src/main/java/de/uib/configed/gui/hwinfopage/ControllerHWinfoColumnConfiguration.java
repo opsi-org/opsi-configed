@@ -103,7 +103,7 @@ public class ControllerHWinfoColumnConfiguration {
 				persistenceController.configOptionsRequestRefresh();
 				model.requestReload();
 
-				persistenceController.getConfigOptions();
+				persistenceController.getPersistentDataRetriever().getConfigOptions();
 
 				model.reset();
 				setDataChanged(false);
@@ -253,7 +253,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getHwAuditDeviceClasses();
+		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getPersistentDataRetriever()
+				.getHwAuditDeviceClasses();
 		int id = 0;
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {

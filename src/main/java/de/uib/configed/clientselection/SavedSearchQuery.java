@@ -107,7 +107,7 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
+		Map<String, Map<String, String>> hostGroups = controller.getPersistentDataRetriever().getHostGroups();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");

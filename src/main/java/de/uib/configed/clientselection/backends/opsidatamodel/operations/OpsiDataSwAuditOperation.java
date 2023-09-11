@@ -34,13 +34,14 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 			String swIdent = null;
 			Integer swIndex = swEntry.getSWid();
 
-			swIdent = persistenceController.getSWident(swIndex);
+			swIdent = persistenceController.getPersistentDataRetriever().getSWident(swIndex);
 			if (swIdent == null || swIndex == null || swIndex == -1) {
 				Logging.info(this, "no swIdent for index " + swIndex);
 				return false;
 			}
 
-			client.setCurrentSwAuditValue(persistenceController.getInstalledSoftwareInformation().get(swIdent));
+			client.setCurrentSwAuditValue(
+					persistenceController.getPersistentDataRetriever().getInstalledSoftwareInformation().get(swIdent));
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
 			}

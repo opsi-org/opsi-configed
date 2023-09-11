@@ -444,7 +444,7 @@ public final class OpsiDataBackend {
 		Logging.info(this, "client maps size " + clientMaps.size());
 
 		if (groups == null || reloadRequested) {
-			groups = persistenceController.getFObject2Groups();
+			groups = persistenceController.getPersistentDataRetriever().getFObject2Groups();
 		}
 
 		if (superGroups == null || reloadRequested) {
@@ -605,7 +605,7 @@ public final class OpsiDataBackend {
 	}
 
 	private void getHardwareOnClient(String[] clientNames) {
-		hardwareOnClient = persistenceController.getHardwareOnClient();
+		hardwareOnClient = persistenceController.getPersistentDataRetriever().getHardwareOnClient();
 		clientToHardware = new HashMap<>();
 		for (int i = 0; i < clientNames.length; i++) {
 			clientToHardware.put(clientNames[i], new LinkedList<>());
@@ -635,8 +635,8 @@ public final class OpsiDataBackend {
 	private void getHardwareConfig() {
 		String locale = Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry();
 		Logging.debug(this, locale);
-		hwConfig = persistenceController.getOpsiHWAuditConf("en_");
-		hwConfigLocalized = persistenceController.getOpsiHWAuditConf(locale);
+		hwConfig = persistenceController.getPersistentDataRetriever().getOpsiHWAuditConf("en_");
+		hwConfigLocalized = persistenceController.getPersistentDataRetriever().getOpsiHWAuditConf(locale);
 		Logging.debug(this, "" + hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();

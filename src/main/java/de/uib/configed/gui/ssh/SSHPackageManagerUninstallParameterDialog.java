@@ -203,13 +203,15 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 			return false;
 		}
 
-		if (persistenceController.getDepot2LocalbootProducts().get(depot) != null
-				&& persistenceController.getDepot2LocalbootProducts().get(depot).containsKey(selectedProduct)) {
+		if (persistenceController.getPersistentDataRetriever().getDepot2LocalbootProducts().get(depot) != null
+				&& persistenceController.getPersistentDataRetriever().getDepot2LocalbootProducts().get(depot)
+						.containsKey(selectedProduct)) {
 			return true;
 		}
 
-		return persistenceController.getDepot2NetbootProducts().get(depot) != null
-				&& persistenceController.getDepot2NetbootProducts().get(depot).containsKey(selectedProduct);
+		return persistenceController.getPersistentDataRetriever().getDepot2NetbootProducts().get(depot) != null
+				&& persistenceController.getPersistentDataRetriever().getDepot2NetbootProducts().get(depot)
+						.containsKey(selectedProduct);
 	}
 
 	private void initDepots() {

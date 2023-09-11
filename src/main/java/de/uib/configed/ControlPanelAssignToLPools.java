@@ -567,7 +567,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					persistenceController.installedSoftwareInformationRequestRefresh();
-					return (Map) persistenceController.getInstalledSoftwareInformationForLicensing();
+					return (Map) persistenceController.getPersistentDataRetriever()
+							.getInstalledSoftwareInformationForLicensing();
 
 				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
 				updateCollection);

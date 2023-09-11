@@ -1182,7 +1182,7 @@ public class MainFrame extends JFrame
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(persistenceController.isWithLocalImaging());
+		jMenuFrameWorkOnGroups.setVisible(persistenceController.getPersistentDataRetriever().isWithLocalImaging());
 		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
@@ -1701,14 +1701,14 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (persistenceController.isWithUEFI()) {
+		if (persistenceController.getPersistentDataRetriever().isWithUEFI()) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
 		} else {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (persistenceController.isWithWAN()) {
+		if (persistenceController.getPersistentDataRetriever().isWithWAN()) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -2159,7 +2159,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
 
-		jButtonWorkOnGroups.setEnabled(persistenceController.isWithLocalImaging());
+		jButtonWorkOnGroups.setEnabled(persistenceController.getPersistentDataRetriever().isWithLocalImaging());
 		jButtonWorkOnGroups.addActionListener(this);
 
 		jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
@@ -2178,10 +2178,12 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
-		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
-				&& licensingInfoMap == null) {
-			licensingInfoMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
-					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.isExtendedView());
+		if (persistenceController.getPersistentDataRetriever().isOpsiLicencingAvailable()
+				&& persistenceController.getPersistentDataRetriever().isOpsiUserAdmin() && licensingInfoMap == null) {
+			licensingInfoMap = LicensingInfoMap.getInstance(
+					persistenceController.getPersistentDataRetriever().getOpsiLicencingInfoOpsiAdmin(),
+					persistenceController.getPersistentDataRetriever().getConfigDefaultValues(),
+					!FGeneralDialogLicensingInfo.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -3034,9 +3036,10 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (!persistenceController.isOpsiLicencingAvailable() || !persistenceController.isOpsiUserAdmin()) {
+		if (!persistenceController.getPersistentDataRetriever().isOpsiLicencingAvailable()
+				|| !persistenceController.getPersistentDataRetriever().isOpsiUserAdmin()) {
 			StringBuilder message = new StringBuilder();
-			Map<String, Object> modulesInfo = persistenceController.getOpsiModulesInfos();
+			Map<String, Object> modulesInfo = persistenceController.getPersistentDataRetriever().getOpsiModulesInfos();
 
 			int count = 0;
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
@@ -3627,8 +3630,8 @@ public class MainFrame extends JFrame
 		ipAddressField.setEditable(b1);
 
 		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && persistenceController.isWithUEFI());
-		cbWANConfig.setEnabled(gb && persistenceController.isWithWAN());
+		cbUefiBoot.setEnabled(gb && persistenceController.getPersistentDataRetriever().isWithUEFI());
+		cbWANConfig.setEnabled(gb && persistenceController.getPersistentDataRetriever().isWithWAN());
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

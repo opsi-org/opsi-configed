@@ -133,7 +133,7 @@ public class CopyClient {
 	}
 
 	private static int getProductType(String productId) {
-		if (persist.getAllLocalbootProductNames().contains(productId)) {
+		if (persist.getPersistentDataRetriever().getAllLocalbootProductNames().contains(productId)) {
 			return OpsiPackage.TYPE_LOCALBOOT;
 		} else {
 			return OpsiPackage.TYPE_NETBOOT;

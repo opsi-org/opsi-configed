@@ -377,7 +377,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		setProductVersion(productVersion + "-" + packageVersion);
 
 		String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
-		OpsiProductInfo info = persistenceController.getProduct2versionInfo2infos().get(productId).get(versionInfo);
+		OpsiProductInfo info = persistenceController.getPersistentDataRetriever().getProduct2versionInfo2infos()
+				.get(productId).get(versionInfo);
 		Logging.info(this,
 				"got product infos  productId, versionInfo:  " + productId + ", " + versionInfo + ": " + info);
 

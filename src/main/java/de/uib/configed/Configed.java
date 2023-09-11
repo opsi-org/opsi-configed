@@ -498,10 +498,11 @@ public final class Configed {
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
 					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
-					persist.getProductGroups().keySet(),
+					persist.getPersistentDataRetriever().getProductGroups().keySet(),
 
 					// data. on which changes are based
-					persist.getConfigDefaultValues(), persist.getConfigOptions());
+					persist.getPersistentDataRetriever().getConfigDefaultValues(),
+					persist.getPersistentDataRetriever().getConfigOptions());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);

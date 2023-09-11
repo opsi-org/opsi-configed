@@ -343,17 +343,18 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void setSWInfo(String swId, String pool) {
 		Logging.info(this, " setSWInfo for " + swId + " pool " + pool);
-		Logging.info(this, " setSWInfo in " + persistenceController.getInstalledSoftwareName2SWinfo()
-				.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
+		Logging.info(this,
+				" setSWInfo in " + persistenceController.getPersistentDataRetriever().getInstalledSoftwareName2SWinfo()
+						.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
 	}
 
 	public void setTableModel() {
 		Logging.info(this, "init modelSWnames");
 
-		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persistenceController.getInstalledSoftwareName2SWinfo())),
-				0, new int[] {}, panelSWnames, updateCollection) {
+		this.modelSWnames = new GenTableModel(null, new DefaultTableProvider(new RetrieverMapSource(columnNames,
+				classNames,
+				() -> (Map) persistenceController.getPersistentDataRetriever().getInstalledSoftwareName2SWinfo())), 0,
+				new int[] {}, panelSWnames, updateCollection) {
 
 			@Override
 			public void produceRows() {
@@ -403,7 +404,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		Set<String> range = new HashSet<>();
 
-		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
+		for (String swID : persistenceController.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
 			String licpool = persistenceController.getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
@@ -457,7 +458,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
-		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
+		for (String swID : persistenceController.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
 			String licpool = persistenceController.getFSoftware2LicencePool(swID);
