@@ -323,9 +323,13 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createParallelGroup()
-				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup()
+				.addGroup(layoutEmbed.createParallelGroup()
+						.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
