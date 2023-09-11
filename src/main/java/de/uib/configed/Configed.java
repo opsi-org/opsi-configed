@@ -196,7 +196,7 @@ public final class Configed {
 		}
 
 		if (result == null) {
-			if (Messages.getMessagesBundle() != null) {
+			if (Messages.getMessagesBundle() != null && Messages.getMessagesBundle().containsKey(key)) {
 				result = Messages.getMessagesBundle().getString(key);
 			} else {
 				Logging.debug("Messages.messagesBundle is null...");

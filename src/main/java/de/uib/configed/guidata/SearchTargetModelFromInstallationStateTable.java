@@ -11,7 +11,7 @@ import java.util.Arrays;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
+import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 
@@ -21,11 +21,11 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	private int[] viewRowfilter = new int[0];
 
-	private PanelGroupedProductSettings panelProductSettings;
+	private PanelProductSettings panelProductSettings;
 
 	private boolean filtered;
 
-	public SearchTargetModelFromInstallationStateTable(JTable table, PanelGroupedProductSettings panelProductSettings) {
+	public SearchTargetModelFromInstallationStateTable(JTable table, PanelProductSettings panelProductSettings) {
 
 		this.table = table;
 		Logging.info(this.getClass(), "table null? " + (table == null));
