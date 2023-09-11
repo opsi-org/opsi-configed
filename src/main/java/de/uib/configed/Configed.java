@@ -497,7 +497,8 @@ public final class Configed {
 					user, password);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
-					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
+					persist.getHostInfoCollections().getDepotNamesList(),
+					persist.getPersistentDataRetriever().getHostGroupIds(),
 					persist.getPersistentDataRetriever().getProductGroups().keySet(),
 
 					// data. on which changes are based

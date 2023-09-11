@@ -141,7 +141,8 @@ public class CopyClient {
 	}
 
 	private void copyProductProperties() {
-		Map<String, ConfigName2ConfigValue> products = persist.getProductsProperties(clientToCopy.getName());
+		Map<String, ConfigName2ConfigValue> products = persist.getPersistentDataRetriever()
+				.getProductsProperties(clientToCopy.getName());
 
 		if (products.isEmpty()) {
 			return;

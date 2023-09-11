@@ -222,7 +222,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Map<String, Object> visualData = mergeProperties(persistenceController.getDepot2product2properties(),
+		Map<String, Object> visualData = mergeProperties(
+				persistenceController.getPersistentDataRetriever().getDepot2product2properties(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -243,7 +244,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
 				Map<String, ConfigName2ConfigValue> product2properties = persistenceController
-						.getDepot2product2properties().get(depot);
+						.getPersistentDataRetriever().getDepot2product2properties().get(depot);
 
 				if (product2properties == null) {
 					Logging.info(this, " product2properties null for depot " + depot);
@@ -433,8 +434,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = persistenceController.getDefaultProductProperties(selectedDepot0)
-				.get(productEdited);
+		ConfigName2ConfigValue properties0 = persistenceController.getPersistentDataRetriever()
+				.getDefaultProductProperties(selectedDepot0).get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
 		listDepots.setSelectionInterval(startDepotIndex, startDepotIndex);
@@ -446,8 +447,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = persistenceController.getDefaultProductProperties(compareDepot)
-					.get(productEdited);
+			ConfigName2ConfigValue compareProperties = persistenceController.getPersistentDataRetriever()
+					.getDefaultProductProperties(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null
 			if (Objects.equals(properties0, compareProperties)) {

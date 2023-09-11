@@ -247,7 +247,7 @@ public class LicenseDisplayer {
 		// model-map
 		Set<String> range = new HashSet<>();
 		for (String swID : persist.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
-			String licpool = persist.getFSoftware2LicencePool(swID);
+			String licpool = persist.getPersistentDataRetriever().getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
 				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);

@@ -327,7 +327,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		if (persistenceController == null) {
 			Logging.error(this, "resetProducts PersistenceController null");
 		} else {
-			NavigableSet<String> productnames = persistenceController.getProductIds();
+			NavigableSet<String> productnames = persistenceController.getPersistentDataRetriever().getProductIds();
 			for (String item : productnames) {
 				jComboBoxOpsiProducts.addItem(item);
 			}

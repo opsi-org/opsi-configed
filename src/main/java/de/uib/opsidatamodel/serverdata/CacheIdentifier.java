@@ -258,6 +258,12 @@ public enum CacheIdentifier {
 	DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS("depot_to_product_to_property_definitions"),
 
 	/**
+	 * return type:
+	 * {@code Map<String, Map<String, Map<String, ConfigName2ConfigValue>>>}
+	 */
+	DEPOT_TO_PRODUCT_TO_PROPERTIES("depot_to_product_to_properties"),
+
+	/**
 	 * return type: {@code Map<String, Map<String, List<Map<String, String>>>>}
 	 */
 	DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS("depot_to_product_to_dependency_infos"),
@@ -371,6 +377,166 @@ public enum CacheIdentifier {
 	 * return type {@code HostInfoCollections}
 	 */
 	HOST_INFO_COLLECTIONS("host_info_collections"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	GLOBAL_READ_ONLY("global_read_only"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	SERVER_FULL_PERMISION("server_full_permission"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	DEPOTS_FULL_PERMISSION("depots_full_permission"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED("host_groups_only_if_explicitly_stated"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	PRODUCT_GROUPS_FULL_PERMISSION("product_groups_full_permission"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	CREATE_CLIENT_PERMISSION("create_client_permission"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	KEY_USER_REGISTER_VALUE("key_user_register_value"),
+
+	/**
+	 * return type {@code boolean}
+	 */
+	APPLY_USER_SPECIALIZED_CONFIG("apply_user_specialized_config"),
+
+	/**
+	 * return type {@code Set<String>}
+	 */
+	DEPOTS_PERMITTED("depots_permitted"),
+
+	/**
+	 * return type {@code Set<String>}
+	 */
+	HOST_GROUPS_PERMITTED("host_groups_permitted"),
+
+	/**
+	 * return type {@code String}
+	 */
+	USER_CONFIG_PART("user_config_part"),
+
+	/**
+	 * return type {@code String}
+	 */
+	USER("user"),
+
+	/**
+	 * return type {@code Map<String, Set<String>>}
+	 */
+	FPRODUCT_GROUP_TO_MEMBERS("fproduct_group_to_members"),
+
+	/**
+	 * return type {@code String}
+	 */
+	OPSI_DEFAULT_DOMAIN("opsi_default_domain"),
+
+	/**
+	 * return type {@code Map<String, Strin>}
+	 */
+	LOG_FILES("log_files"),
+
+	/**
+	 * return type {@code Map<String, Map<String, Object>>}
+	 */
+	PRODUCT_GLOBAL_INFOS("product_global_infos"),
+
+	/**
+	 * return type {@code Map<String, List<String>>}
+	 */
+	POSSIBLE_ACTIONS("possible_actions"),
+
+	/**
+	 * return type {@code NavigableSet<Set>}
+	 */
+	PRODUCT_IDS("product_ids"),
+
+	/**
+	 * return type {@code Map<String, Map<String, String>>}
+	 */
+	PRODUCT_DEFAULT_STATES("product_default_states"),
+
+	/**
+	 * return type {@code Map<String, Map<String, ConfigName2ConfigValue>>}
+	 */
+	PRODUCT_PROPERTIES("product_properties"),
+
+	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES("product_having_client_specific_properties"),
+
+	/**
+	 * return type {@code Map<String, Map<String, ListCellOptions>>}
+	 */
+	PRODUCT_PROPERTY_DEFINITIOS("product_property_definitions"),
+
+	/**
+	 * return type {@code NavigableSet<Object>}
+	 */
+	SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL("software_without_associated_license_pool"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	FLICENSE_POOL_TO_SOFTWARE_LIST("flicense_pool_to_software_list"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST("flicense_pool_to_unknonwn_software_list"),
+
+	/**
+	 * return type {@code Map<String, String>}
+	 */
+	FSOFTWARE_TO_LICENSE_POOL("fsoftware_to_license_pool"),
+
+	/**
+	 * return type {@code AuditSoftwareXLicencePool}
+	 */
+	RELATIONS_AUDIT_SOFTWARE_TO_LICENSE_POOLS("relations_audit_software_to_license_pools"),
+
+	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	HOST_DISPLAY_FIELDS("host_display_fields"),
+
+	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS("product_on_client_display_fields_netboot_products"),
+
+	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS("product_on_client_display_fields_localboot_products"),
+
+	/**
+	 * return type {@code Map<String, LicenceUsageEntry>}
+	 */
+	ROWS_LICENSE_USAGE("rows_license_usage"),
+
+	/**
+	 * return type {@code Map<String, List<LicenceUsageEntry>>}
+	 */
+	FCLIENT_TO_LICENSES_USAGE_LIST("fclient_to_licenses_usage_list"),
 
 	/**
 	 * return type: {@code boolean}

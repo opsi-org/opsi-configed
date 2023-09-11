@@ -515,11 +515,11 @@ public final class OpsiDataBackend {
 	}
 
 	public List<String> getGroups() {
-		return persistenceController.getHostGroupIds();
+		return persistenceController.getPersistentDataRetriever().getHostGroupIds();
 	}
 
 	public NavigableSet<String> getProductIDs() {
-		return persistenceController.getProductIds();
+		return persistenceController.getPersistentDataRetriever().getProductIds();
 	}
 
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {

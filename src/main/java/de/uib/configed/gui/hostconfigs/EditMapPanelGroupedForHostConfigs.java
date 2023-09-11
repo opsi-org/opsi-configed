@@ -473,7 +473,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
 
 				// Collection<String> existingHostgroups,
-				persistenceController.getHostGroupIds(),
+				persistenceController.getPersistentDataRetriever().getHostGroupIds(),
 				// Collection<String> existingProductgroups,
 				persistenceController.getPersistentDataRetriever().getProductGroups().keySet(),
 

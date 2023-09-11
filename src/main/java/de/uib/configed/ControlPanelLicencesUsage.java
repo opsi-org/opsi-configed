@@ -138,7 +138,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					persistenceController.licencesUsageRequestRefresh();
-					return (Map) persistenceController.getLicencesUsage();
+					return (Map) persistenceController.getPersistentDataRetriever().getLicencesUsage();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 

@@ -394,9 +394,9 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "initGui");
 
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
-				persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts());
+				persistenceController.getPersistentDataRetriever().getProductOnClientsDisplayFieldsLocalbootProducts());
 		displayFieldsNetbootProducts = new LinkedHashMap<>(
-				persistenceController.getProductOnClientsDisplayFieldsNetbootProducts());
+				persistenceController.getPersistentDataRetriever().getProductOnClientsDisplayFieldsNetbootProducts());
 		// initialization by defaults, it can be edited afterwards
 
 		initTree();
@@ -825,7 +825,7 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.setDepot(depotRepresentative);
 		persistenceController.depotChange();
 
-		String opsiDefaultDomain = persistenceController.getOpsiDefaultDomain();
+		String opsiDefaultDomain = persistenceController.getPersistentDataRetriever().getOpsiDefaultDomain();
 		editableDomains = persistenceController.getDomains();
 		if (!editableDomains.contains(opsiDefaultDomain)) {
 			editableDomains.add(opsiDefaultDomain);
@@ -833,18 +833,18 @@ public class ConfigedMain implements ListSelectionListener {
 
 		localbootProductnames = persistenceController.getPersistentDataRetriever().getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getAllNetbootProductNames();
-		persistenceController.getProductIds();
+		persistenceController.getPersistentDataRetriever().getProductIds();
 
-		hostDisplayFields = persistenceController.getHostDisplayFields();
-		persistenceController.getProductOnClientsDisplayFieldsNetbootProducts();
-		persistenceController.getProductOnClientsDisplayFieldsLocalbootProducts();
+		hostDisplayFields = persistenceController.getPersistentDataRetriever().getHostDisplayFields();
+		persistenceController.getPersistentDataRetriever().getProductOnClientsDisplayFieldsNetbootProducts();
+		persistenceController.getPersistentDataRetriever().getProductOnClientsDisplayFieldsLocalbootProducts();
 
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();
 		}
 
 		productGroups = persistenceController.getPersistentDataRetriever().getProductGroups();
-		productGroupMembers = persistenceController.getFProductGroup2Members();
+		productGroupMembers = persistenceController.getPersistentDataRetriever().getFProductGroup2Members();
 
 		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persistenceController.getPersistentDataRetriever()
 				.getOpsiHWAuditConf(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
@@ -855,20 +855,21 @@ public class ConfigedMain implements ListSelectionListener {
 
 		persistenceController.retrieveProducts();
 
-		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
+		possibleActions = persistenceController.getPersistentDataRetriever().getPossibleActions(depotRepresentative);
 		persistenceController.retrieveProductPropertyDefinitions();
-		persistenceController.retrieveProductDependencies();
+		persistenceController.getPersistentDataRetriever().getDepot2product2dependencyInfos();
 
-		persistenceController.retrieveDepotProductProperties();
+		persistenceController.getPersistentDataRetriever().retrieveDepotProductProperties();
 
 		dataReady = true;
 		mainFrame.enableAfterLoading();
 	}
 
 	public void toggleColumnIPAddress() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -878,9 +879,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnSystemUUID() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -890,9 +892,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnHardwareAddress() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -902,14 +905,15 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void setColumnSessionInfo(boolean b) {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		if (visible == b) {
 			return;
 		}
 
 		Logging.info(this, "setColumnSessionInfo " + b);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
 
 		mainFrame.getCombinedMenuItemSessionInfoColumn().show(b);
 		setRebuiltClientListTableModel(false);
@@ -920,7 +924,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnSessionInfo() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 
 		setColumnSessionInfo(!visible);
@@ -929,10 +933,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnInventoryNumber() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
-				!visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -944,8 +948,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnCreated() {
-		boolean visible = persistenceController.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -957,9 +963,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnWANactive() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -971,9 +978,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnUEFIactive() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -985,15 +993,15 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnInstallByShutdownActive() {
-		Boolean visible = persistenceController.getHostDisplayFields()
+		Boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 		if (visible == null) {
 			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
 					JOptionPane.OK_OPTION);
 			// == null can occur if an old configed runs somewhere
 		} else {
-			persistenceController.getHostDisplayFields().put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
-					!visible);
+			persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+					.put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
 
 			setRebuiltClientListTableModel(false);
 			selectionPanel.initSortKeys();
@@ -1006,9 +1014,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleColumnDepot() {
-		boolean visible = persistenceController.getHostDisplayFields()
+		boolean visible = persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDisplayFields().put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
+		persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -1469,7 +1478,7 @@ public class ConfigedMain implements ListSelectionListener {
 		licencePoolTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, () -> (Map) persistenceController.getLicencepools()));
 
-		persistenceController.retrieveRelationsAuditSoftwareToLicencePools();
+		persistenceController.getPersistentDataRetriever().retrieveRelationsAuditSoftwareToLicencePools();
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
@@ -1798,7 +1807,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		if (pclist != null) {
-			hostDisplayFields = persistenceController.getHostDisplayFields();
+			hostDisplayFields = persistenceController.getPersistentDataRetriever().getHostDisplayFields();
 
 			// test
 
@@ -1903,7 +1912,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
 		hostConfigs = null;
-		persistenceController.getEmptyLogfiles();
+		persistenceController.getPersistentDataRetriever().getEmptyLogfiles();
 
 		if (mainFrame.getControllerHWinfoMultiClients() != null) {
 			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
@@ -2041,8 +2050,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
-		if (Boolean.TRUE.equals(
-				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
+		if (Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
@@ -2053,8 +2062,8 @@ public class ConfigedMain implements ListSelectionListener {
 			column.setCellRenderer(new ConnectionStatusTableCellRenderer());
 		}
 
-		if (Boolean.TRUE.equals(
-				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
+		if (Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2073,8 +2082,8 @@ public class ConfigedMain implements ListSelectionListener {
 			initSelectionPanelColumn(col);
 		}
 
-		if (Boolean.TRUE.equals(
-				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
+		if (Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2091,7 +2100,7 @@ public class ConfigedMain implements ListSelectionListener {
 			initSelectionPanelColumn(col);
 		}
 
-		if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields()
+		if (Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever().getHostDisplayFields()
 				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
@@ -2251,7 +2260,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (getSelectedClients().length > 0 && possibleActions.get(productEdited) != null) {
 
-			Map<String, Object> productPropertiesFor1Client = persistenceController
+			Map<String, Object> productPropertiesFor1Client = persistenceController.getPersistentDataRetriever()
 					.getProductProperties(getSelectedClients()[0], productEdited);
 
 			if (productPropertiesFor1Client != null) {
@@ -2271,8 +2280,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 				// merge the other clients
 				for (int i = 1; i < getSelectedClients().length; i++) {
-					productPropertiesFor1Client = persistenceController.getProductProperties(getSelectedClients()[i],
-							productEdited);
+					productPropertiesFor1Client = persistenceController.getPersistentDataRetriever()
+							.getProductProperties(getSelectedClients()[i], productEdited);
 
 					productProperties.add(productPropertiesFor1Client);
 
@@ -2838,7 +2847,7 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.getPanelLocalbootProductSettings().initAllProperties();
 
 		Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
-		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
+		possibleActions = persistenceController.getPersistentDataRetriever().getPossibleActions(depotRepresentative);
 
 		// we retrieve the properties for all clients and products
 
@@ -2846,7 +2855,8 @@ public class ConfigedMain implements ListSelectionListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
+		persistenceController.getPersistentDataRetriever()
+				.retrieveProductProperties(selectionPanel.getSelectedValues());
 
 		Set<String> oldProductSelection = mainFrame.getPanelLocalbootProductSettings().getSelectedIDs();
 		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame
@@ -2863,7 +2873,7 @@ public class ConfigedMain implements ListSelectionListener {
 					collectChangedLocalbootStates,
 					persistenceController.getPersistentDataRetriever().getAllLocalbootProductNames(depotRepresentative),
 					localbootStatesAndActions, possibleActions,
-					persistenceController.getProductGlobalInfos(depotRepresentative),
+					persistenceController.getPersistentDataRetriever().getProductGlobalInfos(depotRepresentative),
 					getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 		}
 
@@ -2924,13 +2934,14 @@ public class ConfigedMain implements ListSelectionListener {
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		mainFrame.getPanelLocalbootProductSettings().initAllProperties();
 
-		possibleActions = persistenceController.getPossibleActions(depotRepresentative);
+		possibleActions = persistenceController.getPersistentDataRetriever().getPossibleActions(depotRepresentative);
 
 		Set<String> oldProductSelection = mainFrame.getPanelNetbootProductSettings().getSelectedIDs();
 
 		// we retrieve the properties for all clients and products
 
-		persistenceController.retrieveProductProperties(selectionPanel.getSelectedValues());
+		persistenceController.getPersistentDataRetriever()
+				.retrieveProductProperties(selectionPanel.getSelectedValues());
 
 		String netbootProductsSavedStateObjTag = "netbootProducts";
 
@@ -2939,7 +2950,7 @@ public class ConfigedMain implements ListSelectionListener {
 			istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 					collectChangedNetbootStates, persistenceController.getAllNetbootProductNames(depotRepresentative),
 					netbootStatesAndActions, possibleActions,
-					persistenceController.getProductGlobalInfos(depotRepresentative),
+					persistenceController.getPersistentDataRetriever().getProductGlobalInfos(depotRepresentative),
 					getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
 		}
 
@@ -3226,7 +3237,8 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 
 			mainFrame.activateLoadingPane();
-			logfiles = persistenceController.getLogfiles(firstSelectedClient, logtypeToUpdate);
+			logfiles = persistenceController.getPersistentDataRetriever().getLogfiles(firstSelectedClient,
+					logtypeToUpdate);
 			mainFrame.disactivateLoadingPane();
 
 			Logging.debug(this, "log pages set");
@@ -3239,7 +3251,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.debug(this, "setLogPage(), selected clients: " + Arrays.toString(getSelectedClients()));
 
-		logfiles = persistenceController.getEmptyLogfiles();
+		logfiles = persistenceController.getPersistentDataRetriever().getEmptyLogfiles();
 		mainFrame.setUpdatedLogfilePanel("instlog");
 		mainFrame.setLogview("instlog");
 
@@ -3576,7 +3588,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			persistenceController.requestReloadOpsiDefaultDomain();
 			persistenceController.userConfigurationRequestReload();
-			persistenceController.checkConfiguration();
+			persistenceController.getPersistentDataRetriever().checkConfiguration();
 
 			persistenceController.opsiInformationRequestRefresh();
 			persistenceController.hwAuditConfRequestRefresh();
@@ -4005,8 +4017,8 @@ public class ConfigedMain implements ListSelectionListener {
 			while (!isInterrupted()) {
 				Logging.debug(this, " editingTarget, viewIndex " + editingTarget + ", " + viewIndex);
 
-				if (viewIndex == VIEW_CLIENTS
-						&& Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
+				if (viewIndex == VIEW_CLIENTS && Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever()
+						.getHostDisplayFields().get("clientConnected"))) {
 
 					reachableInfo = persistenceController.reachableInfo(null);
 
@@ -4113,7 +4125,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void setReachableInfo(String[] selClients) {
 		// update column
-		if (Boolean.TRUE.equals(persistenceController.getHostDisplayFields().get("clientConnected"))) {
+		if (Boolean.TRUE.equals(
+				persistenceController.getPersistentDataRetriever().getHostDisplayFields().get("clientConnected"))) {
 			AbstractTableModel model = selectionPanel.getTableModel();
 
 			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
@@ -4201,8 +4214,8 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.getIconButtonSessionInfo().setEnabled(true);
 
 		// update column
-		if (Boolean.TRUE.equals(
-				persistenceController.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
+		if (Boolean.TRUE.equals(persistenceController.getPersistentDataRetriever().getHostDisplayFields()
+				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 			AbstractTableModel model = selectionPanel.getTableModel();
 
 			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
@@ -4293,7 +4306,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		for (String client : getSelectedClients()) {
 			Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = persistenceController
-					.getFClient2LicencesUsageList();
+					.getPersistentDataRetriever().getFClient2LicencesUsageList();
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
 				persistenceController.addDeletionLicenceUsage(client, m.getLicenceId(), m.getLicencepool());
@@ -4312,7 +4325,8 @@ public class ConfigedMain implements ListSelectionListener {
 		List<String> vNetbootProducts = netbootProductnames;
 
 		NewClientDialog.getInstance(this, getLinkedDepots());
-		NewClientDialog.getInstance().setGroupList(persistenceController.getHostGroupIds());
+		NewClientDialog.getInstance()
+				.setGroupList(persistenceController.getPersistentDataRetriever().getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
 
 		NewClientDialog.getInstance().setDomains(editableDomains);

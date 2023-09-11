@@ -197,8 +197,9 @@ public class PanelProductProperties extends JSplitPane {
 						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-				List<String> depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
-						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+				List<String> depotsOfPackageAsRetrieved = persistenceController.getPersistentDataRetriever()
+						.getProduct2VersionInfo2Depots().get(theTable.getValueAt(row, columnNames.indexOf("productId")))
+						.get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo " + versionInfo);
 

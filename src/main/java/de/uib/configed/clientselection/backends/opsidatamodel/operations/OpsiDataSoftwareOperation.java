@@ -28,7 +28,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);
 
-		productDefaultStates = persistenceController.getProductDefaultStates();
+		productDefaultStates = persistenceController.getPersistentDataRetriever().getProductDefaultStates();
 		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
 	}
 

@@ -341,7 +341,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persistenceController.getProductProperties(server, winProduct);
+			Map<String, Object> propsMap = persistenceController.getPersistentDataRetriever()
+					.getProductProperties(server, winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;

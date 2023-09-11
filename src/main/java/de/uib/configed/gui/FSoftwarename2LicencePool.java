@@ -405,7 +405,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		Set<String> range = new HashSet<>();
 
 		for (String swID : persistenceController.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
-			String licpool = persistenceController.getFSoftware2LicencePool(swID);
+			String licpool = persistenceController.getPersistentDataRetriever().getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
 				range.add(VALUE_NO_LICENCE_POOL);
@@ -461,7 +461,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		for (String swID : persistenceController.getPersistentDataRetriever().getName2SWIdents().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
-			String licpool = persistenceController.getFSoftware2LicencePool(swID);
+			String licpool = persistenceController.getPersistentDataRetriever().getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
 				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENCE_POOL);
@@ -510,7 +510,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SW_ID);
-						String licensePoolIDOld = persistenceController.getFSoftware2LicencePool(swID);
+						String licensePoolIDOld = persistenceController.getPersistentDataRetriever()
+								.getFSoftware2LicencePool(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
 						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew)) {

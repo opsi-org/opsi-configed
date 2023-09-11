@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -27,8 +28,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.MainFrame;
 import de.uib.configed.tree.ClientTree;
+import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
@@ -38,6 +43,7 @@ import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
+import de.uib.configed.type.SavedSearch;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicenceContractEntry;
 import de.uib.configed.type.licences.LicenceEntry;
@@ -59,9 +65,13 @@ import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserConfigProducing;
+import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.productstate.ActionRequest;
+import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
+import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
@@ -2769,5 +2779,1887 @@ public class PersistentDataRetriever {
 		}
 
 		return result;
+	}
+
+	public final void checkConfiguration() {
+		retrieveOpsiModules();
+		Logging.info(this,
+				"checkConfiguration, modules " + cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class));
+
+		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+
+		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, checkReadOnlyBySystemuser());
+		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION,
+				!cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
+		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
+		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, true);
+		cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
+		cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
+
+		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
+				Boolean.class);
+		boolean correctedUserRegisterVal = setAgainUserRegistration(keyUserRegisterValue);
+
+		boolean setUserRegisterVal = !keyUserRegisterValue && correctedUserRegisterVal;
+
+		if (setUserRegisterVal) {
+			keyUserRegisterValue = true;
+		}
+
+		if (Boolean.TRUE.equals(keyUserRegisterValue)) {
+			keyUserRegisterValue = checkUserRolesModule();
+			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
+		}
+
+		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null
+				|| setUserRegisterVal) {
+			List<Object> readyObjects = new ArrayList<>();
+			Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(
+					OpsiServiceNOMPersistenceController.KEY_USER_REGISTER, keyUserRegisterValue,
+					"without given values the primary value setting is false");
+			readyObjects.add(item);
+
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
+
+			exec.doCall(omc);
+		}
+
+		applyUserSpecializedConfig();
+
+		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
+				getHostInfoCollections().getConfigServer(), getHostInfoCollections().getDepotNamesList(),
+				getHostGroupIds(), getProductGroups().keySet(), getConfigDefaultValues(), getConfigOptions()).produce();
+
+		if (readyConfigObjects == null) {
+			Logging.warning(this, "readyObjects for userparts " + null);
+		} else {
+			if (!readyConfigObjects.isEmpty()) {
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
+						new Object[] { readyConfigObjects });
+				exec.doCall(omc);
+			}
+
+			Logging.info(this, "readyObjects for userparts " + readyConfigObjects.size());
+		}
+
+		checkPermissions();
+
+		if (cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class)) {
+			checkStandardConfigs();
+		}
+	}
+
+	private boolean checkReadOnlyBySystemuser() {
+		boolean result = false;
+
+		Logging.info(this, "checkReadOnly");
+		if (exec.getBooleanResult(
+				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}))) {
+			result = true;
+			Logging.info(this,
+					"checkReadOnly " + cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
+		}
+
+		return result;
+	}
+
+	// final in order to avoid deactiviating by override
+	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
+		boolean withUserRoles = cacheManager.getCachedData(CacheIdentifier.WITH_USER_ROLES, Boolean.class);
+		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
+
+		boolean resultVal = userRegisterValueFromConfigs;
+
+		if (!withUserRoles) {
+			return resultVal;
+		}
+
+		Boolean locallySavedValueUserRegister = null;
+		if (Configed.getSavedStates() == null) {
+			Logging.trace(this, "savedStates.saveRegisterUser not initialized");
+		} else {
+			locallySavedValueUserRegister = Boolean.parseBoolean(
+					Configed.getSavedStates().getProperty(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER));
+			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
+
+			if (userRegisterValueFromConfigs) {
+				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
+					// we save true
+					Configed.getSavedStates().setProperty(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
+							"true");
+				}
+			} else {
+				if (locallySavedValueUserRegister != null && locallySavedValueUserRegister) {
+					// if true was locally saved but is not the value from service then we ask
+					Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
+
+					FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
+							Configed.getResourceValue("RegisterUserWarning.dialog.title"),
+
+							true,
+							new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
+									Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
+									Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
+							new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+									Utils.createImageIcon("images/edit-delete.png", ""),
+									Utils.createImageIcon("images/executing_command_red_16.png", "") },
+							500, 200);
+					StringBuilder msg = new StringBuilder(
+							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
+					msg.append("\n");
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
+
+					dialog.setMessage(msg.toString());
+					dialog.setVisible(true);
+					int result = dialog.getResult();
+					Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
+
+					switch (result) {
+					case 1:
+						Logging.info(this, "setAgainUserRegistration ignore ");
+						break;
+
+					case 2:
+						Logging.info(this, "setAgainUserRegistration remove warning locally ");
+						// remove from store
+						Configed.getSavedStates().remove(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER);
+						break;
+
+					case 3:
+						Logging.info(this, "setAgainUserRegistration reactivate user check ");
+						resultVal = true;
+						break;
+
+					default:
+						Logging.warning(this, "no case found for result in setAgainUserRegistration");
+						break;
+					}
+				}
+			}
+		}
+
+		return resultVal;
+
+	}
+
+	private final boolean checkUserRolesModule() {
+		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
+				Boolean.class);
+		if (Boolean.TRUE.equals(keyUserRegisterValue)
+				&& !cacheManager.getCachedData(CacheIdentifier.WITH_USER_ROLES, Boolean.class)) {
+			keyUserRegisterValue = false;
+			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
+			SwingUtilities.invokeLater(this::callOpsiLicenceMissingText);
+		}
+
+		return keyUserRegisterValue;
+	}
+
+	private void callOpsiLicenceMissingText() {
+		StringBuilder info = new StringBuilder();
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+		info.append(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER + " "
+				+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
+		info.append("\n");
+
+		Logging.warning(this, " user role administration configured but not permitted by the modules file " + info);
+
+		FOpsiLicenseMissingText.callInstanceWith(info.toString());
+	}
+
+	private boolean applyUserSpecializedConfig() {
+		Boolean applyUserSpecializedConfig = cacheManager.getCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG,
+				Boolean.class);
+		if (applyUserSpecializedConfig != null) {
+			return applyUserSpecializedConfig;
+		}
+
+		applyUserSpecializedConfig = cacheManager.getCachedData(CacheIdentifier.WITH_USER_ROLES, Boolean.class)
+				&& cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class);
+		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
+
+		return applyUserSpecializedConfig;
+	}
+
+	public List<String> getHostGroupIds() {
+		Set<String> groups = getHostGroups().keySet();
+		groups.remove(ClientTree.DIRECTORY_NAME);
+		return new ArrayList<>(groups);
+	}
+
+	private void checkPermissions() {
+		UserOpsipermission.ActionPrivilege serverActionPermission;
+
+		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+
+		// variable for simplifying the use of the map
+		String configKey = null;
+		boolean globalReadOnly = cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class);
+
+		// already specified via systemuser group
+		if (!globalReadOnly) {
+			// lookup if we have a config for it and set it though not set by group
+			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY;
+			Logging.info(this, "checkPermissions  configKey " + configKey);
+			globalReadOnly = serverPropertyMap.get(configKey) != null
+					&& (Boolean) serverPropertyMap.get(configKey).get(0);
+		}
+
+		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
+
+		if (globalReadOnly) {
+			serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
+		} else {
+			// is default!!
+			boolean mayWriteOnOpsiserver = true;
+
+			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
+			Logging.info(this, "checkPermissions  configKey " + configKey);
+
+			if (serverPropertyMap.get(configKey) != null) {
+				Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+				mayWriteOnOpsiserver = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
+			}
+
+			Logging.info(this, " checkPermissions mayWriteOnOpsiserver " + mayWriteOnOpsiserver);
+			if (mayWriteOnOpsiserver) {
+				serverActionPermission = UserOpsipermission.ActionPrivilege.READ_WRITE;
+			} else {
+				serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
+			}
+		}
+
+		boolean serverFullPermission = serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE;
+		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverFullPermission);
+
+		configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
+		Logging.info(this, " checkPermissions key " + configKey);
+		boolean withUserRoles = cacheManager.getCachedData(CacheIdentifier.WITH_USER_ROLES, Boolean.class);
+		if (serverPropertyMap.get(configKey) != null && withUserRoles) {
+			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+			boolean createClientPermission = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
+			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
+		}
+
+		String configKeyUseList = null;
+		String configKeyList = null;
+
+		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
+		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
+		Set<String> depotsPermitted = new HashSet<>();
+
+		boolean depotsFullPermission = checkFullPermission(depotsPermitted, configKeyUseList, configKeyList,
+				serverPropertyMap);
+		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
+		Logging.info(this,
+				"checkPermissions depotsFullPermission (false means, depots must be specified " + depotsFullPermission);
+		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
+
+		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
+		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
+		Set<String> hostgroupsPermitted = new HashSet<>();
+
+		// false, //not only as specified but always
+		boolean hostgroupsOnlyIfExplicitlyStated = checkFullPermission(hostgroupsPermitted, configKeyUseList,
+				configKeyList, serverPropertyMap);
+
+		if (hostgroupsOnlyIfExplicitlyStated) {
+			hostgroupsPermitted = null;
+		}
+		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
+				hostgroupsOnlyIfExplicitlyStated);
+
+		Logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
+
+		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
+		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
+		Set<String> productgroupsPermitted = new HashSet<>();
+
+		boolean productgroupsFullPermission = checkFullPermission(productgroupsPermitted, configKeyUseList,
+				configKeyList, serverPropertyMap);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
+
+		Set<String> permittedProducts = null;
+
+		if (!productgroupsFullPermission) {
+			permittedProducts = new TreeSet<>();
+
+			for (String group : productgroupsPermitted) {
+				Set<String> products = getFProductGroup2Members().get(group);
+				if (products != null) {
+					permittedProducts.addAll(products);
+				}
+			}
+		}
+
+		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+	}
+
+	private String userPart() {
+		String userConfigPart = cacheManager.getCachedData(CacheIdentifier.USER_CONFIG_PART, String.class);
+		if (userConfigPart != null) {
+			return userConfigPart;
+		}
+
+		if (applyUserSpecializedConfig()) {
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
+					+ cacheManager.getCachedData(CacheIdentifier.USER, String.class) + "}.";
+		} else {
+			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.USER_CONFIG_PART, userConfigPart);
+		Logging.info(this, "userConfigPart initialized, " + userConfigPart);
+
+		return userConfigPart;
+	}
+
+	private boolean checkFullPermission(Set<String> permittedEntities, final String keyUseList, final String keyList,
+			final Map<String, List<Object>> serverPropertyMap) {
+		Logging.info(this, "checkFullPermission  key name,  defaultResult true " + keyUseList);
+
+		boolean fullPermission = true;
+
+		if (serverPropertyMap.get(keyUseList) != null) {
+			fullPermission = !(Boolean) (serverPropertyMap.get(keyUseList).get(0));
+			// we don't give full permission if the config doesn't exist
+
+			// we didn't configure anything, therefore we revoke the setting
+			if (serverPropertyMap.get(keyList) == null) {
+				fullPermission = true;
+				Logging.info(this, "checkFullPermission not configured keyList " + keyList);
+			}
+		}
+
+		Logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
+
+		// we didn't configure anything, therefore we revoke the setting
+		if (!fullPermission && serverPropertyMap.get(keyList) != null) {
+			for (Object val : serverPropertyMap.get(keyList)) {
+				permittedEntities.add((String) val);
+			}
+		}
+
+		Logging.info(this, "checkFullPermission   result " + fullPermission);
+		Logging.info(this, "checkFullPermission   produced list " + permittedEntities);
+
+		return fullPermission;
+	}
+
+	public Map<String, Set<String>> getFProductGroup2Members() {
+		Map<String, Set<String>> fProductGroup2Members = cacheManager
+				.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
+		if (fProductGroup2Members == null) {
+			fProductGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
+			cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, fProductGroup2Members);
+		}
+		return fProductGroup2Members;
+	}
+
+	private boolean checkStandardConfigs() {
+		boolean result = getConfigOptions() != null;
+		Logging.info(this, "checkStandardConfigs, already there " + result);
+
+		if (!result) {
+			return false;
+		}
+
+		List<Object> defaultValues;
+		List<Object> possibleValues;
+		Map<String, Object> item;
+		String key;
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
+
+		// list of domains for new clients
+		key = OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY;
+		Map<String, List<Object>> configDefaultValues = cacheManager
+				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(getOpsiDefaultDomain());
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(getOpsiDefaultDomain());
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", true);
+
+			readyObjects.add(item);
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// search by sql if possible
+		key = OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL;
+
+		defaultValues = configDefaultValues.get(key);
+
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(key,
+					OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL,
+					"Use SQL calls for search if SQL backend is active");
+			readyObjects.add(item);
+		}
+
+		// global value for install_by_shutdown
+
+		key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
+
+		defaultValues = configDefaultValues.get(key);
+
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(key,
+					OpsiServiceNOMPersistenceController.DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
+					"Use install by shutdown if possible");
+			readyObjects.add(item);
+		}
+
+		// product_sort_algorithm
+		// will not be used in opsi 4.3
+		if (!ServerFacade.isOpsi43()) {
+			key = OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM;
+			// defaultValues
+			defaultValues = configDefaultValues.get(key);
+			Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
+
+			if (defaultValues == null) {
+				Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+				defaultValues = new ArrayList<>();
+				defaultValues.add("algorithm1");
+
+				possibleValues = new ArrayList<>();
+				possibleValues.add("algorithm1");
+				possibleValues.add("algorithm2");
+
+				// create config for service
+				item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+				item.put("ident", key);
+				item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
+				item.put("defaultValues", defaultValues);
+
+				item.put("possibleValues", possibleValues);
+				item.put("editable", false);
+				item.put("multiValue", false);
+
+				readyObjects.add(item);
+			}
+		}
+
+		// extra display fields in licencing
+
+		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION;
+
+		// defaultValues
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			// key not yet configured
+			defaultValues = new ArrayList<>();
+			// example for standard configuration other than empty
+			// extra columns for licence management, page licences reconciliation
+			possibleValues = new ArrayList<>();
+			possibleValues.add("description");
+			possibleValues.add("inventoryNumber");
+			possibleValues.add("notes");
+			possibleValues.add("ipAddress");
+			possibleValues.add("lastSeen");
+
+			// create config for service
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+			item.put("ident", key);
+			item.put("description",
+					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
+			item.put("defaultValues", defaultValues);
+
+			item.put("possibleValues", possibleValues);
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			readyObjects.add(item);
+		}
+
+		// remote controls
+		String command;
+		String description;
+
+		// ping_linux
+		key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "xterm +hold -e ping %host%";
+			description = "ping, started in a Linux environment";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(persistenceController.produceConfigEntry("BoolConfig",
+					key + "." + RemoteControl.EDITABLE_KEY, true, "(command may be edited)"));
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
+
+		// ping_windows
+		key = RemoteControl.CONFIG_KEY + "." + "ping_windows";
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "cmd.exe /c start ping %host%";
+			description = "ping, started in a Windows terminal";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(persistenceController.produceConfigEntry("BoolConfig",
+					key + "." + RemoteControl.EDITABLE_KEY, true, "(command may be edited)"));
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
+
+		// connect to opsiclientd timeline, linux
+		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_linux";
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "firefox https://%host%:4441/info.html";
+			description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(persistenceController.produceConfigEntry("BoolConfig",
+					key + "." + RemoteControl.EDITABLE_KEY, false, "(command may not be edited)"));
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
+
+		// connect to opsiclientd timeline, windows
+		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_windows";
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "cmd.exe /c start https://%host%:4441/info.html";
+			description = "opsiclientd  timeline, called rfrom a Windows environment";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(persistenceController.produceConfigEntry("BoolConfig",
+					key + "." + RemoteControl.EDITABLE_KEY, false, "(command may not be edited)"));
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
+
+		// additional queries
+		String query;
+		StringBuilder qbuf;
+		key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
+
+		defaultValues = configDefaultValues.get(key);
+
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			qbuf = new StringBuilder("select");
+			qbuf.append(" hostId, productId, installationStatus from ");
+			qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
+			qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
+			qbuf.append(" AND =  installationStatus='installed' ");
+			qbuf.append(" order by hostId, productId ");
+
+			query = qbuf.toString();
+			description = "all hosts and their installed products";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, query, description));
+
+			readyObjects.add(persistenceController.produceConfigEntry("BoolConfig",
+					key + "." + OpsiServiceNOMPersistenceController.EDITABLE_KEY, false, "(command may be edited)"));
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + OpsiServiceNOMPersistenceController.DESCRIPTION_KEY, description, ""));
+		}
+
+		// WAN_CONFIGURATION
+		// does it exist?
+
+		Map<String, ConfigOption> wanConfigOptions = getWANConfigOptions();
+		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
+			Logging.info(this, "build default wanConfigOptions");
+			readyObjects = buildWANConfigOptions(readyObjects);
+		}
+
+		// saved searches
+
+		key = SavedSearch.CONFIG_KEY + "." + "product_failed";
+
+		defaultValues = configDefaultValues.get(key);
+
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			StringBuilder val = new StringBuilder();
+			val.append("{ \"version\" : \"2\", ");
+			val.append("\"data\" : {");
+			val.append(" \"element\" : null, ");
+			val.append(" \"elementPath\" : null,");
+			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
+			val.append(
+					" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
+			val.append("} }");
+
+			String value = val.toString();
+
+			description = "any product failed";
+
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key, value, description));
+
+			// description entry
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig",
+					key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
+		}
+
+		// configuration of host menus
+
+		key = OpsiServiceNOMPersistenceController.KEY_DISABLED_CLIENT_ACTIONS;
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+					+ OpsiServiceNOMPersistenceController.KEY_DISABLED_CLIENT_ACTIONS);
+			// key not yet configured
+			defaultValues = new ArrayList<>();
+			configDefaultValues.put(key, defaultValues);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
+			possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
+			possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+			item.put("id", key);
+			item.put("description", "");
+			item.put("defaultValues", defaultValues);
+
+			item.put("possibleValues", possibleValues);
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			readyObjects.add(item);
+		}
+
+		key = OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key,
+					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE,
+					"default windows username for deploy-client-agent-script"));
+		}
+
+		key = OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key,
+					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
+					"default windows password for deploy-client-agent-script"));
+		}
+
+		key = OpsiServiceNOMPersistenceController.CONFIGED_WORKBENCH_KEY;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			readyObjects.add(persistenceController.produceConfigEntry("UnicodeConfig", key,
+					OpsiServiceNOMPersistenceController.getConfigedWorkbenchDefaultValue(),
+					"default path to opsiproducts"));
+		} else {
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
+			OpsiServiceNOMPersistenceController.setConfigedWorkbenchDefaultValue((String) defaultValues.get(0));
+		}
+
+		// configuration of opsiclientd extra events
+
+		key = OpsiServiceNOMPersistenceController.KEY_OPSICLIENTD_EXTRA_EVENTS;
+
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+					+ OpsiServiceNOMPersistenceController.KEY_OPSICLIENTD_EXTRA_EVENTS);
+			// key not yet configured
+			defaultValues = new ArrayList<>();
+
+			defaultValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+
+			configDefaultValues.put(key, defaultValues);
+
+			possibleValues = new ArrayList<>();
+
+			possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+			possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_SILENT_INSTALL);
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+			item.put("id", key);
+			item.put("description", "");
+			item.put("defaultValues", defaultValues);
+
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", true);
+
+			readyObjects.add(item);
+		}
+
+		// for warnings for opsi licences
+
+		// percentage number of clients
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(item);
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// absolute number of clients
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(item);
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// days limit warning
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(item);
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// modules disabled for warnings
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+
+			possibleValues = new ArrayList<>();
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", true);
+			item.put("multiValue", true);
+
+			readyObjects.add(item);
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// add metaconfigs
+
+		// Update configs if there are some to update
+		if (!readyObjects.isEmpty()) {
+			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
+
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
+
+			exec.doCall(omc);
+		} else {
+			Logging.notice(this, "there are no configurations to update");
+		}
+
+		List<Map<String, Object>> defaultUserConfigsObsolete = new ArrayList<>();
+
+		// delete obsolete configs
+
+		for (Entry<String, List<Object>> configEntry : configDefaultValues.entrySet()) {
+			if (configEntry.getKey().startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "ssh")) {
+				defaultValues = configEntry.getValue();
+
+				if (defaultValues != null) {
+					// still existing
+					Logging.info(this, "handling ssh config key at old location " + configEntry.getKey());
+					Map<String, Object> config = new HashMap<>();
+
+					config.put("id", configEntry.getKey());
+
+					String type = "BoolConfig";
+					config.put("type", type);
+
+					defaultUserConfigsObsolete.add(config);
+				}
+			}
+		}
+
+		for (Entry<String, List<Object>> configEntry : configDefaultValues.entrySet()) {
+			if (configEntry.getKey().startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "{ole.")) {
+				defaultValues = configEntry.getValue();
+
+				if (defaultValues != null) {
+					// still existing
+					Logging.info(this, "removing unwillingly generated entry  " + configEntry.getKey());
+					Map<String, Object> config = new HashMap<>();
+
+					config.put("id", configEntry.getKey());
+
+					String type = "BoolConfig";
+					config.put("type", type);
+
+					defaultUserConfigsObsolete.add(config);
+				}
+			}
+		}
+
+		Logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
+
+		if (!defaultUserConfigsObsolete.isEmpty()) {
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+					new Object[] { defaultUserConfigsObsolete }));
+		}
+
+		return true;
+	}
+
+	/**
+	 * delivers the default domain if it is not existing it retrieves it from
+	 * servide
+	 */
+	public String getOpsiDefaultDomain() {
+		retrieveOpsiDefaultDomain();
+		return cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
+	}
+
+	/**
+	 * retrieves default domain from service
+	 */
+	private void retrieveOpsiDefaultDomain() {
+		String opsiDefaultDomain = cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
+		if (opsiDefaultDomain == null) {
+			Object[] params = new Object[] {};
+			opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN, params));
+			cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
+		}
+	}
+
+	private List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
+		// NOT_WAN meta configs
+		Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
+						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_GUISTARTUP,
+				true, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
+						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
+				true, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
+						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_NET_CONNECTION,
+				false, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
+						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_TIMER,
+				false, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		return readyObjects;
+	}
+
+	public Map<String, String> getEmptyLogfiles() {
+		Map<String, String> logfiles = new HashMap<>();
+		String[] logtypes = Utils.getLogTypes();
+		for (int i = 0; i < logtypes.length; i++) {
+			logfiles.put(logtypes[i], "");
+		}
+		cacheManager.setCachedData(CacheIdentifier.LOG_FILES, logfiles);
+		return logfiles;
+	}
+
+	public Map<String, String> getLogfiles(String clientId, String logtype) {
+		Map<String, String> logfiles = cacheManager.getCachedData(CacheIdentifier.LOG_FILES, Map.class);
+		if (logfiles == null) {
+			logfiles = getEmptyLogfiles();
+		}
+
+		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
+		if (i < 0) {
+			Logging.error("illegal logtype: " + logtype);
+			return logfiles;
+		}
+
+		Logging.debug(this, "getLogfile logtye " + logtype);
+
+		String[] logtypes = Utils.getLogTypes();
+
+		String s = "";
+
+		Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Utils.getMaxLogSize(i));
+
+		try {
+			if (Utils.getMaxLogSize(i) == 0) {
+				s = exec.getStringResult(
+						new OpsiMethodCall(RPCMethodName.LOG_READ, new String[] { logtype, clientId }));
+			} else {
+				s = exec.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ,
+						new String[] { logtype, clientId, String.valueOf(Utils.getMaxLogSize(i)) }));
+			}
+
+		} catch (OutOfMemoryError e) {
+			s = "--- file too big for showing, enlarge java memory  ---";
+			Logging.debug(this, "thrown exception: " + e);
+		}
+
+		logfiles.put(logtype, s);
+
+		return logfiles;
+	}
+
+	public Map<String, Map<String, Object>> getProductGlobalInfos(String depotId) {
+		checkProductGlobalInfos(depotId);
+		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, Map.class);
+	}
+
+	// map with key productId
+	public Map<String, List<String>> getPossibleActions(String depotId) {
+		Logging.debug(this, "getPossibleActions depot irregular " + !persistenceController.theDepot.equals(depotId));
+		checkProductGlobalInfos(depotId);
+		return cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS, Map.class);
+	}
+
+	private void checkProductGlobalInfos(String depotId) {
+		Logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
+		if (!persistenceController.theDepot.equals(depotId)) {
+			Logging.warning(this, "depot irregular, preset " + persistenceController.theDepot);
+		}
+		if (depotId == null || depotId.isEmpty()) {
+			Logging.notice(this, "checkProductGlobalInfos called for no depot");
+		}
+		Map<String, Map<String, Object>> productGlobalInfos = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, Map.class);
+		Map<String, List<String>> possibleActions = cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS,
+				Map.class);
+		Logging.debug(this, "checkProductGlobalInfos depotId " + depotId + " productGlobaInfos  = null "
+				+ (productGlobalInfos == null) + " possibleActions = null " + (possibleActions == null));
+		if (possibleActions == null || productGlobalInfos == null || persistenceController.theDepot == null
+				|| !persistenceController.theDepot.equals(depotId)) {
+			retrieveProductGlobalInfos(depotId);
+		}
+	}
+
+	private void retrieveProductGlobalInfos(String depotId) {
+		Logging.info(this, "retrieveProductGlobalInfos , depot " + depotId);
+
+		Map<String, Map<String, Object>> productGlobalInfos = new HashMap<>();
+		Map<String, List<String>> possibleActions = new HashMap<>();
+
+		for (String productId : getProduct2versionInfo2infos().keySet()) {
+			if (getProduct2versionInfo2infos().get(productId) == null) {
+				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + productId);
+			}
+
+			if (getProduct2versionInfo2infos().get(productId) != null) {
+				String versionInfo = null;
+				Map<String, OpsiProductInfo> productAllInfos = getProduct2versionInfo2infos().get(productId);
+
+				// look for associated product on depot info
+				HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProducts().get(depotId);
+				if (product2VersionList != null && product2VersionList.get(productId) != null
+						&& !product2VersionList.get(productId).isEmpty()) {
+					versionInfo = product2VersionList.get(productId).get(0);
+				}
+
+				if (versionInfo == null) {
+					product2VersionList = getDepot2NetbootProducts().get(depotId);
+
+					if (product2VersionList != null && product2VersionList.get(productId) != null
+							&& !product2VersionList.get(productId).isEmpty()) {
+						versionInfo = product2VersionList.get(productId).get(0);
+					}
+				}
+
+				// if found go on
+
+				if (versionInfo != null && productAllInfos.get(versionInfo) != null) {
+					OpsiProductInfo productInfo = productAllInfos.get(versionInfo);
+
+					possibleActions.put(productId, productInfo.getPossibleActions());
+
+					Map<String, Object> aProductInfo = new HashMap<>();
+
+					aProductInfo.put("actions", productInfo.getPossibleActions());
+
+					aProductInfo.put(ProductState.KEY_PRODUCT_ID, productId
+					// productInfo.getProductId()
+					);
+					aProductInfo.put(ProductState.KEY_VERSION_INFO,
+							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
+
+					aProductInfo.put(ProductState.KEY_PRODUCT_PRIORITY, productInfo.getPriority());
+
+					aProductInfo.put(ProductState.KEY_PRODUCT_NAME,
+							// OpsiProductInfo.SERVICEkeyPRODUCT_NAME,
+							productInfo.getProductName());
+
+					aProductInfo.put(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION, productInfo.getDescription());
+
+					aProductInfo.put(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE, productInfo.getAdvice());
+
+					aProductInfo.put(ProductState.KEY_PRODUCT_VERSION, productInfo.getProductVersion());
+
+					aProductInfo.put(ProductState.KEY_PACKAGE_VERSION, productInfo.getPackageVersion());
+
+					aProductInfo.put(OpsiPackage.SERVICE_KEY_LOCKED, productInfo.getLockedInfo());
+
+					Logging.debug(this, "productInfo " + aProductInfo);
+
+					productGlobalInfos.put(productId, aProductInfo);
+				}
+			}
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, productGlobalInfos);
+		cacheManager.setCachedData(CacheIdentifier.POSSIBLE_ACTIONS, possibleActions);
+		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+	}
+
+	public Map<String, Map<String, String>> getProductDefaultStates() {
+		NavigableSet<String> productIds = cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, NavigableSet.class);
+		if (productIds == null) {
+			productIds = getProductIds();
+		}
+
+		Map<String, Map<String, String>> productDefaultStates = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES, Map.class);
+		Logging.debug(this, "getProductDefaultStates, count " + productDefaultStates.size());
+		return productDefaultStates;
+	}
+
+	public NavigableSet<String> getProductIds() {
+		getProduct2versionInfo2infos();
+
+		NavigableSet<String> productIds = cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, NavigableSet.class);
+		if (productIds == null) {
+			productIds = new TreeSet<>();
+			Map<String, Map<String, String>> productDefaultStates = new TreeMap<>();
+
+			for (String productId : getProduct2versionInfo2infos().keySet()) {
+				productIds.add(productId);
+				ProductState productDefault = new ProductState(null);
+				productDefault.put("productId", productId);
+				productDefaultStates.put(productId, productDefault);
+			}
+			cacheManager.setCachedData(CacheIdentifier.PRODUCT_IDS, productIds);
+			cacheManager.setCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES, productDefaultStates);
+
+			Logging.info(this, "getProductIds size / names " + productIds.size() + " / ... ");
+		}
+
+		return productIds;
+	}
+
+	public Map<String, ConfigName2ConfigValue> getProductsProperties(String pcname) {
+		Logging.debug(this, "getProductsProperties for host " + pcname);
+
+		Set<String> pcs = new TreeSet<>();
+		pcs.add(pcname);
+		retrieveProductProperties(pcs);
+
+		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+		if (productProperties.get(pcname) == null) {
+			return new HashMap<>();
+		}
+
+		return productProperties.get(pcname);
+	}
+
+	/**
+	 * @param pcname      - if it changes productproperties should have been set
+	 *                    to null.
+	 * @param productname
+	 */
+	public Map<String, Object> getProductProperties(String pcname, String productname) {
+		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
+
+		Set<String> pcs = new TreeSet<>();
+		pcs.add(pcname);
+		retrieveProductProperties(pcs);
+
+		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+		if (productProperties.get(pcname) == null || productProperties.get(pcname).get(productname) == null) {
+			return new HashMap<>();
+		}
+
+		return productProperties.get(pcname).get(productname);
+	}
+
+	/**
+	 * This method collects properties for all selected clients and all
+	 * products,<br \> as a sideeffect, it produces the depot specific default
+	 * values <br \>
+	 *
+	 * @param clientNames -
+	 */
+	private void retrieveProductProperties(final Set<String> clientNames) {
+
+		boolean existing = true;
+		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+		if (productProperties == null) {
+			existing = false;
+		} else {
+			for (String client : clientNames) {
+				if (productProperties.get(client) == null) {
+					existing = false;
+					break;
+				}
+			}
+		}
+
+		if (existing) {
+			return;
+		}
+
+		productProperties = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
+
+		fillProductPropertyStates(clientNames);
+		List<Map<String, Object>> retrieved = getProductPropertyStates();
+
+		Set<String> productsWithProductPropertyStates = new HashSet<>();
+
+		for (Map<String, Object> map : retrieved) {
+			String host = (String) map.get("objectId");
+
+			productsWithProductPropertyStates.add((String) map.get("productId"));
+
+			Map<String, Map<String, Object>> productproperties1Client = productPropertiesRetrieved.computeIfAbsent(host,
+					s -> new HashMap<>());
+
+			Map<String, Object> properties = productproperties1Client.computeIfAbsent((String) map.get("productId"),
+					s -> new HashMap<>());
+
+			properties.put((String) map.get("propertyId"),
+					POJOReMapper.remap(map.get("values"), new TypeReference<List<Object>>() {
+					}));
+		}
+
+		Logging.info(this,
+				" retrieveProductproperties  productsWithProductPropertyStates " + productsWithProductPropertyStates);
+
+		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(
+				persistenceController.theDepot);
+		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
+		if (!defaultProperties.isEmpty()) {
+			for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
+				defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
+			}
+		}
+
+		Set<String> products = defaultPropertiesRetrieved.keySet();
+
+		Set<String> productsHavingSpecificProperties = new TreeSet<>(products);
+
+		for (String host : clientNames) {
+			HashMap<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
+			productProperties.put(host, productproperties1Client);
+
+			Map<String, Map<String, Object>> retrievedProperties = productPropertiesRetrieved.get(host);
+			if (retrievedProperties == null) {
+				retrievedProperties = defaultPropertiesRetrieved;
+				productsHavingSpecificProperties.clear();
+			}
+
+			for (String product : products) {
+				Map<String, Object> retrievedProperties1Product = retrievedProperties.get(product);
+				// complete set of default values
+				Map<String, Object> properties1Product = new HashMap<>(defaultPropertiesRetrieved.get(product));
+
+				if (retrievedProperties1Product == null) {
+					productsHavingSpecificProperties.remove(product);
+				} else {
+					for (Entry<String, Object> retrievedProperty : retrievedProperties1Product.entrySet()) {
+						properties1Product.put(retrievedProperty.getKey(), retrievedProperty.getValue());
+					}
+				}
+
+				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product, null);
+				productproperties1Client.put(product, state);
+			}
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTIES, productProperties);
+
+		Logging.info(this,
+				" retrieveProductproperties productsHavingSpecificProperties " + productsHavingSpecificProperties);
+
+		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductProperties(persistenceController.theDepot);
+
+		Map<String, Boolean> productHavingClientSpecificProperties = new HashMap<>();
+		Map<String, Map<String, ListCellOptions>> productPropertyDefinitions = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIOS, Map.class);
+
+		for (String product : products) {
+			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
+				ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
+
+				Iterator<String> iterProperties = productPropertyDefinitions.get(product).keySet().iterator();
+				while (iterProperties.hasNext()) {
+					String property = iterProperties.next();
+
+					if (productPropertyConfig.isEmpty() || productPropertyConfig.get(property) == null) {
+						productPropertyDefinitions.get(product).get(property).setDefaultValues(new ArrayList<>());
+					} else {
+						productPropertyDefinitions.get(product).get(property)
+								.setDefaultValues((List) productPropertyConfig.get(property));
+					}
+				}
+			}
+
+			productHavingClientSpecificProperties.put(product, productsHavingSpecificProperties.contains(product));
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
+				productHavingClientSpecificProperties);
+	}
+
+	public Map<String, ConfigName2ConfigValue> getDefaultProductProperties(String depotId) {
+		Logging.debug(this, "getDefaultProductProperties for depot " + depotId);
+		retrieveDepotProductProperties();
+		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = cacheManager
+				.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class);
+		if (depot2product2properties == null) {
+			Logging.error("no product properties ");
+			return new HashMap<>();
+		} else {
+			if (depot2product2properties.get(depotId) == null) {
+				// initializing state
+				return new HashMap<>();
+			}
+
+			if (!depot2product2properties.get(depotId).isEmpty()) {
+				Logging.info(this, "getDefaultProductProperties for depotId " + depotId + " starts with "
+						+ new ArrayList<>(depot2product2properties.get(depotId).keySet()).get(0));
+			}
+
+			return depot2product2properties.get(depotId);
+		}
+	}
+
+	/**
+	 * This method collects properties for all selected clients and all
+	 * products,<br \> as a sideeffect, it produces the depot specific default
+	 * values <br \>
+	 *
+	 * @param clientNames -
+	 */
+	public void retrieveProductProperties(List<String> clientNames) {
+		retrieveProductProperties(new HashSet<>(clientNames));
+	}
+
+	public Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2properties() {
+		retrieveDepotProductProperties();
+		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class);
+	}
+
+	public void retrieveDepotProductProperties() {
+		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = cacheManager
+				.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class);
+		if (depot2product2properties != null) {
+			return;
+		}
+
+		Logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
+
+		depot2product2properties = new HashMap<>();
+
+		// depot missing ??
+
+		HostInfoCollections hostInfoCollections = cacheManager.getCachedData(CacheIdentifier.HOST_INFO_COLLECTIONS,
+				HostInfoCollections.class);
+		List<Map<String, Object>> retrieved = getProductPropertyDepotStates(hostInfoCollections.getDepots().keySet());
+
+		for (Map<String, Object> map : retrieved) {
+			String host = (String) map.get("objectId");
+
+			if (!hostInfoCollections.getDepots().keySet().contains(host)) {
+				Logging.warning(this, "should be a productPropertyState for a depot, but host " + host);
+				continue;
+			}
+
+			Map<String, ConfigName2ConfigValue> productproperties1Host = depot2product2properties.computeIfAbsent(host,
+					arg -> new HashMap<>());
+
+			ConfigName2ConfigValue properties = productproperties1Host.computeIfAbsent(
+					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
+					arg -> new ConfigName2ConfigValue(new HashMap<>()));
+
+			properties.put((String) map.get("propertyId"), new JSONArray((List<?>) map.get("values")).toList());
+			properties.getRetrieved().put((String) map.get("propertyId"),
+					new JSONArray((List<?>) map.get("values")).toList());
+
+			Logging.debug(this,
+					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, depot2product2properties);
+	}
+
+	public NavigableSet<Object> getSoftwareWithoutAssociatedLicencePool() {
+		NavigableSet<Object> softwareWithoutAssociatedLicencePool = cacheManager
+				.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
+		if (softwareWithoutAssociatedLicencePool == null) {
+			retrieveRelationsAuditSoftwareToLicencePools();
+		}
+
+		return softwareWithoutAssociatedLicencePool;
+	}
+
+	public List<String> getSoftwareListByLicencePool(String licencePoolId) {
+		Map<String, List<String>> fLicencePool2SoftwareList = cacheManager
+				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
+		if (fLicencePool2SoftwareList == null) {
+			retrieveRelationsAuditSoftwareToLicencePools();
+		}
+
+		List<String> result = fLicencePool2SoftwareList.get(licencePoolId);
+		if (result == null) {
+			result = new ArrayList<>();
+		}
+		return result;
+	}
+
+	public List<String> getUnknownSoftwareListForLicencePool(String licencePoolId) {
+		Map<String, List<String>> fLicencePool2UnknownSoftwareList = cacheManager
+				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
+		if (fLicencePool2UnknownSoftwareList == null) {
+			retrieveRelationsAuditSoftwareToLicencePools();
+		}
+
+		List<String> result = fLicencePool2UnknownSoftwareList.get(licencePoolId);
+		if (result == null) {
+			result = new ArrayList<>();
+		}
+		return result;
+	}
+
+	public Map<String, String> getFSoftware2LicencePool() {
+		Map<String, String> fSoftware2LicencePool = cacheManager
+				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
+		if (fSoftware2LicencePool == null) {
+			retrieveRelationsAuditSoftwareToLicencePools();
+		}
+		return fSoftware2LicencePool;
+	}
+
+	public String getFSoftware2LicencePool(String softwareIdent) {
+		Map<String, String> fSoftware2LicencePool = cacheManager
+				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
+		if (fSoftware2LicencePool == null) {
+			retrieveRelationsAuditSoftwareToLicencePools();
+		}
+		return fSoftware2LicencePool.get(softwareIdent);
+	}
+
+	public void retrieveRelationsAuditSoftwareToLicencePools() {
+		AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools = cacheManager.getCachedData(
+				CacheIdentifier.RELATIONS_AUDIT_SOFTWARE_TO_LICENSE_POOLS, AuditSoftwareXLicencePool.class);
+		Logging.info(this,
+				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
+
+		if (relationsAuditSoftwareToLicencePools == null) {
+			//persistentDataRetriever.auditSoftwareXLicencePoolRequestRefresh();
+		} else {
+			return;
+		}
+
+		relationsAuditSoftwareToLicencePools = getAuditSoftwareXLicencePool();
+
+		// function softwareIdent --> pool
+		Map<String, String> fSoftware2LicencePool = new HashMap<>();
+		// function pool --> list of assigned software
+		Map<String, List<String>> fLicencePool2SoftwareList = new HashMap<>();
+		// function pool --> list of assigned software
+		Map<String, List<String>> fLicencePool2UnknownSoftwareList = new HashMap<>();
+
+		NavigableSet<String> softwareWithoutAssociatedLicencePool = new TreeSet<>(
+				getInstalledSoftwareInformationForLicensing().keySet());
+
+		if (!cacheManager.getCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT, Boolean.class)) {
+			return;
+		}
+
+		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
+			SWAuditEntry entry = new SWAuditEntry(retrieved);
+			String licencePoolKEY = retrieved.get(LicencepoolEntry.ID_SERVICE_KEY);
+			String swKEY = entry.getIdent();
+
+			// build row for software table
+			LinkedHashMap<String, String> row = new LinkedHashMap<>();
+
+			for (String colName : SWAuditEntry.getDisplayKeys()) {
+				row.put(colName, entry.get(colName));
+
+			}
+
+			// build fSoftware2LicencePool
+			if (fSoftware2LicencePool.get(swKEY) != null && !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {
+				Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
+						+ fSoftware2LicencePool.get(swKEY) + " as well as " + licencePoolKEY);
+			}
+			fSoftware2LicencePool.put(swKEY, licencePoolKEY);
+
+			// build fLicencePool2SoftwareList
+			if (fLicencePool2SoftwareList.get(licencePoolKEY) == null) {
+				fLicencePool2SoftwareList.put(licencePoolKEY, new ArrayList<>());
+			}
+
+			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
+			if (softwareIds.indexOf(swKEY) == -1) {
+				if (getInstalledSoftwareInformationForLicensing().get(swKEY) == null) {
+					Logging.warning(this, "license pool " + licencePoolKEY
+							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
+					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
+					// found
+					List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList.computeIfAbsent(licencePoolKEY,
+							s -> new ArrayList<>());
+					unknownSoftwareIds.add(swKEY);
+				} else {
+					softwareIds.add(swKEY);
+					softwareWithoutAssociatedLicencePool.remove(swKEY);
+				}
+			}
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicencePool);
+		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicencePool2SoftwareList);
+		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
+				fLicencePool2UnknownSoftwareList);
+		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+				softwareWithoutAssociatedLicencePool);
+
+		Logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools,  softwareWithoutAssociatedLicencePool "
+				+ softwareWithoutAssociatedLicencePool.size());
+	}
+
+	public Map<String, Boolean> getHostDisplayFields() {
+		Map<String, Boolean> hostDisplayFields = cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS,
+				Map.class);
+		if (hostDisplayFields == null) {
+			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+
+			List<String> configuredByService = OpsiServiceNOMPersistenceController.takeAsStringList(
+					serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_HOST_DISPLAYFIELDS));
+
+			// check if have to initialize the server property
+			configuredByService = produceHostDisplayFields(configuredByService);
+
+			hostDisplayFields = new LinkedHashMap<>();
+			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+			// always shown, we put it here because of ordering and repeat the statement
+			// after the loop if it has been set to false
+
+			for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
+				hostDisplayFields.put(field, configuredByService.indexOf(field) > -1);
+			}
+
+			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+			cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
+		}
+
+		return hostDisplayFields;
+	}
+
+	private List<String> produceHostDisplayFields(List<String> givenList) {
+		List<String> result = null;
+		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Logging.info(this, "produceHost_displayFields configOptions.get(key) "
+				+ configOptions.get(OpsiServiceNOMPersistenceController.KEY_HOST_DISPLAYFIELDS));
+
+		List<String> possibleValues = new ArrayList<>();
+		possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+
+		List<String> defaultValues = new ArrayList<>();
+		defaultValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+
+		if (givenList == null || givenList.isEmpty()) {
+			result = defaultValues;
+
+			Logging.info(this, "givenList is null or empty: " + givenList);
+
+			// create config for service
+			Map<String, Object> item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+			item.put("ident", OpsiServiceNOMPersistenceController.KEY_HOST_DISPLAYFIELDS);
+			item.put("description", "");
+			item.put("defaultValues", defaultValues);
+			item.put("possibleValues", possibleValues);
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
+
+			exec.doCall(omc);
+		} else {
+			result = givenList;
+			// but not if we want to change the default values:
+		}
+
+		return result;
+	}
+
+	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {
+		Map<String, Boolean> productOnClientsDisplayFieldsNetbootProducts = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS, Map.class);
+		if (productOnClientsDisplayFieldsNetbootProducts == null) {
+			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+
+			List<String> configuredByService = OpsiServiceNOMPersistenceController.takeAsStringList(serverPropertyMap
+					.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
+
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
+
+			Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS,
+					Map.class);
+			if (configOptions
+					.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT) != null) {
+				possibleValuesAccordingToService = (List<?>) configOptions
+						.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT)
+						.get("possibleValues");
+			}
+
+			if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
+					.equals(new HashSet<>(possibleValuesAccordingToService)))) {
+				// we did not initialize server property
+				configuredByService = produceProductOnClientDisplayfieldsNetboot();
+			}
+
+			productOnClientsDisplayFieldsNetbootProducts = new LinkedHashMap<>();
+
+			// key names from ProductState
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+					configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION, false);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+					configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+					configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
+
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
+		}
+
+		return productOnClientsDisplayFieldsNetbootProducts;
+	}
+
+	private List<String> produceProductOnClientDisplayfieldsNetboot() {
+		List<String> result = getDefaultValuesProductOnClientDisplayFields();
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
+
+		// create config for service
+		Map<String, Object> item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+		item.put("ident", OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
+		item.put("description", "");
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", false);
+		item.put("multiValue", true);
+
+		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
+
+		exec.doCall(omc);
+
+		return result;
+	}
+
+	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
+		Map<String, Boolean> productOnClientsDisplayFieldsLocalbootProducts = cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS, Map.class);
+		if (productOnClientsDisplayFieldsLocalbootProducts == null) {
+			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
+
+			Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS,
+					Map.class);
+			Logging.debug(this,
+					"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
+							+ configOptions.get(
+									OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
+
+			List<String> configuredByService = OpsiServiceNOMPersistenceController.takeAsStringList(serverPropertyMap
+					.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
+
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
+
+			if (configOptions
+					.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT) != null) {
+				possibleValuesAccordingToService = (List<?>) configOptions
+						.get(OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT)
+						.get("possibleValues");
+			}
+
+			Logging.debug(this, "getProductOnClients_displayFieldsLocalbootProducts() possibleValuesAccordingToService "
+					+ possibleValuesAccordingToService);
+
+			if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
+					.equals(new HashSet<>(possibleValuesAccordingToService)))) {
+				// we did not initialize server property
+				configuredByService = produceProductOnClientDisplayfieldsLocalboot();
+			}
+
+			productOnClientsDisplayFieldsLocalbootProducts = new LinkedHashMap<>();
+
+			if (configuredByService == null) {
+				Logging.warning(this, "configuredByService is null");
+				return productOnClientsDisplayFieldsLocalbootProducts;
+			}
+
+			// key names from ProductState
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+					configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
+					configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+					configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
+					configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1);
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
+					configuredByService.indexOf(ProductState.KEY_POSITION) > -1);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+					configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
+
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
+
+		}
+
+		return productOnClientsDisplayFieldsLocalbootProducts;
+	}
+
+	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
+		if (cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class)) {
+			return null;
+		}
+
+		List<String> result = getDefaultValuesProductOnClientDisplayFields();
+
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
+
+		// create config for service
+		Map<String, Object> item = OpsiServiceNOMPersistenceController.createNOMitem("UnicodeConfig");
+		item.put("ident", OpsiServiceNOMPersistenceController.KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
+		item.put("description", "");
+		item.put("defaultValues", result);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", false);
+		item.put("multiValue", true);
+
+		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
+
+		exec.doCall(omc);
+
+		return result;
+	}
+
+	private static List<String> getDefaultValuesProductOnClientDisplayFields() {
+		List<String> result = new ArrayList<>();
+
+		result.add("productId");
+
+		result.add(ProductState.KEY_INSTALLATION_STATUS);
+		result.add(ProductState.KEY_INSTALLATION_INFO);
+		result.add(ProductState.KEY_ACTION_REQUEST);
+		result.add(ProductState.KEY_VERSION_INFO);
+
+		return result;
+	}
+
+	private static List<String> getPossibleValuesProductOnClientDisplayFields() {
+		List<String> possibleValues = new ArrayList<>();
+		possibleValues.add("productId");
+		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
+		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
+		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
+		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
+		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
+		possibleValues.add(ProductState.KEY_POSITION);
+		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
+		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
+		possibleValues.add(ProductState.KEY_VERSION_INFO);
+
+		return possibleValues;
+	}
+
+	public Map<String, LicenceUsageEntry> getLicencesUsage() {
+		retrieveLicencesUsage();
+		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
+	}
+
+	public Map<String, List<LicenceUsageEntry>> getFClient2LicencesUsageList() {
+		retrieveLicencesUsage();
+		return cacheManager.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
+	}
+
+	private void retrieveLicencesUsage() {
+		Map<String, LicenceUsageEntry> rowsLicencesUsage = cacheManager
+				.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
+		Logging.info(this, "retrieveLicencesUsage with refresh " + (rowsLicencesUsage == null));
+
+		if (rowsLicencesUsage == null) {
+			//persistentDataRetriever.licenceUsagesRequestRefresh();
+		} else {
+			return;
+		}
+
+		if (!cacheManager.getCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT, Boolean.class)) {
+			return;
+		}
+
+		rowsLicencesUsage = new HashMap<>();
+		Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = new HashMap<>();
+
+		for (LicenceUsageEntry m : getLicenceUsages()) {
+			rowsLicencesUsage.put(m.getPseudoKey(), m);
+
+			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.computeIfAbsent(m.getClientId(),
+					s -> new ArrayList<>());
+			licencesUsagesForClient.add(m);
+		}
+		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, rowsLicencesUsage);
+		cacheManager.setCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, fClient2LicencesUsageList);
 	}
 }
