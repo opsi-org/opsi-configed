@@ -709,7 +709,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		boolean existsNewRow = mainController.licencePoolTableProvider.getRows().size() < modelLicencepools
 				.getRowCount();
 
-		if (existsNewRow && persistenceController.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
+		if (existsNewRow && persistenceController.getPersistentDataRetriever().getLicencepools()
+				.containsKey(rowmap.get("licensePoolId"))) {
 			// but we leave it until the service methods reflect the situation more
 			// accurately
 

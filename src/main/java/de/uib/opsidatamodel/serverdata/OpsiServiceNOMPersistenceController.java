@@ -504,14 +504,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 	}
 
-	public Map<String, List<Object>> getWanConfiguration() {
-		return wanConfiguration;
-	}
-
-	public Map<String, List<Object>> getNotWanConfiguration() {
-		return notWanConfiguration;
-	}
-
 	// ---------------------------------------------------------------
 
 	public HostInfoCollections getHostInfoCollections() {
@@ -678,9 +670,12 @@ public class OpsiServiceNOMPersistenceController {
 	public Boolean isUefiConfigured(String hostname) {
 		Boolean result = false;
 
-		if (getConfigs().get(hostname) != null && getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).get(0);
+		if (persistentDataRetriever.getConfigs().get(hostname) != null
+				&& persistentDataRetriever.getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME) != null
+				&& !((List<?>) persistentDataRetriever.getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))
+						.isEmpty()) {
+			String configValue = (String) ((List<?>) persistentDataRetriever.getConfigs().get(hostname)
+					.get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -796,13 +791,13 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.info(this, "addWANConfigState configId, item " + config.getKey() + ", " + item);
 
 			// locally, hopefully the RPC call will work
-			if (getConfigs().get(clientId) == null) {
+			if (persistentDataRetriever.getConfigs().get(clientId) == null) {
 				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client " + clientId
 						+ " no local update");
-				getConfigs().put(clientId, new HashMap<>());
+				persistentDataRetriever.getConfigs().put(clientId, new HashMap<>());
 			}
 
-			getConfigs().get(clientId).put(config.getKey(), config.getValue());
+			persistentDataRetriever.getConfigs().get(clientId).put(config.getKey(), config.getValue());
 
 			// prepare for JSON RPC
 			jsonObjects.add(item);
@@ -864,13 +859,13 @@ public class OpsiServiceNOMPersistenceController {
 
 		// locally
 		if (result) {
-			if (getConfigs().get(clientId) == null) {
-				getConfigs().put(clientId, new HashMap<>());
+			if (persistentDataRetriever.getConfigs().get(clientId) == null) {
+				persistentDataRetriever.getConfigs().put(clientId, new HashMap<>());
 			}
 
-			Logging.info(this,
-					"configureUefiBoot, configs for clientId " + clientId + " " + getConfigs().get(clientId));
-			getConfigs().get(clientId).put(CONFIG_DHCPD_FILENAME, values);
+			Logging.info(this, "configureUefiBoot, configs for clientId " + clientId + " "
+					+ persistentDataRetriever.getConfigs().get(clientId));
+			persistentDataRetriever.getConfigs().get(clientId).put(CONFIG_DHCPD_FILENAME, values);
 		}
 
 		return result;
@@ -2566,7 +2561,7 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
 		Boolean value = null;
 
-		Map<String, Object> hostConfig = getConfigs().get(hostName);
+		Map<String, Object> hostConfig = persistentDataRetriever.getConfigs().get(hostName);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
 			value = interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
 			Logging.debug(this,
@@ -2625,15 +2620,9 @@ public class OpsiServiceNOMPersistenceController {
 		//persistentDataRetriever.hostConfigsRequestRefresh();
 	}
 
-	public Map<String, Map<String, Object>> getConfigs() {
-		return persistentDataRetriever.getConfigs();
-	}
-
 	public Map<String, Object> getConfig(String objectId) {
 		persistentDataRetriever.getConfigOptions();
-
-		Map<String, Object> retrieved = getConfigs().get(objectId);
-
+		Map<String, Object> retrieved = persistentDataRetriever.getConfigs().get(objectId);
 		return new ConfigName2ConfigValue(retrieved, configOptions);
 	}
 
@@ -3651,11 +3640,6 @@ public class OpsiServiceNOMPersistenceController {
 	public List<String> getServerConfigStrings(String key) {
 		persistentDataRetriever.getConfigOptions();
 		return takeAsStringList(configDefaultValues.get(key));
-	}
-
-	public Map<String, LicencepoolEntry> getLicencepools() {
-		//persistentDataRetriever.licencepoolsRequestRefresh();
-		return persistentDataRetriever.getLicencepools();
 	}
 
 	// poolId -> LicenceStatisticsRow

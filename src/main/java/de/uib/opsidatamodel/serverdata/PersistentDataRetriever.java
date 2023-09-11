@@ -466,6 +466,14 @@ public class PersistentDataRetriever {
 		return configListCellOptions;
 	}
 
+	public Map<String, List<Object>> getWanConfiguration() {
+		return cacheManager.getCachedData(CacheIdentifier.WAN_CONFIGURATION, Map.class);
+	}
+
+	public Map<String, List<Object>> getNotWanConfiguration() {
+		return cacheManager.getCachedData(CacheIdentifier.NOT_WAN_CONFIGURATION, Map.class);
+	}
+
 	public Map<String, ConfigOption> getWANConfigOptions() {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + OpsiServiceNOMPersistenceController.WAN_PARTKEY);

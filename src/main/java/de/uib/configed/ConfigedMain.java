@@ -1458,8 +1458,8 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, () -> (Map) persistenceController.getLicencepools()));
+		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+				() -> (Map) persistenceController.getPersistentDataRetriever().getLicencepools()));
 
 		persistenceController.getPersistentDataRetriever().retrieveRelationsAuditSoftwareToLicencePools();
 
@@ -3135,7 +3135,8 @@ public class ConfigedMain implements ListSelectionListener {
 				hostConfigs = new HashMap<>();
 
 				for (String client : getSelectedClients()) {
-					hostConfigs.put(client, persistenceController.getConfigs().get(client));
+					hostConfigs.put(client,
+							persistenceController.getPersistentDataRetriever().getConfigs().get(client));
 				}
 			}
 

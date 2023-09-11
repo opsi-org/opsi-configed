@@ -306,7 +306,7 @@ public class HostInfoCollections {
 				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
 						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
-				depotId = (String) ((List<?>) (persistenceController.getConfigs().get(name)
+				depotId = (String) ((List<?>) (persistenceController.getPersistentDataRetriever().getConfigs().get(name)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 			}
 
@@ -325,7 +325,7 @@ public class HostInfoCollections {
 
 			if (persistenceController.getConfig(name) != null) {
 				boolean result = persistenceController.findBooleanConfigurationComparingToDefaults(name,
-						persistenceController.getWanConfiguration());
+						persistenceController.getPersistentDataRetriever().getWanConfiguration());
 				Logging.debug(this, "host " + name + " wan config " + result);
 				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 			}
@@ -345,10 +345,10 @@ public class HostInfoCollections {
 	}
 
 	private boolean hasConfig(String clientId) {
-		return persistenceController.getConfigs().get(clientId) != null
-				&& persistenceController.getConfigs().get(clientId)
+		return persistenceController.getPersistentDataRetriever().getConfigs().get(clientId) != null
+				&& persistenceController.getPersistentDataRetriever().getConfigs().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID) != null
-				&& !((List<?>) (persistenceController.getConfigs().get(clientId)
+				&& !((List<?>) (persistenceController.getPersistentDataRetriever().getConfigs().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty();
 	}
 
@@ -411,13 +411,13 @@ public class HostInfoCollections {
 
 	private void setDepot(String clientName, String depotId) {
 		// set config
-		if (persistenceController.getConfigs().get(clientName) == null) {
-			persistenceController.getConfigs().put(clientName, new HashMap<>());
+		if (persistenceController.getPersistentDataRetriever().getConfigs().get(clientName) == null) {
+			persistenceController.getPersistentDataRetriever().getConfigs().put(clientName, new HashMap<>());
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		persistenceController.getConfigs().get(clientName).put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID,
-				depotList);
+		persistenceController.getPersistentDataRetriever().getConfigs().get(clientName)
+				.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
 
 		// set in mapPC_Infomap
 		HostInfo hostInfo = mapPCInfomap.get(clientName);
