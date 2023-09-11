@@ -2569,7 +2569,10 @@ public class PersistentDataRetriever {
 	}
 
 	public Map<String, LicenceEntry> getLicences() {
-		retrieveLicences();
+		cacheManager.setCachedData(CacheIdentifier.LICENSES, new HashMap<>());
+		if (isWithLicenceManagement()) {
+			retrieveLicences();
+		}
 		return cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class);
 	}
 
@@ -2678,7 +2681,9 @@ public class PersistentDataRetriever {
 	}
 
 	public List<Map<String, Object>> checkHealth() {
-		retrieveHealthData();
+		if (cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) == null) {
+			retrieveHealthData();
+		}
 		return cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class);
 	}
 
@@ -2688,7 +2693,9 @@ public class PersistentDataRetriever {
 	}
 
 	public Map<String, Object> getDiagnosticData() {
-		retrieveDiagnosticData();
+		if (cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class) == null) {
+			retrieveDiagnosticData();
+		}
 		return cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class);
 	}
 
@@ -3008,6 +3015,22 @@ public class PersistentDataRetriever {
 		Set<String> groups = getHostGroups().keySet();
 		groups.remove(ClientTree.DIRECTORY_NAME);
 		return new ArrayList<>(groups);
+	}
+
+	public boolean isServerFullPermission() {
+		return cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class);
+	}
+
+	public boolean isCreateClientPermission() {
+		return cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class);
+	}
+
+	public boolean isDepotsFullPermission() {
+		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class);
+	}
+
+	public Set<String> getDepotsPermitted() {
+		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 	}
 
 	private void checkPermissions() {

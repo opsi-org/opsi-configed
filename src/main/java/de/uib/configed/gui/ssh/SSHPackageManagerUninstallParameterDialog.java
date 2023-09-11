@@ -131,7 +131,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		Logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.isDepotsFullPermission()) {
+			if (persistenceController.getPersistentDataRetriever().isDepotsFullPermission()) {
 				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
@@ -178,7 +178,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.isDepotsFullPermission()) {
+		if (persistenceController.getPersistentDataRetriever().isDepotsFullPermission()) {
 			textFieldSelectedDepots.setEditable(true);
 			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);

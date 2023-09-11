@@ -255,7 +255,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxHost.addItem(host);
 
 		OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
+		Set<String> depots = persist.getVolatileDataRetriever().getDepotPropertiesForPermittedDepots().keySet();
 
 		// remove login host name if identical with depot fqdn
 		depots.remove(host);

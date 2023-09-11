@@ -20,7 +20,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
  * saved in a file.
  */
 public final class HealthInfo {
-	private static OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private HealthInfo() {
@@ -40,7 +40,7 @@ public final class HealthInfo {
 	}
 
 	private static StringBuilder processHealthData(boolean includeDetailedInformation) {
-		List<Map<String, Object>> healthData = persist.checkHealth();
+		List<Map<String, Object>> healthData = persistenceController.getPersistentDataRetriever().checkHealth();
 		StringBuilder healthDataBuilder = new StringBuilder();
 
 		for (Map<String, Object> data : healthData) {
@@ -69,7 +69,7 @@ public final class HealthInfo {
 
 	private static Map<String, Map<String, Object>> produceMap(boolean includeDetailedInformation) {
 		Map<String, Map<String, Object>> result = new TreeMap<>();
-		List<Map<String, Object>> healthData = persist.checkHealth();
+		List<Map<String, Object>> healthData = persistenceController.getPersistentDataRetriever().checkHealth();
 
 		for (Map<String, Object> data : healthData) {
 			Map<String, Object> info = new TreeMap<>();
@@ -94,7 +94,8 @@ public final class HealthInfo {
 	}
 
 	private static String produceHealthDetails(Map<String, Object> healthData) {
-		List<Map<String, Object>> healthDetails = persist.retrieveHealthDetails((String) healthData.get("check_id"));
+		List<Map<String, Object>> healthDetails = persistenceController.getVolatileDataRetriever()
+				.retrieveHealthDetails((String) healthData.get("check_id"));
 		if (healthDetails.isEmpty()) {
 			return "";
 		}

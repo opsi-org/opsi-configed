@@ -475,7 +475,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persistenceController.getRelationsProductId2LPool())),
+						() -> (Map) persistenceController.getVolatileDataRetriever().getRelationsProductId2LPool())),
 				-1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 

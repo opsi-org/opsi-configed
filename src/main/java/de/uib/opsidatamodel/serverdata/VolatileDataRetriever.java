@@ -14,22 +14,26 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.SWAuditClientEntry;
+import de.uib.configed.type.licences.LicencePoolXOpsiProduct;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import utils.Utils;
@@ -43,9 +47,14 @@ import utils.Utils;
  */
 public class VolatileDataRetriever {
 	AbstractExecutioner exec;
+	PersistentDataRetriever persistentDataRetriever;
+	OpsiServiceNOMPersistenceController persistenceController;
 
-	public VolatileDataRetriever(AbstractExecutioner exec) {
+	public VolatileDataRetriever(AbstractExecutioner exec, PersistentDataRetriever persistentDataRetriever,
+			OpsiServiceNOMPersistenceController persistenceController) {
 		this.exec = exec;
+		this.persistentDataRetriever = persistentDataRetriever;
+		this.persistenceController = persistenceController;
 	}
 
 	/**
@@ -575,5 +584,172 @@ public class VolatileDataRetriever {
 	public String getOpsiCACert() {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_OPSI_CA_CERT, new Object[0]);
 		return exec.getStringResult(omc);
+	}
+
+	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
+		Map<String, Map<String, Object>> depotProperties = persistentDataRetriever.getHostInfoCollections()
+				.getAllDepots();
+		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
+
+		String configServer = persistentDataRetriever.getHostInfoCollections().getConfigServer();
+		if (persistenceController.hasDepotPermission(configServer)) {
+			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
+		}
+
+		for (Entry<String, Map<String, Object>> depotProperty : depotProperties.entrySet()) {
+			if (!depotProperty.getKey().equals(configServer)
+					&& persistenceController.hasDepotPermission(depotProperty.getKey())) {
+				depotPropertiesForPermittedDepots.put(depotProperty.getKey(), depotProperty.getValue());
+			}
+		}
+
+		return depotPropertiesForPermittedDepots;
+	}
+
+	public Map<String, Integer> getInstalledOsOverview() {
+		Logging.info(this, "getInstalledOsOverview");
+		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
+		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
+				new TypeReference<Map<String, Integer>>() {
+				});
+	}
+
+	public List<Map<String, Object>> getModules() {
+		Logging.info(this, "getModules");
+		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
+		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
+				new TypeReference<List<Map<String, Object>>>() {
+				});
+	}
+
+	private Map<String, Object> retrieveProducedLicensingInfo() {
+		Map<String, Object> producedLicencingInfo;
+		if (persistentDataRetriever.isOpsiUserAdmin()
+				&& persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin() != null) {
+			producedLicencingInfo = POJOReMapper.remap(
+					persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin().get("result"),
+					new TypeReference<Map<String, Object>>() {
+					});
+		} else {
+			producedLicencingInfo = persistentDataRetriever.getOpsiLicencingInfoNoOpsiAdmin();
+		}
+		return producedLicencingInfo;
+	}
+
+	public List<String> getDomains() {
+		List<String> result = new ArrayList<>();
+
+		Map<String, List<Object>> configDefaultValues = persistentDataRetriever.getConfigDefaultValues();
+		if (configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY) == null) {
+			Logging.info(this,
+					"no values found for   " + OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
+		} else {
+			Logging.info(this, "getDomains "
+					+ configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
+
+			HashMap<String, Integer> numberedValues = new HashMap<>();
+			TreeSet<String> orderedValues = new TreeSet<>();
+			TreeSet<String> unorderedValues = new TreeSet<>();
+
+			for (Object item : configDefaultValues
+					.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY)) {
+				String entry = (String) item;
+				int p = entry.indexOf(":");
+				if (p == -1 || p == 0) {
+					unorderedValues.add(entry);
+				} else if (p > 0) {
+					// the only regular case
+					int orderNumber = -1;
+					try {
+						orderNumber = Integer.valueOf(entry.substring(0, p));
+						String value = entry.substring(p + 1);
+						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
+							orderedValues.add(entry);
+							numberedValues.put(value, orderNumber);
+						}
+					} catch (NumberFormatException x) {
+						Logging.warning(this, "illegal order format for domain entry: " + entry);
+						unorderedValues.add(entry);
+					}
+				} else {
+					Logging.warning(this, "p has unexpected value " + p);
+				}
+			}
+
+			for (String entry : orderedValues) {
+				int p = entry.indexOf(":");
+				result.add(entry.substring(p + 1));
+			}
+
+			unorderedValues.removeAll(result);
+
+			for (String entry : unorderedValues) {
+				result.add(entry);
+			}
+		}
+
+		Logging.info(this, "getDomains " + result);
+		return result;
+	}
+
+	// without internal caching; legacy license method
+	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
+		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
+		if (persistentDataRetriever.isWithLicenceManagement()) {
+			List<String> callAttributes = new ArrayList<>();
+			Map<String, Object> callFilter = new HashMap<>();
+			List<Map<String, Object>> softwareL2LPools = exec
+					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
+							new Object[] { callAttributes, callFilter }));
+
+			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
+				softwareL2LPool.remove("ident");
+				softwareL2LPool.remove("type");
+
+				rowsSoftwareL2LPool
+						.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
+								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
+			}
+		}
+		return rowsSoftwareL2LPool;
+	}
+
+	// without internal caching
+	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
+		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
+
+		if (persistentDataRetriever.isWithLicenceManagement()) {
+			//persistentDataRetriever.licencePoolXOpsiProductRequestRefresh();
+			persistentDataRetriever.getLicencePoolXOpsiProduct();
+			Logging.info(this,
+					"licencePoolXOpsiProduct size " + persistentDataRetriever.getLicencePoolXOpsiProduct().size());
+
+			for (StringValuedRelationElement element : persistentDataRetriever.getLicencePoolXOpsiProduct()) {
+				rowsLicencePoolXOpsiProduct
+						.put(Utils.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
+								element.get(LicencePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
+			}
+		}
+
+		Logging.info(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
+
+		return rowsLicencePoolXOpsiProduct;
+	}
+
+	public boolean isHealthDataAlreadyLoaded() {
+		return persistentDataRetriever.checkHealth() != null;
+	}
+
+	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		for (Map<String, Object> data : persistentDataRetriever.checkHealth()) {
+			if (((String) data.get("check_id")).equals(checkId)) {
+				result = POJOReMapper.remap(data.get("partial_results"),
+						new TypeReference<List<Map<String, Object>>>() {
+						});
+				break;
+			}
+		}
+		return result;
 	}
 }

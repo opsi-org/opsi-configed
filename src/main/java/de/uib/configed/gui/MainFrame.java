@@ -2836,7 +2836,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!persistenceController.isCreateClientPermission()) {
+			if (!persistenceController.getPersistentDataRetriever().isCreateClientPermission()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
@@ -2987,7 +2987,7 @@ public class MainFrame extends JFrame
 	private void showHealthDataAction() {
 
 		// Only show loading when health data are not yet loaded
-		if (!persistenceController.isHealthDataAlreadyLoaded()) {
+		if (!persistenceController.getVolatileDataRetriever().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
 

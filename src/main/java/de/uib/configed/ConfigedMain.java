@@ -571,12 +571,13 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setSSHallowedHosts() {
 		Set<String> sshAllowedHosts = new HashSet<>();
 
-		if (persistenceController.isDepotsFullPermission()) {
+		if (persistenceController.getPersistentDataRetriever().isDepotsFullPermission()) {
 			Logging.info(this, "set ssh allowed hosts " + host);
 			sshAllowedHosts.add(host);
 			sshAllowedHosts.addAll(persistenceController.getHostInfoCollections().getDepots().keySet());
 		} else {
-			sshAllowedHosts.addAll(persistenceController.getDepotPropertiesForPermittedDepots().keySet());
+			sshAllowedHosts.addAll(
+					persistenceController.getVolatileDataRetriever().getDepotPropertiesForPermittedDepots().keySet());
 		}
 
 		SSHCommandFactory.getInstance(this).setAllowedHosts(sshAllowedHosts);
@@ -809,7 +810,7 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.depotChange();
 
 		String opsiDefaultDomain = persistenceController.getPersistentDataRetriever().getOpsiDefaultDomain();
-		editableDomains = persistenceController.getDomains();
+		editableDomains = persistenceController.getVolatileDataRetriever().getDomains();
 		if (!editableDomains.contains(opsiDefaultDomain)) {
 			editableDomains.add(opsiDefaultDomain);
 		}
@@ -1473,7 +1474,7 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licenceOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> persistenceController.getRelationsSoftwareL2LPool()));
+				() -> persistenceController.getVolatileDataRetriever().getRelationsSoftwareL2LPool()));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1510,7 +1511,7 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getSoftwareLicences()));
+				() -> (Map) persistenceController.getPersistentDataRetriever().getLicences()));
 	}
 
 	private void startLicencesFrame() {
@@ -3058,7 +3059,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (editingTarget == EditingTarget.DEPOTS) {
 			Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
-					.getDepotPropertiesForPermittedDepots();
+					.getVolatileDataRetriever().getDepotPropertiesForPermittedDepots();
 
 			if (hostUpdateCollection != null) {
 				updateCollection.remove(hostUpdateCollection);

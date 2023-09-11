@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -48,7 +47,6 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.SavedSearch;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.configed.type.licences.LicencePoolXOpsiProduct;
 import de.uib.configed.type.licences.LicenceStatisticsRow;
 import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
@@ -437,7 +435,7 @@ public class OpsiServiceNOMPersistenceController {
 		// hostInfoCollections = new HostInfoCollections(this);
 		exec = new ServerFacade(server, user, password);
 		dataUpdater = new DataUpdater(exec);
-		volatileDataRetriever = new VolatileDataRetriever(exec);
+		volatileDataRetriever = new VolatileDataRetriever(exec, persistentDataRetriever, this);
 		persistentDataRetriever = new PersistentDataRetriever(exec, this);
 		hwAuditConf = new HashMap<>();
 	}
@@ -583,43 +581,14 @@ public class OpsiServiceNOMPersistenceController {
 		return globalReadOnly;
 	}
 
-	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
-		Map<String, Map<String, Object>> depotProperties = getHostInfoCollections().getAllDepots();
-		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
-
-		String configServer = getHostInfoCollections().getConfigServer();
-		if (hasDepotPermission(configServer)) {
-			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
-		}
-
-		for (Entry<String, Map<String, Object>> depotProperty : depotProperties.entrySet()) {
-			if (!depotProperty.getKey().equals(configServer) && hasDepotPermission(depotProperty.getKey())) {
-				depotPropertiesForPermittedDepots.put(depotProperty.getKey(), depotProperty.getValue());
-			}
-		}
-
-		return depotPropertiesForPermittedDepots;
-	}
-
-	public boolean isServerFullPermission() {
-		return serverFullPermission;
-	}
-
-	public boolean isCreateClientPermission() {
-		return createClientPermission;
-	}
-
-	public boolean isDepotsFullPermission() {
-		return depotsFullPermission;
-	}
-
 	public boolean hasDepotPermission(String depotId) {
-		if (depotsFullPermission) {
+		if (persistentDataRetriever.isDepotsFullPermission()) {
 			return true;
 		}
 
 		boolean result = false;
 
+		Set<String> depotsPermitted = persistentDataRetriever.getDepotsPermitted();
 		if (depotsPermitted != null) {
 			result = depotsPermitted.contains(depotId);
 		}
@@ -1308,46 +1277,6 @@ public class OpsiServiceNOMPersistenceController {
 
 		// background call, do not show waiting info
 		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT));
-	}
-
-	public Map<String, Integer> getInstalledOsOverview() {
-		Logging.info(this, "getInstalledOsOverview");
-
-		Map<String, Object> producedLicencingInfo;
-
-		if (persistentDataRetriever.isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = POJOReMapper.remap(
-					persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin().get("result"),
-					new TypeReference<Map<String, Object>>() {
-					});
-		} else {
-			producedLicencingInfo = persistentDataRetriever.getOpsiLicencingInfoNoOpsiAdmin();
-		}
-
-		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
-				new TypeReference<Map<String, Integer>>() {
-				});
-
-	}
-
-	public List<Map<String, Object>> getModules() {
-		Logging.info(this, "getModules");
-
-		Map<String, Object> producedLicencingInfo;
-
-		if (persistentDataRetriever.isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = POJOReMapper.remap(
-					persistentDataRetriever.getOpsiLicencingInfoOpsiAdmin().get("result"),
-					new TypeReference<Map<String, Object>>() {
-					});
-		} else {
-			producedLicencingInfo = persistentDataRetriever.getOpsiLicencingInfoNoOpsiAdmin();
-		}
-
-		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
-				new TypeReference<List<Map<String, Object>>>() {
-				});
-
 	}
 
 	// executes all updates collected by setHostDescription ...
@@ -2999,58 +2928,6 @@ public class OpsiServiceNOMPersistenceController {
 		opsiDefaultDomain = null;
 	}
 
-	public List<String> getDomains() {
-		List<String> result = new ArrayList<>();
-
-		if (configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY) == null) {
-			Logging.info(this, "no values found for   " + CONFIGED_GIVEN_DOMAINS_KEY);
-		} else {
-			Logging.info(this, "getDomains " + configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY));
-
-			HashMap<String, Integer> numberedValues = new HashMap<>();
-			TreeSet<String> orderedValues = new TreeSet<>();
-			TreeSet<String> unorderedValues = new TreeSet<>();
-
-			for (Object item : configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY)) {
-				String entry = (String) item;
-				int p = entry.indexOf(":");
-				if (p == -1 || p == 0) {
-					unorderedValues.add(entry);
-				} else if (p > 0) {
-					// the only regular case
-					int orderNumber = -1;
-					try {
-						orderNumber = Integer.valueOf(entry.substring(0, p));
-						String value = entry.substring(p + 1);
-						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
-							orderedValues.add(entry);
-							numberedValues.put(value, orderNumber);
-						}
-					} catch (NumberFormatException x) {
-						Logging.warning(this, "illegal order format for domain entry: " + entry);
-						unorderedValues.add(entry);
-					}
-				} else {
-					Logging.warning(this, "p has unexpected value " + p);
-				}
-			}
-
-			for (String entry : orderedValues) {
-				int p = entry.indexOf(":");
-				result.add(entry.substring(p + 1));
-			}
-
-			unorderedValues.removeAll(result);
-
-			for (String entry : unorderedValues) {
-				result.add(entry);
-			}
-		}
-
-		Logging.info(this, "getDomains " + result);
-		return result;
-	}
-
 	public void writeDomains(List<Object> domains) {
 		String key = CONFIGED_GIVEN_DOMAINS_KEY;
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -3168,17 +3045,6 @@ public class OpsiServiceNOMPersistenceController {
 		return false;
 	}
 
-	// without internal caching
-	public Map<String, LicenceEntry> getSoftwareLicences() {
-		Map<String, LicenceEntry> softwareLicences = new HashMap<>();
-
-		if (withLicenceManagement) {
-			//persistentDataRetriever.licencesRequestRefresh();
-			softwareLicences = persistentDataRetriever.getLicences();
-		}
-		return softwareLicences;
-	}
-
 	// returns the ID of the edited data record
 	public String editSoftwareLicence(String softwareLicenseId, String licenceContractId, String licenceType,
 			String maxInstallations, String boundToHost, String expirationDate) {
@@ -3249,30 +3115,6 @@ public class OpsiServiceNOMPersistenceController {
 		return false;
 	}
 
-	// without internal caching; legacy license method
-	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
-		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
-
-		if (withLicenceManagement) {
-			List<String> callAttributes = new ArrayList<>();
-			Map<String, Object> callFilter = new HashMap<>();
-			List<Map<String, Object>> softwareL2LPools = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
-							new Object[] { callAttributes, callFilter }));
-
-			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
-				softwareL2LPool.remove("ident");
-				softwareL2LPool.remove("type");
-
-				rowsSoftwareL2LPool
-						.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
-								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
-			}
-		}
-
-		return rowsSoftwareL2LPool;
-	}
-
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
 		if (!serverFullPermission) {
 			return "";
@@ -3304,28 +3146,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		return false;
-	}
-
-	// without internal caching
-	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
-		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
-
-		if (withLicenceManagement) {
-			//persistentDataRetriever.licencePoolXOpsiProductRequestRefresh();
-			persistentDataRetriever.getLicencePoolXOpsiProduct();
-			Logging.info(this,
-					"licencePoolXOpsiProduct size " + persistentDataRetriever.getLicencePoolXOpsiProduct().size());
-
-			for (StringValuedRelationElement element : persistentDataRetriever.getLicencePoolXOpsiProduct()) {
-				rowsLicencePoolXOpsiProduct
-						.put(Utils.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
-								element.get(LicencePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
-			}
-		}
-
-		Logging.info(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
-
-		return rowsLicencePoolXOpsiProduct;
 	}
 
 	public String editRelationProductId2LPool(String productId, String licensePoolId) {
@@ -4199,41 +4019,6 @@ public class OpsiServiceNOMPersistenceController {
 		}
 		Logging.info(this, "checkSSHCommandMethod " + method + " does not exists");
 		return false;
-	}
-
-	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
-		List<Map<String, Object>> result = new ArrayList<>();
-
-		for (Map<String, Object> data : checkHealth()) {
-			if (((String) data.get("check_id")).equals(checkId)) {
-				result = POJOReMapper.remap(data.get("partial_results"),
-						new TypeReference<List<Map<String, Object>>>() {
-						});
-				break;
-			}
-		}
-
-		return result;
-	}
-
-	public List<Map<String, Object>> checkHealth() {
-		if (!isHealthDataAlreadyLoaded()) {
-			healthData = persistentDataRetriever.checkHealth();
-		}
-
-		return healthData;
-	}
-
-	public boolean isHealthDataAlreadyLoaded() {
-		return healthData != null;
-	}
-
-	public Map<String, Object> getDiagnosticData() {
-		if (diagnosticData == null) {
-			diagnosticData = persistentDataRetriever.getDiagnosticData();
-		}
-
-		return diagnosticData;
 	}
 
 	/**

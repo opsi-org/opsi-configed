@@ -35,7 +35,7 @@ public final class ModuleData {
 
 		modules.clear();
 
-		for (Map<String, Object> moduleInfo : persistenceController.getModules()) {
+		for (Map<String, Object> moduleInfo : persistenceController.getVolatileDataRetriever().getModules()) {
 			modules.add(moduleInfo.get("module_id").toString());
 		}
 	}
@@ -56,7 +56,7 @@ public final class ModuleData {
 		activeModules.clear();
 		expiredModules.clear();
 
-		List<Map<String, Object>> modules = persistenceController.getModules();
+		List<Map<String, Object>> modules = persistenceController.getVolatileDataRetriever().getModules();
 
 		for (Map<String, Object> moduleInfo : modules) {
 			String moduleId = moduleInfo.get("module_id").toString();

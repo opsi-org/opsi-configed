@@ -266,7 +266,7 @@ public final class ProductData {
 			return;
 		}
 
-		Map<String, Integer> installedOSs = persistenceController.getInstalledOsOverview();
+		Map<String, Integer> installedOSs = persistenceController.getVolatileDataRetriever().getInstalledOsOverview();
 
 		if (installedOSs.isEmpty()) {
 			return;
