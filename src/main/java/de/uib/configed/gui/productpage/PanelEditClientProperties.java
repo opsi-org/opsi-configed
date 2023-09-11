@@ -79,17 +79,20 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
 				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
+				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.DEFAULT_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(buttonRemoveSpecificValues, 20, 20, 20)
+				.addComponent(buttonRemoveSpecificValues, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.DEFAULT_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
 
-		titleLayout.setVerticalGroup(titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGroup(titleLayout
+				.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+						GroupLayout.PREFERRED_SIZE)));
 	}
 
 	@Override

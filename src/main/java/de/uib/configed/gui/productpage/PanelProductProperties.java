@@ -48,8 +48,6 @@ public class PanelProductProperties extends JSplitPane {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.configedMain = configedMain;
 		init();
-
-		super.setResizeWeight(0.7);
 	}
 
 	private void init() {

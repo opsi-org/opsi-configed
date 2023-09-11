@@ -405,8 +405,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, maxTableWidth)
 						.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
 						.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
+								GroupLayout.PREFERRED_SIZE)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)

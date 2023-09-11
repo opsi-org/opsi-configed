@@ -178,8 +178,11 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
 				minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addComponent(jLabelEditDepotProductProperties,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(jLabelEditDepotProductProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 	}
 
 	@Override
