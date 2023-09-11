@@ -292,7 +292,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private int clientCount;
 	private boolean firstDepotListChange = true;
 
-	private final Dimension licencesInitDimension = new Dimension(1200, 800);
+	private final Dimension licencesInitDimension = new Dimension(1200, 900);
 
 	private int viewIndex = VIEW_CLIENTS;
 	private int saveClientsViewIndex = VIEW_CLIENTS;
@@ -1408,10 +1408,9 @@ public class ConfigedMain implements ListSelectionListener {
 		// rearranging visual components
 		mainFrame.validate();
 
-
 		// center the frame:
 		locateAndDisplay();
-		
+
 		// set splitpanes before making the frame visible
 		mainFrame.initSplitPanes();
 
