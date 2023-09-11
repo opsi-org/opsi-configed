@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.Dimension;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +65,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	private static final String SCANTIME = "scantime";
 
+	private static final int INITIAL_DIVIDER_LOCATION = 350;
+
 	private Map<String, List<Map<String, Object>>> hwInfo;
 	private String treeRootTitle;
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
@@ -115,9 +116,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
-		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
-
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
@@ -147,6 +145,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		contentPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
@@ -193,7 +192,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
-
 	}
 
 	private void exportPDF() {

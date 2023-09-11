@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.synth.Region;
 import javax.swing.plaf.synth.SynthConstants;
@@ -80,6 +81,9 @@ public class PanelTabbedDocuments extends JTabbedPane {
 		for (int i = 0; i < idents.length; i++) {
 			initLogFrame(i, defaultText);
 		}
+
+		super.setBorder(new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+				Globals.MIN_GAP_SIZE));
 	}
 
 	private void initLogFrame(int i, String defaultText) {

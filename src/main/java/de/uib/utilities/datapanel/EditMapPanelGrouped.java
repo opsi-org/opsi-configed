@@ -60,9 +60,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected Map<String, DefaultEditMapPanel> partialPanels;
 	private NavigableMap<String, Map<String, Object>> virtualLines;
 
-	private int hGap = Globals.HGAP_SIZE / 2;
-	private int vGap = Globals.VGAP_SIZE / 2;
-
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable, final DefaultEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
@@ -250,11 +247,13 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addComponent(splitPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(hGap, hGap, hGap));
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(vGap, vGap, vGap)
-				.addComponent(splitPane, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(vGap, vGap, vGap));
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(splitPane, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 	}
 
