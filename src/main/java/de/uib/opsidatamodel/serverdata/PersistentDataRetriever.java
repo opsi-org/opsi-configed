@@ -207,6 +207,15 @@ public class PersistentDataRetriever {
 		return fObject2Groups;
 	}
 
+	public Map<String, Set<String>> getFGroup2Members() {
+		Map<String, Set<String>> fGroup2Members = cacheManager.getCachedData(CacheIdentifier.FGROUP_TO_MEMBERS,
+				Map.class);
+		if (fGroup2Members == null) {
+			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
+		}
+		return fGroup2Members;
+	}
+
 	// returns the function that yields for a given groupId all objects which belong
 	// to the group
 	public Map<String, Set<String>> retrieveFGroup2Members(String groupType, String memberIdName) {

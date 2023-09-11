@@ -95,7 +95,7 @@ public class CopyClient {
 	}
 
 	private void copyGroups() {
-		Map<String, Set<String>> fGroup2Members = persist.getFGroup2Members();
+		Map<String, Set<String>> fGroup2Members = persist.getPersistentDataRetriever().getFGroup2Members();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName()))
 				.collect(Collectors.toList());

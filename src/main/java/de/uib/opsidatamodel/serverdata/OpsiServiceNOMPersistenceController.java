@@ -1437,14 +1437,6 @@ public class OpsiServiceNOMPersistenceController {
 		fProductGroup2Members = null;
 	}
 
-	public Map<String, Set<String>> getFGroup2Members() {
-		if (fGroup2Members == null) {
-			fGroup2Members = persistentDataRetriever.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP,
-					"clientId");
-		}
-		return fGroup2Members;
-	}
-
 	public void fObject2GroupsRequestRefresh() {
 		fObject2Groups = null;
 	}
@@ -1943,7 +1935,7 @@ public class OpsiServiceNOMPersistenceController {
 		netbootProductNames = null;
 		localbootProductNames = null;
 		retrieveProducts();
-		retrieveProductPropertyDefinitions();
+		// retrieveProductPropertyDefinitions();
 		persistentDataRetriever.getProductGlobalInfos(theDepot);
 	}
 
@@ -2405,7 +2397,7 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String productId) {
-		retrieveProductPropertyDefinitions();
+		// retrieveProductPropertyDefinitions();
 		Map<String, ListCellOptions> result;
 
 		if (productPropertyDefinitions == null) {
@@ -2423,10 +2415,6 @@ public class OpsiServiceNOMPersistenceController {
 	public void productPropertyDefinitionsRequestRefresh() {
 		//persistentDataRetriever.productPropertyDefinitionsRequestRefresh();
 		productPropertyDefinitions = null;
-	}
-
-	public void retrieveProductPropertyDefinitions() {
-		productPropertyDefinitions = persistentDataRetriever.getDepot2Product2PropertyDefinitions().get(theDepot);
 	}
 
 	public String getProductTitle(String product) {

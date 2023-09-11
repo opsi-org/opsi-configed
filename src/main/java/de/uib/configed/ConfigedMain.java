@@ -839,7 +839,7 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.retrieveProducts();
 
 		possibleActions = persistenceController.getPersistentDataRetriever().getPossibleActions(depotRepresentative);
-		persistenceController.retrieveProductPropertyDefinitions();
+		persistenceController.getPersistentDataRetriever().getDepot2Product2PropertyDefinitions();
 		persistenceController.getPersistentDataRetriever().getDepot2product2dependencyInfos();
 
 		persistenceController.getPersistentDataRetriever().retrieveDepotProductProperties();

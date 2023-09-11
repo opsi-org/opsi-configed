@@ -539,6 +539,11 @@ public enum CacheIdentifier {
 	FCLIENT_TO_LICENSES_USAGE_LIST("fclient_to_licenses_usage_list"),
 
 	/**
+	 * return type {@code Map<String, Set<String>>}
+	 */
+	FGROUP_TO_MEMBERS("fgroup_to_members"),
+
+	/**
 	 * return type: {@code boolean}
 	 */
 	MFA_ENABLED("mfa_enabled");
