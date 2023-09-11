@@ -281,9 +281,18 @@ public final class Utils {
 
 	private static Image createMainIcon() {
 		Image mainIcon = null;
-		URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
+
+		String iconPath;
+
+		if (Main.THEMES) {
+			iconPath = "gui/" + Globals.ICON_OPSI;
+		} else {
+			iconPath = Globals.ICON_RESOURCE_NAME;
+		}
+
+		URL resource = Globals.class.getResource(iconPath);
 		if (resource == null) {
-			Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+			Logging.debug("image resource " + iconPath + "  not found");
 		} else {
 			mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 		}

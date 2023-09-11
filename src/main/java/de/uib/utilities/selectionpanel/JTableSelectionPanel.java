@@ -318,7 +318,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Utils.createImageIcon("images/opsi-logo.png", ""));
+		String logoPath;
+		if (Main.THEMES) {
+			logoPath = Globals.ICON_OPSI;
+		} else {
+			logoPath = "images/opsi-logo.png";
+		}
+
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(logoPath, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		if (!Main.FONT) {
@@ -336,8 +343,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		mdPanel.setLayout(mdLayout);
 
 		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-				.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
-				.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
+				.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40).addComponent(missingData2, 10, 40, 80)
+				.addGap(10, 10, Short.MAX_VALUE));
 		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
 				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
