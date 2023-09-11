@@ -45,7 +45,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconButton;
-import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -95,7 +95,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private Map<String, Map<String, String>> theData;
 
-	private PanelProductSettings associate;
+	private PanelGroupedProductSettings associate;
 	private JPanel panelEdit;
 
 	private Map<String, String> namesAndDescriptions;
@@ -144,7 +144,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private ConfigedMain configedMain;
 
-	public ProductgroupPanel(PanelProductSettings associate, ConfigedMain configedMain, JTable table) {
+	public ProductgroupPanel(PanelGroupedProductSettings associate, ConfigedMain configedMain, JTable table) {
 		this.associate = associate;
 		this.configedMain = configedMain;
 		this.tableProducts = table;

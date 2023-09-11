@@ -60,8 +60,6 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.InstallationStateTableModelFiltered;
-import de.uib.configed.productgroup.ProductgroupPanel;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -147,11 +145,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private String title;
 
-	// State reducedTo1stSelection
-	// List reductionList
-
-	private ProductgroupPanel groupPanel;
-
 	protected ConfigedMain mainController;
 
 	public PanelProductSettings(String title, ConfigedMain mainController, Map<String, Boolean> productDisplayFields) {
@@ -165,22 +158,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void initTopPane() {
-		if (tableProducts == null) {
-			Logging.error(this, " tableProducts == null ");
-			Main.endApp(Main.NO_ERROR);
-		}
-		topPane = new ProductgroupPanel(this, mainController, tableProducts);
+		topPane = new JPanel();
 		topPane.setVisible(true);
-		groupPanel = (ProductgroupPanel) topPane;
-		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event reloadAction " + ae);
-			reloadAction();
-		});
-
-		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
-			saveAndExecuteAction();
-		});
 	}
 
 	protected void init() {
@@ -392,26 +371,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new PopupMouseListener(popup));
 		tableProducts.addMouseListener(new PopupMouseListener(popup));
 
-		activatePacketSelectionHandling(true);
-		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	}
-
-	public void setGroupsData(final Map<String, Map<String, String>> data,
-			final Map<String, Set<String>> productGroupMembers) {
-		groupPanel.setGroupsData(data, productGroupMembers);
-		showAll();
-	}
-
-	private void activatePacketSelectionHandling(boolean b) {
-		if (b) {
-			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
-		} else {
-			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
-		}
-	}
-
-	public void setSearchFields(List<String> fieldList) {
-		groupPanel.setSearchFields(fieldList);
 	}
 
 	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
@@ -743,7 +702,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void setSelection(Set<String> selectedIDs) {
-		activatePacketSelectionHandling(false);
 		clearSelection();
 		if (selectedIDs != null) {
 			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
@@ -759,13 +717,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				}
 			}
 		}
-
-		activatePacketSelectionHandling(true);
-		groupPanel.findGroup(selectedIDs);
 	}
 
 	public Set<String> getSelectedIDs() {
-		Set<String> result = new HashSet<>();
+		HashSet<String> result = new HashSet<>();
 
 		int[] selection = tableProducts.getSelectedRows();
 
@@ -788,43 +743,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		return selectionInModelTerms;
-	}
-
-	public void reduceToSet(Set<String> filter) {
-		activatePacketSelectionHandling(false);
-
-		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
-		tModel.setFilterFrom(filter);
-
-		Logging.info(this, "reduceToSet  " + filter);
-		Logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.isGuiFiltered());
-
-		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
-
-		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
-	}
-
-	public void reduceToSelected() {
-		Set<String> selection = getSelectedIDs();
-		Logging.debug(this, "reduceToSelected: selectedIds  " + selection);
-		reduceToSet(selection);
-		setSelection(selection);
-	}
-
-	public void noSelection() {
-		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
-
-		activatePacketSelectionHandling(false);
-		tModel.setFilterFrom((Set<String>) null);
-		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
-	}
-
-	public void showAll() {
-		Set<String> selection = getSelectedIDs();
-		noSelection();
-		setSelection(selection);
 	}
 
 	public void setTableModel(IFInstallationStateTableModel istm) {

@@ -31,7 +31,7 @@ public interface IFInstallationStateTableModel extends TableModel, ComboBoxModel
 
 	void finishCollectiveChange();
 
-	void updateTable(String clientId, TreeSet<String> productId, String[] attributes);
+	void updateTable(String clientId, TreeSet<String> productId);
 
-	void updateTable(String clientId, String[] attributes);
+	void updateTable(String clientId);
 }

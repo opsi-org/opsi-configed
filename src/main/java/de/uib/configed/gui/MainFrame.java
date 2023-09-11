@@ -97,8 +97,8 @@ import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
+import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.gui.productpage.PanelProductProperties;
-import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
@@ -366,8 +366,8 @@ public class MainFrame extends JFrame
 
 	private HostsStatusPanel statusPane;
 
-	private PanelProductSettings panelLocalbootProductSettings;
-	private PanelProductSettings panelNetbootProductSettings;
+	private PanelGroupedProductSettings panelLocalbootProductSettings;
+	private PanelGroupedProductSettings panelNetbootProductSettings;
 	private PanelHostConfig panelHostConfig;
 	private PanelHostProperties panelHostProperties;
 	private PanelProductProperties panelProductProperties;
@@ -2420,11 +2420,11 @@ public class MainFrame extends JFrame
 				Utils.createImageIcon("images/clientselection.png", ""), panelClientSelection,
 				Configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
-		panelLocalbootProductSettings = new PanelProductSettings(
+		panelLocalbootProductSettings = new PanelGroupedProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsLocalbootProducts());
 
-		panelNetbootProductSettings = new PanelProductSettings(
+		panelNetbootProductSettings = new PanelGroupedProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts());
 
@@ -3731,11 +3731,11 @@ public class MainFrame extends JFrame
 		return combinedMenuItemDepotColumn;
 	}
 
-	public PanelProductSettings getPanelLocalbootProductSettings() {
+	public PanelGroupedProductSettings getPanelLocalbootProductSettings() {
 		return panelLocalbootProductSettings;
 	}
 
-	public PanelProductSettings getPanelNetbootProductSettings() {
+	public PanelGroupedProductSettings getPanelNetbootProductSettings() {
 		return panelNetbootProductSettings;
 	}
 

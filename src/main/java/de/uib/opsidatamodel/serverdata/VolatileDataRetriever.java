@@ -239,11 +239,12 @@ public class VolatileDataRetriever {
 		return new HashSet<>(exec.getStringListResult(omc));
 	}
 
-	public List<Map<String, Object>> getProductInfos(String clientId, String[] callAttributes) {
-		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, callAttributes));
+	public List<Map<String, Object>> getProductInfos(String clientId) {
+		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId));
 	}
 
-	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId, String[] callAttributes) {
+	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
+		String[] callAttributes = new String[] {};
 		HashMap<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);

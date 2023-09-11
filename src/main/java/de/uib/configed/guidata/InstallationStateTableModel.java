@@ -231,7 +231,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -246,11 +246,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		// add update to list
 		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
-				.getProductInfos(productIds, clientId, attributes);
+				.getProductInfos(productIds, clientId);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-					new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
-					})));
+					POJOReMapper.remap(productInfo, new TypeReference<>() {
+					}));
 		}
 
 		// TODO refactoring needed in these methods...
@@ -265,14 +265,14 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, String[] attributes) {
+	public synchronized void updateTable(String clientId) {
 		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
-				.getProductInfos(clientId, attributes);
+				.getProductInfos(clientId);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-						new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
-						})));
+						POJOReMapper.remap(productInfo, new TypeReference<>() {
+						}));
 			}
 		} else {
 			allClientsProductStates.get(clientId).clear();
