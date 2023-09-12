@@ -1,5 +1,20 @@
 # Changelog
 
+## [unversioned] - xxxx-xx-xx
+
+### Changed
+- Don't load software information on start (performance)
+- Only save shown software information (less memory usage)
+- Remove unnecessary calls on startup (performance)
+- Remove unnecessary calls on reload (performance)
+- Reset only changed products (performance)
+- Dashboard loading reworked (performance)
+- Rework copying clients (performance)
+- Remove unnecessary calls when starting client creation dialog (performance)
+- Show only available modules as option in opsi-licensing
+- Client tree selection / navigation reworked
+- Open multiple windows in logviewer when opening archives with several files
+
 ## [4.2.22.13] - 2023-08-28
 ### Fixed
 - Groups (specialities) available again 
