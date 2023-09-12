@@ -180,8 +180,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		if (installProductFromWorkbench()) {
 			produceServerPath();
 			rootFrame.activateLoadingCursor();
-			persistenceController.setRights(opsiPackageServerPathS);
-			boolean result = persistenceController.installPackage(opsiPackageServerPathS);
+			persistenceController.getRPCMethodExecutor().setRights(opsiPackageServerPathS);
+			boolean result = persistenceController.getRPCMethodExecutor().installPackage(opsiPackageServerPathS);
 			rootFrame.disactivateLoadingCursor();
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);

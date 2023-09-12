@@ -4578,9 +4578,9 @@ public class ConfigedMain implements ListSelectionListener {
 				List<String> errors;
 
 				if (ServerFacade.isOpsi43()) {
-					errors = persistenceController.wakeOnLanOpsi43(clients);
+					errors = persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(clients);
 				} else {
-					errors = persistenceController.wakeOnLan(clients);
+					errors = persistenceController.getRPCMethodExecutor().wakeOnLan(clients);
 				}
 
 				return errors;
@@ -4622,7 +4622,7 @@ public class ConfigedMain implements ListSelectionListener {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.deletePackageCaches(getSelectedClients());
+				return persistenceController.getRPCMethodExecutor().deletePackageCaches(getSelectedClients());
 			}
 		}.start();
 	}
@@ -4635,7 +4635,8 @@ public class ConfigedMain implements ListSelectionListener {
 		new AbstractErrorListProducer("opsiclientd " + event) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.fireOpsiclientdEventOnClients(event, getSelectedClients());
+				return persistenceController.getRPCMethodExecutor().fireOpsiclientdEventOnClients(event,
+						getSelectedClients());
 			}
 		}.start();
 	}
@@ -4648,7 +4649,8 @@ public class ConfigedMain implements ListSelectionListener {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.showPopupOnClients(message, getSelectedClients(), seconds);
+				return persistenceController.getRPCMethodExecutor().showPopupOnClients(message, getSelectedClients(),
+						seconds);
 			}
 
 		}.start();
@@ -4785,7 +4787,7 @@ public class ConfigedMain implements ListSelectionListener {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.shutdownClients(getSelectedClients());
+					return persistenceController.getRPCMethodExecutor().shutdownClients(getSelectedClients());
 				}
 			}.start();
 		}
@@ -4800,7 +4802,7 @@ public class ConfigedMain implements ListSelectionListener {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.rebootClients(getSelectedClients());
+					return persistenceController.getRPCMethodExecutor().rebootClients(getSelectedClients());
 				}
 			}.start();
 		}

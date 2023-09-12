@@ -42,7 +42,7 @@ public class FWakeClients extends FShowList {
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04F);
-		Map<String, List<String>> hostSeparationByDepots = persistenceController
+		Map<String, List<String>> hostSeparationByDepots = persistenceController.getVolatileDataRetriever()
 				.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
@@ -97,9 +97,11 @@ public class FWakeClients extends FShowList {
 			}
 
 			if (ServerFacade.isOpsi43()) {
-				persistenceController.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
+				persistenceController.getRPCMethodExecutor()
+						.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
 			} else {
-				persistenceController.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
+				persistenceController.getRPCMethodExecutor().wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots,
+						executionerForDepots);
 			}
 
 			Utils.threadSleep(this, 1000L * delaySecs);

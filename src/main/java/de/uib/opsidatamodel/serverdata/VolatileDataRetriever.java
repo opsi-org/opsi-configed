@@ -752,4 +752,20 @@ public class VolatileDataRetriever {
 		}
 		return result;
 	}
+
+	public Map<String, List<String>> getHostSeparationByDepots(String[] hostIds) {
+		Map<String, Set<String>> hostSeparationByDepots = new HashMap<>();
+
+		for (String hostId : hostIds) {
+			String depotId = persistentDataRetriever.getHostInfoCollections().getMapPcBelongsToDepot().get(hostId);
+			hostSeparationByDepots.computeIfAbsent(depotId, arg -> new HashSet<>()).add(hostId);
+		}
+
+		Map<String, List<String>> result = new HashMap<>();
+		for (Entry<String, Set<String>> hostSeparationEntry : hostSeparationByDepots.entrySet()) {
+			result.put(hostSeparationEntry.getKey(), new ArrayList<>(hostSeparationEntry.getValue()));
+		}
+
+		return result;
+	}
 }

@@ -102,7 +102,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
-		Map<String, List<String>> hostSeparationByDepots = persistenceController
+		Map<String, List<String>> hostSeparationByDepots = persistenceController.getVolatileDataRetriever()
 				.getHostSeparationByDepots(main.getSelectedClients());
 		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = main.getSelectedClients();
