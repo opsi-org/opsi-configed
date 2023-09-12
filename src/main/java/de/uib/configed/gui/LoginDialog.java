@@ -176,17 +176,21 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setIconImage(Utils.getMainIcon());
 
 		// Opsilogo
-		String logoPath;
-		if (FlatLaf.isLafDark()) {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer_neg.png";
+		if (Main.THEMES) {
+			String logoPath;
+			if (FlatLaf.isLafDark()) {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
+			} else {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
+			}
+
+			ImageIcon icon = Utils.createImageIcon(logoPath, null);
+			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
+
+			jLabelLogo = new JLabel(new ImageIcon(image));
 		} else {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer.png";
+			jLabelLogo = new JLabel();
 		}
-
-		ImageIcon icon = Utils.createImageIcon(logoPath, null);
-		Image image = icon.getImage().getScaledInstance(219, 60, Image.SCALE_SMOOTH);
-
-		jLabelLogo = new JLabel(new ImageIcon(image));
 
 		jLabelTitle.setText(Globals.APPNAME);
 		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("

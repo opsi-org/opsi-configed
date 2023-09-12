@@ -2361,13 +2361,13 @@ public class MainFrame extends JFrame
 			String logoPath;
 
 			if (FlatLaf.isLafDark()) {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer_neg.png";
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
 			} else {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_quer.png";
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 			}
 
 			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(219, 60, Image.SCALE_SMOOTH);
+			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
 
 			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
 		}
