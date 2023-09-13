@@ -151,9 +151,6 @@ public class PanelProductProperties extends JSplitPane {
 
 			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
 				infoPane.clearEditing();
-				infoPane.setInactive();
-			} else {
-				infoPane.setActive();
 			}
 
 			// otherweise selectedRowChanged() works
@@ -174,7 +171,6 @@ public class PanelProductProperties extends JSplitPane {
 				panelEditProperties.clearDepotListData();
 			} else {
 
-				infoPane.setActive();
 				int row = lsm.getMinSelectionIndex();
 
 				updateInfoPane(row);

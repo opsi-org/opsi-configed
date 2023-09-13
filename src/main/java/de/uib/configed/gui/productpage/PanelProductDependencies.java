@@ -80,7 +80,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	}
 
 	public void clearEditing() {
-
 		dependenciesModel = new DependenciesModel();
 		dependenciesModel.addListener(this);
 
