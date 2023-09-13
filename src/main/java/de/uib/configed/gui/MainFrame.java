@@ -1701,11 +1701,13 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (persistenceController.isWithUEFI()) {
-			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
-		} else {
-			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			cbUefiBoot.setEnabled(false);
+		if (!ServerFacade.isOpsi43()) {
+			if (persistenceController.isWithUEFI()) {
+				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
+			} else {
+				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
+				cbUefiBoot.setEnabled(false);
+			}
 		}
 
 		if (persistenceController.isWithWAN()) {
@@ -1781,15 +1783,6 @@ public class MainFrame extends JFrame
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 		JLabel labelOpsiHostKey = new JLabel("opsiHostKey");
 
-		JTextArea jFieldInDepot = new JTextArea();
-		jFieldInDepot.setEditable(false);
-		if (!Main.FONT) {
-			jFieldInDepot.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-		if (!Main.THEMES) {
-			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
-
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
@@ -1856,7 +1849,11 @@ public class MainFrame extends JFrame
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
-		cbUefiBoot.addActionListener(this);
+		if (ServerFacade.isOpsi43()) {
+			cbUefiBoot.setVisible(false);
+		} else {
+			cbUefiBoot.addActionListener(this);
+		}
 
 		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
 				unselectedIcon, nullIcon, false);
@@ -1992,46 +1989,61 @@ public class MainFrame extends JFrame
 				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// DESCRIPTION
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(labelClientDescription)
+				.addComponent(labelClientDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// INVENTORY NUMBER
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(labelClientInventoryNumber)
+				.addComponent(labelClientInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// SYSTEM UUID
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(labelClientSystemUUID)
+				.addGap(ServerFacade.isOpsi43() ? Globals.MIN_VGAP_SIZE : 0,
+						ServerFacade.isOpsi43() ? Globals.MIN_VGAP_SIZE : 0,
+						ServerFacade.isOpsi43() ? Globals.MIN_VGAP_SIZE : 0)
+				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// MAC ADDRESS
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(labelClientMacAddress)
+				.addComponent(labelClientMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// IP ADDRESS
-				.addComponent(labelClientIPAddress)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				////// INSTALL BY SHUTDOWN
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(cbInstallByShutdown, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(cbInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// UEFI BOOT & WAN Config
 
-				.addComponent(cbUefiBoot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(cbUefiBoot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(cbWANConfig, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(cbWANConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// ONE TIME PASSWORD
-				.addGap(Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2)
-				.addComponent(labelOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(labelOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				////// opsiHostKey
-				.addComponent(labelOpsiHostKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(labelOpsiHostKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldHostKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// NOTES
-				.addGap(Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2)
-				.addComponent(labelClientNotes)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		jPanel3.setBorder(BorderFactory.createEtchedBorder());
