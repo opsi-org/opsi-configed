@@ -370,7 +370,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		setProductName("");
 		setProductInfo("");
-		panelProductDependencies.clearEditing();
+		panelProductDependencies.setEditValues("", "");
 	}
 
 	//

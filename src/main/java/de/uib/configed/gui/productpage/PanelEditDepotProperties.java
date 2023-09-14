@@ -232,12 +232,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		if (!listDepots.getSelectedValuesList().isEmpty()) {
-			productPropertiesPanel.setEditableMap(
-
-					visualData,
-
-					persistenceController.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0),
-							productEdited));
+			productPropertiesPanel.setEditableMap(visualData, persistenceController
+					.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();

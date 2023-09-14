@@ -599,21 +599,18 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			return;
 		}
 
-		clearEditing();
-
 		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-		if (lsm.isSelectionEmpty()) {
-			Logging.debug(this, "no rows selected");
+		if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+			Logging.debug(this, "no or several rows selected");
+			clearEditing();
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
-			if (selectedRow == lsm.getMaxSelectionIndex()) {
-				Logging.debug(this, "selected " + selectedRow);
-				Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
-				Logging.debug(this, "selected  value at "
-						+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-				mainController.setProductEdited(
-						(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-			}
+			Logging.debug(this, "selected " + selectedRow);
+			Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
+			Logging.debug(this, "selected  value at "
+					+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
+			mainController.setProductEdited(
+					(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 		}
 	}
 
@@ -1036,8 +1033,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void clearEditing() {
-
 		initEditing("", "", "", "", "", null, null, null, null);
+		infoPane.clearEditing();
 	}
 
 	// RowSorterListener for table row sorter
