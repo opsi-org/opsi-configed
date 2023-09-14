@@ -134,33 +134,16 @@ public class PanelProductProperties extends JSplitPane {
 
 			Logging.debug(this, "valueChanged in paneProducts " + e);
 
-			if (e.getValueIsAdjusting()) {
-				return;
+			if (!e.getValueIsAdjusting()) {
+
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			}
-
-			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-			lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-			if (lsm.isSelectionEmpty()) {
-
-				Logging.info(this, "selected  no row ");
-
-			}
-
-			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
-				infoPane.clearEditing();
-				infoPane.setInactive();
-			} else {
-				infoPane.setActive();
-			}
-
-			// otherweise selectedRowChanged() works
 		}
 
 		@Override
 		public void selectedRowChanged() {
 			// if we got a new selection
-
 			Logging.debug(this, "selectedRowChanged in paneProducts ");
 
 			ListSelectionModel lsm = getListSelectionModel();
@@ -172,7 +155,6 @@ public class PanelProductProperties extends JSplitPane {
 				panelEditProperties.clearDepotListData();
 			} else {
 
-				infoPane.setActive();
 				int row = lsm.getMinSelectionIndex();
 
 				updateInfoPane(row);
@@ -210,7 +192,6 @@ public class PanelProductProperties extends JSplitPane {
 
 				Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
-				infoPane.clearEditing();
 				if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
 
 					infoPane.setEditValues(productEdited,
