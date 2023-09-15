@@ -3156,7 +3156,7 @@ public class ConfigedMain implements ListSelectionListener {
 					OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
-					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
+					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
 
 		}
