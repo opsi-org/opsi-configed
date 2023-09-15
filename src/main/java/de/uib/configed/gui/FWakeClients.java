@@ -42,7 +42,7 @@ public class FWakeClients extends FShowList {
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04F);
-		Map<String, List<String>> hostSeparationByDepots = persistenceController.getVolatileDataRetriever()
+		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
 				.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();

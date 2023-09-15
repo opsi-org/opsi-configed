@@ -75,7 +75,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 
@@ -194,7 +194,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
-			if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+			if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 				doAction3();
 			}
 		});

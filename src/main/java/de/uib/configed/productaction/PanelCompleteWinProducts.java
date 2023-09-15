@@ -131,7 +131,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
+				depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -343,8 +344,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persistenceController.getPersistentDataRetriever()
-					.getProductProperties(server, winProduct);
+			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(server,
+					winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;
@@ -368,7 +369,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					rootFrame.activateLoadingCursor();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
-					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
+					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
+							"productkey", values);
 
 					rootFrame.disactivateLoadingCursor();
 				}

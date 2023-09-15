@@ -189,9 +189,9 @@ public class PanelSWInfo extends JPanel {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getVolatileDataRetriever()
+								.getSoftwareDataService()
 								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
-						Map<String, Map<String, Object>> tableData = persistenceController
+						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
@@ -199,7 +199,7 @@ public class PanelSWInfo extends JPanel {
 							title = scanInfo;
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController
+							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
 

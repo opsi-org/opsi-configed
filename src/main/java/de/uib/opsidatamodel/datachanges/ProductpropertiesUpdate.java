@@ -31,7 +31,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 		if (newdata instanceof ConfigName2ConfigValue) {
 
-			persistenceController.setProductProperties(pcname, productname, newdata);
+			persistenceController.getProductDataService().setProductProperties(pcname, productname, newdata);
 		}
 	}
 

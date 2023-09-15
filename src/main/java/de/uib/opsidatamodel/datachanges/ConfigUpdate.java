@@ -27,6 +27,6 @@ public class ConfigUpdate implements UpdateCommand {
 	public void doCall() {
 		Logging.info(this, "doCall, setting class " + newdata.getClass() + ", the new data is " + newdata);
 
-		persistenceController.setConfig(newdata);
+		persistenceController.getConfigDataService().setConfig(newdata);
 	}
 }

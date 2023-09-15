@@ -805,7 +805,7 @@ public class MainFrame extends JFrame
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.DEFAULT_FONT);
@@ -954,7 +954,8 @@ public class MainFrame extends JFrame
 
 		jMenuServer.removeAll();
 		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
-		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+				.isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		Logging.info(this, "setupMenuServer add configpage");
@@ -1182,7 +1183,7 @@ public class MainFrame extends JFrame
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(persistenceController.getPersistentDataRetriever().isWithLocalImaging());
+		jMenuFrameWorkOnGroups.setVisible(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
@@ -1584,7 +1585,7 @@ public class MainFrame extends JFrame
 
 		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.DEFAULT_FONT);
@@ -1701,14 +1702,14 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (persistenceController.getPersistentDataRetriever().isWithUEFI()) {
+		if (persistenceController.getModuleDataService().isWithUEFIPD()) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
 		} else {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (persistenceController.getPersistentDataRetriever().isWithWAN()) {
+		if (persistenceController.getModuleDataService().isWithWANPD()) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -2159,7 +2160,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
 
-		jButtonWorkOnGroups.setEnabled(persistenceController.getPersistentDataRetriever().isWithLocalImaging());
+		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jButtonWorkOnGroups.addActionListener(this);
 
 		jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
@@ -2178,11 +2179,11 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
-		if (persistenceController.getPersistentDataRetriever().isOpsiLicencingAvailable()
-				&& persistenceController.getPersistentDataRetriever().isOpsiUserAdmin() && licensingInfoMap == null) {
+		if (persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
+				&& persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
 			licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getPersistentDataRetriever().getOpsiLicencingInfoOpsiAdmin(),
-					persistenceController.getPersistentDataRetriever().getConfigDefaultValues(),
+					persistenceController.getModuleDataService().getOpsiLicencingInfoOpsiAdminPD(),
+					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 					!FGeneralDialogLicensingInfo.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
@@ -2616,7 +2617,7 @@ public class MainFrame extends JFrame
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly() && b) {
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly() && b) {
 			return;
 		}
 
@@ -2824,7 +2825,8 @@ public class MainFrame extends JFrame
 			return;
 		}
 
-		List<String> disabledClientMenuEntries = persistenceController.getDisabledClientMenuEntries();
+		List<String> disabledClientMenuEntries = persistenceController.getConfigDataService()
+				.getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
 			for (String menuActionType : disabledClientMenuEntries) {
@@ -2836,7 +2838,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!persistenceController.getPersistentDataRetriever().isCreateClientPermission()) {
+			if (!persistenceController.getConfigDataService().isCreateClientPermissionPD()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
@@ -2987,7 +2989,7 @@ public class MainFrame extends JFrame
 	private void showHealthDataAction() {
 
 		// Only show loading when health data are not yet loaded
-		if (!persistenceController.getVolatileDataRetriever().isHealthDataAlreadyLoaded()) {
+		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
 
@@ -3036,10 +3038,10 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (!persistenceController.getPersistentDataRetriever().isOpsiLicencingAvailable()
-				|| !persistenceController.getPersistentDataRetriever().isOpsiUserAdmin()) {
+		if (!persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
+				|| !persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
 			StringBuilder message = new StringBuilder();
-			Map<String, Object> modulesInfo = persistenceController.getPersistentDataRetriever().getOpsiModulesInfos();
+			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
 
 			int count = 0;
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
@@ -3604,7 +3606,7 @@ public class MainFrame extends JFrame
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean gb = !PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+		boolean gb = !PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly();
 
 		labelHost.setEnabled(singleClient);
 
@@ -3630,8 +3632,8 @@ public class MainFrame extends JFrame
 		ipAddressField.setEditable(b1);
 
 		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && persistenceController.getPersistentDataRetriever().isWithUEFI());
-		cbWANConfig.setEnabled(gb && persistenceController.getPersistentDataRetriever().isWithWAN());
+		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isWithUEFIPD());
+		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isWithWANPD());
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

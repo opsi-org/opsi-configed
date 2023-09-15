@@ -115,8 +115,8 @@ public class SWAuditClientEntry {
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
-		this.software = persistenceController.getPersistentDataRetriever().getSoftwareList();
-		this.software2Number = persistenceController.getPersistentDataRetriever().getSoftware2Number();
+		this.software = persistenceController.getSoftwareDataService().getSoftwareListPD();
+		this.software2Number = persistenceController.getSoftwareDataService().getSoftware2NumberPD();
 		produceSWid();
 		data.put(LICENCE_KEY, produceNonNull(m.get(LICENCE_KEY)));
 		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
@@ -140,7 +140,7 @@ public class SWAuditClientEntry {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
 			persistenceController.installedSoftwareInformationRequestRefresh();
-			software = persistenceController.getPersistentDataRetriever().getSoftwareList();
+			software = persistenceController.getSoftwareDataService().getSoftwareListPD();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new HashSet<>();
 		} else {

@@ -216,7 +216,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 			if (depotslist.getSelectedIndex() > -1) {
 				String depotSelected = depotslist.getSelectedValue();
-				List<String> depotsWithEqualStock = persistenceController
+				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
 						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				depotslist.addToSelection(depotsWithEqualStock);
 			}

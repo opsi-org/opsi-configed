@@ -223,7 +223,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		Map<String, Object> visualData = mergeProperties(
-				persistenceController.getPersistentDataRetriever().getDepot2product2properties(),
+				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -237,14 +237,14 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 					visualData,
 
-					persistenceController.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0),
-							productEdited));
+					persistenceController.getProductDataService()
+							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
-				Map<String, ConfigName2ConfigValue> product2properties = persistenceController
-						.getPersistentDataRetriever().getDepot2product2properties().get(depot);
+				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getProductDataService()
+						.getDepot2product2propertiesPD().get(depot);
 
 				if (product2properties == null) {
 					Logging.info(this, " product2properties null for depot " + depot);
@@ -434,8 +434,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = persistenceController.getPersistentDataRetriever()
-				.getDefaultProductProperties(selectedDepot0).get(productEdited);
+		ConfigName2ConfigValue properties0 = persistenceController.getProductDataService()
+				.getDefaultProductPropertiesPD(selectedDepot0).get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
 		listDepots.setSelectionInterval(startDepotIndex, startDepotIndex);
@@ -447,8 +447,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = persistenceController.getPersistentDataRetriever()
-					.getDefaultProductProperties(compareDepot).get(productEdited);
+			ConfigName2ConfigValue compareProperties = persistenceController.getProductDataService()
+					.getDefaultProductPropertiesPD(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null
 			if (Objects.equals(properties0, compareProperties)) {

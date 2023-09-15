@@ -28,6 +28,7 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 /**
  * HostInfoCollections description: abstract methods for retrieving and setting
@@ -142,7 +143,7 @@ public class HostInfoCollections {
 			return;
 		}
 
-		List<Map<String, Object>> opsiHosts = persistenceController.getVolatileDataRetriever().hostRead();
+		List<Map<String, Object>> opsiHosts = persistenceController.getHostDataService().hostRead();
 		HostInfo.resetInstancesCount();
 
 		opsiHostNames = new ArrayList<>();
@@ -237,8 +238,7 @@ public class HostInfoCollections {
 				allDepots.put(name, host);
 				countClients--;
 
-				boolean isMasterDepot = OpsiServiceNOMPersistenceController
-						.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true);
+				boolean isMasterDepot = Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true);
 
 				if (isMasterDepot) {
 					Map<String, Object> hostMap = new HashMap<>(host);
@@ -248,8 +248,8 @@ public class HostInfoCollections {
 				String workbenchPath = retrieveWorkbenchPath(host);
 
 				if (!workbenchPath.isEmpty()) {
-					OpsiServiceNOMPersistenceController.setConfigedWorkbenchDefaultValue(workbenchPath);
-					OpsiServiceNOMPersistenceController.setPackageServerDirectoryS(workbenchPath);
+					persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchPath);
+					persistenceController.getConfigDataService().setPackageServerDirectoryPD(workbenchPath);
 				}
 			}
 		}
@@ -281,8 +281,7 @@ public class HostInfoCollections {
 			allDepots.put(name, host);
 			countClients--;
 
-			boolean isMasterDepot = OpsiServiceNOMPersistenceController
-					.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
+			boolean isMasterDepot = Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
 
 			if (isMasterDepot) {
 				Map<String, Object> hostMap = new HashMap<>(host);
@@ -306,7 +305,7 @@ public class HostInfoCollections {
 				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
 						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
-				depotId = (String) ((List<?>) (persistenceController.getPersistentDataRetriever().getConfigs().get(name)
+				depotId = (String) ((List<?>) (persistenceController.getConfigDataService().getConfigsPD().get(name)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 			}
 
@@ -320,12 +319,15 @@ public class HostInfoCollections {
 
 			Logging.debug(this, "getConfigs for " + name);
 
-			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, persistenceController.isInstallByShutdownConfigured(name));
-			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY, persistenceController.isUefiConfigured(name));
+			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
+					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
+			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
+					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfig(name) != null) {
-				boolean result = persistenceController.findBooleanConfigurationComparingToDefaults(name,
-						persistenceController.getPersistentDataRetriever().getWanConfiguration());
+			if (persistenceController.getConfigDataService().getConfig(name) != null) {
+				boolean result = persistenceController.getConfigDataService()
+						.findBooleanConfigurationComparingToDefaults(name,
+								persistenceController.getConfigDataService().getWanConfigurationPD());
 				Logging.debug(this, "host " + name + " wan config " + result);
 				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 			}
@@ -345,11 +347,11 @@ public class HostInfoCollections {
 	}
 
 	private boolean hasConfig(String clientId) {
-		return persistenceController.getPersistentDataRetriever().getConfigs().get(clientId) != null
-				&& persistenceController.getPersistentDataRetriever().getConfigs().get(clientId)
+		return persistenceController.getConfigDataService().getConfigsPD().get(clientId) != null
+				&& persistenceController.getConfigDataService().getConfigsPD().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID) != null
-				&& !((List<?>) (persistenceController.getPersistentDataRetriever().getConfigs().get(clientId)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty();
+				&& !((List<?>) (persistenceController.getConfigDataService()).getConfigsPD().get(clientId)
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).isEmpty();
 	}
 
 	public Map<String, Set<String>> getFNode2Treeparents() {
@@ -382,7 +384,7 @@ public class HostInfoCollections {
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
-			if (persistenceController.hasDepotPermission(depot)) {
+			if (persistenceController.getConfigDataService().hasDepotPermission(depot)) {
 				depotList.add(depot);
 			}
 		}
@@ -411,12 +413,12 @@ public class HostInfoCollections {
 
 	private void setDepot(String clientName, String depotId) {
 		// set config
-		if (persistenceController.getPersistentDataRetriever().getConfigs().get(clientName) == null) {
-			persistenceController.getPersistentDataRetriever().getConfigs().put(clientName, new HashMap<>());
+		if (persistenceController.getConfigDataService().getConfigsPD().get(clientName) == null) {
+			persistenceController.getConfigDataService().getConfigsPD().put(clientName, new HashMap<>());
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		persistenceController.getPersistentDataRetriever().getConfigs().get(clientName)
+		persistenceController.getConfigDataService().getConfigsPD().get(clientName)
 				.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
 
 		// set in mapPC_Infomap
@@ -436,7 +438,7 @@ public class HostInfoCollections {
 	}
 
 	public void setDepotForClients(String[] clients, String depotId) {
-		if (!persistenceController.hasDepotPermission(depotId)) {
+		if (!persistenceController.getConfigDataService().hasDepotPermission(depotId)) {
 			return;
 		}
 
@@ -448,10 +450,10 @@ public class HostInfoCollections {
 		config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
 		for (int i = 0; i < clients.length; i++) {
 			// collect data
-			persistenceController.setAdditionalConfiguration(clients[i], config);
+			persistenceController.getConfigDataService().setAdditionalConfiguration(clients[i], config);
 		}
 		// send data
-		persistenceController.setAdditionalConfiguration();
+		persistenceController.getConfigDataService().setAdditionalConfiguration();
 
 		// change transitory data
 		for (int i = 0; i < clients.length; i++) {

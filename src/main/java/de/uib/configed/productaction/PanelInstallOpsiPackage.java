@@ -144,12 +144,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private void produceServerPath() {
 		Logging.debug(this, "produceServerPath ");
 
-		opsiPackageServerPathS = OpsiServiceNOMPersistenceController.getPackageServerDirectoryS() + opsiPackageNameS;
+		opsiPackageServerPathS = persistenceController.getConfigDataService().getPackageServerDirectoryPD()
+				+ opsiPackageNameS;
 		Logging.debug(this, "produceServerPath " + opsiPackageServerPathS);
 	}
 
 	private void buildSambaTarget(String depotserver) {
-		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostDataService()
+				.getHostInfoCollectionsPD().getDepots();
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
@@ -225,7 +227,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
-		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
+		Logging.debug(this, "defineChoosers, depots: "
+				+ persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots());
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 

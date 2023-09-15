@@ -41,11 +41,12 @@ public class DependenciesTreeModel {
 	private void initGraph(String depotId) {
 
 		if (depotId == null) {
-			depotId = persistenceController.getDepot();
+			depotId = persistenceController.getDepotDataService().getDepot();
 		}
 
 		// Erstmal die Dependencies laden
-		Map<String, List<Map<String, String>>> dependencies = persistenceController.getProductDependencies(depotId);
+		Map<String, List<Map<String, String>>> dependencies = persistenceController.getProductDataService()
+				.getProductDependencies(depotId);
 
 		productList = new LinkedList<>(dependencies.keySet());
 

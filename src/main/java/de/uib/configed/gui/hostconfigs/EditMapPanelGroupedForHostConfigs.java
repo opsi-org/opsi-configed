@@ -320,8 +320,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				if (!(key.equals(rolekey))) {
 					String theRole = null;
 
-					List<Object> values = PersistenceControllerFactory.getPersistenceController()
-							.getPersistentDataRetriever().getConfigDefaultValues().get(rolekey);
+					List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+							.getConfigDefaultValuesPD().get(rolekey);
 
 					if (values != null && !values.isEmpty()) {
 						theRole = "" + values.get(0);
@@ -467,22 +467,22 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				false,
 
 				// String configserver,
-				persistenceController.getHostInfoCollections().getConfigServer(),
+				persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer(),
 
 				// Collection<String> existingDepots,
-				persistenceController.getHostInfoCollections().getDepotNamesList(),
+				persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList(),
 
 				// Collection<String> existingHostgroups,
-				persistenceController.getPersistentDataRetriever().getHostGroupIds(),
+				persistenceController.getGroupDataService().getHostGroupIds(),
 				// Collection<String> existingProductgroups,
-				persistenceController.getPersistentDataRetriever().getProductGroups().keySet(),
+				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 
 				// data. on which changes are based
 				// Map<String, List<Object>> serverconfigValuesMap,
-				persistenceController.getPersistentDataRetriever().getConfigDefaultValues(),
+				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 
 				// Map<String, ListCellOptions> configOptionsMap
-				persistenceController.getPersistentDataRetriever().getConfigOptions());
+				persistenceController.getConfigDataService().getConfigOptionsPD());
 
 		List<Object> newData = up.produce();
 
@@ -580,11 +580,11 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private void setRoleConfig(String name, String rolename) {
 		Logging.info(this, "setRoleConfig " + name + "," + rolename);
-		PersistenceControllerFactory.getPersistenceController().addRoleConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name, rolename);
 	}
 
 	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
-		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
 	}
 }

@@ -293,7 +293,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		Logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
 
-		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
+				depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}

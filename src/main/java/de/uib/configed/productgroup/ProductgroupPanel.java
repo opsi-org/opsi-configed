@@ -715,8 +715,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
-			Set<String> extendedSelection = persistenceController.extendToDependentProducts(associate.getSelectedIDs(),
-					"bonifax.uib.local");
+			Set<String> extendedSelection = persistenceController.getProductDataService()
+					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
 			Set<String> addedElements = new TreeSet<>(extendedSelection);
 			addedElements.removeAll(originalSelection);
 

@@ -148,7 +148,7 @@ public class UserConfigProducing {
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this,
 					"supplyConfigPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
-			item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
+			item = Utils.createNOMBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(item);
 		}
@@ -169,7 +169,7 @@ public class UserConfigProducing {
 			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 			Logging.info(this, "supplyConfigPermissionList products List " + listOptions);
 
-			item = OpsiServiceNOMPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			item = Utils.createNOMitem(ConfigOption.UNICODE_TYPE);
 			item.put("ident", configKeyList);
 			item.put("editable", false);
 			item.put("multiValue", true);
@@ -282,7 +282,7 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole + ", "
 				+ roleParts);
 
-		return OpsiServiceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
+		return Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
 				"which role should determine this users configuration", false, false, selectedValuesRole,
 				possibleValuesRole);
 	}
@@ -320,8 +320,7 @@ public class UserConfigProducing {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = OpsiServiceNOMPersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UNICODE_CONFIG, configKey,
+				Map<String, Object> itemRole = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
 				readyObjects.add(itemRole);
@@ -353,8 +352,7 @@ public class UserConfigProducing {
 					+ ": " + (readyObjects.size() - 1));
 			List<Object> timeVal = Utils.getNowTimeListValue("set by role prototype");
 
-			Map<String, Object> itemModifyTime = OpsiServiceNOMPersistenceController
-					.createNOMitem(ConfigOption.UNICODE_TYPE);
+			Map<String, Object> itemModifyTime = Utils.createNOMitem(ConfigOption.UNICODE_TYPE);
 			itemModifyTime.put("ident", startKey + UserConfig.MODIFICATION_INFO_KEY);
 			itemModifyTime.put("editable", false);
 			itemModifyTime.put("multiValue", false);
@@ -557,7 +555,7 @@ public class UserConfigProducing {
 				value = prototypeConfig.getBooleanValue(partKey);
 				userConfig.setBooleanValue(partKey, value);
 
-				Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONBoolConfig(configKey, value,
+				Map<String, Object> item = Utils.createNOMBoolConfig(configKey, value,
 						"the primary value setting is based on the user group");
 				readyObjects.add(item);
 			} else {
@@ -588,8 +586,8 @@ public class UserConfigProducing {
 				values = prototypeConfig.getValues(partkey);
 				userConfig.setValues(partkey, values);
 
-				Map<String, Object> item = OpsiServiceNOMPersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey, false, false, values, values);
+				Map<String, Object> item = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey,
+						false, false, values, values);
 				readyObjects.add(item);
 			}
 		}

@@ -186,7 +186,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 			if (valueList.getSelectedIndex() > -1) {
 				String depotSelected = valueList.getSelectedValue();
-				List<String> depotsWithEqualStock = persistenceController
+				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
 						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				valueList.addToSelection(depotsWithEqualStock);
 

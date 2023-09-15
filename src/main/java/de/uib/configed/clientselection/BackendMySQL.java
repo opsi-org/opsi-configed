@@ -46,7 +46,7 @@ public class BackendMySQL {
 			.getPersistenceController();
 
 	public BackendMySQL() {
-		hwConfig = persistenceController.getPersistentDataRetriever().getOpsiHWAuditConf("en_");
+		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
 
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}

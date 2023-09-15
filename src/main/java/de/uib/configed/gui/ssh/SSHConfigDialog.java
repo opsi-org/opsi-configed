@@ -82,7 +82,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 	}
@@ -255,7 +255,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxHost.addItem(host);
 
 		OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-		Set<String> depots = persist.getVolatileDataRetriever().getDepotPropertiesForPermittedDepots().keySet();
+		Set<String> depots = persist.getDepotDataService().getDepotPropertiesForPermittedDepots().keySet();
 
 		// remove login host name if identical with depot fqdn
 		depots.remove(host);
@@ -353,15 +353,15 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		buttonPanel.add(new JLabel("            "));
 
 		Logging.info(this, "actionlistener for button1 "
-				+ PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+				+ PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
+		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
 		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 				"images/folder_16.png", " ", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 

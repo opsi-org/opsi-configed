@@ -67,7 +67,7 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 			tooltipText = Utils.fillStringToLength(tooltipText + " ", FILL_LENGTH);
 
 			String depot = (String) value;
-			if (!persistenceController.hasDepotPermission(depot)) {
+			if (!persistenceController.getConfigDataService().hasDepotPermission(depot)) {
 				if (!Main.THEMES) {
 					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 				}

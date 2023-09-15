@@ -91,7 +91,7 @@ public class ControllerHWinfoColumnConfiguration {
 				Logging.info(this, "commit, we do the saving");
 
 				Logging.info(this, " we have got updateItems " + updateItems);
-				persistenceController.saveHwColumnConfig(updateItems);
+				persistenceController.getHardwareDataService().saveHwColumnConfig(updateItems);
 				updateItems.clear();
 
 			}
@@ -103,7 +103,7 @@ public class ControllerHWinfoColumnConfiguration {
 				persistenceController.configOptionsRequestRefresh();
 				model.requestReload();
 
-				persistenceController.getPersistentDataRetriever().getConfigOptions();
+				persistenceController.getConfigDataService().getConfigOptionsPD();
 
 				model.reset();
 				setDataChanged(false);
@@ -253,8 +253,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getPersistentDataRetriever()
-				.getHwAuditDeviceClasses();
+		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getHardwareDataService()
+				.getHwAuditDeviceClassesPD();
 		int id = 0;
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {

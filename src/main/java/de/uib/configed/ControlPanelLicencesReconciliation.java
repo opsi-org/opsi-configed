@@ -89,7 +89,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> columnNames;
 		List<String> classNames;
 
-		List<String> extraHostFields = persistenceController.getServerConfigStrings(
+		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
@@ -127,7 +127,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 							persistenceController.reconciliationInfoRequestRefresh();
 						}
 						initialized = true;
-						return persistenceController.getLicencesReconciliation();
+						return persistenceController.getSoftwareDataService().getLicencesReconciliationPD();
 					}
 				})),
 

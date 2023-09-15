@@ -239,7 +239,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	// overwrite to implement persistency
 	private void removeSavedSearch(String name) {
-		persistenceController.deleteSavedSearch(name);
+		persistenceController.getConfigDataService().deleteSavedSearch(name);
 
 		manager.removeSearch(name);
 	}

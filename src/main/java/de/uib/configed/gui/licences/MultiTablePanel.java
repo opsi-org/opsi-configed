@@ -26,7 +26,7 @@ public class MultiTablePanel extends TabClientAdapter {
 
 	@Override
 	public boolean mayLeave() {
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			return true;
 		}
 

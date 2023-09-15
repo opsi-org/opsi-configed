@@ -226,7 +226,8 @@ public final class SSHCommandFactory {
 	 * @return True if method exists
 	 **/
 	public boolean checkSSHCommandMethod() {
-		return persistenceController.checkSSHCommandMethod(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
+		return persistenceController.getSSHCommandDataService()
+				.checkSSHCommandMethod(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
 	}
 
 	/**
@@ -267,7 +268,7 @@ public final class SSHCommandFactory {
 	public List<SSHCommandTemplate> retrieveSSHCommandList() {
 		Logging.info(this, "retrieveSSHCommandList ");
 		if (commandlist == null) {
-			commandlist = persistenceController.getVolatileDataRetriever().retrieveCommandList();
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 		}
 
 		sshCommandList = new ArrayList<>();
@@ -323,7 +324,7 @@ public final class SSHCommandFactory {
 	 **/
 	public List<String> getSSHCommandMenuNames() {
 		if (commandlist == null) {
-			commandlist = persistenceController.getVolatileDataRetriever().retrieveCommandList();
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 		}
 
 		List<String> knownMenusList = new ArrayList<>(knownMenus);
@@ -338,7 +339,7 @@ public final class SSHCommandFactory {
 	 **/
 	public List<String> getSSHCommandMenuParents() {
 		if (commandlist == null) {
-			commandlist = persistenceController.getVolatileDataRetriever().retrieveCommandList();
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 		}
 
 		List<String> knownParentsList = new ArrayList<>(knownParents);
@@ -355,7 +356,7 @@ public final class SSHCommandFactory {
 	 **/
 	public Map<String, List<SSHCommandTemplate>> getSSHCommandMapSortedByParent() {
 		if (commandlist == null) {
-			commandlist = persistenceController.getVolatileDataRetriever().retrieveCommandList();
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 		}
 
 		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
@@ -404,7 +405,7 @@ public final class SSHCommandFactory {
 	 **/
 	public SSHCommandTemplate getSSHCommandByMenu(String menu) {
 		if (sshCommandList == null) {
-			commandlist = persistenceController.getVolatileDataRetriever().retrieveCommandList();
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 		}
 		for (SSHCommandTemplate c : sshCommandList) {
 			if (c.getMenuText().equals(menu)) {
@@ -450,14 +451,13 @@ public final class SSHCommandFactory {
 
 		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
-			if (persistenceController.updateSSHCommand(jsonObjects)) {
-
+			if (persistenceController.getSSHCommandDataService().updateSSHCommand(jsonObjects)) {
 				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
 		} else {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
-			if (persistenceController.createSSHCommand(jsonObjects)) {
+			if (persistenceController.getSSHCommandDataService().createSSHCommand(jsonObjects)) {
 				sshCommandList.add(command);
 				knownMenus.add(command.getMenuText());
 				return true;
@@ -508,7 +508,7 @@ public final class SSHCommandFactory {
 		// return
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
-		if (persistenceController.deleteSSHCommand(jsonObjects)) {
+		if (persistenceController.getSSHCommandDataService().deleteSSHCommand(jsonObjects)) {
 			sshCommandList.remove(getSSHCommandByMenu(menu));
 			knownMenus.remove(menu);
 		}

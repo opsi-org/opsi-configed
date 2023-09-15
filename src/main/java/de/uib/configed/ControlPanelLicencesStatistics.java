@@ -76,7 +76,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 						} else {
 							initialized = true;
 						}
-						return persistenceController.getLicenceStatistics();
+						return persistenceController.getSoftwareDataService().getLicenceStatistics();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);

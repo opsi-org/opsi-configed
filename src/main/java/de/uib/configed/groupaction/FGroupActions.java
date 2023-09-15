@@ -83,7 +83,7 @@ public class FGroupActions extends SecondaryFrame {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection
-				.addAll(new TreeSet<>(persistenceController.getVolatileDataRetriever().getCommonProductPropertyValues(
+				.addAll(new TreeSet<>(persistenceController.getProductDataService().getCommonProductPropertyValues(
 						associatedClients, OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
@@ -114,14 +114,16 @@ public class FGroupActions extends SecondaryFrame {
 
 		glassPane.activate(true);
 
-		persistenceController.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.getProductDataService().setCommonProductPropertyValue(
+				main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.getProductDataService().updateProductOnClients(
+				main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 

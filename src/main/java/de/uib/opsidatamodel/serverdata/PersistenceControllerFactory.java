@@ -48,11 +48,11 @@ public final class PersistenceControllerFactory {
 		}
 
 		if (connected) {
-			persistenceController.getPersistentDataRetriever().checkMultiFactorAuthentication();
+			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
 			Utils.setMultiFactorAuthenticationEnabled(
-					persistenceController.getPersistentDataRetriever().usesMultiFactorAuthentication());
-			persistenceController.getPersistentDataRetriever().checkConfiguration();
-			persistenceController.getPersistentDataRetriever().retrieveOpsiModules();
+					persistenceController.getUserDataService().usesMultiFactorAuthentication());
+			persistenceController.getConfigDataService().checkConfigurationPD();
+			persistenceController.getModuleDataService().retrieveOpsiModules();
 		}
 
 		staticPersistControl = persistenceController;

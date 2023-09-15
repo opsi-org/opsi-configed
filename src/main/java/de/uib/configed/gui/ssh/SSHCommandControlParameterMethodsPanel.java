@@ -115,8 +115,10 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	}
 
 	private void setComponentsEnabledRO() {
-		jButtonTestParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
-		jButtonAddParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		jButtonTestParam.setEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
+		jButtonAddParam.setEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
 	}
 
 	public JButton getButtonAdd() {

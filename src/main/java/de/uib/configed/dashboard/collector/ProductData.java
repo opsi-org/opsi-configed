@@ -39,7 +39,7 @@ public final class ProductData {
 
 	private static String selectedDepot;
 	private static List<String> depots = new ArrayList<>(
-			persistenceController.getHostInfoCollections().getAllDepots().keySet());
+			persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots().keySet());
 
 	private ProductData() {
 	}
@@ -73,8 +73,7 @@ public final class ProductData {
 			return;
 		}
 
-		List<Map<String, Object>> allProductsInDepot = persistenceController.getVolatileDataRetriever()
-				.getAllProducts();
+		List<Map<String, Object>> allProductsInDepot = persistenceController.getProductDataService().getAllProducts();
 
 		for (String depot : depots) {
 			Helper.fillMapOfListsForDepots(products,
@@ -135,12 +134,12 @@ public final class ProductData {
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
-			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
-					.collect(Collectors.toList());
+			List<String> clientsMap = persistenceController.getHostDataService().getHostInfoCollectionsPD()
+					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
+					.map(HostInfo::getName).collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
-					.getVolatileDataRetriever().getMapOfProductStatesAndActions(clientIds);
+					.getProductDataService().getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
@@ -199,8 +198,9 @@ public final class ProductData {
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
-		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+		List<String> hostnames = persistenceController.getHostDataService().getHostInfoCollectionsPD()
+				.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
+				.map(HostInfo::getName).collect(Collectors.toList());
 		for (String productId : tmpUnusedProductsList.get(depot)) {
 			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}
@@ -266,7 +266,7 @@ public final class ProductData {
 			return;
 		}
 
-		Map<String, Integer> installedOSs = persistenceController.getVolatileDataRetriever().getInstalledOsOverview();
+		Map<String, Integer> installedOSs = persistenceController.getModuleDataService().getInstalledOsOverview();
 
 		if (installedOSs.isEmpty()) {
 			return;

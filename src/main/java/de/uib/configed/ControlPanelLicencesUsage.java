@@ -68,7 +68,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		}
 
 		String licencePoolId = selectedLPoolIds.iterator().next();
-		String result = persistenceController.getLicenceUsage(clientId, licencePoolId);
+		String result = persistenceController.getLicenseDataService().getLicenceUsage(clientId, licencePoolId);
 
 		if (result != null) {
 			thePanel.getPanelUsage().reload();
@@ -102,7 +102,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		thePanel.setClientsSource(new ComboBoxModeller() {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
+				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostDataService()
+						.getHostInfoCollectionsPD()
 						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
 						.keySet());
 
@@ -138,7 +139,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					persistenceController.licencesUsageRequestRefresh();
-					return (Map) persistenceController.getPersistentDataRetriever().getLicencesUsage();
+					return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 
@@ -180,7 +181,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.getPanelUsage(), modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.editLicenceUsage(
+						return persistenceController.getLicenseDataService().editLicenceUsage(
 								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
@@ -192,7 +193,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persistenceController.deleteLicenceUsage(
+						return persistenceController.getLicenseDataService().deleteLicenceUsage(
 								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));

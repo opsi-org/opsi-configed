@@ -30,8 +30,8 @@ public final class DepotData {
 			return;
 		}
 
-		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
-		depots = persistenceController.getHostInfoCollections().getDepots();
+		persistenceController.getHostDataService().getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		depots = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots();
 	}
 
 	public static void clear() {

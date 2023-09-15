@@ -51,10 +51,11 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	private void retrieveRequirements(String depotId, String product) {
 		// if depotId == null the depot representative is used
-		requMap = persistenceController.getProductRequirements(depotId, product);
-		requBeforeMap = persistenceController.getProductPreRequirements(depotId, product);
-		requAfterMap = persistenceController.getProductPostRequirements(depotId, product);
-		requDeinstallMap = persistenceController.getProductDeinstallRequirements(depotId, product);
+		requMap = persistenceController.getProductDataService().getProductRequirements(depotId, product);
+		requBeforeMap = persistenceController.getProductDataService().getProductPreRequirements(depotId, product);
+		requAfterMap = persistenceController.getProductDataService().getProductPostRequirements(depotId, product);
+		requDeinstallMap = persistenceController.getProductDataService().getProductDeinstallRequirements(depotId,
+				product);
 	}
 
 	private void init() {

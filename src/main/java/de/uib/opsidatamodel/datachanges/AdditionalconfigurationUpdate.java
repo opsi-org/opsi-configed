@@ -30,7 +30,7 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 		if (newdata instanceof ConfigName2ConfigValue) {
 			ConfigName2ConfigValue configState = (ConfigName2ConfigValue) newdata;
 
-			persistenceController.setAdditionalConfiguration(objectId, configState);
+			persistenceController.getConfigDataService().setAdditionalConfiguration(objectId, configState);
 			// for opsi 4.0, this only collects the data
 		}
 	}

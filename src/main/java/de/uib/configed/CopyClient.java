@@ -88,14 +88,14 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		persist.createClient(newClientName, Utils.getDomainFromClientName(clientToCopy.getName()),
+		persist.getHostDataService().createClient(newClientName, Utils.getDomainFromClientName(clientToCopy.getName()),
 				clientToCopy.getInDepot(), newDescription, newInventoryNumber, newNotes, newIpAddress, newSystemUUID,
 				newMacAddress, clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(),
 				clientToCopy.getWanConfig(), "", "");
 	}
 
 	private void copyGroups() {
-		Map<String, Set<String>> fGroup2Members = persist.getPersistentDataRetriever().getFGroup2Members();
+		Map<String, Set<String>> fGroup2Members = persist.getGroupDataService().getFGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName()))
 				.collect(Collectors.toList());
@@ -104,12 +104,12 @@ public class CopyClient {
 			return;
 		}
 
-		persist.addHost2Groups(newClientNameWithDomain, clientGroups);
+		persist.getGroupDataService().addHost2Groups(newClientNameWithDomain, clientGroups);
 		persist.fObject2GroupsRequestRefresh();
 	}
 
 	private void copyProducts() {
-		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist.getVolatileDataRetriever()
+		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist.getProductDataService()
 				.getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
@@ -123,17 +123,17 @@ public class CopyClient {
 
 			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				productInfo.values().removeIf(String::isEmpty);
-				persist.updateProductOnClient(newClientNameWithDomain, productInfo.get("productId"),
-						getProductType(productInfo.get("productId")), productInfo);
+				persist.getProductDataService().updateProductOnClient(newClientNameWithDomain,
+						productInfo.get("productId"), getProductType(productInfo.get("productId")), productInfo);
 			});
 		}
 
 		// Trigger product update.
-		persist.updateProductOnClients();
+		persist.getProductDataService().updateProductOnClients();
 	}
 
 	private static int getProductType(String productId) {
-		if (persist.getPersistentDataRetriever().getAllLocalbootProductNames().contains(productId)) {
+		if (persist.getProductDataService().getAllLocalbootProductNames().contains(productId)) {
 			return OpsiPackage.TYPE_LOCALBOOT;
 		} else {
 			return OpsiPackage.TYPE_NETBOOT;
@@ -141,27 +141,29 @@ public class CopyClient {
 	}
 
 	private void copyProductProperties() {
-		Map<String, ConfigName2ConfigValue> products = persist.getPersistentDataRetriever()
-				.getProductsProperties(clientToCopy.getName());
+		Map<String, ConfigName2ConfigValue> products = persist.getProductDataService()
+				.getProductsPropertiesPD(clientToCopy.getName());
 
 		if (products.isEmpty()) {
 			return;
 		}
 
 		for (Entry<String, ConfigName2ConfigValue> entry : products.entrySet()) {
-			persist.setProductProperties(newClientNameWithDomain, entry.getKey(), entry.getValue());
+			persist.getProductDataService().setProductProperties(newClientNameWithDomain, entry.getKey(),
+					entry.getValue());
 		}
 
 		// Trigger the product's properties update.
-		persist.setProductProperties();
+		persist.getProductDataService().setProductProperties();
 	}
 
 	private void copyConfigStates() {
-		Map<String, Object> clientConfigStates = persist.getConfig(clientToCopy.getName());
+		Map<String, Object> clientConfigStates = persist.getConfigDataService().getConfig(clientToCopy.getName());
 		if (clientConfigStates != null) {
-			persist.setAdditionalConfiguration(newClientNameWithDomain, (ConfigName2ConfigValue) clientConfigStates);
+			persist.getConfigDataService().setAdditionalConfiguration(newClientNameWithDomain,
+					(ConfigName2ConfigValue) clientConfigStates);
 			// Trigger the config state update.
-			persist.setAdditionalConfiguration();
+			persist.getConfigDataService().setAdditionalConfiguration();
 		}
 	}
 }

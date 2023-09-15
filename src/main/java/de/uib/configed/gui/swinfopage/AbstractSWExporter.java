@@ -192,9 +192,9 @@ public abstract class AbstractSWExporter {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getVolatileDataRetriever()
+								.getSoftwareDataService()
 								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
-						Map<String, Map<String, Object>> tableData = persistenceController
+						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
@@ -203,7 +203,7 @@ public abstract class AbstractSWExporter {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController
+							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}
 

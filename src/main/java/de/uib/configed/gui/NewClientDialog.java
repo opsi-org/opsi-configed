@@ -288,7 +288,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!persistenceController.getPersistentDataRetriever().isWithUEFI()) {
+		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
 			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
 		}
@@ -300,7 +300,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 
-		if (!persistenceController.getPersistentDataRetriever().isWithUEFI()) {
+		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
@@ -309,14 +309,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!persistenceController.getPersistentDataRetriever().isWithWAN()) {
+		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 
 		jCheckWan = new JCheckBox();
 		jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
-		if (!persistenceController.getPersistentDataRetriever().isWithWAN()) {
+		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
@@ -649,7 +649,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		setDomains(editableDomains);
 
 		Logging.debug(this, "createClient saveDomains " + saveDomains);
-		persistenceController.writeDomains(saveDomains);
+		persistenceController.getConfigDataService().writeDomains(saveDomains);
 	}
 
 	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
@@ -911,9 +911,9 @@ public final class NewClientDialog extends FGeneralDialog {
 		String group = (String) jComboPrimaryGroup.getSelectedItem();
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = persistenceController.getPersistentDataRetriever().isWithUEFI()
+		boolean uefiboot = persistenceController.getModuleDataService().isWithUEFIPD()
 				&& jCheckUefi.getSelectedObjects() != null;
-		boolean wanConfig = persistenceController.getPersistentDataRetriever().isWithWAN()
+		boolean wanConfig = persistenceController.getModuleDataService().isWithWANPD()
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 

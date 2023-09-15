@@ -45,7 +45,7 @@ public class ExternalSource implements TableSource {
 			reloadRequested = false;
 		}
 
-		return persistenceController.getPersistentDataRetriever().getProductRows();
+		return persistenceController.getProductDataService().getProductRowsPD();
 	}
 
 	@Override

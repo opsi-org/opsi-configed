@@ -59,7 +59,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
 
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()
 				|| !support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
 			return false;
 		}

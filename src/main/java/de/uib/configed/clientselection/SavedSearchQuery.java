@@ -75,9 +75,11 @@ public class SavedSearchQuery {
 
 	public List<String> runSearch(boolean printing) {
 
-		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
+		Map<String, Map<String, Object>> depots = controller.getHostDataService().getHostInfoCollectionsPD()
+				.getAllDepots();
 
-		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
+		controller.getHostDataService().getHostInfoCollectionsPD()
+				.getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();
@@ -107,7 +109,7 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = controller.getPersistentDataRetriever().getHostGroups();
+		Map<String, Map<String, String>> hostGroups = controller.getGroupDataService().getHostGroupsPD();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
@@ -118,17 +120,17 @@ public class SavedSearchQuery {
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 
-		if (!controller.deleteGroup(groupName)) {
+		if (!controller.getGroupDataService().deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
 			Main.endApp(6);
 		}
 
-		if (!controller.addGroup(saveGroupRelation)) {
+		if (!controller.getGroupDataService().addGroup(saveGroupRelation)) {
 			Logging.error("add group error, group " + saveGroupRelation);
 			Main.endApp(7);
 		}
 
-		if (!controller.addHosts2Group(hosts, groupName)) {
+		if (!controller.getGroupDataService().addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group " + groupName);
 			Main.endApp(8);
 		}

@@ -54,7 +54,8 @@ public final class SmbConnect {
 
 	public String buildSambaTarget(String depotserver, String share) {
 		String result = "";
-		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostDataService()
+				.getHostInfoCollectionsPD().getDepots();
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 

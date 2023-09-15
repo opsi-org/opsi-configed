@@ -104,8 +104,8 @@ public class ControllerHWinfoMultiClients {
 
 	private void initModel() {
 
-		List<String> columnNames = persistenceController.getPersistentDataRetriever().getClient2HwRowsColumnNames();
-		List<String> classNames = persistenceController.getPersistentDataRetriever().getClient2HwRowsJavaclassNames();
+		List<String> columnNames = persistenceController.getHardwareDataService().getClient2HwRowsColumnNamesPD();
+		List<String> classNames = persistenceController.getHardwareDataService().getClient2HwRowsJavaclassNamesPD();
 
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
@@ -120,7 +120,7 @@ public class ControllerHWinfoMultiClients {
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					Logging.info(this, "retrieveMap: getClient2HwRows");
-					return persistenceController.getClient2HwRows(hosts);
+					return persistenceController.getHardwareDataService().getClient2HwRowsPD(hosts);
 				})),
 
 				// keycol

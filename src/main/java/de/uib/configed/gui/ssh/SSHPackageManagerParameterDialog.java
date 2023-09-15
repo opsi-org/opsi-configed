@@ -81,7 +81,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction3();
@@ -98,7 +98,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonReload.setIcon(Utils.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				configedMain.reload();
@@ -115,7 +115,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonReload);
 		buttonPanel.add(jButtonExecute);
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
 	}
 
 	protected void consolidate() {

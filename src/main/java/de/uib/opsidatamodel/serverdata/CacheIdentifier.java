@@ -223,7 +223,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Map<String, OpsiProductInfo>>}
 	 */
-	PRODUCT_TO_VERION_INFO_TO_INFOS("product_to_version_info_to_infos"),
+	PRODUCT_TO_VERSION_INFO_TO_INFOS("product_to_version_info_to_infos"),
 
 	/**
 	 * return type {@code Map<String, Map<String, Object>>}
@@ -493,12 +493,12 @@ public enum CacheIdentifier {
 	SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL("software_without_associated_license_pool"),
 
 	/**
-	 * return type {@code List<String>}
+	 * return type {@code Map<String, List<String>>}
 	 */
 	FLICENSE_POOL_TO_SOFTWARE_LIST("flicense_pool_to_software_list"),
 
 	/**
-	 * return type {@code List<String>}
+	 * return type {@code Map<String, List<String>>}
 	 */
 	FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST("flicense_pool_to_unknonwn_software_list"),
 
@@ -541,6 +541,26 @@ public enum CacheIdentifier {
 	 * return type {@code Map<String, Set<String>>}
 	 */
 	FGROUP_TO_MEMBERS("fgroup_to_members"),
+
+	/**
+	 * return type {@code Map<String, Map<String, Object>>}
+	 */
+	ROWS_LICENSES_RECONCILIATION("rows_licenses_reconcilation"),
+
+	/**
+	 * return type {@code String}
+	 */
+	DEPOT("depot"),
+
+	/**
+	 * return type {@code String}
+	 */
+	CONFIGED_WORKBENCH_DEFAULT_VALUE("configed_workbench_default_value"),
+
+	/**
+	 * return type {@code String}
+	 */
+	PACKAGE_SERVER_DIRECTORY("package_server_directory"),
 
 	/**
 	 * return type {@code boolean}

@@ -83,9 +83,9 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: " + size());
 		if (masterConfig) {
-			persistenceController.setConfig();
+			persistenceController.getConfigDataService().setConfig();
 		} else {
-			persistenceController.setAdditionalConfiguration();
+			persistenceController.getConfigDataService().setAdditionalConfiguration();
 		}
 		clear();
 	}

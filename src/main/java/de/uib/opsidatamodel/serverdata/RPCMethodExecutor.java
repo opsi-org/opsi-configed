@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -28,16 +29,13 @@ import de.uib.utilities.logging.Logging;
  */
 public class RPCMethodExecutor {
 	AbstractExecutioner exec;
-	VolatileDataRetriever volatileDataRetriever;
-	PersistentDataRetriever persistentDataRetriever;
 	OpsiServiceNOMPersistenceController persistenceController;
+	HostDataService hostDataService;
 
-	public RPCMethodExecutor(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController,
-			VolatileDataRetriever volatileDataRetriever, PersistentDataRetriever persistentDataRetriever) {
+	public RPCMethodExecutor(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.exec = exec;
 		this.persistenceController = persistenceController;
-		this.volatileDataRetriever = volatileDataRetriever;
-		this.persistentDataRetriever = persistentDataRetriever;
+		this.hostDataService = persistenceController.getHostDataService();
 	}
 
 	public boolean installPackage(String filename) {
@@ -57,7 +55,7 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLan(String[] hostIds) {
-		return wakeOnLan(volatileDataRetriever.getHostSeparationByDepots(hostIds));
+		return wakeOnLan(hostDataService.getHostSeparationByDepots(hostIds));
 	}
 
 	private List<String> wakeOnLan(Map<String, List<String>> hostSeparationByDepot) {
@@ -119,10 +117,10 @@ public class RPCMethodExecutor {
 		Map<String, Object> response = new HashMap<>();
 
 		AbstractExecutioner exec1 = persistenceController
-				.retrieveWorkingExec(persistentDataRetriever.getHostInfoCollections().getConfigServer());
+				.retrieveWorkingExec(hostDataService.getHostInfoCollectionsPD().getConfigServer());
 
 		Logging.info(this, "working exec for config server "
-				+ persistentDataRetriever.getHostInfoCollections().getConfigServer() + " " + (exec1 != null));
+				+ hostDataService.getHostInfoCollectionsPD().getConfigServer() + " " + (exec1 != null));
 
 		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });

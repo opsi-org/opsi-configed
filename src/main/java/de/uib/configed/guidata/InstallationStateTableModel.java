@@ -245,7 +245,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// add update to list
-		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
+		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
 				.getProductInfos(productIds, clientId);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
@@ -266,7 +266,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public synchronized void updateTable(String clientId) {
-		List<Map<String, Object>> productInfos = persistenceController.getVolatileDataRetriever()
+		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
 				.getProductInfos(clientId);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
@@ -421,7 +421,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return false;
 		}
 
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -901,19 +901,21 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
-			Map<String, String> requirements = persistenceController.getProductDeinstallRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductDataService()
+					.getProductDeinstallRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			Map<String, String> requirements = persistenceController.getProductPreRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductDataService()
+					.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductRequirements(null, product);
+			requirements = persistenceController.getProductDataService().getProductRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductPostRequirements(null, product);
+			requirements = persistenceController.getProductDataService().getProductPostRequirements(null, product);
 			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		}

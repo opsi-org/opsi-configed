@@ -103,12 +103,13 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
 	}
 
 	private void getDefaultAuthData() {
-		Map<String, Object> configs = persistenceController
-				.getConfig(persistenceController.getHostInfoCollections().getConfigServer());
+		Map<String, Object> configs = persistenceController.getConfigDataService()
+				.getConfig(persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer());
 
 		List<Object> resultConfigList = (List<Object>) configs
 				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
@@ -310,7 +311,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
