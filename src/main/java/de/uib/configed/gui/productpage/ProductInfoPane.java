@@ -14,12 +14,11 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-
-import org.jdesktop.swingx.JXPanel;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -34,8 +33,8 @@ import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
 
-	private JXPanel productDescriptionsPanel;
-	private JXPanel bottomComponent;
+	private JPanel productDescriptionsPanel;
+	private JPanel bottomComponent;
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -180,7 +179,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	}
 
 	private void setupLayout() {
-		productDescriptionsPanel = new JXPanel();
+		productDescriptionsPanel = new JPanel();
 
 		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
 		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
@@ -225,7 +224,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
 
 		// treat the bottom panel
-		bottomComponent = new JXPanel();
+		bottomComponent = new JPanel();
 
 		GroupLayout layoutBottomComponent = new GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
@@ -347,32 +346,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductName.setText(s);
 	}
 
-	public void setActive() {
-		setGrey(1F);
-	}
-
-	public void setInactive() {
-		setGrey(0.1F);
-	}
-
-	private void setGrey(float alpha) {
-
-		if (productDescriptionsPanel != null) {
-			productDescriptionsPanel.setAlpha(alpha);
-		}
-
-		if (panelEditProperties != null) {
-			panelEditProperties.setAlpha(alpha);
-		}
-
-		if (bottomComponent != null) {
-			bottomComponent.setAlpha(alpha);
-		}
-	}
-
 	public void setEditValues(String productId, String productVersion, String packageVersion, String depotId) {
 
-		setActive();
 		setProductId(productId);
 		setProductVersion(productVersion + "-" + packageVersion);
 
@@ -391,13 +366,12 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 	public void clearEditing() {
 
-		setActive();
 		setProductId("");
 		setProductVersion("");
 
 		setProductName("");
 		setProductInfo("");
-		panelProductDependencies.clearEditing();
+		panelProductDependencies.setEditValues("", "");
 	}
 
 	//

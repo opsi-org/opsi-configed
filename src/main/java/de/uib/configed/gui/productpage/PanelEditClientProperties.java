@@ -52,8 +52,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		buttonRemoveSpecificValues = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
-				"images/reset_network_eliminate.png", /* "images/edit-delete.png", */
-				"images/reset_network_eliminate_over.png", /* "images/edit-delete_over.png", */
+				"images/reset_network_eliminate.png", "images/reset_network_eliminate_over.png",
 				"images/reset_network_eliminate_disabled.png", true);
 
 		buttonRemoveSpecificValues.setPreferredSize(new Dimension(15, 30));

@@ -154,7 +154,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private boolean switchLineColors = true;
 
 	private boolean awareOfSelectionListener;
-	private boolean followSelectionListener = true;
 	private boolean awareOfTableChangedListener = true;
 
 	private boolean withTablesearchPane;
@@ -1517,9 +1516,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
-			if (followSelectionListener) {
-				selectedRowChanged();
-			}
+
+			selectedRowChanged();
 
 			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(true);
