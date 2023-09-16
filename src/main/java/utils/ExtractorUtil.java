@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,7 +99,7 @@ public final class ExtractorUtil {
 				if (!entry.isDirectory()) {
 					byte[] content = new byte[(int) entry.getSize()];
 					int bytesRead = sevenZFile.read(content);
-					files.put(entry.getName(), new String(content, 0, bytesRead));
+					files.put(entry.getName(), new String(content, 0, bytesRead, StandardCharsets.UTF_8));
 				}
 			}
 		} catch (IOException e) {
