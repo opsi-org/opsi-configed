@@ -361,19 +361,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
-			protected void reloadData() {
+			public void reloadData() {
 				super.reloadData();
 				Logging.info(this, "we are in PanelProductSettings");
 			}
 
 			@Override
-			protected void saveData() {
+			public void saveData() {
 				super.saveData();
 				Logging.info(this, "we are in PanelProductSettings");
 			}
 
 			@Override
-			protected void deleteData() {
+			public void deleteData() {
 				super.deleteData();
 				Logging.info(this, "we are in PanelProductSettings");
 			}
