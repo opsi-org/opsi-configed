@@ -114,8 +114,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	private boolean markDeviation = true;
-
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable) {
 		this(tableCellRenderer, keylistExtendible, entryRemovable, false);
 	}
@@ -338,23 +336,17 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 						if (!Main.THEMES) {
 							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
+						} else {
+							jc.setForeground(Globals.OPSI_ERROR);
 						}
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
-						Font gotFont = jc.getFont();
-						gotFont = gotFont.deriveFont(Font.BOLD);
-						if (!Main.FONT) {
-							jc.setFont(gotFont);
-						}
+						jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 					} else {
 
 						Object gotValue = table.getValueAt(rowIndex, 1);
-						if (markDeviation && !defaultValue.equals(gotValue)) {
-							Font gotFont = jc.getFont();
-							gotFont = gotFont.deriveFont(Font.BOLD);
-							if (!Main.FONT) {
-								jc.setFont(gotFont);
-							}
+						if (!defaultValue.equals(gotValue)) {
+							jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 						}
 					}
 
