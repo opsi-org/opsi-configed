@@ -21,7 +21,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
@@ -31,7 +30,7 @@ public class PanelHostConfig extends JPanel {
 	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 
 	// delegate
-	private EditMapPanelGrouped editMapPanel;
+	private EditMapPanelGroupedForHostConfigs editMapPanel;
 
 	private boolean keylistExtendible = true;
 	private boolean entryRemovable = true;
@@ -96,12 +95,12 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
 				entryRemovable, reloadable, new DefaultEditMapPanel.Actor() {
 					@Override
-					protected void reloadData() {
+					public void reloadData() {
 						reloadHostConfig();
 					}
 
 					@Override
-					protected void saveData() {
+					public void saveData() {
 						saveHostConfig();
 					}
 				});
@@ -127,9 +126,7 @@ public class PanelHostConfig extends JPanel {
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
 			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
 			boolean optionsEditable, NavigableMap<String, String> classesMap) {
-		Logging.info(this, "initEditing "
-
-				+ " optionsEditable " + optionsEditable);
+		Logging.info(this, "initEditing  optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
@@ -138,7 +135,6 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.setLabel(labeltext);
 
 		editMapPanel.setOptionsEditable(optionsEditable);
-
 	}
 
 	// delegated methods

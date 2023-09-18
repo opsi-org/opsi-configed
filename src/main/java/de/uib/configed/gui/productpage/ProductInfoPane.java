@@ -33,8 +33,6 @@ import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
 
-	private JPanel productDescriptionsPanel;
-	private JPanel bottomComponent;
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -179,7 +177,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	}
 
 	private void setupLayout() {
-		productDescriptionsPanel = new JPanel();
+		JPanel productDescriptionsPanel = new JPanel();
 
 		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
 		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
@@ -224,7 +222,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
 
 		// treat the bottom panel
-		bottomComponent = new JPanel();
+		JPanel bottomComponent = new JPanel();
 
 		GroupLayout layoutBottomComponent = new GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);

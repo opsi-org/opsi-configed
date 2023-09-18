@@ -28,7 +28,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 // works on a map of pairs of type String - List
 public class DefaultEditMapPanel extends JPanel {
-	protected MapTableModel mapTableModel;
+	public MapTableModel mapTableModel;
 
 	protected boolean reloadable;
 	protected boolean showToolTip = true;
@@ -64,15 +64,15 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	public static class Actor {
-		protected void reloadData() {
+		public void reloadData() {
 			Logging.info(this, "DefaultEditMapPanel: reloadData");
 		}
 
-		protected void saveData() {
+		public void saveData() {
 			Logging.info(this, "DefaultEditMapPanel: saveData");
 		}
 
-		protected void deleteData() {
+		public void deleteData() {
 			Logging.info(this, "DefaultEditMapPanel: deleteData");
 		}
 	}
