@@ -452,7 +452,7 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveSoftwareIdentOnClientsPD(final List<String> clients) {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS, Map.class) == null) {
+		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS, Map.class) != null) {
 			return;
 		}
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());

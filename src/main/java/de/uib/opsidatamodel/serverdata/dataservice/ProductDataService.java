@@ -874,7 +874,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveDepotProductPropertiesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class) == null) {
+		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class) != null) {
 			return;
 		}
 

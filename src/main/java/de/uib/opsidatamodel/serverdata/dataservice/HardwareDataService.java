@@ -86,9 +86,7 @@ public class HardwareDataService {
 	}
 
 	public Map<String, OpsiHwAuditDeviceClass> getHwAuditDeviceClassesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class) == null) {
-			produceHwAuditDeviceClassesPD();
-		}
+		produceHwAuditDeviceClassesPD();
 		return cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
 	}
 
