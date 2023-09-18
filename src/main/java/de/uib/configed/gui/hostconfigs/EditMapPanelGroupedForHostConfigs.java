@@ -56,8 +56,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.tree.SimpleIconNodeRenderer;
-import de.uib.utilities.tree.SimpleTreeModel;
 import de.uib.utilities.tree.SimpleTreePath;
 import de.uib.utilities.tree.XTree;
 import utils.PopupMouseListener;

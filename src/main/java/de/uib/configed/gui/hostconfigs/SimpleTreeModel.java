@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.tree;
+package de.uib.configed.gui.hostconfigs;
 
 import java.util.Map;
 import java.util.NavigableSet;
@@ -16,6 +16,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.tree.SimpleIconNode;
+import de.uib.utilities.tree.SimpleTreePath;
 import utils.Utils;
 
 public class SimpleTreeModel extends DefaultTreeModel {

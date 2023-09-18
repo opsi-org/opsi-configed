@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.tree;
+package de.uib.configed.gui.hostconfigs;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.utilities.tree.SimpleIconNode;
 
 public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
