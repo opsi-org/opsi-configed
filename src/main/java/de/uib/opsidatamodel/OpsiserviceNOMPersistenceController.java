@@ -221,45 +221,40 @@ public class OpsiserviceNOMPersistenceController {
 
 	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
-		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
-		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
-		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "opsi module status display");
-		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
+		PROPERTY_CLASSES_SERVER.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		PROPERTY_CLASSES_SERVER.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
+		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
 		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
-				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
-		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
-				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
-		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
-				"<html><p>remote control calls,<br />i.e. calls to tools on the local computer<br />typically targeting at a selected client</p></html>");
+				"HostConfigNodeRenderer.configed.query_supplementary");
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
+		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
+		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
 		PROPERTY_CLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
-				"<html><p>configuration for hw overview table,<br />- best editing via the helper function<br />at the hw overview table!)</p></html>");
-		PROPERTY_CLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
+				"HostConfigNodeRenderer.configed.usecolumns_hwaudit");
+		PROPERTY_CLASSES_SERVER.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
 
-		PROPERTY_CLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-		PROPERTY_CLASSES_SERVER.put("software-on-demand",
-				"<html>software on demand configuration,<br />not client specific</html>");
+		PROPERTY_CLASSES_SERVER.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
+		PROPERTY_CLASSES_SERVER.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
 		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROOT,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
 		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
 	}
 
-	public static final NavigableMap<String, String> PROPERTYCLASSES_CLIENT = new TreeMap<>();
+	public static final NavigableMap<String, String> PROPERTY_CLASSES_CLIENT = new TreeMap<>();
 	static {
-		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
-		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
-		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
-		PROPERTYCLASSES_CLIENT.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-
-		PROPERTYCLASSES_CLIENT.put("software-on-demand",
-				"<html>software on demand configuration,<br />not client specific</html>");
+		PROPERTY_CLASSES_CLIENT.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		PROPERTY_CLASSES_CLIENT.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		PROPERTY_CLASSES_CLIENT.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
+		PROPERTY_CLASSES_CLIENT.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
+		PROPERTY_CLASSES_CLIENT.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
 	}
 
 	public static final Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
 	static {
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
-		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTY_CLASSES_CLIENT.keySet());
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
 	}

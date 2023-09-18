@@ -56,8 +56,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.tree.SimpleIconNodeRenderer;
-import de.uib.utilities.tree.SimpleTreeModel;
 import de.uib.utilities.tree.SimpleTreePath;
 import de.uib.utilities.tree.XTree;
 import utils.PopupMouseListener;
@@ -83,7 +81,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private JSplitPane splitPane;
 	protected XTree tree;
 	private JPanel emptyRightPane;
-	private SimpleTreeModel treemodel;
+	private HostConfigTreeModel treemodel;
 
 	private NavigableMap<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
@@ -388,7 +386,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		ToolTipManager.sharedInstance().registerComponent(tree);
 
-		tree.setCellRenderer(new SimpleIconNodeRenderer());
+		tree.setCellRenderer(new HostConfigNodeRenderer());
 		tree.expandAll();
 
 		tree.addTreeSelectionListener(this);
@@ -427,7 +425,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
 
-			treemodel = new SimpleTreeModel(givenClasses.keySet(), tooltips4Keys);
+			treemodel = new HostConfigTreeModel(givenClasses.keySet(), tooltips4Keys);
 
 			tree.setModel(treemodel);
 			tree.expandAll();

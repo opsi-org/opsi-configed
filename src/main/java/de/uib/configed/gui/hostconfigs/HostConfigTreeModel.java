@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.tree;
+package de.uib.configed.gui.hostconfigs;
 
 import java.util.Map;
 import java.util.NavigableSet;
@@ -15,19 +15,21 @@ import java.util.TreeSet;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.tree.SimpleTreePath;
 
-public class SimpleTreeModel extends DefaultTreeModel {
+public class HostConfigTreeModel extends DefaultTreeModel {
 	public final SimpleIconNode rootNode;
 
 	private Set<SimpleTreePath> allPathes;
 
 	private Map<String, String> tooltips;
 
-	public SimpleTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
+	public HostConfigTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
 
-		Logging.debug(this.getClass(), "SimpleTreeModel created for " + dottedKeys);
+		Logging.debug(this.getClass(), "HostConfigTreeModel created for " + dottedKeys);
 		super.setAsksAllowsChildren(true);
 
 		rootNode = (SimpleIconNode) super.getRoot();
@@ -117,11 +119,11 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 		if (tooltips != null) {
 			String key = partialPath.dottedString(0, partialPath.size());
-			String description = tooltips.get(key);
-			if (description == null || description.trim().isEmpty()) {
+
+			if (tooltips.get(key) == null) {
 				node.setToolTipText(key);
 			} else {
-				node.setToolTipText(description);
+				node.setToolTipText(Configed.getResourceValue(tooltips.get(key)));
 			}
 		}
 
