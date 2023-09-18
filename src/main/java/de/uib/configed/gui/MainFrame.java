@@ -2448,26 +2448,7 @@ public class MainFrame extends JFrame
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
-		panelHostConfig = new PanelHostConfig() {
-			@Override
-			protected void reloadHostConfig() {
-				Logging.info(this, "reloadHostConfig");
-				super.reloadHostConfig();
-				configedMain.cancelChanges();
-
-				persistenceController.configOptionsRequestRefresh();
-
-				persistenceController.hostConfigsRequestRefresh();
-				configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
-			}
-
-			// overwrite in subclasses
-			@Override
-			protected void saveHostConfig() {
-				super.saveHostConfig();
-				configedMain.checkSaveAll(false);
-			}
-		};
+		panelHostConfig = new PanelHostConfig(configedMain);
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
