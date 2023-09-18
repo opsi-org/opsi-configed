@@ -85,7 +85,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private NavigableMap<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
-	private Map<String, String> tooltips4Keys;
 	protected Map<String, DefaultEditMapPanel> partialPanels;
 	private NavigableMap<String, Map<String, Object>> virtualLines;
 
@@ -425,8 +424,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
 
-			treemodel = new HostConfigTreeModel(givenClasses.keySet(), tooltips4Keys);
-
+			treemodel = new HostConfigTreeModel(givenClasses);
 			tree.setModel(treemodel);
 			tree.expandAll();
 
@@ -519,7 +517,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void generateParts() {
-		tooltips4Keys = givenClasses;
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {

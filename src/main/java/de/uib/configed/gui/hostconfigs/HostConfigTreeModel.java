@@ -26,17 +26,17 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 
 	private Map<String, String> tooltips;
 
-	public HostConfigTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
+	public HostConfigTreeModel(Map<String, String> keysWithTooltips) {
 		super(new SimpleIconNode(""));
 
-		Logging.debug(this.getClass(), "HostConfigTreeModel created for " + dottedKeys);
+		Logging.debug(this.getClass(), "HostConfigTreeModel created for " + keysWithTooltips);
 		super.setAsksAllowsChildren(true);
 
 		rootNode = (SimpleIconNode) super.getRoot();
 
-		this.tooltips = tooltips;
+		this.tooltips = keysWithTooltips;
 
-		generateFrom(dottedKeys);
+		generateFrom(keysWithTooltips.keySet());
 	}
 
 	public NavigableSet<String> getGeneratedKeys() {
