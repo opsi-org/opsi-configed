@@ -148,9 +148,9 @@ public class SoftwareDataService {
 	public void retrieveRelationsAuditSoftwareToLicencePoolsPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				NavigableSet.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) != null) {
+				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) != null) {
 			return;
 		}
 
@@ -321,17 +321,17 @@ public class SoftwareDataService {
 		return softwareList.get(i);
 	}
 
-	private void retrieveInstalledSoftwareInformationPD() {
+	public void retrieveInstalledSoftwareInformationPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+				&& cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
 						NavigableMap.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
+				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 						NavigableMap.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
+				&& cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
 						NavigableMap.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class) != null) {
+				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class) != null) {
 			return;
 		}
 
@@ -462,7 +462,7 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS, Map.class);
 	}
 
-	private void retrieveSoftwareIdentOnClientsPD(final List<String> clients) {
+	public void retrieveSoftwareIdentOnClientsPD(final List<String> clients) {
 		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS, Map.class) == null) {
 			return;
 		}
@@ -1004,7 +1004,7 @@ public class SoftwareDataService {
 	}
 
 	// poolId -> LicenceStatisticsRow
-	private Map<String, LicenceStatisticsRow> produceLicenceStatisticsPD() {
+	public Map<String, LicenceStatisticsRow> produceLicenceStatisticsPD() {
 		// side effects of this method: rowsLicencesReconciliation
 		Logging.info(this, "produceLicenceStatistics === ");
 

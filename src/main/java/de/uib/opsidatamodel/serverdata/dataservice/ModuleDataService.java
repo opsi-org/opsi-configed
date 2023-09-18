@@ -103,6 +103,7 @@ public class ModuleDataService {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO,
 					new Object[] { true, false, true, false });
 			licencingInfoOpsiAdmin = exec.retrieveResponse(omc);
+			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, licencingInfoOpsiAdmin);
 		}
 
 		return licencingInfoOpsiAdmin;

@@ -31,6 +31,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
@@ -175,8 +176,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
-				persistenceController.configOptionsRequestRefresh();
-				persistenceController.opsiLicencingInfoRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicencingInfoOpsiAdminPD(),

@@ -13,6 +13,7 @@ import java.util.Map;
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -72,7 +73,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
 						if (initialized) {
-							persistenceController.reconciliationInfoRequestRefresh();
+							persistenceController.reloadData(ReloadEvent.RECONCILIATION_INFO_RELOAD.toString());
 						} else {
 							initialized = true;
 						}

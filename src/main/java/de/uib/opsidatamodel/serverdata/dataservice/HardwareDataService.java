@@ -92,7 +92,7 @@ public class HardwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
 	}
 
-	private void produceHwAuditDeviceClassesPD() {
+	public void produceHwAuditDeviceClassesPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class) != null) {
 			return;
 		}
@@ -191,7 +191,7 @@ public class HardwareDataService {
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	private List<String> produceHwClassesPD(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
+	public List<String> produceHwClassesPD(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class) != null) {
 			return new ArrayList<>();
 		}
@@ -209,13 +209,18 @@ public class HardwareDataService {
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
+
+		if (hwAuditConf == null) {
+			hwAuditConf = new HashMap<>();
+		}
+
 		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
 				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 		return hwAuditConf.get(locale);
 	}
 
-	private List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
 		if (hwAuditConf == null) {
@@ -246,12 +251,7 @@ public class HardwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS, Map.class);
 	}
 
-	private void retrieveClient2HwRowsPD(String[] hosts) {
-		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
-		if (cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS, Map.class) != null) {
-			return;
-		}
-
+	public void retrieveClient2HwRowsPD(String[] hosts) {
 		Map<String, Map<String, Object>> client2HwRows = cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS,
 				Map.class);
 		if (client2HwRows != null) {
@@ -259,6 +259,7 @@ public class HardwareDataService {
 			return;
 		}
 
+		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
 		client2HwRows = new HashMap<>();
 
 		HostInfoCollections hostInfoCollections = hostDataService.getHostInfoCollectionsPD();
@@ -466,6 +467,11 @@ public class HardwareDataService {
 		return result;
 	}
 
+	public List<String> getHostColumnNamesPD() {
+		retrieveClient2HwRowsColumnNamesPD();
+		return cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class);
+	}
+
 	public List<String> getClient2HwRowsColumnNamesPD() {
 		retrieveClient2HwRowsColumnNamesPD();
 		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class);
@@ -481,13 +487,14 @@ public class HardwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class);
 	}
 
-	private void retrieveClient2HwRowsColumnNamesPD() {
+	public void retrieveClient2HwRowsColumnNamesPD() {
 		configDataService.getConfigOptionsPD();
 		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null " + (CacheManager
 				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
-		if (cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES, List.class) != null) {
+		if (cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES, List.class) != null) {
 			return;
 		}
 

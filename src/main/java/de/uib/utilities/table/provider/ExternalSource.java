@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 
 public class ExternalSource implements TableSource {
 	// adapter for external source for table data
@@ -41,7 +42,7 @@ public class ExternalSource implements TableSource {
 	@Override
 	public List<List<Object>> retrieveRows() {
 		if (reloadRequested) {
-			persistenceController.productDataRequestRefresh();
+			persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 			reloadRequested = false;
 		}
 

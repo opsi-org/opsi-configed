@@ -203,7 +203,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Object2Product2VersionList.class);
 	}
 
-	private void retrieveProductsAllDepotsPD() {
+	public void retrieveProductsAllDepotsPD() {
 		Logging.debug(this, "retrieveProductsAllDepots ? ");
 		Object2Product2VersionList depot2LocalbootProducts = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Object2Product2VersionList.class);
@@ -215,6 +215,7 @@ public class ProductDataService {
 		if (depot2NetbootProducts != null) {
 			Logging.debug(this, "depot2NetbootProducts" + depot2NetbootProducts.size());
 		}
+
 		retrieveProductInfosPD();
 
 		List<List<Object>> productRows = cacheManager.getCachedData(CacheIdentifier.PRODUCT_ROWS, List.class);
@@ -312,7 +313,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class);
 	}
 
-	private void retrieveProductInfosPD() {
+	public void retrieveProductInfosPD() {
 		Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class);
 		Logging.debug(this, "retrieveProductInfos data == null " + (product2versionInfo2infos == null));
@@ -373,7 +374,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS, Map.class);
 	}
 
-	private void retrieveAllProductPropertyDefinitionsPD() {
+	public void retrieveAllProductPropertyDefinitionsPD() {
 		retrieveProductsAllDepotsPD();
 
 		Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions = cacheManager
@@ -447,7 +448,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS, Map.class);
 	}
 
-	private void retrieveAllProductDependenciesPD() {
+	public void retrieveAllProductDependenciesPD() {
 		retrieveProductsAllDepotsPD();
 
 		Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos = cacheManager
@@ -534,7 +535,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES, List.class);
 	}
 
-	private void retrieveProductPropertyDepotStatesPD(Set<String> depots) {
+	public void retrieveProductPropertyDepotStatesPD(Set<String> depots) {
 		Logging.info(this, "retrieveProductPropertyDepotStates for depots " + depots);
 		List<Map<String, Object>> productPropertyDepotStates = produceProductPropertyStatesPD(depots);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES, productPropertyDepotStates);
@@ -586,7 +587,7 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS, Map.class);
 	}
 
-	private void checkProductGlobalInfosPD(String depotId) {
+	public void checkProductGlobalInfosPD(String depotId) {
 		Logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
 		if (!depotDataService.getDepot().equals(depotId)) {
 			Logging.warning(this, "depot irregular, preset " + depotDataService.getDepot());
@@ -754,6 +755,11 @@ public class ProductDataService {
 		return productProperties.get(pcname).get(productname);
 	}
 
+	public Boolean hasClientSpecificProperties(String productName) {
+		return (Boolean) cacheManager
+				.getCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES, Map.class).get(productName);
+	}
+
 	/**
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
@@ -761,7 +767,7 @@ public class ProductDataService {
 	 *
 	 * @param clientNames -
 	 */
-	private void retrieveProductPropertiesPD(final Set<String> clientNames) {
+	public void retrieveProductPropertiesPD(final Set<String> clientNames) {
 		boolean existing = true;
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -881,6 +887,7 @@ public class ProductDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
 				productHavingClientSpecificProperties);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIOS, productPropertyDefinitions);
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {

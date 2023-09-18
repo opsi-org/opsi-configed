@@ -877,7 +877,7 @@ public class ConfigDataService {
 	/**
 	 * retrieves default domain from service
 	 */
-	private void retrieveOpsiDefaultDomainPD() {
+	public void retrieveOpsiDefaultDomainPD() {
 		String opsiDefaultDomain = cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
 		if (opsiDefaultDomain == null) {
 			Object[] params = new Object[] {};
@@ -1346,7 +1346,7 @@ public class ConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class);
 	}
 
-	private void retrieveHostConfigsPD() {
+	public void retrieveHostConfigsPD() {
 		Map<String, Map<String, Object>> hostConfigs = cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS,
 				Map.class);
 		if (hostConfigs != null) {

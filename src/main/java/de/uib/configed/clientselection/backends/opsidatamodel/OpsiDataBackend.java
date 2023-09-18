@@ -95,8 +95,10 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 
 public final class OpsiDataBackend {
@@ -420,17 +422,18 @@ public final class OpsiDataBackend {
 		groups = null;
 		superGroups = null;
 		softwareMap = null;
-		persistenceController.productDataRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 
 		swauditMap = null;
-		persistenceController.softwareAuditOnClientsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+		persistenceController.reloadData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString());
 
 		hardwareOnClient = null;
 		clientToHardware = null;
 	}
 
 	public void reload() {
-		persistenceController.depotChange();
+		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
 
 	private void checkInitData() {

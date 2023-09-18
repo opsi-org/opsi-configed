@@ -17,6 +17,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.ComboBoxModeller;
@@ -138,7 +139,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				columnNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.licencesUsageRequestRefresh();
+					persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
 					return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);

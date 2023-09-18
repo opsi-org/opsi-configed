@@ -73,7 +73,7 @@ public class LicenseDataService {
 		return cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class);
 	}
 
-	private void retrieveLicencepoolsPD() {
+	public void retrieveLicencepoolsPD() {
 		Map<String, LicencepoolEntry> licencepools = new TreeMap<>();
 		if (moduleDataService.isWithLicenceManagementPD()) {
 			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
@@ -136,7 +136,7 @@ public class LicenseDataService {
 		return cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class);
 	}
 
-	private void retrieveLicencesPD() {
+	public void retrieveLicencesPD() {
 		if (!moduleDataService.isWithLicenceManagementPD()
 				&& cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class) != null) {
 			return;
@@ -159,7 +159,7 @@ public class LicenseDataService {
 	}
 
 	// SOFTWARE_LICENSE_TO_LICENSE_POOL
-	private void retrieveLicenceUsabilitiesPD() {
+	public void retrieveLicenceUsabilitiesPD() {
 		if (!moduleDataService.isWithLicenceManagementPD()
 				&& cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null) {
 			return;
@@ -326,7 +326,7 @@ public class LicenseDataService {
 		return cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class);
 	}
 
-	private void retrieveLicenceUsagesPD() {
+	public void retrieveLicenceUsagesPD() {
 		if (moduleDataService.isWithLicenceManagementPD()
 				&& cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class) != null) {
 			return;

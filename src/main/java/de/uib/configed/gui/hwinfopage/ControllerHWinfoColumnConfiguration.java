@@ -30,6 +30,7 @@ import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.IntComparatorForObjects;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -98,9 +99,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 			@Override
 			public void reload() {
-
-				persistenceController.hwAuditConfRequestRefresh();
-				persistenceController.configOptionsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.HARDWARE_CONF_RELOAD.toString());
 				model.requestReload();
 
 				persistenceController.getConfigDataService().getConfigOptionsPD();
@@ -109,9 +108,7 @@ public class ControllerHWinfoColumnConfiguration {
 				setDataChanged(false);
 
 				panel.moveToValue("true", columnNames.indexOf(COL_USE_IN_QUERY), true);
-
 			}
-
 		};
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());

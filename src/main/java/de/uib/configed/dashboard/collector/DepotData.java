@@ -9,6 +9,7 @@ package de.uib.configed.dashboard.collector;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
@@ -30,7 +31,7 @@ public final class DepotData {
 			return;
 		}
 
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
 		depots = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots();
 	}
 

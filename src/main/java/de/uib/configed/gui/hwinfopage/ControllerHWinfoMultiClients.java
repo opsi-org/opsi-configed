@@ -24,6 +24,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -86,9 +87,7 @@ public class ControllerHWinfoMultiClients {
 		panel = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
-
-				persistenceController.client2HwRowsRequestRefresh();
-
+				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 				super.reload();
 			}
 		};
@@ -149,8 +148,8 @@ public class ControllerHWinfoMultiClients {
 			return;
 		}
 		// the window exists
-		persistenceController.configOptionsRequestRefresh();
-		persistenceController.client2HwRowsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 		initModel();
 
 		// we apply filter

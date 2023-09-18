@@ -18,6 +18,7 @@ import java.util.Set;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -139,7 +140,7 @@ public class SWAuditClientEntry {
 	private void updateSoftware() {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
-			persistenceController.installedSoftwareInformationRequestRefresh();
+			persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 			software = persistenceController.getSoftwareDataService().getSoftwareListPD();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new HashSet<>();

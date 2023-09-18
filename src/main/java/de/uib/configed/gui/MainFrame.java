@@ -115,8 +115,10 @@ import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
@@ -2458,9 +2460,7 @@ public class MainFrame extends JFrame
 				super.reloadHostConfig();
 				configedMain.cancelChanges();
 
-				persistenceController.configOptionsRequestRefresh();
-
-				persistenceController.hostConfigsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
 				configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
@@ -2488,8 +2488,8 @@ public class MainFrame extends JFrame
 			@Override
 			protected void reload() {
 				super.reload();
-				persistenceController.installedSoftwareInformationRequestRefresh();
-				persistenceController.softwareAuditOnClientsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				persistenceController.reloadData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString());
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};

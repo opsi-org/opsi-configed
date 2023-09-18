@@ -62,7 +62,6 @@ import javax.swing.tree.TreePath;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
@@ -113,7 +112,9 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -624,7 +625,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
 		persistenceController.getHostDataService().getHostInfoCollectionsPD().retrieveOpsiHosts();
 
 		SwingUtilities.invokeLater(() -> {
@@ -641,7 +642,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
 		persistenceController.getHostDataService().getHostInfoCollectionsPD().retrieveOpsiHosts();
 
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
@@ -808,7 +809,6 @@ public class ConfigedMain implements ListSelectionListener {
 			depotRepresentative = myServer;
 		}
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
-		persistenceController.depotChange();
 
 		String opsiDefaultDomain = persistenceController.getConfigDataService().getOpsiDefaultDomainPD();
 		editableDomains = persistenceController.getConfigDataService().getDomains();
@@ -1910,7 +1910,7 @@ public class ConfigedMain implements ListSelectionListener {
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
 
-		persistenceController.productpropertiesRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString());
 
 		localbootStatesAndActionsUpdate = true;
 		netbootStatesAndActionsUpdate = true;
@@ -2343,7 +2343,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
 
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
-				+ persistenceController.hasClientSpecificProperties(productname));
+				+ persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
 		mainFrame.getPanelLocalbootProductSettings().initEditing(productname,
 				persistenceController.getProductDataService().getProductTitle(productname),
@@ -2754,7 +2754,7 @@ public class ConfigedMain implements ListSelectionListener {
 					persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
 					// everything
-					persistenceController.depotChange();
+					persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 				}
 			}
 		}
@@ -3512,9 +3512,7 @@ public class ConfigedMain implements ListSelectionListener {
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
 		if (dataReady) {
-			persistenceController.licencesUsageRequestRefresh();
-			persistenceController.relationsAuditSoftwareToLicencePoolsRequestRefresh();
-			persistenceController.reconciliationInfoRequestRefresh();
+			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
 			Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 			while (iter.hasNext()) {
@@ -3574,37 +3572,15 @@ public class ConfigedMain implements ListSelectionListener {
 		if (dataReady) {
 			allowedClients = null;
 
+			persistenceController.reloadData(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString());
+
 			FOpsiLicenseMissingText.reset();
-
-			persistenceController.requestReloadOpsiDefaultDomain();
-			persistenceController.userConfigurationRequestReload();
-			persistenceController.getConfigDataService().checkConfigurationPD();
-
-			persistenceController.opsiInformationRequestRefresh();
-			persistenceController.hwAuditConfRequestRefresh();
-			persistenceController.client2HwRowsRequestRefresh();
-
-			Logging.info(this, "call installedSoftwareInformationRequestRefresh()");
-			persistenceController.installedSoftwareInformationRequestRefresh();
-			persistenceController.softwareAuditOnClientsRequestRefresh();
-
-			persistenceController.productDataRequestRefresh();
-			OpsiDataBackend.getInstance().setReloadRequested();
 			mainFrame.getPanelProductProperties().reload();
-
-			persistenceController.configOptionsRequestRefresh();
-
 			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
 				mainFrame.getFDialogOpsiLicensingInfo().reload();
 			}
 
 			requestRefreshDataForClientSelection();
-
-			reloadHosts();
-
-			persistenceController.fProductGroup2MembersRequestRefresh();
-			persistenceController.auditHardwareOnHostRequestRefresh();
-
 			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
@@ -4514,11 +4490,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void reloadHosts() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().opsiHostsRequestRefresh();
-		persistenceController.hostConfigsRequestRefresh();
-		persistenceController.hostGroupsRequestRefresh();
-		persistenceController.fObject2GroupsRequestRefresh();
-		persistenceController.fGroup2MembersRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 
 		mainFrame.setCursor(null);
@@ -4533,7 +4505,7 @@ public class ConfigedMain implements ListSelectionListener {
 					.collect(Collectors.toList()).toArray(new String[clients.size()]);
 
 			persistenceController.getHostDataService().getHostInfoCollectionsPD().addOpsiHostNames(createdClientNames);
-			persistenceController.fObject2GroupsRequestRefresh();
+			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 			refreshClientListActivateALL();
 			setClients(createdClientNames);
@@ -4558,7 +4530,7 @@ public class ConfigedMain implements ListSelectionListener {
 				inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group,
 				productNetboot)) {
 			checkErrorList();
-			persistenceController.fObject2GroupsRequestRefresh();
+			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 			refreshClientList();
 

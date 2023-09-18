@@ -7,33 +7,23 @@
 package de.uib.opsidatamodel.serverdata;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.NavigableMap;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 
 import de.uib.configed.Configed;
 import de.uib.configed.productaction.PanelCompleteWinProducts;
-import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
-import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.HostGroups;
 import de.uib.opsidatamodel.HostInfoCollections;
-import de.uib.opsidatamodel.RemoteControls;
-import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.DepotDataService;
@@ -48,8 +38,24 @@ import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SSHCommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
+import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.EssentialDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.HostConfigDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.ProductPropertyReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.ReconciliationDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
 
 /**
  * PersistenceController implementation for the New Object Model (opsi 4.0)
@@ -109,9 +115,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
 	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
-	private static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
-	private static String packageServerDirectoryS = configedWorkbenchDefaultValue;
-
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
 	// keys for default wan configuration
@@ -146,15 +149,11 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String HOST_KEY = "hostId";
 
-	private static final RPCMethodName BACKEND_LICENSING_INFO_METHOD_NAME = RPCMethodName.BACKEND_GET_LICENSING_INFO;
-
 	public static final String CONFIG_STATE_TYPE = "ConfigState";
 
 	public static final String OBJECT_ID = "objectId";
 	public static final String CONFIG_ID = "configId";
 	public static final String VALUES_ID = "values";
-
-	private static Boolean keyUserRegisterValue;
 
 	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
@@ -206,165 +205,15 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 
-	private Map<String, List<Object>> wanConfiguration;
-	private Map<String, List<Object>> notWanConfiguration;
-
-	/**
-	 * This creation method constructs a new Controller instance and lets a
-	 * static variable point to it When next time we need a Controller we can
-	 * choose if we take the already constructed one - returned from the static
-	 * method getPersistenceController - or construct a new one public static
-	 * PersistenceController getNewPersistenceController (String server, String
-	 * user, String password) { return null; } public static
-	 * PersistenceController getPersistenceController () { return null; }
-	 */
-
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	private AbstractExecutioner exec;
-
-	/* data for checking permissions */
-	private boolean globalReadOnly;
-
-	private boolean serverFullPermission;
-
-	private boolean createClientPermission;
-
-	private boolean depotsFullPermission;
-	private Set<String> depotsPermitted;
-
-	private boolean hostgroupsOnlyIfExplicitlyStated;
-	private Set<String> hostgroupsPermitted;
-
-	private boolean productgroupsFullPermission;
-
 	/* ------------------------------------------ */
 
 	private String connectionServer;
-	private String user;
-	private String userConfigPart;
-	private Boolean applyUserSpecializedConfig;
-
-	private Map<String, List<String>> mapOfMethodSignatures;
-
-	private Map<String, Map<String, Object>> productGlobalInfos;
-
-	private Map<String, Map<String, ConfigName2ConfigValue>> productProperties;
-	// (pcname -> (productname -> (propertyname -> propertyvalue))) NOM
-	private Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties;
-	private Map<String, Boolean> productHavingClientSpecificProperties;
-
-	// for depot
-	private Map<String, Map<String, ListCellOptions>> productPropertyDefinitions;
-
 	private HostInfoCollections hostInfoCollections;
 
 	public String theDepot = "";
-
-	private String opsiDefaultDomain;
-
-	private Set<String> permittedProducts;
-
-	private List<String> localbootProductNames;
-	private List<String> netbootProductNames;
-
-	private Map<String, List<String>> possibleActions; // product-->possibleActions
-
-	// key --> rowmap for auditSoftware
-
-	private List<Map<String, Object>> relationsAuditHardwareOnHost;
-
-	private AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools;
-
-	// function softwareIdent --> pool
-	private Map<String, String> fSoftware2LicencePool;
-
-	// function pool --> list of assigned software
-	private Map<String, List<String>> fLicencePool2SoftwareList;
-
-	// function pool --> list of assigned software which is not in software table
-	private Map<String, List<String>> fLicencePool2UnknownSoftwareList;
-
-	private NavigableSet<Object> softwareWithoutAssociatedLicencePool;
-
-	// map key -> rowmap
-	private Map<String, LicenceUsageEntry> rowsLicencesUsage;
-
-	// function host -> list of used licences
-	private Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList;
-
-	private Map<String, Map<String, Object>> rowsLicencesReconciliation;
-
-	private Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf;
-
-	private List<String> opsiHwClassNames;
-	private Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
-
-	private List<String> hostColumnNames;
-	private List<String> client2HwRowsColumnNames;
-	private List<String> client2HwRowsJavaclassNames;
-	private List<String> hwInfoClassNames;
-
-	private Map<String, Map<String, String>> productGroups;
-
-	private HostGroups hostGroups;
-
-	private Map<String, Set<String>> fObject2Groups;
-
-	private Map<String, Set<String>> fGroup2Members;
-
-	private Map<String, Set<String>> fProductGroup2Members;
-
-	private Map<String, String> logfiles;
-
-	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
-
-	private Map<String, Object> opsiInformation = new HashMap<>();
-	private Map<String, Object> licencingInfoOpsiAdmin;
-	private Map<String, Object> licencingInfoNoOpsiAdmin;
-	private LicensingInfoMap licInfoMap;
-
-	private boolean hasOpsiLicencingBeenChecked;
-	private boolean isOpsiLicencingAvailable;
-
-	private boolean hasIsOpisUserAdminBeenChecked;
-	private boolean isOpsiUserAdmin;
-	private boolean isMultiFactorAuthenticationEnabled;
-
-	// the infos that are displayed in the gui
-	private Map<String, Object> opsiModulesDisplayInfo;
-
-	// the resulting info about permission
-	private Map<String, Boolean> opsiModules;
-
-	private boolean withLicenceManagement;
-	private boolean withLocalImaging;
-
-	private boolean withMySQL;
-	private boolean withUEFI;
-	private boolean withWAN;
-
-	private boolean withUserRoles;
-
-	// for internal use, for external cast to:
-	private Map<String, ConfigOption> configOptions;
-	private Map<String, ListCellOptions> configListCellOptions;
-	private Map<String, List<Object>> configDefaultValues;
-
-	private RemoteControls remoteControls;
-	private SavedSearches savedSearches;
-
-	private Map<String, Boolean> productOnClientsDisplayFieldsNetbootProducts;
-	private Map<String, Boolean> productOnClientsDisplayFieldsLocalbootProducts;
-	private Map<String, Boolean> hostDisplayFields;
-
-	private NavigableSet<String> productIds;
-	private Map<String, Map<String, String>> productDefaultStates;
-
-	private List<Map<String, Object>> healthData;
-	private Map<String, Object> diagnosticData;
-
-	private Boolean acceptMySQL;
 
 	private ConfigDataService configDataService;
 	private DepotDataService depotDataService;
@@ -380,12 +229,11 @@ public class OpsiServiceNOMPersistenceController {
 	private SSHCommandDataService sshCommandDataService;
 	private UserDataService userDataService;
 	private RPCMethodExecutor rpcMethodExecutor;
+	private ReloadDispatcher reloadDispatcher;
 
-	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiServiceNOMPersistenceController(String server, String user, String password) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
-		this.user = user;
 
 		Logging.debug(this.getClass(), "create");
 
@@ -405,7 +253,6 @@ public class OpsiServiceNOMPersistenceController {
 		sshCommandDataService = new SSHCommandDataService(exec);
 		userDataService = new UserDataService(exec);
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
-		hwAuditConf = new HashMap<>();
 
 		configDataService.setGroupDataService(groupDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
@@ -430,6 +277,8 @@ public class OpsiServiceNOMPersistenceController {
 		softwareDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setConfigDataService(configDataService);
+
+		registerReloadHandlers();
 	}
 
 	public ConfigDataService getConfigDataService() {
@@ -488,7 +337,101 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
-	// ---------------------------------------------------------------
+	private void registerReloadHandlers() {
+		reloadDispatcher = new ReloadDispatcher();
+
+		EssentialDataReloadHandler essentialDataReloadHandler = new EssentialDataReloadHandler();
+		essentialDataReloadHandler.setConfigDataService(configDataService);
+		essentialDataReloadHandler.setDepotDataService(depotDataService);
+		essentialDataReloadHandler.setGroupDataService(groupDataService);
+		essentialDataReloadHandler.setHardwareDataService(hardwareDataService);
+		essentialDataReloadHandler.setHostDataService(hostDataService);
+		essentialDataReloadHandler.setModuleDataService(moduleDataService);
+		essentialDataReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString(), essentialDataReloadHandler);
+
+		HostDataReloadHandler hostDataReloadHandler = new HostDataReloadHandler();
+		hostDataReloadHandler.setConfigDataService(configDataService);
+		hostDataReloadHandler.setGroupDataService(groupDataService);
+		hostDataReloadHandler.setHostDataService(hostDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
+
+		ClientHardwareDataReloadHandler clientHardwareDataReloadHandler = new ClientHardwareDataReloadHandler();
+		clientHardwareDataReloadHandler.setHardwareDataService(hardwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString(),
+				clientHardwareDataReloadHandler);
+
+		ConfigOptionsDataReloadHandler configOptionsDataReloadHandler = new ConfigOptionsDataReloadHandler();
+		configOptionsDataReloadHandler.setConfigDataService(configDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString(), configOptionsDataReloadHandler);
+
+		HardwareConfDataReloadHandler hardwareConfDataReloadHandler = new HardwareConfDataReloadHandler();
+		hardwareConfDataReloadHandler.setConfigDataService(configDataService);
+		hardwareConfDataReloadHandler.setHardwareDataService(hardwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(), hardwareConfDataReloadHandler);
+
+		HostConfigDataReloadHandler hostConfigDataReloadHandler = new HostConfigDataReloadHandler();
+		hostConfigDataReloadHandler.setConfigDataService(configDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.HOST_CONFIG_RELOAD.toString(), hostConfigDataReloadHandler);
+
+		InstalledSoftwareDataReloadHandler installedSoftwareDataReloadHandler = new InstalledSoftwareDataReloadHandler();
+		installedSoftwareDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString(),
+				installedSoftwareDataReloadHandler);
+
+		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
+		licenseDataReloadHandler.setHostDataService(hostDataService);
+		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
+
+		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
+		opsiLicenseReloadHandler.setModuleDataService(moduleDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_LICENSE_RELOAD.toString(), opsiLicenseReloadHandler);
+
+		ProductDataReloadHandler productDataReloadHandler = new ProductDataReloadHandler();
+		productDataReloadHandler.setGroupDataService(groupDataService);
+		productDataReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(), productDataReloadHandler);
+
+		ProductPropertyReloadHandler productPropertyReloadHandler = new ProductPropertyReloadHandler();
+		productPropertyReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString(),
+				productPropertyReloadHandler);
+
+		ReconciliationDataReloadHandler reconciliationDataReloadHandler = new ReconciliationDataReloadHandler();
+		reconciliationDataReloadHandler.setHostDataService(hostDataService);
+		reconciliationDataReloadHandler.setLicenseDataService(licenseDataService);
+		reconciliationDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.RECONCILIATION_INFO_RELOAD.toString(),
+				reconciliationDataReloadHandler);
+
+		DepotChangeReloadHandler depotChangeReloadHandler = new DepotChangeReloadHandler();
+		depotChangeReloadHandler.setDepotDataService(depotDataService);
+		depotChangeReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_CHANGE_RELOAD.toString(), depotChangeReloadHandler);
+
+		RelationsASWToLPDataReloadHandler relationsASWToLPDataReloadHandler = new RelationsASWToLPDataReloadHandler();
+		relationsASWToLPDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString(),
+				relationsASWToLPDataReloadHandler);
+
+		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
+		defaultDataReloadHandler.setGroupDataService(groupDataService);
+		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
+		defaultDataReloadHandler.setHostDataService(hostDataService);
+		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
+				defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.HOST_INFO_COLLECTIONS.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString(),
+				defaultDataReloadHandler);
+	}
+
+	public void reloadData(String event) {
+		reloadDispatcher.dispatch(event);
+	}
+
 	// Registering and notifying panelCompleteWinProducts
 	// TODO change how messages are shown there
 
@@ -501,8 +444,6 @@ public class OpsiServiceNOMPersistenceController {
 			panelCompleteWinProducts.evaluateWinProducts();
 		}
 	}
-
-	// ---------------------------------------------------------------
 
 	public AbstractExecutioner retrieveWorkingExec(String depot) {
 
@@ -546,154 +487,8 @@ public class OpsiServiceNOMPersistenceController {
 		return result;
 	}
 
-	// we delegate method calls to the executioner
 	public ConnectionState getConnectionState() {
 		return exec.getConnectionState();
-	}
-
-	public void hostGroupsRequestRefresh() {
-		hostGroups = null;
-	}
-
-	public void fGroup2MembersRequestRefresh() {
-		fGroup2Members = null;
-	}
-
-	public void fProductGroup2MembersRequestRefresh() {
-		fProductGroup2Members = null;
-	}
-
-	public void fObject2GroupsRequestRefresh() {
-		fObject2Groups = null;
-	}
-
-	public void hwAuditConfRequestRefresh() {
-		hwAuditConf.clear();
-		hwAuditDeviceClasses = null;
-		client2HwRowsColumnNames = null;
-		hwInfoClassNames = null;
-
-		if (opsiHwClassNames != null) {
-			opsiHwClassNames.clear();
-		}
-		opsiHwClassNames = null;
-	}
-
-	public void softwareAuditOnClientsRequestRefresh() {
-		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
-		// persistentDataRetriever.softwareAuditOnClientsRequestRefresh();
-	}
-
-	public void auditHardwareOnHostRequestRefresh() {
-		relationsAuditHardwareOnHost = null;
-	}
-
-	/* multiclient hwinfo */
-
-	public void client2HwRowsRequestRefresh() {
-		hostColumnNames = null;
-		client2HwRowsColumnNames = null;
-		// persistentDataRetriever.client2HwRowsRequestRefresh();
-	}
-
-	public void depotChange() {
-		Logging.info(this, "depotChange");
-		productGlobalInfos = null;
-		possibleActions = null;
-		productIds = null;
-		netbootProductNames = null;
-		localbootProductNames = null;
-		// retrieveProducts();
-		// retrieveProductPropertyDefinitions();
-		// persistentDataRetriever.getProductGlobalInfos(theDepot);
-	}
-
-	public void productDataRequestRefresh() {
-		//persistentDataRetriever.productDataRequestRefresh();
-		productpropertiesRequestRefresh();
-		depot2product2properties = null;
-		productGroups = null;
-	}
-
-	public Boolean hasClientSpecificProperties(String productname) {
-		return productHavingClientSpecificProperties.get(productname);
-	}
-
-	public void productPropertyDefinitionsRequestRefresh() {
-		//persistentDataRetriever.productPropertyDefinitionsRequestRefresh();
-		productPropertyDefinitions = null;
-	}
-
-	public void productpropertiesRequestRefresh() {
-		//persistentDataRetriever.productPropertyStatesRequestRefresh();
-		productProperties = null;
-	}
-
-	public void configOptionsRequestRefresh() {
-		Logging.info(this, "configOptionsRequestRefresh");
-		configOptions = null;
-	}
-
-	public void hostConfigsRequestRefresh() {
-		//persistentDataRetriever.hostConfigsRequestRefresh();
-	}
-
-	/**
-	 * signals that the default domain shall be reloaded from service
-	 */
-	public void requestReloadOpsiDefaultDomain() {
-		opsiDefaultDomain = null;
-	}
-
-	public void installedSoftwareInformationRequestRefresh() {
-		Logging.info(this, " call installedSoftwareInformationRequestRefresh()");
-		//persistentDataRetriever.installedSoftwareInformationRequestRefresh();
-	}
-
-	public void relationsAuditSoftwareToLicencePoolsRequestRefresh() {
-		relationsAuditSoftwareToLicencePools = null;
-		softwareWithoutAssociatedLicencePool = null;
-		fLicencePool2SoftwareList = null;
-		fLicencePool2UnknownSoftwareList = null;
-	}
-
-	public void licencesUsageRequestRefresh() {
-		rowsLicencesUsage = null;
-		fClient2LicencesUsageList = null;
-	}
-
-	public void reconciliationInfoRequestRefresh() {
-		Logging.info(this, "reconciliationInfoRequestRefresh");
-		rowsLicencesReconciliation = null;
-		Logging.info(this, "reconciliationInfoRequestRefresh installedSoftwareInformationRequestRefresh()");
-		// persistentDataRetriever.installedSoftwareInformationRequestRefresh();
-
-		relationsAuditSoftwareToLicencePools = null;
-
-		// persistentDataRetriever.softwareAuditOnClientsRequestRefresh();
-		// persistentDataRetriever.licencepoolsRequestRefresh();
-		// persistentDataRetriever.licencesRequestRefresh();
-		// persistentDataRetriever.licenceUsabilitiesRequestRefresh();
-		// persistentDataRetriever.licenceUsagesRequestRefresh();
-		hostInfoCollections.opsiHostsRequestRefresh();
-	}
-
-	public void userConfigurationRequestReload() {
-		Logging.info(this, "userConfigurationRequestReload");
-		keyUserRegisterValue = null;
-	}
-
-	// opsi module information
-	public void opsiInformationRequestRefresh() {
-		opsiInformation = new HashMap<>();
-	}
-
-	public final void opsiLicencingInfoRequestRefresh() {
-		licencingInfoOpsiAdmin = null;
-		licencingInfoNoOpsiAdmin = null;
-		licInfoMap = null;
-		LicensingInfoMap.requestRefresh();
-		Logging.info(this, "request worked");
 	}
 
 	public AbstractExecutioner getExecutioner() {

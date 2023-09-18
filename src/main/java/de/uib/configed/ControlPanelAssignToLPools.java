@@ -32,6 +32,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -569,7 +570,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.installedSoftwareInformationRequestRefresh();
+					persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 					return (Map) persistenceController.getSoftwareDataService()
 							.getInstalledSoftwareInformationForLicensingPD();
 

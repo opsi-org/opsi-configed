@@ -32,6 +32,7 @@ import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -408,11 +409,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 		// partial reload
 		buildUserConfig();
-
-		persistenceController.hostConfigsRequestRefresh();
-		persistenceController.configOptionsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
 		super.reload();
-
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
