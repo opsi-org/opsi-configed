@@ -1683,7 +1683,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (!persistenceController.getConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
 			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-			permittedHostGroups = persistenceController.getConfigDataService().getHostgroupsPermitted();
+			permittedHostGroups = persistenceController.getConfigDataService().getHostGroupsPermitted();
 		}
 
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);

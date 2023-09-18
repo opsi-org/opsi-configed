@@ -1023,6 +1023,7 @@ public class ConfigDataService {
 		if (hostgroupsOnlyIfExplicitlyStated) {
 			hostgroupsPermitted = null;
 		}
+		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, hostgroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
 				hostgroupsOnlyIfExplicitlyStated);
 
@@ -1340,10 +1341,10 @@ public class ConfigDataService {
 				cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, Boolean.class));
 	}
 
-	public Set<String> getHostgroupsPermitted() {
+	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-			result = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
+			result = cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, Set.class);
 		}
 
 		Logging.info(this, "getHostgroupsPermitted " + result);
