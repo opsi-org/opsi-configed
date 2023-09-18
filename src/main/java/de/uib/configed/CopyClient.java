@@ -143,7 +143,7 @@ public class CopyClient {
 
 	private void copyProductProperties() {
 		Map<String, ConfigName2ConfigValue> products = persistenceController.getProductDataService()
-				.getProductsPropertiesPD(clientToCopy.getName());
+				.getProductPropertiesPD(clientToCopy.getName());
 
 		if (products.isEmpty()) {
 			return;

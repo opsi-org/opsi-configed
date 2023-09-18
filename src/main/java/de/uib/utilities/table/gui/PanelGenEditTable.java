@@ -242,7 +242,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			return false;
 		}
 		return PersistenceControllerFactory.getPersistenceController().getConfigDataService()
-				.isServerFullPermissionPD();
+				.hasServerFullPermissionPD();
 	}
 
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {

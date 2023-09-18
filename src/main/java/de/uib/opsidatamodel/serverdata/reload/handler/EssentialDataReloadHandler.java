@@ -91,7 +91,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.getConfigOptionsPD();
+		configDataService.retrieveConfigOptionsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
 		groupDataService.getProductGroupsPD();

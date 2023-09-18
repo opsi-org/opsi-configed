@@ -63,7 +63,6 @@ public class HostDataService {
 	public HostDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-		// this.configDataService = persistenceController.getConfigDataService();
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {

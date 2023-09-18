@@ -47,10 +47,6 @@ public class DepotDataService {
 	public DepotDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-		// this.persistenceController = persistenceController;
-		// this.hostDataService = persistenceController.getHostDataService();
-		// this.configDataService = persistenceController.getConfigDataService();
-		// this.productDataService = persistenceController.getProductDataService();
 	}
 
 	public void setHostDataService(HostDataService hostDataService) {
@@ -116,7 +112,7 @@ public class DepotDataService {
 
 		// we don't have a productsgroupsFullPermission.
 		List<String> netbootProductNames = productDataService.getAllNetbootProductNames(depotId);
-		Set<String> permittedProducts = productDataService.getPermittedProductsPD();
+		Set<String> permittedProducts = configDataService.getPermittedProductsPD();
 		if (permittedProducts != null) {
 			netbootProductNames.retainAll(permittedProducts);
 		}

@@ -27,7 +27,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
@@ -159,7 +158,7 @@ public class ConfigDataService {
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
 				hostInfoCollections.getConfigServer(), hostInfoCollections.getDepotNamesList(),
 				groupDataService.getHostGroupIds(), groupDataService.getProductGroupsPD().keySet(),
-				getConfigDefaultValuesPD(), getConfigOptionsPD()).produce();
+				getConfigDefaultValuesPD(), getConfigListCellOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
@@ -175,7 +174,7 @@ public class ConfigDataService {
 
 		checkPermissions();
 
-		if (isServerFullPermissionPD()) {
+		if (hasServerFullPermissionPD()) {
 			checkStandardConfigs();
 		}
 	}
@@ -328,7 +327,7 @@ public class ConfigDataService {
 	}
 
 	private boolean checkStandardConfigs() {
-		boolean result = getConfigOptionsPD() != null;
+		boolean result = getConfigListCellOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there " + result);
 
 		if (!result) {
@@ -878,12 +877,12 @@ public class ConfigDataService {
 	 * retrieves default domain from service
 	 */
 	public void retrieveOpsiDefaultDomainPD() {
-		String opsiDefaultDomain = cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
-		if (opsiDefaultDomain == null) {
-			Object[] params = new Object[] {};
-			opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN, params));
-			cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
+		if (cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class) != null) {
+			return;
 		}
+		Object[] params = new Object[] {};
+		String opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN, params));
+		cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
 	}
 
 	private List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
@@ -923,15 +922,15 @@ public class ConfigDataService {
 		return readyObjects;
 	}
 
-	public boolean isServerFullPermissionPD() {
+	public boolean hasServerFullPermissionPD() {
 		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
-	public boolean isCreateClientPermissionPD() {
+	public boolean hasCreateClientPermissionPD() {
 		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
 	}
 
-	public boolean isDepotsFullPermissionPD() {
+	public boolean hasDepotsFullPermissionPD() {
 		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
 	}
 
@@ -1050,9 +1049,14 @@ public class ConfigDataService {
 					permittedProducts.addAll(products);
 				}
 			}
+			cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 		}
 
 		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+	}
+
+	public Set<String> getPermittedProductsPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
 	private String userPartPD() {
@@ -1107,145 +1111,150 @@ public class ConfigDataService {
 	}
 
 	public Map<String, List<Object>> getConfigDefaultValuesPD() {
-		getConfigOptionsPD();
+		retrieveConfigOptionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 	}
 
 	public Map<String, RemoteControl> getRemoteControlsPD() {
-		getConfigOptionsPD();
+		retrieveConfigOptionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.REMOTE_CONTROLS, Map.class);
 	}
 
 	public SavedSearches getSavedSearchesPD() {
-		getConfigOptionsPD();
+		retrieveConfigOptionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.SAVED_SEARCHES, SavedSearches.class);
 	}
 
-	public Map<String, ListCellOptions> getConfigOptionsPD() {
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = hardwareDataService.getHwAuditDeviceClassesPD();
-		Map<String, ListCellOptions> configListCellOptions = cacheManager
-				.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class);
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
-		Map<String, List<Object>> configDefaultValues = cacheManager
-				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
+	public Map<String, ConfigOption> getConfigOptionsPD() {
+		retrieveConfigOptionsPD();
+		return cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+	}
 
-		if (configListCellOptions == null || configOptions == null || configDefaultValues == null) {
-			Logging.debug(this, "getConfigOptions() work");
+	public Map<String, ListCellOptions> getConfigListCellOptionsPD() {
+		retrieveConfigOptionsPD();
+		return cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class);
+	}
 
-			List<Map<String, Object>> deleteItems = new ArrayList<>();
+	public void retrieveConfigOptionsPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) != null) {
+			return;
+		}
 
-			boolean tryIt = true;
+		Logging.debug(this, "getConfigOptions() work");
 
-			int tryOnceMoreCounter = 0;
-			final int STOP_REPEATING_AT_THIS = 1;
+		List<Map<String, Object>> deleteItems = new ArrayList<>();
 
-			while (tryIt) {
-				tryIt = false;
-				tryOnceMoreCounter++;
+		boolean tryIt = true;
 
-				configOptions = new HashMap<>();
-				configListCellOptions = new HashMap<>();
-				configDefaultValues = new HashMap<>();
+		int tryOnceMoreCounter = 0;
+		final int STOP_REPEATING_AT_THIS = 1;
 
-				RemoteControls remoteControls = new RemoteControls();
-				SavedSearches savedSearches = new SavedSearches();
+		while (tryIt) {
+			tryIt = false;
+			tryOnceMoreCounter++;
 
-				OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
-						hwAuditDeviceClasses);
+			Map<String, ConfigOption> configOptions = new HashMap<>();
+			Map<String, ListCellOptions> configListCellOptions = new HashMap<>();
+			Map<String, List<Object>> configDefaultValues = new HashMap<>();
 
-				// metaConfig for wan configuration is rebuilt in
-				// getWANConfigOptions
+			RemoteControls remoteControls = new RemoteControls();
+			SavedSearches savedSearches = new SavedSearches();
 
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
-				List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
+			OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
+					hardwareDataService.getHwAuditDeviceClassesPD());
 
-				Logging.info(this, "configOptions retrieved ");
+			// metaConfig for wan configuration is rebuilt in
+			// getWANConfigOptions
 
-				for (Map<String, Object> configItem : retrievedList) {
-					// map to java type
-					for (Entry<String, Object> configItemEntry : configItem.entrySet()) {
-						if (configItemEntry.getValue() instanceof JSONArray) {
-							configItem.put(configItemEntry.getKey(), ((JSONArray) configItemEntry.getValue()).toList());
-						}
-					}
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
+			List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
 
-					String key = (String) configItem.get("ident");
+			Logging.info(this, "configOptions retrieved ");
 
-					// build a ConfigOption from the retrieved item
-
-					// eliminate key produced by old version for role branch
-
-					String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-							+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
-					//
-
-					if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
-						Logging.warning(this, "user entry " + key
-								+ " produced by a still somewhere running old configed version , please delete user entry "
-								+ pseudouserProducedByOldVersion);
-
-						deleteItems.add(configItem);
-
-						Logging.info(this, "deleteItem " + configItem);
-
-						continue;
-					}
-
-					ConfigOption configOption = new ConfigOption(configItem);
-
-					configOptions.put(key, configOption);
-
-					configListCellOptions.put(key, configOption);
-
-					if (configOption.getDefaultValues() == null) {
-						Logging.warning(this, "default values missing for config  " + key);
-
-						if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
-							tryIt = true;
-							Logging.warning(this,
-									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
-
-							Utils.threadSleep(this, 1000);
-							break;
-						}
-					}
-
-					configDefaultValues.put(key, configOption.getDefaultValues());
-
-					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
-						remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
-						savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-						hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
+			for (Map<String, Object> configItem : retrievedList) {
+				// map to java type
+				for (Entry<String, Object> configItemEntry : configItem.entrySet()) {
+					if (configItemEntry.getValue() instanceof JSONArray) {
+						configItem.put(configItemEntry.getKey(), ((JSONArray) configItemEntry.getValue()).toList());
 					}
 				}
 
-				cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
-				cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+				String key = (String) configItem.get("ident");
 
-				Logging.debug(this,
-						" getConfigOptions produced hwAuditDevicePropertyTypes " + hwAuditDevicePropertyTypes);
+				// build a ConfigOption from the retrieved item
+
+				// eliminate key produced by old version for role branch
+
+				String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
+						+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
+				//
+
+				if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
+					Logging.warning(this, "user entry " + key
+							+ " produced by a still somewhere running old configed version , please delete user entry "
+							+ pseudouserProducedByOldVersion);
+
+					deleteItems.add(configItem);
+
+					Logging.info(this, "deleteItem " + configItem);
+
+					continue;
+				}
+
+				ConfigOption configOption = new ConfigOption(configItem);
+
+				configOptions.put(key, configOption);
+
+				configListCellOptions.put(key, configOption);
+
+				if (configOption.getDefaultValues() == null) {
+					Logging.warning(this, "default values missing for config  " + key);
+
+					if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
+						tryIt = true;
+						Logging.warning(this,
+								"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
+
+						Utils.threadSleep(this, 1000);
+						break;
+					}
+				}
+
+				configDefaultValues.put(key, configOption.getDefaultValues());
+
+				if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
+					remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
+					savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
+					hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
+				}
 			}
 
+			cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
+			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
-			Logging.info(this, "{ole deleteItems " + deleteItems.size());
-
-			if (!deleteItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-						new Object[] { deleteItems.toArray() });
-
-				if (exec.doCall(omc)) {
-					deleteItems.clear();
-				}
-			}
-
-			getWANConfigOptionsPD();
-			Logging.debug(this, "getConfigOptions() work finished");
+			Logging.debug(this, " getConfigOptions produced hwAuditDevicePropertyTypes " + hwAuditDevicePropertyTypes);
 		}
 
-		return configListCellOptions;
+		Logging.info(this, "{ole deleteItems " + deleteItems.size());
+
+		if (!deleteItems.isEmpty()) {
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+					new Object[] { deleteItems.toArray() });
+
+			if (exec.doCall(omc)) {
+				deleteItems.clear();
+			}
+		}
+
+		getWANConfigOptionsPD();
+		Logging.debug(this, "getConfigOptions() work finished");
+
+		return;
 	}
 
 	public Map<String, List<Object>> getWanConfigurationPD() {
@@ -1298,7 +1307,7 @@ public class ConfigDataService {
 
 	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
 		HashMap<String, ConfigOption> result = new HashMap<>();
-		getConfigOptionsPD();
+		retrieveConfigOptionsPD();
 		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 		for (Entry<String, ConfigOption> configOption : configOptions.entrySet()) {
 			if (configOption.getKey().startsWith(s) && configOption.getKey().length() > s.length()) {
@@ -1311,7 +1320,7 @@ public class ConfigDataService {
 	}
 
 	public boolean hasDepotPermission(String depotId) {
-		if (isDepotsFullPermissionPD()) {
+		if (hasDepotsFullPermissionPD()) {
 			return true;
 		}
 
@@ -1559,7 +1568,7 @@ public class ConfigDataService {
 				// configOptionsRequestRefresh();
 			}
 
-			getConfigOptionsPD();
+			retrieveConfigOptionsPD();
 			configCollection.clear();
 
 			Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
@@ -1745,22 +1754,23 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDisabledClientMenuEntries() {
+		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+			retrieveConfigOptionsPD();
+		}
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		if (configDefaultValues == null) {
-			getConfigOptionsPD();
-		}
 		return Utils.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
 		Logging.debug(this, "getOpsiclientdExtraEvents");
 
+		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+			retrieveConfigOptionsPD();
+		}
+
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		if (configDefaultValues != null) {
-			getConfigOptionsPD();
-		}
 		if (configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS) == null) {
 			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
@@ -1772,7 +1782,7 @@ public class ConfigDataService {
 	}
 
 	public Map<String, Object> getConfig(String objectId) {
-		getConfigOptionsPD();
+		retrieveConfigOptionsPD();
 		Map<String, Object> retrieved = getConfigsPD().get(objectId);
 		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 		return new ConfigName2ConfigValue(retrieved, configOptions);
@@ -1919,7 +1929,7 @@ public class ConfigDataService {
 
 			if (configsChanged) {
 				// configOptionsRequestRefresh();
-				getConfigOptionsPD();
+				retrieveConfigOptionsPD();
 			}
 
 			// build calls
@@ -2133,7 +2143,7 @@ public class ConfigDataService {
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object obj = getConfigOptionsPD().get(key);
+		Object obj = getConfigListCellOptionsPD().get(key);
 
 		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
 		if (obj == null) {
@@ -2160,7 +2170,7 @@ public class ConfigDataService {
 
 	public List<String> getServerConfigStrings(String key) {
 		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
-			getConfigOptionsPD();
+			retrieveConfigOptionsPD();
 		}
 		return Utils.takeAsStringList(getConfigDefaultValuesPD().get(key));
 	}

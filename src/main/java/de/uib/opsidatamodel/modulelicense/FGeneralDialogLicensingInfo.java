@@ -180,7 +180,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
-						persistenceController.getModuleDataService().getOpsiLicencingInfoOpsiAdminPD(),
+						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 						!FGeneralDialogLicensingInfo.extendedView);
 

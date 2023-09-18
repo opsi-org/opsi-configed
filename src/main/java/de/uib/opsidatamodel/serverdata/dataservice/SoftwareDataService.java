@@ -102,17 +102,12 @@ public class SoftwareDataService {
 	}
 
 	public NavigableSet<Object> getSoftwareWithoutAssociatedLicencePoolPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
-				NavigableSet.class) == null) {
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-		}
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
 	}
 
 	public List<String> getSoftwareListByLicencePoolPD(String licencePoolId) {
-		if (cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class) == null) {
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-		}
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
 		List<String> result = fLicensePool2SoftwareList.get(licencePoolId);
@@ -120,9 +115,7 @@ public class SoftwareDataService {
 	}
 
 	public List<String> getUnknownSoftwareListForLicencePoolPD(String licencePoolId) {
-		if (cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class) == null) {
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-		}
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		Map<String, List<String>> fLicencePool2UnknownSoftwareList = cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
 		List<String> result = fLicencePool2UnknownSoftwareList.get(licencePoolId);
@@ -130,16 +123,12 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, String> getFSoftware2LicencePoolPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) == null) {
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-		}
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		return cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 	}
 
 	public String getFSoftware2LicencePoolPD(String softwareIdent) {
-		if (cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) == null) {
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-		}
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		Map<String, String> fSoftware2LicencePool = cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 		return fSoftware2LicencePool.get(softwareIdent);
@@ -233,7 +222,7 @@ public class SoftwareDataService {
 				AuditSoftwareXLicencePool.class);
 	}
 
-	private void retrieveAuditSoftwareXLicencePoolPD() {
+	public void retrieveAuditSoftwareXLicencePoolPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
 				AuditSoftwareXLicencePool.class) != null) {
 			return;
@@ -532,11 +521,7 @@ public class SoftwareDataService {
 		return rowsSoftwareL2LPool;
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getClient2Software(List<String> clients) {
-		return retrieveSoftwareAuditOnClients(clients);
-	}
-
-	public Map<String, List<SWAuditClientEntry>> retrieveSoftwareAuditOnClients(final List<String> clients) {
+	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(final List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
@@ -628,7 +613,7 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicence(String softwareLicenseId, String licenceContractId, String licenceType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 
@@ -682,7 +667,7 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteSoftwareLicence(String softwareLicenseId) {
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -696,7 +681,7 @@ public class SoftwareDataService {
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 
@@ -714,7 +699,7 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -737,7 +722,7 @@ public class SoftwareDataService {
 	public boolean removeAssociations(String licencePoolId, List<String> softwareIds) {
 		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licencePoolId + ", " + softwareIds);
 
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -799,7 +784,7 @@ public class SoftwareDataService {
 		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
 				+ softwareToAssign);
 
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -915,7 +900,7 @@ public class SoftwareDataService {
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licencePoolIDNew) {
-		if (Boolean.FALSE.equals(configDataService.isServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 

@@ -488,7 +488,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveClient2HwRowsColumnNamesPD() {
-		configDataService.getConfigOptionsPD();
+		configDataService.retrieveConfigOptionsPD();
 		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null " + (CacheManager
 				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
 		if (cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class) != null
@@ -609,7 +609,7 @@ public class HardwareDataService {
 	}
 
 	public boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems) {
-		configDataService.getConfigOptionsPD();
+		configDataService.retrieveConfigOptionsPD();
 
 		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 		List<Object> readyObjects = new ArrayList<>();

@@ -187,7 +187,6 @@ public class OpsiServiceNOMPersistenceController {
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 		PROPERTYCLASSES_CLIENT.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-
 		PROPERTYCLASSES_CLIENT.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
 	}
@@ -208,12 +207,9 @@ public class OpsiServiceNOMPersistenceController {
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	private AbstractExecutioner exec;
-	/* ------------------------------------------ */
 
 	private String connectionServer;
 	private HostInfoCollections hostInfoCollections;
-
-	public String theDepot = "";
 
 	private ConfigDataService configDataService;
 	private DepotDataService depotDataService;

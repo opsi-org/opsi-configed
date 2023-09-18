@@ -820,28 +820,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void buildUserConfig() {
-
-		UserConfigProducing up = new UserConfigProducing(
-				// boolean notUsingDefaultUser, if true, we would supply the logged in user)
-				false,
-
-				// String configserver,
+		UserConfigProducing up = new UserConfigProducing(false,
 				persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer(),
-
-				// Collection<String> existingDepots,
 				persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList(),
-
-				// Collection<String> existingHostgroups,
 				persistenceController.getGroupDataService().getHostGroupIds(),
-				// Collection<String> existingProductgroups,
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-
-				// data. on which changes are based
-				// Map<String, List<Object>> serverconfigValuesMap,
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-
-				// Map<String, ListCellOptions> configOptionsMap
-				persistenceController.getConfigDataService().getConfigOptionsPD());
+				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 
 		List<Object> newData = up.produce();
 

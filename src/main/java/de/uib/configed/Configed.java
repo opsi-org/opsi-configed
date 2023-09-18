@@ -500,10 +500,8 @@ public final class Configed {
 					persist.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList(),
 					persist.getGroupDataService().getHostGroupIds(),
 					persist.getGroupDataService().getProductGroupsPD().keySet(),
-
-					// data. on which changes are based
 					persist.getConfigDataService().getConfigDefaultValuesPD(),
-					persist.getConfigDataService().getConfigOptionsPD());
+					persist.getConfigDataService().getConfigListCellOptionsPD());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);

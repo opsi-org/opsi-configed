@@ -29,7 +29,7 @@ public class HostConfigDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.getConfigOptionsPD();
+		configDataService.retrieveConfigOptionsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
 		configDataService.retrieveHostConfigsPD();

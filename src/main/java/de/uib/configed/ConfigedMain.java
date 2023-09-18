@@ -572,7 +572,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setSSHallowedHosts() {
 		Set<String> sshAllowedHosts = new HashSet<>();
 
-		if (persistenceController.getConfigDataService().isDepotsFullPermissionPD()) {
+		if (persistenceController.getConfigDataService().hasDepotsFullPermissionPD()) {
 			Logging.info(this, "set ssh allowed hosts " + host);
 			sshAllowedHosts.add(host);
 			sshAllowedHosts
@@ -3130,7 +3130,7 @@ public class ConfigedMain implements ListSelectionListener {
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
 
 			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
-					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigOptionsPD(),
+					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					// editableOptions
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
@@ -3156,14 +3156,14 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 
-			Map<String, ListCellOptions> configOptions = persistenceController.getConfigDataService()
-					.getConfigOptionsPD();
+			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
+					.getConfigListCellOptionsPD();
 
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
-					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
+					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
 
 		}

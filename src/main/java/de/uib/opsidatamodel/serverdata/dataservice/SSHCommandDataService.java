@@ -11,7 +11,6 @@ import java.util.Map;
 
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
@@ -30,13 +29,11 @@ import de.uib.utilities.logging.Logging;
  * {@code Persistent Data}.
  */
 public class SSHCommandDataService {
-	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private ModuleDataService moduleDataService;
 	private ConfigDataService configDataService;
 
 	public SSHCommandDataService(AbstractExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}
 

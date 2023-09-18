@@ -2196,7 +2196,7 @@ public class MainFrame extends JFrame
 		if (persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
 				&& persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
 			licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicencingInfoOpsiAdminPD(),
+					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 					!FGeneralDialogLicensingInfo.isExtendedView());
 
@@ -2850,7 +2850,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!persistenceController.getConfigDataService().isCreateClientPermissionPD()) {
+			if (!persistenceController.getConfigDataService().hasCreateClientPermissionPD()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);

@@ -193,7 +193,7 @@ public abstract class AbstractSWExporter {
 						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
 								.getSoftwareDataService()
-								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 

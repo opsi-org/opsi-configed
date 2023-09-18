@@ -190,7 +190,7 @@ public class PanelSWInfo extends JPanel {
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
 								.getSoftwareDataService()
-								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 

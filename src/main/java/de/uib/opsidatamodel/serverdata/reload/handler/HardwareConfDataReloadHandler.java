@@ -50,6 +50,6 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.getConfigOptionsPD();
+		configDataService.retrieveConfigOptionsPD();
 	}
 }

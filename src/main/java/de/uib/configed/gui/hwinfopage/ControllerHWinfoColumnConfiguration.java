@@ -102,7 +102,7 @@ public class ControllerHWinfoColumnConfiguration {
 				persistenceController.reloadData(ReloadEvent.HARDWARE_CONF_RELOAD.toString());
 				model.requestReload();
 
-				persistenceController.getConfigDataService().getConfigOptionsPD();
+				persistenceController.getConfigDataService().retrieveConfigOptionsPD();
 
 				model.reset();
 				setDataChanged(false);

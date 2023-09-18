@@ -267,7 +267,7 @@ public class GroupDataService {
 	}
 
 	public boolean addGroup(StringValuedRelationElement newgroup, boolean requestRefresh) {
-		if (!configDataService.isServerFullPermissionPD()) {
+		if (!configDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -301,7 +301,7 @@ public class GroupDataService {
 	}
 
 	public boolean deleteGroup(String groupId) {
-		if (!configDataService.isServerFullPermissionPD()) {
+		if (!configDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -320,7 +320,7 @@ public class GroupDataService {
 	}
 
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo) {
-		if (!configDataService.isServerFullPermissionPD()) {
+		if (!configDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -350,7 +350,7 @@ public class GroupDataService {
 	}
 
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
-		if (!configDataService.isServerFullPermissionPD()) {
+		if (!configDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 

@@ -20,7 +20,7 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 
 /**
- * Provides methods for working with hardware data on the server.
+ * Provides methods for working with health data on the server.
  * <p>
  * Classes ending in {@code DataService} represent somewhat of a layer between
  * server and the client. It enables to work with specific data, that is saved
@@ -43,25 +43,29 @@ public class HealthDataService {
 	}
 
 	public List<Map<String, Object>> checkHealthPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) == null) {
-			retrieveHealthDataPD();
-		}
+		retrieveHealthDataPD();
 		return cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class);
 	}
 
-	private void retrieveHealthDataPD() {
+	public void retrieveHealthDataPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) != null) {
+			return;
+		}
+
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_HEALTH_CHECK, new Object[0]);
 		cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA, exec.getListOfMaps(omc));
 	}
 
 	public Map<String, Object> getDiagnosticDataPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class) == null) {
-			retrieveDiagnosticDataPD();
-		}
+		retrieveDiagnosticDataPD();
 		return cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class);
 	}
 
-	private void retrieveDiagnosticDataPD() {
+	public void retrieveDiagnosticDataPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class) != null) {
+			return;
+		}
+
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA, new Object[0]);
 		cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA, exec.getMapResult(omc));
 	}

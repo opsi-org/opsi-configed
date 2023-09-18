@@ -630,7 +630,7 @@ public final class OpsiDataBackend {
 		}
 
 		result = persistenceController.getSoftwareDataService()
-				.getClient2Software(Arrays.stream(clientNames).collect(Collectors.toList()));
+				.getSoftwareAuditOnClients(Arrays.stream(clientNames).collect(Collectors.toList()));
 
 		return result;
 	}
