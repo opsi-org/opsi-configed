@@ -6,6 +6,10 @@
 
 package de.uib.opsidatamodel.serverdata;
 
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
+
 /**
  * Identifiers for internally cached data.
  * <p>
@@ -43,7 +47,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code List<Map<String, Object>>}
 	 */
-	RELATIONS_AUDIT_HARDWARE_ON_HOST("reloations_audit_hardware_on_host"),
+	RELATIONS_AUDIT_HARDWARE_ON_HOST("relations_audit_hardware_on_host"),
 
 	/**
 	 * return type {@code List<String>}
@@ -121,54 +125,49 @@ public enum CacheIdentifier {
 	SAVED_SEARCHES("saved_searches"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_LICENSE_MANAGEMENT("with_license_management"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_LOCAL_IMAGING("with_local_imaging"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_MY_SQL("with_my_sql"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_UEFI("with_uefi"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_WAN("with_wan"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	WITH_USER_ROLES("with_user_roles"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	ACCEPT_MY_SQL("accept_my_sql"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED("has_is_opsi_user_admin_been_checked"),
 
 	/**
-	 * return type {@code boolean}
+	 * return type {@code Boolean}
 	 */
 	IS_OPSI_ADMIN_USER("is_opsi_admin_user"),
-
-	/**
-	 * return type {@code LicensingInfoMap}
-	 */
-	LICENSING_INFO_MAP("licensing_info_map"),
 
 	/**
 	 * return type {@code Map<String, Boolean>}
@@ -433,11 +432,6 @@ public enum CacheIdentifier {
 	USER_CONFIG_PART("user_config_part"),
 
 	/**
-	 * return type {@code String}
-	 */
-	USER("user"),
-
-	/**
 	 * return type {@code Map<String, Set<String>>}
 	 */
 	FPRODUCT_GROUP_TO_MEMBERS("fproduct_group_to_members"),
@@ -506,11 +500,6 @@ public enum CacheIdentifier {
 	 * return type {@code Map<String, String>}
 	 */
 	FSOFTWARE_TO_LICENSE_POOL("fsoftware_to_license_pool"),
-
-	/**
-	 * return type {@code AuditSoftwareXLicencePool}
-	 */
-	RELATIONS_AUDIT_SOFTWARE_TO_LICENSE_POOLS("relations_audit_software_to_license_pools"),
 
 	/**
 	 * return type {@code Map<String, Boolean>}

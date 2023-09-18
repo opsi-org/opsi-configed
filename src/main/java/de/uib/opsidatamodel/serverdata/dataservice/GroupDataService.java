@@ -114,6 +114,7 @@ public class GroupDataService {
 				Map.class);
 		if (fGroup2Members == null) {
 			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
+			cacheManager.setCachedData(CacheIdentifier.FGROUP_TO_MEMBERS, fGroup2Members);
 		}
 		return fGroup2Members;
 	}

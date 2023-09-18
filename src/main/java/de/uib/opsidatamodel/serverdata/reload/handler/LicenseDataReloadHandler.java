@@ -38,7 +38,6 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
 		licenseDataService.retrieveLicenceUsabilitiesPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_SOFTWARE_TO_LICENSE_POOLS);
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);

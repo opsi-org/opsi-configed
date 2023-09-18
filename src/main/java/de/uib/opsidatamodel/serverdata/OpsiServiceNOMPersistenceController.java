@@ -206,6 +206,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
+	public String user;
+
 	private AbstractExecutioner exec;
 
 	private String connectionServer;
@@ -230,6 +232,7 @@ public class OpsiServiceNOMPersistenceController {
 	OpsiServiceNOMPersistenceController(String server, String user, String password) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
+		this.user = user;
 
 		Logging.debug(this.getClass(), "create");
 

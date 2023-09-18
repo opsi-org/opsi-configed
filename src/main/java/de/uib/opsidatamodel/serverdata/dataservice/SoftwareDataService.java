@@ -143,77 +143,78 @@ public class SoftwareDataService {
 			return;
 		}
 
-		AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools = cacheManager.getCachedData(
-				CacheIdentifier.RELATIONS_AUDIT_SOFTWARE_TO_LICENSE_POOLS, AuditSoftwareXLicencePool.class);
-		Logging.info(this,
-				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
-		relationsAuditSoftwareToLicencePools = getAuditSoftwareXLicencePoolPD();
-
-		// function softwareIdent --> pool
-		Map<String, String> fSoftware2LicencePool = new HashMap<>();
-		// function pool --> list of assigned software
-		Map<String, List<String>> fLicencePool2SoftwareList = new HashMap<>();
-		// function pool --> list of assigned software
-		Map<String, List<String>> fLicencePool2UnknownSoftwareList = new HashMap<>();
-
-		NavigableSet<String> softwareWithoutAssociatedLicencePool = new TreeSet<>(
-				getInstalledSoftwareInformationForLicensingPD().keySet());
-
 		if (!moduleDataService.isWithLicenceManagementPD()) {
 			return;
 		}
 
-		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
-			SWAuditEntry entry = new SWAuditEntry(retrieved);
-			String licencePoolKEY = retrieved.get(LicencepoolEntry.ID_SERVICE_KEY);
-			String swKEY = entry.getIdent();
+		AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools = getAuditSoftwareXLicencePoolPD();
+		Logging.info(this,
+				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
 
-			// build row for software table
-			LinkedHashMap<String, String> row = new LinkedHashMap<>();
+		if (relationsAuditSoftwareToLicencePools != null) {
+			// function softwareIdent --> pool
+			Map<String, String> fSoftware2LicencePool = new HashMap<>();
+			// function pool --> list of assigned software
+			Map<String, List<String>> fLicencePool2SoftwareList = new HashMap<>();
+			// function pool --> list of assigned software
+			Map<String, List<String>> fLicencePool2UnknownSoftwareList = new HashMap<>();
 
-			for (String colName : SWAuditEntry.getDisplayKeys()) {
-				row.put(colName, entry.get(colName));
+			NavigableSet<String> softwareWithoutAssociatedLicencePool = new TreeSet<>(
+					getInstalledSoftwareInformationForLicensingPD().keySet());
 
-			}
+			for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
+				SWAuditEntry entry = new SWAuditEntry(retrieved);
+				String licencePoolKEY = retrieved.get(LicencepoolEntry.ID_SERVICE_KEY);
+				String swKEY = entry.getIdent();
 
-			// build fSoftware2LicencePool
-			if (fSoftware2LicencePool.get(swKEY) != null && !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {
-				Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
-						+ fSoftware2LicencePool.get(swKEY) + " as well as " + licencePoolKEY);
-			}
-			fSoftware2LicencePool.put(swKEY, licencePoolKEY);
+				// build row for software table
+				LinkedHashMap<String, String> row = new LinkedHashMap<>();
 
-			// build fLicencePool2SoftwareList
-			if (fLicencePool2SoftwareList.get(licencePoolKEY) == null) {
-				fLicencePool2SoftwareList.put(licencePoolKEY, new ArrayList<>());
-			}
+				for (String colName : SWAuditEntry.getDisplayKeys()) {
+					row.put(colName, entry.get(colName));
 
-			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
-			if (softwareIds.indexOf(swKEY) == -1) {
-				if (getInstalledSoftwareInformationForLicensingPD().get(swKEY) == null) {
-					Logging.warning(this, "license pool " + licencePoolKEY
-							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
-					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
-					// found
-					List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList.computeIfAbsent(licencePoolKEY,
-							s -> new ArrayList<>());
-					unknownSoftwareIds.add(swKEY);
-				} else {
-					softwareIds.add(swKEY);
-					softwareWithoutAssociatedLicencePool.remove(swKEY);
+				}
+
+				// build fSoftware2LicencePool
+				if (fSoftware2LicencePool.get(swKEY) != null
+						&& !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {
+					Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
+							+ fSoftware2LicencePool.get(swKEY) + " as well as " + licencePoolKEY);
+				}
+				fSoftware2LicencePool.put(swKEY, licencePoolKEY);
+
+				// build fLicencePool2SoftwareList
+				if (fLicencePool2SoftwareList.get(licencePoolKEY) == null) {
+					fLicencePool2SoftwareList.put(licencePoolKEY, new ArrayList<>());
+				}
+
+				List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
+				if (softwareIds.indexOf(swKEY) == -1) {
+					if (getInstalledSoftwareInformationForLicensingPD().get(swKEY) == null) {
+						Logging.warning(this, "license pool " + licencePoolKEY
+								+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
+						// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
+						// found
+						List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList
+								.computeIfAbsent(licencePoolKEY, s -> new ArrayList<>());
+						unknownSoftwareIds.add(swKEY);
+					} else {
+						softwareIds.add(swKEY);
+						softwareWithoutAssociatedLicencePool.remove(swKEY);
+					}
 				}
 			}
+
+			cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicencePool);
+			cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicencePool2SoftwareList);
+			cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
+					fLicencePool2UnknownSoftwareList);
+			cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+					softwareWithoutAssociatedLicencePool);
+
+			Logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools,  softwareWithoutAssociatedLicencePool "
+					+ softwareWithoutAssociatedLicencePool.size());
 		}
-
-		cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicencePool);
-		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicencePool2SoftwareList);
-		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
-				fLicencePool2UnknownSoftwareList);
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
-				softwareWithoutAssociatedLicencePool);
-
-		Logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools,  softwareWithoutAssociatedLicencePool "
-				+ softwareWithoutAssociatedLicencePool.size());
 	}
 
 	public AuditSoftwareXLicencePool getAuditSoftwareXLicencePoolPD() {
@@ -319,8 +320,7 @@ public class SoftwareDataService {
 						NavigableMap.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
-						NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class) != null) {
+						NavigableMap.class) != null) {
 			return;
 		}
 
@@ -522,6 +522,10 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(final List<String> clients) {
+		if (cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class) != null) {
+			return new HashMap<>();
+		}
+
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
@@ -569,6 +573,8 @@ public class SoftwareDataService {
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
+
+		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, client2software);
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());

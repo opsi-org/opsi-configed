@@ -201,6 +201,7 @@ public class ConfigDataService {
 		}
 
 		applyUserSpecializedConfig = moduleDataService.isWithUserRolesPD() && hasKeyUserRegisterValuePD();
+		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
 		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
@@ -1066,8 +1067,8 @@ public class ConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ cacheManager.getCachedData(CacheIdentifier.USER, String.class) + "}.";
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.user
+					+ "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}

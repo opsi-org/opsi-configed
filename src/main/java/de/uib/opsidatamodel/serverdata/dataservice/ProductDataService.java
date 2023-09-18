@@ -1605,6 +1605,8 @@ public class ProductDataService {
 					configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
 			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
+			cacheManager.setCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS,
+					productOnClientsDisplayFieldsNetbootProducts);
 		}
 
 		return productOnClientsDisplayFieldsNetbootProducts;
@@ -1695,7 +1697,8 @@ public class ProductDataService {
 					configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
-
+			cacheManager.setCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
+					productOnClientsDisplayFieldsLocalbootProducts);
 		}
 
 		return productOnClientsDisplayFieldsLocalbootProducts;
