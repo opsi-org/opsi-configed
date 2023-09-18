@@ -3157,7 +3157,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
 					configOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
+					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
 
 		}
 
