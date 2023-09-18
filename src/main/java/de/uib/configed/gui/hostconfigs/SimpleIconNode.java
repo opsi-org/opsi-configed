@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.tree;
+package de.uib.configed.gui.hostconfigs;
 
 import java.awt.Image;
 

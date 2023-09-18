@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.tree;
+package de.uib.configed.gui.hostconfigs;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -16,16 +16,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.Main;
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 
-public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
+public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
 	private static final int LABEL_HEIGHT = 22;
 
 	private Font emphasized;
 	private Font standard;
 
-	public SimpleIconNodeRenderer() {
+	public HostConfigNodeRenderer() {
 		super();
 
 		if (!Main.THEMES) {
@@ -58,7 +59,12 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-			setText(stringValue);
+			if ("".equals(stringValue)) {
+				setText(Configed.getResourceValue("HostConfigNodeRenderer.mainNode"));
+			} else {
+				setText(stringValue);
+			}
+
 			setToolTipText(((SimpleIconNode) value).getToolTipText());
 
 			// adaption to size of bold font??

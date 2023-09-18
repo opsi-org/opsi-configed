@@ -13,12 +13,14 @@ import java.util.NavigableMap;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
@@ -36,20 +38,31 @@ public class PanelHostConfig extends JPanel {
 	private boolean entryRemovable = true;
 	private boolean reloadable = true;
 
-	public PanelHostConfig() {
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+	private ConfigedMain configedMain;
 
+	public PanelHostConfig(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		buildPanel();
 	}
 
 	// overwrite in subclasses
 	protected void reloadHostConfig() {
-		Logging.info(this, " in PanelHostConfig: reloadHostConfig");
+		Logging.info(this, "reloadHostConfig");
 
+		configedMain.cancelChanges();
+
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
+
+		configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 	}
 
 	// overwrite in subclasses
 	protected void saveHostConfig() {
 		Logging.debug(this, "saveHostConfig");
+		configedMain.checkSaveAll(false);
 	}
 
 	private void handleUserInPropertyClass(String superclass, String user) {
