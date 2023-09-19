@@ -13,7 +13,6 @@
 
 package de.uib.configed.guidata;
 
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -33,13 +32,12 @@ public class ColoredTableCellRenderer extends StandardTableCellRenderer {
 			int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (value != null && value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
+		if (value != null && value.equals(Globals.CONFLICT_STATE_STRING)) {
 			if (!Main.THEMES) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);
 			} else {
-				c.setBackground(Color.PINK);
-				c.setForeground(Color.PINK);
+				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 			}
 		}
 

@@ -50,8 +50,6 @@ import de.uib.utilities.logging.Logging;
  */
 public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
 
-	public static final String CONFLICT_STRING = Globals.CONFLICT_STATE_STRING;
-
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
@@ -408,7 +406,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			visualStates.put(productId, resultValue);
 		} else {
 			if (!oldValue.equalsIgnoreCase(mixinValue)) {
-				resultValue = CONFLICT_STRING;
+				resultValue = Globals.CONFLICT_STATE_STRING;
 				visualStates.put(productId, resultValue);
 			}
 		}

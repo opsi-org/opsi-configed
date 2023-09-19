@@ -134,7 +134,7 @@ public final class Globals {
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
 
 	public static final Color FAILED_COLOR = OPSI_ERROR;
-	public static final Color ACTION_COLOR = OPSI_WARNING;
+	public static final Color ACTION_COLOR = OPSI_OK;
 	public static final Color OK_COLOR = OPSI_OK;
 	public static final Color UNKNOWN_COLOR = LOG_COLOR_SECRET;
 
@@ -185,15 +185,16 @@ public final class Globals {
 	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
 	public static final Color ACTION_REQUEST_SETUP_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_UPDATE_COLOR = ACTION_COLOR;
-	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = Color.BLUE;
+	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = LOG_COLOR_ERROR;
 	public static final Color ACTION_REQUEST_ALWAYS_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_ONCE_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_CUSTOM_COLOR = ACTION_COLOR;
-	public static final Color ACTION_REQUEST_LAST_COLOR = PRIMARY_FOREGROUND_COLOR;
 
 	public static final Color INSTALLATION_STATUS_NOT_INSTALLED_COLOR = INVISIBLE;
 	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
 	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = UNKNOWN_COLOR;
+
+	public static final Color PRODUCT_STATUS_MIXED_COLOR = LOG_COLOR_SECRET;
 
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
