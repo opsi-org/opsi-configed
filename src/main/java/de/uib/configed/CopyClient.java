@@ -96,7 +96,7 @@ public class CopyClient {
 	}
 
 	private void copyGroups() {
-		Map<String, Set<String>> fGroup2Members = persistenceController.getGroupDataService().getFGroup2MembersPD();
+		Map<String, Set<String>> fGroup2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName()))
 				.collect(Collectors.toList());

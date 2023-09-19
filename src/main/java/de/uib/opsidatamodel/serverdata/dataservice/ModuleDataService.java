@@ -113,6 +113,26 @@ public class ModuleDataService {
 		}
 	}
 
+	public Map<String, Object> getOpsiLicensingInfoNoOpsiAdminPD() {
+		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
+		retrieveOpsiLicensingInfoNoOpsiAdminPD();
+		return cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class);
+	}
+
+	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class) != null) {
+			return;
+		}
+		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) == null
+				&& isOpsiLicensingAvailablePD()) {
+			Object[] callParameters = {};
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters,
+					OpsiMethodCall.BACKGROUND_DEFAULT);
+			Map<String, Object> licensingInfoNoOpsiAdmin = exec.getMapResult(omc);
+			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, licensingInfoNoOpsiAdmin);
+		}
+	}
+
 	private void produceOpsiModulesInfoPD() {
 		// has the actual signal if a module is activ
 		Map<String, Boolean> opsiModules = new HashMap<>();
@@ -731,24 +751,6 @@ public class ModuleDataService {
 		}
 		cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, isOpsiUserAdmin);
 		cacheManager.setCachedData(CacheIdentifier.HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED, true);
-	}
-
-	public Map<String, Object> getOpsiLicensingInfoNoOpsiAdminPD() {
-		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
-
-		Map<String, Object> licensingInfoNoOpsiAdmin = cacheManager
-				.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class);
-		Map<String, Object> licensingInfoOpsiAdmin = cacheManager
-				.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class);
-		if (licensingInfoOpsiAdmin == null && isOpsiLicensingAvailablePD()) {
-			Object[] callParameters = {};
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters,
-					OpsiMethodCall.BACKGROUND_DEFAULT);
-			licensingInfoNoOpsiAdmin = exec.getMapResult(omc);
-			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, licensingInfoNoOpsiAdmin);
-		}
-
-		return licensingInfoNoOpsiAdmin;
 	}
 
 	public boolean isOpsiLicensingAvailablePD() {

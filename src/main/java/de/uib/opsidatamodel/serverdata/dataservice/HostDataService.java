@@ -600,30 +600,30 @@ public class HostDataService {
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {
-		Map<String, Boolean> hostDisplayFields = cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS,
-				Map.class);
-		if (hostDisplayFields == null) {
-			Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		retrieveHostDisplayFields();
+		return cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class);
+	}
 
-			List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+	public void retrieveHostDisplayFields() {
+		if (cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class) != null) {
+			return;
+		}
+		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+		// check if have to initialize the server property
+		configuredByService = produceHostDisplayFields(configuredByService);
 
-			// check if have to initialize the server property
-			configuredByService = produceHostDisplayFields(configuredByService);
+		Map<String, Boolean> hostDisplayFields = new LinkedHashMap<>();
+		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+		// always shown, we put it here because of ordering and repeat the statement
+		// after the loop if it has been set to false
 
-			hostDisplayFields = new LinkedHashMap<>();
-			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
-			// always shown, we put it here because of ordering and repeat the statement
-			// after the loop if it has been set to false
-
-			for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-				hostDisplayFields.put(field, configuredByService.indexOf(field) > -1);
-			}
-
-			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
-			cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
+		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
+			hostDisplayFields.put(field, configuredByService.indexOf(field) > -1);
 		}
 
-		return hostDisplayFields;
+		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+		cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
 	}
 
 	private List<String> produceHostDisplayFields(List<String> givenList) {

@@ -60,10 +60,14 @@ public class GroupDataService {
 	}
 
 	public Map<String, Map<String, String>> getProductGroupsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class) != null) {
-			return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class);
-		}
+		retrieveProductGroupsPD();
+		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class);
+	}
 
+	public void retrieveProductGroupsPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class) != null) {
+			return;
+		}
 		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
@@ -72,14 +76,17 @@ public class GroupDataService {
 				"ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" });
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
-		return result;
 	}
 
 	public Map<String, Map<String, String>> getHostGroupsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class) != null) {
-			return cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class);
-		}
+		retrieveHostGroupsPD();
+		return cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class);
+	}
 
+	public void retrieveHostGroupsPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class) != null) {
+			return;
+		}
 		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
@@ -93,38 +100,25 @@ public class GroupDataService {
 		result.alterToWorkingVersion();
 		Logging.debug(this, "getHostGroups rebuilt" + result);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, result);
-		return result;
 	}
 
-	// returns the function that yields for a given clientId all groups to which the
-	// client belongs
-	public Map<String, Set<String>> getFObject2GroupsPD() {
-		Map<String, Set<String>> fObject2Groups = cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS,
-				Map.class);
-		if (fObject2Groups == null) {
-			Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
-					new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-					ClientTree.getTranslationsFromPersistentNames());
-			fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
-			cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
-		}
-		return fObject2Groups;
+	public Map<String, Set<String>> getFProductGroup2Members() {
+		retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId",
+				CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS);
+		return cacheManager.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
 	}
 
-	public Map<String, Set<String>> getFGroup2MembersPD() {
-		Map<String, Set<String>> fGroup2Members = cacheManager.getCachedData(CacheIdentifier.FGROUP_TO_MEMBERS,
-				Map.class);
-		if (fGroup2Members == null) {
-			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
-			cacheManager.setCachedData(CacheIdentifier.FGROUP_TO_MEMBERS, fGroup2Members);
-		}
-		return fGroup2Members;
+	public Map<String, Set<String>> getFHostGroup2MembersPD() {
+		retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId", CacheIdentifier.FGROUP_TO_MEMBERS);
+		return cacheManager.getCachedData(CacheIdentifier.FGROUP_TO_MEMBERS, Map.class);
 	}
 
 	// returns the function that yields for a given groupId all objects which belong
 	// to the group
-	public Map<String, Set<String>> retrieveFGroup2Members(String groupType, String memberIdName) {
+	public void retrieveFGroup2Members(String groupType, String memberIdName, CacheIdentifier cacheId) {
+		if (cacheManager.getCachedData(cacheId, Map.class) != null) {
+			return;
+		}
 		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("groupType", groupType);
@@ -132,7 +126,26 @@ public class GroupDataService {
 				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
 						new Object[] { callAttributes, callFilter }),
 				"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
-		return projectToFunction(mappedRelations, "groupId", memberIdName);
+		cacheManager.setCachedData(cacheId, projectToFunction(mappedRelations, "groupId", memberIdName));
+	}
+
+	// returns the function that yields for a given clientId all groups to which the
+	// client belongs
+	public Map<String, Set<String>> getFObject2GroupsPD() {
+		retrieveFObject2GroupsPD();
+		return cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class);
+	}
+
+	public void retrieveFObject2GroupsPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null) {
+			return;
+		}
+		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
+				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
+				new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
+				ClientTree.getTranslationsFromPersistentNames());
+		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
+		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
 	}
 
 	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
@@ -156,16 +169,6 @@ public class GroupDataService {
 		Set<String> groups = getHostGroupsPD().keySet();
 		groups.remove(ClientTree.DIRECTORY_NAME);
 		return new ArrayList<>(groups);
-	}
-
-	public Map<String, Set<String>> getFProductGroup2Members() {
-		Map<String, Set<String>> fProductGroup2Members = cacheManager
-				.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
-		if (fProductGroup2Members == null) {
-			fProductGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
-			cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, fProductGroup2Members);
-		}
-		return fProductGroup2Members;
 	}
 
 	public boolean addHosts2Group(List<String> objectIds, String groupId) {

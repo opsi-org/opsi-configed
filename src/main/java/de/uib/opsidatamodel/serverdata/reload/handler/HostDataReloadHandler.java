@@ -1,5 +1,6 @@
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
+import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
@@ -36,12 +37,13 @@ public class HostDataReloadHandler implements ReloadHandler {
 		configDataService.retrieveHostConfigsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
-		groupDataService.getHostGroupsPD();
+		groupDataService.retrieveHostGroupsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
-		groupDataService.getFObject2GroupsPD();
+		groupDataService.retrieveFObject2GroupsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.FGROUP_TO_MEMBERS);
-		groupDataService.getFGroup2MembersPD();
+		groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
+				CacheIdentifier.FGROUP_TO_MEMBERS);
 	}
 }

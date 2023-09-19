@@ -821,8 +821,8 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getProductDataService().getProductIdsPD();
 
 		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
-		persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
-		persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts();
+		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsNetbootProducts();
+		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsLocalbootProducts();
 
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();

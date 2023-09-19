@@ -961,11 +961,11 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, LicenceStatisticsRow> getLicenceStatistics() {
-		return produceLicenceStatisticsPD();
+		return retrieveLicenceStatisticsPD();
 	}
 
 	// poolId -> LicenceStatisticsRow
-	public Map<String, LicenceStatisticsRow> produceLicenceStatisticsPD() {
+	public Map<String, LicenceStatisticsRow> retrieveLicenceStatisticsPD() {
 		// side effects of this method: rowsLicencesReconciliation
 		Logging.info(this, "produceLicenceStatistics === ");
 

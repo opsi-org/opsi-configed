@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
@@ -41,11 +42,12 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		});
 		eventHandlers.put(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
-			hardwareDataService.getHardwareOnClientPD();
+			hardwareDataService.retrieveHardwareOnClientPD();
 		});
 		eventHandlers.put(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
-			groupDataService.getFGroup2MembersPD();
+			groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
+					CacheIdentifier.FGROUP_TO_MEMBERS);
 		});
 		eventHandlers.put(CacheIdentifier.HOST_INFO_COLLECTIONS.toString(),
 				(Void v) -> hostDataService.getHostInfoCollectionsPD().opsiHostsRequestRefresh());
@@ -53,7 +55,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS));
 		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
-			groupDataService.getHostGroupsPD();
+			groupDataService.retrieveHostGroupsPD();
 		});
 		eventHandlers.put(CacheIdentifier.HOST_CONFIGS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);

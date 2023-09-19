@@ -73,24 +73,27 @@ public class HardwareDataService {
 	}
 
 	public List<Map<String, Object>> getHardwareOnClientPD() {
-		List<Map<String, Object>> relationsAuditHardwareOnHost = cacheManager
-				.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class);
-		if (relationsAuditHardwareOnHost == null) {
-			Map<String, String> filterMap = new HashMap<>();
-			filterMap.put("state", "1");
-			relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
-					RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
-			cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
+		retrieveHardwareOnClientPD();
+		return cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class);
+	}
+
+	public void retrieveHardwareOnClientPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class) != null) {
+			return;
 		}
-		return relationsAuditHardwareOnHost;
+		Map<String, String> filterMap = new HashMap<>();
+		filterMap.put("state", "1");
+		List<Map<String, Object>> relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
+		cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
 	}
 
 	public Map<String, OpsiHwAuditDeviceClass> getHwAuditDeviceClassesPD() {
-		produceHwAuditDeviceClassesPD();
+		retrieveHwAuditDeviceClassesPD();
 		return cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
 	}
 
-	public void produceHwAuditDeviceClassesPD() {
+	public void retrieveHwAuditDeviceClassesPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class) != null) {
 			return;
 		}
@@ -182,14 +185,14 @@ public class HardwareDataService {
 	}
 
 	public List<String> getAllHwClassNamesPD() {
-		produceHwClassesPD(getOpsiHWAuditConfPD());
+		retrieveHwClassesPD(getOpsiHWAuditConfPD());
 		List<String> opsiHwClassNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class);
 		Logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
 		return opsiHwClassNames;
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	public List<String> produceHwClassesPD(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
+	public List<String> retrieveHwClassesPD(Iterable<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class) != null) {
 			return new ArrayList<>();
 		}

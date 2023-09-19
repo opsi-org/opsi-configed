@@ -34,7 +34,7 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		hardwareDataService.getOpsiHWAuditConfPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES);
-		hardwareDataService.produceHwAuditDeviceClassesPD();
+		hardwareDataService.retrieveHwAuditDeviceClassesPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HOST_COLUMN_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES);
@@ -43,7 +43,7 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		hardwareDataService.retrieveClient2HwRowsColumnNamesPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES);
-		hardwareDataService.produceHwClassesPD(hardwareDataService.getOpsiHWAuditConfPD());
+		hardwareDataService.retrieveHwClassesPD(hardwareDataService.getOpsiHWAuditConfPD());
 
 		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
 		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);

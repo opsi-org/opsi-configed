@@ -26,10 +26,10 @@ public class OpsiLicenseReloadHandler implements ReloadHandler {
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN);
-		moduleDataService.getOpsiLicensingInfoOpsiAdminPD();
+		moduleDataService.retrieveOpsiLicensingInfoOpsiAdminPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN);
-		moduleDataService.getOpsiLicensingInfoNoOpsiAdminPD();
+		moduleDataService.retrieveOpsiLicensingInfoNoOpsiAdminPD();
 
 		LicensingInfoMap.requestRefresh();
 	}

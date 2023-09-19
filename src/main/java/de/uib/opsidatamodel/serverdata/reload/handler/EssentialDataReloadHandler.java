@@ -6,6 +6,7 @@
 
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
+import de.uib.configed.type.Object2GroupEntry;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -83,7 +84,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES);
-		hardwareDataService.produceHwClassesPD(hardwareDataService
+		hardwareDataService.retrieveHwClassesPD(hardwareDataService
 				.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry()));
 
 		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
@@ -94,7 +95,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		configDataService.retrieveConfigOptionsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
-		groupDataService.getProductGroupsPD();
+		groupDataService.retrieveProductGroupsPD();
 
 		hostDataService.getHostInfoCollectionsPD().opsiHostsRequestRefresh();
 
@@ -102,10 +103,11 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		configDataService.retrieveHostConfigsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
-		groupDataService.getFObject2GroupsPD();
+		groupDataService.retrieveFObject2GroupsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS);
-		groupDataService.getFProductGroup2Members();
+		groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId",
+				CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS);
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN);
 		configDataService.retrieveOpsiDefaultDomainPD();
@@ -118,7 +120,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		productDataService.getProductIdsPD();
+		productDataService.retrieveProductIdsAndDefaultStatesPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
@@ -141,14 +143,14 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		productDataService.retrieveAllProductDependenciesPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS);
-		hostDataService.getHostDisplayFields();
+		hostDataService.retrieveHostDisplayFields();
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS);
-		productDataService.getProductOnClientsDisplayFieldsLocalbootProducts();
+		productDataService.retrieveProductOnClientsDisplayFieldsLocalbootProducts();
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS);
-		productDataService.getProductOnClientsDisplayFieldsNetbootProducts();
+		productDataService.retrieveProductOnClientsDisplayFieldsNetbootProducts();
 
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
-		hardwareDataService.getHardwareOnClientPD();
+		hardwareDataService.retrieveHardwareOnClientPD();
 	}
 }
