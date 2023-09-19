@@ -41,9 +41,6 @@ public class IconButton extends JButton {
 	 */
 	private Icon defaultIcon;
 
-	/** Running action icon */
-	private Icon runningActionIcon;
-
 	/** A description used for tooltips anyway */
 	private String description;
 
@@ -216,20 +213,6 @@ public class IconButton extends JButton {
 	 */
 	public Icon getDefaultIcon() {
 		return defaultIcon;
-	}
-
-	/**
-	 * set the running action icon as internal value by location
-	 */
-	public void setRunningActionIcon(String desc) {
-		runningActionIcon = Utils.createImageIcon(desc, "");
-	}
-
-	/**
-	 * gets it
-	 */
-	public Icon getRunningActionIcon() {
-		return runningActionIcon;
 	}
 
 	/**
