@@ -77,6 +77,10 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		this.groupDataService = groupDataService;
 	}
 
+	public void setLicenseDataService(LicenseDataService licenseDataService) {
+		this.licenseDataService = licenseDataService;
+	}
+
 	@Override
 	public void handle(String event) {
 		eventHandlers.get(event).accept(null);

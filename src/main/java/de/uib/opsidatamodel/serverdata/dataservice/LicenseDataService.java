@@ -137,8 +137,7 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicencesPD() {
-		if (!moduleDataService.isWithLicenceManagementPD()
-				&& cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class) != null) {
+		if (cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class) != null) {
 			return;
 		}
 		Map<String, LicenceEntry> licences = new HashMap<>();
@@ -346,7 +345,6 @@ public class LicenseDataService {
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
 		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
 		if (moduleDataService.isWithLicenceManagementPD()) {
-			getLicencePoolXOpsiProductPD();
 			Logging.info(this, "licencePoolXOpsiProduct size " + getLicencePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicencePoolXOpsiProductPD()) {
 				rowsLicencePoolXOpsiProduct
@@ -365,7 +363,7 @@ public class LicenseDataService {
 
 	public void retrieveLicencePoolXOpsiProductPD() {
 		if (cacheManager.getCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT,
-				LicencePoolXOpsiProduct.class) == null) {
+				LicencePoolXOpsiProduct.class) != null) {
 			return;
 		}
 		Logging.info(this, "retrieveLicencePoolXOpsiProduct");

@@ -273,6 +273,8 @@ public class OpsiServiceNOMPersistenceController {
 		productDataService.setHostDataService(hostDataService);
 		softwareDataService.setHostDataService(hostDataService);
 		softwareDataService.setModuleDataService(moduleDataService);
+		softwareDataService.setLicenseDataService(licenseDataService);
+		softwareDataService.setConfigDataService(configDataService);
 		sshCommandDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setConfigDataService(configDataService);
 
@@ -417,6 +419,8 @@ public class OpsiServiceNOMPersistenceController {
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
 		defaultDataReloadHandler.setHostDataService(hostDataService);
+		defaultDataReloadHandler.setConfigDataService(configDataService);
+		defaultDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);

@@ -83,6 +83,7 @@ public class SoftwareDataService {
 	private HostDataService hostDataService;
 	private ModuleDataService moduleDataService;
 	private ConfigDataService configDataService;
+	private LicenseDataService licenseDataService;
 
 	public SoftwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
@@ -100,6 +101,10 @@ public class SoftwareDataService {
 
 	public void setModuleDataService(ModuleDataService moduleDataService) {
 		this.moduleDataService = moduleDataService;
+	}
+
+	public void setLicenseDataService(LicenseDataService licenseDataService) {
+		this.licenseDataService = licenseDataService;
 	}
 
 	public NavigableSet<Object> getSoftwareWithoutAssociatedLicencePoolPD() {
@@ -975,8 +980,7 @@ public class SoftwareDataService {
 		Map<String, Set<String>> swId2clients = getSoftwareIdent2clientsPD(opsiHostNames);
 
 		if (Boolean.TRUE.equals(moduleDataService.isWithLicenceManagementPD())) {
-			Map<String, LicencepoolEntry> licencePools = cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS,
-					Map.class);
+			Map<String, LicencepoolEntry> licencePools = licenseDataService.getLicencepoolsPD();
 
 			Map<String, Map<String, Object>> rowsLicencesReconciliation = cacheManager
 					.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
@@ -1056,20 +1060,18 @@ public class SoftwareDataService {
 		// ------------------ retrieve data for statistics
 
 		// table LICENSE_POOL
-		Map<String, LicencepoolEntry> licencePools = cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS,
-				Map.class);
+		Map<String, LicencepoolEntry> licencePools = licenseDataService.getLicencepoolsPD();
 
 		// table SOFTWARE_LICENSE
 		Logging.info(this, " licences ");
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
 		Logging.info(this, " licence usabilities ");
-		List<LicenceUsableForEntry> licenceUsabilities = cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES,
-				List.class);
+		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenceUsabilitiesPD();
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " licence usages ");
-		List<LicenceUsageEntry> licenceUsages = cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class);
+		List<LicenceUsageEntry> licenceUsages = licenseDataService.getLicenceUsagesPD();
 
 		// software usage according to audit
 		// tables
@@ -1088,7 +1090,7 @@ public class SoftwareDataService {
 			// value up this step
 			ExtendedInteger count = pool2allowedUsagesCount.get(pool);
 
-			Map<String, LicenceEntry> licences = cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class);
+			Map<String, LicenceEntry> licences = licenseDataService.getLicencesPD();
 
 			// not yet initialized
 			if (count == null) {
