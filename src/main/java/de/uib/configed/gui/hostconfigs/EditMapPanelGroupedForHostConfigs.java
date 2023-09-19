@@ -482,6 +482,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			return;
 		}
 
+		if ("".equals(s)) {
+			s = Configed.getResourceValue("HostConfigTreeModel.noClientsSelected");
+			tree.collapseRow(0);
+		}
+
 		treemodel.setRootLabel(s);
 	}
 
