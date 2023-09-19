@@ -76,7 +76,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	private String actualProduct = "";
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
 	protected List<String> productsV;
 
@@ -117,7 +117,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
+	public InstallationStateTableModel(String[] selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
@@ -128,7 +128,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.info(this.getClass(), " statesAndActions " + statesAndActions.size());
 		}
 
-		this.main = main;
+		this.configedMain = configedMain;
 
 		this.collectChangedStates = collectChangedStates;
 		this.selectedClients = selectedClients;
@@ -673,7 +673,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		changedStatesForProduct.put(stateType, state);
 
-		main.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private String getChangedState(String clientId, String product, String stateType) {
@@ -1323,7 +1323,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				Logging.warning(this, "unexpected indexPreparedColumns[col] " + indexPreparedColumns[col]);
 			}
 
-			main.getGeneralDataChangedKeeper().dataHaveChanged(this);
+			configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
 		}
 	}
 }

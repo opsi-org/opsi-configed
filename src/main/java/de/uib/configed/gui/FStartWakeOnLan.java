@@ -78,12 +78,12 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	private String scheduleTitle;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public FStartWakeOnLan(String title, ConfigedMain main) {
+	public FStartWakeOnLan(String title, ConfigedMain configedMain) {
 		super(null, title, false, new String[] { Configed.getResourceValue("FStartWakeOnLan.cancel"),
 				Configed.getResourceValue("FStartWakeOnLan.start") }, 750, 310);
-		this.main = main;
+		this.configedMain = configedMain;
 
 		setCalToNow();
 		super.setLocationRelativeTo(Utils.getMasterFrame());
@@ -103,13 +103,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 				.getPersistenceController();
 
 		Map<String, List<String>> hostSeparationByDepots = persistenceController
-				.getHostSeparationByDepots(main.getSelectedClients());
+				.getHostSeparationByDepots(configedMain.getSelectedClients());
 		Set<String> usedDepots = hostSeparationByDepots.keySet();
-		currentlySelectedClients = main.getSelectedClients();
+		currentlySelectedClients = configedMain.getSelectedClients();
 
 		int clientCount;
-		if (main.getSelectedClients() != null) {
-			clientCount = main.getSelectedClients().length;
+		if (configedMain.getSelectedClients() != null) {
+			clientCount = configedMain.getSelectedClients().length;
 		} else {
 			clientCount = 0;
 		}
@@ -429,9 +429,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		waitingMode = false;
 
 		if (spinnerDelay.getValue() == nullDelayValue) {
-			main.wakeUp(currentlySelectedClients, scheduleTitle);
+			configedMain.wakeUp(currentlySelectedClients, scheduleTitle);
 		} else {
-			main.wakeUpWithDelay(labelledDelays.get(spinnerDelay.getValue()), currentlySelectedClients, scheduleTitle);
+			configedMain.wakeUpWithDelay(labelledDelays.get(spinnerDelay.getValue()), currentlySelectedClients,
+					scheduleTitle);
 		}
 
 		leave();

@@ -49,14 +49,14 @@ public class FGroupActions extends SecondaryFrame {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
 	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 
-	public FGroupActions(ConfigedMain main) {
+	public FGroupActions(ConfigedMain configedMain) {
 		super();
 
-		this.main = main;
+		this.configedMain = configedMain;
 
 		define();
 		reload();
@@ -90,10 +90,10 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void reload() {
-		setGroupLabelling(main.getActivatedGroupModel().getLabel(),
-				"" + main.getActivatedGroupModel().getNumberOfClients());
+		setGroupLabelling(configedMain.getActivatedGroupModel().getLabel(),
+				"" + configedMain.getActivatedGroupModel().getNumberOfClients());
 
-		associatedClients = new ArrayList<>(main.getActivatedGroupModel().getAssociatedClients());
+		associatedClients = new ArrayList<>(configedMain.getActivatedGroupModel().getAssociatedClients());
 		setImages();
 	}
 
@@ -113,14 +113,15 @@ public class FGroupActions extends SecondaryFrame {
 
 		glassPane.activate(true);
 
-		persistenceController.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.setCommonProductPropertyValue(
+				configedMain.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.updateProductOnClients(configedMain.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 

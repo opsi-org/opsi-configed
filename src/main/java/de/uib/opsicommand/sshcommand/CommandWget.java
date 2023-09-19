@@ -159,7 +159,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	@Override
-	public void startParameterGui(ConfigedMain main) {
+	public void startParameterGui(ConfigedMain configedMain) {
 		dialog = new SSHWgetParameterDialog();
 	}
 

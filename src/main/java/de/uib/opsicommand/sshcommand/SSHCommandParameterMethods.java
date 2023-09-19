@@ -87,7 +87,7 @@ public final class SSHCommandParameterMethods {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private SSHCommandParameterMethods(ConfigedMain main) {
+	private SSHCommandParameterMethods(ConfigedMain configedMain) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
 		methods.put(METHOD_GET_SELECTED_CLIENT_NAMES, "getSelectedClientNames");
 		methods.put(METHOD_GET_SELECTED_CLIENT_IPS, "getSelectedClientIPs");
@@ -97,16 +97,16 @@ public final class SSHCommandParameterMethods {
 		methods.put(METHOD_GET_CONNECTED_SSH_SERVER_NAME, "getConnectedSSHServerName");
 		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
 
-		this.configedMain = main;
+		this.configedMain = configedMain;
 		instance = this;
 		init();
 	}
 
-	public static SSHCommandParameterMethods getInstance(ConfigedMain m) {
+	public static SSHCommandParameterMethods getInstance(ConfigedMain configedMain) {
 		if (instance != null) {
 			return instance;
 		} else {
-			return new SSHCommandParameterMethods(m);
+			return new SSHCommandParameterMethods(configedMain);
 		}
 	}
 

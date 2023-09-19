@@ -38,7 +38,7 @@ public class CommandRepositoryUpload extends CommandSFTPUpload {
 	}
 
 	@Override
-	public void startParameterGui(ConfigedMain main) {
+	public void startParameterGui(ConfigedMain configedMain) {
 
 		dialog = new SSHRepositoryUploadDialog();
 	}

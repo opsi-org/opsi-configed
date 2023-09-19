@@ -69,7 +69,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -98,9 +98,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
-	public ControlPanelAssignToLPools(ConfigedMain mainController) {
+	public ControlPanelAssignToLPools(ConfigedMain configedMain) {
 		thePanel = new PanelAssignToLPools(this);
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		init();
 	}
 
@@ -415,7 +415,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
 				columnNames, 0);
-		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
+		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, configedMain.licencePoolTableProvider, 0,
 				thePanel.getPanelLicencepools(), updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
 
@@ -505,8 +505,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			comboLP0.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
-			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
-					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+			List<String> poolIds = configedMain.licencePoolTableProvider.getOrderedColumn(
+					configedMain.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
 			if (poolIds.size() <= 1) {
 				poolIds.add("");
@@ -698,8 +698,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private String updateLicencepool(Map<String, Object> rowmap) {
 		// hack for avoiding unvoluntary reuse of a licence pool id
-		boolean existsNewRow = mainController.licencePoolTableProvider.getRows().size() < modelLicencepools
-				.getRowCount();
+		boolean existsNewRow = configedMain.licencePoolTableProvider.getRows().size() < modelLicencepools.getRowCount();
 
 		if (existsNewRow && persistenceController.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
 			// but we leave it until the service methods reflect the situation more

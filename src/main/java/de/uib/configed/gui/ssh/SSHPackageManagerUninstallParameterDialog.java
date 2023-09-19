@@ -68,13 +68,13 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
-	public SSHPackageManagerUninstallParameterDialog(ConfigedMain m) {
+	public SSHPackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
 		super(Globals.APPNAME + "  "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
 		frameWidth = 850;
 		frameHeight = 350;
 
-		configedMain = m;
+		this.configedMain = configedMain;
 
 		fDepotList = new FDepotselectionList(this) {
 			@Override

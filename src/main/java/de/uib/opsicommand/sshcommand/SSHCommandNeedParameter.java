@@ -11,7 +11,7 @@ import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
 public interface SSHCommandNeedParameter {
 
-	void startParameterGui(ConfigedMain main);
+	void startParameterGui(ConfigedMain configedMain);
 
 	SSHConnectionExecDialog startHelpDialog();
 

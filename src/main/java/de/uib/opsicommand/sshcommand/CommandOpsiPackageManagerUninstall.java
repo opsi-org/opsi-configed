@@ -60,8 +60,8 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	@Override
-	public void startParameterGui(ConfigedMain main) {
-		dialog = new SSHPackageManagerUninstallParameterDialog(main);
+	public void startParameterGui(ConfigedMain configedMain) {
+		dialog = new SSHPackageManagerUninstallParameterDialog(configedMain);
 	}
 
 	@Override

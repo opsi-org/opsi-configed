@@ -49,13 +49,13 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
 
-	public ControlPanelEditLicences(ConfigedMain mainController) {
+	public ControlPanelEditLicences(ConfigedMain configedMain) {
 
 		// extending TabClientAdapter
 		thePanel = new PanelEditLicences(this);
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		init();
 	}
 
@@ -84,8 +84,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		columnNames.add("licenseKey");
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
 				columnNames, 0);
-		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, mainController.licenceOptionsTableProvider,
-				-1, new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection);
+		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
+				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
 
 		tableModels.add(modelLicencekeys);
@@ -119,8 +119,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
-					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+			List<String> poolIds = configedMain.licencePoolTableProvider.getOrderedColumn(
+					configedMain.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
 			if (poolIds.size() <= 1) {
 				poolIds.add("");
@@ -164,7 +164,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactorySoftwarelicences = new MapTableUpdateItemFactory(
 				modelSoftwarelicences, columnNames, 0);
 		modelSoftwarelicences = new GenTableModel(updateItemFactorySoftwarelicences,
-				mainController.softwarelicencesTableProvider, 0, thePanel.getPanelSoftwarelicences(), updateCollection);
+				configedMain.softwarelicencesTableProvider, 0, thePanel.getPanelSoftwarelicences(), updateCollection);
 		updateItemFactorySoftwarelicences.setSource(modelSoftwarelicences);
 
 		tableModels.add(modelSoftwarelicences);
@@ -192,7 +192,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
-					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+					.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()))
 							.keySet());
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
@@ -246,7 +246,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		columnNames.add("notes");
 		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames, 0);
 		modelLicencecontracts = new GenTableModel(updateItemFactoryLicencecontracts,
-				mainController.licenceContractsTableProvider, 0, thePanel.getPanelLicencecontracts(), updateCollection);
+				configedMain.licenceContractsTableProvider, 0, thePanel.getPanelLicencecontracts(), updateCollection);
 		updateItemFactoryLicencecontracts.setSource(modelLicencecontracts);
 
 		tableModels.add(modelLicencecontracts);
@@ -356,21 +356,21 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			}
 		}
 		if (keyNew) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelSoftwarelicences().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelKeys().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -406,21 +406,21 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			}
 		}
 		if (keyNew) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelLicencecontracts().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelSoftwarelicences().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;

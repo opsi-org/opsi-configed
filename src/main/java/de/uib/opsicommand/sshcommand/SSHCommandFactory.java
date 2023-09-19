@@ -137,10 +137,10 @@ public final class SSHCommandFactory {
 	/**
 	 * Factory Instance for SSH Command
 	 * 
-	 * @param main {@link de.uib.configed.ConfigedMain} class
+	 * @param configedMain {@link de.uib.configed.ConfigedMain} class
 	 **/
-	private SSHCommandFactory(ConfigedMain main) {
-		this.configedMain = main;
+	private SSHCommandFactory(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		Logging.info(this.getClass(), "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
@@ -154,11 +154,11 @@ public final class SSHCommandFactory {
 	 * @param configedMain {@link de.uib.configed.ConfigedMain} class
 	 * @return SSHCommandFactory instance
 	 **/
-	public static SSHCommandFactory getInstance(ConfigedMain m) {
+	public static SSHCommandFactory getInstance(ConfigedMain configedMain) {
 		if (instance != null) {
 			return instance;
 		} else {
-			return new SSHCommandFactory(m);
+			return new SSHCommandFactory(configedMain);
 		}
 	}
 

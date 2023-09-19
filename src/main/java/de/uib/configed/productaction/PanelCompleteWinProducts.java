@@ -81,10 +81,10 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	private ConfigedMain configedMain;
 	private SecondaryFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain main, SecondaryFrame rootFrame) {
-		this.configedMain = main;
+	public PanelCompleteWinProducts(ConfigedMain configedMain, SecondaryFrame rootFrame) {
+		this.configedMain = configedMain;
 		this.rootFrame = rootFrame;
-		server = main.getConfigserver();
+		server = configedMain.getConfigserver();
 
 		defineChoosers();
 		initComponentsForNameProducer();
