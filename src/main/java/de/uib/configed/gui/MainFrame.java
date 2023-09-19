@@ -1331,14 +1331,10 @@ public class MainFrame extends JFrame
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
 				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
 
-		String[] waitingCircle = new String[] { "images/systemusers_sessioninfo_activitycircle/loading_01.png",
-				"images/systemusers_sessioninfo_activitycircle/loading_02.png" };
-
 		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
-				"images/system-users-query_over.png", waitingCircle,
-
-				500, configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+				"images/system-users-query_over.png",
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setEnabled(true);
 
 		iconButtonToggleClientFilter = new IconButton(

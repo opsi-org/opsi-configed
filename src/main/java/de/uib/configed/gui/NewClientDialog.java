@@ -92,7 +92,6 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		jButton2.setDefaultIcon("images/client_small.png");
 		jButton2.setIcon(jButton2.getDefaultIcon());
-		jButton2.setRunningActionIcon("images/waitingcircle_16.png");
 
 		this.depots = depots;
 
@@ -875,8 +874,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	@Override
 	protected void preAction2() {
 		super.preAction2();
-		jButton2.setIcon(jButton2.getRunningActionIcon());
-
 	}
 
 	@Override
