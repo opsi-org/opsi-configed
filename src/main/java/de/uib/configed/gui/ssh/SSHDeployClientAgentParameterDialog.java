@@ -86,9 +86,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SSHDeployClientAgentParameterDialog(ConfigedMain m) {
+	public SSHDeployClientAgentParameterDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
-		configedMain = m;
+		this.configedMain = configedMain;
 		getDefaultAuthData();
 
 		init();

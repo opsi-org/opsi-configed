@@ -185,8 +185,8 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	@Override
-	public void startParameterGui(ConfigedMain main) {
-		dialog = new SSHDeployClientAgentParameterDialog(main);
+	public void startParameterGui(ConfigedMain configedMain) {
+		dialog = new SSHDeployClientAgentParameterDialog(configedMain);
 	}
 
 	@Override

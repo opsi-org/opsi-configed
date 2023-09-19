@@ -41,15 +41,15 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	private JRadioButton jRadioButtonWGet;
 	private String fromMakeProductfile;
 
-	public SSHPackageManagerInstallParameterDialog(ConfigedMain m) {
-		this(m, "");
+	public SSHPackageManagerInstallParameterDialog(ConfigedMain configedMain) {
+		this(configedMain, "");
 	}
 
-	public SSHPackageManagerInstallParameterDialog(ConfigedMain m, String fullPathToPackage) {
+	public SSHPackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
 		super(Globals.APPNAME + "  "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
 
-		configedMain = m;
+		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;
 		super.initButtons(this);
 		installLocalPanel = new SSHPMInstallLocalPanel();

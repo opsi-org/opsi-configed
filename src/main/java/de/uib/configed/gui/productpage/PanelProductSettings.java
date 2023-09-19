@@ -151,12 +151,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private ProductgroupPanel groupPanel;
 
-	protected ConfigedMain mainController;
+	protected ConfigedMain configedMain;
 
-	public PanelProductSettings(String title, ConfigedMain mainController, Map<String, Boolean> productDisplayFields) {
+	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		this.productDisplayFields = productDisplayFields;
 		init();
 
@@ -168,7 +168,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			Logging.error(this, " tableProducts == null ");
 			Main.endApp(Main.NO_ERROR);
 		}
-		topPane = new ProductgroupPanel(this, mainController, tableProducts);
+		topPane = new ProductgroupPanel(this, configedMain, tableProducts);
 		topPane.setVisible(true);
 		groupPanel = (ProductgroupPanel) topPane;
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
@@ -354,8 +354,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
-		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
+		((EditMapPanelX) propertiesPanel)
+				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
+		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
 			public void reloadData() {
@@ -376,13 +377,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			}
 		});
 
-		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(mainController,
-				propertiesPanel);
+		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
 		propertiesPanel.registerDataChangedObserver(infoPane);
 
-		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
+		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
 
@@ -468,8 +468,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		save.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save-menue");
-			mainController.checkSaveAll(false);
-			mainController.requestReloadStatesAndActions();
+			configedMain.checkSaveAll(false);
+			configedMain.requestReloadStatesAndActions();
 		});
 
 		popup.add(save);
@@ -481,7 +481,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
-		itemOnDemand.addActionListener((ActionEvent e) -> mainController.fireOpsiclientdEventOnSelectedClients(
+		itemOnDemand.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(
 				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
@@ -554,8 +554,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			item.addItemListener((ItemEvent e) -> {
 				boolean oldstate = checkColumns.get(columnName);
 				checkColumns.put(columnName, !oldstate);
-				mainController.requestReloadStatesAndActions();
-				mainController.resetView(mainController.getViewIndex());
+				configedMain.requestReloadStatesAndActions();
+				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
@@ -573,11 +573,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		metaData.put("header", title);
 		metaData.put("subject", title);
 		title = "";
-		if (mainController.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot : " + mainController.getHostsStatusInfo().getInvolvedDepots();
+		if (configedMain.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot : " + configedMain.getHostsStatusInfo().getInvolvedDepots();
 		}
-		if (mainController.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Clients: " + mainController.getHostsStatusInfo().getSelectedClientNames();
+		if (configedMain.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Clients: " + configedMain.getHostsStatusInfo().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
@@ -608,7 +608,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
 			Logging.debug(this, "selected  value at "
 					+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-			mainController.setProductEdited(
+			configedMain.setProductEdited(
 					(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 		}
 	}
@@ -681,19 +681,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected void reloadAction() {
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 
-		mainController.requestReloadStatesAndActions();
-		mainController.resetView(mainController.getViewIndex());
-		mainController.setDataChanged(false);
+		configedMain.requestReloadStatesAndActions();
+		configedMain.resetView(configedMain.getViewIndex());
+		configedMain.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	protected void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
-		mainController.checkSaveAll(false);
-		mainController.requestReloadStatesAndActions();
+		configedMain.checkSaveAll(false);
+		configedMain.requestReloadStatesAndActions();
 
-		mainController.fireOpsiclientdEventOnSelectedClients(
+		configedMain.fireOpsiclientdEventOnSelectedClients(
 				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 	}

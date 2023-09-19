@@ -33,12 +33,12 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private int[] filterInverse;
 
-	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
+	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
-		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
-				productGlobalInfos, displayColumns);
+		super(selectedClients, configedMain, collectChangedStates, listOfInstallableProducts, statesAndActions,
+				possibleActions, productGlobalInfos, displayColumns);
 
 		this.savedStateObjTag = savedStateObjTag;
 	}

@@ -66,11 +66,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private SecondaryFrame rootFrame;
 
-	public PanelInstallOpsiPackage(ConfigedMain main, SecondaryFrame rootFrame) {
-		this.main = main;
+	public PanelInstallOpsiPackage(ConfigedMain configedMain, SecondaryFrame rootFrame) {
+		this.configedMain = configedMain;
 		this.rootFrame = rootFrame;
 
 		isWindows = Utils.isWindows();
@@ -227,7 +227,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
 
 		// as long as we did not implement contacting a different depot
 		comboChooseDepot.setEnabled(false);

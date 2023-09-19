@@ -57,13 +57,13 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JButton jButtonToPackageManager;
 	private JButton jButtonExec;
 	private String filename;
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private boolean isAdvancedOpen = true;
 	private SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 
-	public SSHMakeProductFileDialog(ConfigedMain m) {
+	public SSHMakeProductFileDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
-		main = m;
+		this.configedMain = configedMain;
 		initGUI();
 
 		filename = "";
@@ -235,8 +235,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
-				if (main != null) {
-					new SSHPackageManagerInstallParameterDialog(main, filename);
+				if (configedMain != null) {
+					new SSHPackageManagerInstallParameterDialog(configedMain, filename);
 				}
 			});
 		}

@@ -27,8 +27,8 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private JPanel titlePanel;
 
-	public PanelEditClientProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
-		super(mainController, productPropertiesPanel);
+	public PanelEditClientProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
+		super(configedMain, productPropertiesPanel);
 		initComponents();
 		initTitlePanel();
 	}

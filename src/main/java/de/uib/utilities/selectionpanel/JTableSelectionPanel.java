@@ -76,7 +76,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	private JTable table;
 
 	private DefaultListSelectionModel selectionmodel;
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
 	private CheckedLabel checkmarkSearch;
@@ -97,9 +97,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private int lastCountOfSearchWords;
 
-	public JTableSelectionPanel(ConfigedMain main) {
+	public JTableSelectionPanel(ConfigedMain configedMain) {
 		super();
-		this.main = main;
+		this.configedMain = configedMain;
 		initComponents();
 		setupLayout();
 	}
@@ -138,7 +138,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setColumnSelectionAllowed(false);
 		// true destroys setSelectedRow etc
 
-		addListSelectionListener(main);
+		addListSelectionListener(configedMain);
 
 		table.addKeyListener(this);
 
@@ -213,7 +213,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
-		buttonInvertSelection.addActionListener((ActionEvent e) -> main.invertClientselection());
+		buttonInvertSelection.addActionListener((ActionEvent e) -> configedMain.invertClientselection());
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
 
@@ -956,7 +956,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				searchTheNextRow();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
-			main.invertClientselection();
+			configedMain.invertClientselection();
 		} else {
 			// Do nothing on other keyPress events
 		}

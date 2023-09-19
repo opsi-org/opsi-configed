@@ -81,14 +81,14 @@ public final class NewClientDialog extends FGeneralDialog {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private NewClientDialog(ConfigedMain main, List<String> depots) {
+	private NewClientDialog(ConfigedMain configedMain, List<String> depots) {
 		super(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
 				new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 680);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
 		jButton2.setDefaultIcon("images/client_small.png");
 		jButton2.setIcon(jButton2.getDefaultIcon());
@@ -100,9 +100,9 @@ public final class NewClientDialog extends FGeneralDialog {
 		pack();
 	}
 
-	public static NewClientDialog getInstance(ConfigedMain main, List<String> depots) {
+	public static NewClientDialog getInstance(ConfigedMain configedMain, List<String> depots) {
 		if (instance == null) {
-			instance = new NewClientDialog(main, depots);
+			instance = new NewClientDialog(configedMain, depots);
 			instance.init();
 		} else {
 			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());

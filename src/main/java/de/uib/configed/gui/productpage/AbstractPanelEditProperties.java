@@ -21,9 +21,9 @@ public abstract class AbstractPanelEditProperties extends JPanel {
 
 	protected String productEdited;
 
-	protected AbstractPanelEditProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
+	protected AbstractPanelEditProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
 		super();
-		this.configedMain = mainController;
+		this.configedMain = configedMain;
 		this.productPropertiesPanel = productPropertiesPanel;
 	}
 

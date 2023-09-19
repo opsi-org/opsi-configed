@@ -39,18 +39,18 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
 
-	public ControlPanelLicencesUsage(ConfigedMain mainController) {
+	public ControlPanelLicencesUsage(ConfigedMain configedMain) {
 		thePanel = new PanelLicencesUsage(this);
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 
 		init();
 	}
 
 	public String getSoftwareLicenceReservation(String clientId) {
 		if (clientId == null || clientId.isEmpty()) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectClient"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -60,7 +60,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		List<String> selectedLPoolIds = thePanel.getPanelLicencePools().getSelectedKeys();
 
 		if (selectedLPoolIds == null || selectedLPoolIds.size() != 1) {
-			JOptionPane.showMessageDialog(mainController.getLicencesFrame(),
+			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectOneLicencepool"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -103,7 +103,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
-						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
+						.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients())
 						.keySet());
 
 				choicesAllHosts.set(0, "");
@@ -164,7 +164,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
 				columnNames, 0);
-		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
+		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, configedMain.licencePoolTableProvider, 0,
 				thePanel.getPanelLicencePools(), updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
 

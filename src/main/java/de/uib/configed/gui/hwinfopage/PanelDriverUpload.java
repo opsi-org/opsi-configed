@@ -174,14 +174,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private String server;
 	private SecondaryFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, SecondaryFrame root) {
-		this.main = main;
+	public PanelDriverUpload(ConfigedMain configedMain, SecondaryFrame root) {
+		this.configedMain = configedMain;
 		this.rootFrame = root;
-		server = main.getConfigserver();
+		server = configedMain.getConfigserver();
 
 		defineChoosers();
 
@@ -228,7 +228,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -335,7 +335,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		JButton btnCreateDrivers = new JButton("", Utils.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
+		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(configedMain,
 				// id not needed
 				new EmptyCommand("create_driver_links.py",
 						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
@@ -666,7 +666,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(main,
+				new SSHConnectExec(configedMain,
 						// Empty_Command(String id, String c, String mt, boolean ns)
 						// id not needed
 						new EmptyCommand("show_drivers.py",
