@@ -239,11 +239,10 @@ public class OpsiServiceNOMPersistenceController {
 		exec = new ServerFacade(server, user, password);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
-		groupDataService = new GroupDataService(exec);
+		groupDataService = new GroupDataService(exec, this);
 		hardwareDataService = new HardwareDataService(exec, this);
 		healthDataService = new HealthDataService(exec);
 		hostDataService = new HostDataService(exec);
-		groupDataService = new GroupDataService(exec);
 		licenseDataService = new LicenseDataService(exec);
 		logDataService = new LogDataService(exec);
 		moduleDataService = new ModuleDataService(exec);
@@ -425,6 +424,7 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_INFO_COLLECTIONS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString(),
 				defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {

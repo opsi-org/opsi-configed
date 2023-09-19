@@ -45,6 +45,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.datapanel.MapTableModel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -1557,9 +1558,9 @@ public class ConfigDataService {
 			if (!callsConfigDeleteCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
 						new Object[] { callsConfigDeleteCollection }));
-				// configOptionsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				// because of referential integrity
-				// hostConfigsRequestRefresh();
+				persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 			}
 
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
@@ -1567,7 +1568,7 @@ public class ConfigDataService {
 			if (!callsConfigUpdateCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
 						new Object[] { callsConfigUpdateCollection }));
-				// configOptionsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 			}
 
 			retrieveConfigOptionsPD();
@@ -1930,8 +1931,7 @@ public class ConfigDataService {
 			}
 
 			if (configsChanged) {
-				// configOptionsRequestRefresh();
-				retrieveConfigOptionsPD();
+				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 			}
 
 			// build calls

@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
@@ -19,6 +20,7 @@ import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 
 public class DefaultDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
+	private ConfigDataService configDataService;
 	private HardwareDataService hardwareDataService;
 	private HostDataService hostDataService;
 	private GroupDataService groupDataService;
@@ -49,6 +51,18 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 				(Void v) -> hostDataService.getHostInfoCollectionsPD().opsiHostsRequestRefresh());
 		eventHandlers.put(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString(),
 				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS));
+		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
+			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
+			groupDataService.getHostGroupsPD();
+		});
+		eventHandlers.put(CacheIdentifier.HOST_CONFIGS.toString(), (Void v) -> {
+			cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
+			configDataService.retrieveHostConfigsPD();
+		});
+	}
+
+	public void setConfigDataService(ConfigDataService configDataService) {
+		this.configDataService = configDataService;
 	}
 
 	public void setHardwareDataService(HardwareDataService hardwareDataService) {

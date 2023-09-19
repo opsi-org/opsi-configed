@@ -23,6 +23,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostGroups;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -46,10 +47,12 @@ public class GroupDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private ConfigDataService configDataService;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public GroupDataService(AbstractExecutioner exec) {
+	public GroupDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
+		this.persistenceController = persistenceController;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {
@@ -294,7 +297,7 @@ public class GroupDataService {
 				new Object[] { id, description, notes, parentId });
 		boolean result = exec.doCall(omc);
 		if (result) {
-			//hostGroupsRequestRefresh();
+			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
 		}
 
 		return result;
@@ -314,7 +317,7 @@ public class GroupDataService {
 		boolean result = exec.doCall(omc);
 
 		if (result) {
-			// hostGroupsRequestRefresh();
+			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
 		}
 
 		return result;

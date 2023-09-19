@@ -42,6 +42,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -291,8 +292,7 @@ public class SoftwareDataService {
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
-				// installedSoftwareInformationRequestRefresh();
-				retrieveInstalledSoftwareInformationPD();
+				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 				if (i > -1 && softwareList != null && softwareList.size() >= i + 1) {
 					infoFound = true;
 				}
