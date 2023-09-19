@@ -1910,7 +1910,7 @@ public class ConfigedMain implements ListSelectionListener {
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
 
-		persistenceController.reloadData(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString());
+		// persistenceController.reloadData(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString());
 
 		localbootStatesAndActionsUpdate = true;
 		netbootStatesAndActionsUpdate = true;

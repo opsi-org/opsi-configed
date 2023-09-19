@@ -30,7 +30,6 @@ public class InstalledSoftwareDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
 		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
-		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE);
 		softwareDataService.retrieveInstalledSoftwareInformationPD();
 	}
 }

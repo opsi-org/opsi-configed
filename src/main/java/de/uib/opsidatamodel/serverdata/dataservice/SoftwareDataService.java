@@ -262,12 +262,6 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getClient2SoftwarePD() {
-		Logging.info(this, "getClient2Software");
-		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class);
-	}
-
 	public List<String> getSoftwareListPD() {
 		retrieveInstalledSoftwareInformationPD();
 		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
@@ -281,6 +275,7 @@ public class SoftwareDataService {
 	public String getSWident(Integer i) {
 		Logging.debug(this, "getSWident for " + i);
 		retrieveInstalledSoftwareInformationPD();
+		String swIdent = null;
 		List<String> softwareList = cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
 		if (softwareList == null || softwareList.size() < i + 1 || i == -1) {
 			if (softwareList != null) {
@@ -298,17 +293,19 @@ public class SoftwareDataService {
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				// installedSoftwareInformationRequestRefresh();
 				retrieveInstalledSoftwareInformationPD();
-				if (i > -1 && softwareList.size() >= i + 1) {
+				if (i > -1 && softwareList != null && softwareList.size() >= i + 1) {
 					infoFound = true;
 				}
 			}
 
 			if (!infoFound) {
 				Logging.warning(this, "missing softwareList entry " + i + " " + softwareList);
-				return null;
+				swIdent = null;
 			}
+		} else {
+			swIdent = softwareList.get(i);
 		}
-		return softwareList.get(i);
+		return swIdent;
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
@@ -336,8 +333,6 @@ public class SoftwareDataService {
 		List<Map<String, Object>> li = exec.getListOfMaps(omc);
 		Iterator<Map<String, Object>> iter = li.iterator();
 
-		List<String> softwareList;
-		NavigableMap<String, Number> software2Number;
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
 		NavigableMap<String, Set<String>> name2SWIdents = new TreeMap<>();
@@ -349,17 +344,14 @@ public class SoftwareDataService {
 
 		while (iter.hasNext()) {
 			i++;
-			Map<String, Object> retrievedEntry = iter.next();
-
-			SWAuditEntry entry = new SWAuditEntry(retrievedEntry);
+			SWAuditEntry entry = new SWAuditEntry(iter.next());
 			String swName = entry.get(SWAuditEntry.NAME);
-
-			installedSoftwareInformation.put(entry.getIdent(), entry);
+			String swIdent = entry.getIdent();
+			installedSoftwareInformation.put(swIdent, entry);
 
 			boolean showForLicensing = true;
 			for (String marker : linuxSWnameMarkers) {
 				String version = entry.get(SWAuditEntry.VERSION);
-
 				if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
 					showForLicensing = false;
 					break;
@@ -367,9 +359,7 @@ public class SoftwareDataService {
 			}
 
 			if (showForLicensing && !linuxSubversionMarkers.isEmpty()) {
-
 				String subversion = entry.get(SWAuditEntry.SUB_VERSION);
-
 				for (String marker : linuxSubversionMarkers) {
 					if (subversion.startsWith(marker)) {
 						showForLicensing = false;
@@ -382,11 +372,9 @@ public class SoftwareDataService {
 				installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
 				Set<String> nameSWIdents = name2SWIdents.computeIfAbsent(swName, s -> new TreeSet<>());
-
 				nameSWIdents.add(entry.getIdent());
 
 				Map<String, String> identInfoRow = installedSoftwareName2SWinfo.get(swName);
-
 				String infoString = "";
 
 				if (identInfoRow == null) {
@@ -398,52 +386,37 @@ public class SoftwareDataService {
 				}
 
 				infoString = infoString + entry.getIdentReduced();
-
 				identInfoRow.put(SWAuditEntry.EXISTING_IDS, infoString);
-
 				installedSoftwareName2SWinfo.put(swName, identInfoRow);
 
 				Map<String, Map<String, String>> ident2infoWithPool = name2ident2infoWithPool.computeIfAbsent(swName,
 						s -> new TreeMap<>());
-
 				Map<String, String> infoWithPool = ident2infoWithPool.computeIfAbsent(entry.getIdent(),
 						s -> new LinkedHashMap<>());
-
-				String licencePoolAssigned = "x " + i;
-
 				infoWithPool.put(SWAuditEntry.ID, entry.getIdent());
-				infoWithPool.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolAssigned);
+				infoWithPool.put(LicencepoolEntry.ID_SERVICE_KEY, "x " + i);
 			}
-
-			softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
-
-			Logging.info(this,
-					"retrieveInstalledSoftwareInformation produced softwarelist with entries " + softwareList.size());
-
-			software2Number = new TreeMap<>();
-			for (String sw : softwareList) {
-				software2Number.put(sw, 0);
-			}
-			int n = 0;
-			for (String sw : software2Number.keySet()) {
-				if (sw.startsWith("NULL")) {
-					Logging.info(this, "retrieveInstalledSoftwareInformation, we get index " + n + " for " + sw);
-				}
-				software2Number.put(sw, n);
-				n++;
-			}
-
-			cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
-			cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
-					installedSoftwareInformationForLicensing);
-			cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
-					installedSoftwareName2SWinfo);
-			cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
-			cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, softwareList);
-			cacheManager.setCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, software2Number);
-
-			persistenceController.notifyPanelCompleteWinProducts();
 		}
+
+		List<String> softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
+		NavigableMap<String, Number> software2Number = new TreeMap<>();
+		int n = 0;
+		for (String sw : softwareList) {
+			if (sw.startsWith("NULL")) {
+				Logging.info(this, "retrieveInstalledSoftwareInformation, we get index " + n + " for " + sw);
+			}
+			software2Number.put(sw, n);
+			n++;
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, softwareList);
+		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, software2Number);
+		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
+		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
+				installedSoftwareInformationForLicensing);
+		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, installedSoftwareName2SWinfo);
+		cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
+		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
 	public Map<String, Set<String>> getSoftwareIdent2clientsPD(List<String> clients) {
@@ -521,11 +494,7 @@ public class SoftwareDataService {
 		return rowsSoftwareL2LPool;
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(final List<String> clients) {
-		if (cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, Map.class) != null) {
-			return new HashMap<>();
-		}
-
+	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
@@ -546,9 +515,7 @@ public class SoftwareDataService {
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 			callFilter.put("state", 1);
-			if (clients != null) {
-				callFilter.put("clientId", clientListForCall);
-			}
+			callFilter.put("clientId", clientListForCall);
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
 					new Object[] { callAttributes, callFilter });
@@ -573,8 +540,6 @@ public class SoftwareDataService {
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
-
-		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_SOFTWARE, client2software);
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());

@@ -256,8 +256,7 @@ public enum CacheIdentifier {
 	DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS("depot_to_product_to_property_definitions"),
 
 	/**
-	 * return type
-	 * {@code Map<String, Map<String, Map<String, ConfigName2ConfigValue>>>}
+	 * return type {@code Map<String, Map<String, ConfigName2ConfigValue>>>}
 	 */
 	DEPOT_TO_PRODUCT_TO_PROPERTIES("depot_to_product_to_properties"),
 
@@ -305,11 +304,6 @@ public enum CacheIdentifier {
 	 * return type {@code NavigableMap<String, Set<String>>}
 	 */
 	NAME_TO_SW_IDENTS("name_to_sw_idents"),
-
-	/**
-	 * return type {@code Map<String, List<SWAuditClientEntry>>}
-	 */
-	CLIENT_TO_SOFTWARE("client_to_software"),
 
 	/**
 	 * return type {@code Map<String, Set<String>>}
@@ -479,7 +473,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Map<String, ListCellOptions>>}
 	 */
-	PRODUCT_PROPERTY_DEFINITIOS("product_property_definitions"),
+	PRODUCT_PROPERTY_DEFINITIONS("product_property_definitions"),
 
 	/**
 	 * return type {@code NavigableSet<Object>}

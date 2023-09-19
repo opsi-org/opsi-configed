@@ -186,7 +186,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductsAllDepotsPD() {
-		Logging.debug(this, "retrieveProductsAllDepots");
+		Logging.debug(this, "retrieveProductsAllDepotsPD");
 		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_ROWS, List.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Map.class) != null
@@ -202,7 +202,7 @@ public class ProductDataService {
 
 		retrieveProductInfosPD();
 
-		Logging.info(this, "retrieveProductsAllDepots, reload");
+		Logging.info(this, "retrieveProductsAllDepotsPD, reload");
 
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
@@ -225,8 +225,7 @@ public class ProductDataService {
 			}
 
 			OpsiPackage p = new OpsiPackage(m);
-
-			Logging.debug(this, "retrieveProductsAllDepots, opsi package " + p);
+			Logging.debug(this, "retrieveProductsAllDepotsPD, opsi package " + p);
 
 			if (p.isNetbootProduct()) {
 				depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
@@ -243,19 +242,16 @@ public class ProductDataService {
 
 			depotsWithThisVersion.add(depot);
 
-			TreeSet<OpsiPackage> depotpackages = depot2Packages.computeIfAbsent(depot, s -> new TreeSet<>());
-			depotpackages.add(p);
+			TreeSet<OpsiPackage> depotPackages = depot2Packages.computeIfAbsent(depot, s -> new TreeSet<>());
+			depotPackages.add(p);
 
 			List<Object> productRow = new ArrayList<>();
-
 			productRow.add(p.getProductId());
-
-			String productName = null;
 
 			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = cacheManager
 					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class);
-			productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getProductName();
-
+			String productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
+					.getProductName();
 			productRow.add(productName);
 			p.appendValues(productRow);
 
@@ -327,6 +323,11 @@ public class ProductDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, product2versionInfo2infos);
 		persistenceController.notifyPanelCompleteWinProducts();
+	}
+
+	public void retrieveProductPropertyDefinitions() {
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS,
+				getDepot2Product2PropertyDefinitionsPD().get(depotDataService.getDepot()));
 	}
 
 	public Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitionsPD() {
@@ -476,8 +477,8 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, List.class);
 	}
 
-	public void fillProductPropertyStatesPD(Collection<String> clients) {
-		Logging.info(this, "fillProductPropertyStates for " + clients);
+	public void retrieveProductPropertyStatesPD(Collection<String> clients) {
+		Logging.info(this, "retrieveProductPropertyStates for " + clients);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, produceProductPropertyStates(clients));
 	}
 
@@ -734,9 +735,8 @@ public class ProductDataService {
 		productProperties = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
 
-		fillProductPropertyStatesPD(clientNames);
+		retrieveProductPropertyStatesPD(clientNames);
 		List<Map<String, Object>> retrieved = getProductPropertyStatesPD();
-
 		Set<String> productsWithProductPropertyStates = new HashSet<>();
 
 		for (Map<String, Object> map : retrieved) {
@@ -808,7 +808,7 @@ public class ProductDataService {
 
 		Map<String, Boolean> productHavingClientSpecificProperties = new HashMap<>();
 		Map<String, Map<String, ListCellOptions>> productPropertyDefinitions = cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIOS, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 
 		for (String product : products) {
 			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
@@ -832,7 +832,6 @@ public class ProductDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
 				productHavingClientSpecificProperties);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIOS, productPropertyDefinitions);
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {
@@ -1420,11 +1419,11 @@ public class ProductDataService {
 	}
 
 	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String productId) {
-		// retrieveProductPropertyDefinitions();
+		retrieveProductPropertyDefinitions();
 		Map<String, ListCellOptions> result;
 
 		Map<String, Map<String, ListCellOptions>> productPropertyDefinitions = cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIOS, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
 		} else {
