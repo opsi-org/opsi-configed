@@ -129,7 +129,6 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
-import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
@@ -2554,14 +2553,8 @@ public class MainFrame extends JFrame
 
 			depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
-			Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
-			containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
 			panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-			Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
-			containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
 			panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
 			iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);

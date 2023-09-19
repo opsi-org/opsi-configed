@@ -26,14 +26,6 @@ public class Containership {
 		Logging.debug("Containership initialized");
 	}
 
-	public void doForAllContainedCompis(String methodName, Object[] args) {
-		Class<?>[] theArgsTypes = new Class[args.length];
-		for (int j = 0; j < args.length; j++) {
-			theArgsTypes[j] = args[j].getClass();
-		}
-		doForAllContained(methodName, args, theArgsTypes, Object.class, theContainer);
-	}
-
 	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class<?> selClass) {
 		Class<?>[] theArgsTypes = new Class[args.length];
 		for (int j = 0; j < args.length; j++) {
