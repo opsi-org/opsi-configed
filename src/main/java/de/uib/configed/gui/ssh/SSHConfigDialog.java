@@ -333,24 +333,15 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		jButtonSave = new IconButton(Configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
-				"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
-		jButtonSave.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
+		jButtonSave = new JButton(Configed.getResourceValue("SSHConnection.buttonConnect"));
+		jButtonSave.setToolTipText(Configed.getResourceValue("SSHConnection.Config.SaveConfiguration"));
 
-		IconButton jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
-				"images/cancel.png", "images/cancel_over.png", " ", true);
-		jButtonClose.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
-		jButtonKill = new IconButton(Configed.getResourceValue("SSHConnection.Config.StopUsing"),
-				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
-		jButtonKill.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
+		jButtonKill = new JButton(Configed.getResourceValue("SSHConnection.buttonDisconnect"));
+		jButtonKill.setToolTipText(Configed.getResourceValue("SSHConnection.Config.StopUsing"));
 		jButtonKill.addActionListener(actionEvent -> doAction2());
 
-		buttonPanel.add(jButtonClose);
+		JButton jButtonClose = new JButton(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> doAction1());
-
-		buttonPanel.add(new JLabel("            "));
 
 		Logging.info(this, "actionlistener for button1 "
 				+ PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
@@ -365,6 +356,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(new JLabel("            "));
 		buttonPanel.add(jButtonKill);
 		buttonPanel.add(jButtonSave);
 
