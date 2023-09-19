@@ -32,7 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -247,7 +246,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel = new DefaultTreeModel(root);
 
 		tree.setModel(treeModel);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		tree.setCellRenderer(new IconNodeRenderer());
 
