@@ -40,10 +40,6 @@ public class ProductDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
 		productDataService.retrieveProductsAllDepotsPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES);
-
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES);
-
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS);
 		productDataService.retrieveAllProductDependenciesPD();
 

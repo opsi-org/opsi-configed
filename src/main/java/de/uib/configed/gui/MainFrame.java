@@ -115,7 +115,6 @@ import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -2467,7 +2466,6 @@ public class MainFrame extends JFrame
 			protected void reload() {
 				super.reload();
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				persistenceController.reloadData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString());
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};

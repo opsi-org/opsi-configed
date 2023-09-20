@@ -2925,7 +2925,6 @@ public class ConfigedMain implements ListSelectionListener {
 		// we retrieve the properties for all clients and products
 
 		persistenceController.getProductDataService().retrieveProductPropertiesPD(selectionPanel.getSelectedValues());
-
 		String netbootProductsSavedStateObjTag = "netbootProducts";
 
 		if (istmForSelectedClientsNetboot == null) {

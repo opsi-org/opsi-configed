@@ -95,7 +95,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -426,7 +425,6 @@ public final class OpsiDataBackend {
 
 		swauditMap = null;
 		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-		persistenceController.reloadData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString());
 
 		hardwareOnClient = null;
 		clientToHardware = null;

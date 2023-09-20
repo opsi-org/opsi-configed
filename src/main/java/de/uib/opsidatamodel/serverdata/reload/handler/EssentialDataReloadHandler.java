@@ -140,9 +140,6 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.ALL_NETBOOT_PRODUCT_NAMES);
 		depotDataService.retrieveProductsPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES);
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES);
-
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
 		productDataService.retrieveAllProductPropertyDefinitionsPD();
 
@@ -157,6 +154,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS);
 		productDataService.retrieveProductOnClientsDisplayFieldsLocalbootProducts();
+
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS);
 		productDataService.retrieveProductOnClientsDisplayFieldsNetbootProducts();
 

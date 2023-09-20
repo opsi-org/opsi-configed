@@ -478,28 +478,16 @@ public class ProductDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public List<Map<String, Object>> getProductPropertyStatesPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, List.class);
-	}
-
-	public void retrieveProductPropertyStatesPD(Collection<String> clients) {
+	private List<Map<String, Object>> getProductPropertyStates(Collection<String> clients) {
 		Logging.info(this, "retrieveProductPropertyStates for " + clients);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, produceProductPropertyStates(clients));
+		return produceProductPropertyStates(clients);
 	}
 
-	public List<Map<String, Object>> getProductPropertyDepotStatesPD(Set<String> depots) {
-		retrieveProductPropertyDepotStatesPD(depots);
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES, List.class);
-	}
-
-	public void retrieveProductPropertyDepotStatesPD(Set<String> depots) {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES, List.class) != null) {
-			return;
-		}
+	private List<Map<String, Object>> getProductPropertyDepotStates(Set<String> depots) {
 		Logging.info(this, "retrieveProductPropertyDepotStates for depots " + depots);
 		List<Map<String, Object>> productPropertyDepotStates = produceProductPropertyStates(depots);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEPOT_STATES, productPropertyDepotStates);
 		Logging.info(this, "retrieveProductPropertyDepotStates ready  size " + productPropertyDepotStates.size());
+		return productPropertyDepotStates;
 	}
 
 	// client is a set of added hosts, host represents the totality and will be
@@ -740,8 +728,7 @@ public class ProductDataService {
 		productProperties = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
 
-		retrieveProductPropertyStatesPD(clientNames);
-		List<Map<String, Object>> retrieved = getProductPropertyStatesPD();
+		List<Map<String, Object>> retrieved = getProductPropertyStates(clientNames);
 		Set<String> productsWithProductPropertyStates = new HashSet<>();
 
 		for (Map<String, Object> map : retrieved) {
@@ -885,7 +872,7 @@ public class ProductDataService {
 		Logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
 
 		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = new HashMap<>();
-		List<Map<String, Object>> retrieved = getProductPropertyDepotStatesPD(hostInfoCollections.getDepots().keySet());
+		List<Map<String, Object>> retrieved = getProductPropertyDepotStates(hostInfoCollections.getDepots().keySet());
 
 		for (Map<String, Object> map : retrieved) {
 			String host = (String) map.get("objectId");

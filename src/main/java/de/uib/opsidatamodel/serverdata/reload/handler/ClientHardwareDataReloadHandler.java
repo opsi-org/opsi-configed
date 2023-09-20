@@ -29,7 +29,5 @@ public class ClientHardwareDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES);
 		hardwareDataService.retrieveClient2HwRowsColumnNamesPD();
-
-		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS);
 	}
 }

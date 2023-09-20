@@ -24,7 +24,6 @@ public class ProductPropertyReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
 		productDataService.retrieveAllProductPropertyDefinitionsPD();

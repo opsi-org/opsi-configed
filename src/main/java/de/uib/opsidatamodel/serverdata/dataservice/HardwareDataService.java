@@ -252,21 +252,9 @@ public class HardwareDataService {
 		return hwAuditConf.get("");
 	}
 
-	public Map<String, Map<String, Object>> getClient2HwRowsPD(String[] hosts) {
-		retrieveClient2HwRowsPD(hosts);
-		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS, Map.class);
-	}
-
-	public void retrieveClient2HwRowsPD(String[] hosts) {
-		Map<String, Map<String, Object>> client2HwRows = cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS,
-				Map.class);
-		if (client2HwRows != null) {
-			Logging.info(this, "retrieveClient2HwRows client2HwRows.size() " + client2HwRows.size());
-			return;
-		}
-
+	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
 		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
-		client2HwRows = new HashMap<>();
+		Map<String, Map<String, Object>> client2HwRows = new HashMap<>();
 
 		// set default rows
 		for (String host : hostInfoCollections.getOpsiHostNames()) {
@@ -310,21 +298,15 @@ public class HardwareDataService {
 		}
 
 		Logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
-		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS, client2HwRows);
 
 		timeCheck.stop();
 		Logging.info(this, "retrieveClient2HwRows finished  ");
 		persistenceController.notifyPanelCompleteWinProducts();
+		return client2HwRows;
 	}
 
 	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
 		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
-
-		Map<String, Map<String, Object>> client2HwRows = cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS,
-				Map.class);
-		if (client2HwRows == null) {
-			return new HashMap<>();
-		}
 
 		List<String> specificColumns = new ArrayList<>();
 		specificColumns.add("HOST.hostId");

@@ -225,11 +225,6 @@ public enum CacheIdentifier {
 	PRODUCT_TO_VERSION_INFO_TO_INFOS("product_to_version_info_to_infos"),
 
 	/**
-	 * return type {@code Map<String, Map<String, Object>>}
-	 */
-	CLIENT_TO_HW_ROWS("client_to_hw_rows"),
-
-	/**
 	 * return type {@code List<String>}
 	 */
 	CLIENT_TO_HW_ROWS_COLUMN_NAMES("client_to_hw_rows_column_names"),
@@ -266,16 +261,6 @@ public enum CacheIdentifier {
 	DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS("depot_to_product_to_dependency_infos"),
 
 	/**
-	 * return type {@code List<Map<String, Object>>}
-	 */
-	PRODUCT_PROPERTY_STATES("product_property_states"),
-
-	/**
-	 * return type {@code List<Map<String, Object>>}
-	 */
-	PRODUCT_PROPERTY_DEPOT_STATES("product_property_depot_states"),
-
-	/**
 	 * return type {@code List<String>}
 	 */
 	SOFTWARE_LIST("software_list"),
@@ -304,11 +289,6 @@ public enum CacheIdentifier {
 	 * return type {@code NavigableMap<String, Set<String>>}
 	 */
 	NAME_TO_SW_IDENTS("name_to_sw_idents"),
-
-	/**
-	 * return type {@code Map<String, Set<String>>}
-	 */
-	SOFTWARE_IDENT_TO_CLIENTS("software_ident_to_clients"),
 
 	/**
 	 * return type {@code AuditSoftwareXLicencePool}

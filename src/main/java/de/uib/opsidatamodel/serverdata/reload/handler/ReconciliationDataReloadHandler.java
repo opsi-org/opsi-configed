@@ -53,8 +53,6 @@ public class ReconciliationDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
 		softwareDataService.retrieveInstalledSoftwareInformationPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS);
-
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);

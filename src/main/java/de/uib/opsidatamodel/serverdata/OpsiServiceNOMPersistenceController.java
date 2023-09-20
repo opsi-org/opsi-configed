@@ -454,8 +454,6 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString(),
-				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
 	}
 
