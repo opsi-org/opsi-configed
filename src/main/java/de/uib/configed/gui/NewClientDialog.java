@@ -88,11 +88,8 @@ public final class NewClientDialog extends FGeneralDialog {
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 680);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
 		this.configedMain = configedMain;
-
-		jButton2.setDefaultIcon("images/client_small.png");
-		jButton2.setIcon(jButton2.getDefaultIcon());
-
 		this.depots = depots;
 
 		init();
@@ -869,17 +866,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		dialog.setCenterPaneInScrollpane(centerPanel);
 		dialog.setupLayout();
 		dialog.setVisible(true);
-	}
-
-	@Override
-	protected void preAction2() {
-		super.preAction2();
-	}
-
-	@Override
-	protected void postAction2() {
-		super.postAction2();
-		jButton2.setIcon(jButton2.getDefaultIcon());
 	}
 
 	/* This method gets called when button 1 is pressed */
