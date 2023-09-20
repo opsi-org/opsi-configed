@@ -481,9 +481,7 @@ public class ModuleDataService {
 
 		// prepare the user info
 		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-
 		opsiModulesInfo.remove("signature");
-		Logging.info(this, "opsi module information " + opsiModulesInfo);
 		opsiModulesInfo.remove("valid");
 
 		// keeps the info for displaying to the user
@@ -536,7 +534,7 @@ public class ModuleDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiModulesDisplayInfo);
+		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, opsiModulesDisplayInfo);
 
 		Logging.info(this, "modules resulting step 1 " + opsiModules);
 		Logging.info(this, "countModules is  " + opsiCountModules);
