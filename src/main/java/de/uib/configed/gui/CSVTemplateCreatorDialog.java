@@ -24,7 +24,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -47,7 +46,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -65,9 +63,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
 						Configed.getResourceValue("FGeneralDialog.ok") },
-				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", ""),
-						Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") },
-				2, 1000, 400, true, null);
+				2, 1000, 400, true);
 
 		this.columnNames = columnNames;
 	}

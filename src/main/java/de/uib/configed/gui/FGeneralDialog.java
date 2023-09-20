@@ -123,12 +123,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight) {
-		this(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, false);
+		this(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, false, null);
 	}
 
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout) {
-		this(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, null);
+	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
+			int preferredWidth, int preferredHeight, boolean lazyLayout) {
+		this(owner, title, modal, buttonList, null, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, null);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,

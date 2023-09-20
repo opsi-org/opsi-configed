@@ -3040,8 +3040,7 @@ public class MainFrame extends JFrame
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("Dashboard.close") },
-					new Icon[] { Utils.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
+					new String[] { Configed.getResourceValue("Dashboard.close") }, 1, 900, 680, true);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);

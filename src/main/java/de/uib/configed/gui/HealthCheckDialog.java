@@ -28,7 +28,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -76,9 +75,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	public HealthCheckDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), false,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") },
-				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") }, 1, 700, 500, true,
-				null);
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 1, 700, 500, true);
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);

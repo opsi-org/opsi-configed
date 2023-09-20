@@ -17,7 +17,6 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -61,10 +60,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
-		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
-				addPane);
+	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
+			int preferredWidth, int preferredHeight, boolean lazyLayout) {
+		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
 		JPanel bottomPanel = new JPanel();
