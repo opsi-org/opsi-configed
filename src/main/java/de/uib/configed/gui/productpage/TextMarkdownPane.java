@@ -36,6 +36,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 		html = html.replace("<p>", "");
 		html = html.replace("</p>", "");
+		html = html.replace("\n", "<br \\>");
 
 		super.setText(html);
 	}
