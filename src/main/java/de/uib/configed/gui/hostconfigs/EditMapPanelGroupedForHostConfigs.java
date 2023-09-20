@@ -23,7 +23,6 @@ import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -618,10 +617,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 			result = true;
-
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
-					JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			String user = UserConfig.getUserFromKey(key);
 			// we really are in a user branch
@@ -644,11 +639,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 					if (obeyToRole) {
 						result = true;
-						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-								Configed.getResourceValue(
-										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined"),
-								key, JOptionPane.INFORMATION_MESSAGE);
-
 					}
 				}
 			}
