@@ -2925,13 +2925,10 @@ public class MainFrame extends JFrame
 	}
 
 	private void showLogfileLocationAction() {
-		FTextArea info = new FTextArea(this,
-				Globals.APPNAME + " " + Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
+		FTextArea info = new FTextArea(this, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
 				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
-				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", ""), null,
-						Utils.createImageIcon("images/document-view16.png", "") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
 			@Override
 			public void doAction2() {
