@@ -13,15 +13,7 @@ import java.util.Map;
  * Provides methods for storing and retrieving cache data.
  * <p>
  * Intended usage of this class is to store and retrieve persistent data (i.e.
- * data that lives for a long time; usually for as long as the process does). It
- * is intened to be used mainly with {@link PersistentDataRetriever} class for
- * storing/retrieving retrieved data from the server. Though, it can be used
- * also by {@link VolatileDataRetriever} class for methods that depend on
- * persistent data but the end result is still volatile.
- * <p>
- * {@link CacheManager} uses {@link CacheIdentifier} to identify which data is
- * internally cached. Data that should be cached internally must have
- * {@link CacheIdentifier} defined.
+ * data that lives for a long time; usually for as long as the process does).
  * <p>
  * {@link CacheManager} is based on Singleton design pattern, meaning there can
  * only be one instance throughout the lifetime of the application. The
@@ -29,9 +21,12 @@ import java.util.Map;
  * thread-safe. You can learn about it more here:
  * https://refactoring.guru/design-patterns/singleton/java/example#example-2
  */
-public class CacheManager {
-	private Map<CacheIdentifier, Object> cache = new EnumMap<>(CacheIdentifier.class);
+public final class CacheManager {
+	// volatile keyword is required for double check lock to work. Although,
+	// SonarLint rule makes a valid point.
+	@SuppressWarnings({ "java:S3077" })
 	private static volatile CacheManager instance;
+	private Map<CacheIdentifier, Object> cache = new EnumMap<>(CacheIdentifier.class);
 
 	private CacheManager() {
 	}
