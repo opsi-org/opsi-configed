@@ -1,5 +1,6 @@
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
+import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
@@ -11,6 +12,7 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 	private HostDataService hostDataService;
 	private LicenseDataService licenseDataService;
 	private SoftwareDataService softwareDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public LicenseDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
@@ -26,6 +28,10 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 	public void SoftwareDataService(SoftwareDataService softwareDataService) {
 		this.softwareDataService = softwareDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	@Override
@@ -57,7 +63,11 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS);
 
-		hostDataService.getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
+		hostInfoCollections.retrieveOpsiHostsPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
+		hostInfoCollections.retrieveFNode2TreeparentsPD();
 	}
 
 }

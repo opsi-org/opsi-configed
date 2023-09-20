@@ -75,11 +75,9 @@ public class SavedSearchQuery {
 
 	public List<String> runSearch(boolean printing) {
 
-		Map<String, Map<String, Object>> depots = controller.getHostDataService().getHostInfoCollectionsPD()
-				.getAllDepots();
+		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
-		controller.getHostDataService().getHostInfoCollectionsPD()
-				.getClientListForDepots(depots.keySet().toArray(new String[0]), null);
+		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();

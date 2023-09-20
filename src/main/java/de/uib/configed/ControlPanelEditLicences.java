@@ -191,10 +191,10 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		}
 
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(
-					persistenceController.getHostDataService().getHostInfoCollectionsPD().getClientListForDepots(
-							configedMain.getSelectedDepots(), configedMain.getAllowedClients())).keySet());
-									
+			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
+					.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()))
+							.keySet());
+
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));

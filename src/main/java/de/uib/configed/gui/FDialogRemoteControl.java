@@ -150,15 +150,13 @@ public class FDialogRemoteControl extends FEditStringList {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
-		HostInfo pcInfo = persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapOfPCInfoMaps()
-				.get(targetClient);
+		HostInfo pcInfo = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(targetClient);
 		values.put("%ipaddress%", pcInfo.getIpAddress());
 		values.put("%hardwareaddress%", pcInfo.getMacAddress());
 		values.put("%inventorynumber%", pcInfo.getInventoryNumber());
 		values.put("%opsihostkey%", pcInfo.getHostKey());
 		values.put("%depotid%", pcInfo.getInDepot());
-		values.put("%configserverid%",
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer());
+		values.put("%configserverid%", persistenceController.getHostInfoCollections().getConfigServer());
 
 		trans.setValues(values);
 

@@ -109,7 +109,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private void getDefaultAuthData() {
 		Map<String, Object> configs = persistenceController.getConfigDataService()
-				.getConfig(persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer());
+				.getConfig(persistenceController.getHostInfoCollections().getConfigServer());
 
 		List<Object> resultConfigList = (List<Object>) configs
 				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);

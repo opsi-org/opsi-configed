@@ -186,8 +186,7 @@ public class PanelProductProperties extends JSplitPane {
 
 				depotsOfPackage = new LinkedList<>();
 
-				for (String depot : persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots()
-						.keySet()) {
+				for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
 					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
 						depotsOfPackage.add(depot);
 					}

@@ -237,8 +237,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel clientTitle = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer()
-				+ ") </html>");
+				+ persistenceController.getHostInfoCollections().getConfigServer() + ") </html>");
 		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
 		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");

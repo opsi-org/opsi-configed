@@ -24,6 +24,7 @@ import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -61,6 +62,7 @@ public class ModuleDataService {
 
 	private HostDataService hostDataService;
 	private ConfigDataService configDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public ModuleDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
@@ -73,6 +75,10 @@ public class ModuleDataService {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public final void retrieveOpsiModules() {
@@ -140,7 +146,7 @@ public class ModuleDataService {
 		// opsiinformation which delivers the service information on checked modules
 		// displaying to the user
 
-		hostDataService.getHostInfoCollectionsPD().retrieveOpsiHosts();
+		hostInfoCollections.retrieveOpsiHostsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		Logging.info(this,
@@ -207,11 +213,11 @@ public class ModuleDataService {
 		// analyse the real module info
 		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
 		opsiCountModules.keySet().removeAll(exec.getListFromItem(opsiInformation.get("obsolete_modules").toString()));
-		hostDataService.getHostInfoCollectionsPD().retrieveOpsiHosts();
+		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
 
-		int countClients = hostDataService.getHostInfoCollectionsPD().getCountClients();
+		int countClients = hostInfoCollections.getCountClients();
 
 		LocalDateTime today = LocalDateTime.now();
 
@@ -319,7 +325,7 @@ public class ModuleDataService {
 					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
 							+ " stopLimit " + stopLimit);
 
-					if (stopLimit != null && hostDataService.getHostInfoCollectionsPD().getCountClients() > stopLimit) {
+					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
 					} else {
 						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
@@ -487,11 +493,11 @@ public class ModuleDataService {
 
 		// analyse the real module info
 		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
-		hostDataService.getHostInfoCollectionsPD().retrieveOpsiHosts();
+		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
 
-		int countClients = hostDataService.getHostInfoCollectionsPD().getCountClients();
+		int countClients = hostInfoCollections.getCountClients();
 
 		LocalDateTime today = LocalDateTime.now();
 
@@ -579,7 +585,7 @@ public class ModuleDataService {
 					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
 							+ " stopLimit " + stopLimit);
 
-					if (stopLimit != null && hostDataService.getHostInfoCollectionsPD().getCountClients() > stopLimit) {
+					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
 					} else {
 						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {

@@ -50,6 +50,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.HostConfigDataReloadHandle
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductPropertyReloadHandler;
@@ -241,7 +242,7 @@ public class OpsiServiceNOMPersistenceController {
 		groupDataService = new GroupDataService(exec, this);
 		hardwareDataService = new HardwareDataService(exec, this);
 		healthDataService = new HealthDataService(exec);
-		hostDataService = new HostDataService(exec);
+		hostDataService = new HostDataService(exec, this);
 		licenseDataService = new LicenseDataService(exec);
 		logDataService = new LogDataService(exec);
 		moduleDataService = new ModuleDataService(exec);
@@ -250,30 +251,47 @@ public class OpsiServiceNOMPersistenceController {
 		sshCommandDataService = new SSHCommandDataService(exec);
 		userDataService = new UserDataService(exec);
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
+		hostInfoCollections = new HostInfoCollections(this);
 
 		configDataService.setGroupDataService(groupDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
 		configDataService.setModuleDataService(moduleDataService);
 		configDataService.setHostDataService(hostDataService);
+		configDataService.setHostInfoCollections(hostInfoCollections);
+
 		depotDataService.setConfigDataService(configDataService);
 		depotDataService.setHostDataService(hostDataService);
 		depotDataService.setProductDataService(productDataService);
+		depotDataService.setHostInfoCollections(hostInfoCollections);
+
 		groupDataService.setConfigDataService(configDataService);
+
 		hardwareDataService.setConfigDataService(configDataService);
 		hardwareDataService.setHostDataService(hostDataService);
-		hostDataService.setHostInfoCollectionsPD(new HostInfoCollections(this));
+		hardwareDataService.setHostInfoCollections(hostInfoCollections);
+
 		hostDataService.setConfigDataService(configDataService);
+		hostDataService.setHostInfoCollections(hostInfoCollections);
+		hostDataService.setHostInfoCollections(hostInfoCollections);
+
 		licenseDataService.setConfigDataService(configDataService);
 		licenseDataService.setModuleDataService(moduleDataService);
+
 		moduleDataService.setHostDataService(hostDataService);
 		moduleDataService.setConfigDataService(configDataService);
+		moduleDataService.setHostInfoCollections(hostInfoCollections);
+
 		productDataService.setConfigDataService(configDataService);
 		productDataService.setDepotDataService(depotDataService);
 		productDataService.setHostDataService(hostDataService);
+		productDataService.setHostInfoCollections(hostInfoCollections);
+
 		softwareDataService.setHostDataService(hostDataService);
 		softwareDataService.setModuleDataService(moduleDataService);
 		softwareDataService.setLicenseDataService(licenseDataService);
 		softwareDataService.setConfigDataService(configDataService);
+		softwareDataService.setHostInfoCollections(hostInfoCollections);
+
 		sshCommandDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setConfigDataService(configDataService);
 
@@ -332,6 +350,10 @@ public class OpsiServiceNOMPersistenceController {
 		return userDataService;
 	}
 
+	public HostInfoCollections getHostInfoCollections() {
+		return hostInfoCollections;
+	}
+
 	public RPCMethodExecutor getRPCMethodExecutor() {
 		return rpcMethodExecutor;
 	}
@@ -347,12 +369,14 @@ public class OpsiServiceNOMPersistenceController {
 		essentialDataReloadHandler.setHostDataService(hostDataService);
 		essentialDataReloadHandler.setModuleDataService(moduleDataService);
 		essentialDataReloadHandler.setProductDataService(productDataService);
+		essentialDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString(), essentialDataReloadHandler);
 
 		HostDataReloadHandler hostDataReloadHandler = new HostDataReloadHandler();
 		hostDataReloadHandler.setConfigDataService(configDataService);
 		hostDataReloadHandler.setGroupDataService(groupDataService);
 		hostDataReloadHandler.setHostDataService(hostDataService);
+		hostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
 
 		ClientHardwareDataReloadHandler clientHardwareDataReloadHandler = new ClientHardwareDataReloadHandler();
@@ -381,6 +405,7 @@ public class OpsiServiceNOMPersistenceController {
 		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
 		licenseDataReloadHandler.setHostDataService(hostDataService);
 		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
+		licenseDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
 
 		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
@@ -401,6 +426,7 @@ public class OpsiServiceNOMPersistenceController {
 		reconciliationDataReloadHandler.setHostDataService(hostDataService);
 		reconciliationDataReloadHandler.setLicenseDataService(licenseDataService);
 		reconciliationDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reconciliationDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.RECONCILIATION_INFO_RELOAD.toString(),
 				reconciliationDataReloadHandler);
 
@@ -414,6 +440,10 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString(),
 				relationsASWToLPDataReloadHandler);
 
+		OpsiHostDataReloadHandler opsiHostDataReloadHandler = new OpsiHostDataReloadHandler();
+		opsiHostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(), opsiHostDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
@@ -424,7 +454,6 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.HOST_INFO_COLLECTIONS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.SOFTWARE_IDENT_TO_CLIENTS.toString(),
 				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
@@ -448,7 +477,6 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public AbstractExecutioner retrieveWorkingExec(String depot) {
-
 		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
 				+ hostInfoCollections.getConfigServer() + " ( named as " + connectionServer + ")");
 
@@ -457,9 +485,7 @@ public class OpsiServiceNOMPersistenceController {
 			return exec;
 		}
 
-		String password = (String) hostDataService.getHostInfoCollectionsPD().getDepots().get(depot)
-				.get(HostInfo.HOST_KEY_KEY);
-
+		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
 		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password);
 
 		if (makeConnection(exec1)) {

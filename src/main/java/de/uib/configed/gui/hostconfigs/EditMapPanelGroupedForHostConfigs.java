@@ -816,8 +816,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void buildUserConfig() {
 		UserConfigProducing up = new UserConfigProducing(false,
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer(),
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList(),
+				persistenceController.getHostInfoCollections().getConfigServer(),
+				persistenceController.getHostInfoCollections().getDepotNamesList(),
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),

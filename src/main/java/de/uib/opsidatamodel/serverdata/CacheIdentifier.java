@@ -366,11 +366,6 @@ public enum CacheIdentifier {
 	DIAGNOSTIC_DATA("diagnostic_data"),
 
 	/**
-	 * return type {@code HostInfoCollections}
-	 */
-	HOST_INFO_COLLECTIONS("host_info_collections"),
-
-	/**
 	 * return type {@code boolean}
 	 */
 	GLOBAL_READ_ONLY("global_read_only"),
@@ -544,6 +539,56 @@ public enum CacheIdentifier {
 	 * return type {@code String}
 	 */
 	PACKAGE_SERVER_DIRECTORY("package_server_directory"),
+
+	/**
+	 * return type {@code String}
+	 */
+	CONFIG_SERVER("config_server"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	OPSI_HOST_NAMES("opsi_host_names"),
+
+	/**
+	 * return type {@code Map<String, Map<String, Object>>}
+	 */
+	MASTER_DEPOTS("master_depots"),
+
+	/**
+	 * return type {@code Map<String, Map<String, Object>>}
+	 */
+	ALL_DEPOTS("all_depots"),
+
+	/**
+	 * return type {@code Map<String, Map<String, HostInfo>>}
+	 */
+	DEPOT_TO_HOST_TO_HOST_INFO("depot_to_host_to_host_info"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	DEPOT_NAMES_LIST("depot_names_list"),
+
+	/**
+	 * return type {@code Map<String, HostInfo>}
+	 */
+	MAP_PC_INFO_MAP("map_pc_info_map"),
+
+	/**
+	 * return type {@code Map<String, HostInfo>}
+	 */
+	HOST_TO_HOST_INFO("host_to_host_info"),
+
+	/**
+	 * return type {@code Map<String, Set<String>>}
+	 */
+	FNODE_TO_TREE_PARENTS("fnode_to_tree_parents"),
+
+	/**
+	 * return type {@code Map<String, String>}
+	 */
+	MAP_PC_BELONGS_TO_DEPOT("map_pc_belongs_to_depot"),
 
 	/**
 	 * return type {@code boolean}

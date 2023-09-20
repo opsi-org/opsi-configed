@@ -78,8 +78,8 @@ public class PanelHostConfig extends JPanel {
 
 	private void putUsersToPropertyclassesTreeMap() {
 		Map<String, Object> configs = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
-				.getConfig(PersistenceControllerFactory.getPersistenceController().getHostDataService()
-						.getHostInfoCollectionsPD().getConfigServer());
+				.getConfig(PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+						.getConfigServer());
 
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
 			String key = entry.getKey();

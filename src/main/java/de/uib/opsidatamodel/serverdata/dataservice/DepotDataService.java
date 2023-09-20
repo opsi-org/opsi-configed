@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
@@ -43,6 +44,7 @@ public class DepotDataService {
 	private HostDataService hostDataService;
 	private ConfigDataService configDataService;
 	private ProductDataService productDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public DepotDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
@@ -59,6 +61,10 @@ public class DepotDataService {
 
 	public void setProductDataService(ProductDataService productDataService) {
 		this.productDataService = productDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public boolean areDepotsSynchronous(Iterable<String> depots) {
@@ -85,10 +91,10 @@ public class DepotDataService {
 	}
 
 	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
-		Map<String, Map<String, Object>> depotProperties = hostDataService.getHostInfoCollectionsPD().getAllDepots();
+		Map<String, Map<String, Object>> depotProperties = hostInfoCollections.getAllDepots();
 		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
-		String configServer = hostDataService.getHostInfoCollectionsPD().getConfigServer();
+		String configServer = hostInfoCollections.getConfigServer();
 		if (configDataService.hasDepotPermission(configServer)) {
 			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
 		}
@@ -128,7 +134,7 @@ public class DepotDataService {
 		TreeSet<OpsiPackage> originalProductStock = productDataService.getDepot2PackagesPD().get(depot);
 		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + originalProductStock);
 
-		for (String testDepot : hostDataService.getHostInfoCollectionsPD().getAllDepots().keySet()) {
+		for (String testDepot : hostInfoCollections.getAllDepots().keySet()) {
 			if (depot.equals(testDepot) || areProductStocksIdentical(originalProductStock,
 					productDataService.getDepot2PackagesPD().get(testDepot))) {
 				result.add(testDepot);

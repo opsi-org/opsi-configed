@@ -81,6 +81,7 @@ public class ProductDataService {
 	private ConfigDataService configDataService;
 	private DepotDataService depotDataService;
 	private HostDataService hostDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	private List<Map<String, Object>> updateProductOnClientItems;
 	private List<Map<String, Object>> productPropertyStateUpdateCollection;
@@ -102,6 +103,10 @@ public class ProductDataService {
 
 	public void setHostDataService(HostDataService hostDataService) {
 		this.hostDataService = hostDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public List<String> getAllNetbootProductNames() {
@@ -880,7 +885,6 @@ public class ProductDataService {
 		Logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
 
 		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = new HashMap<>();
-		HostInfoCollections hostInfoCollections = hostDataService.getHostInfoCollectionsPD();
 		List<Map<String, Object>> retrieved = getProductPropertyDepotStatesPD(hostInfoCollections.getDepots().keySet());
 
 		for (Map<String, Object> map : retrieved) {

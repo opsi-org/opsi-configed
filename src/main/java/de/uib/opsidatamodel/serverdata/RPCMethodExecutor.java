@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.utilities.logging.Logging;
 
@@ -31,11 +32,19 @@ public class RPCMethodExecutor {
 	AbstractExecutioner exec;
 	OpsiServiceNOMPersistenceController persistenceController;
 	HostDataService hostDataService;
+	HostInfoCollections hostInfoCollections;
 
 	public RPCMethodExecutor(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.exec = exec;
 		this.persistenceController = persistenceController;
-		this.hostDataService = persistenceController.getHostDataService();
+	}
+
+	public void setHostDataService(HostDataService hostDataService) {
+		this.hostDataService = hostDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public boolean installPackage(String filename) {
@@ -116,11 +125,10 @@ public class RPCMethodExecutor {
 	public List<String> wakeOnLanOpsi43(String[] hostIds) {
 		Map<String, Object> response = new HashMap<>();
 
-		AbstractExecutioner exec1 = persistenceController
-				.retrieveWorkingExec(hostDataService.getHostInfoCollectionsPD().getConfigServer());
+		AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(hostInfoCollections.getConfigServer());
 
-		Logging.info(this, "working exec for config server "
-				+ hostDataService.getHostInfoCollectionsPD().getConfigServer() + " " + (exec1 != null));
+		Logging.info(this,
+				"working exec for config server " + hostInfoCollections.getConfigServer() + " " + (exec1 != null));
 
 		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });

@@ -150,8 +150,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void buildSambaTarget(String depotserver) {
-		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostDataService()
-				.getHostInfoCollectionsPD().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
@@ -227,8 +226,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
-		Logging.debug(this, "defineChoosers, depots: "
-				+ persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots());
+		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
 

@@ -204,7 +204,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList()) {
+		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
 			if (persistenceController.getConfigDataService().hasDepotPermission(depot)) {
 				result.add(depot);
 			}

@@ -84,6 +84,7 @@ public class ConfigDataService {
 	private HardwareDataService hardwareDataService;
 	private ModuleDataService moduleDataService;
 	private HostDataService hostDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	private List<Map<String, Object>> configCollection;
 	private List<Map<String, Object>> configStateCollection;
@@ -109,6 +110,10 @@ public class ConfigDataService {
 
 	public void setHostDataService(HostDataService hostDataService) {
 		this.hostDataService = hostDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public final void checkConfigurationPD() {
@@ -155,7 +160,6 @@ public class ConfigDataService {
 
 		applyUserSpecializedConfigPD();
 
-		HostInfoCollections hostInfoCollections = hostDataService.getHostInfoCollectionsPD();
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
 				hostInfoCollections.getConfigServer(), hostInfoCollections.getDepotNamesList(),
 				groupDataService.getHostGroupIds(), groupDataService.getProductGroupsPD().keySet(),

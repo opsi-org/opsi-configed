@@ -39,7 +39,7 @@ public final class ProductData {
 
 	private static String selectedDepot;
 	private static List<String> depots = new ArrayList<>(
-			persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots().keySet());
+			persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 	private ProductData() {
 	}
@@ -134,9 +134,9 @@ public final class ProductData {
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
-			List<String> clientsMap = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
-					.map(HostInfo::getName).collect(Collectors.toList());
+			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
+					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
+					.collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
 					.getProductDataService().getMapOfProductStatesAndActions(clientIds);
@@ -198,9 +198,8 @@ public final class ProductData {
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
-		List<String> hostnames = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-				.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
-				.map(HostInfo::getName).collect(Collectors.toList());
+		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
+				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
 		for (String productId : tmpUnusedProductsList.get(depot)) {
 			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}

@@ -187,7 +187,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 			textFieldSelectedDepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList()) {
+		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
 			if (isPossibleDepot(depot, selectedProduct)) {
 				Logging.info(this, "taking this depot " + depot);
 				result.add(depot);

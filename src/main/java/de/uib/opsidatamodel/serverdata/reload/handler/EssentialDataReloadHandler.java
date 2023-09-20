@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.messages.Messages;
+import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
@@ -27,6 +28,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 	private ModuleDataService moduleDataService;
 	private HardwareDataService hardwareDataService;
 	private HostDataService hostDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public EssentialDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
@@ -58,6 +60,10 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 	public void setHostDataService(HostDataService hostDataService) {
 		this.hostDataService = hostDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	@Override
@@ -97,7 +103,11 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
 		groupDataService.retrieveProductGroupsPD();
 
-		hostDataService.getHostInfoCollectionsPD().opsiHostsRequestRefresh();
+		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
+		hostInfoCollections.retrieveOpsiHostsPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
+		hostInfoCollections.retrieveFNode2TreeparentsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
 		configDataService.retrieveHostConfigsPD();

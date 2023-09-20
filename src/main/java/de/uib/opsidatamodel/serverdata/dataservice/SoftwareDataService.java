@@ -84,6 +84,7 @@ public class SoftwareDataService {
 	private ModuleDataService moduleDataService;
 	private ConfigDataService configDataService;
 	private LicenseDataService licenseDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public SoftwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
@@ -105,6 +106,10 @@ public class SoftwareDataService {
 
 	public void setLicenseDataService(LicenseDataService licenseDataService) {
 		this.licenseDataService = licenseDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public NavigableSet<Object> getSoftwareWithoutAssociatedLicencePoolPD() {
@@ -975,7 +980,6 @@ public class SoftwareDataService {
 		// result
 		Map<String, Integer> licencePoolUsagecountSWInvent = new HashMap<>();
 		AuditSoftwareXLicencePool auditSoftwareXLicencePool = getAuditSoftwareXLicencePoolPD();
-		HostInfoCollections hostInfoCollections = hostDataService.getHostInfoCollectionsPD();
 		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
 		Map<String, Set<String>> swId2clients = getSoftwareIdent2clientsPD(opsiHostNames);
 

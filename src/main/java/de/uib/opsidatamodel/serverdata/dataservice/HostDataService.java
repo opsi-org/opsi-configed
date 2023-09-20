@@ -3,6 +3,7 @@
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
+
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import utils.Utils;
@@ -56,17 +58,24 @@ public class HostDataService {
 
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
+	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	private Map<String, Map<String, Object>> hostUpdates;
 
-	public HostDataService(AbstractExecutioner exec) {
+	public HostDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
+		this.persistenceController = persistenceController;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public boolean createClients(Iterable<List<Object>> clients) {
@@ -159,7 +168,6 @@ public class HostDataService {
 				productsNetbootJsonObject.add(itemProducts);
 			}
 
-			HostInfoCollections hostInfoCollections = getHostInfoCollectionsPD();
 			HostInfo hostInfo = new HostInfo(hostItem);
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
@@ -311,7 +319,6 @@ public class HostDataService {
 		}
 
 		if (result) {
-			HostInfoCollections hostInfoCollections = getHostInfoCollectionsPD();
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
 			}
@@ -333,10 +340,9 @@ public class HostDataService {
 			return false;
 		}
 
-		HostInfoCollections hostInfoCollections = getHostInfoCollectionsPD();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT,
 				new String[] { hostname, newHostname });
-		hostInfoCollections.opsiHostsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 		return exec.doCall(omc);
 	}
 
@@ -345,12 +351,11 @@ public class HostDataService {
 			return;
 		}
 
-		HostInfoCollections hostInfoCollections = getHostInfoCollectionsPD();
 		for (String hostId : hostIds) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new String[] { hostId });
 			exec.doCall(omc);
 		}
-		hostInfoCollections.opsiHostsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
 	public Map<String, Object> reachableInfo(String[] clientIds) {
@@ -440,7 +445,6 @@ public class HostDataService {
 
 	public Map<String, List<String>> getHostSeparationByDepots(String[] hostIds) {
 		Map<String, Set<String>> hostSeparationByDepots = new HashMap<>();
-		HostInfoCollections hostInfoCollections = getHostInfoCollectionsPD();
 		for (String hostId : hostIds) {
 			String depotId = hostInfoCollections.getMapPcBelongsToDepot().get(hostId);
 			hostSeparationByDepots.computeIfAbsent(depotId, arg -> new HashSet<>()).add(hostId);
@@ -589,14 +593,6 @@ public class HostDataService {
 		hostMaps.add(corrected);
 
 		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { hostMaps }));
-	}
-
-	public HostInfoCollections getHostInfoCollectionsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.HOST_INFO_COLLECTIONS, HostInfoCollections.class);
-	}
-
-	public void setHostInfoCollectionsPD(HostInfoCollections hostInfoCollections) {
-		cacheManager.setCachedData(CacheIdentifier.HOST_INFO_COLLECTIONS, hostInfoCollections);
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {

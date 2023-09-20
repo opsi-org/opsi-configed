@@ -443,7 +443,7 @@ public final class OpsiDataBackend {
 
 		// take always the current host infos
 
-		clientMaps = persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapOfPCInfoMaps();
+		clientMaps = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 		Logging.info(this, "client maps size " + clientMaps.size());
 
 		if (groups == null || reloadRequested) {
@@ -451,7 +451,7 @@ public final class OpsiDataBackend {
 		}
 
 		if (superGroups == null || reloadRequested) {
-			superGroups = persistenceController.getHostDataService().getHostInfoCollectionsPD().getFNode2Treeparents();
+			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
 		}
 
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);

@@ -57,6 +57,7 @@ public class HardwareDataService {
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private HostDataService hostDataService;
+	private HostInfoCollections hostInfoCollections;
 
 	public HardwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
@@ -70,6 +71,10 @@ public class HardwareDataService {
 
 	public void setHostDataService(HostDataService hostDataService) {
 		this.hostDataService = hostDataService;
+	}
+
+	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
+		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public List<Map<String, Object>> getHardwareOnClientPD() {
@@ -263,7 +268,6 @@ public class HardwareDataService {
 		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
 		client2HwRows = new HashMap<>();
 
-		HostInfoCollections hostInfoCollections = hostDataService.getHostInfoCollectionsPD();
 		// set default rows
 		for (String host : hostInfoCollections.getOpsiHostNames()) {
 			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();

@@ -418,7 +418,7 @@ public final class SSHCommandParameterMethods {
 	}
 
 	private String getConfigServerName() {
-		List<String> depots = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList();
+		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.getHost())) {
 				Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
@@ -446,8 +446,7 @@ public final class SSHCommandParameterMethods {
 		String[] clientIPs = new String[clientnames.length];
 		int counter = 0;
 		for (String name : clientnames) {
-			HostInfo hostInfo = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-					.getMapOfAllPCInfoMaps().get(name);
+			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
 			if (hostInfo != null) {
 				clientIPs[counter] = hostInfo.getIpAddress();
 				counter++;
@@ -478,8 +477,8 @@ public final class SSHCommandParameterMethods {
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {
-			String depotip = (String) persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots()
-					.get(name).get(HostInfo.CLIENT_IP_ADDRESS_KEY);
+			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
+					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;

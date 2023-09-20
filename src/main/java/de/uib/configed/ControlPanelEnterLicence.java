@@ -50,7 +50,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	}
 
 	public List<String> getChoicesAllHosts() {
-		return new ArrayList<>(new TreeMap<>(persistenceController.getHostDataService().getHostInfoCollectionsPD()
+		return new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
 				.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients())).keySet());
 	}
 

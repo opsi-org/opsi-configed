@@ -52,11 +52,10 @@ public final class ClientData {
 
 		clients.clear();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostDataService().getHostInfoCollectionsPD()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
 				.getMapOfAllPCInfoMaps();
 
-		List<String> depots = new ArrayList<>(
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
@@ -104,12 +103,11 @@ public final class ClientData {
 
 		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
 				persistenceController.getHostDataService().getMessagebusConnectedClients());
-		List<String> depots = new ArrayList<>(
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 		for (String depot : depots) {
-			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostDataService()
-					.getHostInfoCollectionsPD().getMapOfAllPCInfoMaps().values().stream()
-					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()
+					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
+					.map(HostInfo::getName).collect(Collectors.toList());
 			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
 					.filter(notConnectedClientsByMessagebusInDepot::contains).collect(Collectors.toList());
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
@@ -137,10 +135,9 @@ public final class ClientData {
 
 		clientLastSeen.clear();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostDataService().getHostInfoCollectionsPD()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
 				.getMapOfAllPCInfoMaps();
-		List<String> depots = new ArrayList<>(
-				persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
 			Helper.fillMapOfMapsForDepots(clientLastSeen, produceLastSeenData(mapOfAllPCInfoMaps, depot), depot);

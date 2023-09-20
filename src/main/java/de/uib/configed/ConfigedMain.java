@@ -575,8 +575,7 @@ public class ConfigedMain implements ListSelectionListener {
 		if (persistenceController.getConfigDataService().hasDepotsFullPermissionPD()) {
 			Logging.info(this, "set ssh allowed hosts " + host);
 			sshAllowedHosts.add(host);
-			sshAllowedHosts
-					.addAll(persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots().keySet());
+			sshAllowedHosts.addAll(persistenceController.getHostInfoCollections().getDepots().keySet());
 		} else {
 			sshAllowedHosts.addAll(
 					persistenceController.getDepotDataService().getDepotPropertiesForPermittedDepots().keySet());
@@ -620,13 +619,12 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void addClientToTable(String clientId) {
-		if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getOpsiHostNames().contains(clientId)
+		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
 				|| getViewIndex() != VIEW_CLIENTS) {
 			return;
 		}
 
-		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().retrieveOpsiHosts();
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
 			List<String> selectedValues = selectionPanel.getSelectedValues();
@@ -637,13 +635,12 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void removeClientFromTable(String clientId) {
-		if (!persistenceController.getHostDataService().getHostInfoCollectionsPD().getOpsiHostNames().contains(clientId)
+		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
 				|| getViewIndex() != VIEW_CLIENTS) {
 			return;
 		}
 
-		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().retrieveOpsiHosts();
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
@@ -1204,8 +1201,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			hostInfo.initialize();
 
-			Map<String, HostInfo> pcinfos = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-					.getMapOfPCInfoMaps();
+			Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 			Logging.info(this,
 					"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
@@ -1295,7 +1291,7 @@ public class ConfigedMain implements ListSelectionListener {
 	// we call this after we have a PersistenceController
 	private void initMainFrame() {
 
-		myServer = persistenceController.getHostDataService().getHostInfoCollectionsPD().getConfigServer();
+		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		initDepots();
 
@@ -1627,8 +1623,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private Map<String, Boolean> produceClientListForDepots(String[] depots, Set<String> allowedClients) {
 		Logging.info(this, " producePcListForDepots " + Arrays.toString(depots) + " running with allowedClients "
 				+ allowedClients);
-		Map<String, Boolean> m = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-				.getClientListForDepots(depots, allowedClients);
+		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(depots,
+				allowedClients);
 
 		if (m != null) {
 			clientCount = m.size();
@@ -1637,7 +1633,7 @@ public class ConfigedMain implements ListSelectionListener {
 		if (mainFrame != null) {
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
 
-			if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getCountClients() == 0) {
+			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
 				selectionPanel.setMissingDataPanel();
 			} else {
 				selectionPanel.setDataPanel();
@@ -1703,8 +1699,7 @@ public class ConfigedMain implements ListSelectionListener {
 			Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
 			treeClients.clear();
-			treeClients.setClientInfo(
-					persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapOfAllPCInfoMaps());
+			treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
 			treeClients.produceTreeForALL(allPCs);
 
@@ -1742,8 +1737,7 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
 				treeClients.clear();
-				treeClients.setClientInfo(
-						persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapOfAllPCInfoMaps());
+				treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
 				treeClients.produceTreeForALL(allPCs);
 
@@ -1791,8 +1785,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		// building table model
-		Map<String, HostInfo> pcinfos = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-				.getMapOfPCInfoMaps();
+		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		if (pclist != null) {
 			hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
@@ -2226,10 +2219,10 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		for (int i = 0; i < getSelectedClients().length; i++) {
-			if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapPcBelongsToDepot()
+			if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 					.get(getSelectedClients()[i]) != null) {
-				depotsOfSelectedClients.add(persistenceController.getHostDataService().getHostInfoCollectionsPD()
-						.getMapPcBelongsToDepot().get(getSelectedClients()[i]));
+				depotsOfSelectedClients.add(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+						.get(getSelectedClients()[i]));
 			}
 		}
 
@@ -2526,7 +2519,7 @@ public class ConfigedMain implements ListSelectionListener {
 		activePaths = new ArrayList<>();
 
 		treeClients = new ClientTree(this);
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().setTree(treeClients);
+		persistenceController.getHostInfoCollections().setTree(treeClients);
 	}
 
 	private void setClientByTree(String nodeObject, TreePath pathToNode) {
@@ -3456,9 +3449,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		String[] depotsListSelectedValues = getSelectedDepots();
 
-		depots = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots();
+		depots = persistenceController.getHostInfoCollections().getDepots();
 
-		depotNamesLinked = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepotNamesList();
+		depotNamesLinked = persistenceController.getHostInfoCollections().getDepotNamesList();
 
 		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
 
@@ -3592,7 +3585,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			fetchDepots();
 
-			persistenceController.getHostDataService().getHostInfoCollectionsPD().getAllDepots();
+			persistenceController.getHostInfoCollections().getAllDepots();
 
 			setEditingTarget(editingTarget);
 
@@ -3600,10 +3593,9 @@ public class ConfigedMain implements ListSelectionListener {
 			NavigableSet<String> clientsLeft = new TreeSet<>();
 
 			for (String client : savedSelectedValues) {
-				if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getMapPcBelongsToDepot()
-						.get(client) != null) {
-					String clientDepot = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-							.getMapPcBelongsToDepot().get(client);
+				if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client) != null) {
+					String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+							.get(client);
 
 					if (selectedDepotsV.contains(clientDepot)) {
 						clientsLeft.add(client);
@@ -4338,8 +4330,7 @@ public class ConfigedMain implements ListSelectionListener {
 				persistenceController.getConfigDataService().isUefiConfigured(myServer),
 				persistenceController.getConfigDataService().isWanConfigured(myServer));
 
-		NewClientDialog.getInstance()
-				.setHostNames(persistenceController.getHostDataService().getHostInfoCollectionsPD().getOpsiHostNames());
+		NewClientDialog.getInstance().setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
 		NewClientDialog.getInstance().setVisible(true);
 	}
 
@@ -4355,8 +4346,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 				String newID = getText();
 
-				if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getOpsiHostNames()
-						.contains(newID)) {
+				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
 					showInformationHostExistsAlready(newID);
 				}
 
@@ -4414,8 +4404,8 @@ public class ConfigedMain implements ListSelectionListener {
 		for (int i = 0; i < getSelectedClients().length; i++) {
 			messageBuffer.append(getSelectedClients()[i]);
 			messageBuffer.append("     (from: ");
-			messageBuffer.append(persistenceController.getHostDataService().getHostInfoCollectionsPD()
-					.getMapPcBelongsToDepot().get(getSelectedClients()[i]));
+			messageBuffer.append(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+					.get(getSelectedClients()[i]));
 
 			messageBuffer.append(") ");
 
@@ -4438,8 +4428,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		Logging.debug(this, " start moving to another depot");
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().setDepotForClients(getSelectedClients(),
-				targetDepot);
+		persistenceController.getHostInfoCollections().setDepotForClients(getSelectedClients(), targetDepot);
 		checkErrorList();
 		refreshClientListKeepingGroup();
 	}
@@ -4503,7 +4492,7 @@ public class ConfigedMain implements ListSelectionListener {
 			String[] createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
 					.collect(Collectors.toList()).toArray(new String[clients.size()]);
 
-			persistenceController.getHostDataService().getHostInfoCollectionsPD().addOpsiHostNames(createdClientNames);
+			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 			refreshClientListActivateALL();
@@ -4523,7 +4512,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		String newClientID = hostname + "." + domainname;
 
-		persistenceController.getHostDataService().getHostInfoCollectionsPD().addOpsiHostName(newClientID);
+		persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 
 		if (persistenceController.getHostDataService().createClient(hostname, domainname, depotID, description,
 				inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group,
@@ -4542,7 +4531,7 @@ public class ConfigedMain implements ListSelectionListener {
 			// Sets the client on the table
 			setClient(newClientID);
 		} else {
-			persistenceController.getHostDataService().getHostInfoCollectionsPD().removeOpsiHostName(newClientID);
+			persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
 		}
 	}
 
@@ -4816,9 +4805,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		Optional<HostInfo> selectedClient = persistenceController.getHostDataService().getHostInfoCollectionsPD()
-				.getMapOfPCInfoMaps().values().stream()
-				.filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
+		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
+				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
 
 		if (!selectedClient.isPresent()) {
 			return;
@@ -4878,8 +4866,7 @@ public class ConfigedMain implements ListSelectionListener {
 			HostInfo clientToCopy = selectedClient.get();
 			String newClientNameWithDomain = newClientName + "."
 					+ Utils.getDomainFromClientName(clientToCopy.getName());
-			if (persistenceController.getHostDataService().getHostInfoCollectionsPD().getOpsiHostNames()
-					.contains(newClientNameWithDomain)) {
+			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {
 					proceed = false;
@@ -4888,8 +4875,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, "copy client with new name " + newClientName);
 			if (proceed) {
-				persistenceController.getHostDataService().getHostInfoCollectionsPD()
-						.addOpsiHostName(newClientNameWithDomain);
+				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
 				refreshClientList();

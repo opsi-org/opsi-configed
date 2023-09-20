@@ -9,9 +9,9 @@ package de.uib.configed.dashboard.collector;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 
 public final class DepotData {
 	private static Map<String, Map<String, Object>> depots = new HashMap<>();
@@ -31,8 +31,8 @@ public final class DepotData {
 			return;
 		}
 
-		persistenceController.reloadData(CacheIdentifier.HOST_INFO_COLLECTIONS.toString());
-		depots = persistenceController.getHostDataService().getHostInfoCollectionsPD().getDepots();
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
+		depots = persistenceController.getHostInfoCollections().getDepots();
 	}
 
 	public static void clear() {
