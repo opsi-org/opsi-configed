@@ -70,9 +70,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private JLabel jLabelConnectionState = new JLabel();
 
-	private SSHConfigDialog(ConfigedMain cmain) {
+	private SSHConfigDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
-		configedMain = cmain;
+		this.configedMain = configedMain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -87,9 +87,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		}
 	}
 
-	public static SSHConfigDialog getInstance(ConfigedMain cmain) {
+	public static SSHConfigDialog getInstance(ConfigedMain configedMain) {
 		if (instance == null) {
-			instance = new SSHConfigDialog(cmain);
+			instance = new SSHConfigDialog(configedMain);
 		} else {
 			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}

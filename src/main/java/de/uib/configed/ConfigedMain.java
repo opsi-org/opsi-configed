@@ -4722,14 +4722,14 @@ public class ConfigedMain implements ListSelectionListener {
 	 */
 	public void startSSHOpsiServerExec(final SSHCommand command) {
 		Logging.info(this, "startSSHOpsiServerExec isReadOnly false");
-		final ConfigedMain m = this;
+		final ConfigedMain configedMain = this;
 		new Thread() {
 			@Override
 			public void run() {
 				if (command.needParameter()) {
-					((SSHCommandNeedParameter) command).startParameterGui(m);
+					((SSHCommandNeedParameter) command).startParameterGui(configedMain);
 				} else {
-					new SSHConnectExec(m, command);
+					new SSHConnectExec(configedMain, command);
 				}
 			}
 		}.start();

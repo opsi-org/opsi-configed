@@ -105,7 +105,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 	/** MainFrame instance **/
 	private JFrame main;
-	private ConfigedMain cmain;
+	private ConfigedMain configedMain;
 	/** SSHCommandFactory instance **/
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
@@ -117,11 +117,11 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param owner Usually the MainFrame
 	 **/
 
-	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
+	private SSHCommandControlDialog(ConfigedMain configedMain, JFrame owner) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		Logging.info(this.getClass(), "SSHCommandControlDialog instance " + instance + " main " + main);
 		main = owner;
-		cmain = cm;
+		this.configedMain = configedMain;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
 				Globals.GAP_SIZE * 2, 0);
 		init();
@@ -134,13 +134,13 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/**
 	 * Method allows only one instance Design: Singelton-Pattern
 	 * 
-	 * @param cm the main controller
-	 * @param fr the parent Frame usually the MainFrame
+	 * @param configedMain the main controller
+	 * @param fr           the parent Frame usually the MainFrame
 	 * @return SSHCommandControlDialog instance
 	 **/
-	public static SSHCommandControlDialog getInstance(ConfigedMain cm) {
+	public static SSHCommandControlDialog getInstance(ConfigedMain configedMain) {
 		if (instance == null) {
-			instance = new SSHCommandControlDialog(cm, ConfigedMain.getMainFrame());
+			instance = new SSHCommandControlDialog(configedMain, ConfigedMain.getMainFrame());
 		} else {
 			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
@@ -640,7 +640,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(cmain, command);
+				new SSHConnectExec(configedMain, command);
 			}
 		}.start();
 

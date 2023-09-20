@@ -44,7 +44,7 @@ public class ControllerHWinfoMultiClients {
 	private PanelGenEditTable panel;
 	private GenTableModel model;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private TableModelFilter tableModelFilter;
@@ -53,13 +53,13 @@ public class ControllerHWinfoMultiClients {
 
 	private TableModelFilterCondition filterConditionHwForSelectedHosts = new FilterConditionHwForSelectedHosts();
 
-	public ControllerHWinfoMultiClients(ConfigedMain main) {
-		this.main = main;
+	public ControllerHWinfoMultiClients(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		start();
 	}
 
 	private void start() {
-		filterConditionHwForSelectedHosts.setFilter(new TreeSet<>(main.getSelectedClientsInTable()));
+		filterConditionHwForSelectedHosts.setFilter(new TreeSet<>(configedMain.getSelectedClientsInTable()));
 		tableModelFilter = new TableModelFilter(filterConditionHwForSelectedHosts, false, true);
 
 		initPanel();
@@ -69,7 +69,7 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	public void setFilter() {
-		Set<Object> theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
+		Set<Object> theFilterSet = new TreeSet<>(configedMain.getSelectedClientsInTable());
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
 		model.invalidate();
 		model.reset();
@@ -183,7 +183,7 @@ public class ControllerHWinfoMultiClients {
 		buttonCopySelection.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.getSelection"));
 
 		buttonCopySelection.addActionListener(
-				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
+				actionEvent -> configedMain.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(new JComponent[] {
 

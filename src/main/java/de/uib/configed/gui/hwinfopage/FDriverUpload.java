@@ -23,12 +23,12 @@ public class FDriverUpload extends SecondaryFrame {
 
 	private PanelDriverUpload panelDriverUpload;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public FDriverUpload(ConfigedMain main) {
+	public FDriverUpload(ConfigedMain configedMain) {
 		super();
 
-		this.main = main;
+		this.configedMain = configedMain;
 
 		init();
 		super.setGlobals(Utils.getMap());
@@ -36,7 +36,7 @@ public class FDriverUpload extends SecondaryFrame {
 	}
 
 	private void init() {
-		panelDriverUpload = new PanelDriverUpload(main, this);
+		panelDriverUpload = new PanelDriverUpload(configedMain, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -62,14 +62,14 @@ public class FDriverUpload extends SecondaryFrame {
 	public void setUploadParameters(String byAuditPath) {
 		panelDriverUpload.setByAuditPath(byAuditPath);
 
-		Logging.info(this, " setUploadParameters " + main.getSelectedClients()[0]);
+		Logging.info(this, " setUploadParameters " + configedMain.getSelectedClients()[0]);
 
-		if (main.getSelectedClients() != null && main.getSelectedClients().length == 1) {
-			panelDriverUpload.setClientName(main.getSelectedClients()[0]);
+		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().length == 1) {
+			panelDriverUpload.setClientName(configedMain.getSelectedClients()[0]);
 		} else {
 			panelDriverUpload.setClientName("");
 		}
 
-		panelDriverUpload.setDepot(main.getConfigserver());
+		panelDriverUpload.setDepot(configedMain.getConfigserver());
 	}
 }

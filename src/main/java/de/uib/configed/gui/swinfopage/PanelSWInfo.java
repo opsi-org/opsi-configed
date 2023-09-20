@@ -82,7 +82,7 @@ public class PanelSWInfo extends JPanel {
 	private int hGap = Globals.HGAP_SIZE / 2;
 	private int vGap = Globals.VGAP_SIZE / 2;
 
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -134,13 +134,13 @@ public class PanelSWInfo extends JPanel {
 		}
 	};
 
-	public PanelSWInfo(ConfigedMain mainController) {
-		this(true, mainController);
+	public PanelSWInfo(ConfigedMain configedMain) {
+		this(true, configedMain);
 	}
 
-	public PanelSWInfo(boolean withPopup, ConfigedMain mainController) {
+	public PanelSWInfo(boolean withPopup, ConfigedMain configedMain) {
 		this.withPopup = withPopup;
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 
 		initTableComponents();
 		setupTableLayout();
@@ -493,7 +493,7 @@ public class PanelSWInfo extends JPanel {
 		PanelSWInfo copyOfMe;
 		GeneralFrame externalView;
 
-		copyOfMe = new PanelSWInfo(false, mainController);
+		copyOfMe = new PanelSWInfo(false, configedMain);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 

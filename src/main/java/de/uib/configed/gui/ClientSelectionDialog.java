@@ -119,9 +119,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private final boolean withMySQL;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public ClientSelectionDialog(ConfigedMain main, JTableSelectionPanel selectionPanel,
+	public ClientSelectionDialog(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
 				false,
@@ -130,14 +130,16 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);
 
-		OpsiServiceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		this.withMySQL = controller.getModuleDataService().canCallMySQLPD() && controller.getConfigDataService()
-				.getGlobalBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+		this.withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
+				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
+						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		Logging.info(this.getClass(), "use mysql " + withMySQL);
 
-		this.main = main;
+		this.configedMain = configedMain;
 		this.selectionPanel = selectionPanel;
 		this.savedSearchesDialog = savedSearchesDialog;
 		super.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -184,7 +186,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		// because of potential memory problems we switch to
 		// client view
-		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS);
+		configedMain.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS);
 
 		if (manager != null) {
 			clients = manager.selectClients();
@@ -261,7 +263,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			SwingUtilities.invokeLater(() -> {
 				manager.getBackend().setReloadRequested();
 				manager.getBackend().reload();
-				main.callNewClientSelectionDialog();
+				configedMain.callNewClientSelectionDialog();
 				// we lose all components of this dialog, there is nothing to reset
 			});
 		});

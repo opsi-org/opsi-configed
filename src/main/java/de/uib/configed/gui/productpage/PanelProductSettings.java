@@ -60,6 +60,8 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
+import de.uib.configed.guidata.InstallationStateTableModelFiltered;
+import de.uib.configed.productgroup.ProductgroupPanel;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -145,12 +147,17 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private String title;
 
-	protected ConfigedMain mainController;
+	// State reducedTo1stSelection
+	// List reductionList
 
-	public PanelProductSettings(String title, ConfigedMain mainController, Map<String, Boolean> productDisplayFields) {
+	private ProductgroupPanel groupPanel;
+
+	protected ConfigedMain configedMain;
+
+	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		this.productDisplayFields = productDisplayFields;
 		init();
 
@@ -158,8 +165,22 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void initTopPane() {
-		topPane = new JPanel();
+		if (tableProducts == null) {
+			Logging.error(this, " tableProducts == null ");
+			Main.endApp(Main.NO_ERROR);
+		}
+		topPane = new ProductgroupPanel(this, configedMain, tableProducts);
 		topPane.setVisible(true);
+		groupPanel = (ProductgroupPanel) topPane;
+		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
+			Logging.info(this, " in top pane we got event reloadAction " + ae);
+			reloadAction();
+		});
+
+		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
+			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			saveAndExecuteAction();
+		});
 	}
 
 	protected void init() {
@@ -335,7 +356,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
-		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
 			public void reloadData() {
@@ -356,13 +377,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			}
 		});
 
-		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(mainController,
-				propertiesPanel);
+		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
 		propertiesPanel.registerDataChangedObserver(infoPane);
 
-		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
+		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
 
@@ -371,6 +391,26 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new PopupMouseListener(popup));
 		tableProducts.addMouseListener(new PopupMouseListener(popup));
 
+		activatePacketSelectionHandling(true);
+		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+	}
+
+	public void setGroupsData(final Map<String, Map<String, String>> data,
+			final Map<String, Set<String>> productGroupMembers) {
+		groupPanel.setGroupsData(data, productGroupMembers);
+		showAll();
+	}
+
+	private void activatePacketSelectionHandling(boolean b) {
+		if (b) {
+			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
+		} else {
+			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
+		}
+	}
+
+	public void setSearchFields(List<String> fieldList) {
+		groupPanel.setSearchFields(fieldList);
 	}
 
 	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
@@ -429,8 +469,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		save.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save-menue");
-			mainController.checkSaveAll(false);
-			mainController.requestReloadStatesAndActions();
+			configedMain.checkSaveAll(false);
+			configedMain.requestReloadStatesAndActions();
 		});
 
 		popup.add(save);
@@ -443,7 +483,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
-		itemOnDemand.addActionListener((ActionEvent e) -> mainController.fireOpsiclientdEventOnSelectedClients(
+		itemOnDemand.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(
 				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
@@ -517,8 +557,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			item.addItemListener((ItemEvent e) -> {
 				boolean oldstate = checkColumns.get(columnName);
 				checkColumns.put(columnName, !oldstate);
-				mainController.requestReloadStatesAndActions();
-				mainController.resetView(mainController.getViewIndex());
+				configedMain.requestReloadStatesAndActions();
+				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
@@ -536,11 +576,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		metaData.put("header", title);
 		metaData.put("subject", title);
 		title = "";
-		if (mainController.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot : " + mainController.getHostsStatusInfo().getInvolvedDepots();
+		if (configedMain.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot : " + configedMain.getHostsStatusInfo().getInvolvedDepots();
 		}
-		if (mainController.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Clients: " + mainController.getHostsStatusInfo().getSelectedClientNames();
+		if (configedMain.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Clients: " + configedMain.getHostsStatusInfo().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
@@ -571,7 +611,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
 			Logging.debug(this, "selected  value at "
 					+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-			mainController.setProductEdited(
+			configedMain.setProductEdited(
 					(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 		}
 	}
@@ -644,19 +684,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected void reloadAction() {
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
 
-		mainController.requestReloadStatesAndActions();
-		mainController.resetView(mainController.getViewIndex());
-		mainController.setDataChanged(false);
+		configedMain.requestReloadStatesAndActions();
+		configedMain.resetView(configedMain.getViewIndex());
+		configedMain.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	protected void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
-		mainController.checkSaveAll(false);
-		mainController.requestReloadStatesAndActions();
+		configedMain.checkSaveAll(false);
+		configedMain.requestReloadStatesAndActions();
 
-		mainController.fireOpsiclientdEventOnSelectedClients(
+		configedMain.fireOpsiclientdEventOnSelectedClients(
 				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 	}
@@ -702,6 +742,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void setSelection(Set<String> selectedIDs) {
+		activatePacketSelectionHandling(false);
 		clearSelection();
 		if (selectedIDs != null) {
 			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
@@ -717,10 +758,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				}
 			}
 		}
+
+		activatePacketSelectionHandling(true);
+		groupPanel.findGroup(selectedIDs);
 	}
 
 	public Set<String> getSelectedIDs() {
-		HashSet<String> result = new HashSet<>();
+		Set<String> result = new HashSet<>();
 
 		int[] selection = tableProducts.getSelectedRows();
 
@@ -743,6 +787,43 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		return selectionInModelTerms;
+	}
+
+	public void reduceToSet(Set<String> filter) {
+		activatePacketSelectionHandling(false);
+
+		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+		tModel.setFilterFrom(filter);
+
+		Logging.info(this, "reduceToSet  " + filter);
+		Logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.isGuiFiltered());
+
+		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
+
+		tableProducts.revalidate();
+		activatePacketSelectionHandling(true);
+	}
+
+	public void reduceToSelected() {
+		Set<String> selection = getSelectedIDs();
+		Logging.debug(this, "reduceToSelected: selectedIds  " + selection);
+		reduceToSet(selection);
+		setSelection(selection);
+	}
+
+	public void noSelection() {
+		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+
+		activatePacketSelectionHandling(false);
+		tModel.setFilterFrom((Set<String>) null);
+		tableProducts.revalidate();
+		activatePacketSelectionHandling(true);
+	}
+
+	public void showAll() {
+		Set<String> selection = getSelectedIDs();
+		noSelection();
+		setSelection(selection);
 	}
 
 	public void setTableModel(IFInstallationStateTableModel istm) {

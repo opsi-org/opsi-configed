@@ -40,6 +40,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		}
 	}
 
+	@Override
 	public void setSearchFields(List<String> fieldList) {
 		groupPanel.setSearchFields(fieldList);
 	}
@@ -50,7 +51,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 			Logging.error(this, " tableProducts == null ");
 			Main.endApp(Main.NO_ERROR);
 		}
-		topPane = new ProductgroupPanel(this, mainController, tableProducts);
+		topPane = new ProductgroupPanel(this, configedMain, tableProducts);
 		topPane.setVisible(true);
 		groupPanel = (ProductgroupPanel) topPane;
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
@@ -73,6 +74,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
+	@Override
 	public void setGroupsData(final Map<String, Map<String, String>> data,
 			final Map<String, Set<String>> productGroupMembers) {
 		groupPanel.setGroupsData(data, productGroupMembers);
@@ -115,6 +117,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		return result;
 	}
 
+	@Override
 	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
 
@@ -130,6 +133,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		activatePacketSelectionHandling(true);
 	}
 
+	@Override
 	public void reduceToSelected() {
 		Set<String> selection = getSelectedIDs();
 		Logging.debug(this, "reduceToSelected: selectedIds  " + selection);
@@ -137,6 +141,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		setSelection(selection);
 	}
 
+	@Override
 	public void noSelection() {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 
@@ -146,6 +151,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		activatePacketSelectionHandling(true);
 	}
 
+	@Override
 	public void showAll() {
 		Set<String> selection = getSelectedIDs();
 		noSelection();

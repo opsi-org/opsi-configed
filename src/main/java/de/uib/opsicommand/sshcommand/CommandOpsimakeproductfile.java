@@ -176,8 +176,8 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	@Override
-	public void startParameterGui(ConfigedMain main) {
-		dialog = new SSHMakeProductFileDialog(main);
+	public void startParameterGui(ConfigedMain configedMain) {
+		dialog = new SSHMakeProductFileDialog(configedMain);
 	}
 
 	@Override

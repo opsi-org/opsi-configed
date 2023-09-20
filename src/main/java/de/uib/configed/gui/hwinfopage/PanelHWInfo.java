@@ -93,15 +93,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private boolean withPopup;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public PanelHWInfo(ConfigedMain main) {
-		this(true, main);
+	public PanelHWInfo(ConfigedMain configedMain) {
+		this(true, configedMain);
 	}
 
-	public PanelHWInfo(boolean withPopup, ConfigedMain main) {
+	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain) {
 		this.withPopup = withPopup;
-		this.main = main;
+		this.configedMain = configedMain;
 		buildPanel();
 	}
 
@@ -112,7 +112,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void buildPanel() {
 
-		panelByAuditInfo = new PanelHWByAuditDriver(main);
+		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
 
@@ -205,11 +205,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
 		title = "";
-		if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
+		if (configedMain.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot: " + configedMain.getHostsStatusInfo().getInvolvedDepots();
 		}
-		if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
+		if (configedMain.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Client: " + configedMain.getHostsStatusInfo().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "hardware infos");
@@ -230,7 +230,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		PanelHWInfo copyOfMe;
 		GeneralFrame externalView;
 
-		copyOfMe = new PanelHWInfo(false, main);
+		copyOfMe = new PanelHWInfo(false, configedMain);
 		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
 

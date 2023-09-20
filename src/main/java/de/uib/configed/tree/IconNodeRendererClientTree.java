@@ -19,10 +19,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
-	public IconNodeRendererClientTree(ConfigedMain main) {
-		this.main = main;
+	public IconNodeRendererClientTree(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 
 		if (!Main.THEMES) {
 			super.setOpaque(true);
@@ -57,7 +57,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			if (!node.getAllowsChildren()) {
 				// client
-				if (main.getActiveTreeNodes().containsKey(stringValue)) {
+				if (configedMain.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
 						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}
@@ -79,11 +79,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				// default,will be changed, if clients are childs
 				setIcon(node.getClosedIcon());
 
-				if (main.getActiveParents().contains(stringValue)) {
+				if (configedMain.getActiveParents().contains(stringValue)) {
 					setIcon(node.getEmphasizedIcon());
 				}
 
-				if (main.getActiveTreeNodes().containsKey(stringValue)) {
+				if (configedMain.getActiveTreeNodes().containsKey(stringValue)) {
 					if (!Main.FONT) {
 						setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 					}

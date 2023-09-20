@@ -66,8 +66,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
-		super(mainController, productPropertiesPanel);
+	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
+		super(configedMain, productPropertiesPanel);
 		initComponents();
 		initTitlePanel();
 	}

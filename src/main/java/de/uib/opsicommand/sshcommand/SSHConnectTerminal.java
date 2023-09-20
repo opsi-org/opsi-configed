@@ -48,8 +48,8 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private List<String> commandsCompgen;
 
-	public SSHConnectTerminal(ConfigedMain main) {
-		super(main);
+	public SSHConnectTerminal(ConfigedMain configedMain) {
+		super(configedMain);
 		dialog = new SSHConnectionTerminalDialog(
 				Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 						+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),

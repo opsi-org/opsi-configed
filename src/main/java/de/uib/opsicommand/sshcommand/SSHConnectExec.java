@@ -48,21 +48,20 @@ public class SSHConnectExec extends SSHConnect {
 		this(null, sshcommand, responseButton);
 	}
 
-	public SSHConnectExec(ConfigedMain m) {
-		super(m);
+	public SSHConnectExec(ConfigedMain configedMain) {
+		super(configedMain);
 		foundError = false;
-		configedMain = m;
-
+		this.configedMain = configedMain;
 	}
 
-	public SSHConnectExec(ConfigedMain m, SSHCommand sshcommand) {
-		this(m, sshcommand, null);
+	public SSHConnectExec(ConfigedMain configedMain, SSHCommand sshcommand) {
+		this(configedMain, sshcommand, null);
 	}
 
-	public SSHConnectExec(ConfigedMain m, SSHCommand sshcommand, JButton responseButton) {
-		super(m);
+	public SSHConnectExec(ConfigedMain configedMain, SSHCommand sshcommand, JButton responseButton) {
+		super(configedMain);
 		foundError = false;
-		configedMain = m;
+		this.configedMain = configedMain;
 
 		Logging.info(this.getClass(), "SSHConnectExec main " + configedMain);
 
