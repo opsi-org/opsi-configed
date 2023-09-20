@@ -264,9 +264,6 @@ public class HostInfoCollections {
 			if (isMasterDepot) {
 				Map<String, Object> hostMap = new HashMap<>(host);
 				masterDepots.put(name, hostMap);
-				// if (depot2Host2HostInfo == null) {
-				// depot2Host2HostInfo = new HashMap<>();
-				// }
 				depot2Host2HostInfo.put(name, new TreeMap<>());
 			}
 		}
@@ -330,21 +327,8 @@ public class HostInfoCollections {
 			hostInfo.setInDepot(depotId);
 			myDepot = depotId;
 
-			// if (host2hostInfo == null) {
-			// 	host2hostInfo = new HashMap<>();
-			// }
 			host2hostInfo.put(name, hostInfo);
-
-			// if (depot2Host2HostInfo == null) {
-			// 	depot2Host2HostInfo = new HashMap<>();
-			// }
-			// if (!depot2Host2HostInfo.containsKey(myDepot)) {
-			// 	Map<String, HostInfo> data = new HashMap<>();
-			// 	data.put(name, hostInfo);
-			// 	depot2Host2HostInfo.put(myDepot, data);
-			// } else {
 			depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
-			// }
 		}
 		cacheManager.setCachedData(CacheIdentifier.HOST_TO_HOST_INFO, host2hostInfo);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
