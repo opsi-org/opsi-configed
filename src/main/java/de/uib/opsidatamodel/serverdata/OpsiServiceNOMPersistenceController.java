@@ -295,6 +295,9 @@ public class OpsiServiceNOMPersistenceController {
 		sshCommandDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setConfigDataService(configDataService);
 
+		rpcMethodExecutor.setHostDataService(hostDataService);
+		rpcMethodExecutor.setHostInfoCollections(hostInfoCollections);
+
 		registerReloadHandlers();
 	}
 
