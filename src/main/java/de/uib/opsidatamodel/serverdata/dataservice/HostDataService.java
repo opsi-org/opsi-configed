@@ -454,10 +454,10 @@ public class HostDataService {
 		return result;
 	}
 
-	public List<Map<String, Object>> hostRead() {
+	public List<Map<String, Object>> getOpsiHosts() {
 		String[] callAttributes = new String[] {};
 		Map<?, ?> callFilter = new HashMap<>();
-		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
+		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
 		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
 				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));

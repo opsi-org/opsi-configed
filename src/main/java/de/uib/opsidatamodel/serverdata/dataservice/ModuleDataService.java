@@ -463,9 +463,6 @@ public class ModuleDataService {
 	private void produceOpsiModulesInfoClassicPD() {
 		produceOpsiInformationPD();
 
-		// keeps the info for displaying to the user
-		Map<String, Object> opsiModulesDisplayInfo = new HashMap<>();
-
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		Map<String, Boolean> opsiModules = new HashMap<>();
@@ -483,7 +480,8 @@ public class ModuleDataService {
 		Logging.info(this, "opsi module information " + opsiModulesInfo);
 		opsiModulesInfo.remove("valid");
 
-		opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
+		// keeps the info for displaying to the user
+		Map<String, Object> opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
@@ -763,10 +761,10 @@ public class ModuleDataService {
 				.toBoolean(cacheManager.getCachedData(CacheIdentifier.HAS_OPSI_LICENSING_BEEN_CHECKED, Boolean.class));
 		if (!hasOpsiLicencingBeenChecked) {
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
-					+ getMethodSignature(RPCMethodName.BACKEND_GET_LICENSING_INFO));
+					+ getMethodSignaturePD(RPCMethodName.BACKEND_GET_LICENSING_INFO));
 
 			boolean isOpsiLicencingAvailable;
-			if (getMethodSignature(
+			if (getMethodSignaturePD(
 					RPCMethodName.BACKEND_GET_LICENSING_INFO) == OpsiServiceNOMPersistenceController.NONE_LIST) {
 				Logging.info(this,
 						"method " + RPCMethodName.BACKEND_GET_LICENSING_INFO + " not existing in this opsi service");
@@ -781,52 +779,50 @@ public class ModuleDataService {
 		}
 	}
 
-	// lazy initializing
-	public List<String> getMethodSignature(RPCMethodName methodname) {
+	public List<String> getMethodSignaturePD(RPCMethodName methodname) {
+		retrieveMethodSignaturesPD();
 		Map<String, List<String>> mapOfMethodSignatures = cacheManager
 				.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class);
-		if (mapOfMethodSignatures == null) {
-			List<Object> methodsList = exec
-					.getListResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_INTERFACE, new Object[] {}));
-
-			if (!methodsList.isEmpty()) {
-				mapOfMethodSignatures = new HashMap<>();
-
-				Iterator<Object> iter = methodsList.iterator();
-				while (iter.hasNext()) {
-					Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
-
-					String name = (String) listEntry.get("name");
-					List<String> signature = new ArrayList<>();
-
-					// should never result
-					List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
-
-					// to null
-					for (int i = 0; i < signature1.size(); i++) {
-						String element = (String) signature1.get(i);
-
-						if (element != null && element.length() > 0 && element.charAt(0) == '*') {
-							signature.add(element.substring(1));
-						} else {
-							signature.add(element);
-						}
-
-						Logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
-					}
-					mapOfMethodSignatures.put(name, signature);
-				}
-				cacheManager.setCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, mapOfMethodSignatures);
-			}
-		}
-
 		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
-
 		if (mapOfMethodSignatures.get(methodname.toString()) == null) {
 			return OpsiServiceNOMPersistenceController.NONE_LIST;
 		}
-
 		return mapOfMethodSignatures.get(methodname.toString());
+	}
+
+	public void retrieveMethodSignaturesPD() {
+		if (cacheManager.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class) != null) {
+			return;
+		}
+
+		Map<String, List<String>> mapOfMethodSignatures = new HashMap<>();
+		List<Object> methodsList = exec
+				.getListResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_INTERFACE, new Object[] {}));
+		Iterator<Object> iter = methodsList.iterator();
+		while (iter.hasNext()) {
+			Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
+
+			String name = (String) listEntry.get("name");
+			List<String> signature = new ArrayList<>();
+
+			// should never result
+			List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
+
+			// to null
+			for (int i = 0; i < signature1.size(); i++) {
+				String element = (String) signature1.get(i);
+
+				if (element != null && element.length() > 0 && element.charAt(0) == '*') {
+					signature.add(element.substring(1));
+				} else {
+					signature.add(element);
+				}
+
+				Logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
+			}
+			mapOfMethodSignatures.put(name, signature);
+		}
+		cacheManager.setCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, mapOfMethodSignatures);
 	}
 
 	private Map<String, Object> produceOpsiInformationPD() {
@@ -845,7 +841,7 @@ public class ModuleDataService {
 		opsiInformation = new HashMap<>();
 
 		// method does not exist before opsi 3.4
-		if (getMethodSignature(methodName) != OpsiServiceNOMPersistenceController.NONE_LIST) {
+		if (getMethodSignaturePD(methodName) != OpsiServiceNOMPersistenceController.NONE_LIST) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 
@@ -860,7 +856,6 @@ public class ModuleDataService {
 				acceptMySQL = false;
 			} else {
 				// test if we can access any table
-
 				String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME + " LIMIT 1 ";
 				Logging.info(this, "test, query " + query);
 				acceptMySQL = exec.doCall(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));

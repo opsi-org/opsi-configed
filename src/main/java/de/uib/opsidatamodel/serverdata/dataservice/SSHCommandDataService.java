@@ -66,7 +66,7 @@ public class SSHCommandDataService {
 	 */
 	public boolean checkSSHCommandMethod(RPCMethodName method) {
 		// method does not exist before opsi 3.4
-		if (moduleDataService.getMethodSignature(method) != OpsiServiceNOMPersistenceController.NONE_LIST) {
+		if (moduleDataService.getMethodSignaturePD(method) != OpsiServiceNOMPersistenceController.NONE_LIST) {
 			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
 			return true;
 		}

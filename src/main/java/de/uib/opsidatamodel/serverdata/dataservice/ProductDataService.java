@@ -822,7 +822,7 @@ public class ProductDataService {
 						productPropertyDefinitions.get(product).get(property).setDefaultValues(new ArrayList<>());
 					} else {
 						productPropertyDefinitions.get(product).get(property)
-								.setDefaultValues((List) productPropertyConfig.get(property));
+								.setDefaultValues((List<Object>) productPropertyConfig.get(property));
 					}
 				}
 			}
