@@ -219,8 +219,10 @@ public class ConfigDataService {
 		if (exec.getBooleanResult(
 				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}))) {
 			result = true;
-			Logging.info(this, "checkReadOnly " + isGlobalReadOnly());
 		}
+
+		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, result);
+		Logging.info(this, "checkReadOnly " + isGlobalReadOnly());
 
 		return result;
 	}
@@ -1357,7 +1359,7 @@ public class ConfigDataService {
 		return result;
 	}
 
-	public Map<String, Map<String, Object>> getConfigsPD() {
+	public Map<String, Map<String, Object>> getHostConfigsPD() {
 		retrieveHostConfigsPD();
 		return cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class);
 	}
@@ -1456,13 +1458,13 @@ public class ConfigDataService {
 			Logging.info(this, "addWANConfigState configId, item " + config.getKey() + ", " + item);
 
 			// locally, hopefully the RPC call will work
-			if (getConfigsPD().get(clientId) == null) {
+			if (getHostConfigsPD().get(clientId) == null) {
 				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client " + clientId
 						+ " no local update");
-				getConfigsPD().put(clientId, new HashMap<>());
+				getHostConfigsPD().put(clientId, new HashMap<>());
 			}
 
-			getConfigsPD().get(clientId).put(config.getKey(), config.getValue());
+			getHostConfigsPD().get(clientId).put(config.getKey(), config.getValue());
 
 			// prepare for JSON RPC
 			jsonObjects.add(item);
@@ -1790,7 +1792,7 @@ public class ConfigDataService {
 
 	public Map<String, Object> getConfig(String objectId) {
 		retrieveConfigOptionsPD();
-		Map<String, Object> retrieved = getConfigsPD().get(objectId);
+		Map<String, Object> retrieved = getHostConfigsPD().get(objectId);
 		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 		return new ConfigName2ConfigValue(retrieved, configOptions);
 	}
@@ -1980,11 +1982,12 @@ public class ConfigDataService {
 	public Boolean isUefiConfigured(String hostname) {
 		Boolean result = false;
 
-		if (getConfigsPD().get(hostname) != null
-				&& getConfigsPD().get(hostname).get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getConfigsPD().get(hostname)
+		if (getHostConfigsPD().get(hostname) != null
+				&& getHostConfigsPD().get(hostname)
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
+				&& !((List<?>) getHostConfigsPD().get(hostname)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getConfigsPD().get(hostname)
+			String configValue = (String) ((List<?>) getHostConfigsPD().get(hostname)
 					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
@@ -2086,13 +2089,13 @@ public class ConfigDataService {
 
 		// locally
 		if (result) {
-			if (getConfigsPD().get(clientId) == null) {
-				getConfigsPD().put(clientId, new HashMap<>());
+			if (getHostConfigsPD().get(clientId) == null) {
+				getHostConfigsPD().put(clientId, new HashMap<>());
 			}
 
 			Logging.info(this,
-					"configureUefiBoot, configs for clientId " + clientId + " " + getConfigsPD().get(clientId));
-			getConfigsPD().get(clientId).put(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME, values);
+					"configureUefiBoot, configs for clientId " + clientId + " " + getHostConfigsPD().get(clientId));
+			getHostConfigsPD().get(clientId).put(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME, values);
 		}
 
 		return result;
@@ -2124,7 +2127,7 @@ public class ConfigDataService {
 		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
 		Boolean value = null;
 
-		Map<String, Object> hostConfig = getConfigsPD().get(hostName);
+		Map<String, Object> hostConfig = getHostConfigsPD().get(hostName);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
 			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
 			Logging.debug(this,
@@ -2175,9 +2178,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getServerConfigStrings(String key) {
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
-			retrieveConfigOptionsPD();
-		}
+		retrieveConfigOptionsPD();
 		return Utils.takeAsStringList(getConfigDefaultValuesPD().get(key));
 	}
 

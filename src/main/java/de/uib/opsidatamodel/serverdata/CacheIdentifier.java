@@ -411,11 +411,6 @@ public enum CacheIdentifier {
 	OPSI_DEFAULT_DOMAIN("opsi_default_domain"),
 
 	/**
-	 * return type {@code Map<String, Strin>}
-	 */
-	LOG_FILES("log_files"),
-
-	/**
 	 * return type {@code Map<String, Map<String, Object>>}
 	 */
 	PRODUCT_GLOBAL_INFOS("product_global_infos"),

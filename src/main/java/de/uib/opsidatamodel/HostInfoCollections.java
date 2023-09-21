@@ -293,7 +293,7 @@ public class HostInfoCollections {
 				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
 						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
-				depotId = (String) ((List<?>) (persistenceController.getConfigDataService().getConfigsPD().get(name)
+				depotId = (String) ((List<?>) (persistenceController.getConfigDataService().getHostConfigsPD().get(name)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 			}
 
@@ -337,10 +337,10 @@ public class HostInfoCollections {
 	}
 
 	private boolean hasConfig(String clientId) {
-		return persistenceController.getConfigDataService().getConfigsPD().get(clientId) != null
-				&& persistenceController.getConfigDataService().getConfigsPD().get(clientId)
+		return persistenceController.getConfigDataService().getHostConfigsPD().get(clientId) != null
+				&& persistenceController.getConfigDataService().getHostConfigsPD().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID) != null
-				&& !((List<?>) (persistenceController.getConfigDataService()).getConfigsPD().get(clientId)
+				&& !((List<?>) (persistenceController.getConfigDataService()).getHostConfigsPD().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).isEmpty();
 	}
 
@@ -408,12 +408,12 @@ public class HostInfoCollections {
 
 	private void setDepot(String clientName, String depotId) {
 		// set config
-		if (persistenceController.getConfigDataService().getConfigsPD().get(clientName) == null) {
-			persistenceController.getConfigDataService().getConfigsPD().put(clientName, new HashMap<>());
+		if (persistenceController.getConfigDataService().getHostConfigsPD().get(clientName) == null) {
+			persistenceController.getConfigDataService().getHostConfigsPD().put(clientName, new HashMap<>());
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		persistenceController.getConfigDataService().getConfigsPD().get(clientName)
+		persistenceController.getConfigDataService().getHostConfigsPD().get(clientName)
 				.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
 
 		// set in mapPC_Infomap

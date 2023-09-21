@@ -156,7 +156,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		Logging.info(this, "retrieveData extendedView " + extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
-
 		columnNames = licenseMap.getColumnNames();
 		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
@@ -173,7 +172,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				false) {
 			@Override
 			public void reload() {
-
 				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
@@ -183,15 +181,10 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 						!FGeneralDialogLicensingInfo.extendedView);
-
 				retrieveData();
-
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
-
 				buildModel();
-
 				super.reload();
-
 			}
 		};
 

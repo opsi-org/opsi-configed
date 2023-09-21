@@ -18,6 +18,7 @@ import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ModuleDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 
 public class EssentialDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
@@ -27,6 +28,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 	private GroupDataService groupDataService;
 	private ModuleDataService moduleDataService;
 	private HardwareDataService hardwareDataService;
+	private SoftwareDataService softwareDataService;
 	private HostDataService hostDataService;
 	private HostInfoCollections hostInfoCollections;
 
@@ -56,6 +58,10 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 	public void setHardwareDataService(HardwareDataService hardwareDataService) {
 		this.hardwareDataService = hardwareDataService;
+	}
+
+	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
+		this.softwareDataService = softwareDataService;
 	}
 
 	public void setHostDataService(HostDataService hostDataService) {
@@ -160,5 +166,13 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 		hardwareDataService.retrieveHardwareOnClientPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
+		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER);
+		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
+		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
+		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
+		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
+		softwareDataService.retrieveInstalledSoftwareInformationPD();
 	}
 }

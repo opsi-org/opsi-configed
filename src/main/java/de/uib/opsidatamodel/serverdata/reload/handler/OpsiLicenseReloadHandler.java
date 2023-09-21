@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ModuleDataService;
@@ -30,7 +29,5 @@ public class OpsiLicenseReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN);
 		moduleDataService.retrieveOpsiLicensingInfoNoOpsiAdminPD();
-
-		LicensingInfoMap.requestRefresh();
 	}
 }

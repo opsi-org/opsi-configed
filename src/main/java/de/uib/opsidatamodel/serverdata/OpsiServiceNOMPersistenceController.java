@@ -373,6 +373,7 @@ public class OpsiServiceNOMPersistenceController {
 		essentialDataReloadHandler.setDepotDataService(depotDataService);
 		essentialDataReloadHandler.setGroupDataService(groupDataService);
 		essentialDataReloadHandler.setHardwareDataService(hardwareDataService);
+		essentialDataReloadHandler.setSoftwareDataService(softwareDataService);
 		essentialDataReloadHandler.setHostDataService(hostDataService);
 		essentialDataReloadHandler.setModuleDataService(moduleDataService);
 		essentialDataReloadHandler.setProductDataService(productDataService);

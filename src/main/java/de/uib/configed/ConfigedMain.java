@@ -1893,8 +1893,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
 		hostConfigs = null;
-		persistenceController.getLogDataService().getEmptyLogfiles();
-
 		if (mainFrame.getControllerHWinfoMultiClients() != null) {
 			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
 		}
@@ -1902,9 +1900,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
-
-		// persistenceController.reloadData(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString());
-
 		localbootStatesAndActionsUpdate = true;
 		netbootStatesAndActionsUpdate = true;
 	}
@@ -2792,13 +2787,7 @@ public class ConfigedMain implements ListSelectionListener {
 	// enables and disables tabs depending if they make sense in other cases
 	private boolean checkOneClientSelected() {
 		Logging.debug(this, "checkOneClientSelected() selectedClients " + Arrays.toString(getSelectedClients()));
-		boolean result = true;
-
-		if (getSelectedClients().length != 1) {
-			result = false;
-		}
-
-		return result;
+		return getSelectedClients().length == 1;
 	}
 
 	private boolean setLocalbootProductsPage() {
@@ -3130,12 +3119,10 @@ public class ConfigedMain implements ListSelectionListener {
 			List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
 			if (hostConfigs == null) {
-
-				// serves as marker
 				hostConfigs = new HashMap<>();
-
 				for (String client : getSelectedClients()) {
-					hostConfigs.put(client, persistenceController.getConfigDataService().getConfigsPD().get(client));
+					hostConfigs.put(client,
+							persistenceController.getConfigDataService().getHostConfigsPD().get(client));
 				}
 			}
 
@@ -3214,14 +3201,10 @@ public class ConfigedMain implements ListSelectionListener {
 			for (int i = 0; i < Utils.getLogTypes().length; i++) {
 				logfiles.put(Utils.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
-
-			mainFrame.setLogfilePanel(logfiles);
 		} else {
-
 			mainFrame.activateLoadingPane();
-			logfiles = persistenceController.getLogDataService().getLogfiles(firstSelectedClient, logtypeToUpdate);
+			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
 			mainFrame.disactivateLoadingPane();
-
 			Logging.debug(this, "log pages set");
 		}
 
@@ -3229,13 +3212,9 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private boolean setLogPage() {
-
 		Logging.debug(this, "setLogPage(), selected clients: " + Arrays.toString(getSelectedClients()));
-
-		logfiles = persistenceController.getLogDataService().getEmptyLogfiles();
 		mainFrame.setUpdatedLogfilePanel("instlog");
 		mainFrame.setLogview("instlog");
-
 		return true;
 	}
 
@@ -3243,10 +3222,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean setView(int viewIndex) {
 		if (viewIndex == VIEW_CLIENTS) {
 			checkErrorList();
-
 			depotsList.setEnabled(true);
 		}
-
 		return true;
 	}
 
@@ -3394,7 +3371,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private static boolean isVisualIndexAllowed(int visualViewIndex) {
-
 		// We cannot change to clients
 		if (visualViewIndex == VIEW_CLIENTS) {
 			return false;
@@ -3439,35 +3415,22 @@ public class ConfigedMain implements ListSelectionListener {
 	private void fetchDepots() {
 		Logging.info(this, "fetchDepots");
 
-		// for testing activated in 4.0.6.0.9
 		if (depotsList.getListSelectionListeners().length > 0) {
 			depotsList.removeListSelectionListener(depotsListSelectionListener);
 		}
-
 		depotsList.getSelectionModel().setValueIsAdjusting(true);
 
-		String[] depotsListSelectedValues = getSelectedDepots();
-
-		depots = persistenceController.getHostInfoCollections().getDepots();
-
 		depotNamesLinked = persistenceController.getHostInfoCollections().getDepotNamesList();
-
 		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
 
-		if (depots.size() == 1) {
-			multiDepot = false;
-		} else {
-			multiDepot = true;
-		}
+		depots = persistenceController.getHostInfoCollections().getDepots();
+		multiDepot = depots.size() != 1;
 
 		Logging.debug(this, "we have multidepot " + multiDepot);
-
 		depotsList.setListData(getLinkedDepots());
-
-		Logging.debug(this, "selected after fetch " + getSelectedDepots().length);
-
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
-
+		String[] depotsListSelectedValues = getSelectedDepots();
+		Logging.debug(this, "selected after fetch " + getSelectedDepots().length);
 		for (int j = 0; j < depotsListSelectedValues.length; j++) {
 			// collect all indices where the value had been selected
 			depotsList.setSelectedValue(depotsListSelectedValues[j], false);
@@ -3488,7 +3451,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		depotsList.getSelectionModel().setValueIsAdjusting(false);
-
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 	}
 
@@ -3583,14 +3545,10 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			fetchDepots();
-
-			persistenceController.getHostInfoCollections().getAllDepots();
-
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
-
 			for (String client : savedSelectedValues) {
 				if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client) != null) {
 					String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
@@ -3601,7 +3559,6 @@ public class ConfigedMain implements ListSelectionListener {
 					}
 				}
 			}
-
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
 			if (selectionPanel != null) {
