@@ -370,9 +370,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		table.setDefaultRenderer(Object.class, colorized);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-		table.setShowGrid(true);
-		table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
+		table.setRowHeight(Globals.LINE_HEIGHT);
+
+		if (!Main.THEMES) {
+			table.setShowGrid(true);
+			table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
+		}
 
 		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 

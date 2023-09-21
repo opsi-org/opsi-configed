@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -179,7 +180,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	 *****************************/
 
 	@Override
-	public void mouseClicked(java.awt.event.MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {
 
 		if (isEnabled()) {
 			ActionEvent action = new ActionEvent(this, 1, description);
@@ -188,15 +189,15 @@ public class IconAsButton extends JPanel implements MouseListener {
 	}
 
 	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 		/* Not needed */}
 
 	@Override
-	public void mouseReleased(java.awt.event.MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {
 		/* Not needed */}
 
 	@Override
-	public void mouseEntered(java.awt.event.MouseEvent e) {
+	public void mouseEntered(MouseEvent e) {
 		if (isEnabled() && !mouseOver) {
 			mouseOver = true;
 			setIcon();
@@ -204,7 +205,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	}
 
 	@Override
-	public void mouseExited(java.awt.event.MouseEvent e) {
+	public void mouseExited(MouseEvent e) {
 		if (isEnabled() && mouseOver) {
 			mouseOver = false;
 			setIcon();

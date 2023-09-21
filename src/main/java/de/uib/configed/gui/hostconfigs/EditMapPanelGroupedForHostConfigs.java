@@ -605,47 +605,49 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.info(this, "theUsers found " + theUsers);
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().setEditDenier(key -> canEdit(key, entry));
+			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
 		}
 	}
 
-	private boolean canEdit(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
+	// Modification info and some userroles cannot be edited
+	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 
 		Logging.info(this, "entry " + partialPanelEntry + " key " + key);
 
-		Boolean result = false;
+		Boolean result = true;
 
 		if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
-			result = true;
+			result = false;
 		} else {
-			String user = UserConfig.getUserFromKey(key);
 			// we really are in a user branch
-			if (user != null) {
-
-				String rolekey = partialPanelEntry.getKey() + "." + UserConfig.HAS_ROLE_ATTRIBUT;
-
-				// rolekey may be edited
-				if (!(key.equals(rolekey))) {
-					String theRole = null;
-
-					List<Object> values = PersistenceControllerFactory.getPersistenceController()
-							.getConfigDefaultValues().get(rolekey);
-
-					if (values != null && !values.isEmpty()) {
-						theRole = "" + values.get(0);
-					}
-
-					boolean obeyToRole = theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE));
-
-					if (obeyToRole) {
-						result = true;
-					}
-				}
+			if (UserConfig.getUserFromKey(key) != null) {
+				result = isUserKeyEditable(key, partialPanelEntry.getKey());
 			}
 		}
 
 		Logging.info(this, "key denied ? " + key + " : " + result);
 		return result;
+	}
+
+	private static boolean isUserKeyEditable(String key, String partialPanelKey) {
+		String rolekey = partialPanelKey + "." + UserConfig.HAS_ROLE_ATTRIBUT;
+
+		// rolekey may be edited
+		if (!(key.equals(rolekey))) {
+
+			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDefaultValues()
+					.get(rolekey);
+
+			boolean obeyToRole = values != null && !values.isEmpty()
+					&& !(values.get(0).equals(UserConfig.NONE_PROTOTYPE));
+
+			// key obeys role and therefore cannot be edited
+			if (obeyToRole) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void classify(Map<String, Object> data, NavigableSet<String> classIds) {

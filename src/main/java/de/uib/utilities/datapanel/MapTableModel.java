@@ -43,7 +43,7 @@ public class MapTableModel extends AbstractTableModel {
 	// keys which identify readonly entries
 	private Set<String> keysOfReadOnlyEntries;
 
-	private Function<String, Boolean> editDenier;
+	private Function<String, Boolean> isEditable;
 
 	private Map<String, ListCellOptions> optionsMap;
 
@@ -162,8 +162,8 @@ public class MapTableModel extends AbstractTableModel {
 		keysOfReadOnlyEntries = keys;
 	}
 
-	public void setEditDenier(Function<String, Boolean> disallow) {
-		editDenier = disallow;
+	public void setIsEditable(Function<String, Boolean> isEditable) {
+		this.isEditable = isEditable;
 	}
 
 	public void addEntry(String key, Object newval, boolean toStore) {
@@ -295,7 +295,7 @@ public class MapTableModel extends AbstractTableModel {
 			return false;
 		} else {
 			return (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
-					&& (editDenier == null || !editDenier.apply(keys.get(row)));
+					&& (isEditable == null || isEditable.apply(keys.get(row)));
 		}
 	}
 
