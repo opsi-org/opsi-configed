@@ -137,7 +137,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			List<?> list = (List<?>) listeditor.getValue();
 
 			if (list.isEmpty()) {
-				result = null;
+				result = list;
 			} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
 				result = list;
 			} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {

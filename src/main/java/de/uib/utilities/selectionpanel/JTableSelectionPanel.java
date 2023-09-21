@@ -116,8 +116,12 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table = new JTable();
 
 		table.setDragEnabled(true);
-		table.setShowGrid(true);
-		table.setGridColor(Globals.JTABLE_SELECTION_PANEL_GRID_COLOR);
+
+		if (!Main.THEMES) {
+			table.setShowGrid(true);
+			table.setGridColor(Globals.JTABLE_SELECTION_PANEL_GRID_COLOR);
+		}
+
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 

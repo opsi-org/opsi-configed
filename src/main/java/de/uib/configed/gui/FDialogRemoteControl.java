@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -257,7 +258,7 @@ public class FDialogRemoteControl extends FEditStringList {
 
 	// interface ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 
 		if (e.getSource() == extraField) {

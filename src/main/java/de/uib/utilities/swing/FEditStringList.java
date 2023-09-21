@@ -6,6 +6,7 @@
 
 package de.uib.utilities.swing;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.text.JTextComponent;
@@ -27,7 +28,7 @@ public class FEditStringList extends FEditList<String> {
 	}
 
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 
 		if (e.getSource() == buttonAdd) {

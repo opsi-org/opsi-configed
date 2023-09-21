@@ -80,6 +80,25 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		createComponents();
 		// components initialized lazily in init()
+
+		addListeners();
+	}
+
+	private void addListeners() {
+		editingArea.addKeyListener(this);
+
+		buttonCommit.addActionListener(this);
+		buttonCancel.addActionListener(this);
+
+		buttonCommit.addKeyListener(this);
+		buttonCancel.addKeyListener(this);
+
+		buttonRemove.addActionListener(this);
+		buttonRemove.addKeyListener(this);
+
+		buttonAdd.addActionListener(this);
+		buttonAdd.addKeyListener(this);
+
 	}
 
 	protected void createComponents() {
@@ -140,20 +159,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-
-		editingArea.addKeyListener(this);
-
-		buttonCommit.addActionListener(this);
-		buttonCancel.addActionListener(this);
-
-		buttonCommit.addKeyListener(this);
-		buttonCancel.addKeyListener(this);
-
-		buttonRemove.addActionListener(this);
-		buttonRemove.addKeyListener(this);
-
-		buttonAdd.addActionListener(this);
-		buttonAdd.addKeyListener(this);
 
 		extraField.getDocument().addDocumentListener(this);
 
@@ -372,6 +377,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
+		} else if (e.getSource() == buttonRemove || e.getSource() == buttonAdd) {
+			// These buttons will be used only in subclasses
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
