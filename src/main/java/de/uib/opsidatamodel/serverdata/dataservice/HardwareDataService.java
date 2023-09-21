@@ -208,43 +208,34 @@ public class HardwareDataService {
 	}
 
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {
+		retrieveOpsiHWAuditConfPD(locale);
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
-
-		if (hwAuditConf == null) {
-			hwAuditConf = new HashMap<>();
-		}
-
-		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
-				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
-		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 		return hwAuditConf.get(locale);
 	}
 
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
+		retrieveOpsiHWAuditConfPD();
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
-		if (hwAuditConf == null) {
-			// Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
-			// return new ArrayList<>();
-			hwAuditConf = new HashMap<>();
-			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(
-					new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] {})));
-			if (hwAuditConf.get("") == null) {
-				Logging.warning(this, "got no hardware config");
-			}
-			cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
-		} else if (!hwAuditConf.containsKey("")) {
-			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(
-					new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] {})));
-			if (hwAuditConf.get("") == null) {
-				Logging.warning(this, "got no hardware config");
-			}
-			cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
-		} else {
-			// hwAuditConf already contains key "" and is initialized
+		if (!hwAuditConf.containsKey("")) {
+			Logging.warning(this, "got no hardware config");
 		}
 		return hwAuditConf.get("");
+	}
+
+	public void retrieveOpsiHWAuditConfPD() {
+		retrieveOpsiHWAuditConfPD("");
+	}
+
+	public void retrieveOpsiHWAuditConfPD(String locale) {
+		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class) != null) {
+			return;
+		}
+		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = new HashMap<>();
+		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
+				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
+		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 	}
 
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {

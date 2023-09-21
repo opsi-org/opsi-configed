@@ -31,7 +31,7 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
-		hardwareDataService.getOpsiHWAuditConfPD();
+		hardwareDataService.retrieveOpsiHWAuditConfPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES);
 		hardwareDataService.retrieveHwAuditDeviceClassesPD();
