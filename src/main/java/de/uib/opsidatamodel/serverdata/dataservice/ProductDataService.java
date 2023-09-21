@@ -1558,70 +1558,8 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductOnClientsDisplayFieldsNetbootProducts() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS,
-				Map.class) != null) {
-			return;
-		}
-		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
-		List<String> configuredByService = Utils
-				.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
-		List<?> possibleValuesAccordingToService = new ArrayList<>();
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
-		if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT) != null) {
-			possibleValuesAccordingToService = (List<?>) configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT)
-					.get("possibleValues");
-		}
-
-		if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
-				.equals(new HashSet<>(possibleValuesAccordingToService)))) {
-			// we did not initialize server property
-			configuredByService = produceProductOnClientDisplayfieldsNetboot();
-		}
-
-		Map<String, Boolean> productOnClientsDisplayFieldsNetbootProducts = new LinkedHashMap<>();
-
-		// key names from ProductState
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
-				configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION, false);
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
-				configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
-				configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
-
-		productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS,
-				productOnClientsDisplayFieldsNetbootProducts);
-	}
-
-	private List<String> produceProductOnClientDisplayfieldsNetboot() {
-		List<String> result = getDefaultValuesProductOnClientDisplayFields();
-		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
-
-		// create config for service
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
-		item.put("description", "");
-		item.put("defaultValues", result);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
-
-		exec.doCall(omc);
-
-		return result;
+		retrieveProductOnClientsDisplayFields(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS,
+				KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
@@ -1631,107 +1569,98 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductOnClientsDisplayFieldsLocalbootProducts() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
-				Map.class) != null) {
+		retrieveProductOnClientsDisplayFields(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
+				KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
+	}
+
+	private void retrieveProductOnClientsDisplayFields(CacheIdentifier cacheId, String key) {
+		if (cacheManager.getCachedData(cacheId, Map.class) != null) {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
-		Logging.debug(this,
-				"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
-						+ configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
+		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
+		Logging.debug(this, "getProductOnClientsDisplayFields() " + configOptions.get(key));
 
-		List<String> configuredByService = Utils
-				.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
+		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(key));
 		List<?> possibleValuesAccordingToService = new ArrayList<>();
-		if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT) != null) {
-			possibleValuesAccordingToService = (List<?>) configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT)
-					.get("possibleValues");
+		if (configOptions.get(key) != null) {
+			possibleValuesAccordingToService = (List<?>) configOptions.get(key).get("possibleValues");
 		}
 
-		Logging.debug(this, "getProductOnClients_displayFieldsLocalbootProducts() possibleValuesAccordingToService "
+		Logging.debug(this, "getProductOnClientsDisplayFields() possibleValuesAccordingToService "
 				+ possibleValuesAccordingToService);
 
 		if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
 				.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 			// we did not initialize server property
-			configuredByService = produceProductOnClientDisplayfieldsLocalboot();
+			configuredByService = produceProductOnClientDisplayfields(key);
 		}
 
-		Map<String, Boolean> productOnClientsDisplayFieldsLocalbootProducts = new LinkedHashMap<>();
+		Map<String, Boolean> productOnClientsDisplayFields = new LinkedHashMap<>();
 		if (configuredByService == null) {
 			Logging.warning(this, "configuredByService is null");
-			cacheManager.setCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
-					productOnClientsDisplayFieldsLocalbootProducts);
+			cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
 			return;
 		}
 
 		// key names from ProductState
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_ID, true);
+		productOnClientsDisplayFields.put(ProductState.KEY_PRODUCT_ID, true);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+		productOnClientsDisplayFields.put(ProductState.KEY_PRODUCT_NAME,
 				configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
+		productOnClientsDisplayFields.put(ProductState.KEY_TARGET_CONFIGURATION,
 				configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
+		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_INFO,
 				configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
+		productOnClientsDisplayFields.put(ProductState.KEY_ACTION_REQUEST, true);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
+		productOnClientsDisplayFields.put(ProductState.KEY_PRODUCT_PRIORITY,
 				configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1);
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
+		productOnClientsDisplayFields.put(ProductState.KEY_POSITION,
 				configuredByService.indexOf(ProductState.KEY_POSITION) > -1);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+		productOnClientsDisplayFields.put(ProductState.KEY_LAST_STATE_CHANGE,
 				configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
-		productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
-				productOnClientsDisplayFieldsLocalbootProducts);
+		productOnClientsDisplayFields.put(ProductState.KEY_VERSION_INFO, true);
+		cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
 	}
 
-	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
+	private List<String> produceProductOnClientDisplayfields(String key) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return null;
 		}
 
 		List<String> result = getDefaultValuesProductOnClientDisplayFields();
-
 		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
 
 		// create config for service
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
+		item.put("ident", key);
 		item.put("description", "");
 		item.put("defaultValues", result);
 		item.put("possibleValues", possibleValues);
 		item.put("editable", false);
 		item.put("multiValue", true);
 
-		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
-
+		Logging.info(this, "produceProductOnClientDisplayfields");
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
-
 		exec.doCall(omc);
-
 		return result;
 	}
 
 	private static List<String> getDefaultValuesProductOnClientDisplayFields() {
 		List<String> result = new ArrayList<>();
-
 		result.add("productId");
-
 		result.add(ProductState.KEY_INSTALLATION_STATUS);
 		result.add(ProductState.KEY_INSTALLATION_INFO);
 		result.add(ProductState.KEY_ACTION_REQUEST);
 		result.add(ProductState.KEY_VERSION_INFO);
-
 		return result;
 	}
 
@@ -1747,7 +1676,6 @@ public class ProductDataService {
 		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
 		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
 		possibleValues.add(ProductState.KEY_VERSION_INFO);
-
 		return possibleValues;
 	}
 }
