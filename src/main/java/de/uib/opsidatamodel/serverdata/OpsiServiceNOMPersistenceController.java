@@ -262,7 +262,6 @@ public class OpsiServiceNOMPersistenceController {
 		configDataService.setGroupDataService(groupDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
 		configDataService.setModuleDataService(moduleDataService);
-		configDataService.setHostDataService(hostDataService);
 		configDataService.setHostInfoCollections(hostInfoCollections);
 
 		depotDataService.setConfigDataService(configDataService);
@@ -281,16 +280,13 @@ public class OpsiServiceNOMPersistenceController {
 		licenseDataService.setConfigDataService(configDataService);
 		licenseDataService.setModuleDataService(moduleDataService);
 
-		moduleDataService.setHostDataService(hostDataService);
 		moduleDataService.setConfigDataService(configDataService);
 		moduleDataService.setHostInfoCollections(hostInfoCollections);
 
 		productDataService.setConfigDataService(configDataService);
 		productDataService.setDepotDataService(depotDataService);
-		productDataService.setHostDataService(hostDataService);
 		productDataService.setHostInfoCollections(hostInfoCollections);
 
-		softwareDataService.setHostDataService(hostDataService);
 		softwareDataService.setModuleDataService(moduleDataService);
 		softwareDataService.setLicenseDataService(licenseDataService);
 		softwareDataService.setConfigDataService(configDataService);

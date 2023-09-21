@@ -60,17 +60,12 @@ public class ModuleDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 
-	private HostDataService hostDataService;
 	private ConfigDataService configDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	public ModuleDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {

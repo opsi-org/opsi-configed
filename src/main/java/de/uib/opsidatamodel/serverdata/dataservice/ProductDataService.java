@@ -80,7 +80,6 @@ public class ProductDataService {
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private DepotDataService depotDataService;
-	private HostDataService hostDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	private List<Map<String, Object>> updateProductOnClientItems;
@@ -99,10 +98,6 @@ public class ProductDataService {
 
 	public void setDepotDataService(DepotDataService depotDataService) {
 		this.depotDataService = depotDataService;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {

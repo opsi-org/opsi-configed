@@ -75,5 +75,4 @@ public class UserDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_OPSI_CA_CERT, new Object[0]);
 		return exec.getStringResult(omc);
 	}
-
 }

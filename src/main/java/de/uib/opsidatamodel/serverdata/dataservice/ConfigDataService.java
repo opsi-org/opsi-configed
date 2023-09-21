@@ -83,7 +83,6 @@ public class ConfigDataService {
 	private GroupDataService groupDataService;
 	private HardwareDataService hardwareDataService;
 	private ModuleDataService moduleDataService;
-	private HostDataService hostDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	private List<Map<String, Object>> configCollection;
@@ -106,10 +105,6 @@ public class ConfigDataService {
 
 	public void setModuleDataService(ModuleDataService moduleDataService) {
 		this.moduleDataService = moduleDataService;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {

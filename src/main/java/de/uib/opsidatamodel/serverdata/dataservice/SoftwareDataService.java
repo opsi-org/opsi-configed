@@ -80,7 +80,6 @@ public class SoftwareDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
-	private HostDataService hostDataService;
 	private ModuleDataService moduleDataService;
 	private ConfigDataService configDataService;
 	private LicenseDataService licenseDataService;
@@ -94,10 +93,6 @@ public class SoftwareDataService {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setModuleDataService(ModuleDataService moduleDataService) {
