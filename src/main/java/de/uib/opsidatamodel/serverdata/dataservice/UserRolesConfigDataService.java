@@ -42,7 +42,8 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 /**
- * Provides methods for working with configuration data on the server.
+ * Provides methods for working with user roles configuration data on the
+ * server.
  * <p>
  * Classes ending in {@code DataService} represent somewhat of a layer between
  * server and the client. It enables to work with specific data, that is saved
