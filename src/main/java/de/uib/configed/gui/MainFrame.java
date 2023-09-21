@@ -954,7 +954,7 @@ public class MainFrame extends JFrame
 
 		jMenuServer.removeAll();
 		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
-		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
@@ -2599,7 +2599,8 @@ public class MainFrame extends JFrame
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly() && b) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
+				&& b) {
 			return;
 		}
 
@@ -2820,7 +2821,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!persistenceController.getConfigDataService().hasCreateClientPermissionPD()) {
+			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
@@ -3585,7 +3586,8 @@ public class MainFrame extends JFrame
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean gb = !PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly();
+		boolean gb = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly();
 
 		labelHost.setEnabled(singleClient);
 

@@ -46,7 +46,7 @@ import utils.Utils;
 public class GroupDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	public GroupDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
@@ -55,8 +55,8 @@ public class GroupDataService {
 		this.persistenceController = persistenceController;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public Map<String, Map<String, String>> getProductGroupsPD() {
@@ -172,7 +172,7 @@ public class GroupDataService {
 	}
 
 	public boolean addHosts2Group(List<String> objectIds, String groupId) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -194,7 +194,7 @@ public class GroupDataService {
 	}
 
 	public boolean addHost2Groups(String objectId, List<String> groupIds) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -215,7 +215,7 @@ public class GroupDataService {
 	}
 
 	public boolean addObject2Group(String objectId, String groupId) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -228,7 +228,7 @@ public class GroupDataService {
 	}
 
 	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -258,7 +258,7 @@ public class GroupDataService {
 	}
 
 	public boolean removeObject2Group(String objectId, String groupId) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -274,7 +274,7 @@ public class GroupDataService {
 	}
 
 	public boolean addGroup(StringValuedRelationElement newgroup, boolean requestRefresh) {
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -308,7 +308,7 @@ public class GroupDataService {
 	}
 
 	public boolean deleteGroup(String groupId) {
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -327,7 +327,7 @@ public class GroupDataService {
 	}
 
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo) {
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -357,7 +357,7 @@ public class GroupDataService {
 	}
 
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 

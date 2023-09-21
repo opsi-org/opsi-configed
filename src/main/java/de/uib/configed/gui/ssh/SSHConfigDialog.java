@@ -82,7 +82,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
-		if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 	}
@@ -352,16 +353,18 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		buttonPanel.add(new JLabel("            "));
 
-		Logging.info(this, "actionlistener for button1 "
-				+ PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		Logging.info(this, "actionlistener for button1 " + PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
 		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 				"images/folder_16.png", " ", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 

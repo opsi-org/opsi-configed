@@ -133,8 +133,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		super.setSize(this.thissize);
 		super.setMaximumSize(new Dimension(900, 700));
 
-		setComponentsEnabledRO(
-				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
+		setComponentsEnabledRO(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
@@ -306,19 +306,22 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jComboBoxPrivat.addItemListener(itemEvent -> applyPrivate());
 		}
 
 		changeEchoChar((char) 0);
 		passwordMode = true;
 		final SSHConnectionTerminalDialog caller = this;
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
 		}
 
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(jTextFieldCommand));
@@ -333,7 +336,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				Configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonExecuteCommand.addActionListener((ActionEvent actionEvent) -> {
 				String text = getInputField().getText() + "\n";
 				if (terminal != null) {

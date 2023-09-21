@@ -308,10 +308,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
 
 		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
-			forbidEditing = !PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			forbidEditing = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 					.hasServerFullPermissionPD();
 		} else {
-			forbidEditing = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			forbidEditing = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 					.isGlobalReadOnly();
 		}
 

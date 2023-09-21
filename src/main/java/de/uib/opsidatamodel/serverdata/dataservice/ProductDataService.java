@@ -79,6 +79,7 @@ public class ProductDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private DepotDataService depotDataService;
 	private HostInfoCollections hostInfoCollections;
 
@@ -94,6 +95,10 @@ public class ProductDataService {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
+	}
+
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setDepotDataService(DepotDataService depotDataService) {
@@ -150,7 +155,7 @@ public class ProductDataService {
 			localbootProductNames.addAll(notSortedProducts);
 
 			// we don't have a productsgroupsFullPermission)
-			Set<String> permittedProducts = configDataService.getPermittedProductsPD();
+			Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
 			if (permittedProducts != null) {
 				localbootProductNames.retainAll(permittedProducts);
 			}
@@ -220,7 +225,7 @@ public class ProductDataService {
 		for (Map<String, Object> m : packages) {
 			String depot = "" + m.get("depotId");
 
-			if (!configDataService.hasDepotPermission(depot)) {
+			if (!userRolesConfigDataService.hasDepotPermission(depot)) {
 				continue;
 			}
 
@@ -1107,7 +1112,7 @@ public class ProductDataService {
 	private boolean updateProductOnClients(List<Map<String, Object>> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 
@@ -1126,7 +1131,7 @@ public class ProductDataService {
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 
@@ -1139,7 +1144,7 @@ public class ProductDataService {
 	}
 
 	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 
@@ -1182,7 +1187,7 @@ public class ProductDataService {
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 
@@ -1350,7 +1355,7 @@ public class ProductDataService {
 	private void setProductProperties(List<Map<String, Object>> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return;
 		}
 
@@ -1691,7 +1696,7 @@ public class ProductDataService {
 	}
 
 	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return null;
 		}
 

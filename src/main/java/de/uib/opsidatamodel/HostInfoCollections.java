@@ -375,7 +375,7 @@ public class HostInfoCollections {
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
-			if (persistenceController.getConfigDataService().hasDepotPermission(depot)) {
+			if (persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
 				depotList.add(depot);
 			}
 		}
@@ -439,7 +439,7 @@ public class HostInfoCollections {
 	}
 
 	public void setDepotForClients(String[] clients, String depotId) {
-		if (!persistenceController.getConfigDataService().hasDepotPermission(depotId)) {
+		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depotId)) {
 			return;
 		}
 

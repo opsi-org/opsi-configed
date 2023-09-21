@@ -81,7 +81,7 @@ public class SoftwareDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ModuleDataService moduleDataService;
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private LicenseDataService licenseDataService;
 	private HostInfoCollections hostInfoCollections;
 
@@ -91,8 +91,8 @@ public class SoftwareDataService {
 		this.persistenceController = persistenceController;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setModuleDataService(ModuleDataService moduleDataService) {
@@ -535,7 +535,7 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicence(String softwareLicenseId, String licenceContractId, String licenceType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 
@@ -589,7 +589,7 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteSoftwareLicence(String softwareLicenseId) {
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -603,7 +603,7 @@ public class SoftwareDataService {
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 
@@ -621,7 +621,7 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -644,7 +644,7 @@ public class SoftwareDataService {
 	public boolean removeAssociations(String licencePoolId, List<String> softwareIds) {
 		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licencePoolId + ", " + softwareIds);
 
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -706,7 +706,7 @@ public class SoftwareDataService {
 		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
 				+ softwareToAssign);
 
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return false;
 		}
 
@@ -822,7 +822,7 @@ public class SoftwareDataService {
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licencePoolIDNew) {
-		if (Boolean.FALSE.equals(configDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
 

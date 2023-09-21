@@ -241,7 +241,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (PersistenceControllerFactory.getPersistenceController() == null) {
 			return false;
 		}
-		return PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+		return PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.hasServerFullPermissionPD();
 	}
 

@@ -69,7 +69,8 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
@@ -84,8 +85,8 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(
-				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();

@@ -572,7 +572,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setSSHallowedHosts() {
 		Set<String> sshAllowedHosts = new HashSet<>();
 
-		if (persistenceController.getConfigDataService().hasDepotsFullPermissionPD()) {
+		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 			Logging.info(this, "set ssh allowed hosts " + host);
 			sshAllowedHosts.add(host);
 			sshAllowedHosts.addAll(persistenceController.getHostInfoCollections().getDepots().keySet());
@@ -1677,9 +1677,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Set<String> permittedHostGroups = null;
 
-		if (!persistenceController.getConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
 			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-			permittedHostGroups = persistenceController.getConfigDataService().getHostGroupsPermitted();
+			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 		}
 
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);

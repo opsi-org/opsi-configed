@@ -94,7 +94,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
@@ -109,8 +110,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(
-				!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {

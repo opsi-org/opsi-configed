@@ -38,6 +38,7 @@ import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SSHCommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
+import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHandler;
@@ -220,6 +221,7 @@ public class OpsiServiceNOMPersistenceController {
 	private HostInfoCollections hostInfoCollections;
 
 	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private DepotDataService depotDataService;
 	private GroupDataService groupDataService;
 	private HardwareDataService hardwareDataService;
@@ -243,6 +245,7 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this.getClass(), "create");
 
 		exec = new ServerFacade(server, user, password);
+		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
 		groupDataService = new GroupDataService(exec, this);
@@ -259,16 +262,19 @@ public class OpsiServiceNOMPersistenceController {
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
 		hostInfoCollections = new HostInfoCollections(this);
 
-		configDataService.setGroupDataService(groupDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
-		configDataService.setModuleDataService(moduleDataService);
-		configDataService.setHostInfoCollections(hostInfoCollections);
+		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
-		depotDataService.setConfigDataService(configDataService);
+		userRolesConfigDataService.setConfigDataService(configDataService);
+		userRolesConfigDataService.setGroupDataService(groupDataService);
+		userRolesConfigDataService.setHostInfoCollections(hostInfoCollections);
+		userRolesConfigDataService.setModuleDataService(moduleDataService);
+
+		depotDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		depotDataService.setProductDataService(productDataService);
 		depotDataService.setHostInfoCollections(hostInfoCollections);
 
-		groupDataService.setConfigDataService(configDataService);
+		groupDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		hardwareDataService.setConfigDataService(configDataService);
 		hardwareDataService.setHostInfoCollections(hostInfoCollections);
@@ -276,24 +282,26 @@ public class OpsiServiceNOMPersistenceController {
 		hostDataService.setConfigDataService(configDataService);
 		hostDataService.setHostInfoCollections(hostInfoCollections);
 		hostDataService.setHostInfoCollections(hostInfoCollections);
+		hostDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
-		licenseDataService.setConfigDataService(configDataService);
+		licenseDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		licenseDataService.setModuleDataService(moduleDataService);
 
-		moduleDataService.setConfigDataService(configDataService);
+		moduleDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		moduleDataService.setHostInfoCollections(hostInfoCollections);
 
 		productDataService.setConfigDataService(configDataService);
 		productDataService.setDepotDataService(depotDataService);
 		productDataService.setHostInfoCollections(hostInfoCollections);
+		productDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		softwareDataService.setModuleDataService(moduleDataService);
 		softwareDataService.setLicenseDataService(licenseDataService);
-		softwareDataService.setConfigDataService(configDataService);
+		softwareDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		softwareDataService.setHostInfoCollections(hostInfoCollections);
 
 		sshCommandDataService.setModuleDataService(moduleDataService);
-		sshCommandDataService.setConfigDataService(configDataService);
+		sshCommandDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		rpcMethodExecutor.setHostDataService(hostDataService);
 		rpcMethodExecutor.setHostInfoCollections(hostInfoCollections);
@@ -303,6 +311,10 @@ public class OpsiServiceNOMPersistenceController {
 
 	public ConfigDataService getConfigDataService() {
 		return configDataService;
+	}
+
+	public UserRolesConfigDataService getUserRolesConfigDataService() {
+		return userRolesConfigDataService;
 	}
 
 	public DepotDataService getDepotDataService() {
@@ -366,6 +378,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		EssentialDataReloadHandler essentialDataReloadHandler = new EssentialDataReloadHandler();
 		essentialDataReloadHandler.setConfigDataService(configDataService);
+		essentialDataReloadHandler.setUserRolesConfigDataService(userRolesConfigDataService);
 		essentialDataReloadHandler.setDepotDataService(depotDataService);
 		essentialDataReloadHandler.setGroupDataService(groupDataService);
 		essentialDataReloadHandler.setHardwareDataService(hardwareDataService);

@@ -31,7 +31,7 @@ import de.uib.utilities.logging.Logging;
 public class SSHCommandDataService {
 	private AbstractExecutioner exec;
 	private ModuleDataService moduleDataService;
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 
 	public SSHCommandDataService(AbstractExecutioner exec) {
 		this.exec = exec;
@@ -41,8 +41,8 @@ public class SSHCommandDataService {
 		this.moduleDataService = moduleDataService;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class SSHCommandDataService {
 	 */
 	private boolean doActionSSHCommand(RPCMethodName method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
@@ -100,7 +100,7 @@ public class SSHCommandDataService {
 	 */
 	public boolean deleteSSHCommand(List<String> jsonObjects) {
 		Logging.info(this, "deleteSSHCommand ");
-		if (Boolean.TRUE.equals(configDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects });

@@ -44,7 +44,8 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 		if (column == 1) {
 			String key = "" + table.getValueAt(row, 0);
 			if (Utils.isKeyForSecretValue(key)) {
-				if (PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()) {
 					Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 					return null;
 				}

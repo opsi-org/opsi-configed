@@ -196,7 +196,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private List<String> getAllowedInstallTargets() {
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.getConfigDataService().hasDepotsFullPermissionPD()) {
+		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 			jTextFieldSelecteddepots.setEditable(true);
 			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL);
@@ -205,7 +205,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		}
 
 		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
-			if (persistenceController.getConfigDataService().hasDepotPermission(depot)) {
+			if (persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
 				result.add(depot);
 			}
 		}
@@ -220,7 +220,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.getConfigDataService().hasDepotsFullPermissionPD()) {
+			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);

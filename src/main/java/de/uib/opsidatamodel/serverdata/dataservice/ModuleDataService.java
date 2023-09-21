@@ -60,7 +60,7 @@ public class ModuleDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	public ModuleDataService(AbstractExecutioner exec) {
@@ -68,8 +68,8 @@ public class ModuleDataService {
 		this.exec = exec;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
@@ -361,7 +361,7 @@ public class ModuleDataService {
 			}
 
 			if (problemToIndicate && ("linux_agent".equals(key) || ("userroles".equals(key)
-					&& Boolean.FALSE.equals(configDataService.hasKeyUserRegisterValuePD())))) {
+					&& Boolean.FALSE.equals(userRolesConfigDataService.hasKeyUserRegisterValuePD())))) {
 				problemToIndicate = false;
 			}
 
@@ -615,7 +615,7 @@ public class ModuleDataService {
 			}
 
 			if (problemToIndicate && ("linux_agent".equals(key) || ("userroles".equals(key)
-					&& Boolean.FALSE.equals(configDataService.hasKeyUserRegisterValuePD())))) {
+					&& Boolean.FALSE.equals(userRolesConfigDataService.hasKeyUserRegisterValuePD())))) {
 				problemToIndicate = false;
 			}
 

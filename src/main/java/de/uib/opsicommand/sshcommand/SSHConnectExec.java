@@ -83,7 +83,8 @@ public class SSHConnectExec extends SSHConnect {
 			return;
 		}
 
-		if (!PersistenceControllerFactory.getPersistenceController().getConfigDataService().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			Logging.info(this, "starting, sshcommand isMultiCommand " + sshcommand.isMultiCommand());
 
 			if (sshcommand instanceof SSHCommandTemplate) {

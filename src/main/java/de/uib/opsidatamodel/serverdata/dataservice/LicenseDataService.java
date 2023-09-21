@@ -48,7 +48,7 @@ import utils.Utils;
 public class LicenseDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private ModuleDataService moduleDataService;
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
@@ -58,8 +58,8 @@ public class LicenseDataService {
 		this.exec = exec;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setModuleDataService(ModuleDataService moduleDataService) {
@@ -198,7 +198,7 @@ public class LicenseDataService {
 
 	public String editLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
 			String notes) {
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return null;
 		}
 
@@ -238,7 +238,7 @@ public class LicenseDataService {
 			return;
 		}
 
-		if (!configDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return;
 		}
 
@@ -252,7 +252,7 @@ public class LicenseDataService {
 		boolean result = false;
 		if (itemsDeletionLicenceUsage == null) {
 			result = true;
-		} else if (!configDataService.hasServerFullPermissionPD()) {
+		} else if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			result = false;
 		} else if (!moduleDataService.isWithLicenceManagementPD()) {
 			result = false;
@@ -292,7 +292,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -410,7 +410,7 @@ public class LicenseDataService {
 	// returns the ID of the edited data record
 	public String editLicenceContract(String licenseContractId, String partner, String conclusionDate,
 			String notificationDate, String expirationDate, String notes) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 		String result = "";
@@ -437,7 +437,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenceContract(String licenseContractId) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -452,7 +452,7 @@ public class LicenseDataService {
 
 	// returns the ID of the edited data record
 	public String editLicencePool(String licensePoolId, String description) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 
@@ -475,7 +475,7 @@ public class LicenseDataService {
 	public boolean deleteLicencePool(String licensePoolId) {
 		Logging.info(this, "deleteLicencePool " + licensePoolId);
 
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -488,7 +488,7 @@ public class LicenseDataService {
 	}
 
 	public String editRelationProductId2LPool(String productId, String licensePoolId) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 
@@ -514,7 +514,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteRelationProductId2LPool(String productId, String licensePoolId) {
-		if (configDataService.hasServerFullPermissionPD()) {
+		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 

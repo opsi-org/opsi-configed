@@ -19,10 +19,12 @@ import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ModuleDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
+import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 
 public class EssentialDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private ProductDataService productDataService;
 	private DepotDataService depotDataService;
 	private GroupDataService groupDataService;
@@ -38,6 +40,10 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
+	}
+
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setProductDataService(ProductDataService productDataService) {
@@ -92,7 +98,7 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION);
 		cacheManager.clearCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION);
 		cacheManager.clearCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE);
-		configDataService.checkConfigurationPD();
+		userRolesConfigDataService.checkConfigurationPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES);

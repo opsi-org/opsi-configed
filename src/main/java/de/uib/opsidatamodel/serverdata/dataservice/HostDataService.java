@@ -60,6 +60,7 @@ public class HostDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	private Map<String, Map<String, Object>> hostUpdates;
@@ -72,6 +73,10 @@ public class HostDataService {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
+	}
+
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
@@ -209,7 +214,7 @@ public class HostDataService {
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
 			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot) {
-		if (!configDataService.hasDepotPermission(depotId)) {
+		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
 			return false;
 		}
 
@@ -336,7 +341,7 @@ public class HostDataService {
 	}
 
 	public boolean renameClient(String hostname, String newHostname) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -347,7 +352,7 @@ public class HostDataService {
 	}
 
 	public void deleteClients(String[] hostIds) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 
@@ -375,7 +380,7 @@ public class HostDataService {
 
 	// executes all updates collected by setHostDescription ...
 	public void updateHosts() {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 
@@ -575,7 +580,7 @@ public class HostDataService {
 	}
 
 	public void setHostValues(Map<String, Object> settings) {
-		if (configDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 

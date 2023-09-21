@@ -51,7 +51,7 @@ public final class PersistenceControllerFactory {
 			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
 			Utils.setMultiFactorAuthenticationEnabled(
 					persistenceController.getUserDataService().usesMultiFactorAuthentication());
-			persistenceController.getConfigDataService().checkConfigurationPD();
+			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 			persistenceController.getModuleDataService().retrieveOpsiModules();
 		}
 

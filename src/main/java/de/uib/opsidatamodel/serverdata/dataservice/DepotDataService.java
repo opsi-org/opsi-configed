@@ -41,7 +41,7 @@ import de.uib.utilities.logging.Logging;
 public class DepotDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
-	private ConfigDataService configDataService;
+	private UserRolesConfigDataService userRolesConfigDataService;
 	private ProductDataService productDataService;
 	private HostInfoCollections hostInfoCollections;
 
@@ -50,8 +50,8 @@ public class DepotDataService {
 		this.exec = exec;
 	}
 
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
+		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
 	public void setProductDataService(ProductDataService productDataService) {
@@ -90,13 +90,13 @@ public class DepotDataService {
 		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
 		String configServer = hostInfoCollections.getConfigServer();
-		if (configDataService.hasDepotPermission(configServer)) {
+		if (userRolesConfigDataService.hasDepotPermission(configServer)) {
 			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
 		}
 
 		for (Entry<String, Map<String, Object>> depotProperty : depotProperties.entrySet()) {
 			if (!depotProperty.getKey().equals(configServer)
-					&& configDataService.hasDepotPermission(depotProperty.getKey())) {
+					&& userRolesConfigDataService.hasDepotPermission(depotProperty.getKey())) {
 				depotPropertiesForPermittedDepots.put(depotProperty.getKey(), depotProperty.getValue());
 			}
 		}
@@ -113,7 +113,7 @@ public class DepotDataService {
 
 		// we don't have a productsgroupsFullPermission.
 		List<String> netbootProductNames = productDataService.getAllNetbootProductNames(depotId);
-		Set<String> permittedProducts = configDataService.getPermittedProductsPD();
+		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
 		if (permittedProducts != null) {
 			netbootProductNames.retainAll(permittedProducts);
 		}
