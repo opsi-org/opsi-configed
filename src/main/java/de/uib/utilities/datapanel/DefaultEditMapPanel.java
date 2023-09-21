@@ -236,8 +236,8 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setReadOnlyEntries(keys);
 	}
 
-	public void setEditDenier(Function<String, Boolean> disallow) {
-		mapTableModel.setEditDenier(disallow);
+	public void setEditableFunction(Function<String, Boolean> isEditable) {
+		mapTableModel.setIsEditable(isEditable);
 	}
 
 	protected void logPopupElements() {
