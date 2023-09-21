@@ -16,14 +16,12 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
-import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 
 public class DefaultDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private ConfigDataService configDataService;
 	private HardwareDataService hardwareDataService;
-	private HostDataService hostDataService;
 	private GroupDataService groupDataService;
 	private LicenseDataService licenseDataService;
 
@@ -65,10 +63,6 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 
 	public void setHardwareDataService(HardwareDataService hardwareDataService) {
 		this.hardwareDataService = hardwareDataService;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setGroupDataService(GroupDataService groupDataService) {

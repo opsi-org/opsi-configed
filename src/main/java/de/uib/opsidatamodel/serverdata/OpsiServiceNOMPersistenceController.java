@@ -455,7 +455,6 @@ public class OpsiServiceNOMPersistenceController {
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
-		defaultDataReloadHandler.setHostDataService(hostDataService);
 		defaultDataReloadHandler.setConfigDataService(configDataService);
 		defaultDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
