@@ -41,7 +41,6 @@ import de.uib.utilities.logging.Logging;
 public class DepotDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
-	private HostDataService hostDataService;
 	private ConfigDataService configDataService;
 	private ProductDataService productDataService;
 	private HostInfoCollections hostInfoCollections;
@@ -49,10 +48,6 @@ public class DepotDataService {
 	public DepotDataService(AbstractExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {

@@ -20,7 +20,7 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 
 /**
- * Provides methods for working with module data on the server.
+ * Provides methods for working with user data on the server.
  * <p>
  * Classes ending in {@code DataService} represent somewhat of a layer between
  * server and the client. It enables to work with specific data, that is saved

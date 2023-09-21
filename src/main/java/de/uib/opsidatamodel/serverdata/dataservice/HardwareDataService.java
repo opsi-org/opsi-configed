@@ -56,7 +56,6 @@ public class HardwareDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
-	private HostDataService hostDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	public HardwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
@@ -67,10 +66,6 @@ public class HardwareDataService {
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {

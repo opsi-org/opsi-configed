@@ -40,7 +40,7 @@ import de.uib.utilities.logging.TimeCheck;
 import utils.Utils;
 
 /**
- * Provides methods for working with module data on the server.
+ * Provides methods for working with host data on the server.
  * <p>
  * Classes ending in {@code DataService} represent somewhat of a layer between
  * server and the client. It enables to work with specific data, that is saved

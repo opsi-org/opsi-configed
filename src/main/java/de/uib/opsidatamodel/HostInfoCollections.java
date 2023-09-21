@@ -32,14 +32,16 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 /**
- * HostInfoCollections description: abstract methods for retrieving and setting
+ * Provides a way to retrieve the current data (and update it) about hosts and
+ * depots, without requiring to retrieve data from the server.
+ * <p>
+ * It does it by keeping all of its data internally cached and updating the
+ * internally cached data with a new data, when it is required.
  */
 @SuppressWarnings({ "unchecked" })
 public class HostInfoCollections {
 	private CacheManager cacheManager;
-
 	private ClientTree connectedTree;
-
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// We need the argument here since the controller is not loaded yet

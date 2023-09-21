@@ -15,6 +15,8 @@ import de.uib.utilities.logging.Logging;
 /**
  * Provides a way to trigger specific {@link ReloadHandler} implementation for
  * an event, without requiring to know specific implementations.
+ * <p>
+ * {@link ReloadDispatcher} is based on event bus design pattern.
  */
 public class ReloadDispatcher {
 	private Map<String, ReloadHandler> handlers = new HashMap<>();

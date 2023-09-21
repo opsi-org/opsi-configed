@@ -1073,7 +1073,7 @@ public class ConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.user
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.getUser()
 					+ "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";

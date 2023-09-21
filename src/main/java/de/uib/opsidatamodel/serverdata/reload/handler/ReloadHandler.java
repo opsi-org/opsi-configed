@@ -12,6 +12,8 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
  * Interface for providing specifc {@link ReloadHandler} implementation to
  * reload specific data, that is closely related or have to be reloaded
  * together.
+ * <p>
+ * {@link ReloadHandler} is based on event bus design pattern.
  */
 public interface ReloadHandler {
 	/**

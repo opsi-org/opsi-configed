@@ -59,14 +59,20 @@ import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReload
 import de.uib.utilities.logging.Logging;
 
 /**
- * PersistenceController implementation for the New Object Model (opsi 4.0)
- * description: instances of PersistenceController give access to proxy objects
+ * Provides methods for accessing classes, that provides methods working with
+ * server data. Each class (usually ending in {@code DataService}) provides
+ * methods working with different kind of data.
+ * <p>
+ * {@link OpsiServiceNOMPersistenceController} is implementation for the New
+ * Object Model (opsi 4.0). Instances of
+ * {@link OpsiServiceNOMPersistenceController} give access to proxy objects
  * which mediate access to remote objects (and buffer the data) The
- * PersistenceController retrieves its data from a server that is compatible
- * with the opsi data server resp. its stub (proxy) It has a Executioner
- * component that transmits requests to the opsi server and receives the
- * responses. There are several classes which implement the Executioner methods
- * in different ways dependent on the used means and protocols
+ * {@link OpsiServiceNOMPersistenceController} retrieves its data from a server
+ * that is compatible with the opsi data server resp. its stub (proxy) It has a
+ * {@link AbstractExecutioner} component that transmits requests to the opsi
+ * server and receives the responses. There are several classes which implement
+ * the {@link AbstractExecutioner} methods in different ways dependent on the
+ * used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
 
@@ -206,7 +212,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
-	public String user;
+	private String user;
 
 	private AbstractExecutioner exec;
 
@@ -260,14 +266,12 @@ public class OpsiServiceNOMPersistenceController {
 		configDataService.setHostInfoCollections(hostInfoCollections);
 
 		depotDataService.setConfigDataService(configDataService);
-		depotDataService.setHostDataService(hostDataService);
 		depotDataService.setProductDataService(productDataService);
 		depotDataService.setHostInfoCollections(hostInfoCollections);
 
 		groupDataService.setConfigDataService(configDataService);
 
 		hardwareDataService.setConfigDataService(configDataService);
-		hardwareDataService.setHostDataService(hostDataService);
 		hardwareDataService.setHostInfoCollections(hostInfoCollections);
 
 		hostDataService.setConfigDataService(configDataService);
@@ -522,5 +526,9 @@ public class OpsiServiceNOMPersistenceController {
 
 	public AbstractExecutioner getExecutioner() {
 		return exec;
+	}
+
+	public String getUser() {
+		return user;
 	}
 }
