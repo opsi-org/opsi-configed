@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
 
 /**
@@ -16,6 +17,8 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
  * <p>
  * Every {@link ReloadHandler} implementation <b>must</b> be registered in
  * {@link ReloadDispatcher} in order for reloading to work.
+ * {@link ReloadHandler} registration is done in
+ * {@link OpsiServiceNOMPersistenceController}.
  * <p>
  * {@link ReloadHandler} is based on event bus design pattern.
  */
