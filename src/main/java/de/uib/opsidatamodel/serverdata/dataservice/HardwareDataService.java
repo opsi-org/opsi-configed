@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
+import de.uib.messages.Messages;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
@@ -99,13 +100,15 @@ public class HardwareDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, new TreeMap<>());
-		if (getOpsiHWAuditConfPD().isEmpty()) {
+		if (getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry())
+				.isEmpty()) {
 			Logging.error(this, "no hwaudit config found ");
 			return;
 		}
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = new TreeMap<>();
-		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConfPD()) {
+		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConfPD(
+				Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry())) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
 					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
@@ -185,7 +188,8 @@ public class HardwareDataService {
 	}
 
 	public List<String> getAllHwClassNamesPD() {
-		retrieveHwClassesPD(getOpsiHWAuditConfPD());
+		retrieveHwClassesPD(
+				getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry()));
 		List<String> opsiHwClassNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class);
 		Logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
 		return opsiHwClassNames;
@@ -207,6 +211,10 @@ public class HardwareDataService {
 		return result;
 	}
 
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
+		return getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
+	}
+
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {
 		retrieveOpsiHWAuditConfPD(locale);
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
@@ -214,18 +222,8 @@ public class HardwareDataService {
 		return hwAuditConf.get(locale);
 	}
 
-	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
-		retrieveOpsiHWAuditConfPD();
-		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
-				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
-		if (!hwAuditConf.containsKey("")) {
-			Logging.warning(this, "got no hardware config");
-		}
-		return hwAuditConf.get("");
-	}
-
 	public void retrieveOpsiHWAuditConfPD() {
-		retrieveOpsiHWAuditConfPD("");
+		retrieveOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 	}
 
 	public void retrieveOpsiHWAuditConfPD(String locale) {
