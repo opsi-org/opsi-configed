@@ -371,7 +371,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Globals.APPNAME + " "
 						+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
-				true, new String[] { Configed.getResourceValue("buttonCANCEL"), Configed.getResourceValue("buttonOK") },
+				true,
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonClose") },
 				400, 200);
 
 		fConfirmAction.setMessage(

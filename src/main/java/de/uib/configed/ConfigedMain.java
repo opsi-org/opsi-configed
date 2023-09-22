@@ -1023,7 +1023,7 @@ public class ConfigedMain implements ListSelectionListener {
 			startGroupActionFrame();
 		} else {
 			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "not activated", true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			f.setVisible(true);
 		}
@@ -1035,7 +1035,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (!activatedGroupModel.isActive()) {
 			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "no group selected", true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			f.setVisible(true);
 
@@ -3685,7 +3685,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (fAskSaveProductConfiguration == null) {
 					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true,
 							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("MainFrame.SaveChangedValue.YES") });
+									Configed.getResourceValue("buttonYES") });
 					fAskSaveProductConfiguration
 							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
@@ -3834,7 +3834,7 @@ public class ConfigedMain implements ListSelectionListener {
 				if (fAskSaveChangedText == null) {
 					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true,
 							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("MainFrame.SaveChangedValue.YES") });
+									Configed.getResourceValue("buttonYES") });
 					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
 					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}
@@ -4051,7 +4051,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void showReachableInfoDialog() {
 		if (fShowReachableInfo == null) {
 			fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-					new String[] { Configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
+					new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
 		}
 
 		fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
@@ -4354,7 +4354,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private static void showInformationHostExistsAlready(String clientId) {
 		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("FGeneralDialog.title.information") + " (" + Globals.APPNAME + ") ", true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
+				new String[] { Configed.getResourceValue("buttonClose") });
 
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
@@ -4377,7 +4377,7 @@ public class ConfigedMain implements ListSelectionListener {
 				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
 				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
 				new String[] { Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionNO"),
-						Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionYES") });
+						Configed.getResourceValue("buttonYES") });
 
 		fChangeDepotForClients.setLineWrap(false);
 
@@ -4825,9 +4825,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-						Configed.getResourceValue("FGeneralDialog.yes") },
-				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, null,
+				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
 		StringBuilder message = new StringBuilder("");
 		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
@@ -4874,8 +4873,7 @@ public class ConfigedMain implements ListSelectionListener {
 		FTextArea fAskOverwriteExsitingHost = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 						+ ") ",
-				true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-						Configed.getResourceValue("FGeneralDialog.yes") });
+				true, new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));

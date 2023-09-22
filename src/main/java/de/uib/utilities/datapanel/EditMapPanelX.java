@@ -221,7 +221,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
@@ -240,7 +240,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
@@ -258,7 +258,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {

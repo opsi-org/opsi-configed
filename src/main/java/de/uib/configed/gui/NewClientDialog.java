@@ -84,7 +84,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private NewClientDialog(ConfigedMain configedMain, List<String> depots) {
 		super(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
-				new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
+				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 680);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -575,10 +575,10 @@ public final class NewClientDialog extends FGeneralDialog {
 
 			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
 					|| !isBoolean((String) client.get(13))) {
-				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
-								+ ") ",
-						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+				FTextArea fInfo = new FTextArea(
+						ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.nonBooleanValue.title")
+								+ " (" + Globals.APPNAME + ") ",
+						false, new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 
 				StringBuilder message = new StringBuilder("");
 				message.append(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
@@ -682,8 +682,8 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
-					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") });
+					true,
+					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
@@ -708,8 +708,8 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
-					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") });
+					true,
+					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
 			fQuestion.setMessage(message.toString());
@@ -735,9 +735,9 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
-					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-							Configed.getResourceValue("FGeneralDialog.yes") },
-					350, 100);
+					true,
+					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
+					100);
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
 			fQuestion.setMessage(message.toString());
@@ -815,7 +815,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
-					false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+					false, new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
 					+ columnNames.toString().replace("[", "").replace("]", ""));

@@ -381,7 +381,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 		if (button1Text == null) {
-			jButton1.setText(Configed.getResourceValue("FGeneralDialog.ok"));
+			jButton1.setText(Configed.getResourceValue("buttonClose"));
 		} else {
 			jButton1.setText(button1Text);
 		}
@@ -410,7 +410,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 			if (button3Text == null) {
-				jButton3.setText(Configed.getResourceValue("FGeneralDialog.empty"));
+				jButton3.setText("");
 			} else {
 				jButton3.setText(button3Text);
 			}

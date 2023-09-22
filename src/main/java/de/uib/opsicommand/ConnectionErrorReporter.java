@@ -131,7 +131,7 @@ public final class ConnectionErrorReporter {
 	private void displayGeneralDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 420, 200);
+				new String[] { Configed.getResourceValue("buttonClose") }, 420, 200);
 
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
@@ -193,9 +193,8 @@ public final class ConnectionErrorReporter {
 	private void displayCancelConfigedDialog() {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.no"),
-						Configed.getResourceValue("FGeneralDialog.yes") },
-				420, 200);
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 420,
+				200);
 
 		fErrorMsg.setTooltipButtons(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCancelHint"),
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);

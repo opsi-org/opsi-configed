@@ -341,7 +341,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jButtonKill.setToolTipText(Configed.getResourceValue("SSHConnection.Config.StopUsing"));
 		jButtonKill.addActionListener(actionEvent -> doAction2());
 
-		JButton jButtonClose = new JButton(Configed.getResourceValue("SSHConnection.buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> doAction1());
 
 		Logging.info(this, "actionlistener for button1 "

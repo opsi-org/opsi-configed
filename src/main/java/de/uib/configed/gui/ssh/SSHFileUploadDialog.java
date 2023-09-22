@@ -182,7 +182,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		}
 
 		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
 		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 

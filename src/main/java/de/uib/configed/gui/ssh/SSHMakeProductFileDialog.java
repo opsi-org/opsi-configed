@@ -250,7 +250,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		}
 
 		JButton jButtonCancel = new JButton();
-		jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonCancel.setText(Configed.getResourceValue("buttonClose"));
 		jButtonCancel.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonCancel.addActionListener(actionEvent -> cancel());
 		buttonPanel.add(jButtonCancel);

@@ -215,7 +215,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		buttonDelete = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
 				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
-		JButton buttonClose = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonCancel"));
+		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
 		labelParentMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));

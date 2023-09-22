@@ -72,7 +72,7 @@ public final class Utils {
 
 	public static void showAboutAction(JFrame parent) {
 		FTextArea info = new FTextArea(parent, Globals.APPNAME + " Copyright Information", true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 500, 300);
+				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
 
 		StringBuilder message = new StringBuilder();
 

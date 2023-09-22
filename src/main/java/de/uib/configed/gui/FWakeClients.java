@@ -106,7 +106,7 @@ public class FWakeClients extends FShowList {
 			turn++;
 		}
 
-		jButton1.setText(Configed.getResourceValue("FWakeClients.close"));
+		jButton1.setText(Configed.getResourceValue("buttonClose"));
 	}
 
 	@Override

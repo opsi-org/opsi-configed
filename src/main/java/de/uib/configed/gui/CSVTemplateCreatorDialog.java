@@ -62,7 +62,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
-						Configed.getResourceValue("FGeneralDialog.ok") },
+						Configed.getResourceValue("buttonClose") },
 				2, 1000, 400, true);
 
 		this.columnNames = columnNames;

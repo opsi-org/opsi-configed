@@ -75,7 +75,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	public HealthCheckDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), false,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 1, 700, 500, true);
+				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 500, true);
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);

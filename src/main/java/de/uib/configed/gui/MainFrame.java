@@ -453,8 +453,8 @@ public class MainFrame extends JFrame
 		guiInit();
 		initData();
 
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("UIManager.noButtonText"));
+		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
+		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
 		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
 	}
 
@@ -2923,7 +2923,7 @@ public class MainFrame extends JFrame
 
 	private void showLogfileLocationAction() {
 		FTextArea info = new FTextArea(this, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
-				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
+				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
@@ -3021,7 +3021,7 @@ public class MainFrame extends JFrame
 			}
 
 			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					message.toString(), true, new String[] { Configed.getResourceValue("buttonOK") }, 300,
+					message.toString(), true, new String[] { Configed.getResourceValue("buttonClose") }, 300,
 					50 + count * 25);
 
 			f.setVisible(true);
@@ -3040,7 +3040,7 @@ public class MainFrame extends JFrame
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("Dashboard.close") }, 1, 900, 680, true);
+					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 680, true);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
