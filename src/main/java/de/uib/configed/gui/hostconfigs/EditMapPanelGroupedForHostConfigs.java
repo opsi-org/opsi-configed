@@ -769,8 +769,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void addUser() {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("FGeneralDialog.cancel") },
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
 
 				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Utils.createImageIcon("images/cancel16_small.png", "") },
@@ -854,8 +853,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
 				false, // modal
 
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("FGeneralDialog.cancel") },
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
 
 				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Utils.createImageIcon("images/cancel16_small.png", "") },

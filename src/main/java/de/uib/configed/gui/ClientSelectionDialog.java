@@ -125,7 +125,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
 				false,
-				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
+				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);

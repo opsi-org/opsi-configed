@@ -70,7 +70,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
 		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
+		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override

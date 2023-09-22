@@ -61,7 +61,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true, new String[] {
-				Configed.getResourceValue("FGeneralDialog.cancel"), Configed.getResourceValue("buttonClose") }, 2, 1000,
+				Configed.getResourceValue("FGeneralDialog.cancel"), Configed.getResourceValue("buttonOK") }, 2, 1000,
 				600, true);
 
 		this.format = format;

@@ -81,7 +81,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	private ConfigedMain configedMain;
 
 	public FStartWakeOnLan(String title, ConfigedMain configedMain) {
-		super(null, title, false, new String[] { Configed.getResourceValue("FStartWakeOnLan.cancel"),
+		super(null, title, false, new String[] { Configed.getResourceValue("buttonClose"),
 				Configed.getResourceValue("FStartWakeOnLan.start") }, 750, 310);
 		this.configedMain = configedMain;
 

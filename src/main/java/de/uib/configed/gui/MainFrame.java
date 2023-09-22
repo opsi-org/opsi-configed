@@ -455,7 +455,7 @@ public class MainFrame extends JFrame
 
 		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
 		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
+		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override
@@ -2915,7 +2915,7 @@ public class MainFrame extends JFrame
 	private void showBackendConfigurationAction() {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
-				new String[] { Configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
+				new String[] { Configed.getResourceValue("buttonClose") }, 800, 600);
 		backendInfoDialog.insertHTMLTable(configedMain.getBackendInfos(), "");
 
 		backendInfoDialog.setVisible(true);
