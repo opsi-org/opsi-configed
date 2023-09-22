@@ -229,7 +229,8 @@ public class HardwareDataService {
 	}
 
 	public void retrieveOpsiHWAuditConfPD(String locale) {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class) != null) {
+		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class).get(locale) != null) {
 			return;
 		}
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = new HashMap<>();
@@ -722,10 +723,6 @@ public class HardwareDataService {
 		scanProperties.add(scanProperty);
 		result.put("SCANPROPERTIES", scanProperties);
 
-		if (result.size() > 1) {
-			return result;
-		}
-
-		return new HashMap<>();
+		return result.size() > 1 ? result : new HashMap<>();
 	}
 }
