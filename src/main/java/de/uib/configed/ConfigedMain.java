@@ -815,7 +815,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getProductDataService().getAllNetbootProductNames();
-		persistenceController.getProductDataService().getProductIdsPD();
+		persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
 
 		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
 		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsNetbootProducts();
@@ -838,9 +838,11 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getDepotDataService().retrieveProductsPD();
 
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
-		persistenceController.getProductDataService().getDepot2Product2PropertyDefinitionsPD();
-		persistenceController.getProductDataService().getDepot2product2dependencyInfosPD();
+		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
+		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
+
+		persistenceController.getSoftwareDataService().retrieveInstalledSoftwareInformationPD();
 
 		dataReady = true;
 		mainFrame.enableAfterLoading();
