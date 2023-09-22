@@ -7,11 +7,15 @@
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
 
 /**
  * Interface for providing specifc {@link ReloadHandler} implementation to
  * reload specific data, that is closely related or have to be reloaded
  * together.
+ * <p>
+ * Every {@link ReloadHandler} implementation <b>must</b> be registered in
+ * {@link ReloadDispatcher} in order for reloading to work.
  * <p>
  * {@link ReloadHandler} is based on event bus design pattern.
  */

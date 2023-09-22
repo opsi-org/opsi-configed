@@ -3,23 +3,17 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 
 public class LicenseDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
-	private HostDataService hostDataService;
 	private LicenseDataService licenseDataService;
 	private SoftwareDataService softwareDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	public LicenseDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setLicenseDataService(LicenseDataService licenseDataService) {

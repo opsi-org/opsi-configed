@@ -420,7 +420,6 @@ public class OpsiServiceNOMPersistenceController {
 				installedSoftwareDataReloadHandler);
 
 		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
-		licenseDataReloadHandler.setHostDataService(hostDataService);
 		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
 		licenseDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
@@ -440,7 +439,6 @@ public class OpsiServiceNOMPersistenceController {
 				productPropertyReloadHandler);
 
 		ReconciliationDataReloadHandler reconciliationDataReloadHandler = new ReconciliationDataReloadHandler();
-		reconciliationDataReloadHandler.setHostDataService(hostDataService);
 		reconciliationDataReloadHandler.setLicenseDataService(licenseDataService);
 		reconciliationDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reconciliationDataReloadHandler.setHostInfoCollections(hostInfoCollections);

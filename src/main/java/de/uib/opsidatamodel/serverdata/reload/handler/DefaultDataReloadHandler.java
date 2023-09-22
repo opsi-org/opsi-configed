@@ -18,6 +18,14 @@ import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 
+/**
+ * Implementation of {@link ReloadHandler} which is responsible for reloading
+ * one entry in the internal cache.
+ * <p>
+ * This {@link ReloadHandler} implementation is triggered by
+ * {@link CacheIdentifier}. Not all {@link CacheIdentifier} have to be handled
+ * in this {@link ReloadHandler}, only those that are required.
+ */
 public class DefaultDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private ConfigDataService configDataService;

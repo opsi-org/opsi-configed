@@ -21,6 +21,13 @@ import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 
+/**
+ * Implementation of {@link ReloadHandler} which is responsible for reloading
+ * essential data in the internal cache.
+ * <p>
+ * Essential data is data that is required to run the configed or required by
+ * sub-data and cannot be lazily loaded.
+ */
 public class EssentialDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private ConfigDataService configDataService;
