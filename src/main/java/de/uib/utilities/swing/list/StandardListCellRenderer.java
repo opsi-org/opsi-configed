@@ -59,8 +59,10 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 		JComponent jc = (JComponent) c;
 
-		CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
-				unselectedEven, unselectedUneven);
+		if (!Main.THEMES) {
+			CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
+					unselectedEven, unselectedUneven);
+		}
 
 		if (!Main.FONT) {
 			jc.setFont(Globals.DEFAULT_FONT);

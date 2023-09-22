@@ -81,7 +81,7 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 		if (Main.THEMES) {
 			ComponentStyler.stylePieChartComponent(moduleStatusComparisonPieChart);
 			moduleStatusNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 

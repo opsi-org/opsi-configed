@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.Dimension;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -66,10 +64,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	private static final String SCANTIME = "scantime";
 
+	private static final int INITIAL_DIVIDER_LOCATION = 350;
+
 	private Map<String, List<Map<String, Object>>> hwInfo;
 	private String treeRootTitle;
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
-	private String title = "HW Information";
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
@@ -87,9 +86,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private String productString;
 
 	private PanelHWByAuditDriver panelByAuditInfo;
-
-	private int hGap = Globals.HGAP_SIZE / 2;
-	private int vGap = Globals.VGAP_SIZE / 2;
 
 	private boolean withPopup;
 
@@ -119,9 +115,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
-		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
-
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
@@ -137,35 +130,37 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutEmbed = new GroupLayout(embed);
 		embed.setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(hGap, hGap, hGap));
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(vGap, vGap, vGap)
+		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(vGap, vGap, vGap));
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 
 		JScrollPane jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		contentPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
 
-		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup().addGap(hGap, hGap, hGap)
+		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addGroup(layoutBase.createParallelGroup()
-						.addGroup(layoutBase.createSequentialGroup().addGap(hGap - 2, hGap - 2, hGap - 2)
-								.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(hGap - 2, hGap - 2, hGap - 2)
+						.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-						).addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGap(hGap, hGap, hGap));
-
-		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(vGap, vGap, vGap)
+		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(vGap / 2, vGap / 2, vGap / 2)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
@@ -196,7 +191,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
-
 	}
 
 	private void exportPDF() {
@@ -204,14 +198,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-		title = "";
-		if (configedMain.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot: " + configedMain.getHostsStatusInfo().getInvolvedDepots();
-		}
-		if (configedMain.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Client: " + configedMain.getHostsStatusInfo().getSelectedClientNames();
-		}
-		metaData.put("title", title);
+
+		metaData.put("title", treeRootTitle);
 		metaData.put("keywords", "hardware infos");
 
 		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
@@ -232,12 +220,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		copyOfMe = new PanelHWInfo(false, configedMain);
 		copyOfMe.setHardwareConfig(hwConfig);
-		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
+		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
 
-		externalView = new GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
@@ -254,15 +242,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void createRoot(String name) {
 		root = new IconNode(name);
-		Icon icon = createImageIcon("hwinfo_images/DEVICE.png");
-		root.setClosedIcon(icon);
-		root.setLeafIcon(icon);
-		root.setOpenIcon(icon);
 
 		treeModel = new DefaultTreeModel(root);
 
 		tree.setModel(treeModel);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		tree.setCellRenderer(new IconNodeRenderer());
 
@@ -436,10 +419,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return data;
 	}
 
-	private void setNode(IconNode node) {
-		tableModel.setData(getDataForNode(node));
-	}
-
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		// Returns the last path element of the selection.
@@ -452,9 +431,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		Logging.debug(this, "selectedPath " + selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
+		} else {
+			tableModel.setData(getDataForNode(node));
 		}
-		setNode(node);
-
 	}
 
 	public void setHardwareConfig(List<Map<String, List<Map<String, Object>>>> hwConfig) {
@@ -488,29 +467,28 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		productString = "";
 	}
 
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo, String treeRootTitle) {
+	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
 		this.hwInfo = hwInfo;
-		this.treeRootTitle = treeRootTitle;
 
-		if (hwInfo == null) {
+		if (hwInfo == null || hwInfo.isEmpty()) {
+			treeRootTitle = Configed.getResourceValue("MainFrame.NoHardwareConfiguration");
 			createRoot(treeRootTitle);
 			tableModel.setData(new ArrayList<>());
+
 			return;
 		}
 
 		List<Map<String, Object>> hwInfoSpecial = hwInfo.get(SCANPROPERTYNAME);
-		String rootname = "";
 
 		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
 				&& hwInfoSpecial.get(0).get(SCANTIME) != null) {
-			rootname = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
+			treeRootTitle = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
 		}
-		title = rootname;
 
-		createRoot(rootname);
+		createRoot(treeRootTitle);
 		tableModel.setData(new ArrayList<>());
 
 		if (hwConfig == null) {
@@ -574,7 +552,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
-
 	}
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,

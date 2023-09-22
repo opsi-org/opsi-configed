@@ -394,11 +394,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonSaveAndExecute.setVisible(true);
 
-		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		if (!Main.FONT) {
-			labelCollectiveAction.setFont(Globals.DEFAULT_FONT);
-		}
-
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
@@ -468,32 +463,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 		if (!Main.THEMES) {
 			labelStrip.setForeground(Globals.LIGHT_BLACK);
-		}
-
-		JPanel surroundScrollChooseAction = new JPanel();
-		GroupLayout surroundActionLayout = new GroupLayout(surroundScrollChooseAction);
-		surroundScrollChooseAction.setLayout(surroundActionLayout);
-
-		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30)
-				// components
-				.addComponent(labelStrip, 15, 15, 15).addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT));
-		surroundActionLayout.setHorizontalGroup(surroundActionLayout.createParallelGroup()
-				.addGroup(surroundActionLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-						.addComponent(labelStrip, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-				.addGroup(surroundActionLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addComponent(
-						scrollChooseAction, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
-
-		;
-
-		if (!Main.THEMES) {
-			surroundScrollChooseAction.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
-		surroundScrollChooseAction.setOpaque(true);
-
-		comboAggregatedEditing.setValues(values);
-		if (!Main.FONT) {
-			comboAggregatedEditing.setFont(Globals.DEFAULT_FONT);
 		}
 
 		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
@@ -618,78 +587,73 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		setGroupEditing(false);
 
-		panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
+		if (!Main.THEMES) {
+			panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
+		}
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
 
-		JPanel separatingPlace = new JPanel();
-		if (!Main.THEMES) {
-			separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
-			separatingPlace.setBackground(Globals.FAILED_COLOR);
-		}
-		separatingPlace.setOpaque(true);
-		separatingPlace.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6));
-
-		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
-				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(searchPane,
-
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-
-				.addComponent(separatingPlace, 1, 1, 1)
-				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)
-						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addComponent(panelEdit,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutMain.createSequentialGroup()
-
+		layoutMain.setVerticalGroup(
+				layoutMain.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(
-						layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-
-								.addComponent(surroundScrollChooseAction, MIN_COMBO_WIDTH, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-								.addComponent(groupsCombo, MIN_COMBO_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_COMBO_WIDTH)
-								.addGap(0, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+								.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
+								.addGroup(layoutMain.createSequentialGroup()
+										.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT))
+
 								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
-				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addComponent(separatingPlace, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+						.addComponent(panelEdit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE));
 
-		);
+		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
+
+				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGroup(layoutMain.createSequentialGroup()
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+
+						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+
+						.addGroup(layoutMain.createParallelGroup()
+								.addGroup(layoutMain.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addComponent(
+										labelStrip, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE))
+								.addGroup(layoutMain.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addComponent(
+										scrollChooseAction, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)))
+
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+
+						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+						.addComponent(groupsCombo, MIN_COMBO_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_COMBO_WIDTH)
+						.addGap(0, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
+				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 	}
 

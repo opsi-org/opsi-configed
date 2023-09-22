@@ -32,7 +32,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
-	private JLabel jLabelFreeInput = new JLabel();
 
 	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
@@ -68,7 +67,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	protected void initLabels() {
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		jLabelFreeInput.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
 	}
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
@@ -80,7 +78,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
@@ -96,7 +94,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		JButton jButtonReload = new JButton();
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
-		jButtonReload.setIcon(Utils.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -109,8 +106,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		}
 
 		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);

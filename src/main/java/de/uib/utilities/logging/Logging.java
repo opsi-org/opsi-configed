@@ -428,7 +428,8 @@ public final class Logging {
 
 		if (fErrors == null) {
 
-			fErrors = new FShowList(f, Globals.APPNAME + ": problems Occurred", false, new String[] { "ok" }, 400, 300);
+			fErrors = new FShowList(f, Globals.APPNAME + ": " + Configed.getResourceValue("problemsOccured"), false,
+					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 		}
 
 		new Thread() {

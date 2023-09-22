@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -38,7 +37,6 @@ import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
 
 public class CSVImportDataDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -62,12 +60,9 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private int startLine = 1;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
-						Configed.getResourceValue("FGeneralDialog.ok") },
-				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", ""),
-						Utils.createImageIcon("images/checked_withoutbox_blue14.png", "") },
-				2, 1000, 600, true, null);
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true, new String[] {
+				Configed.getResourceValue("FGeneralDialog.cancel"), Configed.getResourceValue("buttonOK") }, 2, 1000,
+				600, true);
 
 		this.format = format;
 		this.parser = new CSVParser(format);

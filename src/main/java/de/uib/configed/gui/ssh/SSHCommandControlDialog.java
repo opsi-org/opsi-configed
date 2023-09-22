@@ -90,7 +90,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JComboBox menu text instance **/
 	private JComboBox<String> jComboBoxMenuText;
 	/** IconButton delete menu text instance **/
-	private IconButton buttonDelete;
+	private JButton buttonDelete;
 
 	/** JComboBox parent menu text instance **/
 	private JComboBox<String> jComboBoxParentMenuText;
@@ -214,10 +214,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				"images/executing_command_red_22.png", true);
 		buttonDelete = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
 				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonSave = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-		JButton buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
-				"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
+		buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
+		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
 		labelParentMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));

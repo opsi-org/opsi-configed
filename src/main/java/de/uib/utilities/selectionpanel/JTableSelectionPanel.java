@@ -255,9 +255,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(Alignment.LEADING).addGroup(layoutTopPane
-				.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
 
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
@@ -279,10 +279,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(comboSearchMode, 100, 200, 300)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(layoutTopPane.createParallelGroup(Alignment.CENTER)
 
 						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -302,7 +302,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+
+				.addGroup(layoutLeftPane.createSequentialGroup()
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+						.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -319,7 +322,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Utils.createImageIcon("images/opsi-logo.png", ""));
+		String logoPath;
+		if (Main.THEMES) {
+			logoPath = Globals.ICON_OPSI;
+		} else {
+			logoPath = "images/opsi-logo.png";
+		}
+
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(logoPath, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		if (!Main.FONT) {
@@ -337,8 +347,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		mdPanel.setLayout(mdLayout);
 
 		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
-				.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
-				.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
+				.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40).addComponent(missingData2, 10, 40, 80)
+				.addGap(10, 10, Short.MAX_VALUE));
 		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
 				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

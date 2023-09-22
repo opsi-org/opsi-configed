@@ -114,8 +114,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	private boolean markDeviation = true;
-
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable) {
 		this(tableCellRenderer, keylistExtendible, entryRemovable, false);
 	}
@@ -134,8 +132,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
 		buildPanel();
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
@@ -225,7 +221,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
@@ -244,7 +240,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
@@ -262,7 +258,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
@@ -340,23 +336,17 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 						if (!Main.THEMES) {
 							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
+						} else {
+							jc.setForeground(Globals.OPSI_ERROR);
 						}
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
-						Font gotFont = jc.getFont();
-						gotFont = gotFont.deriveFont(Font.BOLD);
-						if (!Main.FONT) {
-							jc.setFont(gotFont);
-						}
+						jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 					} else {
 
 						Object gotValue = table.getValueAt(rowIndex, 1);
-						if (markDeviation && !defaultValue.equals(gotValue)) {
-							Font gotFont = jc.getFont();
-							gotFont = gotFont.deriveFont(Font.BOLD);
-							if (!Main.FONT) {
-								jc.setFont(gotFont);
-							}
+						if (!defaultValue.equals(gotValue)) {
+							jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 						}
 					}
 
@@ -379,7 +369,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		TableCellRenderer colorized = new ColorTableCellRenderer();
 
 		table.setDefaultRenderer(Object.class, colorized);
-		table.setRowHeight(Globals.LINE_HEIGHT);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		if (!Main.THEMES) {
 			table.setShowGrid(true);

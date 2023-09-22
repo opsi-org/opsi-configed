@@ -64,7 +64,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			if (!Main.THEMES) {
 				super.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
-			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+			jButtonClose = new IconButton(Configed.getResourceValue("buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
 			jButtonClose.addActionListener(closeListener);
 

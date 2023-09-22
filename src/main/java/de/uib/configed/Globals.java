@@ -19,7 +19,7 @@ import java.text.DateFormat;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-08-28";
+	public static final String VERDATE = "2023-09-22";
 
 	public static final String VERHASHTAG = "";
 
@@ -28,8 +28,12 @@ public final class Globals {
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2023 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
-	public static final String APPNAME = "opsi config editor";
+	public static final String APPNAME = "opsi-configed";
+	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
+
 	public static final String ICON_RESOURCE_NAME = "opsi.gif";
+
+	public static final String ICON_OPSI = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_nur_Biene_quer.png";
 
 	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
 	public static final String OPSI_SUPPORT_PAGE = "http://opsi.org/support";
@@ -48,16 +52,53 @@ public final class Globals {
 	public static final Color OPSI_MAGENTA = new Color(203, 30, 88);
 	public static final Color OPSI_BLUE = new Color(63, 90, 166);
 
-	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
-	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
+	public static final Color OPSI_DARK_BLUE = new Color(45, 65, 120);
 
-	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
-	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
+	// Logging colors
+	public static final Color LOG_COLOR_ESSENTIAL = new Color(41, 121, 255);
+	public static final Color LOG_COLOR_CRITICAL = new Color(226, 0, 102);
+	public static final Color LOG_COLOR_ERROR = new Color(229, 29, 59);
+	public static final Color LOG_COLOR_WARNING = new Color(255, 145, 0);
+
+	public static final Color LOG_COLOR_NOTICE = new Color(0, 150, 5);
+	public static final Color LOG_COLOR_INFO_LIGHT = new Color(33, 33, 33);
+	public static final Color LOG_COLOR_INFO_DARK = new Color(245, 245, 245);
+	public static final Color LOG_COLOR_DEBUG_LIGHT = new Color(86, 86, 86);
+	public static final Color LOG_COLOR_DEBUG_DARK = new Color(192, 192, 192);
+	public static final Color LOG_COLOR_TRACE = new Color(139, 139, 139);
+	public static final Color LOG_COLOR_SECRET = new Color(213, 0, 249);
+
+	public static final Color OPSI_LOGO_BLUE = new Color(106, 128, 174);
+	public static final Color OPSI_LOGO_LIGHT_BLUE = new Color(195, 200, 222);
+
+	// New colors
+
+	public static final Color OPSI_BLUE_2 = new Color(42, 60, 111);
+	public static final Color OPSI_DARK_BLUE_2 = new Color(30, 43, 80);
+
+	public static final Color OPSI_LIGHT_BLUE = new Color(159, 172, 210);
+	public static final Color OPSI_LIGHT_BLUE_2 = new Color(141, 154, 192);
+
+	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
+	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
+	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
+	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
 
 	public static final Font DEFAULT_FONT = new Font("SansSerif", 0, 11);
 	public static final Font DEFAULT_FONT_STANDARD_BOLD = new Font("SansSerif", Font.BOLD, 11);
 	public static final Font DEFAULT_FONT_SMALL = new Font("SansSerif", 0, 9);
 	public static final Font DEFAULT_FONT_SMALL_BOLD = new Font("SansSerif", Font.BOLD, 9);
+
+	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
+	public static final Color OPSI_OK_DARK = new Color(36, 107, 50);
+
+	public static final Color OPSI_WARNING = LOG_COLOR_WARNING;
+	public static final Color OPSI_WARNING_DARK = new Color(187, 136, 25);
+
+	public static final Color OPSI_ERROR = LOG_COLOR_ERROR;
+	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
+
+	// End new colors
 
 	public static final Font DEFAULT_FONT_BIG = new Font("SansSerif", 0, 12);
 	public static final Font DEFAULT_FONT_BOLD = new Font("SansSerif", Font.BOLD, 12);
@@ -86,12 +127,16 @@ public final class Globals {
 
 	public static final Color FAILED_BACKGROUND_COLOR = new Color(100, 100, 100);
 
-	public static final Color FAILED_COLOR = Color.RED;
-	public static final Color ACTION_COLOR = new Color(239, 4, 4);
-	public static final Color WARNING_COLOR = new Color(204, 51, 0);
-	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful?
-	public static final Color OK_COLOR = new Color(20, 140, 20);
-	public static final Color UNKNOWN_COLOR = new Color(40, 17, 213);
+	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
+	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
+
+	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
+	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
+
+	public static final Color FAILED_COLOR = OPSI_ERROR;
+	public static final Color ACTION_COLOR = OPSI_OK;
+	public static final Color OK_COLOR = OPSI_OK;
+	public static final Color UNKNOWN_COLOR = LOG_COLOR_SECRET;
 
 	public static final Color DARK_ORANGE = new Color(218, 180, 4);
 	public static final Color LIGHT_BLACK = new Color(30, 30, 30);
@@ -140,15 +185,16 @@ public final class Globals {
 	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
 	public static final Color ACTION_REQUEST_SETUP_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_UPDATE_COLOR = ACTION_COLOR;
-	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = Color.BLUE;
+	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = LOG_COLOR_ERROR;
 	public static final Color ACTION_REQUEST_ALWAYS_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_ONCE_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_CUSTOM_COLOR = ACTION_COLOR;
-	public static final Color ACTION_REQUEST_LAST_COLOR = PRIMARY_FOREGROUND_COLOR;
 
 	public static final Color INSTALLATION_STATUS_NOT_INSTALLED_COLOR = INVISIBLE;
 	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
 	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = UNKNOWN_COLOR;
+
+	public static final Color PRODUCT_STATUS_MIXED_COLOR = LOG_COLOR_SECRET;
 
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
@@ -196,21 +242,8 @@ public final class Globals {
 	public static final Color DEFAULT_TABLE_CELL_SELECTED_BG_COLOR = new Color(206, 224, 235);
 	public static final Color DEFAULT_TABLE_CELL_SELECTED_BG_COLOR_NOT_EDITABLE = new Color(189, 207, 231);
 
-	public static final Color LOG_COLOR_ESSENTIAL = new Color(41, 121, 255);
-	public static final Color LOG_COLOR_CRITICAL = new Color(226, 0, 102);
-	public static final Color LOG_COLOR_ERROR = new Color(229, 29, 59);
-	public static final Color LOG_COLOR_WARNING = new Color(255, 145, 0);
-
-	public static final Color LOG_COLOR_NOTICE = new Color(0, 150, 5);
-	public static final Color LOG_COLOR_INFO_LIGHT = new Color(33, 33, 33);
-	public static final Color LOG_COLOR_INFO_DARK = new Color(245, 245, 245);
-	public static final Color LOG_COLOR_DEBUG_LIGHT = new Color(86, 86, 86);
-	public static final Color LOG_COLOR_DEBUG_DARK = new Color(192, 192, 192);
-	public static final Color LOG_COLOR_TRACE = new Color(139, 139, 139);
-	public static final Color LOG_COLOR_SECRET = new Color(213, 0, 249);
-
-	public static final Color OPSI_LOGO_BLUE = new Color(106, 128, 174);
-	public static final Color OPSI_LOGO_LIGHT_BLUE = new Color(195, 200, 222);
+	public static final Color opsiLogoBlue = new Color(106, 128, 174);
+	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
 
 	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
 
@@ -220,7 +253,6 @@ public final class Globals {
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
 
-	public static final int SMALL_GAP_SIZE = 2;
 	public static final int GAP_SIZE = 10;
 	public static final int MIN_GAP_SIZE = 5;
 	public static final int VGAP_SIZE = 10;
@@ -240,7 +272,7 @@ public final class Globals {
 	public static final int LINE_HEIGHT = 28;
 	public static final int SMALL_HEIGHT = 18;
 	public static final int PROGRESS_BAR_HEIGHT = 10;
-	public static final int TABLE_ROW_HEIGHT = 16;
+	public static final int TABLE_ROW_HEIGHT = 20;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;

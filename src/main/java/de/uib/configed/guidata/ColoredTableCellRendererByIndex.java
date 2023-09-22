@@ -46,13 +46,12 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 			return c;
 		}
 
-		if (value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
+		if (value.equals(Globals.CONFLICT_STATE_STRING)) {
 			if (!Main.THEMES) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);
 			} else {
-				c.setBackground(Color.PINK);
-				c.setForeground(Color.PINK);
+				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 			}
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
@@ -61,9 +60,7 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
 					} else {
-						if (!Main.THEMES || !isSelected) {
-							c.setForeground(textcolor);
-						}
+						c.setForeground(textcolor);
 					}
 				}
 			}

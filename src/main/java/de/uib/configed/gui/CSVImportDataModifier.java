@@ -106,7 +106,7 @@ public class CSVImportDataModifier {
 			}
 
 			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
-					new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 
 			fInfo.setMessage(message.toString());
 			fInfo.setAlwaysOnTop(true);

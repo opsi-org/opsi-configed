@@ -8,12 +8,12 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,7 +49,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -76,10 +76,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -87,6 +85,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -143,7 +143,6 @@ public class MainFrame extends JFrame
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
-	public static final int F_HEIGHT = 600;
 
 	private static final int F_WIDTH_RIGHTHANDED = 200;
 
@@ -372,7 +371,7 @@ public class MainFrame extends JFrame
 	private PanelHostProperties panelHostProperties;
 	private PanelProductProperties panelProductProperties;
 
-	private PanelHWInfo showHardwareLogVersion2;
+	private PanelHWInfo panelHWInfo;
 	private JPanel showHardwareLogNotFound;
 	private ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
@@ -390,8 +389,6 @@ public class MainFrame extends JFrame
 	private FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JPanel jPanel3 = new JPanel();
-
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
 	private String[] options = new String[] { "off", "on", "setup" };
@@ -407,7 +404,6 @@ public class MainFrame extends JFrame
 
 	private JLabel jLabelPath = new JLabel();
 
-	private JLabel labelHost;
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
 	private CheckedLabel cbUefiBoot;
@@ -458,9 +454,9 @@ public class MainFrame extends JFrame
 		guiInit();
 		initData();
 
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("UIManager.noButtonText"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
+		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
+		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
+		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override
@@ -484,9 +480,9 @@ public class MainFrame extends JFrame
 	// This shall be called after MainFrame is made visible
 	public void initSplitPanes() {
 		panelClientSelection.setDividerLocation(0.8);
-		panelLocalbootProductSettings.setDividerLocation(0.75);
-		panelNetbootProductSettings.setDividerLocation(0.75);
-		panelProductProperties.setDividerLocation(0.75);
+		panelLocalbootProductSettings.setDividerLocation(0.8);
+		panelNetbootProductSettings.setDividerLocation(0.8);
+		panelProductProperties.setDividerLocation(0.8);
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -1327,7 +1323,7 @@ public class MainFrame extends JFrame
 		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
+				"images/apply.png", " ", "images/apply_disabled.png", false);
 
 		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
@@ -1754,18 +1750,15 @@ public class MainFrame extends JFrame
 		// clientPane
 		clientPane = new JPanel();
 
-		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
-		clientPane.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
-
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
-
-		labelHost = new JLabel(Utils.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
-		labelHost.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		labelHostID = new JLabel("");
 		if (!Main.FONT) {
 			labelHostID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
+		} else {
+			labelHostID.setFont(labelHostID.getFont()
+					.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
 		}
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
@@ -1875,58 +1868,50 @@ public class MainFrame extends JFrame
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(labelHost, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
-						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Short.MAX_VALUE))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// INVENTORY NUMBER
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// SYSTEM UUID
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// IP ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
@@ -1934,55 +1919,52 @@ public class MainFrame extends JFrame
 				/////// INSTALL BY SHUTDOWN
 
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(cbInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// UEFI BOOT
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(cbUefiBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// WAN CONFIG
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(cbWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				////// opsiHostKey
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// NOTES
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)));
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(labelHost)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// DESCRIPTION
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
@@ -2042,9 +2024,6 @@ public class MainFrame extends JFrame
 				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		jPanel3.setBorder(BorderFactory.createEtchedBorder());
-		jPanel3.setLayout(new BorderLayout());
 
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
@@ -2222,7 +2201,6 @@ public class MainFrame extends JFrame
 		jButtonOpsiLicenses.addActionListener(this);
 
 		JPanel iconPaneTargets = new JPanel();
-		iconPaneTargets.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
 		iconPaneTargets.setLayout(layoutIconPaneTargets);
@@ -2252,7 +2230,6 @@ public class MainFrame extends JFrame
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		JPanel iconPaneExtraFrames = new JPanel();
-		iconPaneExtraFrames.setBorder(new LineBorder(Globals.BLUE_GREY, 1, true));
 
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
 		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
@@ -2374,10 +2351,34 @@ public class MainFrame extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
+		if (Main.THEMES) {
+			c.weightx = 0.0;
+		} else {
+			c.weightx = 1.0;
+		}
 		c.gridx = 0;
 		c.gridy = 0;
 		iconBarPane.add(iconPane1, c);
+
+		if (Main.THEMES) {
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1.0;
+			c.gridx = 1;
+			c.gridy = 0;
+
+			String logoPath;
+
+			if (FlatLaf.isLafDark()) {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
+			} else {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
+			}
+
+			ImageIcon icon = Utils.createImageIcon(logoPath, null);
+			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
+
+			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
+		}
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
@@ -2425,9 +2426,9 @@ public class MainFrame extends JFrame
 
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
-				Utils.createImageIcon("images/clientselection.png", ""), panelClientSelection,
-				Configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null,
+				panelClientSelection, Configed.getResourceValue("MainFrame.panel_Clientselection"),
+				ConfigedMain.VIEW_CLIENTS);
 
 		panelLocalbootProductSettings = new PanelGroupedProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
@@ -2437,29 +2438,27 @@ public class MainFrame extends JFrame
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				Utils.createImageIcon("images/package.png", ""), panelLocalbootProductSettings,
-				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
+				panelLocalbootProductSettings, Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				Utils.createImageIcon("images/bootimage.png", ""), panelNetbootProductSettings,
-				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), null,
+				panelNetbootProductSettings, Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panelHostConfig = new PanelHostConfig(configedMain);
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelHostConfig,
-				Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null,
+				panelHostConfig, Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
+				ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				Utils.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
-				Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null,
+				showHardwareLog, Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
+				ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(configedMain) {
 			@Override
@@ -2487,9 +2486,9 @@ public class MainFrame extends JFrame
 		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				Utils.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
-				Configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
+				showSoftwareLog, Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
+				ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
 				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles")) {
@@ -2501,8 +2500,7 @@ public class MainFrame extends JFrame
 			}
 		};
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"),
-				Utils.createImageIcon("images/logfile.png", ""), showLogfiles,
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null, showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
@@ -2519,9 +2517,8 @@ public class MainFrame extends JFrame
 
 		panelProductProperties = new PanelProductProperties(configedMain);
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelProductProperties,
-				Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null,
+				panelProductProperties, Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		Logging.info(this,
@@ -2532,9 +2529,9 @@ public class MainFrame extends JFrame
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				Utils.createImageIcon("images/config_pro.png", ""), panelHostProperties,
-				Configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
+		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null,
+				panelHostProperties, Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
+				ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
@@ -2923,7 +2920,7 @@ public class MainFrame extends JFrame
 	private void showBackendConfigurationAction() {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
-				new String[] { Configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
+				new String[] { Configed.getResourceValue("buttonClose") }, 800, 600);
 		backendInfoDialog.insertHTMLTable(configedMain.getBackendInfos(), "");
 
 		backendInfoDialog.setVisible(true);
@@ -2931,7 +2928,7 @@ public class MainFrame extends JFrame
 
 	private void showLogfileLocationAction() {
 		FTextArea info = new FTextArea(this, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
-				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
+				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
@@ -3030,7 +3027,7 @@ public class MainFrame extends JFrame
 			}
 
 			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					message.toString(), true, new String[] { Configed.getResourceValue("buttonOK") }, 300,
+					message.toString(), true, new String[] { Configed.getResourceValue("buttonClose") }, 300,
 					50 + count * 25);
 
 			f.setVisible(true);
@@ -3049,8 +3046,7 @@ public class MainFrame extends JFrame
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("Dashboard.close") },
-					new Icon[] { Utils.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
+					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 680, true);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
@@ -3394,8 +3390,8 @@ public class MainFrame extends JFrame
 	}
 
 	public void initHardwareInfo(List<Map<String, List<Map<String, Object>>>> config) {
-		if (showHardwareLogVersion2 == null) {
-			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
+		if (panelHWInfo == null) {
+			panelHWInfo = new PanelHWInfo(configedMain) {
 				@Override
 				protected void reload() {
 					super.reload();
@@ -3405,7 +3401,7 @@ public class MainFrame extends JFrame
 				}
 			};
 		}
-		showHardwareLogVersion2.setHardwareConfig(config);
+		panelHWInfo.setHardwareConfig(config);
 	}
 
 	private void showHardwareInfo() {
@@ -3446,18 +3442,12 @@ public class MainFrame extends JFrame
 		showHardwareLog = showHardwareLogMultiClientReport;
 
 		showHardwareInfo();
-
 	}
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
-		if (hardwareInfo == null) {
-			showHardwareLogVersion2.setHardwareInfo(null,
-					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
-		} else {
-			showHardwareLogVersion2.setHardwareInfo(hardwareInfo, null);
-		}
+		panelHWInfo.setHardwareInfo(hardwareInfo);
 
-		showHardwareLog = showHardwareLogVersion2;
+		showHardwareLog = panelHWInfo;
 		showHardwareInfo();
 	}
 
@@ -3588,8 +3578,6 @@ public class MainFrame extends JFrame
 		// mix with global read only flag
 		boolean gb = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly();
-
-		labelHost.setEnabled(singleClient);
 
 		// resulting toggle for multi hosts editing
 		boolean b1 = false;

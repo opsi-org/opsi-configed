@@ -17,6 +17,8 @@ import javax.swing.text.JTextComponent;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -183,8 +185,19 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Utils.createImageIcon("images/network-wireless-connected-100.png", "");
-		disconnectedIcon = Utils.createImageIcon("images/network-wireless-disconnected.png", "");
+		String pathConnectedIcon;
+		String pathDisconnectedIcon;
+
+		if (Main.THEMES && FlatLaf.isLafDark()) {
+			pathConnectedIcon = "images/network-wireless-connected-100_invert.png";
+			pathDisconnectedIcon = "images/network-wireless-disconnected_invert.png";
+		} else {
+			pathConnectedIcon = "images/network-wireless-connected-100.png";
+			pathDisconnectedIcon = "images/network-wireless-disconnected.png";
+		}
+
+		connectedIcon = Utils.createImageIcon(pathConnectedIcon, "");
+		disconnectedIcon = Utils.createImageIcon(pathDisconnectedIcon, "");
 
 		connectionStateLabel = new JLabel();
 
@@ -218,6 +231,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(connectionStateLabel)

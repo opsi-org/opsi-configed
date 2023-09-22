@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -21,9 +20,9 @@ import de.uib.utilities.logging.Logging;
 
 public class FDialogSubTable extends FGeneralDialog {
 
-	public FDialogSubTable(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight) {
-		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, true);
+	public FDialogSubTable(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
+			int preferredWidth, int preferredHeight) {
+		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, true);
 		Logging.info(this.getClass(), "created ");
 		additionalPaneMaxWidth = Short.MAX_VALUE;
 	}

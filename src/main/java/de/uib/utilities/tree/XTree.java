@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.utilities.logging.Logging;
 
@@ -28,7 +29,6 @@ public class XTree extends JTree {
 	}
 
 	private void init() {
-
 		MouseMotionListener ml = new MouseAdapter() {
 			Cursor infoCursor = new Cursor(Cursor.HAND_CURSOR);
 
@@ -46,6 +46,7 @@ public class XTree extends JTree {
 		};
 		addMouseMotionListener(ml);
 
+		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 
 	public List<Integer> getToggledRows(TreePath parent) {

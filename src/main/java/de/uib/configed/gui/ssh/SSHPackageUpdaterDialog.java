@@ -28,7 +28,6 @@ import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -93,7 +92,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		inputPanel.add(jLabelRepos);
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonDoAction.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
@@ -103,8 +102,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		}
 
 		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);

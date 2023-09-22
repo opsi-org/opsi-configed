@@ -225,7 +225,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		jScrollPane.setViewportView(output);
 		output.setText("");
 
-		jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+		jButtonClose = new IconButton(Configed.getResourceValue("buttonClose"), "images/cancel.png",
 				"images/cancel.png", "images/cancel.png", true);
 
 		jButtonClose.setPreferredSize(jButtonDimension);

@@ -18,6 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.Main;
@@ -53,81 +54,85 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		textPanes = new LogPane[idents.length];
 
 		for (int i = 0; i < idents.length; i++) {
-			final String ident = idents[i];
-			LogPane showPane = new LogPane(defaultText, true) {
-				@Override
-				public void reload() {
-					super.reload();
-					loadDocument(ident);
-				}
-
-				@Override
-				public void save() {
-					String filename = ident;
-					if (getInfo() != null) {
-						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
-					}
-					Logging.debug(this, "save with filename " + filename);
-					String pathname = openFile(filename + ".log");
-					if (pathname != null && !pathname.isEmpty()) {
-						saveToFile(pathname, getLines());
-					}
-
-				}
-
-				@Override
-				protected void saveAsZip() {
-					Logging.info(this, "saveAsZip");
-
-					String filename = ident;
-					if (getInfo() != null) {
-						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
-					}
-					String pathname = openFile(filename + ".zip");
-					if (pathname != null && !pathname.isEmpty()) {
-						saveToZipFile(pathname, filename, getLines());
-					}
-
-				}
-
-				@Override
-				protected void saveAllAsZip(boolean loadMissingDocs) {
-					Logging.info(this, "saveAllAsZip got ident " + ident + " loadMissingDocs " + loadMissingDocs);
-
-					String fname = ident;
-					if (getInfo() != null) {
-						fname = getInfo().replace('.', '_') + "_all";
-					}
-
-					Logging.info(this, "saveAllAsZip, start getting pathname");
-					String pathname = openFile(fname + ".zip");
-
-					if (pathname != null && !pathname.isEmpty()) {
-						Logging.info(this, "saveAllAsZip, got pathname");
-
-						if (loadMissingDocs) {
-							for (int logNo = 0; logNo < idents.length; logNo++) {
-								if (textPanes[logNo].getLines().length <= 1) {
-									// empty
-
-									loadDocument(idents[logNo]);
-								}
-
-								Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
-										+ textPanes[logNo].getLines().length);
-							}
-						}
-
-						saveAllToZipFile(pathname);
-					}
-				}
-			};
-
-			textPanes[i] = showPane;
-
-			super.addTab(ident, textPanes[i]);
-
+			initLogFrame(i, defaultText);
 		}
+
+		super.setBorder(new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+				Globals.MIN_GAP_SIZE));
+	}
+
+	private void initLogFrame(int i, String defaultText) {
+		LogPane showPane = new LogPane(defaultText, true) {
+			@Override
+			public void reload() {
+				super.reload();
+				loadDocument(idents[i]);
+			}
+
+			@Override
+			public void save() {
+				String filename = idents[i];
+				if (getInfo() != null) {
+					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
+				}
+				Logging.debug(this, "save with filename " + filename);
+				String pathname = openFile(filename + ".log");
+				if (pathname != null && !pathname.isEmpty()) {
+					saveToFile(pathname, getLines());
+				}
+			}
+
+			@Override
+			protected void saveAsZip() {
+				Logging.info(this, "saveAsZip");
+
+				String filename = idents[i];
+				if (getInfo() != null) {
+					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
+				}
+				String pathname = openFile(filename + ".zip");
+				if (pathname != null && !pathname.isEmpty()) {
+					saveToZipFile(pathname, filename, getLines());
+				}
+
+			}
+
+			@Override
+			protected void saveAllAsZip(boolean loadMissingDocs) {
+				Logging.info(this, "saveAllAsZip got ident " + idents[i] + " loadMissingDocs " + loadMissingDocs);
+
+				String fname = idents[i];
+				if (getInfo() != null) {
+					fname = getInfo().replace('.', '_') + "_all";
+				}
+
+				Logging.info(this, "saveAllAsZip, start getting pathname");
+				String pathname = openFile(fname + ".zip");
+
+				if (pathname != null && !pathname.isEmpty()) {
+					Logging.info(this, "saveAllAsZip, got pathname");
+
+					if (loadMissingDocs) {
+						for (int logNo = 0; logNo < idents.length; logNo++) {
+							if (textPanes[logNo].getLines().length <= 1) {
+								// empty
+
+								loadDocument(idents[logNo]);
+							}
+
+							Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
+									+ textPanes[logNo].getLines().length);
+						}
+					}
+
+					saveAllToZipFile(pathname);
+				}
+			}
+		};
+
+		textPanes[i] = showPane;
+
+		super.addTab(idents[i], textPanes[i]);
 	}
 
 	// override in subclasses

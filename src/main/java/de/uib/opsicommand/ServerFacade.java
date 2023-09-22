@@ -135,7 +135,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		requestProperties.put("Accept-Encoding", "lz4, gzip");
 
-		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
+		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 
 		if (versionRetriever.isServerVersionAtLeast("4.2")) {
 			requestProperties.put("Accept", "application/msgpack");

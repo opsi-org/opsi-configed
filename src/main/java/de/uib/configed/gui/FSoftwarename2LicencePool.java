@@ -16,7 +16,6 @@ import java.util.TreeMap;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -86,10 +85,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private boolean foundVariantLicencepools;
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
-		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
-
-				Configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
-				new Icon[] { Utils.createImageIcon("images/cancel16_small.png", "") }, 1, 700, 800);
+		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800);
 
 		this.myController = myController;
 

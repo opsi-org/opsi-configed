@@ -70,18 +70,20 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
-		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup().addGap(20).addGroup(planeLayout
-				.createParallelGroup().addComponent(header, GroupLayout.Alignment.CENTER).addComponent(editMapPanel)
+		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+				.addGroup(planeLayout.createParallelGroup().addComponent(header, GroupLayout.Alignment.CENTER)
+						.addComponent(editMapPanel))
+				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-		).addGap(20));
-
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addGap(20)
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addComponent(header, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(5)
-				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGap(20));
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+
+				.addComponent(editMapPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void initMultipleHostsEditing(String labeltext, ComboBoxModel<String> comboModel,

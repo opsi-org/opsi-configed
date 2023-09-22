@@ -35,7 +35,6 @@ import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
 
@@ -247,7 +246,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 		jButtonExec = new JButton();
 		jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExec.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
+
 		jButtonExec.setEnabled(false);
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -255,8 +254,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		}
 
 		JButton jButtonCancel = new JButton();
-		jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
-		jButtonCancel.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonCancel.setText(Configed.getResourceValue("buttonClose"));
+
 		jButtonCancel.addActionListener(actionEvent -> cancel());
 		buttonPanel.add(jButtonCancel);
 		buttonPanel.add(jButtonToPackageManager);

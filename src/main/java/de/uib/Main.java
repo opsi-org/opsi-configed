@@ -40,8 +40,8 @@ public class Main {
 	// Flags
 
 	// Are themes enabled?
-	public static final boolean THEMES = false;
-	public static final boolean FONT = false;
+	public static final boolean THEMES = true;
+	public static final boolean FONT = true;
 
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes

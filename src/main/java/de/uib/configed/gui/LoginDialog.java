@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -18,6 +19,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -32,6 +34,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.border.Border;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -60,12 +64,14 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
+	private JPanel panel;
 	private GlassPane glassPane;
 
 	private WaitingWorker waitingWorker;
 
 	private JLabel jLabelTitle = new JLabel();
 	private JLabel jLabelVersion = new JLabel();
+	private JLabel jLabelLogo = new JLabel();
 
 	private JLabel jLabelUser = new JLabel();
 	private JTextField fieldUser = new JTextField();
@@ -169,6 +175,27 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		setIconImage(Utils.getMainIcon());
 
+		// Opsilogo
+		if (Main.THEMES) {
+			String logoPath;
+			if (FlatLaf.isLafDark()) {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
+			} else {
+				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
+			}
+
+			ImageIcon icon = Utils.createImageIcon(logoPath, null);
+			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
+
+			jLabelLogo = new JLabel(new ImageIcon(image));
+		} else {
+			jLabelLogo = new JLabel();
+		}
+
+		jLabelTitle.setText(Globals.APPNAME);
+		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
+
 		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
 
 		fieldHost.setEditable(true);
@@ -200,16 +227,11 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
-		jButtonCommit.setSelected(true);
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
-
-		jLabelTitle.setText(Globals.APPNAME);
-		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
-				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
 	}
 
 	private void setupLayout() {
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
@@ -222,12 +244,15 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		panel.setLayout(groupLayout);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				.addGap(Globals.LINE_HEIGHT)
+
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2).addComponent(fieldHost, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -254,6 +279,11 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE)
 						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE))
+
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE)
+						.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE)

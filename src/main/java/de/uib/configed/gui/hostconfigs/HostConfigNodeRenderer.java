@@ -78,10 +78,16 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			if (row == 0) {
 				if (!Main.FONT) {
 					setFont(emphasized);
+				} else {
+					setFont(getFont().deriveFont(Font.BOLD));
+					setFocusable(false);
 				}
 			} else {
 				if (!Main.FONT) {
 					setFont(standard);
+				} else {
+					setFont(getFont().deriveFont(Font.PLAIN));
+					setFocusable(true);
 				}
 			}
 

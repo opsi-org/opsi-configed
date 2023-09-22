@@ -69,7 +69,7 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 		if (Main.THEMES) {
 			ComponentStyler.styleBarChartComponent(installedOSComparisonBarChart);
 			installedOSNoDataText
-					.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 		}
 	}
 
