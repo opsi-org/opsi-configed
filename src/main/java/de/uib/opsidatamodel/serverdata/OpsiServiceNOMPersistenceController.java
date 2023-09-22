@@ -469,6 +469,7 @@ public class OpsiServiceNOMPersistenceController {
 				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTIES.toString(), defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {
