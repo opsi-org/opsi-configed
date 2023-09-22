@@ -45,6 +45,14 @@ public final class Logviewer {
 	private static void processArgs(CommandLine cmd) {
 		if (cmd.hasOption("f")) {
 			fileName = cmd.getOptionValue("f");
+		} else if (cmd.getArgList().size() == 1) {
+			// Handle right-click menu file opening in Linux:  When opening log
+			// file in Linux using the righ-click menu, the "-f" option may not
+			// be added (i.e, automatic file opening won't be handled by Linux).
+			// Therefore, the logviewer will be opened without a file.
+			fileName = cmd.getArgList().get(0);
+		} else {
+			// No file attached or too many files attached.
 		}
 	}
 
