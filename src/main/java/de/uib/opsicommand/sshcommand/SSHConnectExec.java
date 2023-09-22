@@ -19,7 +19,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -83,7 +83,8 @@ public class SSHConnectExec extends SSHConnect {
 			return;
 		}
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			Logging.info(this, "starting, sshcommand isMultiCommand " + sshcommand.isMultiCommand());
 
 			if (sshcommand instanceof SSHCommandTemplate) {

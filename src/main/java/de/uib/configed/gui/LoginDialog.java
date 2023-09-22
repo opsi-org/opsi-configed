@@ -43,8 +43,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.PanelLinedComponents;
@@ -62,7 +62,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
 	private ConfigedMain configedMain;
-	private OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
 	private JPanel panel;
 	private GlassPane glassPane;

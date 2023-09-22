@@ -23,9 +23,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditStringList;
@@ -43,7 +45,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	private GlassPane glassPane;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SavedSearchesDialog(JTableSelectionPanel selectionPanel, ConfigedMain configedMain) {
@@ -239,14 +241,14 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	// overwrite to implement persistency
 	private void removeSavedSearch(String name) {
-		persistenceController.deleteSavedSearch(name);
+		persistenceController.getConfigDataService().deleteSavedSearch(name);
 
 		manager.removeSearch(name);
 	}
 
 	protected void reloadAction() {
-		persistenceController.configOptionsRequestRefresh();
-		persistenceController.auditHardwareOnHostRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		persistenceController.reloadData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString());
 		resetModel();
 	}
 

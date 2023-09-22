@@ -6,7 +6,7 @@
 
 package de.uib.messagebus.event;
 
-public enum WebSocketEvents {
+public enum WebSocketEvent {
 	GENERAL_EVENT("event"),
 
 	CHANNEL_SUBSCRIPTION_EVENT("channel_subscription_event"),
@@ -24,7 +24,7 @@ public enum WebSocketEvents {
 
 	private final String displayName;
 
-	WebSocketEvents(String displayName) {
+	WebSocketEvent(String displayName) {
 		this.displayName = displayName;
 	}
 

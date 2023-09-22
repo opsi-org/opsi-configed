@@ -94,9 +94,10 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 
 public final class OpsiDataBackend {
@@ -131,7 +132,7 @@ public final class OpsiDataBackend {
 	private Map<String, String> hwUiToOpsi;
 	private Map<String, List<Map<String, Object>>> hwClassToValues;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private OpsiDataBackend() {
@@ -420,17 +421,17 @@ public final class OpsiDataBackend {
 		groups = null;
 		superGroups = null;
 		softwareMap = null;
-		persistenceController.productDataRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 
 		swauditMap = null;
-		persistenceController.softwareAuditOnClientsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 
 		hardwareOnClient = null;
 		clientToHardware = null;
 	}
 
 	public void reload() {
-		persistenceController.depotChange();
+		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
 
 	private void checkInitData() {
@@ -444,17 +445,17 @@ public final class OpsiDataBackend {
 		Logging.info(this, "client maps size " + clientMaps.size());
 
 		if (groups == null || reloadRequested) {
-			groups = persistenceController.getFObject2Groups();
+			groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
 		}
 
 		if (superGroups == null || reloadRequested) {
-			superGroups = persistenceController.getHostInfoCollections().getFNode2Treeparents();
+			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
 		}
 
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			softwareMap = persistenceController.getMapOfProductStatesAndActions(clientNames);
+			softwareMap = persistenceController.getProductDataService().getMapOfProductStatesAndActions(clientNames);
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
@@ -515,11 +516,11 @@ public final class OpsiDataBackend {
 	}
 
 	public List<String> getGroups() {
-		return persistenceController.getHostGroupIds();
+		return persistenceController.getGroupDataService().getHostGroupIds();
 	}
 
 	public NavigableSet<String> getProductIDs() {
-		return persistenceController.getProductIds();
+		return persistenceController.getProductDataService().getProductIdsPD();
 	}
 
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {
@@ -605,13 +606,13 @@ public final class OpsiDataBackend {
 	}
 
 	private void getHardwareOnClient(String[] clientNames) {
-		hardwareOnClient = persistenceController.getHardwareOnClient();
+		hardwareOnClient = persistenceController.getHardwareDataService().getHardwareOnClientPD();
 		clientToHardware = new HashMap<>();
 		for (int i = 0; i < clientNames.length; i++) {
 			clientToHardware.put(clientNames[i], new LinkedList<>());
 		}
 		for (Map<String, Object> map : hardwareOnClient) {
-			String name = (String) map.get(OpsiserviceNOMPersistenceController.HOST_KEY);
+			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);
 			if (!clientToHardware.containsKey(name)) {
 				Logging.debug(this, "Non-client hostid: " + name);
 				continue;
@@ -626,7 +627,8 @@ public final class OpsiDataBackend {
 			return result;
 		}
 
-		result = persistenceController.getClient2Software(Arrays.stream(clientNames).collect(Collectors.toList()));
+		result = persistenceController.getSoftwareDataService()
+				.getSoftwareAuditOnClients(Arrays.stream(clientNames).collect(Collectors.toList()));
 
 		return result;
 	}
@@ -634,8 +636,8 @@ public final class OpsiDataBackend {
 	private void getHardwareConfig() {
 		String locale = Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry();
 		Logging.debug(this, locale);
-		hwConfig = persistenceController.getOpsiHWAuditConf("en_");
-		hwConfigLocalized = persistenceController.getOpsiHWAuditConf(locale);
+		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
+		hwConfigLocalized = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD(locale);
 		Logging.debug(this, "" + hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();

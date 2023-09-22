@@ -31,9 +31,9 @@ import de.uib.configed.clientselection.operations.OrOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer {
@@ -53,7 +53,7 @@ public class OpsiDataSerializer {
 
 	private SelectionManager manager;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
@@ -82,7 +82,7 @@ public class OpsiDataSerializer {
 	public List<String> getSaved() {
 		HashSet<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
-		set.addAll(persistenceController.getSavedSearches().keySet());
+		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
 		return new LinkedList<>(set);
 	}
 
@@ -90,7 +90,7 @@ public class OpsiDataSerializer {
 	 * Get the saved searches map
 	 */
 	public SavedSearches getSavedSearches() {
-		return persistenceController.getSavedSearches();
+		return persistenceController.getConfigDataService().getSavedSearchesPD();
 	}
 
 	/**
@@ -198,7 +198,8 @@ public class OpsiDataSerializer {
 	private Map<String, Object> getData(String name) {
 
 		// we take version from server and not the (possibly edited own version! )
-		searches.put(name, persistenceController.getSavedSearches().get(name).getSerialization());
+		searches.put(name,
+				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
 
 		// controller.getSavedSearches().get(name)
 
@@ -221,7 +222,7 @@ public class OpsiDataSerializer {
 		Logging.info(this, name + ": " + jsonString);
 		searches.put(name, jsonString);
 		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-		persistenceController.saveSearch(saveObj);
+		persistenceController.getConfigDataService().saveSearch(saveObj);
 	}
 
 	/** Get the data version of the currently loaded saved search */

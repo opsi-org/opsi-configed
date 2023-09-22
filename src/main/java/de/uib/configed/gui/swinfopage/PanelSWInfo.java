@@ -36,8 +36,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToCSV;
@@ -80,7 +80,7 @@ public class PanelSWInfo extends JPanel {
 	private boolean askForOverwrite = true;
 
 	private ConfigedMain configedMain;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public enum KindOfExport {
@@ -183,8 +183,9 @@ public class PanelSWInfo extends JPanel {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
-						Map<String, Map<String, Object>> tableData = persistenceController
+								.getSoftwareDataService()
+								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
@@ -192,7 +193,7 @@ public class PanelSWInfo extends JPanel {
 							title = scanInfo;
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController
+							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
 

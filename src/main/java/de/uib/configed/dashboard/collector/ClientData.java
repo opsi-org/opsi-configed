@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public final class ClientData {
@@ -31,7 +31,7 @@ public final class ClientData {
 
 	private static String selectedDepot;
 
-	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ClientData() {
@@ -102,7 +102,7 @@ public final class ClientData {
 		notConnectedClientsByMessagebus.clear();
 
 		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
-				persistenceController.getMessagebusConnectedClients());
+				persistenceController.getHostDataService().getMessagebusConnectedClients());
 		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 		for (String depot : depots) {
 			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()

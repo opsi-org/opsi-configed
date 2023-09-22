@@ -22,8 +22,8 @@ import de.uib.configed.ErrorCode;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -40,7 +40,7 @@ public abstract class AbstractSWExporter {
 
 	private String filenamePrefix = "report_swaudit_";
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	protected GenTableModel modelSWInfo;
@@ -192,8 +192,9 @@ public abstract class AbstractSWExporter {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
-						Map<String, Map<String, Object>> tableData = persistenceController
+								.getSoftwareDataService()
+								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
@@ -202,7 +203,7 @@ public abstract class AbstractSWExporter {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persistenceController
+							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}
 

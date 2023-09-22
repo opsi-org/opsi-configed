@@ -30,8 +30,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
@@ -50,7 +51,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	private static boolean showOnlyAvailableModules = true;
 
 	private LicensingInfoPanelGenEditTable thePanel;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
 
@@ -155,7 +156,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		Logging.info(this, "retrieveData extendedView " + extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
-
 		columnNames = licenseMap.getColumnNames();
 		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
@@ -172,23 +172,19 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				false) {
 			@Override
 			public void reload() {
-
 				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
-				persistenceController.configOptionsRequestRefresh();
-				persistenceController.opsiLicencingInfoRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
-				licenseMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
-						persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
-
+				licenseMap = LicensingInfoMap.getInstance(
+						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
+						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+						!FGeneralDialogLicensingInfo.extendedView);
 				retrieveData();
-
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
-
 				buildModel();
-
 				super.reload();
-
 			}
 		};
 

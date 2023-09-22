@@ -14,15 +14,15 @@ import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
 import de.uib.configed.type.licences.LicenceContractEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class LicenseData {
 	private static List<String> licenses = new ArrayList<>();
 	private static List<String> activeLicenses = new ArrayList<>();
 	private static List<String> expiredLicenses = new ArrayList<>();
 
-	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private LicenseData() {
@@ -37,7 +37,8 @@ public final class LicenseData {
 			return;
 		}
 
-		Map<String, LicenceContractEntry> licenceContracts = persistenceController.getLicenceContracts();
+		Map<String, LicenceContractEntry> licenceContracts = persistenceController.getLicenseDataService()
+				.getLicenceContractsPD();
 
 		if (licenceContracts.isEmpty()) {
 			return;
@@ -72,7 +73,7 @@ public final class LicenseData {
 		expiredLicenses.clear();
 
 		NavigableMap<String, NavigableSet<String>> expiredLicenceContracts = persistenceController
-				.getLicenceContractsExpired();
+				.getLicenseDataService().getLicenceContractsToNotifyPD();
 
 		if (expiredLicenceContracts.isEmpty()) {
 			return;

@@ -19,8 +19,8 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -41,7 +41,7 @@ public class PanelProductProperties extends JSplitPane {
 
 	private ConfigedMain configedMain;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public PanelProductProperties(ConfigedMain configedMain) {
@@ -122,9 +122,6 @@ public class PanelProductProperties extends JSplitPane {
 		@Override
 		public void reload() {
 			Logging.info(this, "reload()");
-
-			persistenceController.productPropertyDefinitionsRequestRefresh();
-			persistenceController.productpropertiesRequestRefresh();
 			super.reload();
 		}
 
@@ -177,7 +174,8 @@ public class PanelProductProperties extends JSplitPane {
 						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-				List<String> depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
+				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
+						.getProduct2VersionInfo2DepotsPD()
 						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo " + versionInfo);

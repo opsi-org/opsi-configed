@@ -61,8 +61,6 @@ import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -71,6 +69,8 @@ import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -464,7 +464,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
-		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		if (!Main.FONT) {
 			save.setFont(Globals.DEFAULT_FONT);
@@ -480,19 +481,21 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
-		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
 		itemOnDemand.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(
-				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
+				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-		itemSaveAndExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		itemSaveAndExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		if (!Main.FONT) {
@@ -698,7 +701,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		configedMain.requestReloadStatesAndActions();
 
 		configedMain.fireOpsiclientdEventOnSelectedClients(
-				OpsiserviceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 	}
 

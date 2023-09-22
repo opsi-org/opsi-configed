@@ -26,7 +26,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
@@ -115,8 +115,10 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	}
 
 	private void setComponentsEnabledRO() {
-		jButtonTestParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
-		jButtonAddParam.setEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		jButtonTestParam.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		jButtonAddParam.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 	}
 
 	public JButton getButtonAdd() {

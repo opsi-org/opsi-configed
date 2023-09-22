@@ -23,9 +23,9 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -163,11 +163,11 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		OpsiServiceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
-		boolean withMySQL = controller.canCallMySQL()
-				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		boolean withMySQL = controller.getModuleDataService().canCallMySQLPD() && controller.getConfigDataService()
+				.getGlobalBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();

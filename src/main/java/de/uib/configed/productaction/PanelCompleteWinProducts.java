@@ -38,8 +38,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -76,7 +76,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	private JFileChooser chooserFolder;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 	private SecondaryFrame rootFrame;
@@ -131,7 +131,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
+				depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -326,10 +327,12 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
 			}
 
-			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
-					+ "/" + SmbConnect.DIRECTORY_PE);
-			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
-					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
+			persistenceController.getRPCMethodExecutor()
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+							+ SmbConnect.DIRECTORY_PE);
+			persistenceController.getRPCMethodExecutor()
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+							+ SmbConnect.DIRECTORY_INSTALL_FILES);
 			rootFrame.disactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
@@ -341,7 +344,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persistenceController.getProductProperties(server, winProduct);
+			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(server,
+					winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;
@@ -365,7 +369,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					rootFrame.activateLoadingCursor();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
-					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
+					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
+							"productkey", values);
 
 					rootFrame.disactivateLoadingCursor();
 				}

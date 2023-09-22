@@ -28,9 +28,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GlassPane;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -47,7 +47,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	private List<String> associatedClients;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 
@@ -82,9 +82,10 @@ public class FGroupActions extends SecondaryFrame {
 	private void setImages() {
 		List<String> imagesCollection = new ArrayList<>();
 
-		imagesCollection.addAll(new TreeSet<>(persistenceController.getCommonProductPropertyValues(associatedClients,
-				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
+		imagesCollection
+				.addAll(new TreeSet<>(persistenceController.getProductDataService().getCommonProductPropertyValues(
+						associatedClients, OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
@@ -113,16 +114,17 @@ public class FGroupActions extends SecondaryFrame {
 
 		glassPane.activate(true);
 
-		persistenceController.setCommonProductPropertyValue(
+		persistenceController.getProductDataService().setCommonProductPropertyValue(
 				configedMain.getActivatedGroupModel().getAssociatedClients(),
-				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
+				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.updateProductOnClients(configedMain.getActivatedGroupModel().getAssociatedClients(),
-				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
+		persistenceController.getProductDataService().updateProductOnClients(
+				configedMain.getActivatedGroupModel().getAssociatedClients(),
+				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 
 		glassPane.activate(false);

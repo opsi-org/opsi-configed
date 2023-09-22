@@ -16,10 +16,11 @@ import javax.swing.JPanel;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
@@ -37,7 +38,7 @@ public class PanelHostConfig extends JPanel {
 	private boolean entryRemovable = true;
 	private boolean reloadable = true;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 
@@ -52,8 +53,8 @@ public class PanelHostConfig extends JPanel {
 
 		configedMain.cancelChanges();
 
-		persistenceController.configOptionsRequestRefresh();
-		persistenceController.hostConfigsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
 
 		configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 	}
@@ -68,7 +69,7 @@ public class PanelHostConfig extends JPanel {
 		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
-		OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, (String arg) -> {
+		OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, (String arg) -> {
 			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
 			return "";
@@ -76,8 +77,9 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void putUsersToPropertyclassesTreeMap() {
-		Map<String, Object> configs = PersistenceControllerFactory.getPersistenceController().getConfig(
-				PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer());
+		Map<String, Object> configs = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+				.getConfig(PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+						.getConfigServer());
 
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
 			String key = entry.getKey();

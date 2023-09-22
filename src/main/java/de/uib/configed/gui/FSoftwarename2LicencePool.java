@@ -30,8 +30,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
@@ -66,7 +66,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private int keyCol;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ControlPanelAssignToLPools myController;
@@ -340,17 +340,18 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void setSWInfo(String swId, String pool) {
 		Logging.info(this, " setSWInfo for " + swId + " pool " + pool);
-		Logging.info(this, " setSWInfo in " + persistenceController.getInstalledSoftwareName2SWinfo()
-				.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
+		Logging.info(this,
+				" setSWInfo in " + persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD()
+						.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
 	}
 
 	public void setTableModel() {
 		Logging.info(this, "init modelSWnames");
 
-		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persistenceController.getInstalledSoftwareName2SWinfo())),
-				0, new int[] {}, panelSWnames, updateCollection) {
+		this.modelSWnames = new GenTableModel(null, new DefaultTableProvider(new RetrieverMapSource(columnNames,
+				classNames,
+				() -> (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD())), 0,
+				new int[] {}, panelSWnames, updateCollection) {
 
 			@Override
 			public void produceRows() {
@@ -400,8 +401,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		Set<String> range = new HashSet<>();
 
-		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
-			String licpool = persistenceController.getFSoftware2LicencePool(swID);
+		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicencePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(VALUE_NO_LICENCE_POOL);
@@ -454,10 +455,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
-		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
+		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
-			String licpool = persistenceController.getFSoftware2LicencePool(swID);
+			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicencePoolPD(swID);
 
 			if (licpool == null) {
 				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENCE_POOL);
@@ -506,14 +507,16 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SW_ID);
-						String licensePoolIDOld = persistenceController.getFSoftware2LicencePool(swID);
+						String licensePoolIDOld = persistenceController.getSoftwareDataService()
+								.getFSoftware2LicencePoolPD(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
 						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew)) {
 							setSWInfo(swID, licensePoolIDNew);
 						}
 
-						return persistenceController.editPool2AuditSoftware(swID, licensePoolIDOld, licensePoolIDNew);
+						return persistenceController.getSoftwareDataService().editPool2AuditSoftware(swID,
+								licensePoolIDOld, licensePoolIDNew);
 
 					}
 

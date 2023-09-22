@@ -11,15 +11,15 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.messagebus.event.WebSocketEvents;
+import de.uib.messagebus.event.WebSocketEvent;
 
 public class ProductOnClientEventHandler implements EventHandler {
 	Map<String, Consumer<Map<String, Object>>> eventHandlers = new HashMap<>();
 
 	public ProductOnClientEventHandler(ConfigedMain configedMain) {
-		eventHandlers.put(WebSocketEvents.PRODUCT_ON_CLIENT_CREATED.toString(), configedMain::updateProduct);
-		eventHandlers.put(WebSocketEvents.PRODUCT_ON_CLIENT_UPDATED.toString(), configedMain::updateProduct);
-		eventHandlers.put(WebSocketEvents.PRODUCT_ON_CLIENT_DELETED.toString(), configedMain::updateProduct);
+		eventHandlers.put(WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString(), configedMain::updateProduct);
+		eventHandlers.put(WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString(), configedMain::updateProduct);
+		eventHandlers.put(WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString(), configedMain::updateProduct);
 	}
 
 	@Override

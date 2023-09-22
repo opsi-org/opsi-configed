@@ -30,11 +30,11 @@ import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import utils.Utils;
@@ -196,7 +196,7 @@ public final class Configed {
 		}
 
 		if (result == null) {
-			if (Messages.getMessagesBundle() != null && Messages.getMessagesBundle().containsKey(key)) {
+			if (Messages.getMessagesBundle() != null) {
 				result = Messages.getMessagesBundle().getString(key);
 			} else {
 				Logging.debug("Messages.messagesBundle is null...");
@@ -493,15 +493,15 @@ public final class Configed {
 
 			addMissingArgs();
 
-			OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host,
+			OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host,
 					user, password);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
-					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
-					persist.getProductGroups().keySet(),
-
-					// data. on which changes are based
-					persist.getConfigDefaultValues(), persist.getConfigOptions());
+					persist.getHostInfoCollections().getDepotNamesList(),
+					persist.getGroupDataService().getHostGroupIds(),
+					persist.getGroupDataService().getProductGroupsPD().keySet(),
+					persist.getConfigDataService().getConfigDefaultValuesPD(),
+					persist.getConfigDataService().getConfigListCellOptionsPD());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);

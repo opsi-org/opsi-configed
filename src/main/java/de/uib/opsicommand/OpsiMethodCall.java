@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
@@ -33,8 +34,8 @@ public class OpsiMethodCall {
 	 * @param parameters the parameters for the method
 	 * @param background if background then no waiting info is shown
 	 */
-	public OpsiMethodCall(String methodname, Object[] parameters, boolean background) {
-		this.methodname = methodname;
+	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters, boolean background) {
+		this.methodname = methodname.toString();
 		this.parameters = parameters;
 		this.background = background;
 		collectCall();
@@ -45,8 +46,7 @@ public class OpsiMethodCall {
 	 * @param methodName name of rpc method
 	 * @param parameters the parameters for the method
 	 */
-	public OpsiMethodCall(String methodname, Object[] parameters) {
-
+	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters) {
 		this(methodname, parameters, false);
 	}
 

@@ -33,7 +33,7 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
@@ -70,7 +70,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		autocompletion.doButtonAction();
 		doSetActionGetVersions();
 		showAdvancedSettings();
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		initFrame();
 	}
@@ -208,7 +209,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jButtonAdvancedSettings.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonAdvancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
 		}
 
@@ -221,7 +223,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 		jButtonSetRights.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
 		}
 
@@ -232,7 +235,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jButtonToPackageManager.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
 				if (configedMain != null) {
 					new SSHPackageManagerInstallParameterDialog(configedMain, filename);
@@ -244,7 +248,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		jButtonExec.setEnabled(false);
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonExec.addActionListener(actionEvent -> doAction2());
 		}
 

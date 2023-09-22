@@ -16,8 +16,8 @@ import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
@@ -31,7 +31,7 @@ public class DependenciesTreeModel {
 
 	private boolean graphIsInitialized;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public DependenciesTreeModel() {
@@ -41,11 +41,12 @@ public class DependenciesTreeModel {
 	private void initGraph(String depotId) {
 
 		if (depotId == null) {
-			depotId = persistenceController.getDepot();
+			depotId = persistenceController.getDepotDataService().getDepot();
 		}
 
 		// Erstmal die Dependencies laden
-		Map<String, List<Map<String, String>>> dependencies = persistenceController.getProductDependencies(depotId);
+		Map<String, List<Map<String, String>>> dependencies = persistenceController.getProductDataService()
+				.getProductDependencies(depotId);
 
 		productList = new LinkedList<>(dependencies.keySet());
 

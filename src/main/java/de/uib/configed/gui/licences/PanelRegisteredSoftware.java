@@ -14,7 +14,8 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -48,7 +49,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void commit() {
 		Logging.info(this, "commit");
 		super.commit();
-		PersistenceControllerFactory.getPersistenceController().relationsAuditSoftwareToLicencePoolsRequestRefresh();
+		PersistenceControllerFactory.getPersistenceController()
+				.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
 		super.reset();
 
 		if (controller.getPanel().getFSoftwarename2LicencePool() != null) {

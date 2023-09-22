@@ -36,8 +36,8 @@ import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
@@ -82,7 +82,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
 	}
@@ -255,8 +256,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		jComboBoxHost.addItem(host);
 
-		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
+		OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		Set<String> depots = persist.getDepotDataService().getDepotPropertiesForPermittedDepots().keySet();
 
 		// remove login host name if identical with depot fqdn
 		depots.remove(host);
@@ -344,16 +345,20 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> doAction1());
 
-		Logging.info(this, "actionlistener for button1 "
-				+ PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		buttonPanel.add(new JLabel("            "));
+
+		Logging.info(this, "actionlistener for button1 " + PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
 		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 				"images/folder_16.png", " ", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 

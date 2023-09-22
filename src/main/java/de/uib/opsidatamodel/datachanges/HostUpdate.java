@@ -8,15 +8,15 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class HostUpdate implements UpdateCommand {
 
 	private Map<String, Object> newdata;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public HostUpdate(Map<String, Object> newdata) {
@@ -27,6 +27,6 @@ public class HostUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 		Logging.debug(this, "doCall, newdata " + newdata);
-		persistenceController.setHostValues(newdata);
+		persistenceController.getHostDataService().setHostValues(newdata);
 	}
 }

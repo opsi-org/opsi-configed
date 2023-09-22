@@ -21,8 +21,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -36,7 +36,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	private int keyCol;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ControlPanelAssignToLPools myController;
@@ -119,8 +119,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		Logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
 
-		boolean success = persistenceController.removeAssociations(myController.getSelectedLicencePool(),
-				panelGlobalSoftware.getSelectedKeys());
+		boolean success = persistenceController.getSoftwareDataService()
+				.removeAssociations(myController.getSelectedLicencePool(), panelGlobalSoftware.getSelectedKeys());
 
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {

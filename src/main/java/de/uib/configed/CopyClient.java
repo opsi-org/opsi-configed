@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -26,7 +27,7 @@ import utils.Utils;
  * product's properties and config states.
  */
 public class CopyClient {
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private HostInfo clientToCopy;
@@ -88,14 +89,14 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		persist.createClient(newClientName, Utils.getDomainFromClientName(clientToCopy.getName()),
-				clientToCopy.getInDepot(), newDescription, newInventoryNumber, newNotes, newIpAddress, newSystemUUID,
-				newMacAddress, clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(),
-				clientToCopy.getWanConfig(), "", "");
+		persistenceController.getHostDataService().createClient(newClientName,
+				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), newDescription,
+				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
+				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), "", "");
 	}
 
 	private void copyGroups() {
-		Map<String, Set<String>> fGroup2Members = persist.getFGroup2Members();
+		Map<String, Set<String>> fGroup2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName()))
 				.collect(Collectors.toList());
@@ -104,13 +105,13 @@ public class CopyClient {
 			return;
 		}
 
-		persist.addHost2Groups(newClientNameWithDomain, clientGroups);
-		persist.fObject2GroupsRequestRefresh();
+		persistenceController.getGroupDataService().addHost2Groups(newClientNameWithDomain, clientGroups);
+		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 	}
 
 	private void copyProducts() {
-		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persist
-				.getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
+		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persistenceController
+				.getProductDataService().getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
 			return;
@@ -123,17 +124,17 @@ public class CopyClient {
 
 			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				productInfo.values().removeIf(String::isEmpty);
-				persist.updateProductOnClient(newClientNameWithDomain, productInfo.get("productId"),
-						getProductType(productInfo.get("productId")), productInfo);
+				persistenceController.getProductDataService().updateProductOnClient(newClientNameWithDomain,
+						productInfo.get("productId"), getProductType(productInfo.get("productId")), productInfo);
 			});
 		}
 
 		// Trigger product update.
-		persist.updateProductOnClients();
+		persistenceController.getProductDataService().updateProductOnClients();
 	}
 
 	private static int getProductType(String productId) {
-		if (persist.getAllLocalbootProductNames().contains(productId)) {
+		if (persistenceController.getProductDataService().getAllLocalbootProductNames().contains(productId)) {
 			return OpsiPackage.TYPE_LOCALBOOT;
 		} else {
 			return OpsiPackage.TYPE_NETBOOT;
@@ -141,26 +142,30 @@ public class CopyClient {
 	}
 
 	private void copyProductProperties() {
-		Map<String, ConfigName2ConfigValue> products = persist.getProductsProperties(clientToCopy.getName());
+		Map<String, ConfigName2ConfigValue> products = persistenceController.getProductDataService()
+				.getProductPropertiesPD(clientToCopy.getName());
 
 		if (products.isEmpty()) {
 			return;
 		}
 
 		for (Entry<String, ConfigName2ConfigValue> entry : products.entrySet()) {
-			persist.setProductProperties(newClientNameWithDomain, entry.getKey(), entry.getValue());
+			persistenceController.getProductDataService().setProductProperties(newClientNameWithDomain, entry.getKey(),
+					entry.getValue());
 		}
 
 		// Trigger the product's properties update.
-		persist.setProductProperties();
+		persistenceController.getProductDataService().setProductProperties();
 	}
 
 	private void copyConfigStates() {
-		Map<String, Object> clientConfigStates = persist.getConfig(clientToCopy.getName());
+		Map<String, Object> clientConfigStates = persistenceController.getConfigDataService()
+				.getConfig(clientToCopy.getName());
 		if (clientConfigStates != null) {
-			persist.setAdditionalConfiguration(newClientNameWithDomain, (ConfigName2ConfigValue) clientConfigStates);
+			persistenceController.getConfigDataService().setAdditionalConfiguration(newClientNameWithDomain,
+					(ConfigName2ConfigValue) clientConfigStates);
 			// Trigger the config state update.
-			persist.setAdditionalConfiguration();
+			persistenceController.getConfigDataService().setAdditionalConfiguration();
 		}
 	}
 }

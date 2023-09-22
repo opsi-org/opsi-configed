@@ -20,8 +20,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SwExporter implements ActionListener {
@@ -29,7 +29,7 @@ public class SwExporter implements ActionListener {
 	private PanelSWInfo panelSWInfo;
 	private ConfigedMain configedMain;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
@@ -67,9 +67,10 @@ public class SwExporter implements ActionListener {
 			panelSWInfo.setHost(client);
 			panelSWInfo.updateModel();
 
-			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-					.retrieveSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(client)));
-			String scandate = persistenceController.getLastSoftwareAuditModification(swAuditClientEntries, client);
+			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
+					.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(client)));
+			String scandate = persistenceController.getSoftwareDataService()
+					.getLastSoftwareAuditModification(swAuditClientEntries, client);
 			if (scandate != null) {
 				int timePos = scandate.indexOf(' ');
 				if (timePos >= 0) {

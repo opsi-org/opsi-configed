@@ -48,9 +48,9 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
@@ -105,7 +105,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private JTextField descriptionField;
 	private boolean deleted;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private abstract static class AbstractDocumentListener implements DocumentListener {
@@ -679,8 +679,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
-			Set<String> extendedSelection = persistenceController.extendToDependentProducts(associate.getSelectedIDs(),
-					"bonifax.uib.local");
+			Set<String> extendedSelection = persistenceController.getProductDataService()
+					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
 			Set<String> addedElements = new TreeSet<>(extendedSelection);
 			addedElements.removeAll(originalSelection);
 

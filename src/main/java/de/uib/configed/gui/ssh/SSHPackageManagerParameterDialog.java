@@ -21,7 +21,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -79,7 +79,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction3();
@@ -95,7 +96,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				configedMain.reload();
@@ -112,7 +114,8 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonReload);
 		buttonPanel.add(jButtonExecute);
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 	}
 
 	protected void consolidate() {

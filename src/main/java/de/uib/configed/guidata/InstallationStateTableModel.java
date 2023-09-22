@@ -33,14 +33,14 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -95,7 +95,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// (clientId -> (productId -> (product state key -> product state value)))
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	private final String[] selectedClients;
@@ -229,7 +229,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -243,12 +243,12 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// add update to list
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(productIds, clientId,
-				attributes);
+		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
+				.getProductInfos(productIds, clientId);
 		for (Map<String, Object> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-					new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
-					})));
+					POJOReMapper.remap(productInfo, new TypeReference<>() {
+					}));
 		}
 
 		// TODO refactoring needed in these methods...
@@ -263,13 +263,14 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, String[] attributes) {
-		List<Map<String, Object>> productInfos = persistenceController.getProductInfos(clientId, attributes);
+	public synchronized void updateTable(String clientId) {
+		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
+				.getProductInfos(clientId);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, Object> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
-						new ProductState(POJOReMapper.remap(productInfo, new TypeReference<>() {
-						})));
+						POJOReMapper.remap(productInfo, new TypeReference<>() {
+						}));
 			}
 		} else {
 			allClientsProductStates.get(clientId).clear();
@@ -418,7 +419,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return false;
 		}
 
-		if (PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -898,19 +900,21 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
-			Map<String, String> requirements = persistenceController.getProductDeinstallRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductDataService()
+					.getProductDeinstallRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			Map<String, String> requirements = persistenceController.getProductPreRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductDataService()
+					.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductRequirements(null, product);
+			requirements = persistenceController.getProductDataService().getProductRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductPostRequirements(null, product);
+			requirements = persistenceController.getProductDataService().getProductPostRequirements(null, product);
 			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		}
