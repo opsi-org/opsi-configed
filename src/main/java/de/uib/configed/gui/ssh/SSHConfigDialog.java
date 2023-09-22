@@ -225,6 +225,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
+
 		getContentPane().add(connectionPanel, BorderLayout.NORTH);
 		getContentPane().add(settingsPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -356,10 +357,23 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 
-		buttonPanel.add(jButtonClose);
-		buttonPanel.add(new JLabel("            "));
-		buttonPanel.add(jButtonKill);
-		buttonPanel.add(jButtonSave);
+		GroupLayout buttonPanelLayout = new GroupLayout(buttonPanel);
+
+		buttonPanelLayout.setHorizontalGroup(buttonPanelLayout.createSequentialGroup()
+				.addComponent(jButtonClose, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonKill, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		buttonPanelLayout.setVerticalGroup(buttonPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(jButtonClose, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonKill, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		JLabel jLabelKeyFile = new JLabel();
 		jLabelKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
