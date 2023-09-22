@@ -842,8 +842,6 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
 
-		persistenceController.getSoftwareDataService().retrieveInstalledSoftwareInformationPD();
-
 		dataReady = true;
 		mainFrame.enableAfterLoading();
 	}
