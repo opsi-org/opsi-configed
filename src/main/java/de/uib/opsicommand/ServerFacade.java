@@ -216,7 +216,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	@Override
 	@SuppressWarnings("java:S1168")
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		Logging.devel("omc " + omc);
 		Logging.info(this, "retrieveResponse started");
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
