@@ -62,7 +62,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private JButton jButtonExecute;
 	private JButton jButtonCopySelectedClients;
-	private JButton jButtonHelp;
 
 	private JTextField jTextFieldClient;
 	private JTextField jTextFieldUser;
@@ -155,7 +154,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxVerbosity.setEnabled(value);
 		jCheckBoxVerbosity.setEditable(value);
 
-		jButtonHelp.setEnabled(value);
 		jButtonExecute.setEnabled(value);
 
 		jCheckBoxIgnorePing.setEnabled(value);
@@ -301,22 +299,14 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonHelp"));
-		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonHelp"));
-
-		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
-
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
-		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
 		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
-		jButtonClose.setIcon(Utils.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
@@ -406,11 +396,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 			jTextFieldClient.setText(clients.toString());
 		}
-	}
-
-	private void doActionHelp() {
-		SSHConnectionExecDialog dia = commandDeployClientAgent.startHelpDialog();
-		dia.setVisible(true);
 	}
 
 	private void initLayout() {

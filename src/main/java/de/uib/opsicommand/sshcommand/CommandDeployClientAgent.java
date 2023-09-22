@@ -190,14 +190,6 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	@Override
-	public SSHConnectionExecDialog startHelpDialog() {
-		SSHCommand commandHelp = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(commandHelp);
-
-		return exec.getDialog();
-	}
-
-	@Override
 	public FGeneralDialog getDialog() {
 		return dialog;
 	}
@@ -241,6 +233,12 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public List<String> getParameterList() {
 		return new ArrayList<>();
+	}
+
+	@Override
+	public SSHConnectionExecDialog startHelpDialog() {
+		// This method is not needed here
+		throw new UnsupportedOperationException("Unimplemented method 'startHelpDialog'");
 	}
 
 }
