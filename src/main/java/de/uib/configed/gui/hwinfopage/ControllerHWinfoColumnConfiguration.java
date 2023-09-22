@@ -28,8 +28,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.IntComparatorForObjects;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -70,7 +71,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public ControllerHWinfoColumnConfiguration() {
@@ -91,27 +92,23 @@ public class ControllerHWinfoColumnConfiguration {
 				Logging.info(this, "commit, we do the saving");
 
 				Logging.info(this, " we have got updateItems " + updateItems);
-				persistenceController.saveHwColumnConfig(updateItems);
+				persistenceController.getHardwareDataService().saveHwColumnConfig(updateItems);
 				updateItems.clear();
 
 			}
 
 			@Override
 			public void reload() {
-
-				persistenceController.hwAuditConfRequestRefresh();
-				persistenceController.configOptionsRequestRefresh();
+				persistenceController.reloadData(ReloadEvent.HARDWARE_CONF_RELOAD.toString());
 				model.requestReload();
 
-				persistenceController.getConfigOptions();
+				persistenceController.getConfigDataService().retrieveConfigOptionsPD();
 
 				model.reset();
 				setDataChanged(false);
 
 				panel.moveToValue("true", columnNames.indexOf(COL_USE_IN_QUERY), true);
-
 			}
-
 		};
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
@@ -253,7 +250,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getHwAuditDeviceClasses();
+		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getHardwareDataService()
+				.getHwAuditDeviceClassesPD();
 		int id = 0;
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {

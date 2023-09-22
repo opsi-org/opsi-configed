@@ -38,7 +38,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import utils.Utils;
@@ -313,9 +313,11 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
 
 		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
-			forbidEditing = !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
+			forbidEditing = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+					.hasServerFullPermissionPD();
 		} else {
-			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+			forbidEditing = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+					.isGlobalReadOnly();
 		}
 
 		Logging.debug("forbidEditing " + forbidEditing);

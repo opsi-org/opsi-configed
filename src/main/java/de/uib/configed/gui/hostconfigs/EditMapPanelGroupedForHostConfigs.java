@@ -44,10 +44,12 @@ import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -67,7 +69,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private PopupMenuTrait popupForUserpath;
@@ -630,8 +632,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		// rolekey may be edited
 		if (!(key.equals(rolekey))) {
 
-			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDefaultValues()
-					.get(rolekey);
+			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+					.getConfigDefaultValuesPD().get(rolekey);
 
 			boolean obeyToRole = values != null && !values.isEmpty()
 					&& !(values.get(0).equals(UserConfig.NONE_PROTOTYPE));
@@ -742,8 +744,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		// partial reload
 		buildUserConfig();
 
-		persistenceController.hostConfigsRequestRefresh();
-		persistenceController.configOptionsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 
 		Logging.info(this, "reload");
 		TreePath p = tree.getSelectionPath();
@@ -805,28 +807,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void buildUserConfig() {
-
-		UserConfigProducing up = new UserConfigProducing(
-				// boolean notUsingDefaultUser, if true, we would supply the logged in user)
-				false,
-
-				// String configserver,
+		UserConfigProducing up = new UserConfigProducing(false,
 				persistenceController.getHostInfoCollections().getConfigServer(),
-
-				// Collection<String> existingDepots,
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
-
-				// Collection<String> existingHostgroups,
-				persistenceController.getHostGroupIds(),
-				// Collection<String> existingProductgroups,
-				persistenceController.getProductGroups().keySet(),
-
-				// data. on which changes are based
-				// Map<String, List<Object>> serverconfigValuesMap,
-				persistenceController.getConfigDefaultValues(),
-
-				// Map<String, ListCellOptions> configOptionsMap
-				persistenceController.getConfigOptions());
+				persistenceController.getGroupDataService().getHostGroupIds(),
+				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
+				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 
 		List<Object> newData = up.produce();
 
@@ -835,7 +822,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		} else {
 
 			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { newData });
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });
 
 				persistenceController.getExecutioner().doCall(omc);
 			}
@@ -923,11 +910,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setRoleConfig(String name, String rolename) {
 		Logging.info(this, "setRoleConfig " + name + "," + rolename);
-		PersistenceControllerFactory.getPersistenceController().addRoleConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name, rolename);
 	}
 
 	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
-		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
 	}
 }

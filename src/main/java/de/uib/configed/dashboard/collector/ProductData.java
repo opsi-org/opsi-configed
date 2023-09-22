@@ -17,8 +17,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ProductData {
 	private static Map<String, List<String>> products = new HashMap<>();
@@ -34,7 +34,7 @@ public final class ProductData {
 	private static int totalWindowsInstallations;
 	private static int totalMacOSInstallations;
 
-	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private static String selectedDepot;
@@ -73,7 +73,7 @@ public final class ProductData {
 			return;
 		}
 
-		List<Map<String, Object>> allProductsInDepot = persistenceController.getAllProducts();
+		List<Map<String, Object>> allProductsInDepot = persistenceController.getProductDataService().getAllProducts();
 
 		for (String depot : depots) {
 			Helper.fillMapOfListsForDepots(products,
@@ -139,7 +139,7 @@ public final class ProductData {
 					.collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
-					.getMapOfProductStatesAndActions(clientIds);
+					.getProductDataService().getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
@@ -265,7 +265,7 @@ public final class ProductData {
 			return;
 		}
 
-		Map<String, Integer> installedOSs = persistenceController.getInstalledOsOverview();
+		Map<String, Integer> installedOSs = persistenceController.getModuleDataService().getInstalledOsOverview();
 
 		if (installedOSs.isEmpty()) {
 			return;

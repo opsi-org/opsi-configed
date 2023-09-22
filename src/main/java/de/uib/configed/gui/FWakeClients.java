@@ -20,14 +20,14 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public FWakeClients(JFrame master, String title) {
@@ -42,7 +42,7 @@ public class FWakeClients extends FShowList {
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04F);
-		Map<String, List<String>> hostSeparationByDepots = persistenceController
+		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
 				.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
@@ -97,9 +97,11 @@ public class FWakeClients extends FShowList {
 			}
 
 			if (ServerFacade.isOpsi43()) {
-				persistenceController.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
+				persistenceController.getRPCMethodExecutor()
+						.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
 			} else {
-				persistenceController.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
+				persistenceController.getRPCMethodExecutor().wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots,
+						executionerForDepots);
 			}
 
 			Utils.threadSleep(this, 1000L * delaySecs);

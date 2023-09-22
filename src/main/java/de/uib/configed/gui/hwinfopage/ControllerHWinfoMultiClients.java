@@ -22,8 +22,9 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -36,7 +37,6 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import utils.Utils;
 
 public class ControllerHWinfoMultiClients {
-
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
 
@@ -44,7 +44,7 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	private ConfigedMain configedMain;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private TableModelFilter tableModelFilter;
 
@@ -72,23 +72,18 @@ public class ControllerHWinfoMultiClients {
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
 		model.invalidate();
 		model.reset();
-
 	}
 
 	public void requestResetFilter() {
 		Logging.info(this, "requestResetFilter");
-
 		setFilter();
-
 	}
 
 	private void initPanel() {
 		panel = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
-
-				persistenceController.client2HwRowsRequestRefresh();
-
+				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 				super.reload();
 			}
 		};
@@ -99,49 +94,22 @@ public class ControllerHWinfoMultiClients {
 		// supply implementation of SearchTargetModelFromTable.setFiltered
 		panel.showFilterIcon(true);
 		panel.setFiltering(true);
-
 	}
 
 	private void initModel() {
-
-		List<String> columnNames = persistenceController.getClient2HwRowsColumnNames();
-		List<String> classNames = persistenceController.getClient2HwRowsJavaclassNames();
+		List<String> columnNames = persistenceController.getHardwareDataService().getClient2HwRowsColumnNamesPD();
+		List<String> classNames = persistenceController.getHardwareDataService().getClient2HwRowsJavaclassNamesPD();
 
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 
-		// GenericTableUpdateItemFactory updateItemFactory = new
-
-		model = new GenTableModel(
-				// updateItemFactory,
-				null,
-
-				// tableProvider
-
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					Logging.info(this, "retrieveMap: getClient2HwRows");
-					return persistenceController.getClient2HwRows(hosts);
-				})),
-
-				// keycol
-				0,
-
-				// final columns int array
-				new int[] { KEY_COL },
-
-				// table model listener
-				panel,
-
-				// ArrayList<TableEditItem> updates
-				// updateCollection
-				null);
-
-		// we got metadata:
+		model = new GenTableModel(null, new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+			Logging.info(this, "retrieveMap: getClient2HwRows");
+			return persistenceController.getHardwareDataService().getClient2HwRows(hosts);
+		})), 0, new int[] { KEY_COL }, panel, null);
 
 		panel.setTableModel(model);
-
 		model.chainFilter(FILTER_SELECTED_CLIENTS, tableModelFilter);
-
 	}
 
 	public void rebuildModel() {
@@ -149,8 +117,8 @@ public class ControllerHWinfoMultiClients {
 			return;
 		}
 		// the window exists
-		persistenceController.configOptionsRequestRefresh();
-		persistenceController.client2HwRowsRequestRefresh();
+		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 		initModel();
 
 		// we apply filter
@@ -158,9 +126,6 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	private void buildSurrounding() {
-
-		// Icon iconConfigure =
-
 		JButton buttonConfigureColumns = new JButton("", Utils.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
@@ -205,14 +170,11 @@ public class ControllerHWinfoMultiClients {
 		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		col = panel.getColumnModel().getColumn(3);
 		col.setHeaderValue(Configed.getResourceValue("PanelHWInfo.lastScanTime"));
-
 	}
 
 	private void configureColumns(ActionEvent actionEvent) {
 		Logging.info(this, "action performed " + actionEvent);
-
 		ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration();
-
 		if (fTable == null || ((FPanel) fTable).isLeft()) {
 			fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.getPanel(),
 					true);
@@ -220,9 +182,7 @@ public class ControllerHWinfoMultiClients {
 			fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
 					ConfigedMain.getMainFrame().getSize().height / 2));
 		}
-
 		fTable.centerOnParent();
-
 		fTable.setVisible(true);
 	}
 
@@ -242,7 +202,6 @@ public class ControllerHWinfoMultiClients {
 			if (filter == null || row == null || KEY_COL >= row.size()) {
 				return true;
 			}
-
 			return filter.contains(row.get(KEY_COL));
 		}
 
@@ -253,7 +212,6 @@ public class ControllerHWinfoMultiClients {
 			if (filter != null) {
 				result = result + " size " + filter.size();
 			}
-
 			return result;
 		}
 	}

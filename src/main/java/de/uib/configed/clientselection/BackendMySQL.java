@@ -18,8 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
@@ -41,11 +42,11 @@ public class BackendMySQL {
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public BackendMySQL() {
-		hwConfig = persistenceController.getOpsiHWAuditConf("en_");
+		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
 
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}
@@ -55,7 +56,7 @@ public class BackendMySQL {
 		Logging.info(this, query);
 
 		List<List<String>> clients = persistenceController.getExecutioner()
-				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
+				.getListOfStringLists(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));
 
 		List<String> list = new ArrayList<>();
 

@@ -12,15 +12,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	private String[] objectIds;
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean masterConfig;
@@ -83,9 +83,9 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: " + size());
 		if (masterConfig) {
-			persistenceController.setConfig();
+			persistenceController.getConfigDataService().setConfig();
 		} else {
-			persistenceController.setAdditionalConfiguration();
+			persistenceController.getConfigDataService().setAdditionalConfiguration();
 		}
 		clear();
 	}

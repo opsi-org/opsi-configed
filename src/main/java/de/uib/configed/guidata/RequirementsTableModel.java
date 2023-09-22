@@ -21,10 +21,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -40,7 +40,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private Map<String, String> requAfterMap;
 	private Map<String, String> requDeinstallMap;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public RequirementsTableModel() {
@@ -51,10 +51,11 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	private void retrieveRequirements(String depotId, String product) {
 		// if depotId == null the depot representative is used
-		requMap = persistenceController.getProductRequirements(depotId, product);
-		requBeforeMap = persistenceController.getProductPreRequirements(depotId, product);
-		requAfterMap = persistenceController.getProductPostRequirements(depotId, product);
-		requDeinstallMap = persistenceController.getProductDeinstallRequirements(depotId, product);
+		requMap = persistenceController.getProductDataService().getProductRequirements(depotId, product);
+		requBeforeMap = persistenceController.getProductDataService().getProductPreRequirements(depotId, product);
+		requAfterMap = persistenceController.getProductDataService().getProductPostRequirements(depotId, product);
+		requDeinstallMap = persistenceController.getProductDataService().getProductDeinstallRequirements(depotId,
+				product);
 	}
 
 	private void init() {

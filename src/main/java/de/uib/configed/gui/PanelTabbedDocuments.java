@@ -6,11 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -22,18 +17,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.synth.Region;
-import javax.swing.plaf.synth.SynthConstants;
-import javax.swing.plaf.synth.SynthContext;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import javax.swing.plaf.synth.SynthStyle;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -41,11 +26,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
-public class PanelTabbedDocuments extends JTabbedPane {
+public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
-
-	private double proportionOfTotalWidth = 1;
 
 	private LogPane[] textPanes;
 	private String[] idents;
@@ -58,18 +42,9 @@ public class PanelTabbedDocuments extends JTabbedPane {
 
 		this.idents = idents;
 
-		super.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				initTabWidth();
-			}
-		});
-
-		super.addChangeListener(changeEvent -> initTabWidth());
-
 		identsList = Arrays.asList(idents);
 
-		setProportionOfTotalWidth(0.5);
+		super.setProportionOfTotalWidth(0.5);
 
 		if (!Main.THEMES) {
 			super.setForeground(Globals.BLUE);
@@ -78,169 +53,80 @@ public class PanelTabbedDocuments extends JTabbedPane {
 		textPanes = new LogPane[idents.length];
 
 		for (int i = 0; i < idents.length; i++) {
-			initLogFrame(i, defaultText);
-		}
-	}
-
-	private void initLogFrame(int i, String defaultText) {
-		LogPane showPane = new LogPane(defaultText, true) {
-			@Override
-			public void reload() {
-				super.reload();
-				loadDocument(idents[i]);
-			}
-
-			@Override
-			public void save() {
-				String filename = idents[i];
-				if (getInfo() != null) {
-					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
-				}
-				Logging.debug(this, "save with filename " + filename);
-				String pathname = openFile(filename + ".log");
-				if (pathname != null && !pathname.isEmpty()) {
-					saveToFile(pathname, getLines());
+			final String ident = idents[i];
+			LogPane showPane = new LogPane(defaultText, true) {
+				@Override
+				public void reload() {
+					super.reload();
+					loadDocument(ident);
 				}
 
-			}
-
-			@Override
-			protected void saveAsZip() {
-				Logging.info(this, "saveAsZip");
-
-				String filename = idents[i];
-				if (getInfo() != null) {
-					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
-				}
-				String pathname = openFile(filename + ".zip");
-				if (pathname != null && !pathname.isEmpty()) {
-					saveToZipFile(pathname, filename, getLines());
-				}
-
-			}
-
-			@Override
-			protected void saveAllAsZip(boolean loadMissingDocs) {
-				Logging.info(this, "saveAllAsZip got ident " + idents[i] + " loadMissingDocs " + loadMissingDocs);
-
-				String filename = idents[i];
-				if (getInfo() != null) {
-					filename = getInfo().replace('.', '_') + "_all";
-				}
-
-				PanelTabbedDocuments.this.saveAllAsZip(filename, loadMissingDocs);
-			}
-		};
-
-		textPanes[i] = showPane;
-
-		super.addTab(idents[i], textPanes[i]);
-	}
-
-	public void saveAllAsZip(String filename, boolean loadMissingDocs) {
-
-		Logging.info(this, "saveAllAsZip, start getting pathname");
-		String pathname = openFile(filename + ".zip");
-
-		if (pathname != null && !pathname.isEmpty()) {
-			Logging.info(this, "saveAllAsZip, got pathname");
-
-			if (loadMissingDocs) {
-				for (int logNo = 0; logNo < idents.length; logNo++) {
-					if (textPanes[logNo].getLines().length <= 1) {
-						// empty
-
-						loadDocument(idents[logNo]);
+				@Override
+				public void save() {
+					String filename = ident;
+					if (getInfo() != null) {
+						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
+					}
+					Logging.debug(this, "save with filename " + filename);
+					String pathname = openFile(filename + ".log");
+					if (pathname != null && !pathname.isEmpty()) {
+						saveToFile(pathname, getLines());
 					}
 
-					Logging.info(this,
-							"saveAllAsZip textPanes[" + logNo + "].lines.length " + textPanes[logNo].getLines().length);
 				}
-			}
 
-			saveAllToZipFile(pathname);
-		}
-	}
+				@Override
+				protected void saveAsZip() {
+					Logging.info(this, "saveAsZip");
 
-	@Override
-	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		if (tip == null) {
-			tip = title;
-		}
+					String filename = ident;
+					if (getInfo() != null) {
+						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
+					}
+					String pathname = openFile(filename + ".zip");
+					if (pathname != null && !pathname.isEmpty()) {
+						saveToZipFile(pathname, filename, getLines());
+					}
 
-		super.insertTab(title, icon, component, tip, index);
-		JLabel label = new JLabel(title, SwingConstants.CENTER);
-		Dimension dim = label.getPreferredSize();
-		Insets tabInsets = getTabInsets();
-		label.setPreferredSize(new Dimension(0, dim.height + tabInsets.top + tabInsets.bottom));
-		setTabComponentAt(index, label);
-		initTabWidth();
-	}
+				}
 
-	private int calcWidth() {
-		return (int) (getWidth() * proportionOfTotalWidth);
-	}
+				@Override
+				protected void saveAllAsZip(boolean loadMissingDocs) {
+					Logging.info(this, "saveAllAsZip got ident " + ident + " loadMissingDocs " + loadMissingDocs);
 
-	private void setProportionOfTotalWidth(double prop) {
-		proportionOfTotalWidth = prop;
-	}
+					String fname = ident;
+					if (getInfo() != null) {
+						fname = getInfo().replace('.', '_') + "_all";
+					}
 
-	private void initTabWidth() {
-		Insets tabInsets = getTabInsets();
-		Insets tabAreaInsets = getTabAreaInsets();
-		Insets insets = getInsets();
-		int areaWidth = calcWidth() - tabAreaInsets.left - tabAreaInsets.right - insets.left - insets.right;
-		int tabCount = getTabCount();
-		int tabWidth = 0;
-		int gap = 0;
-		switch (getTabPlacement()) {
-		case LEFT:
-		case RIGHT:
-			tabWidth = areaWidth / 4;
-			gap = 0;
-			break;
-		case BOTTOM:
-		case TOP:
-		default:
-			tabWidth = areaWidth / tabCount;
-			gap = areaWidth - (tabWidth * tabCount);
-			break;
-		}
+					Logging.info(this, "saveAllAsZip, start getting pathname");
+					String pathname = openFile(fname + ".zip");
 
-		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;
-		for (int i = 0; i < tabCount; i++) {
-			JLabel l = (JLabel) getTabComponentAt(i);
-			if (l == null) {
-				break;
-			}
+					if (pathname != null && !pathname.isEmpty()) {
+						Logging.info(this, "saveAllAsZip, got pathname");
 
-			if (i < gap) {
-				tabWidth = tabWidth + 1;
-			}
-			l.setPreferredSize(new Dimension(tabWidth, l.getPreferredSize().height));
-		}
-		revalidate();
-	}
+						if (loadMissingDocs) {
+							for (int logNo = 0; logNo < idents.length; logNo++) {
+								if (textPanes[logNo].getLines().length <= 1) {
+									// empty
 
-	private Insets getTabInsets() {
-		Insets i = UIManager.getInsets("TabbedPane.tabInsets");
-		if (i != null) {
-			return i;
-		} else {
-			SynthStyle style = SynthLookAndFeel.getStyle(this, Region.TABBED_PANE_TAB);
-			SynthContext context = new SynthContext(this, Region.TABBED_PANE_TAB, style, SynthConstants.ENABLED);
-			return style.getInsets(context, null);
-		}
-	}
+									loadDocument(idents[logNo]);
+								}
 
-	private Insets getTabAreaInsets() {
-		Insets i = UIManager.getInsets("TabbedPane.tabAreaInsets");
-		if (i != null) {
-			return i;
-		} else {
-			SynthStyle style = SynthLookAndFeel.getStyle(this, Region.TABBED_PANE_TAB_AREA);
-			SynthContext context = new SynthContext(this, Region.TABBED_PANE_TAB_AREA, style, SynthConstants.ENABLED);
-			return style.getInsets(context, null);
+								Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
+										+ textPanes[logNo].getLines().length);
+							}
+						}
+
+						saveAllToZipFile(pathname);
+					}
+				}
+			};
+
+			textPanes[i] = showPane;
+
+			super.addTab(ident, textPanes[i]);
+
 		}
 	}
 

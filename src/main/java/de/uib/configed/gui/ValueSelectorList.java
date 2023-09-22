@@ -24,8 +24,8 @@ import javax.swing.ScrollPaneConstants;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
@@ -45,7 +45,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private boolean multidepot;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	/**
@@ -186,7 +186,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 			if (valueList.getSelectedIndex() > -1) {
 				String depotSelected = valueList.getSelectedValue();
-				List<String> depotsWithEqualStock = persistenceController
+				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
 						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				valueList.addToSelection(depotsWithEqualStock);
 

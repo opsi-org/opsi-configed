@@ -41,9 +41,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -63,7 +63,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	private final Map<String, Object> emptyVisualData = new HashMap<>();
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
@@ -222,7 +222,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Map<String, Object> visualData = mergeProperties(persistenceController.getDepot2product2properties(),
+		Map<String, Object> visualData = mergeProperties(
+				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -232,14 +233,14 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		if (!listDepots.getSelectedValuesList().isEmpty()) {
-			productPropertiesPanel.setEditableMap(visualData, persistenceController
+			productPropertiesPanel.setEditableMap(visualData, persistenceController.getProductDataService()
 					.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
-				Map<String, ConfigName2ConfigValue> product2properties = persistenceController
-						.getDepot2product2properties().get(depot);
+				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getProductDataService()
+						.getDepot2product2propertiesPD().get(depot);
 
 				if (product2properties == null) {
 					Logging.info(this, " product2properties null for depot " + depot);
@@ -429,8 +430,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = persistenceController.getDefaultProductProperties(selectedDepot0)
-				.get(productEdited);
+		ConfigName2ConfigValue properties0 = persistenceController.getProductDataService()
+				.getDefaultProductPropertiesPD(selectedDepot0).get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
 		listDepots.setSelectionInterval(startDepotIndex, startDepotIndex);
@@ -442,8 +443,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = persistenceController.getDefaultProductProperties(compareDepot)
-					.get(productEdited);
+			ConfigName2ConfigValue compareProperties = persistenceController.getProductDataService()
+					.getDefaultProductPropertiesPD(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null
 			if (Objects.equals(properties0, compareProperties)) {

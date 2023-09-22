@@ -22,8 +22,8 @@ import javax.swing.table.TableColumn;
 import de.uib.Main;
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -47,7 +47,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	private GenTableModel modelSoftwarelicences;
 	private GenTableModel modelLicencecontracts;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 
@@ -137,7 +137,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					public String sendUpdate(Map<String, Object> rowmap) {
 						Logging.info(this, "sendUpdate " + rowmap);
 
-						return persistenceController.editRelationSoftwareL2LPool(
+						return persistenceController.getSoftwareDataService().editRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
 								(String) rowmap.get("licenseKey"));
 					}
@@ -146,7 +146,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						Logging.info(this, "sendDelete " + rowmap);
 						modelLicencekeys.requestReload();
-						return persistenceController.deleteRelationSoftwareL2LPool(
+						return persistenceController.getSoftwareDataService().deleteRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
 					}
 				}, updateCollection));
@@ -194,6 +194,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
 					.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()))
 							.keySet());
+
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
@@ -221,8 +222,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					@Override
 					public String sendUpdate(Map<String, Object> m) {
 
-						return persistenceController.editSoftwareLicence((String) m.get("softwareLicenseId"),
-								(String) m.get("licenseContractId"), (String) m.get("licenseType"),
+						return persistenceController.getSoftwareDataService().editSoftwareLicence(
+								(String) m.get("softwareLicenseId"), (String) m.get("licenseContractId"),
+								(String) m.get("licenseType"),
 								LicenceEntry.produceNormalizedCount("" + m.get("maxInstallations")),
 								(String) m.get("boundToHost"), (String) m.get("expirationDate"));
 					}
@@ -230,7 +232,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelSoftwarelicences.requestReload();
-						return persistenceController.deleteSoftwareLicence((String) m.get("softwareLicenseId"));
+						return persistenceController.getSoftwareDataService()
+								.deleteSoftwareLicence((String) m.get("softwareLicenseId"));
 					}
 				}, updateCollection));
 	}
@@ -319,16 +322,17 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 				thePanel.getPanelLicencecontracts(), modelLicencecontracts, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.editLicenceContract((String) rowmap.get("licenseContractId"),
-								(String) rowmap.get("partner"), (String) rowmap.get("conclusionDate"),
-								(String) rowmap.get("notificationDate"), (String) rowmap.get("expirationDate"),
-								(String) rowmap.get("notes"));
+						return persistenceController.getLicenseDataService().editLicenceContract(
+								(String) rowmap.get("licenseContractId"), (String) rowmap.get("partner"),
+								(String) rowmap.get("conclusionDate"), (String) rowmap.get("notificationDate"),
+								(String) rowmap.get("expirationDate"), (String) rowmap.get("notes"));
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
-						return persistenceController.deleteLicenceContract((String) rowmap.get("licenseContractId"));
+						return persistenceController.getLicenseDataService()
+								.deleteLicenceContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));
 	}

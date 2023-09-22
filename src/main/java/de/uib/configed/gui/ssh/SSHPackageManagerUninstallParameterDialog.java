@@ -34,8 +34,8 @@ import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
 
@@ -59,7 +59,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private JButton jButtonDepotSelection;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private FDepotselectionList fDepotList;
@@ -105,7 +105,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		super.pack();
 		super.setSize(frameWidth, frameHeight);
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		super.setVisible(true);
 	}
@@ -131,8 +132,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		Logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.isDepotsFullPermission()) {
-				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else {
@@ -142,13 +143,13 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		} else {
 			jButtonExecute.setEnabled(true);
 
-			if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
-				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+			if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (selectedDepots
-					.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
+					.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 				StringBuilder sb = new StringBuilder();
 				int startIndex = possibleDepots
-						.indexOf(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+						.indexOf(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
 
@@ -178,10 +179,10 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.isDepotsFullPermission()) {
+		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 			textFieldSelectedDepots.setEditable(true);
-			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else {
 			textFieldSelectedDepots.setEditable(false);
 		}
@@ -199,17 +200,19 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	}
 
 	private boolean isPossibleDepot(String depot, String selectedProduct) {
-		if (!persistenceController.hasDepotPermission(depot)) {
+		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
 			return false;
 		}
 
-		if (persistenceController.getDepot2LocalbootProducts().get(depot) != null
-				&& persistenceController.getDepot2LocalbootProducts().get(depot).containsKey(selectedProduct)) {
+		if (persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot) != null
+				&& persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot)
+						.containsKey(selectedProduct)) {
 			return true;
 		}
 
-		return persistenceController.getDepot2NetbootProducts().get(depot) != null
-				&& persistenceController.getDepot2NetbootProducts().get(depot).containsKey(selectedProduct);
+		return persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot) != null
+				&& persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot)
+						.containsKey(selectedProduct);
 	}
 
 	private void initDepots() {
@@ -325,7 +328,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		if (persistenceController == null) {
 			Logging.error(this, "resetProducts PersistenceController null");
 		} else {
-			NavigableSet<String> productnames = persistenceController.getProductIds();
+			NavigableSet<String> productnames = persistenceController.getProductDataService().getProductIdsPD();
 			for (String item : productnames) {
 				jComboBoxOpsiProducts.addItem(item);
 			}

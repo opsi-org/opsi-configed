@@ -14,8 +14,8 @@ import de.uib.Main;
 import de.uib.configed.type.HostGroupRelation;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -30,7 +30,7 @@ public class SavedSearchQuery {
 	private String password;
 	private String searchName;
 
-	private OpsiserviceNOMPersistenceController controller;
+	private OpsiServiceNOMPersistenceController controller;
 
 	public SavedSearchQuery(String host, String user, String password, String searchName) {
 		Logging.setLogLevelFile(Logging.LEVEL_NONE);
@@ -107,7 +107,7 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
+		Map<String, Map<String, String>> hostGroups = controller.getGroupDataService().getHostGroupsPD();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
@@ -118,17 +118,17 @@ public class SavedSearchQuery {
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 
-		if (!controller.deleteGroup(groupName)) {
+		if (!controller.getGroupDataService().deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
 			Main.endApp(6);
 		}
 
-		if (!controller.addGroup(saveGroupRelation)) {
+		if (!controller.getGroupDataService().addGroup(saveGroupRelation)) {
 			Logging.error("add group error, group " + saveGroupRelation);
 			Main.endApp(7);
 		}
 
-		if (!controller.addHosts2Group(hosts, groupName)) {
+		if (!controller.getGroupDataService().addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group " + groupName);
 			Main.endApp(8);
 		}

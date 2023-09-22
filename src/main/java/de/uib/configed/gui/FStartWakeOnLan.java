@@ -35,8 +35,8 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
@@ -99,10 +99,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	}
 
 	public void setClients() {
-		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
-		Map<String, List<String>> hostSeparationByDepots = persistenceController
+		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
 				.getHostSeparationByDepots(configedMain.getSelectedClients());
 		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = configedMain.getSelectedClients();

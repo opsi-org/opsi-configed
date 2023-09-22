@@ -24,8 +24,8 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.script.Interpreter;
 import de.uib.utilities.swing.FEditStringList;
@@ -148,7 +148,7 @@ public class FDialogRemoteControl extends FEditStringList {
 
 		values.put("%hostname%", hostName);
 
-		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
 		HostInfo pcInfo = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().get(targetClient);

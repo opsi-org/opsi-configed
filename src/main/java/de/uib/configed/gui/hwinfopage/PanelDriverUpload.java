@@ -39,8 +39,8 @@ import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
@@ -172,7 +172,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private JLabel jLabelTopic;
 	private int wLeftText;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
 	private String server;
@@ -293,7 +293,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		Logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
 
-		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
+				depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -718,7 +719,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
 						+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
 				Logging.info(this, "set rights for " + driverDir);
-				persistenceController.setRights(driverDir);
+				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
 
 			rootFrame.disactivateLoadingCursor();

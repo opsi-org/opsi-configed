@@ -16,8 +16,9 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -108,15 +109,15 @@ public class SWAuditClientEntry {
 	private List<String> software;
 	private NavigableMap<String, Integer> software2Number;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SWAuditClientEntry(final Map<String, Object> m) {
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
-		this.software = persistenceController.getSoftwareList();
-		this.software2Number = persistenceController.getSoftware2Number();
+		this.software = persistenceController.getSoftwareDataService().getSoftwareListPD();
+		this.software2Number = persistenceController.getSoftwareDataService().getSoftware2NumberPD();
 		produceSWid();
 		data.put(LICENCE_KEY, produceNonNull(m.get(LICENCE_KEY)));
 		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
@@ -139,8 +140,8 @@ public class SWAuditClientEntry {
 	private void updateSoftware() {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
-			persistenceController.installedSoftwareInformationRequestRefresh();
-			software = persistenceController.getSoftwareList();
+			persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+			software = persistenceController.getSoftwareDataService().getSoftwareListPD();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new HashSet<>();
 		} else {

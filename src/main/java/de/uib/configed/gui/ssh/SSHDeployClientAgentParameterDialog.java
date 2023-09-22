@@ -35,8 +35,8 @@ import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 import utils.Utils;
@@ -83,7 +83,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private boolean aktive;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SSHDeployClientAgentParameterDialog(ConfigedMain configedMain) {
@@ -103,15 +103,16 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly());
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 	}
 
 	private void getDefaultAuthData() {
-		Map<String, Object> configs = persistenceController
+		Map<String, Object> configs = persistenceController.getConfigDataService()
 				.getConfig(persistenceController.getHostInfoCollections().getConfigServer());
 
 		List<Object> resultConfigList = (List<Object>) configs
-				.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
+				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
@@ -123,7 +124,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		}
 
-		resultConfigList = (List<Object>) configs.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
+		resultConfigList = (List<Object>) configs.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 
 			Logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
@@ -310,7 +311,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Utils.createImageIcon("images/execute16_blue.png", ""));
-		if (!PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 

@@ -9,8 +9,8 @@ package de.uib.configed.guidata;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class DependenciesModel {
 
@@ -19,7 +19,7 @@ public class DependenciesModel {
 	private RequirementsTableModel requirementsTableModel;
 	private DependenciesTreeModel dependenciesTreeModel;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public DependenciesModel() {
@@ -39,7 +39,7 @@ public class DependenciesModel {
 	}
 
 	public void setActualProduct(String productId) {
-		String depotId = persistenceController.getDepot();
+		String depotId = persistenceController.getDepotDataService().getDepot();
 
 		setActualProduct(depotId, productId);
 	}

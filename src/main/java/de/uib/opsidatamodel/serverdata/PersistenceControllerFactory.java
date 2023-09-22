@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsidatamodel;
+package de.uib.opsidatamodel.serverdata;
 
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
@@ -13,7 +13,7 @@ import utils.Utils;
 
 public final class PersistenceControllerFactory {
 
-	private static OpsiserviceNOMPersistenceController staticPersistControl;
+	private static OpsiServiceNOMPersistenceController staticPersistControl;
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -25,7 +25,7 @@ public final class PersistenceControllerFactory {
 	 * choose if we take the already constructed one - returned from the static
 	 * method getPersistenceController - or construct a new one
 	 */
-	public static OpsiserviceNOMPersistenceController getNewPersistenceController(String server, String user,
+	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
 			String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
@@ -34,7 +34,7 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		OpsiserviceNOMPersistenceController persistenceController = new OpsiserviceNOMPersistenceController(server,
+		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
 				user, password);
 		Logging.info(
 				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
@@ -48,10 +48,11 @@ public final class PersistenceControllerFactory {
 		}
 
 		if (connected) {
-			persistenceController.checkMultiFactorAuthentication();
-			Utils.setMultiFactorAuthenticationEnabled(persistenceController.usesMultiFactorAuthentication());
-			persistenceController.checkConfiguration();
-			persistenceController.retrieveOpsiModules();
+			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
+			Utils.setMultiFactorAuthenticationEnabled(
+					persistenceController.getUserDataService().usesMultiFactorAuthentication());
+			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+			persistenceController.getModuleDataService().retrieveOpsiModules();
 		}
 
 		staticPersistControl = persistenceController;
@@ -64,7 +65,7 @@ public final class PersistenceControllerFactory {
 		return staticPersistControl;
 	}
 
-	public static OpsiserviceNOMPersistenceController getPersistenceController() {
+	public static OpsiServiceNOMPersistenceController getPersistenceController() {
 		return staticPersistControl;
 	}
 

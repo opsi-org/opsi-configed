@@ -35,7 +35,7 @@ import java.util.Set;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -172,7 +172,8 @@ public final class CertificateManager {
 		List<File> certificateFiles = getCertificates();
 
 		if (!certificateFiles.isEmpty()) {
-			String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
+			String certificateContent = PersistenceControllerFactory.getPersistenceController().getUserDataService()
+					.getOpsiCACert();
 			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
 
 			for (File certificateFile : certificateFiles) {

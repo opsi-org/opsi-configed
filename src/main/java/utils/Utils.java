@@ -35,6 +35,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -331,5 +333,82 @@ public final class Utils {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static List<String> takeAsStringList(List<Object> list) {
+		List<String> result = new ArrayList<>();
+
+		if (list == null) {
+			return result;
+		}
+
+		for (Object val : list) {
+			result.add((String) val);
+		}
+
+		return result;
+	}
+
+	public static Map<String, Object> createNOMConfig(ConfigOption.TYPE type, String key, String description,
+			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
+		Map<String, Object> item = createNOMitem(type.toString());
+		item.put("id", key.toLowerCase(Locale.ROOT));
+		item.put("description", description);
+		item.put("editable", editable);
+		item.put("multiValue", multiValue);
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		return item;
+	}
+
+	public static Map<String, Object> createNOMBoolConfig(String key, Boolean value, String description) {
+		List<Object> defaultValues = new ArrayList<>();
+		defaultValues.add(value);
+		List<Object> possibleValues = new ArrayList<>();
+		possibleValues.add(true);
+		possibleValues.add(false);
+		return createNOMConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
+				possibleValues);
+	}
+
+	public static Map<String, Object> createUefiNOMEntry(String clientId, String val) {
+		Map<String, Object> item = createNOMitem("ConfigState");
+		List<String> values = new ArrayList<>();
+		values.add(val);
+		item.put("objectId", clientId);
+		item.put("values", values);
+		item.put("configId", OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME);
+		return item;
+	}
+
+	public static Map<String, Object> createNOMitem(String type) {
+		Map<String, Object> item = new HashMap<>();
+		item.put("type", type);
+		return item;
+	}
+
+	public static Boolean interpretAsBoolean(Object ob, Boolean defaultValue) {
+		Boolean result = false;
+
+		if (ob == null) {
+			result = defaultValue;
+		} else if (ob instanceof Boolean) {
+			result = (Boolean) ob;
+		} else if (ob instanceof Integer) {
+			result = ((Integer) ob) == 1;
+		} else if (ob instanceof String) {
+			result = "1".equals(ob);
+		} else {
+			/* Not foreseen value. */
+			Logging.warning("could not find boolean in interpretAsBoolean, returning false");
+			result = false;
+		}
+
+		return result;
+	}
+
+	@SuppressWarnings({ "java:S1125" })
+	public static boolean toBoolean(Boolean bool) {
+		return bool == null ? false : bool.booleanValue();
 	}
 }

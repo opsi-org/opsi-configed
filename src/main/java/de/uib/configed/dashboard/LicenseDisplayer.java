@@ -26,8 +26,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -64,7 +64,7 @@ public class LicenseDisplayer {
 	private ScrollPane scrollPane;
 
 	private String message = "";
-	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 	private LicenseDisplayer controller;
 
 	private Stage stage;
@@ -138,8 +138,10 @@ public class LicenseDisplayer {
 
 	private String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
+				.getLicenceContractsToNotifyPD();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenseDataService()
+				.getLicenceContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 		Logging.info(this, "contractsToNotify " + contractsToNotify);
@@ -195,7 +197,7 @@ public class LicenseDisplayer {
 
 		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+						() -> (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD())),
 				0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {
@@ -244,8 +246,8 @@ public class LicenseDisplayer {
 		// nearly done in produceModelSWxLicencepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
-		for (String swID : persist.getName2SWIdents().get(swName)) {
-			String licpool = persist.getFSoftware2LicencePool(swID);
+		for (String swID : persist.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+			String licpool = persist.getSoftwareDataService().getFSoftware2LicencePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
