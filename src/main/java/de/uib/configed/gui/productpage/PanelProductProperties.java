@@ -21,7 +21,6 @@ import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -125,7 +124,6 @@ public class PanelProductProperties extends JSplitPane {
 		@Override
 		public void reload() {
 			Logging.info(this, "reload()");
-			persistenceController.reloadData(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString());
 			super.reload();
 		}
 

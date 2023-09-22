@@ -20,7 +20,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.ProductPropertyReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReconciliationDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
@@ -89,11 +88,6 @@ public enum ReloadEvent {
 	 * Triggers {@link HostConfigDataReloadHandler}.
 	 */
 	HOST_CONFIG_RELOAD("host_config_reload"),
-
-	/**
-	 * Triggers {@link ProductPropertyReloadHandler}.
-	 */
-	PRODUCT_PROPERTIES_RELOAD("product_properties_reload"),
 
 	/**
 	 * Triggers {@link LicenseDataReloadHandler}.

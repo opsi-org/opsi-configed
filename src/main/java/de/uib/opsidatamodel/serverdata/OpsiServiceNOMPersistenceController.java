@@ -54,7 +54,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.ProductPropertyReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReconciliationDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.utilities.logging.Logging;
@@ -432,11 +431,6 @@ public class OpsiServiceNOMPersistenceController {
 		productDataReloadHandler.setGroupDataService(groupDataService);
 		productDataReloadHandler.setProductDataService(productDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(), productDataReloadHandler);
-
-		ProductPropertyReloadHandler productPropertyReloadHandler = new ProductPropertyReloadHandler();
-		productPropertyReloadHandler.setProductDataService(productDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_PROPERTIES_RELOAD.toString(),
-				productPropertyReloadHandler);
 
 		ReconciliationDataReloadHandler reconciliationDataReloadHandler = new ReconciliationDataReloadHandler();
 		reconciliationDataReloadHandler.setLicenseDataService(licenseDataService);
