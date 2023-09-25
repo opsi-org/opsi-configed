@@ -117,11 +117,8 @@ public class ProductDataService {
 		Object2Product2VersionList netbootProducts = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Object2Product2VersionList.class);
 
-		List<String> netbootProductNames = netbootProducts.get(depotId) != null
-				? new ArrayList<>(netbootProducts.get(depotId).keySet())
+		return netbootProducts.get(depotId) != null ? new ArrayList<>(netbootProducts.get(depotId).keySet())
 				: new ArrayList<>();
-
-		return netbootProductNames;
 	}
 
 	public List<String> getAllLocalbootProductNames() {
