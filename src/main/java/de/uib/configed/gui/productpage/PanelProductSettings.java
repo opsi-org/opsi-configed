@@ -61,6 +61,7 @@ import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -141,6 +142,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
+	private JMenuItem itemOnDemandForSelectedProducts;
 
 	private JMenuItem itemSaveAndExecute;
 
@@ -491,6 +493,21 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
+
+		itemOnDemandForSelectedProducts = new JMenuItemFormatted();
+		itemOnDemandForSelectedProducts
+				.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_processActionRequests"));
+		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+
+		if (!Main.FONT) {
+			itemOnDemandForSelectedProducts.setFont(Globals.DEFAULT_FONT);
+		}
+		itemOnDemandForSelectedProducts.addActionListener((ActionEvent e) -> configedMain.processActionRequests());
+
+		if (ServerFacade.isOpsi43()) {
+			popup.add(itemOnDemandForSelectedProducts);
+		}
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));

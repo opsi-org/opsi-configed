@@ -4572,6 +4572,20 @@ public class ConfigedMain implements ListSelectionListener {
 		}.start();
 	}
 
+	public void processActionRequests() {
+		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+			return;
+		}
+
+		new AbstractErrorListProducer("opsiclientd processActionRequests") {
+			@Override
+			protected List<String> getErrors() {
+				return persistenceController.getRPCMethodExecutor().processActionRequests(getSelectedClients(),
+						mainFrame.getPanelLocalbootProductSettings().getSelectedIDs().toArray(String[]::new));
+			}
+		}.start();
+	}
+
 	public void showPopupOnSelectedClients(final String message, final Float seconds) {
 		if (getSelectedClients() == null || getSelectedClients().length == 0) {
 			return;
