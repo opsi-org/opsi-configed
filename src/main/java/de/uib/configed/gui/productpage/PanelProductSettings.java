@@ -142,7 +142,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
-	private JMenuItem itemOnDemandForSelectedProducts;
 
 	private JMenuItem itemSaveAndExecute;
 
@@ -406,7 +405,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		showAll();
 	}
 
-	private void activatePacketSelectionHandling(boolean b) {
+	protected void activatePacketSelectionHandling(boolean b) {
 		if (b) {
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
 		} else {
@@ -493,7 +492,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		popup.add(itemOnDemand);
 
-		itemOnDemandForSelectedProducts = new JMenuItemFormatted();
+		JMenuItem itemOnDemandForSelectedProducts = new JMenuItemFormatted();
 		itemOnDemandForSelectedProducts
 				.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_processActionRequests"));
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()

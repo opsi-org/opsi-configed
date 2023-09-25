@@ -35,7 +35,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
@@ -106,7 +105,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public PanelAssignToLPools getTabClient() {
 		return thePanel;
 	}
 
@@ -1053,9 +1052,5 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelLicencepools().getTheTable().clearSelection();
 		thePanel.getPanelRegisteredSoftware().getTheTable().clearSelection();
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
-	}
-
-	public PanelAssignToLPools getPanel() {
-		return thePanel;
 	}
 }

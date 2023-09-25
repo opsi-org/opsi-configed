@@ -363,7 +363,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					foundVariantLicencepools = checkExistNamesWithVariantLicencepools((String) getValueAt(i, 0));
 					i++;
 				}
-				myController.getPanel().setDisplaySimilarExist(foundVariantLicencepools);
+				myController.getTabClient().setDisplaySimilarExist(foundVariantLicencepools);
 			}
 
 			@Override

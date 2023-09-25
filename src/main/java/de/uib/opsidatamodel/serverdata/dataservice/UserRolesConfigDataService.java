@@ -666,11 +666,11 @@ public class UserRolesConfigDataService {
 			command = "xterm +hold -e ping %host%";
 			description = "ping, started in a Linux environment";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, command, description));
-			readyObjects.add(configDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
 					true, "(command may be edited)"));
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig",
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
 		}
 
@@ -684,11 +684,11 @@ public class UserRolesConfigDataService {
 			command = "cmd.exe /c start ping %host%";
 			description = "ping, started in a Windows terminal";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, command, description));
-			readyObjects.add(configDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
 					true, "(command may be edited)"));
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig",
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
 		}
 
@@ -702,11 +702,11 @@ public class UserRolesConfigDataService {
 			command = "firefox https://%host%:4441/info.html";
 			description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, command, description));
-			readyObjects.add(configDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
 					false, "(command may not be edited)"));
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig",
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
 		}
 
@@ -720,11 +720,11 @@ public class UserRolesConfigDataService {
 			command = "cmd.exe /c start https://%host%:4441/info.html";
 			description = "opsiclientd  timeline, called rfrom a Windows environment";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, command, description));
-			readyObjects.add(configDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
 					false, "(command may not be edited)"));
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig",
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
 		}
 
@@ -748,11 +748,11 @@ public class UserRolesConfigDataService {
 			query = qbuf.toString();
 			description = "all hosts and their installed products";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, query, description));
-			readyObjects.add(configDataService.produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, query, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false,
 					"(command may be edited)"));
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY,
 					description, ""));
 		}
 
@@ -788,10 +788,10 @@ public class UserRolesConfigDataService {
 
 			description = "any product failed";
 
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key, value, description));
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, value, description));
 
 			// description entry
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig",
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
 		}
 
@@ -829,7 +829,7 @@ public class UserRolesConfigDataService {
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
 					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
@@ -839,7 +839,7 @@ public class UserRolesConfigDataService {
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
 					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
 		}
@@ -848,7 +848,7 @@ public class UserRolesConfigDataService {
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-			readyObjects.add(configDataService.produceConfigEntry("UnicodeConfig", key,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
 					configDataService.getConfigedWorkbenchDefaultValuePD(), "default path to opsiproducts"));
 		} else {
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
@@ -1056,7 +1056,7 @@ public class UserRolesConfigDataService {
 		return true;
 	}
 
-	private List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
+	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = Utils.createNOMBoolConfig(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."

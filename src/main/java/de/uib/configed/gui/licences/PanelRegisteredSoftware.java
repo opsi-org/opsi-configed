@@ -53,11 +53,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
 		super.reset();
 
-		if (controller.getPanel().getFSoftwarename2LicencePool() != null) {
+		if (controller.getTabClient().getFSoftwarename2LicencePool() != null) {
 			Logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
 
 			// does not solve the task
-			controller.getPanel().getFSoftwarename2LicencePool().getPanelSWnames().reset();
+			controller.getTabClient().getFSoftwarename2LicencePool().getPanelSWnames().reset();
 		}
 
 	}
@@ -80,8 +80,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		Logging.info(this, " got name " + nameVal);
 
-		if (controller.getPanel().getFSoftwarename2LicencePool() != null) {
-			controller.getPanel().getFSoftwarename2LicencePool().getPanelSWnames().moveToValue(nameVal, 0);
+		if (controller.getTabClient().getFSoftwarename2LicencePool() != null) {
+			controller.getTabClient().getFSoftwarename2LicencePool().getPanelSWnames().moveToValue(nameVal, 0);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 				controller.validateWindowsSoftwareKeys();
 
-				if (controller.getPanel().getFSoftwarename2LicencePool().isVisible()) {
+				if (controller.getTabClient().getFSoftwarename2LicencePool().isVisible()) {
 					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
 					// the data is not refreshed
