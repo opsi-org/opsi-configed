@@ -360,8 +360,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		((EditMapPanelX) propertiesPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
+		propertiesPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override

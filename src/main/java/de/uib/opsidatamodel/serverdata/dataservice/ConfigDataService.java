@@ -245,8 +245,6 @@ public class ConfigDataService {
 
 		getWANConfigOptionsPD();
 		Logging.debug(this, "getConfigOptions() work finished");
-
-		return;
 	}
 
 	public Map<String, List<Object>> getWanConfigurationPD() {

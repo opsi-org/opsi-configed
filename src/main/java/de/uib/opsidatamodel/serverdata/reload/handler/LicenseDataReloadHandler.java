@@ -20,7 +20,7 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		this.licenseDataService = licenseDataService;
 	}
 
-	public void SoftwareDataService(SoftwareDataService softwareDataService) {
+	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
 		this.softwareDataService = softwareDataService;
 	}
 

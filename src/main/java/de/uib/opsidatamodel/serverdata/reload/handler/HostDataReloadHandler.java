@@ -6,21 +6,15 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
-import de.uib.opsidatamodel.serverdata.dataservice.HostDataService;
 
 public class HostDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
-	private HostDataService hostDataService;
 	private ConfigDataService configDataService;
 	private GroupDataService groupDataService;
 	private HostInfoCollections hostInfoCollections;
 
 	public HostDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setHostDataService(HostDataService hostDataService) {
-		this.hostDataService = hostDataService;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {
