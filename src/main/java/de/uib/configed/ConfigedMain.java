@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -335,6 +336,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
+	private List<String> previousSelectedDepots;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -1345,7 +1347,22 @@ public class ConfigedMain implements ListSelectionListener {
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 		depotsList.setInfo(depots);
 
-		// String[] oldSelectedDepots =
+		depotsList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String[] currentSelectedClients = getSelectedClients();
+				treeClients.clearSelection();
+				selectedClients = new String[0];
+				previousSelectedClients = new String[0];
+				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
+				List<String> currentSelectedDepots = depotsList.getSelectedValuesList();
+				if (currentSelectedClients.length > 0
+						|| (previousSelectedDepots != null && !previousSelectedDepots.equals(currentSelectedDepots))) {
+					setViewIndex(getViewIndex());
+				}
+				previousSelectedDepots = currentSelectedDepots;
+			}
+		});
 
 		if (oldSelectedDepots.length == 0) {
 			depotsList.setSelectedValue(myServer, true);
@@ -2674,8 +2691,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (selectionPanel != null) {
 			initialTreeActivation();
 		}
-
-		setViewIndex(getViewIndex());
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -3095,7 +3110,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
-		depotsList.setEnabled(true);
 		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
 			objectIds.add(myServer);
@@ -3114,20 +3128,16 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (editingTarget == EditingTarget.SERVER) {
 			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
-
 			Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDataService()
 					.getConfigDefaultValuesPD();
-
 			additionalConfigs.add(defaultValuesMap);
-
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
-
 			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
 					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
-					// editableOptions
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 		} else {
+			depotsList.setEnabled(true);
 			List<Map<String, Object>> additionalConfigs = getSelectedClients().length != 0
 					? produceAdditionalConfigs(Arrays.asList(getSelectedClients()))
 					: produceAdditionalConfigs(depotsList.getSelectedValuesList());
