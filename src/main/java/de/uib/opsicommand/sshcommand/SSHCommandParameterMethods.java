@@ -159,8 +159,6 @@ public final class SSHCommandParameterMethods {
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
 		if (caller instanceof SSHConnectExec) {
 			outputDia = ((SSHConnectExec) caller).getDialog();
-		} else if (caller instanceof SSHConnectTerminal) {
-			outputDia = ((SSHConnectTerminal) caller).getDialog();
 		} else {
 			Logging.warning(this, "caller has unexpected type in parseParameter " + caller.getClass());
 		}

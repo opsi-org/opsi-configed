@@ -293,7 +293,6 @@ public final class Globals {
 
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;
-	public static final int GRAPHIC_BUTTON_WIDTH_X = 55;
 
 	public static final int CHECKBOX_WIDTH = 20;
 	public static final int COMBOBOX_ROW_COUNT = 20;
