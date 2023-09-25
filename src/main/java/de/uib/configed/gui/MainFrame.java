@@ -249,7 +249,6 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuHelpAbout = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
-	private JMenuItem jMenuHelpServerInfoPage = new JMenuItem();
 	private JMenu jMenuHelpLoglevel = new JMenu();
 	private JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
 	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
@@ -1281,10 +1280,6 @@ public class MainFrame extends JFrame
 			rbLoglevelItems[i].addActionListener(this::applyLoglevel);
 		}
 		jMenuHelp.add(jMenuHelpLoglevel);
-
-		jMenuHelpServerInfoPage.setText("opsi server InfoPage");
-
-		jMenuHelpServerInfoPage.addActionListener((ActionEvent e) -> showInfoPage());
 
 		jMenuHelpLogfileLocation.setText(Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
 		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
@@ -3034,12 +3029,6 @@ public class MainFrame extends JFrame
 		} else {
 			callOpsiLicensingInfo();
 		}
-	}
-
-	private void showInfoPage() {
-		FEditorPane fEditPane = new FEditorPane(this, "opsi server infoPage", false, new String[] { "ok" }, 500, 400);
-		fEditPane.setPage("https://" + configedMain.getConfigserver() + ":4447/info");
-		fEditPane.setVisible(true);
 	}
 
 	private void callOpsiLicensingInfo() {
