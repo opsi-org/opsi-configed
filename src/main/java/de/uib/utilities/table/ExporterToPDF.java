@@ -288,6 +288,9 @@ public class ExporterToPDF extends AbstractExportTable {
 		PdfPCell defaultCell = table.getDefaultCell();
 		if (!Main.THEMES) {
 			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
+		} else {
+			defaultCell.setBackgroundColor(new BaseColor(Globals.OPSI_BACKGROUND_LIGHT.getRed(),
+					Globals.OPSI_BACKGROUND_LIGHT.getGreen(), Globals.OPSI_BACKGROUND_LIGHT.getBlue()));
 		}
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
@@ -295,6 +298,9 @@ public class ExporterToPDF extends AbstractExportTable {
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
 			if (!Main.THEMES) {
 				h.setBackgroundColor(headerBackground);
+			} else {
+				h.setBackgroundColor(new BaseColor(Globals.OPSI_GREY.getRed(), Globals.OPSI_GREY.getGreen(),
+						Globals.OPSI_GREY.getBlue()));
 			}
 			table.addCell(h);
 		}
@@ -325,6 +331,11 @@ public class ExporterToPDF extends AbstractExportTable {
 							value.setBackgroundColor(evenBackground);
 						} else {
 							value.setBackgroundColor(oddBackground);
+						}
+					} else {
+						if (j % 2 == 0) {
+							value.setBackgroundColor(new BaseColor(Globals.OPSI_LIGHT_GREY.getRed(),
+									Globals.OPSI_LIGHT_GREY.getGreen(), Globals.OPSI_LIGHT_GREY.getBlue()));
 						}
 					}
 
