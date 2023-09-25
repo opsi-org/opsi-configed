@@ -739,7 +739,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			final FShowList fMissingProducts = new FShowList(ConfigedMain.getMainFrame(),
 					Globals.APPNAME + ": "
 							+ Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
-					true, new String[] { "ok" }, 400, 300);
+					true, new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 			fMissingProducts.setMessage(lines.toString());
 			fMissingProducts.setAlwaysOnTop(true);
 			fMissingProducts.setVisible(true);

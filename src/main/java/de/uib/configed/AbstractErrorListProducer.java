@@ -24,8 +24,8 @@ public abstract class AbstractErrorListProducer extends Thread {
 	@Override
 	public void run() {
 		// final
-		FShowList fListFeedback = new FShowList(ConfigedMain.getMainFrame(), title, false, new String[] { "ok" }, 800,
-				200);
+		FShowList fListFeedback = new FShowList(ConfigedMain.getMainFrame(), title, false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 800, 200);
 		if (!Main.FONT) {
 			fListFeedback.setFont(Globals.DEFAULT_FONT);
 		}
