@@ -1907,7 +1907,6 @@ public class ConfigedMain implements ListSelectionListener {
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-		persistenceController.getProductDataService().retrieveProductPropertiesPD(Arrays.asList(getSelectedClients()));
 		localbootStatesAndActionsUpdate = true;
 		netbootStatesAndActionsUpdate = true;
 	}
