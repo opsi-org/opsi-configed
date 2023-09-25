@@ -253,7 +253,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean localbootStatesAndActionsUpdate;
 	private Map<String, List<Map<String, String>>> netbootStatesAndActions;
 	private boolean netbootStatesAndActionsUpdate;
-	private Map<String, Map<String, Object>> hostConfigs;
 
 	// collection of retrieved software audit and hardware maps
 
@@ -1892,7 +1891,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private void requestRefreshDataForClientSelection() {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
-		hostConfigs = null;
 		if (mainFrame.getControllerHWinfoMultiClients() != null) {
 			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
 		}
@@ -2185,25 +2183,32 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private String getSelectedClientsStringWithMaxLength(Integer max) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		return getListStringRepresentation(Arrays.asList(getSelectedClients()), max);
+	}
+
+	private String getSelectedDepotsString() {
+		return getListStringRepresentation(depotsList.getSelectedValuesList(), null);
+	}
+
+	private String getListStringRepresentation(List<String> list, Integer max) {
+		if (list == null || list.isEmpty()) {
 			return "";
 		}
 
 		StringBuilder result = new StringBuilder();
-		int stop = getSelectedClients().length;
+		int stop = list.size();
 		if (max != null && stop > max) {
 			stop = max;
 		}
 
 		for (int i = 0; i < stop - 1; i++) {
-			result.append(getSelectedClients()[i]);
-
+			result.append(list.get(i));
 			result.append(";\n");
 		}
 
-		result.append(getSelectedClients()[stop - 1]);
+		result.append(list.get(stop - 1));
 
-		if (max != null && getSelectedClients().length > max) {
+		if (max != null && list.size() > max) {
 			result.append(" ... ");
 		}
 
@@ -2670,6 +2675,7 @@ public class ConfigedMain implements ListSelectionListener {
 			initialTreeActivation();
 		}
 
+		setViewIndex(getViewIndex());
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -3084,22 +3090,26 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	public boolean setNetworkconfigurationPage() {
+	public boolean setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
-		String[] objectIds;
+		depotsList.setEnabled(true);
+		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
-			objectIds = new String[] { myServer };
+			objectIds.add(myServer);
+		} else if (getSelectedClients().length > 0) {
+			objectIds.addAll(Arrays.asList(getSelectedClients()));
 		} else {
-			objectIds = getSelectedClients();
+			objectIds.addAll(depotsList.getSelectedValuesList());
 		}
 
 		if (additionalconfigurationUpdateCollection != null) {
 			updateCollection.remove(additionalconfigurationUpdateCollection);
 		}
-		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
+		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
+				objectIds.toArray(String[]::new));
 		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
 
 		if (editingTarget == EditingTarget.SERVER) {
@@ -3118,37 +3128,32 @@ public class ConfigedMain implements ListSelectionListener {
 					// editableOptions
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 		} else {
-			List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
-
-			if (hostConfigs == null) {
-				hostConfigs = new HashMap<>();
-				for (String client : getSelectedClients()) {
-					hostConfigs.put(client,
-							persistenceController.getConfigDataService().getHostConfigsPD().get(client));
-				}
-			}
-
-			Logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
-
-			for (int i = 0; i < getSelectedClients().length; i++) {
-				additionalConfigs.add(persistenceController.getConfigDataService().getConfig(getSelectedClients()[i]));
-				// with server defaults
-			}
-
+			List<Map<String, Object>> additionalConfigs = getSelectedClients().length != 0
+					? produceAdditionalConfigs(Arrays.asList(getSelectedClients()))
+					: produceAdditionalConfigs(depotsList.getSelectedValuesList());
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-
-			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
-					.getConfigListCellOptionsPD();
-
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
-
-			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
-					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
+			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
+					.getConfigListCellOptionsPD();
+			String labeltext = getSelectedClients().length != 0 ? getSelectedClientsString()
+					: getSelectedDepotsString();
+			mainFrame.getPanelHostConfig().initEditing(labeltext, mergedVisualMap, configListCellOptions,
+					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
 		}
 
 		return true;
+	}
+
+	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
+		List<Map<String, Object>> additionalConfigs = new ArrayList<>(list.size());
+		Logging.info(this, "additionalConfig fetch for " + list);
+		for (String item : list) {
+			additionalConfigs.add(persistenceController.getConfigDataService().getConfig(item));
+			// with server defaults
+		}
+		return additionalConfigs;
 	}
 
 	private boolean setHardwareInfoPage() {
@@ -3247,7 +3252,7 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 
 		case VIEW_NETWORK_CONFIGURATION:
-			result = setNetworkconfigurationPage();
+			result = setNetworkConfigurationPage();
 			break;
 
 		case VIEW_HARDWARE_INFO:

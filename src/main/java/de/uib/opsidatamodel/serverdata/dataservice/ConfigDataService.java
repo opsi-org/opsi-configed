@@ -18,6 +18,8 @@ import java.util.TreeSet;
 
 import org.json.JSONArray;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
@@ -25,6 +27,7 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.RemoteControls;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -326,30 +329,35 @@ public class ConfigDataService {
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
 		timeCheck.start();
 
-		String[] callAttributes = new String[] {};
-		Map<String, Object> callFilter = new HashMap<>();
+		String[] configIds = new String[] {};
+		String[] objectIds = new String[] {};
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
+				new Object[] { configIds, objectIds, false });
+		Map<String, Object> retrieved = exec.getMapResult(omc);
 		hostConfigs = new HashMap<>();
 
-		for (Map<String, Object> listElement : retrieved) {
-			Object id = listElement.get("objectId");
+		for (Entry<String, Object> listElement : retrieved.entrySet()) {
+			Object id = listElement.getKey();
 
 			if (id instanceof String && !"".equals(id)) {
 				String hostId = (String) id;
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
+				Map<String, Object> l = POJOReMapper.remap(listElement.getValue(),
+						new TypeReference<Map<String, Object>>() {
+						});
 
-				Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
+				for (Entry<String, Object> ll : l.entrySet()) {
+					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
 
-				String configId = (String) listElement.get("configId");
+					String configId = (String) ll.getKey();
 
-				if (listElement.get("values") == null) {
-					configs1Host.put(configId, new ArrayList<>());
-					// is a data error but can occur
-				} else {
-					configs1Host.put(configId, listElement.get("values"));
+					if (listElement.getValue() == null) {
+						configs1Host.put(configId, new ArrayList<>());
+						// is a data error but can occur
+					} else {
+						configs1Host.put(configId, ll.getValue());
+					}
 				}
 			}
 		}
