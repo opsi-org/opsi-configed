@@ -303,7 +303,8 @@ public class Main {
 			Configed.main(cmd);
 		}
 
-		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
+		fErrorOutOfMemory = new FTextArea(null, "configed", true,
+				new String[] { Configed.getResourceValue("buttonClose") }, 400, 400);
 
 		if (!THEMES) {
 			fErrorOutOfMemory.setContentBackground(Globals.DARK_ORANGE);

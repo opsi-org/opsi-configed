@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -54,10 +55,10 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	static {
 		ANSI_CODE_COLORS.put("[0;info;0m", Globals.GREYED);
 		ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
-		ANSI_CODE_COLORS.put("[0;30;40m", Globals.PRIMARY_FOREGROUND_COLOR);
-		ANSI_CODE_COLORS.put("[1;30;40m", Globals.PRIMARY_FOREGROUND_COLOR);
-		ANSI_CODE_COLORS.put("[0;40;40m", Globals.PRIMARY_FOREGROUND_COLOR);
-		ANSI_CODE_COLORS.put("[1;40;40m", Globals.PRIMARY_FOREGROUND_COLOR);
+		ANSI_CODE_COLORS.put("[0;30;40m", null);
+		ANSI_CODE_COLORS.put("[1;30;40m", null);
+		ANSI_CODE_COLORS.put("[0;40;40m", null);
+		ANSI_CODE_COLORS.put("[1;40;40m", null);
 		ANSI_CODE_COLORS.put("[0;31;40m", Globals.ACTION_COLOR);
 		ANSI_CODE_COLORS.put("[1;31;40m", Globals.ACTION_COLOR);
 		ANSI_CODE_COLORS.put("[0;41;40m", Globals.ACTION_COLOR);
@@ -100,7 +101,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected GroupLayout konsolePanelLayout;
 	protected GroupLayout mainPanelLayout;
 
-	private Color linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR;
+	private Color linecolor;
 
 	protected class DialogCloseListener implements ActionListener {
 		@Override
@@ -116,15 +117,13 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		super(null, "", false);
 		Logging.info(this.getClass(), "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
 		buildFrame = false;
+		linecolor = getAnsiForegroundColor();
+
 		closeListener = new DialogCloseListener();
 		initOutputGui();
 		super.setSize(700, 400);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	}
-
-	public void setStartAnsi(Color c) {
-		linecolor = c;
 	}
 
 	public void append(String line) {
@@ -133,14 +132,18 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	private String findAnsiCodeColor(Entry<String, Color> entry, String key, String line) {
 		if (line.trim().replace("\\t", "").replace(" ", "").startsWith(key)) {
-			linecolor = entry.getValue();
+
+			linecolor = entry.getValue() == null ? getAnsiForegroundColor() : entry.getValue();
 			line = line.replace(key, "");
-			Logging.debug(this,
-					"append parseAnsiCodes found color key " + key + " value " + entry.getValue().toString());
+			Logging.debug(this, "append parseAnsiCodes found color key " + key + " value " + linecolor);
 
 			line = line.replace(ANSI_ESCAPE_1, "");
 		}
 		return line;
+	}
+
+	private static Color getAnsiForegroundColor() {
+		return UIManager.getColor("Label.foreground");
 	}
 
 	public void append(String caller, String line) {
@@ -164,7 +167,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		output.setCharacterAttributes(aset, false);
 		if (line.contains(ANSI_CODE_END_1) || line.contains(ANSI_CODE_END_2)) {
 			line = line.replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
-			linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR;
+			linecolor = getAnsiForegroundColor();
 		}
 
 		try {

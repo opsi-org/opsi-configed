@@ -33,6 +33,7 @@ public enum RPCMethodName {
 	HOST_CONTROL_SHOW_POPUP("hostControl_showPopup"), HOST_CONTROL_SHUTDOWN("hostControl_shutdown"),
 	HOST_CONTROL_REBOOT("hostControl_reboot"), HOST_CONTROL_REACHABLE("hostControl_reachable"),
 	HOST_CONTROL_GET_ACTIVE_SESSIONS("hostControl_getActiveSessions"),
+	HOST_CONTROL_PROCESS_ACTION_REQUESTS("hostControl_processActionRequests"),
 
 	HOST_CONTROL_SAFE_REACHABLE("hostControlSafe_reachable"),
 	HOST_CONTROL_SAFE_OPSICLIENTD_RPC("hostControlSafe_opsiclientdRpc"),

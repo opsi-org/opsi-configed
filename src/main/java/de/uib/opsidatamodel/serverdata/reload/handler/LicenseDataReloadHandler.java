@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.HostInfoCollections;
@@ -20,7 +26,7 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		this.licenseDataService = licenseDataService;
 	}
 
-	public void SoftwareDataService(SoftwareDataService softwareDataService) {
+	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
 		this.softwareDataService = softwareDataService;
 	}
 

@@ -167,7 +167,7 @@ public abstract class AbstractExportTable {
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
 
-			chooser.setApproveButtonText("ok");
+			chooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
 			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));
 			UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 			UIManager.put("FileChooser.cancelButtonToolTipText", "");
@@ -235,7 +235,7 @@ public abstract class AbstractExportTable {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), "OK");
+		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 			Logging.info(this, "clicked ok on JFileChosser, get now fileName: " + fileName);

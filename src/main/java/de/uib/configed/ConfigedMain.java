@@ -303,7 +303,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private Map<String, Object> reachableInfo = new HashMap<>();
 	private Map<String, String> sessionInfo = new HashMap<>();
 
-	private Map<String, String> logfiles;
+	private Map<String, String> logfiles = new HashMap<>();
 
 	private Map<String, Boolean> hostDisplayFields;
 
@@ -4550,6 +4550,20 @@ public class ConfigedMain implements ListSelectionListener {
 			protected List<String> getErrors() {
 				return persistenceController.getRPCMethodExecutor().fireOpsiclientdEventOnClients(event,
 						getSelectedClients());
+			}
+		}.start();
+	}
+
+	public void processActionRequests() {
+		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+			return;
+		}
+
+		new AbstractErrorListProducer("opsiclientd processActionRequests") {
+			@Override
+			protected List<String> getErrors() {
+				return persistenceController.getRPCMethodExecutor().processActionRequests(getSelectedClients(),
+						mainFrame.getPanelLocalbootProductSettings().getSelectedIDs().toArray(String[]::new));
 			}
 		}.start();
 	}

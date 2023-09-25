@@ -33,7 +33,7 @@ public final class Messages {
 	private static List<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
-	public static ResourceBundle messagesBundle;
+	private static ResourceBundle messagesBundle;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
 	private static String selectedTheme = availableThemes.get(0);
 

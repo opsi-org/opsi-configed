@@ -32,14 +32,6 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		super(title, mainController, productDisplayFields);
 	}
 
-	private void activatePacketSelectionHandling(boolean b) {
-		if (b) {
-			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
-		} else {
-			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
-		}
-	}
-
 	@Override
 	public void setSearchFields(List<String> fieldList) {
 		groupPanel.setSearchFields(fieldList);

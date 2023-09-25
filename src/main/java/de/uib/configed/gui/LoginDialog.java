@@ -64,7 +64,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	private JPanel panel;
 	private GlassPane glassPane;
 
 	private WaitingWorker waitingWorker;
@@ -231,7 +230,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void setupLayout() {
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);

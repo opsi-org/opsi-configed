@@ -114,13 +114,14 @@ public class ProductDataService {
 	}
 
 	public List<String> getAllNetbootProductNames(String depotId) {
-		List<String> netbootProductNames = new ArrayList<>();
 		Object2Product2VersionList netbootProducts = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Object2Product2VersionList.class);
-		netbootProductNames = netbootProducts.get(depotId) != null
+
+		List<String> netbootProductNames = netbootProducts.get(depotId) != null
 				? new ArrayList<>(netbootProducts.get(depotId).keySet())
 				: new ArrayList<>();
-		return new ArrayList<>(netbootProductNames);
+
+		return netbootProductNames;
 	}
 
 	public List<String> getAllLocalbootProductNames() {
@@ -129,7 +130,7 @@ public class ProductDataService {
 
 	public List<String> getAllLocalbootProductNames(String depotId) {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
-		List<String> localbootProductNames = new ArrayList<>();
+		List<String> localbootProductNames;
 		if (ServerFacade.isOpsi43()) {
 			localbootProductNames = new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet());
 		} else {

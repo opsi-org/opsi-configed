@@ -21,7 +21,7 @@ public final class FOpsiLicenseMissingText extends FTextArea {
 
 	private FOpsiLicenseMissingText() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("Permission.modules.title"), false,
-				new String[] { "ok" }, 450, 250);
+				new String[] { Configed.getResourceValue("buttonClose") }, 450, 250);
 	}
 
 	private static FOpsiLicenseMissingText getInstance() {

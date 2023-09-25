@@ -146,6 +146,13 @@ public class RPCMethodExecutor {
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
+	public List<String> processActionRequests(String[] clientIds, String[] productIds) {
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS,
+				new Object[] { clientIds, productIds });
+		Map<String, Object> responses = exec.getMapResult(omc);
+		return collectErrorsFromResponsesByHost(responses, "processActionRequests");
+	}
+
 	public List<String> showPopupOnClients(String message, String[] clientIds, Float seconds) {
 		OpsiMethodCall omc;
 

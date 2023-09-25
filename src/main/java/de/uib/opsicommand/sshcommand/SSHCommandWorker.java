@@ -21,7 +21,6 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
@@ -229,7 +228,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 		Logging.info(this, "chunks " + chunks.size());
 
 		if (outputDialog != null) {
-			outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 
 			for (String line : chunks) {
 				Logging.debug(this, "process " + line);

@@ -248,8 +248,6 @@ public class ConfigDataService {
 
 		getWANConfigOptionsPD();
 		Logging.debug(this, "getConfigOptions() work finished");
-
-		return;
 	}
 
 	public Map<String, List<Object>> getWanConfigurationPD() {
@@ -695,11 +693,12 @@ public class ConfigDataService {
 		exec.doCall(omc);
 	}
 
-	protected Map<String, Object> produceConfigEntry(String nomType, String key, Object value, String description) {
+	protected static Map<String, Object> produceConfigEntry(String nomType, String key, Object value,
+			String description) {
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private Map<String, Object> produceConfigEntry(String nomType, String key, Object value, String description,
+	private static Map<String, Object> produceConfigEntry(String nomType, String key, Object value, String description,
 			boolean editable) {
 		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(value);

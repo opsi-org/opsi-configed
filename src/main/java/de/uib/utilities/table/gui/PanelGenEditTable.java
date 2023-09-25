@@ -296,8 +296,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		addComponentListener(this);
 
-		JPanel controlPanel = initControlPanel();
-
 		label = new JLabel(title);
 		if (!Main.FONT) {
 			label.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
@@ -391,6 +389,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		}
 
+		JPanel controlPanel = initControlPanel();
+		
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 

@@ -61,6 +61,7 @@ import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -358,8 +359,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		((EditMapPanelX) propertiesPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
+		propertiesPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
@@ -405,7 +405,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		showAll();
 	}
 
-	private void activatePacketSelectionHandling(boolean b) {
+	protected void activatePacketSelectionHandling(boolean b) {
 		if (b) {
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
 		} else {
@@ -491,6 +491,21 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
+
+		JMenuItem itemOnDemandForSelectedProducts = new JMenuItemFormatted();
+		itemOnDemandForSelectedProducts
+				.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_processActionRequests"));
+		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+
+		if (!Main.FONT) {
+			itemOnDemandForSelectedProducts.setFont(Globals.DEFAULT_FONT);
+		}
+		itemOnDemandForSelectedProducts.addActionListener((ActionEvent e) -> configedMain.processActionRequests());
+
+		if (ServerFacade.isOpsi43()) {
+			popup.add(itemOnDemandForSelectedProducts);
+		}
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));

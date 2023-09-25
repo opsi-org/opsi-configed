@@ -305,7 +305,6 @@ public class SoftwareDataService {
 
 			if (!infoFound) {
 				Logging.warning(this, "missing softwareList entry " + i + " " + softwareList);
-				swIdent = null;
 			}
 		} else {
 			swIdent = softwareList.get(i);
