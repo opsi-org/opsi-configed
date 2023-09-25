@@ -303,7 +303,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private Map<String, Object> reachableInfo = new HashMap<>();
 	private Map<String, String> sessionInfo = new HashMap<>();
 
-	private Map<String, String> logfiles;
+	private Map<String, String> logfiles = new HashMap<>();
 
 	private Map<String, Boolean> hostDisplayFields;
 
