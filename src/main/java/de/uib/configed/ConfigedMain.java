@@ -1358,6 +1358,7 @@ public class ConfigedMain implements ListSelectionListener {
 				List<String> currentSelectedDepots = depotsList.getSelectedValuesList();
 				if (currentSelectedClients.length > 0
 						|| (previousSelectedDepots != null && !previousSelectedDepots.equals(currentSelectedDepots))) {
+					checkSaveAll(true);
 					setViewIndex(getViewIndex());
 				}
 				previousSelectedDepots = currentSelectedDepots;
@@ -3316,7 +3317,7 @@ public class ConfigedMain implements ListSelectionListener {
 			requestReloadStatesAndActions();
 		}
 
-		saveIfIndicated();
+		checkSaveAll(true);
 
 		// we will only leave view 0 if a PC is selected
 
@@ -3887,40 +3888,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.debug(this, "checkClose result " + result);
 		return result;
-	}
-
-	// if data are changed then save or - after asking - abandon changes
-	private void saveIfIndicated() {
-		Logging.info(this, "saveIfIndicated : anyDataChanged, " + anyDataChanged);
-
-		if (!anyDataChanged) {
-			return;
-		}
-
-		if (clientInfoDataChangedKeeper.askSave()) {
-			clientInfoDataChangedKeeper.save();
-		} else {
-			// reset to old values
-			hostInfo.resetGui(mainFrame);
-		}
-		clientInfoDataChangedKeeper.unsetDataChanged();
-
-		if (generalDataChangedKeeper.askSave()) {
-			generalDataChangedKeeper.save();
-		} else {
-			generalDataChangedKeeper.cancel();
-		}
-		generalDataChangedKeeper.unsetDataChanged();
-
-		if (hostConfigsDataChangedKeeper.askSave()) {
-			hostConfigsDataChangedKeeper.save();
-		} else {
-			hostConfigsDataChangedKeeper.cancel();
-		}
-		hostConfigsDataChangedKeeper.unsetDataChanged();
-
-		setDataChanged(false, true);
-		clearUpdateCollectionAndTell();
 	}
 
 	// save if not otherwise stated
