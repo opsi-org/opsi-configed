@@ -1134,6 +1134,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setEditingClients() {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
+		treeClients.setEnabled(true);
+
 		mainFrame.setConfigPanesEnabled(true);
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
@@ -1150,6 +1152,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void setEditingDepots() {
 		Logging.info(this, "setEditingTarget  DEPOTS");
+
+		depotsList.setEnabled(true);
+		treeClients.setEnabled(false);
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -1168,6 +1173,8 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void setEditingServer() {
+		depotsList.setEnabled(true);
+		treeClients.setEnabled(false);
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -3043,7 +3050,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (editingTarget == EditingTarget.DEPOTS) {
 			mainFrame.getPanelProductProperties().setProductProperties();
-
+			depotsList.setEnabled(true);
 			return true;
 		} else {
 			return false;
@@ -3110,6 +3117,8 @@ public class ConfigedMain implements ListSelectionListener {
 		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
 				objectIds.toArray(String[]::new));
 		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+
+		depotsList.setEnabled(false);
 
 		if (editingTarget == EditingTarget.SERVER) {
 			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
