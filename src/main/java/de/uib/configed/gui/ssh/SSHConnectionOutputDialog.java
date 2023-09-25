@@ -114,7 +114,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected DialogCloseListener closeListener;
 
 	public SSHConnectionOutputDialog(String title) {
-		super(null, "", false);
+		super(null, title, false);
 		Logging.info(this.getClass(), "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
 		buildFrame = false;
 		linecolor = getAnsiForegroundColor();
