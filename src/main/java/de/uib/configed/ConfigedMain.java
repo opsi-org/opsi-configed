@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -336,7 +335,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
-	private List<String> previousSelectedDepots;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -1160,6 +1158,8 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
 		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
 				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
@@ -1346,24 +1346,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 		depotsList.setInfo(depots);
-
-		depotsList.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				String[] currentSelectedClients = getSelectedClients();
-				treeClients.clearSelection();
-				selectedClients = new String[0];
-				previousSelectedClients = new String[0];
-				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-				List<String> currentSelectedDepots = depotsList.getSelectedValuesList();
-				if (currentSelectedClients.length > 0
-						|| (previousSelectedDepots != null && !previousSelectedDepots.equals(currentSelectedDepots))) {
-					checkSaveAll(true);
-					setViewIndex(getViewIndex());
-				}
-				previousSelectedDepots = currentSelectedDepots;
-			}
-		});
 
 		if (oldSelectedDepots.length == 0) {
 			depotsList.setSelectedValue(myServer, true);
@@ -2692,6 +2674,8 @@ public class ConfigedMain implements ListSelectionListener {
 		if (selectionPanel != null) {
 			initialTreeActivation();
 		}
+
+		setViewIndex(getViewIndex());
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -3114,10 +3098,10 @@ public class ConfigedMain implements ListSelectionListener {
 		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
 			objectIds.add(myServer);
-		} else if (getSelectedClients().length > 0) {
-			objectIds.addAll(Arrays.asList(getSelectedClients()));
-		} else {
+		} else if (editingTarget == EditingTarget.DEPOTS) {
 			objectIds.addAll(depotsList.getSelectedValuesList());
+		} else {
+			objectIds.addAll(Arrays.asList(getSelectedClients()));
 		}
 
 		if (additionalconfigurationUpdateCollection != null) {
@@ -3138,17 +3122,19 @@ public class ConfigedMain implements ListSelectionListener {
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 		} else {
-			depotsList.setEnabled(true);
-			List<Map<String, Object>> additionalConfigs = getSelectedClients().length != 0
-					? produceAdditionalConfigs(Arrays.asList(getSelectedClients()))
-					: produceAdditionalConfigs(depotsList.getSelectedValuesList());
+			if (editingTarget == EditingTarget.DEPOTS) {
+				depotsList.setEnabled(true);
+			}
+			List<Map<String, Object>> additionalConfigs = editingTarget == EditingTarget.DEPOTS
+					? produceAdditionalConfigs(depotsList.getSelectedValuesList())
+					: produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
 					.getConfigListCellOptionsPD();
-			String labeltext = getSelectedClients().length != 0 ? getSelectedClientsString()
-					: getSelectedDepotsString();
+			String labeltext = editingTarget == EditingTarget.DEPOTS ? getSelectedDepotsString()
+					: getSelectedClientsString();
 			mainFrame.getPanelHostConfig().initEditing(labeltext, mergedVisualMap, configListCellOptions,
 					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
