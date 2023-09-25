@@ -1164,7 +1164,8 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
 		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")),
+				ServerFacade.isOpsi43());
 
 		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
 				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
