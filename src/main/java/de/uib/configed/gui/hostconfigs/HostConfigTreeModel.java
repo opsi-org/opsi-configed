@@ -123,7 +123,9 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 			if (tooltips.get(key) == null) {
 				node.setToolTipText(key);
 			} else {
-				node.setToolTipText(Configed.getResourceValue(tooltips.get(key)));
+				if (!tooltips.get(key).isEmpty()) {
+					node.setToolTipText(Configed.getResourceValue(tooltips.get(key)));
+				}
 			}
 		}
 

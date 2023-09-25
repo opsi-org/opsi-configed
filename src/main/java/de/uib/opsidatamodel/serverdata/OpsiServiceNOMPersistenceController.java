@@ -167,15 +167,12 @@ public class OpsiServiceNOMPersistenceController {
 		PROPERTY_CLASSES_SERVER.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
-		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY,
-				"HostConfigNodeRenderer.configed.dash_configuration.Tooltip");
+		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
 		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
-				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
-		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
-				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
-		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
-				"<html><p>remote control calls,<br />i.e. calls to tools on the local computer<br />typically targeting at a selected client</p></html>");
+				"HostConfigNodeRenderer.configed.query_supplementary");
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
+		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
+		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
 		PROPERTY_CLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
 				"HostConfigNodeRenderer.configed.usecolumns_hwaudit");
 		PROPERTY_CLASSES_SERVER.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
@@ -183,9 +180,8 @@ public class OpsiServiceNOMPersistenceController {
 		PROPERTY_CLASSES_SERVER.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
 		PROPERTY_CLASSES_SERVER.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
 		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROOT,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
-		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
+				"EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip");
+		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT, "EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip");
 	}
 
 	public static final NavigableMap<String, String> PROPERTY_CLASSES_CLIENT = new TreeMap<>();
