@@ -62,6 +62,7 @@ public class PanelHostConfig extends JPanel {
 	// overwrite in subclasses
 	protected void saveHostConfig() {
 		Logging.debug(this, "saveHostConfig");
+		configedMain.checkSaveAll(false);
 	}
 
 	private void handleUserInPropertyClass(String superclass, String user) {
