@@ -58,8 +58,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			"byAudit" };
 	private int hFirstGap = Globals.HFIRST_GAP;
 
-	private int hGap = Globals.HGAP_SIZE / 2;
-	private int vGap = Globals.VGAP_SIZE / 2;
+	private int hGap = Globals.GAP_SIZE / 2;
+	private int vGap = Globals.GAP_SIZE / 2;
 
 	private String byAuditPath = "";
 
@@ -514,7 +514,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addComponent(panelMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelTargetPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(buttonCallChooserServerpath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,

@@ -42,17 +42,17 @@ public class PanelLinedComponents extends JPanel {
 		setLayout(layout);
 
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		hGroup.addGap(Globals.HGAP_SIZE);
+		hGroup.addGap(Globals.GAP_SIZE);
 		if (components != null) {
 			for (int j = 0; j < components.length; j++) {
 				hGroup.addComponent(components[j], 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-				hGroup.addGap(Globals.HGAP_SIZE);
+				hGroup.addGap(Globals.GAP_SIZE);
 			}
 		}
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
+		vGroup.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2);
 
 		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(Alignment.CENTER);
 
@@ -64,7 +64,7 @@ public class PanelLinedComponents extends JPanel {
 
 		vGroup.addGroup(vGroup1);
 
-		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
+		vGroup.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2);
 		layout.setVerticalGroup(vGroup);
 	}
 }

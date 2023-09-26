@@ -60,7 +60,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 						.addComponent(panelStatistics, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
-						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
 
 		);
 	}

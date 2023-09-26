@@ -71,13 +71,11 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 
-		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonHelp"));
+		jButtonHelp = new JButton(Configed.getResourceValue("SSHConnection.buttonHelp"));
 
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));
 
-		jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {

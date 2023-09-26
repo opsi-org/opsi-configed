@@ -347,7 +347,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				.addComponent(topPane, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(layoutLeftPane.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 						.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()

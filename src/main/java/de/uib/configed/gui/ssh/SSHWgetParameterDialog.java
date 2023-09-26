@@ -35,7 +35,6 @@ import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -186,8 +185,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel.close();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
-		jButtonHelp = new JButton("", Utils.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
+		jButtonHelp = new JButton(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
