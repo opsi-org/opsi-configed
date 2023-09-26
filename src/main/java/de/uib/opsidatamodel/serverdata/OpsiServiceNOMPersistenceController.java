@@ -415,6 +415,7 @@ public class OpsiServiceNOMPersistenceController {
 		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
 		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
 		licenseDataReloadHandler.setHostInfoCollections(hostInfoCollections);
+		licenseDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
 
 		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
