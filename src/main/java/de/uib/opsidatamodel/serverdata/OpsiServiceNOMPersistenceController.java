@@ -47,7 +47,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.EssentialDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.HostConfigDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
@@ -403,10 +402,6 @@ public class OpsiServiceNOMPersistenceController {
 		hardwareConfDataReloadHandler.setHardwareDataService(hardwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(), hardwareConfDataReloadHandler);
 
-		HostConfigDataReloadHandler hostConfigDataReloadHandler = new HostConfigDataReloadHandler();
-		hostConfigDataReloadHandler.setConfigDataService(configDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.HOST_CONFIG_RELOAD.toString(), hostConfigDataReloadHandler);
-
 		InstalledSoftwareDataReloadHandler installedSoftwareDataReloadHandler = new InstalledSoftwareDataReloadHandler();
 		installedSoftwareDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString(),
@@ -458,6 +453,7 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTIES.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {

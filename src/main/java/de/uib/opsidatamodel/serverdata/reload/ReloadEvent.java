@@ -13,7 +13,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.EssentialDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.HostConfigDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
@@ -83,11 +82,6 @@ public enum ReloadEvent {
 	 * Triggers {@link InstalledSoftwareDataReloadHandler}.
 	 */
 	INSTALLED_SOFTWARE_RELOAD("installed_software_reload"),
-
-	/**
-	 * Triggers {@link HostConfigDataReloadHandler}.
-	 */
-	HOST_CONFIG_RELOAD("host_config_reload"),
 
 	/**
 	 * Triggers {@link LicenseDataReloadHandler}.
