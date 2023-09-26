@@ -66,7 +66,7 @@ public class LicenseDataService {
 		this.moduleDataService = moduleDataService;
 	}
 
-	public Map<String, LicencepoolEntry> getLicencepoolsPD() {
+	public Map<String, LicencepoolEntry> getLicencePoolsPD() {
 		retrieveLicencepoolsPD();
 		return cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class);
 	}
@@ -319,7 +319,7 @@ public class LicenseDataService {
 		return result;
 	}
 
-	public List<LicenceUsageEntry> getLicenceUsagesPD() {
+	public List<LicenceUsageEntry> getLicenseUsagesPD() {
 		retrieveLicenceUsagesPD();
 		return cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class);
 	}
@@ -397,7 +397,7 @@ public class LicenseDataService {
 
 		Map<String, LicenceUsageEntry> rowsLicencesUsage = new HashMap<>();
 		Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = new HashMap<>();
-		for (LicenceUsageEntry m : getLicenceUsagesPD()) {
+		for (LicenceUsageEntry m : getLicenseUsagesPD()) {
 			rowsLicencesUsage.put(m.getPseudoKey(), m);
 			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.computeIfAbsent(m.getClientId(),
 					s -> new ArrayList<>());

@@ -1457,7 +1457,7 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencepoolsPD()));
+				() -> (Map) persistenceController.getLicenseDataService().getLicencePoolsPD()));
 
 		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
@@ -4261,7 +4261,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
 				persistenceController.getLicenseDataService().addDeletionLicenceUsage(client, m.getLicenceId(),
-						m.getLicencepool());
+						m.getLicensePool());
 			}
 		}
 

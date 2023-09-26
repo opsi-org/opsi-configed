@@ -128,7 +128,7 @@ public class SoftwareDataService {
 		return result == null ? new ArrayList<>() : result;
 	}
 
-	public Map<String, String> getFSoftware2LicencePoolPD() {
+	public Map<String, String> getFSoftware2LicensePoolPD() {
 		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 		return cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 	}
@@ -912,121 +912,137 @@ public class SoftwareDataService {
 	// poolId -> LicenceStatisticsRow
 	public Map<String, LicenceStatisticsRow> retrieveLicenceStatisticsPD() {
 		// side effects of this method: rowsLicencesReconciliation
-		Logging.info(this, "produceLicenceStatistics === ");
-
-		Map<String, List<String>> licencePool2listOfUsingClientsSWInvent = new HashMap<>();
-		Map<String, Set<String>> licencePool2setOfUsingClientsSWInvent = new HashMap<>();
-
-		// result
-		Map<String, Integer> licencePoolUsagecountSWInvent = new HashMap<>();
-		AuditSoftwareXLicencePool auditSoftwareXLicencePool = getAuditSoftwareXLicencePoolPD();
-		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
-		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
-
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenceManagementPD())) {
-			Map<String, LicencepoolEntry> licencePools = licenseDataService.getLicencepoolsPD();
-
-			Map<String, Map<String, Object>> rowsLicencesReconciliation = cacheManager
-					.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
-			if (rowsLicencesReconciliation == null) {
-				rowsLicencesReconciliation = new HashMap<>();
-
-				Map<String, List<Object>> configDefaultValues = cacheManager
-						.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-				List<String> extraHostFields = Utils.takeAsStringList(configDefaultValues.get(
-						OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION));
-
-				Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
-
-				for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
-					for (String pool : licencePools.keySet()) {
-						HashMap<String, Object> rowMap = new HashMap<>();
-
-						rowMap.put(OpsiServiceNOMPersistenceController.HOST_KEY, clientEntry.getKey());
-
-						for (String fieldName : extraHostFields) {
-							rowMap.put(fieldName, clientEntry.getValue().getMap().get(fieldName));
-						}
-
-						rowMap.put("licensePoolId", pool);
-						rowMap.put("used_by_opsi", false);
-						rowMap.put("SWinventory_used", false);
-						String pseudokey = Utils.pseudokey(new String[] { clientEntry.getKey(), pool });
-						rowsLicencesReconciliation.put(pseudokey, rowMap);
-					}
-				}
-			}
-
-			getInstalledSoftwareInformationForLicensingPD();
-			retrieveRelationsAuditSoftwareToLicencePoolsPD();
-
-			Map<String, String> fSoftware2LicencePool = cacheManager
-					.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
-			// idents
-			for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
-				String licencePoolId = fSoftware2LicencePool.get(softwareIdent);
-
-				if (licencePoolId != null) {
-					List<String> listOfUsingClients = licencePool2listOfUsingClientsSWInvent
-							.computeIfAbsent(licencePoolId, s -> new ArrayList<>());
-					Set<String> setOfUsingClients = licencePool2setOfUsingClientsSWInvent.computeIfAbsent(licencePoolId,
-							s -> new HashSet<>());
-
-					Logging.debug(this,
-							"software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
-
-					if (swId2clients.get(softwareIdent) == null) {
-						continue;
-					}
-
-					for (String client : swId2clients.get(softwareIdent)) {
-						listOfUsingClients.add(client);
-						setOfUsingClients.add(client);
-					}
-
-					licencePoolUsagecountSWInvent.put(licencePoolId, setOfUsingClients.size());
-
-					for (String client : swId2clients.get(softwareIdent)) {
-						String pseudokey = Utils.pseudokey(new String[] { client, licencePoolId });
-
-						if (rowsLicencesReconciliation.get(pseudokey) == null) {
-							Logging.warning(
-									"client " + client + " or license pool ID " + licencePoolId + " do not exist");
-						} else {
-							rowsLicencesReconciliation.get(pseudokey).put("SWinventory_used", true);
-						}
-					}
-				}
-			}
-			cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicencesReconciliation);
+		if (!moduleDataService.isWithLicenceManagementPD()) {
+			return new HashMap<>();
 		}
 
-		// ------------------ retrieve data for statistics
+		Logging.info(this, "retrieveLicenseStatistics");
+		Map<String, Map<String, Object>> rowsLicensesReconciliation = getRowsLicenseReconciliation();
+		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation);
 
-		// table LICENSE_POOL
-		Map<String, LicencepoolEntry> licencePools = licenseDataService.getLicencepoolsPD();
-
-		// table SOFTWARE_LICENSE
-		Logging.info(this, " licences ");
+		getInstalledSoftwareInformationForLicensingPD();
+		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
-		Logging.info(this, " licence usabilities ");
-		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenceUsabilitiesPD();
+		Map<String, ExtendedInteger> pool2allowedUsagesCount = getPool2AllowedUsagesCount();
+		Logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " licence usages ");
-		List<LicenceUsageEntry> licenceUsages = licenseDataService.getLicenceUsagesPD();
+		List<LicenceUsageEntry> licenseUsages = licenseDataService.getLicenseUsagesPD();
+		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<>();
+		Map<String, Set<String>> pool2opsiUsages = new TreeMap<>();
+		for (LicenceUsageEntry licenseUsage : licenseUsages) {
+			String pool = licenseUsage.getLicensePool();
+			Integer usageCount = pool2opsiUsagesCount.computeIfAbsent(pool, s -> Integer.valueOf(0));
+			Set<String> usingClients = pool2opsiUsages.computeIfAbsent(pool, s -> new TreeSet<>());
+			String clientId = licenseUsage.getClientId();
+			if (clientId != null) {
+				usageCount = usageCount + 1;
+				pool2opsiUsagesCount.put(pool, usageCount);
+				usingClients.add(clientId);
+			}
+		}
 
-		// software usage according to audit
-		// tables
-		// AUDIT_SOFTWARE_TO_LICENSE_POOL
-		// SOFTWARE_CONFIG
-		// leads to getSoftwareAuditOnClients()
+		// all used licences for pools
+		Logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
+		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount();
+		Map<String, LicenceStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
+		// table LICENSE_POOL
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		for (String licensePoolId : licensePools.keySet()) {
+			LicenceStatisticsRow rowMap = new LicenceStatisticsRow(licensePoolId);
+			rowsLicenseStatistics.put(licensePoolId, rowMap);
 
-		// ----------------- set up data structure
+			rowMap.setAllowedUsagesCount(pool2allowedUsagesCount.get(licensePoolId));
+			rowMap.setOpsiUsagesCount(pool2opsiUsagesCount.get(licensePoolId));
+			rowMap.setSWauditUsagesCount(pool2installationsCount.get(licensePoolId));
 
+			Set<String> listOfUsingClients = pool2opsiUsages.get(licensePoolId);
+
+			Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+
+			if (listOfUsingClients != null) {
+				for (String client : listOfUsingClients) {
+					String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+
+					if (rowsLicensesReconciliation.get(pseudokey) == null) {
+						Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+					} else {
+						rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
+					}
+				}
+			}
+		}
+
+		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
+
+		Logging.debug(this, "rowsLicenceStatistics " + rowsLicenseStatistics);
+		return rowsLicenseStatistics;
+	}
+
+	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
+		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null) {
+			return new HashMap<>();
+		}
+
+		Map<String, Map<String, Object>> rowsLicensesReconciliation = new HashMap<>();
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		Map<String, List<Object>> configDefaultValues = cacheManager
+				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
+		List<String> extraHostFields = Utils.takeAsStringList(configDefaultValues.get(
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION));
+		Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
+		for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
+			for (String pool : licensePools.keySet()) {
+				HashMap<String, Object> rowMap = new HashMap<>();
+
+				rowMap.put(OpsiServiceNOMPersistenceController.HOST_KEY, clientEntry.getKey());
+
+				for (String fieldName : extraHostFields) {
+					rowMap.put(fieldName, clientEntry.getValue().getMap().get(fieldName));
+				}
+
+				rowMap.put("licensePoolId", pool);
+				rowMap.put("used_by_opsi", false);
+				rowMap.put("SWinventory_used", false);
+				String pseudokey = Utils.pseudokey(new String[] { clientEntry.getKey(), pool });
+				rowsLicensesReconciliation.put(pseudokey, rowMap);
+			}
+		}
+
+		return rowsLicensesReconciliation;
+	}
+
+	private void checkLicensesReconciliationUsedBySWInventory(
+			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
+		Map<String, String> fSoftware2LicensePool = getFSoftware2LicensePoolPD();
+		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
+		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
+		for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
+			String licensePoolId = fSoftware2LicensePool.get(softwareIdent);
+			Logging.debug(this, "software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
+
+			if (licensePoolId == null || swId2clients.get(softwareIdent) == null) {
+				continue;
+			}
+
+			for (String client : swId2clients.get(softwareIdent)) {
+				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+
+				if (rowsLicensesReconciliation.get(pseudokey) == null) {
+					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+				} else {
+					rowsLicensesReconciliation.get(pseudokey).put("SWinventory_used", true);
+				}
+			}
+		}
+	}
+
+	private Map<String, ExtendedInteger> getPool2AllowedUsagesCount() {
+		Logging.info(this, " licence usabilities ");
+		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenceUsabilitiesPD();
 		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<>();
-
 		for (LicenceUsableForEntry licenceUsability : licenceUsabilities) {
 			String pool = licenceUsability.getLicencePoolId();
 			String licenceId = licenceUsability.getLicenceId();
@@ -1045,39 +1061,25 @@ public class SoftwareDataService {
 				pool2allowedUsagesCount.put(pool, result);
 			}
 		}
+		return pool2allowedUsagesCount;
+	}
 
-		Logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
-
-		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<>();
-
-		Map<String, Set<String>> pool2opsiUsages = new TreeMap<>();
-
-		for (LicenceUsageEntry licenceUsage : licenceUsages) {
-			String pool = licenceUsage.getLicencepool();
-			Integer usageCount = pool2opsiUsagesCount.computeIfAbsent(pool, s -> Integer.valueOf(0));
-			Set<String> usingClients = pool2opsiUsages.computeIfAbsent(pool, s -> new TreeSet<>());
-
-			String clientId = licenceUsage.getClientId();
-
-			if (clientId != null) {
-				usageCount = usageCount + 1;
-				pool2opsiUsagesCount.put(pool, usageCount);
-				usingClients.add(clientId);
-			}
-		}
-
-		// all used licences for pools
-
-		Logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
-
-		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
-		// we take Set since we count only one usage per client
-
+	private Map<String, Integer> getPool2InstallationsCount() {
 		TreeMap<String, Integer> pool2installationsCount = new TreeMap<>();
+		for (Entry<String, TreeSet<String>> poolEntry : getPool2Clients().entrySet()) {
+			pool2installationsCount.put(poolEntry.getKey(), poolEntry.getValue().size());
+		}
+		return pool2installationsCount;
+	}
 
+	private TreeMap<String, TreeSet<String>> getPool2Clients() {
 		// require this licencepool
 		// add the clients which have this software installed
-
+		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
+		// we take Set since we count only one usage per client
+		AuditSoftwareXLicencePool auditSoftwareXLicencePool = getAuditSoftwareXLicencePoolPD();
+		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
+		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicencePool) {
 			Logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
 			String pool = swXpool.get(LicencepoolEntry.ID_SERVICE_KEY);
@@ -1093,46 +1095,7 @@ public class SoftwareDataService {
 				clientsServedByPool.addAll(swId2clients.get(swIdent));
 			}
 		}
-
-		for (Entry<String, TreeSet<String>> poolEntry : pool2clients.entrySet()) {
-			pool2installationsCount.put(poolEntry.getKey(), poolEntry.getValue().size());
-		}
-
-		Map<String, LicenceStatisticsRow> rowsLicenceStatistics = new TreeMap<>();
-
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenceManagementPD())) {
-			for (String licencePoolId : licencePools.keySet()) {
-				LicenceStatisticsRow rowMap = new LicenceStatisticsRow(licencePoolId);
-				rowsLicenceStatistics.put(licencePoolId, rowMap);
-
-				rowMap.setAllowedUsagesCount(pool2allowedUsagesCount.get(licencePoolId));
-				rowMap.setOpsiUsagesCount(pool2opsiUsagesCount.get(licencePoolId));
-				rowMap.setSWauditUsagesCount(pool2installationsCount.get(licencePoolId));
-
-				Set<String> listOfUsingClients = pool2opsiUsages.get(licencePoolId);
-
-				Logging.debug(this, "pool  " + licencePoolId + " used_by_opsi on clients : " + listOfUsingClients);
-
-				if (listOfUsingClients != null) {
-					Map<String, Map<String, Object>> rowsLicencesReconciliation = cacheManager
-							.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
-					for (String client : listOfUsingClients) {
-						String pseudokey = Utils.pseudokey(new String[] { client, licencePoolId });
-
-						if (rowsLicencesReconciliation.get(pseudokey) == null) {
-							Logging.warning(
-									"client " + client + " or license pool ID " + licencePoolId + " do not exist");
-						} else {
-							rowsLicencesReconciliation.get(pseudokey).put("used_by_opsi", true);
-						}
-					}
-				}
-			}
-		}
-
-		Logging.debug(this, "rowsLicenceStatistics " + rowsLicenceStatistics);
-
-		return rowsLicenceStatistics;
+		return pool2clients;
 	}
 
 	private Map<String, Set<String>> getSoftwareIdentOnClients(final List<String> clients) {

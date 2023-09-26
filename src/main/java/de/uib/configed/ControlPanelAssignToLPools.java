@@ -704,7 +704,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// hack for avoiding unvoluntary reuse of a licence pool id
 		boolean existsNewRow = configedMain.licencePoolTableProvider.getRows().size() < modelLicencepools.getRowCount();
 
-		if (existsNewRow && persistenceController.getLicenseDataService().getLicencepoolsPD()
+		if (existsNewRow && persistenceController.getLicenseDataService().getLicencePoolsPD()
 				.containsKey(rowmap.get("licensePoolId"))) {
 			// but we leave it until the service methods reflect the situation more
 			// accurately
@@ -775,7 +775,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// remove all old assignements
 		for (String swId : oldSWListForPool) {
 			Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-			persistenceController.getSoftwareDataService().getFSoftware2LicencePoolPD().remove(swId);
+			persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD().remove(swId);
 		}
 		// set the current ones
 		for (String ident : softwareIds) {
