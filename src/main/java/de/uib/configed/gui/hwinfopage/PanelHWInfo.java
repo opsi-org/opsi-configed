@@ -126,21 +126,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (!Main.THEMES) {
 			table.setBackground(Globals.NIMBUS_BACKGROUND);
 		}
-		JPanel embed = new JPanel();
-		GroupLayout layoutEmbed = new GroupLayout(embed);
-		embed.setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup()
-				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
-				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
-
-		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
-
-		JScrollPane jScrollPaneInfo = new JScrollPane(embed);
+		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
@@ -152,16 +139,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup()
 				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 				.addGroup(layoutBase.createParallelGroup()
-						.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
 				.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE));
 
-		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup()
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutBase.setVerticalGroup(
+				layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(
+								contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 

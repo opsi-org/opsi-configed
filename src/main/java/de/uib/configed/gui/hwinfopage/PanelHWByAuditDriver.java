@@ -88,7 +88,6 @@ public class PanelHWByAuditDriver extends JPanel {
 		layoutByAuditInfo
 				.setVerticalGroup(
 						layoutByAuditInfo.createSequentialGroup()
-								.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 								.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelInfo, lh, lh, lh)
 										.addComponent(labelVendor, lh, lh, lh).addComponent(labelProduct, lh, lh, lh)
 										.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
@@ -114,10 +113,8 @@ public class PanelHWByAuditDriver extends JPanel {
 								).addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addGap(Globals.MIN_HGAP_SIZE * 2, Globals.MIN_HGAP_SIZE * 2, Globals.MIN_HGAP_SIZE * 2)
-						.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_HGAP_SIZE * 2, Globals.MIN_HGAP_SIZE * 2, Globals.MIN_HGAP_SIZE * 2)
+				.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, Globals.MIN_HGAP_SIZE * 4, Globals.MIN_HGAP_SIZE * 4)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addComponent(selectionComputerSystem, 2, GroupLayout.PREFERRED_SIZE,
@@ -150,7 +147,10 @@ public class PanelHWByAuditDriver extends JPanel {
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
-		setBorder(BorderFactory.createLineBorder(Globals.GREYED));
+
+		if (!Main.THEMES) {
+			setBorder(BorderFactory.createLineBorder(Globals.GREYED));
+		}
 	}
 
 	public void emptyByAuditStrings() {
