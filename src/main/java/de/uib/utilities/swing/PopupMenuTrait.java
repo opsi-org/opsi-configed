@@ -80,7 +80,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(POPUP_SAVE);
 
 			String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.save"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("buttonSave"),
 					Utils.createImageIcon(iconSavePath, ""));
 
 			// not work

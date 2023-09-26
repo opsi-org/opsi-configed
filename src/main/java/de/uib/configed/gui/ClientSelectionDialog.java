@@ -231,7 +231,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			saveDescriptionLabel.setFont(Globals.DEFAULT_FONT);
 		}
 
-		saveButton = new JButton(Configed.getResourceValue("ClientSelectionDialog.inquirySave"));
+		saveButton = new JButton(Configed.getResourceValue("buttonSave"));
 		if (!Main.FONT) {
 			saveButton.setFont(Globals.DEFAULT_FONT);
 		}

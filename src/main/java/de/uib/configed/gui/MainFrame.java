@@ -2023,7 +2023,7 @@ public class MainFrame extends JFrame
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
-		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
+		jButtonSaveList.setText(Configed.getResourceValue("buttonSave"));
 		if (!Main.THEMES) {
 			jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
 		}

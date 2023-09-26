@@ -213,8 +213,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
-				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Utils.createImageIcon(iconSavePath, ""));
+		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(Configed.getResourceValue("buttonSave"),
+				Utils.createImageIcon(iconSavePath, ""));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);

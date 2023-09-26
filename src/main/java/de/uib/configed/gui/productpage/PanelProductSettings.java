@@ -463,7 +463,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup = new JPopupMenu("");
 
 		JMenuItem save = new JMenuItemFormatted();
-		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
+		save.setText(Configed.getResourceValue("buttonSave"));
 		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));

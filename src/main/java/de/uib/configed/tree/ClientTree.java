@@ -1158,8 +1158,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 						Configed.getResourceValue("ClientTree.abandonUniqueLocation"),
 						Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.requestInformation"), -1,
 						JOptionPane.WARNING_MESSAGE, null,
-						new String[] { Configed.getResourceValue("yesOption"), Configed.getResourceValue("noOption") },
-						Configed.getResourceValue("noOption"));
+						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
+						Configed.getResourceValue("buttonNO"));
 
 				if (returnedOption == 1 || returnedOption == JOptionPane.CLOSED_OPTION) {
 					result = selectOneNode(groupSet, clientID, preSelected);
