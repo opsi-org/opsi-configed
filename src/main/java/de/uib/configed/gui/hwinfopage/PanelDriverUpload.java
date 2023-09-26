@@ -170,7 +170,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private String winProduct = "";
 
 	private JLabel jLabelTopic;
-	private int wLeftText;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -190,7 +189,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
-		wLeftText = jLabelTopic.getPreferredSize().width;
 
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
@@ -534,106 +532,83 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 				).addGap(vGap, vGap * 2, vGap * 2));
 
-		layoutByAuditInfo
-				.setHorizontalGroup(
-						layoutByAuditInfo.createParallelGroup()
-								.addGroup(
-										layoutByAuditInfo.createSequentialGroup()
-												.addGap(hFirstGap, hFirstGap, hFirstGap)
-												.addGroup(layoutByAuditInfo.createParallelGroup()
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(jLabelTopic, 5, wLeftText, wLeftText)
-																.addGap(hFirstGap, hFirstGap, hFirstGap)
+		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup().addGroup(layoutByAuditInfo
+				.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layoutByAuditInfo.createParallelGroup()
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
 
-																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
-																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
-														.addGroup(
-																layoutByAuditInfo.createSequentialGroup().addComponent(
-																		panelMountShare, GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(jLabelDepotServer)
-																.addGap(hGap, hGap, hGap)
-																.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH,
-																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
-																.addGap(hGap, hGap, hGap)
-																.addComponent(jLabelWinProduct,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(hGap, hGap, hGap)
-																.addComponent(comboChooseWinProduct,
-																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
-																		Globals.BUTTON_WIDTH * 3))
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(jLabelShowDrivers, Globals.BUTTON_WIDTH,
-																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-																.addGap(hGap, hGap, hGap).addComponent(
-																		buttonShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH))
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(jLabelCreateDrivers, Globals.BUTTON_WIDTH,
-																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-																.addGap(hGap, hGap, hGap).addComponent(
-																		btnCreateDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH))
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(labelDriverToIntegrate,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(hGap, hGap, hGap)
-																.addComponent(buttonCallSelectDriverFiles,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH)
-																.addGap(hFirstGap, hFirstGap, hFirstGap)
-																.addComponent(fieldDriverPath, Globals.BUTTON_WIDTH,
-																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
-														.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-														.addGroup(
-																layoutByAuditInfo.createSequentialGroup().addComponent(
-																		panelMountShare, GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(labelTargetPath,
-																		labelDriverToIntegrate.getPreferredSize().width,
-																		labelDriverToIntegrate.getPreferredSize().width,
-																		labelDriverToIntegrate.getPreferredSize().width)
-																.addGap(hGap, hGap, hGap)
-																.addComponent(buttonCallChooserServerpath,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH,
-																		Globals.GRAPHIC_BUTTON_WIDTH)
-																.addGap(hFirstGap, hFirstGap, hFirstGap)
-																.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
-																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
-
-												).addGap(hFirstGap, hFirstGap, hFirstGap))
-								.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
-
-										.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE,
+								.addComponent(fieldClientname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH * 2))
+						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(
+								panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(jLabelDepotServer)
+								.addGap(hGap, hGap, hGap)
+								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH * 2)
+								.addGap(hGap, hGap, hGap)
+								.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(hGap, hGap, hGap).addComponent(comboChooseWinProduct, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 3))
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelShowDrivers, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(hGap, hGap, hGap).addComponent(buttonShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH))
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelCreateDrivers, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(hGap, hGap, hGap).addComponent(btnCreateDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH))
+						.addGroup(
+								layoutByAuditInfo.createSequentialGroup()
+										.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-										.addGap(hGap, 2 * hGap, 2 * hGap)
-
-										.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-										.addGap(hGap, 2 * hGap, 2 * hGap)
-										.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+										.addGap(hGap, hGap, hGap)
+										.addComponent(buttonCallSelectDriverFiles, Globals.GRAPHIC_BUTTON_WIDTH,
 												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
-										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
+										.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldDriverPath,
+												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
+						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(panelMountShare,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(
+								layoutByAuditInfo.createSequentialGroup()
+										.addComponent(labelTargetPath, labelDriverToIntegrate.getPreferredSize().width,
+												labelDriverToIntegrate.getPreferredSize().width,
+												labelDriverToIntegrate.getPreferredSize().width)
+										.addGap(hGap, hGap, hGap)
+										.addComponent(buttonCallChooserServerpath, Globals.GRAPHIC_BUTTON_WIDTH,
+												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldServerPath,
+												Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
 
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
+				).addGap(hFirstGap, hFirstGap, hFirstGap))
+				.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
 
-										.addGap(hGap, hGap, Short.MAX_VALUE)
+						.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
-										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
+						.addGap(hGap, 2 * hGap, 2 * hGap)
+
+						.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+
+						.addGap(hGap, 2 * hGap, 2 * hGap)
+						.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
+
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+
+						.addGap(hGap, hGap, Short.MAX_VALUE)
+
+						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_3);
