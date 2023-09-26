@@ -46,6 +46,8 @@ import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -210,8 +212,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
+		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
 		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
-				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Utils.createImageIcon("images/save.png", ""));
+				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Utils.createImageIcon(iconSavePath, ""));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
