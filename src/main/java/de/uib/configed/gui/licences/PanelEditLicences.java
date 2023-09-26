@@ -95,11 +95,11 @@ public class PanelEditLicences extends MultiTablePanel {
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGap(10, 10, 10));
 		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 
 						.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -109,9 +109,9 @@ public class PanelEditLicences extends MultiTablePanel {
 						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGap(10, 10, 10));
 		layoutBottomPane.setVerticalGroup(
-				layoutBottomPane.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

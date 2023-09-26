@@ -165,22 +165,22 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		GroupLayout layout1 = new GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
 		layout1.setHorizontalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1
-				.createSequentialGroup().addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.createSequentialGroup().addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(layout1.createParallelGroup(Alignment.LEADING)
 						.addComponent(editingArea, 60, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGroup(layout1.createSequentialGroup()
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
+								.addGap(Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 								.addComponent(buttonRemove, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonAdd, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(extraLabel, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)));
 		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -194,7 +194,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)));
 
 		if (loggingPanel.isVisible()) {
 			splitPane.setTopComponent(framingPanel);

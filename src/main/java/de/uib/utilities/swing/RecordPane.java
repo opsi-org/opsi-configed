@@ -82,25 +82,25 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 
 		for (String key : data.keySet()) {
 			hGroup.addGroup(baseLayout.createSequentialGroup()
-					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
+					.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 					.addComponent(labelfields.get(key), MIN_LABEL_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_LABEL_WIDTH)
-					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
+					.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 					.addComponent(datafields.get(key), MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_FIELD_WIDTH)
-					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
+					.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 		}
 
 		baseLayout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = baseLayout.createSequentialGroup();
 
-		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
+		vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
 		for (String key : data.keySet()) {
-			vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
+			vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
 			vGroup.addGroup(baseLayout.createParallelGroup()
 					.addComponent(labelfields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT)
 					.addComponent(datafields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT));
 		}
-		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
+		vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
 
 		baseLayout.setVerticalGroup(vGroup);
 	}

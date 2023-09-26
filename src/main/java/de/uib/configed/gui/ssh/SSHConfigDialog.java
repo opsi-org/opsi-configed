@@ -460,7 +460,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				.addGroup(connectionPanelLayout.createParallelGroup()
 						.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -470,7 +470,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.VGAP_SIZE)
+								.addGap(Globals.GAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(jComboBoxHost, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -480,17 +480,17 @@ public final class SSHConfigDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 										.addComponent(jTextFieldPassword, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								.addGap(Globals.VGAP_SIZE))
-						.addGap(Globals.VGAP_SIZE)
+								.addGap(Globals.GAP_SIZE))
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckBoxUseKeyFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(jLabelKeyFile, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelPassphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.VGAP_SIZE)
+								.addGap(Globals.GAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addGroup(connectionPanelLayout.createSequentialGroup()
 												.addComponent(jTextFieldKeyFile, GroupLayout.PREFERRED_SIZE,
@@ -501,42 +501,42 @@ public final class SSHConfigDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 								// )
-								.addGap(Globals.VGAP_SIZE))
+								.addGap(Globals.GAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(jLabelConnectionState,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addContainerGap());
 
-		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
+		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jComboBoxHost, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelHost, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jTextFieldPort, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelPort, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jTextFieldUser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelUser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jTextFieldPassword, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelPassword, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jCheckBoxUseKeyFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(iconButtonOpenChooser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -544,17 +544,17 @@ public final class SSHConfigDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelKeyFile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jTextFieldPassphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelPassphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(
 						jLabelConnectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.VGAP_SIZE).addContainerGap(70, 70));
+				.addGap(Globals.GAP_SIZE).addContainerGap(70, 70));
 
 		settingsPanelLayout.setHorizontalGroup(settingsPanelLayout.createSequentialGroup()
 				.addGroup(settingsPanelLayout.createParallelGroup()

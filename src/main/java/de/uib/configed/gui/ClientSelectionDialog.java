@@ -269,24 +269,24 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		});
 
 		GroupLayout.SequentialGroup saveHGroup = additionalLayout.createSequentialGroup();
-		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addGap(Globals.GAP_SIZE);
 		saveHGroup.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
+		saveHGroup.addGap(Globals.GAP_SIZE / 2);
 		saveHGroup.addComponent(saveNameField, 40, 100, 200);
-		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addGap(Globals.GAP_SIZE);
 		saveHGroup.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
+		saveHGroup.addGap(Globals.GAP_SIZE / 2);
 		saveHGroup.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE);
-		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addGap(Globals.GAP_SIZE);
 		saveHGroup.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH);
-		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addGap(Globals.GAP_SIZE);
 		saveHGroup.addComponent(buttonReload, 20, 20, 20);
-		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
+		saveHGroup.addGap(Globals.GAP_SIZE / 2);
 		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
 
-		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addGap(Globals.GAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
 
 		GroupLayout.ParallelGroup saveVGroup = additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER);

@@ -66,7 +66,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 				.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEditProperties.setVerticalGroup(layoutEditProperties.createSequentialGroup()
-				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(
 						productPropertiesPanel, Globals.MIN_TABLE_V_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
