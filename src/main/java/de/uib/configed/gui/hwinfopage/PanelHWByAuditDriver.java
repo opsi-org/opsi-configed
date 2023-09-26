@@ -84,21 +84,30 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
-		int lh = Globals.LINE_HEIGHT - 4;
+
 		layoutByAuditInfo
 				.setVerticalGroup(
 						layoutByAuditInfo.createSequentialGroup()
-								.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelInfo, lh, lh, lh)
-										.addComponent(labelVendor, lh, lh, lh).addComponent(labelProduct, lh, lh, lh)
-										.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-										.addComponent(buttonUploadDrivers, lh, lh, lh))
+								.addGroup(layoutByAuditInfo.createParallelGroup()
+										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelVendor, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelProduct, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(layoutByAuditInfo.createParallelGroup()
 										.addGroup(layoutByAuditInfo.createSequentialGroup()
 												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 														Globals.MIN_GAP_SIZE)
 												.addComponent(selectionComputerSystem))
-										.addComponent(fieldVendor, lh, lh, lh).addComponent(labelSeparator, lh, lh, lh)
-										.addComponent(fieldLabel, lh, lh, lh)
+										.addComponent(fieldVendor, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelSeparator, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 								).addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 								.addGroup(layoutByAuditInfo.createParallelGroup()
@@ -107,23 +116,27 @@ public class PanelHWByAuditDriver extends JPanel {
 												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 														Globals.MIN_GAP_SIZE)
 												.addComponent(selectionBaseBoard))
-										.addComponent(fieldVendor2, lh, lh, lh)
-										.addComponent(labelSeparator2, lh, lh, lh).addComponent(fieldLabel2, lh, lh, lh)
-
-								).addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+										.addComponent(fieldVendor2, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelSeparator2, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldLabel2, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2)
-				.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(2, Globals.MIN_GAP_SIZE * 4, Globals.MIN_GAP_SIZE * 4)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(
+						labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(0, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(selectionComputerSystem, 2, GroupLayout.PREFERRED_SIZE,
+						.addComponent(selectionComputerSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(selectionBaseBoard, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelVendor,
-								Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
+						.addComponent(labelVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
 						.addComponent(fieldVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
 						.addComponent(fieldVendor2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
@@ -133,8 +146,8 @@ public class PanelHWByAuditDriver extends JPanel {
 						.addComponent(labelSeparator2))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelProduct,
-								Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
+						.addComponent(labelProduct, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
 						.addComponent(fieldLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
 						.addComponent(fieldLabel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
