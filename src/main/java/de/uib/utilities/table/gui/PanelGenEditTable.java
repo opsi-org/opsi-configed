@@ -442,8 +442,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			return controlPanel;
 		}
 
-		buttonCommit = new IconButton(Configed.getResourceValue("buttonSave"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png");
+		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
+				"images/apply_disabled.png");
 
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 

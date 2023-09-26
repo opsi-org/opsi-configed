@@ -121,8 +121,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new IconButton(Configed.getResourceValue("buttonSave"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png", true);
+		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
+				"images/apply_disabled.png", true);
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",

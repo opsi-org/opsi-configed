@@ -238,7 +238,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-		iconButtonSave = new IconButton(Configed.getResourceValue("buttonSave"), iconSavePath, iconSavePath, "");
+		iconButtonSave = new IconButton(Configed.getResourceValue("save"), iconSavePath, iconSavePath, "");
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();
