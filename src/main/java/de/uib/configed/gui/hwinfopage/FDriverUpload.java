@@ -31,7 +31,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		init();
 		super.setGlobals(Utils.getMap());
-		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
+		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
 	}
 
 	private void init() {

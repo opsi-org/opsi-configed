@@ -458,11 +458,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				Utils.createImageIcon("images/checked_withoutbox.png", "Z"),
 				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
 
-		buttonUploadDrivers = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
-		buttonUploadDrivers.setEnabled(false);
-		buttonUploadDrivers.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
-		// buttonUploadDrivers.setDisabledIcon(
-
+		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);
 
 		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
@@ -522,15 +518,13 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(driverPathChecked, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(serverPathChecked, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonUploadDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT))
+						.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 
 				.addGap(vGap, vGap * 2, vGap * 2)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-
-						.addGap(Globals.LINE_HEIGHT)
-
-				).addGap(vGap, vGap * 2, vGap * 2));
+				.addGroup(
+						layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER).addGap(Globals.LINE_HEIGHT))
+				.addGap(vGap, vGap * 2, vGap * 2));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup().addGroup(layoutByAuditInfo
 				.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -600,8 +594,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 								GroupLayout.PREFERRED_SIZE)
 
 						.addGap(hGap, 2 * hGap, 2 * hGap)
-						.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
 
 				.addGroup(layoutByAuditInfo.createSequentialGroup()
