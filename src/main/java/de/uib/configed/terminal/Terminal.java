@@ -277,17 +277,17 @@ public final class Terminal {
 
 		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
 
-		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonFontPlus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(buttonFontMinus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup()
-				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(themeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -297,7 +297,7 @@ public final class Terminal {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonFontMinus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.HGAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		return settingsPanel;
 	}
@@ -327,17 +327,17 @@ public final class Terminal {
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
-		southLayout.setHorizontalGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+		southLayout.setHorizontalGroup(southLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(uploadingFileLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(fileNameLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(uploadedFilesLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(fileUploadProgressBar, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(southLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(uploadingFileLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -347,7 +347,7 @@ public final class Terminal {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fileUploadProgressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.HGAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		return southPanel;
 	}

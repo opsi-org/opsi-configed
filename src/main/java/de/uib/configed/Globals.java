@@ -252,12 +252,8 @@ public final class Globals {
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
 
-	public static final int GAP_SIZE = 10;
 	public static final int MIN_GAP_SIZE = 5;
-	public static final int VGAP_SIZE = 10;
-	public static final int HGAP_SIZE = 10;
-	public static final int MIN_VGAP_SIZE = 5;
-	public static final int MIN_HGAP_SIZE = 5;
+	public static final int GAP_SIZE = 10;
 
 	public static final int MIN_VSIZE = 10;
 	public static final int PREF_VSIZE = 80;
@@ -315,7 +311,7 @@ public final class Globals {
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 
 	// action form constants
-	public static final int HFIRST_GAP = HGAP_SIZE * 3;
+	public static final int HFIRST_GAP = GAP_SIZE * 3;
 	public static final int FIRST_LABEL_WIDTH = 250;
 
 	public static final String STARRED_STRING = "*****";

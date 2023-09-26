@@ -105,21 +105,20 @@ public class PanelMountShare extends JPanel {
 									.addGap(hFirstGap, hFirstGap, hFirstGap)
 									.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
 											Globals.BUTTON_WIDTH * 3, Short.MAX_VALUE)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
+									.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 		} else {
 
 			layout.setHorizontalGroup(
 					layout.createParallelGroup()
 							.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 									.addGap(FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+									.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 									.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addGap(hFirstGap, hFirstGap, hFirstGap)
 									.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
 											Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-									.addGap(5, 5, 5)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
+									.addGap(5, 5, 5).addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE)));
 		}
 	}
 
