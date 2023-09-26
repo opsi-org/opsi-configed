@@ -613,7 +613,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private JTable createHWInfoTableModelComplete() {
 		getLocalizedHashMap();
-		// TODO
+
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
 		JTable jTableComplete = new JTable(tableModelComplete);
 

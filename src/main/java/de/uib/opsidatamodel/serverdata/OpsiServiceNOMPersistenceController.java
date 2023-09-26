@@ -460,9 +460,6 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.dispatch(event);
 	}
 
-	// Registering and notifying panelCompleteWinProducts
-	// TODO change how messages are shown there
-
 	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
 		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}

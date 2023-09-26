@@ -21,7 +21,6 @@ public class ExtendedDate {
 	private LocalDateTime date;
 	private String sDate;
 
-	// TODO where will this be needed?
 	public ExtendedDate(Object value) {
 		interpretAsTimestamp(value);
 	}
