@@ -173,5 +173,9 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 		hardwareDataService.retrieveHardwareOnClientPD();
+
+		// Request health data to be reloaded later on - lazy initialization.
+		cacheManager.clearCachedData(CacheIdentifier.HEALTH_CHECK_DATA);
+		cacheManager.clearCachedData(CacheIdentifier.DIAGNOSTIC_DATA);
 	}
 }
