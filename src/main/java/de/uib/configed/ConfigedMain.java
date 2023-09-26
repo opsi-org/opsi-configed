@@ -1136,6 +1136,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		treeClients.setEnabled(true);
+		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		mainFrame.setConfigPanesEnabled(true);
@@ -1156,6 +1157,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setEditingTarget  DEPOTS");
 
 		depotsList.setEnabled(true);
+		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		treeClients.setEnabled(false);
 
@@ -1177,8 +1179,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void setEditingServer() {
-		depotsList.setEnabled(true);
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		treeClients.setEnabled(false);
 
 		initServer();
@@ -3057,6 +3057,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setProductPropertiesPage");
 		mainFrame.getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
+		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		return true;
@@ -3070,6 +3071,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setHostPropertiesPage");
 
 		depotsList.setEnabled(true);
+		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
@@ -3141,6 +3143,7 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 			if (editingTarget == EditingTarget.DEPOTS) {
 				depotsList.setEnabled(true);
+				depotsList.requestFocus();
 				depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			}
 			List<Map<String, Object>> additionalConfigs = editingTarget == EditingTarget.DEPOTS
