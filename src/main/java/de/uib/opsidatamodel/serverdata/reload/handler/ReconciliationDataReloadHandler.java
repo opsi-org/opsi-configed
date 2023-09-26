@@ -37,7 +37,7 @@ public class ReconciliationDataReloadHandler implements ReloadHandler {
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
-		softwareDataService.retrieveLicenceStatisticsPD();
+		softwareDataService.retrieveLicenseStatisticsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER);

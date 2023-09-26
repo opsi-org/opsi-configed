@@ -900,17 +900,17 @@ public class SoftwareDataService {
 		return "???";
 	}
 
-	public Map<String, Map<String, Object>> getLicencesReconciliationPD() {
-		getLicenceStatistics();
+	public Map<String, Map<String, Object>> getLicensesReconciliationPD() {
+		getLicenseStatistics();
 		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 	}
 
-	public Map<String, LicenceStatisticsRow> getLicenceStatistics() {
-		return retrieveLicenceStatisticsPD();
+	public Map<String, LicenceStatisticsRow> getLicenseStatistics() {
+		return retrieveLicenseStatisticsPD();
 	}
 
 	// poolId -> LicenceStatisticsRow
-	public Map<String, LicenceStatisticsRow> retrieveLicenceStatisticsPD() {
+	public Map<String, LicenceStatisticsRow> retrieveLicenseStatisticsPD() {
 		// side effects of this method: rowsLicencesReconciliation
 		if (!moduleDataService.isWithLicenceManagementPD()) {
 			return new HashMap<>();

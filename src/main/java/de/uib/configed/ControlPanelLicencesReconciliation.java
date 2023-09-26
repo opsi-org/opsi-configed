@@ -128,7 +128,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 							persistenceController.reloadData(ReloadEvent.RECONCILIATION_INFO_RELOAD.toString());
 						}
 						initialized = true;
-						return persistenceController.getSoftwareDataService().getLicencesReconciliationPD();
+						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})),
 
