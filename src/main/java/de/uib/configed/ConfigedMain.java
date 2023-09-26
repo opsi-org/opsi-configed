@@ -48,6 +48,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -1135,6 +1136,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		treeClients.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		mainFrame.setConfigPanesEnabled(true);
 		mainFrame.setConfigPaneEnabled(
@@ -1154,6 +1156,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setEditingTarget  DEPOTS");
 
 		depotsList.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		treeClients.setEnabled(false);
 
 		initServer();
@@ -1175,6 +1178,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void setEditingServer() {
 		depotsList.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		treeClients.setEnabled(false);
 
 		initServer();
@@ -3046,37 +3050,41 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private boolean setProductPropertiesPage() {
-		Logging.debug(this, "setProductPropertiesPage");
-
-		if (editingTarget == EditingTarget.DEPOTS) {
-			mainFrame.getPanelProductProperties().setProductProperties();
-			depotsList.setEnabled(true);
-			return true;
-		} else {
+		if (editingTarget != EditingTarget.DEPOTS) {
 			return false;
 		}
+
+		Logging.debug(this, "setProductPropertiesPage");
+		mainFrame.getPanelProductProperties().setProductProperties();
+		depotsList.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		return true;
 	}
 
 	private boolean setHostPropertiesPage() {
+		if (editingTarget != EditingTarget.DEPOTS) {
+			return false;
+		}
+
 		Logging.debug(this, "setHostPropertiesPage");
 
-		if (editingTarget == EditingTarget.DEPOTS) {
-			Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
-					.getDepotDataService().getDepotPropertiesForPermittedDepots();
+		depotsList.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-			if (hostUpdateCollection != null) {
-				updateCollection.remove(hostUpdateCollection);
-			}
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
+				.getDepotPropertiesForPermittedDepots();
 
-			hostUpdateCollection = new HostUpdateCollection();
-			addToGlobalUpdateCollection(hostUpdateCollection);
-
-			mainFrame.getPanelHostProperties().initMultipleHostsEditing(
-					Configed.getResourceValue("PanelHostProperties.SelectHost"),
-					new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
-					depotPropertiesForPermittedDepots, hostUpdateCollection,
-					OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		if (hostUpdateCollection != null) {
+			updateCollection.remove(hostUpdateCollection);
 		}
+
+		hostUpdateCollection = new HostUpdateCollection();
+		addToGlobalUpdateCollection(hostUpdateCollection);
+
+		mainFrame.getPanelHostProperties().initMultipleHostsEditing(selectedDepots[0],
+				depotPropertiesForPermittedDepots, hostUpdateCollection,
+				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		return true;
 	}
@@ -3133,6 +3141,7 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 			if (editingTarget == EditingTarget.DEPOTS) {
 				depotsList.setEnabled(true);
+				depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			}
 			List<Map<String, Object>> additionalConfigs = editingTarget == EditingTarget.DEPOTS
 					? produceAdditionalConfigs(depotsList.getSelectedValuesList())
