@@ -15,6 +15,7 @@ import javax.swing.table.TableCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
@@ -33,6 +34,9 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
+
+		CellAlternatingColorizer.colorize(cell, isSelected, row % 2 == 0, column % 2 == 0, true);
+
 		if (!Main.THEMES) {
 			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
 		}

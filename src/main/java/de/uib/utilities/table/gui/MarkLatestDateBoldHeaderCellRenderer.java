@@ -10,14 +10,13 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
-public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRenderer {
+public class MarkLatestDateBoldHeaderCellRenderer extends ColorTableCellRenderer {
 	private TableCellRenderer rend;
 	private LicensingInfoMap licensingInfoMap;
 
