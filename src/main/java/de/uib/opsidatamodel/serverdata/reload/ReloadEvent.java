@@ -20,7 +20,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.ReconciliationDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
 
@@ -73,11 +72,6 @@ public enum ReloadEvent {
 	 * Triggers {@link HardwareConfDataReloadHandler}.
 	 */
 	HARDWARE_CONF_RELOAD("hardware_conf_reload"),
-
-	/**
-	 * Triggers {@link ReconciliationDataReloadHandler}.
-	 */
-	RECONCILIATION_INFO_RELOAD("reconciliation_info_reload"),
 
 	/**
 	 * Triggers {@link InstalledSoftwareDataReloadHandler}.
