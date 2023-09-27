@@ -653,7 +653,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return model;
 	}
 
-	public Set<String> associateClientsToGroups(String[] x, Map<String, Set<String>> fObject2Groups,
+	public Set<String> associateClientsToGroups(String[] clientIds, Map<String, Set<String>> fObject2Groups,
 			Set<String> permittedHostGroups) {
 		locationsInDIRECTORY.clear();
 
@@ -663,7 +663,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// would eliminate
 		// the filter by depot etc.
 
-		for (String clientId : x) {
+		for (String clientId : clientIds) {
 			if (fObject2Groups.get(clientId) != null) {
 				Set<String> belongingTo = fObject2Groups.get(clientId);
 
@@ -699,14 +699,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		// check produced DIRECTORY
-		for (int i = 0; i < x.length; i++) {
-			String clientId = x[i];
-			checkDIRECTORY(clientId, null);
+		for (int i = 0; i < clientIds.length; i++) {
+			checkDIRECTORY(clientIds[i], null);
 		}
 
 		// build membersOfDIRECTORY_NOT_ASSIGNED
-		for (int i = 0; i < x.length; i++) {
-			String clientId = x[i];
+		for (int i = 0; i < clientIds.length; i++) {
+			String clientId = clientIds[i];
 			Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
 
 			// client is not in any DIRECTORY group
@@ -1115,7 +1114,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private static List<GroupNode> selectOneNode(Set<GroupNode> groupSet, String clientID, GroupNode preSelected) {
 		List<GroupNode> result = null;
 
-		if (groupSet.size() > 1) {
+		//Ask only if mainFrame is not null; Otherwise, errors will occure
+		if (groupSet.size() > 1 && ConfigedMain.getMainFrame() != null) {
 
 			FEditList<GroupNode> fList = new FEditList<>();
 			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray(new GroupNode[0])));
