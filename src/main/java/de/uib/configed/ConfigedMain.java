@@ -130,7 +130,6 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -170,8 +169,6 @@ public class ConfigedMain implements ListSelectionListener {
 	protected DefaultTableProvider licenceOptionsTableProvider;
 	protected DefaultTableProvider licenceContractsTableProvider;
 	protected DefaultTableProvider softwarelicencesTableProvider;
-
-	private DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -403,8 +400,6 @@ public class ConfigedMain implements ListSelectionListener {
 		initTree();
 
 		allFrames = new ArrayList<>();
-
-		initSpecialTableProviders();
 
 		initMainFrame();
 
@@ -777,26 +772,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (ServerFacade.isOpsi43()) {
 			initMessagebus();
 		}
-	}
-
-	private void initSpecialTableProviders() {
-		List<String> columnNames = new ArrayList<>();
-
-		columnNames.add("productId");
-		columnNames.add("productName");
-
-		// from OpsiPackage.appendValues
-		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
-		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
-		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
-
-		List<String> classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
-		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
 	}
 
 	private void preloadData() {
@@ -5136,10 +5111,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public DefaultTableProvider getGlobalProductsTableProvider() {
-		return globalProductsTableProvider;
 	}
 
 	public LicencesFrame getLicencesFrame() {
