@@ -170,7 +170,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("FGroupAction.replayImage"));
 
-		JButton buttonSetup = new JButton(Configed.getResourceValue("FGroupAction.buttonSetup"));
+		JButton buttonSetup = new JButton(Configed.getResourceValue("save"));
 		buttonSetup.setToolTipText(Configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 
 		buttonSetup.addActionListener(actionEvent -> replay());

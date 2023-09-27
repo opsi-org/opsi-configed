@@ -18,6 +18,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -54,7 +55,7 @@ public class PanelHostConfig extends JPanel {
 		configedMain.cancelChanges();
 
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
-		persistenceController.reloadData(ReloadEvent.HOST_CONFIG_RELOAD.toString());
+		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 
 		configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 	}

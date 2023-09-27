@@ -93,8 +93,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 			labelHint.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
 		}
 
-		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
-				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true) {
+		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
+				"images/apply_disabled.png", true) {
 			@Override
 			public void setEnabled(boolean b) {
 				super.setEnabled(b);

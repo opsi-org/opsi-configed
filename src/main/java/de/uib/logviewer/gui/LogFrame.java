@@ -40,6 +40,8 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -228,15 +230,15 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private void setupIcons() {
 		iconButtonOpen = new IconButton(Configed.getResourceValue("LogFrame.jMenuFileOpen"), "images/openfile.gif",
-				"images/images/openfile.gif", "");
+				"images/openfile.gif", "");
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
 		iconButtonReload = new IconButton(Configed.getResourceValue("LogFrame.buttonReload"), "images/reload16.png",
-				"images/images/reload16.png", "");
+				"images/reload16.png", "");
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		iconButtonSave = new IconButton(Configed.getResourceValue("PopupMenuTrait.save"), "images/save.png",
-				"images/images/save.png", "");
+		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
+		iconButtonSave = new IconButton(Configed.getResourceValue("save"), iconSavePath, iconSavePath, "");
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();
@@ -244,7 +246,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		});
 
 		iconButtonCopy = new IconButton(Configed.getResourceValue("LogFrame.buttonCopy"), "images/edit-copy.png",
-				"images/images/edit-copy.png", "");
+				"images/edit-copy.png", "");
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 	}
 

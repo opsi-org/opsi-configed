@@ -14,7 +14,6 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
@@ -32,7 +31,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		init();
 		super.setGlobals(Utils.getMap());
-		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
+		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
 	}
 
 	private void init() {
@@ -62,14 +61,15 @@ public class FDriverUpload extends SecondaryFrame {
 	public void setUploadParameters(String byAuditPath) {
 		panelDriverUpload.setByAuditPath(byAuditPath);
 
-		Logging.info(this, " setUploadParameters " + configedMain.getSelectedClients()[0]);
+		String clientName;
 
 		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().length == 1) {
-			panelDriverUpload.setClientName(configedMain.getSelectedClients()[0]);
+			clientName = configedMain.getSelectedClients()[0];
 		} else {
-			panelDriverUpload.setClientName("");
+			clientName = "";
 		}
 
+		panelDriverUpload.setClientName(clientName);
 		panelDriverUpload.setDepot(configedMain.getConfigserver());
 	}
 }

@@ -12,6 +12,9 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
+import com.formdev.flatlaf.FlatLaf;
+
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import utils.PopupMouseListener;
@@ -75,8 +78,10 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE:
 			i = listPopups.indexOf(POPUP_SAVE);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.save"),
-					Utils.createImageIcon("images/save.png", ""));
+
+			String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("save"),
+					Utils.createImageIcon(iconSavePath, ""));
 
 			// not work
 

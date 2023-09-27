@@ -52,7 +52,11 @@ import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
+
+	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
+
 	private static NewClientDialog instance;
+
 	private ConfigedMain configedMain;
 
 	private JComboBox<String> jComboDomain;
@@ -76,8 +80,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private List<String> depots;
 	private List<String> domains;
 	private List<String> existingHostNames;
-
-	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();

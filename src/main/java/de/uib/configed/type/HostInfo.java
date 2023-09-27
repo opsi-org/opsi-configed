@@ -429,7 +429,6 @@ public class HostInfo {
 		return selectionPanel.findModelRowFromValue(client, 0);
 	}
 
-	// TODO: this method shouldn't be here.
 	public void resetGui(MainFrame mainFrame) {
 		Logging.info(this, "resetGui for " + toString());
 		mainFrame.setClientDescriptionText(clientDescription);

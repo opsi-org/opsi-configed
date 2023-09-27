@@ -503,21 +503,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
 			setOpsiPackageFilename(dir + "" + getPackageID(dir) + "_" + prodVersion + "-" + packVersion + ".opsi");
 
-			// ToDo: command_strings in sshcommandfactory auslagern
-			//
-			//
 			String command = "[ -f " + filename + " ] &&  rm " + filename + " && echo \"File " + filename
 					+ " removed\" || echo \"File did not exist\"";
-			// Empty_Command removeExistingPackage = new
-			// Empty_Command(str_command_fileexists.replace(str_replacement_filename,
 
 			EmptyCommand removeExistingPackage = new EmptyCommand(command);
 			str2exec.addCommand(removeExistingPackage);
 
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
-			// removeExistingPackage = new
-			// Empty_Command(str_command_filezsyncExists.replace(str_replacement_filename,
 
 			removeExistingPackage = new EmptyCommand(command);
 			str2exec.addCommand(removeExistingPackage);
@@ -525,8 +518,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			command = "[ -f " + filename + ".md5 ] &&  rm " + filename + ".md5 && echo \"File " + filename
 					+ ".md5 removed\" || echo \"File  " + filename + ".md5 did not exist\"";
 			removeExistingPackage = new EmptyCommand(command);
-			// removeExistingPackage = new
-			// Empty_Command(str_command_filemd5Exists.replace(str_replacement_filename,
 
 			str2exec.addCommand(removeExistingPackage);
 		}
@@ -553,7 +544,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String getPackageID(String dir) {
-		// cat " + dir + "OPSI/control | grep "id: "
+
 		EmptyCommand getPackageId = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_CAT_DIRECTORY
 				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();

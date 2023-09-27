@@ -2023,7 +2023,7 @@ public class MainFrame extends JFrame
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
-		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
+		jButtonSaveList.setText(Configed.getResourceValue("save"));
 		if (!Main.THEMES) {
 			jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
 		}
@@ -2958,7 +2958,6 @@ public class MainFrame extends JFrame
 	}
 
 	private void showHealthDataAction() {
-
 		// Only show loading when health data are not yet loaded
 		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
