@@ -1433,13 +1433,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame start ");
-
-		// general
-
 		initTableData();
-
 		startLicencesFrame();
-
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}

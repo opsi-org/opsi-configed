@@ -160,7 +160,7 @@ public class LicenseDataService {
 	// SOFTWARE_LICENSE_TO_LICENSE_POOL
 	public void retrieveLicenceUsabilitiesPD() {
 		if (!moduleDataService.isWithLicenceManagementPD()
-				&& cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null) {
+				|| cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null) {
 			return;
 		}
 		List<LicenceUsableForEntry> licenceUsabilities = new ArrayList<>();

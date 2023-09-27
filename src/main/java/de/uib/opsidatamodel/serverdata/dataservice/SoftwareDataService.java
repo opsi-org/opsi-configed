@@ -920,7 +920,7 @@ public class SoftwareDataService {
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = getRowsLicenseReconciliation();
 		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation);
 
-		getInstalledSoftwareInformationForLicensingPD();
+		retrieveInstalledSoftwareInformationPD();
 		retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
