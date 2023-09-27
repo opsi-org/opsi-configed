@@ -901,7 +901,7 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, Map<String, Object>> getLicensesReconciliationPD() {
-		getLicenseStatistics();
+		retrieveLicenseStatisticsPD();
 		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 	}
 
@@ -983,7 +983,7 @@ public class SoftwareDataService {
 
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
 		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null) {
-			return new HashMap<>();
+			return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 		}
 
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = new HashMap<>();
