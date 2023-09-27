@@ -1433,13 +1433,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame start ");
-
-		// general
-
 		initTableData();
-
 		startLicencesFrame();
-
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
@@ -1457,7 +1452,7 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencepoolsPD()));
+				() -> (Map) persistenceController.getLicenseDataService().getLicencePoolsPD()));
 
 		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
@@ -4261,7 +4256,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
 				persistenceController.getLicenseDataService().addDeletionLicenceUsage(client, m.getLicenceId(),
-						m.getLicencepool());
+						m.getLicensePool());
 			}
 		}
 
