@@ -3167,9 +3167,13 @@ public class ConfigedMain implements ListSelectionListener {
 	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
 		List<Map<String, Object>> additionalConfigs = new ArrayList<>(list.size());
 		Logging.info(this, "additionalConfig fetch for " + list);
-		for (String item : list) {
-			additionalConfigs.add(persistenceController.getConfigDataService().getConfig(item));
-			// with server defaults
+		if (ServerFacade.isOpsi43()) {
+			additionalConfigs = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
+		} else {
+			for (String item : list) {
+				additionalConfigs.add(persistenceController.getConfigDataService().getHostConfig(item));
+				// with server defaults
+			}
 		}
 		return additionalConfigs;
 	}

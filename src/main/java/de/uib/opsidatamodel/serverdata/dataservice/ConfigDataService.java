@@ -28,6 +28,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.RemoteControls;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -318,6 +319,57 @@ public class ConfigDataService {
 	}
 
 	public void retrieveHostConfigsPD() {
+		if (ServerFacade.isOpsi43()) {
+			retrieveHostConfigsPDOpsi43();
+		} else {
+			retrieveHostConfigsPDOpsi42Lower();
+		}
+	}
+
+	private void retrieveHostConfigsPDOpsi42Lower() {
+		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
+			return;
+		}
+
+		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
+		timeCheck.start();
+
+		String[] callAttributes = new String[] {};
+		Map<String, Object> callFilter = new HashMap<>();
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter });
+		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
+		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
+
+		for (Map<String, Object> listElement : retrieved) {
+			Object id = listElement.get("objectId");
+
+			if (id instanceof String && !"".equals(id)) {
+				String hostId = (String) id;
+				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
+
+				Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
+
+				String configId = (String) listElement.get("configId");
+
+				if (listElement.get("values") == null) {
+					configs1Host.put(configId, new ArrayList<>());
+					// is a data error but can occur
+				} else {
+					configs1Host.put(configId, listElement.get("values"));
+				}
+			}
+		}
+
+		timeCheck.stop();
+		Logging.info(this, "retrieveHostConfigs retrieved " + hostConfigs.keySet());
+
+		cacheManager.setCachedData(CacheIdentifier.HOST_CONFIGS, hostConfigs);
+		persistenceController.notifyPanelCompleteWinProducts();
+	}
+
+	private void retrieveHostConfigsPDOpsi43() {
 		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
 			return;
 		}
@@ -327,12 +379,10 @@ public class ConfigDataService {
 
 		String[] configIds = new String[] {};
 		String[] objectIds = new String[] {};
-
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
 				new Object[] { configIds, objectIds, false });
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
-
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
 			Object id = hostConfig.getKey();
 
@@ -747,11 +797,24 @@ public class ConfigDataService {
 		return result;
 	}
 
-	public Map<String, Object> getConfig(String objectId) {
+	public Map<String, Object> getHostConfig(String objectId) {
 		retrieveConfigOptionsPD();
-		Map<String, Object> retrieved = getHostConfigsPD().get(objectId);
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
-		return new ConfigName2ConfigValue(retrieved, configOptions);
+		return new ConfigName2ConfigValue(getHostConfigsPD().get(objectId), getConfigOptionsPD());
+	}
+
+	public List<Map<String, Object>> getHostsConfigsWithDefaults(List<String> objectIds) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		Set<String> configIds = new HashSet<>();
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
+				new Object[] { configIds, objectIds, true });
+		Map<String, Object> retrieved = exec.getMapResult(omc);
+		for (Entry<String, Object> entry : retrieved.entrySet()) {
+			Map<String, Object> configs = POJOReMapper.remap(entry.getValue(),
+					new TypeReference<Map<String, Object>>() {
+					});
+			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
+		}
+		return result;
 	}
 
 	// collect config state updates
@@ -1007,7 +1070,7 @@ public class ConfigDataService {
 			Map<String, List<Object>> defaultConfiguration) {
 		boolean tested = false;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
-			tested = valueFromConfigStateAsExpected(getConfig(host), configuration.getKey(),
+			tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
 					(Boolean) (configuration.getValue().get(0)));
 			if (!tested) {
 				break;

@@ -312,7 +312,7 @@ public class HostInfoCollections {
 			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
 					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfigDataService().getConfig(name) != null) {
+			if (persistenceController.getConfigDataService().getHostConfig(name) != null) {
 				boolean result = persistenceController.getConfigDataService()
 						.findBooleanConfigurationComparingToDefaults(name,
 								persistenceController.getConfigDataService().getWanConfigurationPD());
