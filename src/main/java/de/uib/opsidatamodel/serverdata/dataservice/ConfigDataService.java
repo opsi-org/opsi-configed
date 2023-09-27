@@ -318,9 +318,7 @@ public class ConfigDataService {
 	}
 
 	public void retrieveHostConfigsPD() {
-		Map<String, Map<String, Object>> hostConfigs = cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS,
-				Map.class);
-		if (hostConfigs != null) {
+		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
 			return;
 		}
 
@@ -333,28 +331,28 @@ public class ConfigDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
 				new Object[] { configIds, objectIds, false });
 		Map<String, Object> retrieved = exec.getMapResult(omc);
-		hostConfigs = new HashMap<>();
+		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 
-		for (Entry<String, Object> listElement : retrieved.entrySet()) {
-			Object id = listElement.getKey();
+		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
+			Object id = hostConfig.getKey();
 
 			if (id instanceof String && !"".equals(id)) {
 				String hostId = (String) id;
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
-				Map<String, Object> l = POJOReMapper.remap(listElement.getValue(),
+				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
 						new TypeReference<Map<String, Object>>() {
 						});
 
-				for (Entry<String, Object> ll : l.entrySet()) {
-					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
+				for (Entry<String, Object> config : configs.entrySet()) {
+					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + hostConfig);
 
-					String configId = (String) ll.getKey();
+					String configId = (String) config.getKey();
 
-					if (listElement.getValue() == null) {
+					if (hostConfig.getValue() == null) {
 						configs1Host.put(configId, new ArrayList<>());
 						// is a data error but can occur
 					} else {
-						configs1Host.put(configId, ll.getValue());
+						configs1Host.put(configId, config.getValue());
 					}
 				}
 			}
