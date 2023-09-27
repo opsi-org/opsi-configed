@@ -15,7 +15,6 @@ import javax.swing.table.TableCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
@@ -24,18 +23,10 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 		this.rend = rend;
 	}
 
-	// to override in subclasses for manipulation the value
-	protected Object modifyValue(Object value) {
-		return value;
-	}
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
-				column);
-
-		CellAlternatingColorizer.colorize(cell, isSelected, row % 2 == 0, column % 2 == 0, true);
+		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (!Main.THEMES) {
 			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
@@ -45,10 +36,10 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 			JComponent jc = (JComponent) cell;
 
 			if (value != null) {
-				String val1 = "" + modifyValue(value);
+				String val1 = "" + value;
+
 				jc.setToolTipText(val1);
 			}
-
 		}
 
 		return cell;
