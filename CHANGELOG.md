@@ -15,6 +15,9 @@
 - Client tree selection / navigation reworked
 - Open multiple windows in logviewer when opening archives with several files
 
+## [4.2.22.14] - 2023-09-27
+- Configed can start now when a client is in two different DIRECTORY groups
+
 ## [4.2.22.13] - 2023-08-28
 ### Fixed
 - Groups (specialities) available again 
