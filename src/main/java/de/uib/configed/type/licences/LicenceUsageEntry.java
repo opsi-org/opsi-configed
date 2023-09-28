@@ -104,7 +104,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		return get(CLIENT_ID_KEY);
 	}
 
-	public String getLicencepool() {
+	public String getLicensePool() {
 		return get(LICENCE_POOL_ID_KEY);
 	}
 
@@ -116,7 +116,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		Map<String, Object> m = new HashMap<>();
 		m.put(CLIENT_ID_KEY, getClientId());
 		m.put(LICENCE_ID_KEY, getLicenceId());
-		m.put(LICENCE_POOL_ID_KEY, getLicencepool());
+		m.put(LICENCE_POOL_ID_KEY, getLicensePool());
 		m.put("type", OPSI_NOM_TYPE);
 		return m;
 	}
@@ -126,7 +126,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public String getPseudoKey() {
-		return produceKey(getClientId(), getLicencepool(), getLicenceId());
+		return produceKey(getClientId(), getLicensePool(), getLicenceId());
 	}
 
 }

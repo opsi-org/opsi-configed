@@ -351,13 +351,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		theTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
-
-					@Override
-					protected Object modifyValue(Object value) {
-						return value;
-					}
-				});
+				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()));
 
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

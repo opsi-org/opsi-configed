@@ -11,15 +11,13 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 import utils.Utils;
 
-public class StandardTableCellRenderer extends DefaultTableCellRenderer {
+public class StandardTableCellRenderer extends ColorTableCellRenderer {
 	protected static final int FILL_LENGTH = 20;
 
 	protected String tooltipPrefix;
@@ -44,7 +42,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		JComponent jc = (JComponent) c;
-		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		if (jc instanceof JLabel) {
 			String tooltipText = null;

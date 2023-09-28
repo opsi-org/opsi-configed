@@ -23,16 +23,11 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 		this.rend = rend;
 	}
 
-	// to override in subclasses for manipulation the value
-	protected Object modifyValue(Object value) {
-		return value;
-	}
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
-				column);
+		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
 		if (!Main.THEMES) {
 			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
 		}
@@ -41,10 +36,10 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 			JComponent jc = (JComponent) cell;
 
 			if (value != null) {
-				String val1 = "" + modifyValue(value);
+				String val1 = "" + value;
+
 				jc.setToolTipText(val1);
 			}
-
 		}
 
 		return cell;

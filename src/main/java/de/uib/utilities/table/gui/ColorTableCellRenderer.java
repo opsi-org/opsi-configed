@@ -26,6 +26,5 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		CellAlternatingColorizer.colorize(cell, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		return cell;
-
 	}
 }

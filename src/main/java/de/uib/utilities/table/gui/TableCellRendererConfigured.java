@@ -11,11 +11,10 @@ import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.Main;
 
-public class TableCellRendererConfigured extends DefaultTableCellRenderer {
+public class TableCellRendererConfigured extends ColorTableCellRenderer {
 	private Font f;
 	private Color color;
 	private Color bg1;

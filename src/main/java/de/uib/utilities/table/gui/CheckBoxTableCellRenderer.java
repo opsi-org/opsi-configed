@@ -18,6 +18,7 @@ import javax.swing.table.TableCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer {
 
@@ -36,6 +37,8 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
+
+		CellAlternatingColorizer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		if (!Main.THEMES) {
 			setForeground(Globals.LIGHT_BLACK);

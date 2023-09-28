@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -26,6 +25,7 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import utils.Utils;
 
 public class RequirementsTableModel extends AbstractTableModel {
@@ -206,7 +206,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		return new MyTableCellRenderer();
 	}
 
-	private static final class MyTableCellRenderer extends DefaultTableCellRenderer {
+	private static final class MyTableCellRenderer extends ColorTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
