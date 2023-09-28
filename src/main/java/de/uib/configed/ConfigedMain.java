@@ -3082,6 +3082,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	public boolean setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this,
@@ -3115,28 +3116,48 @@ public class ConfigedMain implements ListSelectionListener {
 					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
-		} else {
-			if (editingTarget == EditingTarget.DEPOTS) {
-				depotsList.setEnabled(true);
-				depotsList.requestFocus();
-				depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			}
-			List<Map<String, Object>> additionalConfigs = editingTarget == EditingTarget.DEPOTS
-					? produceAdditionalConfigs(depotsList.getSelectedValuesList())
-					: produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
+		} else if (editingTarget == EditingTarget.DEPOTS) {
+			depotsList.setEnabled(true);
+			depotsList.requestFocus();
+			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(depotsList.getSelectedValuesList());
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
-			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
-					.getConfigListCellOptionsPD();
-			String labeltext = editingTarget == EditingTarget.DEPOTS ? getSelectedDepotsString()
-					: getSelectedClientsString();
-			mainFrame.getPanelHostConfig().initEditing(labeltext, mergedVisualMap, configListCellOptions,
-					additionalConfigs, additionalconfigurationUpdateCollection, false,
+			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
+					additionalconfigurationUpdateCollection, false,
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
+		} else {
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
+			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
+			removeKeysStartingWith(mergedVisualMap,
+					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+			Map<String, Object> defaultValues = new HashMap<>();
+			List<String> depotIds = new ArrayList<>();
+			depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
+					.get(getSelectedClients()[0]).getInDepot());
+			defaultValues = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(depotIds).get(0);
+			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
+				configListCellOptions.get(entry.getKey())
+						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+			}
+			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
+					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
 		}
 
 		return true;
+	}
+
+	private Map<String, ListCellOptions> deepCopyConfigListCellOptions(Map<String, ListCellOptions> originalMap) {
+		Map<String, ListCellOptions> copy = new HashMap<>();
+		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
+			copy.put(entry.getKey(), entry.getValue().deepCopy());
+		}
+		return copy;
 	}
 
 	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
