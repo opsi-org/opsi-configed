@@ -72,7 +72,7 @@ public class HostInfoCollections {
 
 	public List<String> getOpsiHostNames() {
 		retrieveOpsiHostsPD();
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
+		return new ArrayList<>(cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class));
 	}
 
 	public int getCountClients() {
