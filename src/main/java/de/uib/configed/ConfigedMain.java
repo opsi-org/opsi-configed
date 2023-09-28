@@ -2808,6 +2808,8 @@ public class ConfigedMain implements ListSelectionListener {
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
 			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_PROGRESS));
+			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_ACTION));
 			localbootStatesAndActions = persistenceController.getProductDataService()
 					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
 			istmForSelectedClientsLocalboot = null;
