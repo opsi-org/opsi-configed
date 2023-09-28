@@ -892,7 +892,11 @@ public class MainFrame extends JFrame
 		jMenuClients.add(jCheckBoxMenuItemShowSessionInfoColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowInventoryNumberColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowCreatedColumn);
-		jMenuClients.add(jCheckBoxMenuItemShowUefiBoot);
+
+		if (!ServerFacade.isOpsi43()) {
+			jMenuClients.add(jCheckBoxMenuItemShowUefiBoot);
+		}
+
 		jMenuClients.add(jCheckBoxMenuItemShowInstallByShutdown);
 		jMenuClients.add(jCheckBoxMenuItemShowDepotColumn);
 	}
@@ -1627,7 +1631,11 @@ public class MainFrame extends JFrame
 		popupClients.add(popupShowSessionInfoColumn);
 		popupClients.add(popupShowInventoryNumberColumn);
 		popupClients.add(popupShowCreatedColumn);
-		popupClients.add(popupShowUefiBoot);
+
+		if (!ServerFacade.isOpsi43()) {
+			popupClients.add(popupShowUefiBoot);
+		}
+
 		popupClients.add(popupShowInstallByShutdownColumn);
 		popupClients.add(popupShowDepotColumn);
 
