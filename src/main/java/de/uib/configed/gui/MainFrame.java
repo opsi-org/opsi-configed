@@ -2462,14 +2462,8 @@ public class MainFrame extends JFrame
 				showHardwareLog, Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
 				ConfigedMain.VIEW_HARDWARE_INFO);
 
-		panelSWInfo = new PanelSWInfo(configedMain) {
-			@Override
-			protected void reload() {
-				super.reload();
-				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
-			}
-		};
+		initSoftWareInfo();
+		initHardwareInfo();
 
 		labelNoSoftware = new JLabel();
 		if (!Main.FONT) {
@@ -3384,19 +3378,17 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void initHardwareInfo(List<Map<String, List<Map<String, Object>>>> config) {
+	private void initHardwareInfo() {
 		if (panelHWInfo == null) {
 			panelHWInfo = new PanelHWInfo(configedMain) {
 				@Override
 				protected void reload() {
 					super.reload();
-
 					// otherwise we get a wait cursor only in table component
 					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
 				}
 			};
 		}
-		panelHWInfo.setHardwareConfig(config);
 	}
 
 	private void showHardwareInfo() {
@@ -3446,7 +3438,7 @@ public class MainFrame extends JFrame
 		showHardwareInfo();
 	}
 
-	private void showSoftwareAudit() {
+	private void showSoftwareInfo() {
 		jTabbedPaneConfigPanes.setComponentAt(
 				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")),
 				showSoftwareLog);
@@ -3459,19 +3451,30 @@ public class MainFrame extends JFrame
 			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().length);
 
 			showSoftwareLog = showSoftwareLogMultiClientReport;
-			showSoftwareAudit();
+			showSoftwareInfo();
 
 		} else {
 			// handled by the following methods
 			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
 			showSoftwareLog = showSoftwareLogNotFound;
-			showSoftwareAudit();
+			showSoftwareInfo();
 		}
 	}
 
 	public void setSoftwareAuditNullInfo(String hostId) {
 		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 		panelSWInfo.setSoftwareNullInfo(hostId);
+	}
+
+	private void initSoftWareInfo() {
+		panelSWInfo = new PanelSWInfo(configedMain) {
+			@Override
+			protected void reload() {
+				super.reload();
+				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
+			}
+		};
 	}
 
 	public void setSoftwareAudit(String hostId) {
@@ -3484,7 +3487,7 @@ public class MainFrame extends JFrame
 
 		showSoftwareLog = panelSWInfo;
 
-		showSoftwareAudit();
+		showSoftwareInfo();
 	}
 
 	public void setUpdatedLogfilePanel(String logtype) {

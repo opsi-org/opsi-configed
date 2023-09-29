@@ -98,7 +98,6 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
-import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -828,11 +827,6 @@ public class ConfigedMain implements ListSelectionListener {
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 
-		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persistenceController.getHardwareDataService()
-				.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
-		mainFrame.initHardwareInfo(hwAuditConfig);
-		Logging.info(this,
-				"preloadData, hw classes " + persistenceController.getHardwareDataService().getAllHwClassNamesPD());
 		mainFrame.updateHostCheckboxenText();
 
 		persistenceController.getDepotDataService().retrieveProductsPD();
