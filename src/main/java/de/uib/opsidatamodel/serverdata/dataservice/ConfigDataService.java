@@ -798,8 +798,11 @@ public class ConfigDataService {
 	}
 
 	public Map<String, Object> getHostConfig(String objectId) {
-		retrieveConfigOptionsPD();
-		return new ConfigName2ConfigValue(getHostConfigsPD().get(objectId), getConfigOptionsPD());
+		Map<String, Object> hostConfig = new HashMap<>();
+		if (getHostConfigsPD().get(objectId) != null) {
+			hostConfig.putAll(getHostConfigsPD().get(objectId));
+		}
+		return new ConfigName2ConfigValue(hostConfig, getConfigOptionsPD());
 	}
 
 	public List<Map<String, Object>> getHostsConfigsWithDefaults(List<String> objectIds) {
@@ -813,6 +816,16 @@ public class ConfigDataService {
 					new TypeReference<Map<String, Object>>() {
 					});
 			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> getHostsConfigsWithoutDefaults(List<String> objectIds) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		for (String objectId : objectIds) {
+			Map<String, Object> hostConfig = getHostConfigsPD().get(objectId) != null ? getHostConfigsPD().get(objectId)
+					: new HashMap<>();
+			result.add(hostConfig);
 		}
 		return result;
 	}
@@ -870,6 +883,11 @@ public class ConfigDataService {
 			if (value != oldValue) {
 				configStateCollection.add(state);
 
+				if (value != null && !((List<Object>) value).contains(null)) {
+					getHostConfigsPD().get(objectId).put(key, value);
+				} else {
+					getHostConfigsPD().get(objectId).remove(key);
+				}
 				// we hope that the update works and directly update the retrievedConfig
 				if (retrievedConfig != null) {
 					retrievedConfig.put(key, value);

@@ -140,14 +140,24 @@ public class PanelHostConfig extends JPanel {
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
 			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
 			boolean optionsEditable, NavigableMap<String, String> classesMap) {
+		initEditing(labeltext, configVisualMap, configOptions, collectionConfigStored, configurationUpdateCollection,
+				optionsEditable, classesMap, null, false);
+	}
+
+	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
+			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
+			boolean optionsEditable, NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
+			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing  optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
+		if (originalMap != null) {
+			editMapPanel.setOriginalMap(originalMap);
+		}
+		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
 		editMapPanel.setUpdateCollection(configurationUpdateCollection);
-
 		editMapPanel.setLabel(labeltext);
-
 		editMapPanel.setOptionsEditable(optionsEditable);
 	}
 

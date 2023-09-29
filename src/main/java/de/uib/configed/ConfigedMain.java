@@ -3115,14 +3115,16 @@ public class ConfigedMain implements ListSelectionListener {
 			depotsList.setEnabled(true);
 			depotsList.requestFocus();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(depotsList.getSelectedValuesList());
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedDepots()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
+					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedDepots())));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
 					additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, false);
 		} else {
 			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
@@ -3130,18 +3132,23 @@ public class ConfigedMain implements ListSelectionListener {
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-			Map<String, Object> defaultValues = new HashMap<>();
-			List<String> depotIds = new ArrayList<>();
-			depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
-					.get(getSelectedClients()[0]).getInDepot());
-			defaultValues = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(depotIds).get(0);
-			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
-				configListCellOptions.get(entry.getKey())
-						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+			if (getSelectedClients().length != 0) {
+				Map<String, Object> defaultValues = new HashMap<>();
+				List<String> depotIds = new ArrayList<>();
+				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
+						.get(getSelectedClients()[0]).getInDepot());
+				defaultValues = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(depotIds)
+						.get(0);
+				for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
+					configListCellOptions.get(entry.getKey())
+							.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+				}
 			}
+			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
+					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedClients())));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
 					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, true);
 		}
 
 		return true;
@@ -3157,6 +3164,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
 		List<Map<String, Object>> additionalConfigs = new ArrayList<>(list.size());
+		if (list.isEmpty()) {
+			return additionalConfigs;
+		}
 		Logging.info(this, "additionalConfig fetch for " + list);
 		if (ServerFacade.isOpsi43()) {
 			additionalConfigs = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
