@@ -79,6 +79,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private List<String> depots;
 	private List<String> domains;
+	private List<String> newDomainsList;
 	private List<String> existingHostNames;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -122,8 +123,8 @@ public final class NewClientDialog extends FGeneralDialog {
 	 * @param domains a LinkedList, the first will be taken in the beginning
 	 * @since 4.0.7.6.11
 	 */
-	public void setDomains(final List<String> domains) {
-		this.domains = domains;
+	public void setDomains() {
+		this.domains = newDomainsList;
 		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
@@ -170,8 +171,8 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel jLabelDomainname = new JLabel();
 		jLabelDomainname.setText(Configed.getResourceValue("NewClientDialog.domain"));
-		jComboDomain = new JComboBox<>();
-		jComboDomain.setEditable(true);
+
+		initComboDomain();
 
 		JLabel jLabelDescription = new JLabel();
 		jLabelDescription.setText(Configed.getResourceValue("NewClientDialog.description"));
@@ -541,6 +542,18 @@ public final class NewClientDialog extends FGeneralDialog {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
+	private void initComboDomain() {
+		String opsiDefaultDomain = persistenceController.getConfigDataService().getOpsiDefaultDomainPD();
+		newDomainsList = persistenceController.getConfigDataService().getDomains();
+		if (!newDomainsList.contains(opsiDefaultDomain)) {
+			newDomainsList.add(opsiDefaultDomain);
+		}
+
+		jComboDomain = new JComboBox<>();
+		jComboDomain.setEditable(true);
+		setDomains();
+	}
+
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
@@ -656,8 +669,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 
 		Logging.debug(this, "createClient editableDomains " + editableDomains);
-		configedMain.setEditableDomains(editableDomains);
-		setDomains(editableDomains);
+
+		newDomainsList = editableDomains;
+
+		setDomains();
 
 		Logging.debug(this, "createClient saveDomains " + saveDomains);
 		persistenceController.getConfigDataService().writeDomains(saveDomains);

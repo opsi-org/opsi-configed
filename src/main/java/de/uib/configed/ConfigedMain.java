@@ -257,7 +257,6 @@ public class ConfigedMain implements ListSelectionListener {
 	// collection of retrieved software audit and hardware maps
 
 	private String myServer;
-	private List<String> editableDomains;
 	private boolean multiDepot;
 
 	private JTableSelectionPanel selectionPanel;
@@ -805,12 +804,6 @@ public class ConfigedMain implements ListSelectionListener {
 			depotRepresentative = myServer;
 		}
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
-
-		String opsiDefaultDomain = persistenceController.getConfigDataService().getOpsiDefaultDomainPD();
-		editableDomains = persistenceController.getConfigDataService().getDomains();
-		if (!editableDomains.contains(opsiDefaultDomain)) {
-			editableDomains.add(opsiDefaultDomain);
-		}
 
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getProductDataService().getAllNetbootProductNames();
@@ -4263,10 +4256,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenceUsage();
 	}
 
-	public void setEditableDomains(List<String> editableDomains) {
-		this.editableDomains = editableDomains;
-	}
-
 	public void callNewClientDialog() {
 		Collections.sort(netbootProductnames);
 		List<String> vNetbootProducts = netbootProductnames;
@@ -4274,8 +4263,6 @@ public class ConfigedMain implements ListSelectionListener {
 		NewClientDialog.getInstance(this, getLinkedDepots());
 		NewClientDialog.getInstance().setGroupList(persistenceController.getGroupDataService().getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
-
-		NewClientDialog.getInstance().setDomains(editableDomains);
 
 		NewClientDialog.getInstance().useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
