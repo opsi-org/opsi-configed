@@ -43,18 +43,16 @@ public final class PersistenceControllerFactory {
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-
-			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
+			persistenceController.getModuleDataService().retrieveOpsiModules();
 		}
 
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
-
+			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
 			Utils.setMultiFactorAuthenticationEnabled(
 					persistenceController.getUserDataService().usesMultiFactorAuthentication());
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
-			persistenceController.getModuleDataService().retrieveOpsiModules();
 
 			if (!Utils.isCertificateVerificationDisabled()) {
 				CertificateManager.updateCertificate();
