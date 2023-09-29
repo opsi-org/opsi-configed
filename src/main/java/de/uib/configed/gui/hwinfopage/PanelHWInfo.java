@@ -213,7 +213,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GeneralFrame externalView;
 
 		copyOfMe = new PanelHWInfo(false, configedMain);
-		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
@@ -430,10 +429,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 	}
 
-	public void setHardwareConfig(List<Map<String, List<Map<String, Object>>>> hwConfig) {
-		this.hwConfig = hwConfig;
-	}
-
 	private void scanNodes(IconNode node) {
 		if (node != null && node.isLeaf()) {
 			TreeNode[] path = node.getPath();
@@ -489,11 +484,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		createRoot(treeRootTitle);
 		tableModel.setData(new ArrayList<>());
-
-		if (hwConfig == null) {
-			Logging.info("hwConfig null");
-			return;
-		}
 
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
