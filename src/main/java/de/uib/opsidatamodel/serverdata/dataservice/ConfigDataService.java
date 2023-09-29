@@ -59,7 +59,6 @@ public class ConfigDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
-	private HardwareDataService hardwareDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
 
 	private List<Map<String, Object>> configCollection;
@@ -70,10 +69,6 @@ public class ConfigDataService {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
-	}
-
-	public void setHardwareDataService(HardwareDataService hardwareDataService) {
-		this.hardwareDataService = hardwareDataService;
 	}
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {

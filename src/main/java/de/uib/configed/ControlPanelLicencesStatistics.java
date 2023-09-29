@@ -29,8 +29,6 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private boolean initialized;
-
 	public ControlPanelLicencesStatistics() {
 		thePanel = new PanelLicencesStatistics(this);
 

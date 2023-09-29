@@ -255,7 +255,6 @@ public class OpsiServiceNOMPersistenceController {
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
 		hostInfoCollections = new HostInfoCollections(this);
 
-		configDataService.setHardwareDataService(hardwareDataService);
 		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		userRolesConfigDataService.setConfigDataService(configDataService);

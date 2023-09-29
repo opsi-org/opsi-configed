@@ -216,7 +216,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	@Override
 	@SuppressWarnings("java:S1168")
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		long start = System.currentTimeMillis();
 
 		Logging.info(this, "retrieveResponse started");
 
