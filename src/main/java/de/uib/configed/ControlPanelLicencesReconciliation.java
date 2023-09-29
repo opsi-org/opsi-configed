@@ -37,8 +37,6 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private boolean initialized;
-
 	private int indexUsedByOpsi;
 	private int indexSWInventoryUsed;
 

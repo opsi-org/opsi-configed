@@ -72,7 +72,7 @@ public class PanelSWInfo extends JPanel {
 	private JLabel labelSuperTitle;
 
 	private String title = "";
-	private String hostId = "";
+	private String hostId;
 	private boolean withPopup;
 
 	private String scanInfo = "";
@@ -153,8 +153,7 @@ public class PanelSWInfo extends JPanel {
 			labelSuperTitle.setFont(Globals.DEFAULT_FONT_BIG);
 		}
 
-		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true) {
-		};
+		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true);
 
 		panelTable.setTitle("");
 
@@ -181,10 +180,16 @@ public class PanelSWInfo extends JPanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
+
+						if (hostId == null) {
+							return new HashMap<>();
+						}
+
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
 								.getSoftwareDataService()
 								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
@@ -196,13 +201,11 @@ public class PanelSWInfo extends JPanel {
 							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
-
 						}
 
 						setSuperTitle(scanInfo);
 
 						Logging.debug(this, " got scanInfo " + scanInfo);
-
 						return tableData;
 					}
 				})), -1, finalColumns, null, null);

@@ -99,7 +99,6 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
-import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -255,7 +254,6 @@ public class ConfigedMain implements ListSelectionListener {
 	// collection of retrieved software audit and hardware maps
 
 	private String myServer;
-	private List<String> editableDomains;
 	private boolean multiDepot;
 
 	private JTableSelectionPanel selectionPanel;
@@ -783,12 +781,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
-		String opsiDefaultDomain = persistenceController.getConfigDataService().getOpsiDefaultDomainPD();
-		editableDomains = persistenceController.getConfigDataService().getDomains();
-		if (!editableDomains.contains(opsiDefaultDomain)) {
-			editableDomains.add(opsiDefaultDomain);
-		}
-
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
 		netbootProductnames = persistenceController.getProductDataService().getAllNetbootProductNames();
 		persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
@@ -804,11 +796,6 @@ public class ConfigedMain implements ListSelectionListener {
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 
-		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persistenceController.getHardwareDataService()
-				.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
-		mainFrame.initHardwareInfo(hwAuditConfig);
-		Logging.info(this,
-				"preloadData, hw classes " + persistenceController.getHardwareDataService().getAllHwClassNamesPD());
 		mainFrame.updateHostCheckboxenText();
 
 		persistenceController.getDepotDataService().retrieveProductsPD();
@@ -2794,6 +2781,12 @@ public class ConfigedMain implements ListSelectionListener {
 			if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
 				attributes.add("actionSequence");
 			}
+
+			if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_PROGRESS));
+				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_ACTION));
+			}
+
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
@@ -4260,10 +4253,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenceUsage();
 	}
 
-	public void setEditableDomains(List<String> editableDomains) {
-		this.editableDomains = editableDomains;
-	}
-
 	public void callNewClientDialog() {
 		Collections.sort(netbootProductnames);
 		List<String> vNetbootProducts = netbootProductnames;
@@ -4271,8 +4260,6 @@ public class ConfigedMain implements ListSelectionListener {
 		NewClientDialog.getInstance(this, getLinkedDepots());
 		NewClientDialog.getInstance().setGroupList(persistenceController.getGroupDataService().getHostGroupIds());
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
-
-		NewClientDialog.getInstance().setDomains(editableDomains);
 
 		NewClientDialog.getInstance().useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),

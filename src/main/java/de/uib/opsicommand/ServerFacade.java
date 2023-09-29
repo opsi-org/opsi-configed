@@ -216,6 +216,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	@Override
 	@SuppressWarnings("java:S1168")
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
+
 		Logging.info(this, "retrieveResponse started");
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
@@ -261,6 +262,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveResponse ready");
+
 		return result;
 	}
 

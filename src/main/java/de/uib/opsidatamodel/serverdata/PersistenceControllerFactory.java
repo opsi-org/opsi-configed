@@ -41,25 +41,24 @@ public final class PersistenceControllerFactory {
 
 		Logging.info("a PersistenceController initiated, got null? " + (persistenceController == null));
 
-		boolean connected = persistenceController.makeConnection();
+		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
+				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 
-		while (persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			connected = persistenceController.makeConnection();
-		}
-
-		if (connected) {
 			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
-			Utils.setMultiFactorAuthenticationEnabled(
-					persistenceController.getUserDataService().usesMultiFactorAuthentication());
-			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
-			persistenceController.getModuleDataService().retrieveOpsiModules();
 		}
 
 		staticPersistControl = persistenceController;
 
-		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& !Utils.isCertificateVerificationDisabled()) {
-			CertificateManager.updateCertificate();
+		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
+
+			Utils.setMultiFactorAuthenticationEnabled(
+					persistenceController.getUserDataService().usesMultiFactorAuthentication());
+			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+			persistenceController.getModuleDataService().retrieveOpsiModules();
+
+			if (!Utils.isCertificateVerificationDisabled()) {
+				CertificateManager.updateCertificate();
+			}
 		}
 
 		return staticPersistControl;

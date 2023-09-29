@@ -40,6 +40,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
+import de.uib.messages.Messages;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
@@ -90,6 +93,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private boolean withPopup;
 
 	private ConfigedMain configedMain;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public PanelHWInfo(ConfigedMain configedMain) {
 		this(true, configedMain);
@@ -207,7 +213,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GeneralFrame externalView;
 
 		copyOfMe = new PanelHWInfo(false, configedMain);
-		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
@@ -424,10 +429,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 	}
 
-	public void setHardwareConfig(List<Map<String, List<Map<String, Object>>>> hwConfig) {
-		this.hwConfig = hwConfig;
-	}
-
 	private void scanNodes(IconNode node) {
 		if (node != null && node.isLeaf()) {
 			TreeNode[] path = node.getPath();
@@ -456,6 +457,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
+		if (hwConfig == null) {
+			hwConfig = persistenceController.getHardwareDataService()
+					.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
+		}
+
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
@@ -478,11 +484,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		createRoot(treeRootTitle);
 		tableModel.setData(new ArrayList<>());
-
-		if (hwConfig == null) {
-			Logging.info("hwConfig null");
-			return;
-		}
 
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];

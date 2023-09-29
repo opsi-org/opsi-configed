@@ -464,7 +464,6 @@ public class SoftwareDataService {
 
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("state", 1);
 			callFilter.put("clientId", clientListForCall);
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
@@ -1115,7 +1114,6 @@ public class SoftwareDataService {
 
 			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("state", 1);
 			callFilter.put("clientId", clientListForCall);
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,

@@ -14,6 +14,7 @@
 - Show only available modules as option in opsi-licensing
 - Client tree selection / navigation reworked
 - Open multiple windows in logviewer when opening archives with several files
+- Remove UEFI-Boot information in opsi 4.3
 
 ## [4.2.22.14] - 2023-09-27
 - Configed can start now when a client is in two different DIRECTORY groups

@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
@@ -64,7 +63,6 @@ public class ConfigDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
-	private HardwareDataService hardwareDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
 
 	private List<Map<String, Object>> configCollection;
@@ -75,10 +73,6 @@ public class ConfigDataService {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
-	}
-
-	public void setHardwareDataService(HardwareDataService hardwareDataService) {
-		this.hardwareDataService = hardwareDataService;
 	}
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
@@ -158,9 +152,6 @@ public class ConfigDataService {
 			RemoteControls remoteControls = new RemoteControls();
 			SavedSearches savedSearches = new SavedSearches();
 
-			OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
-					hardwareDataService.getHwAuditDeviceClassesPD());
-
 			// metaConfig for wan configuration is rebuilt in
 			// getWANConfigOptions
 
@@ -223,7 +214,6 @@ public class ConfigDataService {
 				if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 					remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 					savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-					hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 				}
 			}
 
@@ -232,8 +222,6 @@ public class ConfigDataService {
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
 			cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
-
-			Logging.debug(this, " getConfigOptions produced hwAuditDevicePropertyTypes " + hwAuditDevicePropertyTypes);
 		}
 
 		Logging.info(this, "{ole deleteItems " + deleteItems.size());
