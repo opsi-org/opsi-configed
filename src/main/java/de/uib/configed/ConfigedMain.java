@@ -333,6 +333,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
+	private String[] previousSelectedDepots;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -1103,8 +1104,6 @@ public class ConfigedMain implements ListSelectionListener {
 		default:
 			break;
 		}
-
-		resetView(viewIndex);
 	}
 
 	private void setEditingClients() {
@@ -1138,7 +1137,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
-
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
 		mainFrame.setConfigPaneEnabled(
@@ -1158,7 +1156,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
-
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
@@ -1331,7 +1328,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		fetchDepots();
 
-		depotsList.addListSelectionListener(depotsListSelectionListener);
 		depotsList.setInfo(depots);
 
 		if (oldSelectedDepots.length == 0) {
@@ -1339,6 +1335,7 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 			selectOldSelectedDepots();
 		}
+		depotsListValueChanged();
 
 		// we correct the result of the first selection
 
