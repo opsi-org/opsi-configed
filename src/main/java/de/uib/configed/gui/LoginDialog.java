@@ -184,7 +184,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			}
 
 			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
+			Image image = icon.getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
 			jLabelLogo = new JLabel(new ImageIcon(image));
 		} else {
