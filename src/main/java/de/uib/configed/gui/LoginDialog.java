@@ -48,6 +48,7 @@ import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
+import javafx.event.ActionEvent;
 import utils.Utils;
 
 public class LoginDialog extends JFrame implements WaitingSleeper {
@@ -180,8 +181,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 			}
 
-
-			jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50););
+			jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 		} else {
 			jLabelLogo = new JLabel();
 		}
