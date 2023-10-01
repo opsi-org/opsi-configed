@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -48,7 +49,6 @@ import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
-import javafx.event.ActionEvent;
 import utils.Utils;
 
 public class LoginDialog extends JFrame implements WaitingSleeper {
