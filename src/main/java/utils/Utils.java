@@ -144,6 +144,18 @@ public final class Utils {
 		}
 	}
 
+	public static ImageIcon createImageIcon(String path, String description, int width, int height) {
+		ImageIcon imageIcon = createImageIcon(path, description);
+
+		if (imageIcon == null) {
+			return null;
+		}
+
+		Image scaledImage = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+		return new ImageIcon(scaledImage, description);
+	}
+
 	public static void threadSleep(Object caller, long millis) {
 		try {
 			Thread.sleep(millis);

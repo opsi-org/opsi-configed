@@ -13,7 +13,6 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -2376,10 +2375,7 @@ public class MainFrame extends JFrame
 				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 			}
 
-			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH);
-
-			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
+			iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
 		}
 
 		c.fill = GridBagConstraints.HORIZONTAL;

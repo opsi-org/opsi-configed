@@ -6,9 +6,7 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,7 +17,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -183,10 +180,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 			}
 
-			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
-			jLabelLogo = new JLabel(new ImageIcon(image));
+			jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50););
 		} else {
 			jLabelLogo = new JLabel();
 		}
