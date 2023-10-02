@@ -43,6 +43,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -287,6 +288,9 @@ public class ExporterToPDF extends AbstractExportTable {
 		PdfPCell defaultCell = table.getDefaultCell();
 		if (!Main.THEMES) {
 			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
+		} else {
+			defaultCell.setBackgroundColor(new BaseColor(Globals.OPSI_BACKGROUND_LIGHT.getRed(),
+					Globals.OPSI_BACKGROUND_LIGHT.getGreen(), Globals.OPSI_BACKGROUND_LIGHT.getBlue()));
 		}
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
@@ -294,6 +298,9 @@ public class ExporterToPDF extends AbstractExportTable {
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
 			if (!Main.THEMES) {
 				h.setBackgroundColor(headerBackground);
+			} else {
+				h.setBackgroundColor(new BaseColor(Globals.OPSI_GREY.getRed(), Globals.OPSI_GREY.getGreen(),
+						Globals.OPSI_GREY.getBlue()));
 			}
 			table.addCell(h);
 		}
@@ -324,6 +331,11 @@ public class ExporterToPDF extends AbstractExportTable {
 							value.setBackgroundColor(evenBackground);
 						} else {
 							value.setBackgroundColor(oddBackground);
+						}
+					} else {
+						if (j % 2 == 0) {
+							value.setBackgroundColor(new BaseColor(Globals.OPSI_LIGHT_GREY.getRed(),
+									Globals.OPSI_LIGHT_GREY.getGreen(), Globals.OPSI_LIGHT_GREY.getBlue()));
 						}
 					}
 
@@ -378,7 +390,9 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			URL opsiImageURL = getImageResourceURL("images/opsi_full.png");
+			String urlPath = ServerFacade.isOpsi43() ? "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png"
+					: "images/opsi_full.png";
+			URL opsiImageURL = getImageResourceURL(urlPath);
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -394,7 +408,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				table.addCell(cell);
 				table.writeSelectedRows(0, -1, 34, xHeaderTop, writer.getDirectContent());
 				// add footer image
-				document.add(createElement(opsiImageURL, 25, 25));
+				document.add(createElement(opsiImageURL, 100, 100));
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
@@ -427,15 +441,14 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	private static Image createElement(URL imageSource, float posx, float posy)
-			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
-			throws DocumentException {
+	// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
+	private static Image createElement(URL imageSource, float width, float height) throws DocumentException {
 		Image img = null;
 
 		try {
 			img = Image.getInstance(imageSource);
-			// no scaling
-			img.setAbsolutePosition(posx, posy);
+			img.scaleToFit(width, height);
+			img.setAbsolutePosition(20, 20);
 		} catch (MalformedURLException ex) {
 			Logging.error("malformed URL --- " + ex);
 		} catch (IOException e) { // getInstannce
