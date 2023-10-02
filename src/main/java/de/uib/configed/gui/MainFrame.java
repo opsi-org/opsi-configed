@@ -1696,13 +1696,11 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (!ServerFacade.isOpsi43()) {
-			if (persistenceController.getModuleDataService().isWithUEFIPD()) {
-				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
-			} else {
-				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-				cbUefiBoot.setEnabled(false);
-			}
+		if (persistenceController.getModuleDataService().isWithUEFIPD()) {
+			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
+		} else {
+			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
+			cbUefiBoot.setEnabled(false);
 		}
 
 		if (persistenceController.getModuleDataService().isWithWANPD()) {
@@ -1841,9 +1839,7 @@ public class MainFrame extends JFrame
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
-		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.setVisible(false);
-		} else {
+		if (!ServerFacade.isOpsi43()) {
 			cbUefiBoot.addActionListener(this);
 		}
 
@@ -3543,7 +3539,12 @@ public class MainFrame extends JFrame
 
 	public void setUefiBoot(Boolean b) {
 		Logging.info(this, "setUefiBoot " + b);
-		cbUefiBoot.setSelected(b);
+
+		if (ServerFacade.isOpsi43()) {
+			cbUefiBoot.setSelected(persistenceController.isUEFI43(configedMain.getSelectedClients()));
+		} else {
+			cbUefiBoot.setSelected(b);
+		}
 	}
 
 	public void setWANConfig(Boolean b) {
@@ -3596,6 +3597,10 @@ public class MainFrame extends JFrame
 
 		// multi host editing allowed
 		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isWithUEFIPD());
+		if (ServerFacade.isOpsi43()) {
+			cbUefiBoot.disableSelection();
+		}
+
 		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isWithWANPD());
 		cbInstallByShutdown.setEnabled(gb);
 

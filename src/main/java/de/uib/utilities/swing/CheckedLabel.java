@@ -246,6 +246,10 @@ public class CheckedLabel extends JPanel implements FocusListener {
 		return selected;
 	}
 
+	public void disableSelection() {
+		super.setEnabled(false);
+	}
+
 	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
