@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.15] - 2023-10-02
+- Surround user password in quotation marks (password is acquired from SSH deploy opsi-client-agent frame)
+- Hide password in log file
+
 ## [4.2.22.14] - 2023-09-27
 - Configed can start now when a client is in two different DIRECTORY groups
 
