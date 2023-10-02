@@ -232,7 +232,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	public void setPassw(String pw) {
 		if (!pw.isEmpty()) {
-			passw = " -p " + pw;
+			passw = " -p " + "\"" + pw + "\"";
 		} else {
 			passw = "";
 		}
