@@ -31,6 +31,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.FTextArea;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -381,12 +382,24 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
+			displayNoClientSpecified();
 			return;
 		}
 
 		commandDeployClientAgent.finish(finalAction);
 
 		new SSHConnectExec(commandDeployClientAgent);
+	}
+
+	private static void displayNoClientSpecified() {
+		FTextArea fNoClientSpecifiedDialog = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.title"), true,
+				new String[] { Configed.getResourceValue("buttonClose") });
+		fNoClientSpecifiedDialog
+				.setMessage(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.message"));
+		fNoClientSpecifiedDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fNoClientSpecifiedDialog.setAlwaysOnTop(true);
+		fNoClientSpecifiedDialog.setVisible(true);
 	}
 
 	private void doCopySelectedClients() {
