@@ -17,7 +17,9 @@ import de.uib.configed.gui.ssh.SSHDeployClientAgentParameterDialog;
 
 public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParameter {
 	private String command;
-	private String baseName = "/var/lib/opsi/depot/opsi-client-agent/opsi-deploy-client-agent";
+	private String baseDir = "/var/lib/opsi/depot";
+	private String opsiClientAgentDir;
+	private String opsiDeployClientAgent = "opsi-deploy-client-agent";
 	private FGeneralDialog dialog;
 	private boolean needingSudo = true;
 	private boolean pingIsRequired = true;
@@ -32,7 +34,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	private String verbosity = "";
 
 	public CommandDeployClientAgent() {
-		command = baseName;
+		command = baseDir;
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getBasicName() {
-		return baseName;
+		return baseDir + "/" + opsiClientAgentDir + "/" + opsiDeployClientAgent;
 	}
 
 	public enum FinalActionType {
@@ -127,7 +129,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getCommand() {
-		command = baseName + " " + verbosity + user + passw + finishAction + getPingOption() + client;
+		command = getBasicName() + " " + verbosity + user + passw + finishAction + getPingOption() + client;
 		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		}
@@ -228,6 +230,10 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		} else {
 			passw = "";
 		}
+	}
+
+	public void setOpsiClientAgentDir(String dir) {
+		opsiClientAgentDir = dir == null || dir.isEmpty() ? "" : dir;
 	}
 
 	@Override

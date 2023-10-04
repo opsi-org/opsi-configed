@@ -43,9 +43,23 @@ import de.uib.utilities.swing.PanelStateSwitch;
 import utils.Utils;
 
 public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
-
 	private static final int FRAME_WIDTH = 800;
 	private static final int FRAME_HEIGHT = 500;
+
+	private enum OS {
+		WINDOWS("Windows"), LINUX("Linux"), MACOS("MacOS");
+
+		private String displayName;
+
+		OS(String displayName) {
+			this.displayName = displayName;
+		}
+
+		@Override
+		public String toString() {
+			return displayName;
+		}
+	}
 
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
@@ -60,6 +74,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JLabel jLabelApplySudo = new JLabel();
 	private JLabel jLabelIgnorePing = new JLabel();
 	private JLabel jLabelFinalize = new JLabel();
+	private JLabel jLabelOperatingSystem = new JLabel();
 
 	private JButton jButtonExecute;
 	private JButton jButtonCopySelectedClients;
@@ -75,6 +90,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JCheckBox jCheckBoxApplySudo;
 	private JCheckBox jCheckBoxIgnorePing;
 	private JComboBox<Integer> jCheckBoxVerbosity;
+	private JComboBox<String> jComboBoxOperatingSystem;
 
 	private String defaultWinUser = "";
 
@@ -296,6 +312,13 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		panelFinalAction.setOpaque(false);
 
+		jLabelOperatingSystem
+				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
+		jComboBoxOperatingSystem = new JComboBox<>(
+				new String[] { OS.LINUX.toString(), OS.WINDOWS.toString(), OS.MACOS.toString() });
+		jComboBoxOperatingSystem.setToolTipText(
+				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
+
 		jButtonCopySelectedClients = new JButton(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
 
@@ -386,8 +409,17 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			return;
 		}
 
+		String selectedOS = jComboBoxOperatingSystem.getItemAt(jComboBoxOperatingSystem.getSelectedIndex());
+		String opsiClientAgentDir = "";
+		if (OS.LINUX.toString().equals(selectedOS)) {
+			opsiClientAgentDir = "opsi-linux-client-agent";
+		} else if (OS.MACOS.toString().equals(selectedOS)) {
+			opsiClientAgentDir = "opsi-mac-client-agent";
+		} else {
+			opsiClientAgentDir = "opsi-client-agent";
+		}
+		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
-
 		new SSHConnectExec(commandDeployClientAgent);
 	}
 
@@ -485,6 +517,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(2 * Globals.GAP_SIZE)
@@ -494,7 +528,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 										.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
 										.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-												Globals.ICON_WIDTH))
+												Globals.ICON_WIDTH)
+										.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))
 
 						)));
 
@@ -538,6 +574,12 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 								.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(jCheckBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE));
 	}
