@@ -13,7 +13,6 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -1697,13 +1696,11 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (!ServerFacade.isOpsi43()) {
-			if (persistenceController.getModuleDataService().isWithUEFIPD()) {
-				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
-			} else {
-				cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-				cbUefiBoot.setEnabled(false);
-			}
+		if (persistenceController.getModuleDataService().isWithUEFIPD()) {
+			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
+		} else {
+			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
+			cbUefiBoot.setEnabled(false);
 		}
 
 		if (persistenceController.getModuleDataService().isWithWANPD()) {
@@ -1842,9 +1839,7 @@ public class MainFrame extends JFrame
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
-		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.setVisible(false);
-		} else {
+		if (!ServerFacade.isOpsi43()) {
 			cbUefiBoot.addActionListener(this);
 		}
 
@@ -2275,10 +2270,10 @@ public class MainFrame extends JFrame
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)));
 
-		JPanel iconPane0 = new JPanel();
+		JPanel iconsTopRight = new JPanel();
 
-		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
-		iconPane0.setLayout(layoutIconPane0);
+		GroupLayout layoutIconPane0 = new GroupLayout(iconsTopRight);
+		iconsTopRight.setLayout(layoutIconPane0);
 
 		layoutIconPane0.setHorizontalGroup(layoutIconPane0.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
@@ -2295,10 +2290,10 @@ public class MainFrame extends JFrame
 						GroupLayout.PREFERRED_SIZE));
 
 		setupIcons1();
-		JPanel iconPane1 = new JPanel();
+		JPanel iconsTopLeft = new JPanel();
 
-		GroupLayout layoutIconPane1 = new GroupLayout(iconPane1);
-		iconPane1.setLayout(layoutIconPane1);
+		GroupLayout layoutIconPane1 = new GroupLayout(iconsTopLeft);
+		iconsTopLeft.setLayout(layoutIconPane1);
 
 		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
@@ -2360,7 +2355,7 @@ public class MainFrame extends JFrame
 		}
 		c.gridx = 0;
 		c.gridy = 0;
-		iconBarPane.add(iconPane1, c);
+		iconBarPane.add(iconsTopLeft, c);
 
 		if (Main.THEMES) {
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -2376,17 +2371,14 @@ public class MainFrame extends JFrame
 				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 			}
 
-			ImageIcon icon = Utils.createImageIcon(logoPath, null);
-			Image image = icon.getImage().getScaledInstance(180, 60, Image.SCALE_SMOOTH);
-
-			iconBarPane.add(new JLabel(new ImageIcon(image)), c);
+			iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
 		}
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
-		iconBarPane.add(iconPane0, c);
+		iconBarPane.add(iconsTopRight, c);
 
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
@@ -2552,9 +2544,9 @@ public class MainFrame extends JFrame
 
 			panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-			iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconsTopRight.setBackground(Globals.BACKGROUND_COLOR_7);
 			iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
-			iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconsTopLeft.setBackground(Globals.BACKGROUND_COLOR_7);
 			panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
 			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -3547,7 +3539,12 @@ public class MainFrame extends JFrame
 
 	public void setUefiBoot(Boolean b) {
 		Logging.info(this, "setUefiBoot " + b);
-		cbUefiBoot.setSelected(b);
+
+		if (ServerFacade.isOpsi43()) {
+			cbUefiBoot.setSelected(persistenceController.isUEFI43(configedMain.getSelectedClients()));
+		} else {
+			cbUefiBoot.setSelected(b);
+		}
 	}
 
 	public void setWANConfig(Boolean b) {
@@ -3600,6 +3597,10 @@ public class MainFrame extends JFrame
 
 		// multi host editing allowed
 		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isWithUEFIPD());
+		if (ServerFacade.isOpsi43()) {
+			cbUefiBoot.disableSelection();
+		}
+
 		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isWithWANPD());
 		cbInstallByShutdown.setEnabled(gb);
 

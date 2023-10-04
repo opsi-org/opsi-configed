@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.serverdata;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -511,5 +512,46 @@ public class OpsiServiceNOMPersistenceController {
 
 	public String getUser() {
 		return user;
+	}
+
+	/*
+	 * Returns if the given clients have an entry for uefiboot.
+	 * That means, the client has a clientconfig "clientconfig.uefinetbootlabel"
+	 * with an entry.
+	 * Should only be used in opsi 4.3 (or later) since before, 
+	 * uefi usage is a simple config entry
+	 * 
+	 * returns null if clients have different values or if clientlist is empty
+	 */
+	@javax.annotation.Nullable
+	public Boolean isUEFI43(String[] clients) {
+
+		Boolean isUEFI = null;
+
+		for (String client : clients) {
+			Map<String, Object> clientConfig = getConfigDataService().getHostConfigsPD().get(client);
+			if (clientConfig == null) {
+				isUEFI = false;
+				continue;
+			}
+
+			Object uefiConfig = clientConfig.get("clientconfig.uefinetbootlabel");
+
+			if (uefiConfig instanceof List && !((List<?>) uefiConfig).isEmpty()) {
+				if (Boolean.FALSE.equals(isUEFI)) {
+					return null;
+				} else {
+					isUEFI = true;
+				}
+			} else {
+				if (Boolean.TRUE.equals(isUEFI)) {
+					return null;
+				} else {
+					isUEFI = false;
+				}
+			}
+		}
+
+		return isUEFI;
 	}
 }

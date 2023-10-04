@@ -88,14 +88,14 @@ public class SSHConnectExec extends SSHConnect {
 			Logging.info(this, "starting, sshcommand isMultiCommand " + sshcommand.isMultiCommand());
 
 			if (sshcommand instanceof SSHCommandTemplate) {
-				Logging.info(this, "exec_template " + sshcommand + ": " + sshcommand.getCommand());
+				Logging.info(this, "exec_template " + sshcommand + ": " + sshcommand.getSecuredCommand());
 				execTemplate((SSHCommandTemplate) sshcommand);
 			} else {
 				if (sshcommand.isMultiCommand()) {
-					Logging.info(this, "exec_list " + sshcommand + ": " + sshcommand.getCommand());
+					Logging.info(this, "exec_list " + sshcommand + ": " + sshcommand.getSecuredCommand());
 					execList((SSHMultiCommand) sshcommand);
 				} else {
-					Logging.info(this, "exec " + sshcommand + ": " + sshcommand.getCommand());
+					Logging.info(this, "exec " + sshcommand + ": " + sshcommand.getSecuredCommand());
 					exec(sshcommand);
 				}
 			}

@@ -16,7 +16,13 @@
 - Open multiple windows in logviewer when opening archives with several files
 - Remove UEFI-Boot information in opsi 4.3
 
+## [4.2.22.15] - 2023-10-02
+### Fixed
+- Surround user password in quotation marks (password is acquired from SSH deploy opsi-client-agent frame)
+- Hide password in log file
+
 ## [4.2.22.14] - 2023-09-27
+### Fixed
 - Configed can start now when a client is in two different DIRECTORY groups
 
 ## [4.2.22.13] - 2023-08-28
