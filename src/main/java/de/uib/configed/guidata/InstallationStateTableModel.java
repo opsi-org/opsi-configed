@@ -1218,7 +1218,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return getDisplayLabelForPosition();
 
 		case 12:
-			return actualProductVersion();
+			return !"not_installed"
+					.equals(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct))
+							? actualProductVersion()
+							: "";
 
 		case 13:
 			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
