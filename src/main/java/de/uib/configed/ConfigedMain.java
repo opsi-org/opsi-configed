@@ -48,6 +48,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -128,7 +129,6 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -168,8 +168,6 @@ public class ConfigedMain implements ListSelectionListener {
 	protected DefaultTableProvider licenceOptionsTableProvider;
 	protected DefaultTableProvider licenceContractsTableProvider;
 	protected DefaultTableProvider softwarelicencesTableProvider;
-
-	private DefaultTableProvider globalProductsTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -252,7 +250,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean localbootStatesAndActionsUpdate;
 	private Map<String, List<Map<String, String>>> netbootStatesAndActions;
 	private boolean netbootStatesAndActionsUpdate;
-	private Map<String, Map<String, Object>> hostConfigs;
 
 	// collection of retrieved software audit and hardware maps
 
@@ -334,6 +331,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
+	private String[] previousSelectedDepots;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -401,8 +399,6 @@ public class ConfigedMain implements ListSelectionListener {
 		initTree();
 
 		allFrames = new ArrayList<>();
-
-		initSpecialTableProviders();
 
 		initMainFrame();
 
@@ -784,26 +780,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	private void initSpecialTableProviders() {
-		List<String> columnNames = new ArrayList<>();
-
-		columnNames.add("productId");
-		columnNames.add("productName");
-
-		// from OpsiPackage.appendValues
-		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
-		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
-		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
-
-		List<String> classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
-		globalProductsTableProvider = new DefaultTableProvider(new ExternalSource(columnNames, classNames));
-	}
-
 	private void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
 
@@ -1108,6 +1084,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setEditingTarget " + t);
 		editingTarget = t;
 		mainFrame.visualizeEditingTarget(t);
+		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
@@ -1122,12 +1099,17 @@ public class ConfigedMain implements ListSelectionListener {
 		default:
 			break;
 		}
-
-		resetView(viewIndex);
+		if (getViewIndex() == previousViewIndex) {
+			resetView(viewIndex);
+		}
 	}
 
 	private void setEditingClients() {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		treeClients.setEnabled(true);
+		depotsList.setEnabled(true);
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		mainFrame.setConfigPanesEnabled(true);
 		mainFrame.setConfigPaneEnabled(
@@ -1146,13 +1128,20 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setEditingDepots() {
 		Logging.info(this, "setEditingTarget  DEPOTS");
 
+		depotsList.setEnabled(true);
+		depotsList.requestFocus();
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		treeClients.setEnabled(false);
+
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
-
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")),
+				ServerFacade.isOpsi43());
 
 		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
 				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
@@ -1161,10 +1150,10 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void setEditingServer() {
+		treeClients.setEnabled(false);
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
-
 		mainFrame.setConfigPaneEnabled(
 				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
@@ -1337,16 +1326,14 @@ public class ConfigedMain implements ListSelectionListener {
 
 		fetchDepots();
 
-		depotsList.addListSelectionListener(depotsListSelectionListener);
 		depotsList.setInfo(depots);
-
-		// String[] oldSelectedDepots =
 
 		if (oldSelectedDepots.length == 0) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
 			selectOldSelectedDepots();
 		}
+		depotsListValueChanged();
 
 		// we correct the result of the first selection
 
@@ -1881,7 +1868,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private void requestRefreshDataForClientSelection() {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
-		hostConfigs = null;
 		if (mainFrame.getControllerHWinfoMultiClients() != null) {
 			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
 		}
@@ -2173,25 +2159,32 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private String getSelectedClientsStringWithMaxLength(Integer max) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		return getListStringRepresentation(Arrays.asList(getSelectedClients()), max);
+	}
+
+	private String getSelectedDepotsString() {
+		return getListStringRepresentation(depotsList.getSelectedValuesList(), null);
+	}
+
+	private String getListStringRepresentation(List<String> list, Integer max) {
+		if (list == null || list.isEmpty()) {
 			return "";
 		}
 
 		StringBuilder result = new StringBuilder();
-		int stop = getSelectedClients().length;
+		int stop = list.size();
 		if (max != null && stop > max) {
 			stop = max;
 		}
 
 		for (int i = 0; i < stop - 1; i++) {
-			result.append(getSelectedClients()[i]);
-
+			result.append(list.get(i));
 			result.append(";\n");
 		}
 
-		result.append(getSelectedClients()[stop - 1]);
+		result.append(list.get(stop - 1));
 
-		if (max != null && getSelectedClients().length > max) {
+		if (max != null && list.size() > max) {
 			result.append(" ... ");
 		}
 
@@ -2658,6 +2651,7 @@ public class ConfigedMain implements ListSelectionListener {
 			initialTreeActivation();
 		}
 
+		setViewIndex(getViewIndex());
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -3032,37 +3026,43 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private boolean setProductPropertiesPage() {
-		Logging.debug(this, "setProductPropertiesPage");
-
-		if (editingTarget == EditingTarget.DEPOTS) {
-			mainFrame.getPanelProductProperties().setProductProperties();
-
-			return true;
-		} else {
+		if (editingTarget != EditingTarget.DEPOTS) {
 			return false;
 		}
+
+		Logging.debug(this, "setProductPropertiesPage");
+		mainFrame.getPanelProductProperties().setProductProperties();
+		depotsList.setEnabled(true);
+		depotsList.requestFocus();
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		return true;
 	}
 
 	private boolean setHostPropertiesPage() {
+		if (editingTarget != EditingTarget.DEPOTS) {
+			return false;
+		}
+
 		Logging.debug(this, "setHostPropertiesPage");
 
-		if (editingTarget == EditingTarget.DEPOTS) {
-			Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
-					.getDepotDataService().getDepotPropertiesForPermittedDepots();
+		depotsList.setEnabled(true);
+		depotsList.requestFocus();
+		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-			if (hostUpdateCollection != null) {
-				updateCollection.remove(hostUpdateCollection);
-			}
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
+				.getDepotPropertiesForPermittedDepots();
 
-			hostUpdateCollection = new HostUpdateCollection();
-			addToGlobalUpdateCollection(hostUpdateCollection);
-
-			mainFrame.getPanelHostProperties().initMultipleHostsEditing(
-					Configed.getResourceValue("PanelHostProperties.SelectHost"),
-					new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
-					depotPropertiesForPermittedDepots, hostUpdateCollection,
-					OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		if (hostUpdateCollection != null) {
+			updateCollection.remove(hostUpdateCollection);
 		}
+
+		hostUpdateCollection = new HostUpdateCollection();
+		addToGlobalUpdateCollection(hostUpdateCollection);
+
+		mainFrame.getPanelHostProperties().initMultipleHostsEditing(selectedDepots[0],
+				depotPropertiesForPermittedDepots, hostUpdateCollection,
+				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		return true;
 	}
@@ -3083,71 +3083,106 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	public boolean setNetworkconfigurationPage() {
+	@SuppressWarnings({ "unchecked" })
+	public boolean setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
-		String[] objectIds;
+		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
-			objectIds = new String[] { myServer };
+			objectIds.add(myServer);
+		} else if (editingTarget == EditingTarget.DEPOTS) {
+			objectIds.addAll(depotsList.getSelectedValuesList());
 		} else {
-			objectIds = getSelectedClients();
+			objectIds.addAll(Arrays.asList(getSelectedClients()));
 		}
 
 		if (additionalconfigurationUpdateCollection != null) {
 			updateCollection.remove(additionalconfigurationUpdateCollection);
 		}
-		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
+		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
+				objectIds.toArray(String[]::new));
 		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+
+		depotsList.setEnabled(false);
 
 		if (editingTarget == EditingTarget.SERVER) {
 			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
-
 			Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDataService()
 					.getConfigDefaultValuesPD();
-
 			additionalConfigs.add(defaultValuesMap);
-
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
-
 			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
 					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
-					// editableOptions
 					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
-		} else {
-			List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
-
-			if (hostConfigs == null) {
-				hostConfigs = new HashMap<>();
-				for (String client : getSelectedClients()) {
-					hostConfigs.put(client,
-							persistenceController.getConfigDataService().getHostConfigsPD().get(client));
-				}
-			}
-
-			Logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
-
-			for (int i = 0; i < getSelectedClients().length; i++) {
-				additionalConfigs.add(persistenceController.getConfigDataService().getConfig(getSelectedClients()[i]));
-				// with server defaults
-			}
-
+		} else if (editingTarget == EditingTarget.DEPOTS) {
+			depotsList.setEnabled(true);
+			depotsList.requestFocus();
+			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedDepots()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-
-			Map<String, ListCellOptions> configListCellOptions = persistenceController.getConfigDataService()
-					.getConfigListCellOptionsPD();
-
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
-
-			mainFrame.getPanelHostConfig().initEditing("  " + getSelectedClientsString(), mergedVisualMap,
+			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
+					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedDepots())));
+			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
+					additionalconfigurationUpdateCollection, false,
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, false);
+		} else {
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
+			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
+			removeKeysStartingWith(mergedVisualMap,
+					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+			if (ServerFacade.isOpsi43() && getSelectedClients().length != 0) {
+				Map<String, Object> defaultValues = new HashMap<>();
+				List<String> depotIds = new ArrayList<>();
+				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
+						.get(getSelectedClients()[0]).getInDepot());
+				defaultValues = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(depotIds)
+						.get(0);
+				for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
+					configListCellOptions.get(entry.getKey())
+							.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+				}
+			}
+			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
+					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedClients())));
+			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
 					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT);
+					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, true);
 		}
 
 		return true;
+	}
+
+	private Map<String, ListCellOptions> deepCopyConfigListCellOptions(Map<String, ListCellOptions> originalMap) {
+		Map<String, ListCellOptions> copy = new HashMap<>();
+		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
+			copy.put(entry.getKey(), entry.getValue().deepCopy());
+		}
+		return copy;
+	}
+
+	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
+		List<Map<String, Object>> additionalConfigs = new ArrayList<>(list.size());
+		if (list.isEmpty()) {
+			return additionalConfigs;
+		}
+		Logging.info(this, "additionalConfig fetch for " + list);
+		if (ServerFacade.isOpsi43()) {
+			additionalConfigs = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
+		} else {
+			for (String item : list) {
+				additionalConfigs.add(persistenceController.getConfigDataService().getHostConfig(item));
+				// with server defaults
+			}
+		}
+		return additionalConfigs;
 	}
 
 	private boolean setHardwareInfoPage() {
@@ -3246,7 +3281,7 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 
 		case VIEW_NETWORK_CONFIGURATION:
-			result = setNetworkconfigurationPage();
+			result = setNetworkConfigurationPage();
 			break;
 
 		case VIEW_HARDWARE_INFO:
@@ -3300,7 +3335,7 @@ public class ConfigedMain implements ListSelectionListener {
 			requestReloadStatesAndActions();
 		}
 
-		saveIfIndicated();
+		checkSaveAll(true);
 
 		// we will only leave view 0 if a PC is selected
 
@@ -3871,40 +3906,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.debug(this, "checkClose result " + result);
 		return result;
-	}
-
-	// if data are changed then save or - after asking - abandon changes
-	private void saveIfIndicated() {
-		Logging.info(this, "saveIfIndicated : anyDataChanged, " + anyDataChanged);
-
-		if (!anyDataChanged) {
-			return;
-		}
-
-		if (clientInfoDataChangedKeeper.askSave()) {
-			clientInfoDataChangedKeeper.save();
-		} else {
-			// reset to old values
-			hostInfo.resetGui(mainFrame);
-		}
-		clientInfoDataChangedKeeper.unsetDataChanged();
-
-		if (generalDataChangedKeeper.askSave()) {
-			generalDataChangedKeeper.save();
-		} else {
-			generalDataChangedKeeper.cancel();
-		}
-		generalDataChangedKeeper.unsetDataChanged();
-
-		if (hostConfigsDataChangedKeeper.askSave()) {
-			hostConfigsDataChangedKeeper.save();
-		} else {
-			hostConfigsDataChangedKeeper.cancel();
-		}
-		hostConfigsDataChangedKeeper.unsetDataChanged();
-
-		setDataChanged(false, true);
-		clearUpdateCollectionAndTell();
 	}
 
 	// save if not otherwise stated
@@ -5136,10 +5137,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public DefaultTableProvider getGlobalProductsTableProvider() {
-		return globalProductsTableProvider;
 	}
 
 	public LicencesFrame getLicencesFrame() {

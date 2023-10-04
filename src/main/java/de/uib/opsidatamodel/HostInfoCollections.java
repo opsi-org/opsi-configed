@@ -293,8 +293,8 @@ public class HostInfoCollections {
 				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
 						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
-				depotId = (String) ((List<?>) (persistenceController.getConfigDataService().getHostConfigsPD().get(name)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
+				depotId = (String) ((List<?>) persistenceController.getConfigDataService().getHostConfigsPD().get(name)
+						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).get(0);
 			}
 
 			if (depotId != null && masterDepots.keySet().contains(depotId)) {
@@ -312,7 +312,7 @@ public class HostInfoCollections {
 			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
 					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfigDataService().getConfig(name) != null) {
+			if (persistenceController.getConfigDataService().getHostConfig(name) != null) {
 				boolean result = persistenceController.getConfigDataService()
 						.findBooleanConfigurationComparingToDefaults(name,
 								persistenceController.getConfigDataService().getWanConfigurationPD());

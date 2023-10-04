@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
@@ -32,11 +27,9 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.ListCellOptions;
 
-public class PanelHostProperties extends JPanel implements ItemListener {
+public class PanelHostProperties extends JPanel {
 	// delegate
 	private DefaultEditMapPanel editMapPanel;
-	private JLabel label;
-	private JComboBox<String> combo;
 	private Map<String, Map<String, Object>> multipleMaps;
 
 	public PanelHostProperties() {
@@ -44,10 +37,6 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	private void buildPanel() {
-		label = new JLabel();
-		combo = new JComboBox<>();
-		combo.setVisible(false);
-		combo.addItemListener(this);
 		PropertiesTableCellRenderer cellRenderer = new PropertiesTableCellRenderer();
 		Logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
@@ -55,43 +44,20 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		editMapPanel.setShowToolTip(false);
 
-		JPanel header = new JPanel();
-
-		GroupLayout headerLayout = new GroupLayout(header);
-		header.setLayout(headerLayout);
-
-		headerLayout.setHorizontalGroup(headerLayout.createSequentialGroup().addGap(10)
-				.addComponent(label, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(10)
-				.addComponent(combo, 200, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(10));
-
-		headerLayout.setVerticalGroup(
-				headerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(label).addComponent(combo));
-
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(planeLayout.createParallelGroup().addComponent(header, GroupLayout.Alignment.CENTER)
-						.addComponent(editMapPanel))
+				.addGroup(planeLayout.createParallelGroup().addComponent(editMapPanel))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
-
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(header, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-
 				.addComponent(editMapPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
-	public void initMultipleHostsEditing(String labeltext, ComboBoxModel<String> comboModel,
-			Map<String, Map<String, Object>> multipleMaps, UpdateCollection updateCollection,
-			Set<String> keysOfReadOnlyEntries) {
-		label.setText(labeltext);
-		activateCombo(comboModel);
-
+	public void initMultipleHostsEditing(String selectedDepot, Map<String, Map<String, Object>> multipleMaps,
+			UpdateCollection updateCollection, Set<String> keysOfReadOnlyEntries) {
 		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
 
 		);
@@ -100,23 +66,14 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		editMapPanel.setUpdateCollection(updateCollection);
 		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
 
-		if (comboModel != null && comboModel.getSize() > 0) {
-			setMap(comboModel.getElementAt(0));
+		if (selectedDepot != null && !selectedDepot.isBlank()) {
+			setMap(selectedDepot);
 		}
 	}
 
 	// delegated methods
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		editMapPanel.registerDataChangedObserver(o);
-	}
-
-	private void activateCombo(ComboBoxModel<String> model) {
-		if (model != null) {
-			combo.setModel(model);
-		}
-
-		combo.setEnabled(model != null);
-		combo.setVisible(model != null);
 	}
 
 	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
@@ -146,13 +103,5 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		Logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
 		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));
 		editMapPanel.setStoreData(editedMaps);
-	}
-
-	// item listener
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (e.getStateChange() == ItemEvent.SELECTED) {
-			setMap((String) combo.getSelectedItem());
-		}
 	}
 }

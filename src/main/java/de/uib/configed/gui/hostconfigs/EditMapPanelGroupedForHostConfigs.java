@@ -6,7 +6,10 @@
 
 package de.uib.configed.gui.hostconfigs;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -23,17 +26,21 @@ import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
 import de.uib.Main;
@@ -43,6 +50,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.guidata.ListMerger;
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
@@ -53,9 +61,11 @@ import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.SimpleTreePath;
 import de.uib.utilities.tree.XTree;
 import utils.PopupMouseListener;
@@ -87,6 +97,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private NavigableSet<String> keyclasses;
 	protected Map<String, DefaultEditMapPanel> partialPanels;
 	private NavigableMap<String, Map<String, Object>> virtualLines;
+
+	private boolean includeAdditionalTooltipText;
+	private Map<String, Object> originalMap;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {
@@ -574,6 +587,116 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						}
 					};
 				}
+
+				@Override
+				protected void buildPanel() {
+					setLayout(new BorderLayout());
+
+					table = new JTable(mapTableModel) {
+						@Override
+						public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+							Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+							if (c instanceof JComponent && showToolTip) {
+								JComponent jc = (JComponent) c;
+
+								String propertyName = names.get(rowIndex);
+
+								String tooltip = null;
+
+								Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService()
+										.getConfigOptionsPD();
+								if (propertyName != null && defaultsMap != null
+										&& defaultsMap.get(propertyName) != null) {
+									String propertyOrigin = "(server)";
+									if (serverConfigs != null && serverConfigs.containsKey(propertyName)
+											&& !serverConfigs.get(propertyName).getDefaultValues()
+													.equals(defaultsMap.get(propertyName))) {
+										propertyOrigin = "(depot)";
+									}
+									if (includeAdditionalTooltipText) {
+										tooltip = "default " + propertyOrigin + ": ";
+									} else {
+										tooltip = "default: ";
+									}
+
+									if (Utils.isKeyForSecretValue(propertyName)) {
+										tooltip = tooltip + Globals.STARRED_STRING;
+									} else {
+										tooltip = tooltip + defaultsMap.get(propertyName);
+									}
+								}
+
+								if (propertyName != null && descriptionsMap != null
+										&& descriptionsMap.get(propertyName) != null) {
+									tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
+								}
+
+								jc.setToolTipText("<html>" + tooltip + "</html>");
+
+								// check equals with default
+
+								Object defaultValue;
+
+								if (defaultsMap == null) {
+									Logging.warning(this, "no default values available, defaultsMap is null");
+								} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
+									Logging.warning(this, "no default Value found");
+
+									if (!Main.THEMES) {
+										jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
+									} else {
+										jc.setForeground(Globals.OPSI_ERROR);
+									}
+									jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+
+									jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+								} else {
+
+									Object gotValue = table.getValueAt(rowIndex, 1);
+									if (!defaultValue.equals(gotValue)
+											|| (originalMap != null && originalMap.containsKey(propertyName))) {
+										jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+									}
+								}
+
+								if (vColIndex == 1
+										&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
+									if (jc instanceof JLabel) {
+										((JLabel) jc).setText(Globals.STARRED_STRING);
+									} else if (jc instanceof JTextComponent) {
+										((JTextComponent) jc).setText(Globals.STARRED_STRING);
+									} else {
+										CellAlternatingColorizer.colorizeSecret(jc);
+									}
+								}
+
+							}
+							return c;
+						}
+
+					};
+
+					TableCellRenderer colorized = new ColorTableCellRenderer();
+
+					table.setDefaultRenderer(Object.class, colorized);
+					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
+
+					if (!Main.THEMES) {
+						table.setShowGrid(true);
+						table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
+					}
+
+					table.addMouseWheelListener(
+							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
+
+					jScrollPane = new JScrollPane(table);
+					if (!Main.THEMES) {
+						jScrollPane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+					}
+
+					add(jScrollPane, BorderLayout.CENTER);
+				}
 			};
 
 			editMapPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(key));
@@ -916,5 +1039,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
+	}
+
+	public void setOriginalMap(Map<String, Object> originalMap) {
+		this.originalMap = originalMap;
+	}
+
+	public void includeAdditionalTooltipText(boolean include) {
+		this.includeAdditionalTooltipText = include;
 	}
 }

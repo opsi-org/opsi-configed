@@ -55,8 +55,8 @@ import utils.Utils;
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
 	private static int objectCounter;
-	private JScrollPane jScrollPane;
-	private JTable table;
+	protected JScrollPane jScrollPane;
+	protected JTable table;
 
 	private TableColumn editableColumn;
 	private TableCellEditor theCellEditor;
@@ -387,7 +387,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		add(jScrollPane, BorderLayout.CENTER);
 	}
 
-	private void reactToMouseWheelEvent(int wheelRotation) {
+	protected void reactToMouseWheelEvent(int wheelRotation) {
 		int selRow = -1;
 
 		if (table.getSelectedRows() == null || table.getSelectedRows().length == 0) {
