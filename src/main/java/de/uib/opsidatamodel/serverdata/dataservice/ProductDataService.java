@@ -937,20 +937,28 @@ public class ProductDataService {
 		return new ArrayList<>(resultSet);
 	}
 
-	public List<Map<String, Object>> getProductInfos(String clientId) {
-		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId));
+	public List<Map<String, String>> getProductInfos(String clientId, String[] attributes) {
+		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, attributes));
 	}
 
-	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
-		String[] callAttributes = new String[] {};
+	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, String[] attributes) {
 		HashMap<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		return new ArrayList<>(exec.getListOfMaps(omc));
+		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
+		OpsiMethodCall omc = new OpsiMethodCall(methodName, new Object[] { attributes, callFilter });
+
+		List<Map<String, String>> result = new ArrayList<>();
+
+		for (Map<String, Object> m : exec.getListOfMaps(omc)) {
+			result.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
+		}
+
+		return result;
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
