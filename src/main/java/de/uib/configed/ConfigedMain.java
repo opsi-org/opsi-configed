@@ -1077,6 +1077,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setEditingTarget " + t);
 		editingTarget = t;
 		mainFrame.visualizeEditingTarget(t);
+		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
@@ -1090,6 +1091,9 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 		default:
 			break;
+		}
+		if (getViewIndex() == previousViewIndex) {
+			resetView(viewIndex);
 		}
 	}
 
