@@ -200,11 +200,6 @@ public enum CacheIdentifier {
 	DEPOT_TO_PACKAGES("depot_to_packages"),
 
 	/**
-	 * return type {@code List<List<Object>>}
-	 */
-	PRODUCT_ROWS("product_rows"),
-
-	/**
 	 * return type {@code Map<String, Map<String, List<String>>}
 	 */
 	PRODUCT_TO_VERSION_INFO_TO_DEPOTS("product_to_version_info_to_depots"),

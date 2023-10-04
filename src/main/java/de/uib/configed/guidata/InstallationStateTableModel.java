@@ -229,7 +229,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds) {
+	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
 
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
@@ -243,9 +243,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		// add update to list
-		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
-				.getProductInfos(productIds, clientId);
-		for (Map<String, Object> productInfo : productInfos) {
+		List<Map<String, String>> productInfos = persistenceController.getProductDataService()
+				.getProductInfos(productIds, clientId, attributes);
+		for (Map<String, String> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
 					POJOReMapper.remap(productInfo, new TypeReference<>() {
 					}));
@@ -263,11 +263,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	@Override
-	public synchronized void updateTable(String clientId) {
-		List<Map<String, Object>> productInfos = persistenceController.getProductDataService()
-				.getProductInfos(clientId);
+	public synchronized void updateTable(String clientId, String[] attributes) {
+		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
+				attributes);
 		if (!productInfos.isEmpty()) {
-			for (Map<String, Object> productInfo : productInfos) {
+			for (Map<String, String> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
 						POJOReMapper.remap(productInfo, new TypeReference<>() {
 						}));
@@ -783,10 +783,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private void setActionRequest(ActionRequest ar, String productId, String clientId) {
-
 		Map<String, Map<String, String>> productStates = allClientsProductStates.computeIfAbsent(clientId,
 				arg -> new HashMap<>());
-
 		productStates.computeIfAbsent(productId, arg -> new HashMap<>()).put(ProductState.KEY_ACTION_REQUEST,
 				ar.toString());
 
@@ -1220,7 +1218,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return getDisplayLabelForPosition();
 
 		case 12:
-			return actualProductVersion();
+			return !"not_installed"
+					.equals(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct))
+							? actualProductVersion()
+							: "";
 
 		case 13:
 			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);

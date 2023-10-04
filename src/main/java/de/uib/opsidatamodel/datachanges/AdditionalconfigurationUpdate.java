@@ -26,10 +26,8 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-
 		if (newdata instanceof ConfigName2ConfigValue) {
 			ConfigName2ConfigValue configState = (ConfigName2ConfigValue) newdata;
-
 			persistenceController.getConfigDataService().setAdditionalConfiguration(objectId, configState);
 			// for opsi 4.0, this only collects the data
 		}

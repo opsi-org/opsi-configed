@@ -21,6 +21,9 @@ public class RetrievedMap extends HashMap<String, Object> {
 		build();
 	}
 
+	protected RetrievedMap() {
+	}
+
 	protected void build() {
 		if (retrieved == null) {
 			return;

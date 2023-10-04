@@ -167,11 +167,6 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, Map.class);
 	}
 
-	public List<List<Object>> getProductRowsPD() {
-		retrieveProductsAllDepotsPD();
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_ROWS, List.class);
-	}
-
 	public Map<String, Map<String, List<String>>> getProduct2VersionInfo2DepotsPD() {
 		retrieveProductsAllDepotsPD();
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class);
@@ -190,8 +185,7 @@ public class ProductDataService {
 
 	public void retrieveProductsAllDepotsPD() {
 		Logging.debug(this, "retrieveProductsAllDepotsPD");
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_ROWS, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
+		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, Map.class) != null) {
@@ -214,7 +208,6 @@ public class ProductDataService {
 				new Object[] { callAttributes, callFilter });
 		List<Map<String, Object>> packages = exec.getListOfMaps(omc);
 
-		List<List<Object>> productRows = new ArrayList<>();
 		Map<String, TreeSet<OpsiPackage>> depot2Packages = new HashMap<>();
 		Object2Product2VersionList depot2NetbootProducts = new Object2Product2VersionList();
 		Object2Product2VersionList depot2LocalbootProducts = new Object2Product2VersionList();
@@ -257,18 +250,49 @@ public class ProductDataService {
 					.getProductName();
 			productRow.add(productName);
 			p.appendValues(productRow);
-
-			if (depotsWithThisVersion.size() == 1) {
-				productRows.add(productRow);
-			}
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, depot2Packages);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_ROWS, productRows);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, product2VersionInfo2Depots);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, depot2LocalbootProducts);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, depot2NetbootProducts);
 		persistenceController.notifyPanelCompleteWinProducts();
+	}
+
+	public List<List<Object>> getProductRowsForDepots(Set<String> depotIds) {
+		Logging.info(this, "retrieveProductsAllDepotsPD, reload");
+		String[] callAttributes = new String[] {};
+		Map<String, Object> callFilter = new HashMap<>();
+		callFilter.put("depotId", depotIds);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter });
+		List<Map<String, Object>> packages = exec.getListOfMaps(omc);
+		List<List<Object>> productRows = new ArrayList<>();
+		for (Map<String, Object> m : packages) {
+			String depot = "" + m.get("depotId");
+
+			if (!userRolesConfigDataService.hasDepotPermission(depot)) {
+				continue;
+			}
+
+			OpsiPackage p = new OpsiPackage(m);
+			List<Object> productRow = new ArrayList<>();
+			productRow.add(p.getProductId());
+
+			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = getProduct2VersionInfo2InfosPD();
+			String productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
+					.getProductName();
+			productRow.add(productName);
+			p.appendValues(productRow);
+
+			List<String> depotsWithThisVersion = getProduct2VersionInfo2DepotsPD().get(p.getProductId())
+					.get(p.getVersionInfo());
+			if (depotsWithThisVersion.size() == 1) {
+				productRows.add(productRow);
+			}
+		}
+		persistenceController.notifyPanelCompleteWinProducts();
+		return productRows;
 	}
 
 	public Map<String, Map<String, OpsiProductInfo>> getProduct2VersionInfo2InfosPD() {
@@ -937,20 +961,28 @@ public class ProductDataService {
 		return new ArrayList<>(resultSet);
 	}
 
-	public List<Map<String, Object>> getProductInfos(String clientId) {
-		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId));
+	public List<Map<String, String>> getProductInfos(String clientId, String[] attributes) {
+		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, attributes));
 	}
 
-	public List<Map<String, Object>> getProductInfos(Set<String> productIds, String clientId) {
-		String[] callAttributes = new String[] {};
+	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, String[] attributes) {
 		HashMap<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		return new ArrayList<>(exec.getListOfMaps(omc));
+		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
+		OpsiMethodCall omc = new OpsiMethodCall(methodName, new Object[] { attributes, callFilter });
+
+		List<Map<String, String>> result = new ArrayList<>();
+
+		for (Map<String, Object> m : exec.getListOfMaps(omc)) {
+			result.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
+		}
+
+		return result;
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {

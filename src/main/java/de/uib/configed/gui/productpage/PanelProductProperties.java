@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
@@ -27,6 +28,8 @@ import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
@@ -54,16 +57,11 @@ public class PanelProductProperties extends JSplitPane {
 
 		depotsOfPackage = new ArrayList<>();
 
-		List<TableEditItem> updateCollection = new ArrayList<>();
-		GenTableModel model = new GenTableModel(null, configedMain.getGlobalProductsTableProvider(), -1, paneProducts,
-				updateCollection);
-
+		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
 		paneProducts = new PaneProducts(columnNames);
-
 		paneProducts.setTableModel(model);
-
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
@@ -92,7 +90,36 @@ public class PanelProductProperties extends JSplitPane {
 		setRightComponent(infoPane);
 	}
 
+	private void updateModel() {
+		paneProducts.setTableModel(createTableModel());
+	}
+
+	private GenTableModel createTableModel() {
+		List<String> columnNames = new ArrayList<>();
+
+		columnNames.add("productId");
+		columnNames.add("productName");
+
+		// from OpsiPackage.appendValues
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
+
+		List<String> classNames = new ArrayList<>();
+		for (int i = 0; i < columnNames.size(); i++) {
+			classNames.add("java.lang.String");
+		}
+
+		List<TableEditItem> updateCollection = new ArrayList<>();
+		return new GenTableModel(null,
+				new DefaultTableProvider(
+						new ExternalSource(columnNames, classNames, Set.of(configedMain.getSelectedDepots()))),
+				-1, paneProducts, updateCollection);
+	}
+
 	public void setProductProperties() {
+		updateModel();
 		int saveSelectedRow = paneProducts.getSelectedRow();
 		paneProducts.reset();
 
