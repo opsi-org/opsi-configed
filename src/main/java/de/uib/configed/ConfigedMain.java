@@ -3126,7 +3126,7 @@ public class ConfigedMain implements ListSelectionListener {
 					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-			if (getSelectedClients().length != 0) {
+			if (ServerFacade.isOpsi43() && getSelectedClients().length != 0) {
 				Map<String, Object> defaultValues = new HashMap<>();
 				List<String> depotIds = new ArrayList<>();
 				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
