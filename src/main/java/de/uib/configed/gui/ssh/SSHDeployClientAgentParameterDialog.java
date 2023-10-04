@@ -9,8 +9,10 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -408,7 +410,33 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			displayNoClientSpecified();
 			return;
 		}
+		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
+		Set<String> nonExistingHostNames = getNonExistingHostNames(clients);
+		if (!nonExistingHostNames.isEmpty()) {
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.title") + " ("
+							+ Globals.APPNAME + ") ",
+					true, new String[] { Configed.getResourceValue("buttonCancel"), Configed
+							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
+			StringBuilder message = new StringBuilder("");
+			message.append(
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message1"));
+			message.append("\n\n");
+			message.append(nonExistingHostNames.toString().replace("[", "").replace("]", "").replace(",", "\n"));
+			message.append("\n\n");
+			message.append(
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message2"));
+			fQuestion.setMessage(message.toString());
+			fQuestion.setLocationRelativeTo(this);
+			fQuestion.setAlwaysOnTop(true);
+			fQuestion.setVisible(true);
 
+			if (fQuestion.getResult() == 2) {
+				clients.removeAll(nonExistingHostNames);
+			} else {
+				return;
+			}
+		}
 		String selectedOS = jComboBoxOperatingSystem.getItemAt(jComboBoxOperatingSystem.getSelectedIndex());
 		String opsiClientAgentDir = "";
 		if (OS.LINUX.toString().equals(selectedOS)) {
@@ -421,6 +449,16 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
 		new SSHConnectExec(commandDeployClientAgent);
+	}
+
+	private Set<String> getNonExistingHostNames(Set<String> hostNames) {
+		Set<String> nonExistingHostNames = new HashSet<>();
+		if (hostNames == null || hostNames.isEmpty()) {
+			return nonExistingHostNames;
+		}
+		nonExistingHostNames.addAll(hostNames);
+		nonExistingHostNames.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		return nonExistingHostNames;
 	}
 
 	private static void displayNoClientSpecified() {
