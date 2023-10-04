@@ -317,7 +317,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jLabelOperatingSystem
 				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
 		jComboBoxOperatingSystem = new JComboBox<>(
-				new String[] { OS.LINUX.toString(), OS.WINDOWS.toString(), OS.MACOS.toString() });
+				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
 		jComboBoxOperatingSystem.setToolTipText(
 				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
 
