@@ -6,7 +6,10 @@
 
 package de.uib;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -257,6 +260,8 @@ public class Main {
 		// Location of the theme property files - register them
 		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
 
+		registerOpenSansFont();
+
 		switch (Messages.getSelectedTheme()) {
 		case "Light":
 			FlatLightLaf.setup();
@@ -269,6 +274,18 @@ public class Main {
 		default:
 			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
 			break;
+		}
+	}
+
+	private static void registerOpenSansFont() {
+		try (InputStream fontStream = Main.class.getResourceAsStream("/fonts/OpenSans.ttf")) {
+			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+			openSansFont = openSansFont.deriveFont(14F);
+			UIManager.put("defaultFont", openSansFont);
+		} catch (IOException e) {
+			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
+		} catch (FontFormatException e) {
+			Logging.error("Font is faulty", e);
 		}
 	}
 
