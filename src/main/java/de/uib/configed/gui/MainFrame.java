@@ -2479,7 +2479,7 @@ public class MainFrame extends JFrame
 				ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
-				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles")) {
+				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"), configedMain) {
 			@Override
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);

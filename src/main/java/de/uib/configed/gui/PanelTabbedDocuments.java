@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -26,6 +27,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.logpane.LogPane;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
@@ -38,10 +40,11 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	private JFileChooser chooser;
 	private File chooserDirectory;
+	private ConfigedMain configedMain;
 
-	public PanelTabbedDocuments(final String[] idents, String defaultText) {
-
+	public PanelTabbedDocuments(final String[] idents, String defaultText, ConfigedMain configedMain) {
 		this.idents = idents;
+		this.configedMain = configedMain;
 
 		identsList = Arrays.asList(idents);
 
@@ -99,6 +102,10 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 			@Override
 			protected void saveAllAsZip(boolean loadMissingDocs) {
+				if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().length <= 0) {
+					return;
+				}
+
 				Logging.info(this, "saveAllAsZip got ident " + idents[i] + " loadMissingDocs " + loadMissingDocs);
 
 				String fname = idents[i];
@@ -109,24 +116,26 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				Logging.info(this, "saveAllAsZip, start getting pathname");
 				String pathname = openFile(fname + ".zip");
 
-				if (pathname != null && !pathname.isEmpty()) {
-					Logging.info(this, "saveAllAsZip, got pathname");
-
-					if (loadMissingDocs) {
-						for (int logNo = 0; logNo < idents.length; logNo++) {
-							if (textPanes[logNo].getLines().length <= 1) {
-								// empty
-
-								loadDocument(idents[logNo]);
-							}
-
-							Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
-									+ textPanes[logNo].getLines().length);
-						}
-					}
-
-					saveAllToZipFile(pathname);
+				if (pathname == null || pathname.isEmpty()) {
+					return;
 				}
+
+				Logging.info(this, "saveAllAsZip, got pathname");
+
+				Map<String, String> logfiles = new HashMap<>();
+				if (loadMissingDocs) {
+					for (int logNo = 0; logNo < idents.length; logNo++) {
+						Map<String, String> logfile = PersistenceControllerFactory.getPersistenceController()
+								.getLogDataService().getLogfile(configedMain.getSelectedClients()[0], idents[logNo]);
+						if (logfile.get(idents[logNo]).split("\n").length > 1) {
+							logfiles.put(idents[logNo], logfile.get(idents[logNo]));
+						}
+
+						Logging.info(this,
+								"saveAllAsZip " + idents[logNo] + " " + logfile.get(idents[logNo]).split("\n").length);
+					}
+				}
+				saveAllToZipFile(pathname, logfiles);
 			}
 		};
 
@@ -233,20 +242,15 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		}
 	}
 
-	private void saveAllToZipFile(String pn) {
-
+	private void saveAllToZipFile(String pn, Map<String, String> logfiles) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
-
 			out.setMethod(ZipOutputStream.DEFLATED);
 			for (int logNo = 0; logNo < idents.length; logNo++) {
-				// load all logfiles ???
-				//
-				// save only if not empty
-				if (textPanes[logNo].getLines().length > 1) {
-					ZipEntry entry = new ZipEntry(textPanes[logNo].getFilenameFromTitle());
+				if (logfiles.get(idents[logNo]) != null && logfiles.get(idents[logNo]).split("\n").length > 1) {
+					ZipEntry entry = new ZipEntry(
+							configedMain.getSelectedClients()[0].replace(".", "_") + "___" + idents[logNo] + ".log");
 					out.putNextEntry(entry);
-
-					writeToOutputStream(textPanes[logNo].getLines(), out);
+					writeToOutputStream(logfiles.get(idents[logNo]).split("\n"), out);
 				}
 				out.closeEntry();
 			}
