@@ -246,7 +246,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService()
 				.getProductInfos(productIds, clientId, attributes);
 		for (Map<String, String> productInfo : productInfos) {
-			allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+			allClientsProductStates.get(clientId).put(productInfo.get("productId"),
 					POJOReMapper.remap(productInfo, new TypeReference<>() {
 					}));
 		}
@@ -268,7 +268,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				attributes);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, String> productInfo : productInfos) {
-				allClientsProductStates.get(clientId).put((String) productInfo.get("productId"),
+				allClientsProductStates.get(clientId).put(productInfo.get("productId"),
 						POJOReMapper.remap(productInfo, new TypeReference<>() {
 						}));
 			}
@@ -1302,7 +1302,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return;
 		}
 
-		if (!((String) retrieveValue).equals(value)) {
+		if (!retrieveValue.equals(value)) {
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);

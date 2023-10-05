@@ -567,12 +567,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					return (Map) persistenceController.getSoftwareDataService()
-							.getInstalledSoftwareInformationForLicensingPD();
-
-				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
-				updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+						() -> (Map) persistenceController.getSoftwareDataService()
+								.getInstalledSoftwareInformationForLicensingPD(),
+						withRowCounter)),
+				WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(), updateCollection);
 
 		Logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);

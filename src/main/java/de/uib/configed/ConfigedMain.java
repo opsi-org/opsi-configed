@@ -331,7 +331,6 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
-	private String[] previousSelectedDepots;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -2166,7 +2165,7 @@ public class ConfigedMain implements ListSelectionListener {
 		return getListStringRepresentation(depotsList.getSelectedValuesList(), null);
 	}
 
-	private String getListStringRepresentation(List<String> list, Integer max) {
+	private static String getListStringRepresentation(List<String> list, Integer max) {
 		if (list == null || list.isEmpty()) {
 			return "";
 		}
@@ -3139,12 +3138,11 @@ public class ConfigedMain implements ListSelectionListener {
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 			if (ServerFacade.isOpsi43() && getSelectedClients().length != 0) {
-				Map<String, Object> defaultValues = new HashMap<>();
 				List<String> depotIds = new ArrayList<>();
 				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
 						.get(getSelectedClients()[0]).getInDepot());
-				defaultValues = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(depotIds)
-						.get(0);
+				Map<String, Object> defaultValues = persistenceController.getConfigDataService()
+						.getHostsConfigsWithDefaults(depotIds).get(0);
 				for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
 					configListCellOptions.get(entry.getKey())
 							.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
@@ -3160,7 +3158,8 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private Map<String, ListCellOptions> deepCopyConfigListCellOptions(Map<String, ListCellOptions> originalMap) {
+	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
+			Map<String, ListCellOptions> originalMap) {
 		Map<String, ListCellOptions> copy = new HashMap<>();
 		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
 			copy.put(entry.getKey(), entry.getValue().deepCopy());

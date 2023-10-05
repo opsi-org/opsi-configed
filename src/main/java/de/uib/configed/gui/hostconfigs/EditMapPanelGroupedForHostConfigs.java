@@ -601,7 +601,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 								String propertyName = names.get(rowIndex);
 
-								String tooltip = null;
+								StringBuilder tooltip = new StringBuilder();
 
 								Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService()
 										.getConfigOptionsPD();
@@ -613,22 +613,23 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 													.equals(defaultsMap.get(propertyName))) {
 										propertyOrigin = "(depot)";
 									}
+
 									if (includeAdditionalTooltipText) {
-										tooltip = "default " + propertyOrigin + ": ";
+										tooltip.append("default " + propertyOrigin + ": ");
 									} else {
-										tooltip = "default: ";
+										tooltip.append("default: ");
 									}
 
 									if (Utils.isKeyForSecretValue(propertyName)) {
-										tooltip = tooltip + Globals.STARRED_STRING;
+										tooltip.append(Globals.STARRED_STRING);
 									} else {
-										tooltip = tooltip + defaultsMap.get(propertyName);
+										tooltip.append(defaultsMap.get(propertyName));
 									}
 								}
 
 								if (propertyName != null && descriptionsMap != null
 										&& descriptionsMap.get(propertyName) != null) {
-									tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
+									tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
 								}
 
 								jc.setToolTipText("<html>" + tooltip + "</html>");

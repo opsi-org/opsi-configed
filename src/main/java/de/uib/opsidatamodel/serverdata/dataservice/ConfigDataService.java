@@ -384,7 +384,7 @@ public class ConfigDataService {
 				for (Entry<String, Object> config : configs.entrySet()) {
 					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + hostConfig);
 
-					String configId = (String) config.getKey();
+					String configId = config.getKey();
 
 					if (hostConfig.getValue() == null) {
 						configs1Host.put(configId, new ArrayList<>());
@@ -808,7 +808,7 @@ public class ConfigDataService {
 		return result;
 	}
 
-	public List<Map<String, Object>> getHostsConfigsWithoutDefaults(List<String> objectIds) {
+	public List<Map<String, Object>> getHostsConfigsWithoutDefaults(Iterable<String> objectIds) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		for (String objectId : objectIds) {
 			Map<String, Object> hostConfig = getHostConfigsPD().get(objectId) != null ? getHostConfigsPD().get(objectId)
