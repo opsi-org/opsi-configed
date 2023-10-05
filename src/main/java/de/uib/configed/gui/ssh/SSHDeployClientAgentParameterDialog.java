@@ -9,8 +9,10 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -31,6 +33,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.FTextArea;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -42,9 +45,23 @@ import de.uib.utilities.swing.PanelStateSwitch;
 import utils.Utils;
 
 public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
-
 	private static final int FRAME_WIDTH = 800;
 	private static final int FRAME_HEIGHT = 500;
+
+	private enum OS {
+		WINDOWS("Windows"), LINUX("Linux"), MACOS("MacOS");
+
+		private String displayName;
+
+		OS(String displayName) {
+			this.displayName = displayName;
+		}
+
+		@Override
+		public String toString() {
+			return displayName;
+		}
+	}
 
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
@@ -59,6 +76,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JLabel jLabelApplySudo = new JLabel();
 	private JLabel jLabelIgnorePing = new JLabel();
 	private JLabel jLabelFinalize = new JLabel();
+	private JLabel jLabelOperatingSystem = new JLabel();
 
 	private JButton jButtonExecute;
 	private JButton jButtonCopySelectedClients;
@@ -74,6 +92,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JCheckBox jCheckBoxApplySudo;
 	private JCheckBox jCheckBoxIgnorePing;
 	private JComboBox<Integer> jCheckBoxVerbosity;
+	private JComboBox<String> jComboBoxOperatingSystem;
 
 	private String defaultWinUser = "";
 
@@ -295,6 +314,13 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		panelFinalAction.setOpaque(false);
 
+		jLabelOperatingSystem
+				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
+		jComboBoxOperatingSystem = new JComboBox<>(
+				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
+		jComboBoxOperatingSystem.setToolTipText(
+				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
+
 		jButtonCopySelectedClients = new JButton(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
 
@@ -381,12 +407,69 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
+			displayNoClientSpecified();
 			return;
 		}
+		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
+		Set<String> nonExistingHostNames = getNonExistingHostNames(clients);
+		if (!nonExistingHostNames.isEmpty()) {
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.title") + " ("
+							+ Globals.APPNAME + ") ",
+					true, new String[] { Configed.getResourceValue("buttonCancel"), Configed
+							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
+			StringBuilder message = new StringBuilder("");
+			message.append(
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message1"));
+			message.append("\n\n");
+			message.append(nonExistingHostNames.toString().replace("[", "").replace("]", "").replace(",", "\n"));
+			message.append("\n\n");
+			message.append(
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message2"));
+			fQuestion.setMessage(message.toString());
+			fQuestion.setLocationRelativeTo(this);
+			fQuestion.setAlwaysOnTop(true);
+			fQuestion.setVisible(true);
 
+			if (fQuestion.getResult() == 2) {
+				clients.removeAll(nonExistingHostNames);
+			} else {
+				return;
+			}
+		}
+		String selectedOS = jComboBoxOperatingSystem.getItemAt(jComboBoxOperatingSystem.getSelectedIndex());
+		String opsiClientAgentDir = "";
+		if (OS.LINUX.toString().equals(selectedOS)) {
+			opsiClientAgentDir = "opsi-linux-client-agent";
+		} else if (OS.MACOS.toString().equals(selectedOS)) {
+			opsiClientAgentDir = "opsi-mac-client-agent";
+		} else {
+			opsiClientAgentDir = "opsi-client-agent";
+		}
+		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
-
 		new SSHConnectExec(commandDeployClientAgent);
+	}
+
+	private Set<String> getNonExistingHostNames(Set<String> hostNames) {
+		Set<String> nonExistingHostNames = new HashSet<>();
+		if (hostNames == null || hostNames.isEmpty()) {
+			return nonExistingHostNames;
+		}
+		nonExistingHostNames.addAll(hostNames);
+		nonExistingHostNames.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		return nonExistingHostNames;
+	}
+
+	private static void displayNoClientSpecified() {
+		FTextArea fNoClientSpecifiedDialog = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.title"), true,
+				new String[] { Configed.getResourceValue("buttonClose") });
+		fNoClientSpecifiedDialog
+				.setMessage(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.message"));
+		fNoClientSpecifiedDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fNoClientSpecifiedDialog.setAlwaysOnTop(true);
+		fNoClientSpecifiedDialog.setVisible(true);
 	}
 
 	private void doCopySelectedClients() {
@@ -472,6 +555,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(2 * Globals.GAP_SIZE)
@@ -481,7 +566,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 										.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
 										.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-												Globals.ICON_WIDTH))
+												Globals.ICON_WIDTH)
+										.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))
 
 						)));
 
@@ -525,6 +612,12 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 								.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(jCheckBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE));
 	}

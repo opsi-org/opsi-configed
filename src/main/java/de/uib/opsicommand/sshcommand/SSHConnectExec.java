@@ -75,7 +75,6 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	private void starting(SSHCommand sshcommand) {
-
 		if (!(isConnected())) {
 			final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
@@ -258,25 +257,20 @@ public class SSHConnectExec extends SSHConnect {
 				if (!EventQueue.isDispatchThread()) {
 					// does this really occur anywhere?
 
-					SwingUtilities.invokeLater(() -> dialog.setVisible(true));
+					SwingUtilities.invokeLater(() -> outputDialog.setVisible(true));
 				} else {
-					dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-					dialog.setVisible(true);
+					outputDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+					outputDialog.setVisible(true);
 				}
-
 			} else {
 				outputDialog = SSHConnectionExecDialog.getInstance();
-			}
-
-			if (SSHCommandFactory.alwaysExecInBackground()) {
-				outputDialog.setVisible(false);
 			}
 
 			outputDialog.setTitle(Configed.getResourceValue("SSHConnection.Exec.title") + " "
 					+ Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
 					+ ")");
-
+			outputDialog.setVisible(!SSHCommandFactory.alwaysExecInBackground());
 		} else {
 			outputDialog = null;
 		}
