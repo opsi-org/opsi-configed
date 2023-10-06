@@ -59,6 +59,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.Main;
@@ -1970,8 +1971,13 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleFilterClientList() {
-		Logging.info(this, "toggleFilterClientList   " + filterClientList);
-		setFilterClientList(!filterClientList);
+		toggleFilterClientList(true);
+	}
+
+	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
+				+ rebuildClientListTableModel);
+		setFilterClientList(!filterClientList, rebuildClientListTableModel);
 	}
 
 	public void invertClientselection() {
@@ -2147,10 +2153,15 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void setFilterClientList(boolean b) {
+		setFilterClientList(b, true);
+	}
 
+	public void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
-		setRebuiltClientListTableModel();
-
+		Logging.devel("rebuild " + rebuildClientListTableModel);
+		if (rebuildClientListTableModel) {
+			setRebuiltClientListTableModel();
+		}
 	}
 
 	private String getSelectedClientsString() {
@@ -2418,7 +2429,13 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this,
 						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
-				if (getSelectedClients().length == 1) {
+				Logging.devel("mouseNode " + mouseNode);
+				final TreeNode node = mouseNode;
+				SwingUtilities.invokeLater(() -> {
+					Logging.devel("n parent " + node.getParent());
+				});
+				if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
+					Logging.devel("host status panel " + mainFrame.getHostsStatusPanel());
 					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
 				} else {
 					mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2530,9 +2547,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		// since we select based on the tree view we disable the filter
 		if (filterClientList) {
-			mainFrame.toggleClientFilterAction();
+			mainFrame.toggleClientFilterAction(false);
 		}
-
 	}
 
 	public void clearTree() {
