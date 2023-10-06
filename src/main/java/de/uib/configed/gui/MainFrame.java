@@ -1310,33 +1310,42 @@ public class MainFrame extends JFrame
 
 		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReload"), "images/reload.gif",
 				"images/reload_over.gif", " ");
+		iconButtonReload.setFocusable(false);
 
 		iconButtonReloadLicenses = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
 				"images/reload_licenses.png", "images/reload_licenses_over.png", " ", false);
+		iconButtonReloadLicenses.setFocusable(false);
 		iconButtonReloadLicenses.setVisible(false);
 
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", " ");
+		iconButtonNewClient.setFocusable(false);
 
 		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
+		iconButtonSetGroup.setFocusable(false);
+
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply.png", " ", "images/apply_disabled.png", false);
-
-		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
-				"images/new_networkconnection.png", "images/new_networkconnection.png",
-				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
-
-		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
-				"images/system-users-query.png", "images/system-users-query_over.png",
-				"images/system-users-query_over.png",
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		iconButtonSessionInfo.setEnabled(true);
+		iconButtonSaveConfiguration.setFocusable(false);
 
 		iconButtonToggleClientFilter = new IconButton(
 				Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
 				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
 				true);
+		iconButtonToggleClientFilter.setFocusable(false);
+
+		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
+				"images/new_networkconnection.png", "images/new_networkconnection.png",
+				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
+		iconButtonReachableInfo.setFocusable(false);
+
+		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
+				"images/system-users-query.png", "images/system-users-query_over.png",
+				"images/system-users-query_over.png",
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+		iconButtonSessionInfo.setFocusable(false);
+		iconButtonSessionInfo.setEnabled(true);
 
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadAction());
 
@@ -1348,14 +1357,14 @@ public class MainFrame extends JFrame
 
 		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> saveAction());
 
+		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
+
 		iconButtonReachableInfo.addActionListener((ActionEvent e) -> getReachableInfo());
 
 		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
 			configedMain.setColumnSessionInfo(true);
 			getSessionInfo();
 		});
-
-		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -2118,22 +2127,26 @@ public class MainFrame extends JFrame
 		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
 		jButtonServerConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		jButtonServerConfiguration.setFocusable(false);
 
 		jButtonDepotsConfiguration = new JButton("", Utils.createImageIcon("images/opsidepots_deselected.png", ""));
 		jButtonDepotsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsidepots.png", ""));
 		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+		jButtonDepotsConfiguration.setFocusable(false);
 
 		jButtonClientsConfiguration = new JButton("", Utils.createImageIcon("images/opsiclients_deselected.png", ""));
 		jButtonClientsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiclients.png", ""));
 		jButtonClientsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		jButtonClientsConfiguration.setFocusable(false);
 
 		jButtonLicences = new JButton("", Utils.createImageIcon("images/licences_deselected.png", ""));
 		jButtonLicences.setEnabled(false);
 		jButtonLicences.setSelectedIcon(Utils.createImageIcon("images/licences.png", ""));
 		jButtonLicences.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonLicences.setToolTipText(Configed.getResourceValue("MainFrame.labelLicences"));
+		jButtonLicences.setFocusable(false);
 
 		jButtonServerConfiguration.addActionListener(this);
 		jButtonDepotsConfiguration.addActionListener(this);
@@ -2144,6 +2157,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
+		jButtonWorkOnGroups.setFocusable(false);
 
 		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jButtonWorkOnGroups.addActionListener(this);
@@ -2152,6 +2166,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnProducts.setSelectedIcon(Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
+		jButtonWorkOnProducts.setFocusable(false);
 
 		jButtonWorkOnProducts.addActionListener(this);
 
@@ -2159,6 +2174,7 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
+		jButtonDashboard.setFocusable(false);
 
 		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
 		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
@@ -2197,6 +2213,7 @@ public class MainFrame extends JFrame
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
 		jButtonOpsiLicenses.addActionListener(this);
+		jButtonOpsiLicenses.setFocusable(false);
 
 		JPanel iconPaneTargets = new JPanel();
 

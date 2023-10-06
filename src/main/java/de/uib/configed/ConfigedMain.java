@@ -5094,8 +5094,15 @@ public class ConfigedMain implements ListSelectionListener {
 		return result;
 	}
 
-	public static LoginDialog getLoginDialog() {
-		return loginDialog;
+	public static JFrame getFrame() {
+		if (mainFrame != null) {
+			return mainFrame;
+		} else if (loginDialog != null) {
+			return loginDialog;
+		} else {
+			Logging.critical(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
+			return null;
+		}
 	}
 
 	public boolean closeInstance(boolean checkdirty) {
