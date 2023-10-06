@@ -129,7 +129,9 @@ public class ProductDataService {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
 		List<String> localbootProductNames;
 		if (ServerFacade.isOpsi43()) {
-			localbootProductNames = new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet());
+			localbootProductNames = getDepot2LocalbootProductsPD().get(depotId) != null
+					? new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet())
+					: new ArrayList<>();
 		} else {
 			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
 					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
