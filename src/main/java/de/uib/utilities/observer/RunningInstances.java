@@ -75,6 +75,8 @@ public class RunningInstances<T> {
 
 	private void sendChangeEvent() {
 		Logging.debug(this, "sendChangeEvent to mainFrame");
-		ConfigedMain.getMainFrame().instancesChanged(getAll());
+		if (ConfigedMain.getMainFrame() != null) {
+			ConfigedMain.getMainFrame().instancesChanged(getAll());
+		}
 	}
 }
