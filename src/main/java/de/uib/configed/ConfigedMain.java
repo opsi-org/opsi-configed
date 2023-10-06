@@ -59,7 +59,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.Main;
@@ -2158,7 +2157,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
-		Logging.devel("rebuild " + rebuildClientListTableModel);
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel();
 		}
@@ -2429,13 +2427,7 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this,
 						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
-				Logging.devel("mouseNode " + mouseNode);
-				final TreeNode node = mouseNode;
-				SwingUtilities.invokeLater(() -> {
-					Logging.devel("n parent " + node.getParent());
-				});
 				if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
-					Logging.devel("host status panel " + mainFrame.getHostsStatusPanel());
 					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
 				} else {
 					mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2589,6 +2581,11 @@ public class ConfigedMain implements ListSelectionListener {
 		activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 		activatedGroupModel.setActive(true);
+
+		// since we select based on the tree view we disable the filter
+		if (filterClientList) {
+			mainFrame.toggleClientFilterAction();
+		}
 	}
 
 	public TreePath getGroupPathActivatedByTree() {
