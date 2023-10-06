@@ -97,10 +97,7 @@ public final class ConnectionErrorReporter {
 
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
-
-		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
-			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
-		}
+		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
 
 		if (!SwingUtilities.isEventDispatchThread()) {
 			launchDialogInEDT(fErrorMsg);
@@ -135,10 +132,7 @@ public final class ConnectionErrorReporter {
 
 		fErrorMsg.setMessage(message);
 		fErrorMsg.setAlwaysOnTop(true);
-
-		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
-			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
-		}
+		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
 
 		if (!SwingUtilities.isEventDispatchThread()) {
 			launchDialogInEDT(fErrorMsg);
@@ -200,10 +194,7 @@ public final class ConnectionErrorReporter {
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);
 		fErrorMsg.setMessage(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"));
 		fErrorMsg.setAlwaysOnTop(true);
-
-		if (ConfigedMain.getMainFrame() == null && ConfigedMain.getLoginDialog() != null) {
-			fErrorMsg.setLocationRelativeTo(ConfigedMain.getLoginDialog());
-		}
+		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
 
 		if (!SwingUtilities.isEventDispatchThread()) {
 			launchDialogInEDT(fErrorMsg);
