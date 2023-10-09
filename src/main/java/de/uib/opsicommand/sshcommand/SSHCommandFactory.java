@@ -177,6 +177,7 @@ public final class SSHCommandFactory {
 	}
 
 	public static void destroyInstance() {
+		sshCommandsParam.clear();
 		instance = null;
 	}
 
