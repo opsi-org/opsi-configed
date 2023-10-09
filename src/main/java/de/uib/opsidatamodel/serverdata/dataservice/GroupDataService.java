@@ -140,9 +140,15 @@ public class GroupDataService {
 		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null) {
 			return;
 		}
+
+		String[] callAttributes = new String[] {};
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("groupType", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+
 		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new String[] {}), "ident",
-				new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
+				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
+						new Object[] { callAttributes, callFilter }),
+				"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
 				ClientTree.getTranslationsFromPersistentNames());
 		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
 		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
