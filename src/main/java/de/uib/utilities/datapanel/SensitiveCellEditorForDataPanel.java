@@ -38,6 +38,10 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 		});
 	}
 
+	public static void destroyInstance() {
+		instances.clear();
+	}
+
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// we use data panel :

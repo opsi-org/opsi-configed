@@ -38,6 +38,10 @@ public final class SmbConnect {
 		return instance;
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	public static String unixPath(String[] parts) {
 		StringBuilder buf = new StringBuilder("");
 		if (parts != null) {

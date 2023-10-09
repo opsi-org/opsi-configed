@@ -61,7 +61,6 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			instance = getNewInstance();
 		}
 		return instance;
-
 	}
 
 	private static SSHConnectionExecDialog getNewInstance() {
@@ -77,6 +76,10 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			instance.setVisible(true);
 		});
 		return instance;
+	}
+
+	public static void destroyInstance() {
+		instance = null;
 	}
 
 	private void initGUI() {

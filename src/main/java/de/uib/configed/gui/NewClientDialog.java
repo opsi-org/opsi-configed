@@ -116,6 +116,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		return instance;
 	}
 
+	public static synchronized void destroyInstance() {
+		instance = null;
+	}
+
 	/**
 	 * Sets the given domain configuration for new clients It expects that
 	 * domains is not empty and the

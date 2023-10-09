@@ -100,6 +100,10 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		return instance;
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	private void checkComponentStates() {
 		boolean state = compareStates();
 		Logging.debug(this, "checkComponentStates  identical " + state);

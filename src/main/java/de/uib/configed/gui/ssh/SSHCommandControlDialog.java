@@ -149,6 +149,10 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		return instance;
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	private void setCenterLayout() {
 		Logging.debug(this, "setCenterLayout ");
 		commandPanelLayout.setAutoCreateGaps(true);

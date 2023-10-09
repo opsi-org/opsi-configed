@@ -176,6 +176,10 @@ public final class SSHCommandFactory {
 		}
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	public void setAllowedHosts(Collection<String> allowed) {
 		allowedHosts.addAll(allowed);
 	}

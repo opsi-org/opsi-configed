@@ -118,6 +118,10 @@ public final class SSHCommandParameterMethods {
 		}
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	public static String[] getParameterMethodLocalNames() {
 		String[] mymethods = new String[methods.size()];
 		int counter = 0;

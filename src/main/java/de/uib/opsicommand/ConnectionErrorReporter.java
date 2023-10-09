@@ -61,7 +61,7 @@ public final class ConnectionErrorReporter {
 		return instance;
 	}
 
-	public static synchronized void destroy() {
+	public static synchronized void destroyInstance() {
 		instance = null;
 	}
 

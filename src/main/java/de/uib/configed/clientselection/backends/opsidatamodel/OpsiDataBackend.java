@@ -149,6 +149,10 @@ public final class OpsiDataBackend {
 		return instance;
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	/**
 	 * Goes through the list of clients and filters them with operation. The
 	 * boolean arguments give hints which data is needed.
