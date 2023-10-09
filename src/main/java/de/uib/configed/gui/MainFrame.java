@@ -598,6 +598,7 @@ public class MainFrame extends JFrame
 			SSHCommandParameterMethods.destroyInstance();
 			SSHConnectionInfo.destroyInstance();
 			SensitiveCellEditorForDataPanel.destroyInstance();
+			Configed.getSavedStates().removeAll();
 			Configed.restartConfiged();
 		});
 
