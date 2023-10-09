@@ -58,17 +58,13 @@ public class PanelHostProperties extends JPanel {
 
 	public void initMultipleHostsEditing(String selectedDepot, Map<String, Map<String, Object>> multipleMaps,
 			UpdateCollection updateCollection, Set<String> keysOfReadOnlyEntries) {
-		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
-
-		);
+		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps));
 
 		this.multipleMaps = multipleMaps;
 		editMapPanel.setUpdateCollection(updateCollection);
 		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
 
-		if (selectedDepot != null && !selectedDepot.isBlank()) {
-			setMap(selectedDepot);
-		}
+		setMap(selectedDepot);
 	}
 
 	// delegated methods
@@ -97,11 +93,16 @@ public class PanelHostProperties extends JPanel {
 
 	}
 
-	private void setMap(String selectedItem) {
-		List<Map<String, Object>> editedMaps = new ArrayList<>(1);
-		editedMaps.add(multipleMaps.get(selectedItem));
-		Logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
-		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));
-		editMapPanel.setStoreData(editedMaps);
+	private void setMap(String selectedDepot) {
+		if (selectedDepot == null || selectedDepot.isBlank()) {
+			editMapPanel.setEditableMap(null, null);
+		} else {
+			List<Map<String, Object>> editedMaps = new ArrayList<>(1);
+			editedMaps.add(multipleMaps.get(selectedDepot));
+			Logging.debug(this, "setMap " + multipleMaps.get(selectedDepot));
+			editMapPanel.setEditableMap(multipleMaps.get(selectedDepot),
+					deriveOptionsMap(multipleMaps.get(selectedDepot)));
+			editMapPanel.setStoreData(editedMaps);
+		}
 	}
 }
