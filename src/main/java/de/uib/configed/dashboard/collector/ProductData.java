@@ -284,6 +284,12 @@ public final class ProductData {
 		installedProducts.clear();
 		failedProducts.clear();
 		unusedProducts.clear();
+		tmpUnusedProductsList.clear();
+
+		totalOSInstallations = 0;
+		totalLinuxInstallations = 0;
+		totalWindowsInstallations = 0;
+		totalMacOSInstallations = 0;
 	}
 
 	public static void retrieveData(String depot) {
