@@ -3072,9 +3072,13 @@ public class ConfigedMain implements ListSelectionListener {
 		hostUpdateCollection = new HostUpdateCollection();
 		addToGlobalUpdateCollection(hostUpdateCollection);
 
-		mainFrame.getPanelHostProperties().initMultipleHostsEditing(selectedDepots[0],
-				depotPropertiesForPermittedDepots, hostUpdateCollection,
-				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		String depot = "";
+		if (selectedDepots.length > 0) {
+			depot = selectedDepots[0];
+		}
+
+		mainFrame.getPanelHostProperties().initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots,
+				hostUpdateCollection, OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		return true;
 	}
