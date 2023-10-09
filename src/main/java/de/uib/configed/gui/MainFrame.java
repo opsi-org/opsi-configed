@@ -114,6 +114,7 @@ import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -502,6 +503,7 @@ public class MainFrame extends JFrame
 		JMenuItem jMenuFileReload = new JMenuItem();
 		JMenu jMenuTheme = new JMenu(); // submenu
 		JMenu jMenuFileLanguage = new JMenu(); // submenu
+		JMenuItem jMenuFileRelogin = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
@@ -571,6 +573,16 @@ public class MainFrame extends JFrame
 			});
 		}
 
+		jMenuFileRelogin.setText(Configed.getResourceValue("MainFrame.jMenuFileRelogin"));
+		jMenuFileRelogin.addActionListener((ActionEvent e) -> {
+			configedMain.closeInstance(true);
+			ConfigedMain.setHost(null);
+			ConfigedMain.setUser(null);
+			ConfigedMain.setPassword(null);
+			CacheManager.getInstance().clearAllCachedData();
+			Configed.restartConfiged();
+		});
+
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
@@ -579,6 +591,7 @@ public class MainFrame extends JFrame
 			jMenuFile.add(jMenuTheme);
 		}
 
+		jMenuFile.add(jMenuFileRelogin);
 		jMenuFile.add(jMenuFileExit);
 	}
 
