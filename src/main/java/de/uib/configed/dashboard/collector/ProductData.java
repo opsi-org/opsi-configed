@@ -297,5 +297,6 @@ public final class ProductData {
 		retrieveProducts();
 		retrieveInstalledOS();
 		retrieveInstalledAndFailedProducts();
+		retrieveUnusedProducts();
 	}
 }

@@ -94,11 +94,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.dashboard.collector.ClientData;
-import de.uib.configed.dashboard.collector.DepotData;
-import de.uib.configed.dashboard.collector.LicenseData;
-import de.uib.configed.dashboard.collector.ModuleData;
-import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
@@ -595,11 +590,6 @@ public class MainFrame extends JFrame
 			SSHConnectionInfo.destroyInstance();
 			SensitiveCellEditorForDataPanel.destroyInstance();
 			Configed.getSavedStates().removeAll();
-			ClientData.clear();
-			ProductData.clear();
-			ModuleData.clear();
-			LicenseData.clear();
-			DepotData.clear();
 			Configed.restartConfiged();
 		});
 
