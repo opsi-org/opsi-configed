@@ -252,7 +252,7 @@ public class Messagebus implements MessagebusListener {
 		sendMessage(message);
 
 		terminal.lock();
-		terminal.connectWebSocket();
+		terminal.connectWebSocketTty();
 	}
 
 	public void send(ByteBuffer message) {

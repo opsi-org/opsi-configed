@@ -1207,7 +1207,7 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 
-			if (!Terminal.getInstance().isWebSocketConnected()) {
+			if (!Terminal.getInstance().isWebSocketTtyConnected()) {
 				configedMain.connectTerminal();
 			} else {
 				Logging.info(this,
