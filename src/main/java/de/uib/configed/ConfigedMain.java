@@ -311,7 +311,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
-	private boolean dataReady;
+	private boolean everythingReady;
 
 	private boolean filterClientList;
 
@@ -401,6 +401,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		initMainFrame();
 
+		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
+
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
 			loginDialog.setVisible(false);
@@ -420,13 +422,9 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
-
 		setEditingTarget(EditingTarget.CLIENTS);
 
 		anyDataChanged = false;
-
-		preloadData();
 
 		// restrict visibility of clients to some group
 
@@ -740,7 +738,12 @@ public class ConfigedMain implements ListSelectionListener {
 		new Thread() {
 			@Override
 			public void run() {
+
+				preloadData();
+
 				initGui();
+
+				everythingReady = true;
 
 				checkErrorList();
 
@@ -781,10 +784,14 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
+		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		if (depotRepresentative == null) {
 			depotRepresentative = myServer;
 		}
+
+		Logging.devel(depotRepresentative + "");
+
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
@@ -805,17 +812,12 @@ public class ConfigedMain implements ListSelectionListener {
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 
-		mainFrame.updateHostCheckboxenText();
-
 		persistenceController.getDepotDataService().retrieveProductsPD();
 
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
-
-		dataReady = true;
-		mainFrame.enableAfterLoading();
 	}
 
 	public void toggleColumnIPAddress() {
@@ -1276,8 +1278,6 @@ public class ConfigedMain implements ListSelectionListener {
 	// we call this after we have a PersistenceController
 	private void initMainFrame() {
 
-		myServer = persistenceController.getHostInfoCollections().getConfigServer();
-
 		initDepots();
 
 		// create client selection panel
@@ -1294,7 +1294,6 @@ public class ConfigedMain implements ListSelectionListener {
 					// Nothing to do for all the other keys
 				}
 			}
-
 		};
 
 		selectionPanel.setModel(buildClientListTableModel(true));
@@ -3374,7 +3373,7 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		if (!problem && dataReady) {
+		if (!problem && everythingReady) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3519,7 +3518,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
-		if (dataReady) {
+		if (everythingReady) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
 			Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
@@ -3538,7 +3537,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		if (dataReady) {
+		if (everythingReady) {
 			String oldGroupSelection = activatedGroupModel.getGroupName();
 			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
@@ -3577,7 +3576,7 @@ public class ConfigedMain implements ListSelectionListener {
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
-		if (dataReady) {
+		if (everythingReady) {
 			allowedClients = null;
 
 			persistenceController.reloadData(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString());
@@ -3590,6 +3589,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 			requestRefreshDataForClientSelection();
 			preloadData();
+
+			mainFrame.updateHostCheckboxenText();
+			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 
