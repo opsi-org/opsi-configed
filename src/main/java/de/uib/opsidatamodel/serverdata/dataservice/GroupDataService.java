@@ -103,6 +103,55 @@ public class GroupDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, result);
 	}
 
+	public void retrieveAllGroupsPD() {
+		// Don't load when one of the two is not null
+		// We only want to load, when both are not yet loaded
+		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class) != null
+				|| cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class) != null) {
+			return;
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[0]);
+
+		List<Map<String, Object>> resultlist = exec.getListOfMaps(omc);
+
+		List<Object> hostGroupsList = new ArrayList<>();
+		List<Object> productGroupsList = new ArrayList<>();
+
+		Iterator<Map<String, Object>> iter = resultlist.iterator();
+
+		while (iter.hasNext()) {
+			Map<String, Object> entry = iter.next();
+
+			if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
+				hostGroupsList.add(entry);
+			} else if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
+				productGroupsList.add(entry);
+			} else {
+				Logging.warning(this, "Unexpected type: " + entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+			}
+		}
+
+		// Load data for hostGroups
+		Map<String, Map<String, String>> source = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
+				hostGroupsList.iterator(), "ident", new String[] { "id", "parentGroupId", "description" },
+				new String[] { "groupId", "parentGroupId", "description" }, null);
+
+		HostGroups hostGroups = new HostGroups(source);
+		Logging.debug(this, "getHostGroups " + hostGroups);
+		hostGroups = hostGroups.addSpecialGroups();
+		Logging.debug(this, "getHostGroups " + hostGroups);
+		hostGroups.alterToWorkingVersion();
+		Logging.debug(this, "getHostGroups rebuilt" + hostGroups);
+		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, hostGroups);
+
+		// Load data for productGroups
+		Map<String, Map<String, String>> result = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
+				productGroupsList.iterator(), "ident", new String[] { "id", "parentGroupId", "description" },
+				new String[] { "groupId", "parentGroupId", "description" }, null);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
+	}
+
 	public Map<String, Set<String>> getFProductGroup2Members() {
 		retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId",
 				CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS);
@@ -156,6 +205,14 @@ public class GroupDataService {
 	}
 
 	public void retrieveAllObject2GroupsPD() {
+
+		// Don't load when one of the two is not null
+		// We only want to load, when both are not yet loaded
+		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null
+				|| cacheManager.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class) != null) {
+			return;
+		}
+
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new Object[] {});
 
 		List<Map<String, Object>> resultlist = exec.getListOfMaps(omc);

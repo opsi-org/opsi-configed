@@ -745,6 +745,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 				everythingReady = true;
 
+				mainFrame.updateHostCheckboxenText();
+				mainFrame.enableAfterLoading();
+
 				checkErrorList();
 
 				loginDialog.setVisible(false);
@@ -805,6 +808,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		// Load all group data in this method to only call one method!
+		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();

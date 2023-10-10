@@ -180,6 +180,9 @@ public class UserRolesConfigDataService {
 
 		applyUserSpecializedConfigPD();
 
+		// Load all data together to prevent an extra RPC-call
+		groupDataService.retrieveAllGroupsPD();
+
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
 				hostInfoCollections.getConfigServer(), hostInfoCollections.getDepotNamesList(),
 				groupDataService.getHostGroupIds(), groupDataService.getProductGroupsPD().keySet(),
