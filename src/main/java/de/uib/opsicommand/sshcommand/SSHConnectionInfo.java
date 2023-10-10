@@ -35,12 +35,7 @@ public final class SSHConnectionInfo {
 		return instance;
 	}
 
-	public static void destroyInstance() {
-		instance = null;
-	}
-
 	public String getHost() {
-
 		return sshConnectionHost;
 	}
 

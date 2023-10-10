@@ -105,7 +105,6 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionErrorReporter;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -583,8 +582,6 @@ public class MainFrame extends JFrame
 			CacheManager.getInstance().clearAllCachedData();
 			SSHCommandFactory.destroyInstance();
 			Terminal.destroyInstance();
-			ConnectionErrorReporter.destroyInstance();
-			SSHConnectionInfo.destroyInstance();
 			Configed.getSavedStates().removeAll();
 			Configed.restartConfiged();
 		});
