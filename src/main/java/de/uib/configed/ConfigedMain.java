@@ -799,6 +799,9 @@ public class ConfigedMain implements ListSelectionListener {
 			savedSearchesDialog.resetModel();
 		}
 
+		// Load all group data in this method to only call one method!
+		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
+
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 

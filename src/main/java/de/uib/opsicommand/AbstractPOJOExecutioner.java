@@ -187,21 +187,27 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
-		Map<String, Map<String, String>> result = new TreeMap<>();
+
 		List<Object> resultlist = getListResult(omc);
 
 		if (resultlist == null) {
-			return result;
+			return new TreeMap<>();
 		}
 
-		Iterator<Object> iter = resultlist.iterator();
+		return generateStringMappedObjectsByKeyResult(resultlist.iterator(), key, sourceVars, targetVars,
+				translateValues);
+	}
+
+	public static Map<String, Map<String, String>> generateStringMappedObjectsByKeyResult(Iterator<Object> iter,
+			String key, String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
+		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		while (iter.hasNext()) {
 			Map<String, String> originalMap = POJOReMapper.remap(iter.next(), new TypeReference<Map<String, String>>() {
 			});
 
 			if (originalMap.get(key) == null) {
-				Logging.error(this, "Missing key " + key + " in output list for " + omc);
+				Logging.error(AbstractPOJOExecutioner.class, "Missing key " + key + " in output list");
 				continue;
 			}
 
@@ -247,12 +253,12 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 		return detailMap;
 	}
 
-	private Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap, String[] sourceVars,
-			String[] targetVars, Map<String, String> translateValues) {
+	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
+			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 		Map<String, String> detailMap = new HashMap<>();
 
 		if (targetVars.length != sourceVars.length) {
-			Logging.warning(this, "generateDetailMapBasedOnKeys targetVars not assignable");
+			Logging.warning(AbstractPOJOExecutioner.class, "generateDetailMapBasedOnKeys targetVars not assignable");
 		}
 
 		for (int i = 0; i < sourceVars.length; i++) {

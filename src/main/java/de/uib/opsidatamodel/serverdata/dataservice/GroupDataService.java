@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostGroups;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -152,6 +153,47 @@ public class GroupDataService {
 				ClientTree.getTranslationsFromPersistentNames());
 		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
 		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
+	}
+
+	public void retrieveAllObject2GroupsPD() {
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new Object[] {});
+
+		List<Map<String, Object>> resultlist = exec.getListOfMaps(omc);
+
+		List<Object> hostGroupsList = new ArrayList<>();
+		List<Object> productGroupsList = new ArrayList<>();
+
+		Iterator<Map<String, Object>> iter = resultlist.iterator();
+
+		while (iter.hasNext()) {
+			Map<String, Object> entry = iter.next();
+
+			if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
+				hostGroupsList.add(entry);
+			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
+				productGroupsList.add(entry);
+			} else {
+				Logging.warning(this, "Unexpected " + Object2GroupEntry.GROUP_TYPE_KEY + ": "
+						+ entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+			}
+		}
+
+		// Generate data for host groups
+		Map<String, Map<String, String>> mappedRelationsHostGroups = AbstractPOJOExecutioner
+				.generateStringMappedObjectsByKeyResult(hostGroupsList.iterator(), "ident",
+						new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
+						ClientTree.getTranslationsFromPersistentNames());
+
+		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelationsHostGroups, "clientId", "groupId");
+		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
+
+		// generate data for product groups
+		Map<String, Map<String, String>> mappedRelationsProductGroups = AbstractPOJOExecutioner
+				.generateStringMappedObjectsByKeyResult(productGroupsList.iterator(), "ident",
+						new String[] { "objectId", "groupId" }, new String[] { "productId", "groupId" }, null);
+
+		cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS,
+				projectToFunction(mappedRelationsProductGroups, "groupId", "productId"));
 	}
 
 	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
