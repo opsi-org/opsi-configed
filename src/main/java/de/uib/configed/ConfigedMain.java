@@ -790,8 +790,6 @@ public class ConfigedMain implements ListSelectionListener {
 			depotRepresentative = myServer;
 		}
 
-		Logging.devel(depotRepresentative + "");
-
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
