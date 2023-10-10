@@ -377,7 +377,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonDelete.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
-				"images/reload_blue16.png", "images/reload_blue16.png", " ", true);
+				"images/reload16.png", "images/reload16.png", " ", true);
 
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
@@ -386,7 +386,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setVisible(true);
 
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.executeNow"),
-				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
+				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", " ", true);
 
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.executeNow"));
 
