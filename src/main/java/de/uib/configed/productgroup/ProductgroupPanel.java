@@ -385,11 +385,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
-		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.executeNow"),
+		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"),
 				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", " ", true);
-
-		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.executeNow"));
-
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		buttonExecuteNow.addActionListener(this);
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonExecuteNow.setVisible(true);
