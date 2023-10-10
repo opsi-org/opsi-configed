@@ -700,7 +700,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			};
 
-			editMapPanel.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(key));
+			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
 
 			partialPanels.put(key, editMapPanel);
