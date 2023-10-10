@@ -85,7 +85,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private IconButton buttonReloadProductStates;
 
-	private IconButton buttonSaveAndExecute;
+	private IconButton buttonExecuteNow;
 
 	private IconButton buttonCollectiveAction;
 
@@ -174,7 +174,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	public void setSaveAndExecuteActionHandler(ActionListener al) {
-		buttonSaveAndExecute.addActionListener(al);
+		buttonExecuteNow.addActionListener(al);
 
 	}
 
@@ -385,14 +385,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
-		buttonSaveAndExecute = new IconButton(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
+		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.executeNow"),
 				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
 
-		buttonSaveAndExecute.setToolTipText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.executeNow"));
 
-		buttonSaveAndExecute.addActionListener(this);
-		buttonSaveAndExecute.setPreferredSize(Globals.NEW_SMALL_BUTTON);
-		buttonSaveAndExecute.setVisible(true);
+		buttonExecuteNow.addActionListener(this);
+		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
+		buttonExecuteNow.setVisible(true);
 
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
@@ -607,7 +607,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
+										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 										.addGroup(layoutMain.createSequentialGroup()
@@ -628,7 +628,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGroup(layoutMain.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

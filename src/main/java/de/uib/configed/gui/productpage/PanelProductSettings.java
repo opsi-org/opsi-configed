@@ -143,7 +143,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
 
-	private JMenuItem itemSaveAndExecute;
+	private JMenuItem itemExecuteNow;
 
 	private String title;
 
@@ -507,20 +507,20 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			popup.add(itemOnDemandForSelectedProducts);
 		}
 
-		itemSaveAndExecute = new JMenuItemFormatted();
-		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-		itemSaveAndExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+		itemExecuteNow = new JMenuItemFormatted();
+		itemExecuteNow.setText(Configed.getResourceValue("ConfigedMain.executeNow"));
+		itemExecuteNow.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 		// dies bit get its intended context
-		itemSaveAndExecute.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
+		itemExecuteNow.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		if (!Main.FONT) {
-			itemSaveAndExecute.setFont(Globals.DEFAULT_FONT);
+			itemExecuteNow.setFont(Globals.DEFAULT_FONT);
 		}
-		itemSaveAndExecute.addActionListener((ActionEvent e) -> {
+		itemExecuteNow.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save and execute menu item");
 			saveAndExecuteAction();
 		});
-		popup.add(itemSaveAndExecute);
+		popup.add(itemExecuteNow);
 		popup.addSeparator();
 
 		showPopupOpsiclientdEvent(true);
@@ -753,7 +753,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private void showPopupOpsiclientdEvent(boolean visible) {
 
 		itemOnDemand.setVisible(visible);
-		itemSaveAndExecute.setVisible(visible);
+		itemExecuteNow.setVisible(visible);
 	}
 
 	public void clearSelection() {

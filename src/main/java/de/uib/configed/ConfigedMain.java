@@ -4573,6 +4573,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		checkSaveAll(false);
+
 		new AbstractErrorListProducer("opsiclientd " + event) {
 			@Override
 			protected List<String> getErrors() {
@@ -4586,6 +4588,8 @@ public class ConfigedMain implements ListSelectionListener {
 		if (getSelectedClients() == null || getSelectedClients().length == 0) {
 			return;
 		}
+
+		checkSaveAll(false);
 
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
