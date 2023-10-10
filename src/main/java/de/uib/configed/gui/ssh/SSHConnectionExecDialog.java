@@ -14,7 +14,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
@@ -26,15 +25,12 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
 
 public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
-
-	private static SSHConnectionExecDialog instance;
-
 	private static final int INFO_LENGTH = 40;
 
 	private JButton jButtonClear;
 	private JButton jButtonKillProcess;
 
-	private SSHConnectionExecDialog() {
+	public SSHConnectionExecDialog() {
 		super(Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput"));
 		if (!SSHConnect.isConnectionAllowed()) {
 			Logging.warning(this.getClass(), "Connection forbidden. Close exec dialog.");
@@ -52,34 +48,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			this.setVisible(!SSHCommandFactory.alwaysExecInBackground());
 			buildFrame = true;
 		}
-	}
-
-	public static SSHConnectionExecDialog getInstance() {
-		Logging.info("SSHConnectionExecDialog.getInstance, existing " + instance);
-
-		if (instance == null) {
-			instance = getNewInstance();
-		}
-		return instance;
-	}
-
-	private static SSHConnectionExecDialog getNewInstance() {
-
-		if (instance != null) {
-			instance.leave();
-			instance = null;
-		}
-
-		instance = new SSHConnectionExecDialog();
-		SwingUtilities.invokeLater(() -> {
-			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			instance.setVisible(true);
-		});
-		return instance;
-	}
-
-	public static void destroyInstance() {
-		instance = null;
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void initGUI() {

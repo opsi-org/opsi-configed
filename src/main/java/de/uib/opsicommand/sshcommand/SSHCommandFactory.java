@@ -146,7 +146,7 @@ public final class SSHCommandFactory {
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);
-		pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
+		pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public final class SSHCommandFactory {
 		if (pmethodHandler != null) {
 			return pmethodHandler;
 		} else {
-			pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
+			pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 			return pmethodHandler;
 		}
 	}

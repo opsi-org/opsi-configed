@@ -52,10 +52,7 @@ import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
-
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
-
-	private static NewClientDialog instance;
 
 	private ConfigedMain configedMain;
 
@@ -85,7 +82,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private NewClientDialog(ConfigedMain configedMain, List<String> depots) {
+	public NewClientDialog(ConfigedMain configedMain, List<String> depots) {
 		super(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
 				new String[] { Configed.getResourceValue("buttonClose"),
@@ -99,25 +96,6 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		init();
 		pack();
-	}
-
-	public static NewClientDialog getInstance(ConfigedMain configedMain, List<String> depots) {
-		if (instance == null) {
-			instance = new NewClientDialog(configedMain, depots);
-			instance.init();
-		} else {
-			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-
-		return instance;
-	}
-
-	public static NewClientDialog getInstance() {
-		return instance;
-	}
-
-	public static synchronized void destroyInstance() {
-		instance = null;
 	}
 
 	/**

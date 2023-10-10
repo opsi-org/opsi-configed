@@ -9,7 +9,6 @@ package de.uib.connectx;
 import java.io.File;
 import java.util.Map;
 
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -21,25 +20,7 @@ public final class SmbConnect {
 	public static final String DIRECTORY_I368 = "i386";
 	public static final String DIRECTORY_INSTALL_FILES = "installfiles";
 
-	private static SmbConnect instance;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
-	// Private constructor to hide public one; We use only one instance
 	private SmbConnect() {
-	}
-
-	public static SmbConnect getInstance() {
-		if (instance == null) {
-			instance = new SmbConnect();
-		}
-
-		return instance;
-	}
-
-	public static void destroyInstance() {
-		instance = null;
 	}
 
 	public static String unixPath(String[] parts) {
@@ -56,11 +37,12 @@ public final class SmbConnect {
 		return buf.toString();
 	}
 
-	public String buildSambaTarget(String depotserver, String share) {
+	public static String buildSambaTarget(String depotserver, String share) {
 		String result = "";
-		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = PersistenceControllerFactory.getPersistenceController()
+				.getHostInfoCollections().getDepots();
 
-		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
+		Logging.info("buildSambaTarget for depotserver " + depotserver);
 
 		if (depot2depotMap.get(depotserver) == null) {
 			return result;
@@ -69,7 +51,7 @@ public final class SmbConnect {
 		String depotRemoteUrl = (String) depot2depotMap.get(depotserver).get("depotRemoteUrl");
 
 		if (depotRemoteUrl == null) {
-			Logging.warning(this, "buildSambaTarget, depotRemoteUrl null");
+			Logging.warning("buildSambaTarget, depotRemoteUrl null");
 			return result;
 		}
 
@@ -78,14 +60,14 @@ public final class SmbConnect {
 
 		if (parts.length > 2) {
 			netbiosName = parts[2];
-			Logging.info(this, "buildSambaTarget " + netbiosName);
+			Logging.info("buildSambaTarget " + netbiosName);
 		} else {
-			Logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
+			Logging.warning("buildSambaTarget, no splitting for " + depotRemoteUrl);
 		}
 
 		result = File.separator + File.separator + netbiosName + File.separator + share;
 
-		Logging.info(this, "buildSambaTarget " + result);
+		Logging.info("buildSambaTarget " + result);
 
 		return result;
 	}

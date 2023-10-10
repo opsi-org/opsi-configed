@@ -185,7 +185,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		defineChoosers();
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
-		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));

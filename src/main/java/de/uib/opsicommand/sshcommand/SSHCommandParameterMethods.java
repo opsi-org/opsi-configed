@@ -53,8 +53,6 @@ public final class SSHCommandParameterMethods {
 
 	public static final Pattern paramSplitterDefaultPattern = Pattern.compile(PARAM_SPLITTER_DEFAULT);
 
-	private static SSHCommandParameterMethods instance;
-
 	public static final String METHOD_INTERACTIVE_ELEMENT = Configed
 			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
 	public static final String METHOD_GET_SELECTED_CLIENT_NAMES = Configed
@@ -87,7 +85,7 @@ public final class SSHCommandParameterMethods {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private SSHCommandParameterMethods(ConfigedMain configedMain) {
+	public SSHCommandParameterMethods(ConfigedMain configedMain) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
 		methods.put(METHOD_GET_SELECTED_CLIENT_NAMES, "getSelectedClientNames");
 		methods.put(METHOD_GET_SELECTED_CLIENT_IPS, "getSelectedClientIPs");
@@ -98,28 +96,7 @@ public final class SSHCommandParameterMethods {
 		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
 
 		this.configedMain = configedMain;
-		instance = this;
 		init();
-	}
-
-	public static SSHCommandParameterMethods getInstance(ConfigedMain configedMain) {
-		if (instance != null) {
-			return instance;
-		} else {
-			return new SSHCommandParameterMethods(configedMain);
-		}
-	}
-
-	public static SSHCommandParameterMethods getInstance() {
-		if (instance != null) {
-			return instance;
-		} else {
-			return new SSHCommandParameterMethods(null);
-		}
-	}
-
-	public static void destroyInstance() {
-		instance = null;
 	}
 
 	public static String[] getParameterMethodLocalNames() {
