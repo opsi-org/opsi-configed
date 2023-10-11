@@ -399,7 +399,6 @@ public final class Terminal {
 	}
 
 	public void connectWebSocket() {
-		WebSocketInputStream.init();
 		TtyConnector connector = new WebSocketTtyConnector(new WebSocketOutputStream(messagebus.getWebSocket()),
 				WebSocketInputStream.getReader());
 		widget.setTtyConnector(connector);

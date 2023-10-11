@@ -39,6 +39,7 @@ public class TerminalEventHandler implements EventHandler {
 	}
 
 	private static void onTerminalOpenEvent(Map<String, Object> data) {
+		WebSocketInputStream.init();
 		Terminal terminal = Terminal.getInstance();
 		terminal.setTerminalId((String) data.get("terminal_id"));
 		terminal.setTerminalChannel((String) data.get("back_channel"));
