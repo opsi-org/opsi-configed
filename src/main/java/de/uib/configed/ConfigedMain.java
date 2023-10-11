@@ -335,6 +335,10 @@ public class ConfigedMain implements ListSelectionListener {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
 
+	private SSHConfigDialog sshConfigDialog;
+	private SSHCommandControlDialog sshCommandControlDialog;
+	private NewClientDialog newClientDialog;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			ConfigedMain.host = host;
@@ -4296,17 +4300,17 @@ public class ConfigedMain implements ListSelectionListener {
 		Collections.sort(netbootProductnames);
 		List<String> vNetbootProducts = netbootProductnames;
 
-		NewClientDialog.getInstance(this, getLinkedDepots());
-		NewClientDialog.getInstance().setGroupList(persistenceController.getGroupDataService().getHostGroupIds());
-		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
-
-		NewClientDialog.getInstance().useConfigDefaults(
+		if (newClientDialog == null) {
+			newClientDialog = new NewClientDialog(this, getLinkedDepots());
+		}
+		newClientDialog.setGroupList(persistenceController.getGroupDataService().getHostGroupIds());
+		newClientDialog.setProductNetbootList(vNetbootProducts);
+		newClientDialog.useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
 				persistenceController.getConfigDataService().isUefiConfigured(myServer),
 				persistenceController.getConfigDataService().isWanConfigured(myServer));
-
-		NewClientDialog.getInstance().setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
-		NewClientDialog.getInstance().setVisible(true);
+		newClientDialog.setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		newClientDialog.setVisible(true);
 	}
 
 	public void callChangeClientIDDialog() {
@@ -4717,12 +4721,19 @@ public class ConfigedMain implements ListSelectionListener {
 	 * Starts the config dialog
 	 */
 	public void startSSHConfigDialog() {
-		SSHConfigDialog.getInstance(this);
+		if (sshConfigDialog == null) {
+			sshConfigDialog = new SSHConfigDialog(this);
+		}
+		sshConfigDialog.setVisible(true);
+		sshConfigDialog.checkComponents();
 	}
 
 	/** Starts the control dialog */
 	public void startSSHControlDialog() {
-		SSHCommandControlDialog.getInstance(this);
+		if (sshCommandControlDialog == null) {
+			sshCommandControlDialog = new SSHCommandControlDialog(this, getMainFrame());
+		}
+		sshCommandControlDialog.setVisible(true);
 	}
 
 	private boolean confirmActionForSelectedClients(String confirmInfo) {

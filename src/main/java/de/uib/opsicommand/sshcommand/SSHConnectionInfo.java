@@ -36,7 +36,6 @@ public final class SSHConnectionInfo {
 	}
 
 	public String getHost() {
-
 		return sshConnectionHost;
 	}
 

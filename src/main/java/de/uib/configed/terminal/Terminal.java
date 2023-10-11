@@ -90,6 +90,10 @@ public final class Terminal {
 		return instance;
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
 	}

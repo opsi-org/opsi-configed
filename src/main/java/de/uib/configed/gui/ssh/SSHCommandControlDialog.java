@@ -48,12 +48,8 @@ import de.uib.utilities.swing.CheckedDocument;
  * @inheritDoc Graphical user interface for editing sshcommands.
  **/
 public final class SSHCommandControlDialog extends FGeneralDialog {
-
 	private static final int FRAME_WIDTH = 850;
 	private static final int FRAME_HEIGHT = 600;
-
-	/** This instance / Design Patter: singelton **/
-	private static SSHCommandControlDialog instance;
 
 	/** button panel instance **/
 	private JPanel buttonPanel = new JPanel();
@@ -104,7 +100,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	private JTextPane jTextPaneCommands = new JTextPane();
 
 	/** MainFrame instance **/
-	private JFrame main;
 	private ConfigedMain configedMain;
 	/** SSHCommandFactory instance **/
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
@@ -116,11 +111,8 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * 
 	 * @param owner Usually the MainFrame
 	 **/
-
-	private SSHCommandControlDialog(ConfigedMain configedMain, JFrame owner) {
+	public SSHCommandControlDialog(ConfigedMain configedMain, JFrame owner) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		Logging.info(this.getClass(), "SSHCommandControlDialog instance " + instance + " main " + main);
-		main = owner;
 		this.configedMain = configedMain;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
 				Globals.GAP_SIZE * 2, 0);
@@ -129,24 +121,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setLocationRelativeTo(owner);
 		this.setVisible(true);
-	}
-
-	/**
-	 * Method allows only one instance Design: Singelton-Pattern
-	 * 
-	 * @param configedMain the main controller
-	 * @param fr           the parent Frame usually the MainFrame
-	 * @return SSHCommandControlDialog instance
-	 **/
-	public static SSHCommandControlDialog getInstance(ConfigedMain configedMain) {
-		if (instance == null) {
-			instance = new SSHCommandControlDialog(configedMain, ConfigedMain.getMainFrame());
-		} else {
-			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-
-		instance.setVisible(true);
-		return instance;
 	}
 
 	private void setCenterLayout() {

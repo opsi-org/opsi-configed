@@ -83,4 +83,11 @@ public final class CacheManager {
 	public void clearCachedData(CacheIdentifier identifier) {
 		cache.remove(identifier);
 	}
+
+	/**
+	 * Clears all internally cached data.
+	 */
+	public void clearAllCachedData() {
+		cache.clear();
+	}
 }

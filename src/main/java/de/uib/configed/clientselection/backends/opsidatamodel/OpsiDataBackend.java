@@ -101,9 +101,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 
 public final class OpsiDataBackend {
-
-	private static OpsiDataBackend instance;
-
 	/*
 	* These variables tell you which data you have to fetch. E.g. if hasSoftware is
 	* true, there is an software
@@ -135,18 +132,8 @@ public final class OpsiDataBackend {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private OpsiDataBackend() {
-
+	public OpsiDataBackend() {
 		getHardwareConfig();
-	}
-
-	// we make a singleton in order to avoid data reloading
-	public static OpsiDataBackend getInstance() {
-		if (instance == null) {
-			instance = new OpsiDataBackend();
-		}
-
-		return instance;
 	}
 
 	/**

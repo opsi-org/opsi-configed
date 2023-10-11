@@ -46,9 +46,7 @@ public class SelectionManager {
 		if (backend == null || backend.isEmpty()) {
 			backend = "opsidata";
 		}
-
-		this.backend = OpsiDataBackend.getInstance();
-
+		this.backend = new OpsiDataBackend();
 		serializer = new OpsiDataSerializer(this);
 		groupWithStatusList = new LinkedList<>();
 	}

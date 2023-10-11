@@ -7,8 +7,6 @@
 package de.uib.utilities.datapanel;
 
 import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -22,22 +20,6 @@ import de.uib.utilities.table.gui.SensitiveCellEditor;
 import utils.Utils;
 
 public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
-
-	private static final Map<Object, SensitiveCellEditorForDataPanel> instances = new HashMap<>();
-
-	public static synchronized SensitiveCellEditorForDataPanel getInstance(Object key) {
-
-		// Zu key gehörige Instanz aus Map holen
-		return instances.computeIfAbsent(key, (Object arg) -> {
-
-			SensitiveCellEditorForDataPanel newInstance = new SensitiveCellEditorForDataPanel();
-			newInstance.myKey = "" + key;
-			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
-					+ " ; size of instances " + instances.size());
-			return newInstance;
-		});
-	}
-
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// we use data panel :
