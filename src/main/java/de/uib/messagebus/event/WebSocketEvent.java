@@ -7,7 +7,7 @@
 package de.uib.messagebus.event;
 
 public enum WebSocketEvent {
-	GENERAL_EVENT("event"),
+	GENERAL_EVENT("event"), GENERAL_ERROR("general_error"),
 
 	CHANNEL_SUBSCRIPTION_EVENT("channel_subscription_event"),
 

@@ -361,6 +361,8 @@ public class Messagebus implements MessagebusListener {
 			initialSubscriptionReceived = true;
 		} else if (WebSocketEvent.GENERAL_EVENT.toString().equals(type)) {
 			onEvent(message);
+		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
+			Logging.error(this, "Error occured on the server " + message.get("error"));
 		} else if (WebSocketEvent.TERMINAL_RESIZE_EVENT.toString().equals(type)) {
 			// Resizing is handled by the user, we only notify server by
 			// sending terminal_resize_request event. On the client side, there is
@@ -371,7 +373,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private void onEvent(Map<String, Object> message) {
-		// Sleep for a little because otherwise we cannot get the needed Data from the Server
+		// Sleep for a little because otherwise we cannot get the needed data from the server.
 		Utils.threadSleep(this, 5);
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
