@@ -269,11 +269,12 @@ public class ProductDataService {
 		List<List<Object>> productRows = new ArrayList<>();
 
 		for (String depotId : depotIds) {
-			if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
+			Set<OpsiPackage> packages = depot2packages.get(depotId);
+
+			if (!userRolesConfigDataService.hasDepotPermission(depotId) || packages == null) {
 				continue;
 			}
 
-			Set<OpsiPackage> packages = depot2packages.get(depotId);
 			for (OpsiPackage p : packages) {
 				List<Object> productRow = new ArrayList<>();
 				productRow.add(p.getProductId());
