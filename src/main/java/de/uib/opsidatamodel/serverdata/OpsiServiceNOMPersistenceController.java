@@ -523,7 +523,6 @@ public class OpsiServiceNOMPersistenceController {
 	 * 
 	 * returns null if clients have different values or if clientlist is empty
 	 */
-	@javax.annotation.Nullable
 	public Boolean isUEFI43(String[] clients) {
 
 		Boolean isUEFI = null;
