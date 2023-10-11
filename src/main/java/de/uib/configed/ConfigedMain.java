@@ -4598,6 +4598,8 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
+		checkSaveAll(false);
+
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
 			protected List<String> getErrors() {

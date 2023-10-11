@@ -143,8 +143,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
 
-	private JMenuItem itemSaveAndExecute;
-
 	private String title;
 
 	// State reducedTo1stSelection
@@ -483,12 +481,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
+		itemOnDemand.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 
 		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.DEFAULT_FONT);
 		}
-		itemOnDemand.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(
-				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
+		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 
 		popup.add(itemOnDemand);
 
@@ -507,20 +505,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			popup.add(itemOnDemandForSelectedProducts);
 		}
 
-		itemSaveAndExecute = new JMenuItemFormatted();
-		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-		itemSaveAndExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
-		// dies bit get its intended context
-		itemSaveAndExecute.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
-		if (!Main.FONT) {
-			itemSaveAndExecute.setFont(Globals.DEFAULT_FONT);
-		}
-		itemSaveAndExecute.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionevent on save and execute menu item");
-			saveAndExecuteAction();
-		});
-		popup.add(itemSaveAndExecute);
 		popup.addSeparator();
 
 		showPopupOpsiclientdEvent(true);
@@ -751,9 +735,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private void showPopupOpsiclientdEvent(boolean visible) {
-
 		itemOnDemand.setVisible(visible);
-		itemSaveAndExecute.setVisible(visible);
 	}
 
 	public void clearSelection() {

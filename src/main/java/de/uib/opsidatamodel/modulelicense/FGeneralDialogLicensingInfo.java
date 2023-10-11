@@ -283,8 +283,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		});
 
 		IconAsButton buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload_blue16.png", "images/reload_blue16.png", "images/reload_blue16.png",
-				"images/reload_blue16.png");
+				"images/reload16.png", "images/reload16.png", "images/reload16.png", "images/reload16.png");
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
