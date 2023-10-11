@@ -686,18 +686,18 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			if (!addedElements.isEmpty()) {
 
 				FShowList fList = new FShowList(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
-						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
+						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
 						450, 400);
 
 				List<String> outlines = new ArrayList<>();
-				outlines.add(Configed.getResourceValue("GroupPanel,addAllDependentProducts"));
+				outlines.add(Configed.getResourceValue("GroupPanel.addAllDependentProducts"));
 				outlines.add("__________");
 				outlines.add("");
 				outlines.addAll(addedElements);
 				fList.setLines(new ArrayList<>(outlines));
 				fList.setVisible(true);
 
-				if (fList.getResult() == 1) {
+				if (fList.getResult() == 2) {
 					associate.setSelection(extendedSelection);
 				}
 			}
