@@ -3,6 +3,8 @@
 ## [unversioned] - xxxx-xx-xx
 
 ### Changed
+- Themes
+- Open Sans Font
 - Don't load software information on start (performance)
 - Only save shown software information (less memory usage)
 - Remove unnecessary calls on startup (performance)
@@ -14,7 +16,9 @@
 - Show only available modules as option in opsi-licensing
 - Client tree selection / navigation reworked
 - Open multiple windows in logviewer when opening archives with several files
-- Remove UEFI-Boot information in opsi 4.3
+- Remove UEFI-Boot information in opsi 4.3 (only show as active, if client has entry in "clientconfig.uefinetbootlabel" config)
+
+## Fixed
 
 ## [4.2.22.15] - 2023-10-02
 ### Fixed

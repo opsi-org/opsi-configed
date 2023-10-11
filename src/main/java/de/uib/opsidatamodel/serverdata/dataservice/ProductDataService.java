@@ -129,7 +129,9 @@ public class ProductDataService {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
 		List<String> localbootProductNames;
 		if (ServerFacade.isOpsi43()) {
-			localbootProductNames = new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet());
+			localbootProductNames = getDepot2LocalbootProductsPD().get(depotId) != null
+					? new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet())
+					: new ArrayList<>();
 		} else {
 			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
 					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
@@ -259,38 +261,38 @@ public class ProductDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public List<List<Object>> getProductRowsForDepots(Set<String> depotIds) {
-		Logging.info(this, "retrieveProductsAllDepotsPD, reload");
-		String[] callAttributes = new String[] {};
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("depotId", depotIds);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> packages = exec.getListOfMaps(omc);
-		List<List<Object>> productRows = new ArrayList<>();
-		for (Map<String, Object> m : packages) {
-			String depot = "" + m.get("depotId");
+	public List<List<Object>> getProductRowsForDepots(Iterable<String> depotIds) {
 
-			if (!userRolesConfigDataService.hasDepotPermission(depot)) {
+		Map<String, Set<OpsiPackage>> depot2packages = cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES,
+				Map.class);
+
+		List<List<Object>> productRows = new ArrayList<>();
+
+		for (String depotId : depotIds) {
+			Set<OpsiPackage> packages = depot2packages.get(depotId);
+
+			if (!userRolesConfigDataService.hasDepotPermission(depotId) || packages == null) {
 				continue;
 			}
 
-			OpsiPackage p = new OpsiPackage(m);
-			List<Object> productRow = new ArrayList<>();
-			productRow.add(p.getProductId());
+			for (OpsiPackage p : packages) {
+				List<Object> productRow = new ArrayList<>();
+				productRow.add(p.getProductId());
 
-			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = getProduct2VersionInfo2InfosPD();
-			String productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
-					.getProductName();
-			productRow.add(productName);
-			p.appendValues(productRow);
+				Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = getProduct2VersionInfo2InfosPD();
+				String productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
+						.getProductName();
+				productRow.add(productName);
+				p.appendValues(productRow);
 
-			List<String> depotsWithThisVersion = getProduct2VersionInfo2DepotsPD().get(p.getProductId())
-					.get(p.getVersionInfo());
-			if (depotsWithThisVersion.size() == 1) {
-				productRows.add(productRow);
+				List<String> depotsWithThisVersion = getProduct2VersionInfo2DepotsPD().get(p.getProductId())
+						.get(p.getVersionInfo());
+				if (depotsWithThisVersion.size() == 1) {
+					productRows.add(productRow);
+				}
 			}
 		}
+
 		persistenceController.notifyPanelCompleteWinProducts();
 		return productRows;
 	}

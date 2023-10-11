@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.productpage;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
@@ -34,6 +35,8 @@ import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
+
+	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
 
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
@@ -162,7 +165,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		dependenciesActivateButton.setText("▶");
 		if (!Main.FONT) {
 			dependenciesActivateButton.setFont(Globals.DEFAULT_FONT);
+		} else {
+			dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 		}
+
 		if (!Main.THEMES) {
 			dependenciesActivateButton.setForeground(Globals.LIGHT_BLACK);
 		}
@@ -173,6 +179,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton.setText("▼");
 		if (!Main.FONT) {
 			propertiesActivateButton.setFont(Globals.DEFAULT_FONT);
+		} else {
+			propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 		}
 		if (!Main.THEMES) {
 			propertiesActivateButton.setForeground(Globals.LIGHT_BLACK);

@@ -311,7 +311,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
-	private boolean dataReady;
+	private boolean everythingReady;
 
 	private boolean filterClientList;
 
@@ -405,6 +405,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		initMainFrame();
 
+		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
+
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
 			loginDialog.setVisible(false);
@@ -424,13 +426,9 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
-
 		setEditingTarget(EditingTarget.CLIENTS);
 
 		anyDataChanged = false;
-
-		preloadData();
 
 		// restrict visibility of clients to some group
 
@@ -744,7 +742,15 @@ public class ConfigedMain implements ListSelectionListener {
 		new Thread() {
 			@Override
 			public void run() {
+
+				preloadData();
+
 				initGui();
+
+				everythingReady = true;
+
+				mainFrame.updateHostCheckboxenText();
+				mainFrame.enableAfterLoading();
 
 				checkErrorList();
 
@@ -785,10 +791,12 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
+		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		if (depotRepresentative == null) {
 			depotRepresentative = myServer;
 		}
+
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
 		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
@@ -803,10 +811,12 @@ public class ConfigedMain implements ListSelectionListener {
 			savedSearchesDialog.resetModel();
 		}
 
+		// Load all group data in this method to only call one method!
+		persistenceController.getGroupDataService().retrieveAllGroupsPD();
+		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
+
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
-
-		mainFrame.updateHostCheckboxenText();
 
 		persistenceController.getDepotDataService().retrieveProductsPD();
 
@@ -814,9 +824,6 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
-
-		dataReady = true;
-		mainFrame.enableAfterLoading();
 	}
 
 	public void toggleColumnIPAddress() {
@@ -1277,8 +1284,6 @@ public class ConfigedMain implements ListSelectionListener {
 	// we call this after we have a PersistenceController
 	private void initMainFrame() {
 
-		myServer = persistenceController.getHostInfoCollections().getConfigServer();
-
 		initDepots();
 
 		// create client selection panel
@@ -1295,7 +1300,6 @@ public class ConfigedMain implements ListSelectionListener {
 					// Nothing to do for all the other keys
 				}
 			}
-
 		};
 
 		selectionPanel.setModel(buildClientListTableModel(true));
@@ -1974,8 +1978,13 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void toggleFilterClientList() {
-		Logging.info(this, "toggleFilterClientList   " + filterClientList);
-		setFilterClientList(!filterClientList);
+		toggleFilterClientList(true);
+	}
+
+	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
+				+ rebuildClientListTableModel);
+		setFilterClientList(!filterClientList, rebuildClientListTableModel);
 	}
 
 	public void invertClientselection() {
@@ -2151,10 +2160,14 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void setFilterClientList(boolean b) {
+		setFilterClientList(b, true);
+	}
 
+	public void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
-		setRebuiltClientListTableModel();
-
+		if (rebuildClientListTableModel) {
+			setRebuiltClientListTableModel();
+		}
 	}
 
 	private String getSelectedClientsString() {
@@ -2422,7 +2435,7 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this,
 						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
-				if (getSelectedClients().length == 1) {
+				if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
 					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
 				} else {
 					mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2534,9 +2547,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 		// since we select based on the tree view we disable the filter
 		if (filterClientList) {
-			mainFrame.toggleClientFilterAction();
+			mainFrame.toggleClientFilterAction(false);
 		}
-
 	}
 
 	public void clearTree() {
@@ -2577,6 +2589,11 @@ public class ConfigedMain implements ListSelectionListener {
 		activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 		activatedGroupModel.setActive(true);
+
+		// since we select based on the tree view we disable the filter
+		if (filterClientList) {
+			mainFrame.toggleClientFilterAction();
+		}
 	}
 
 	public TreePath getGroupPathActivatedByTree() {
@@ -3063,9 +3080,13 @@ public class ConfigedMain implements ListSelectionListener {
 		hostUpdateCollection = new HostUpdateCollection();
 		addToGlobalUpdateCollection(hostUpdateCollection);
 
-		mainFrame.getPanelHostProperties().initMultipleHostsEditing(selectedDepots[0],
-				depotPropertiesForPermittedDepots, hostUpdateCollection,
-				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		String depot = "";
+		if (selectedDepots.length > 0) {
+			depot = selectedDepots[0];
+		}
+
+		mainFrame.getPanelHostProperties().initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots,
+				hostUpdateCollection, OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		return true;
 	}
@@ -3358,7 +3379,7 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		if (!problem && dataReady) {
+		if (!problem && everythingReady) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3503,7 +3524,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
-		if (dataReady) {
+		if (everythingReady) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
 			Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
@@ -3522,7 +3543,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		if (dataReady) {
+		if (everythingReady) {
 			String oldGroupSelection = activatedGroupModel.getGroupName();
 			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
@@ -3561,7 +3582,7 @@ public class ConfigedMain implements ListSelectionListener {
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
-		if (dataReady) {
+		if (everythingReady) {
 			allowedClients = null;
 
 			persistenceController.reloadData(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString());
@@ -3574,6 +3595,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 			requestRefreshDataForClientSelection();
 			preloadData();
+
+			mainFrame.updateHostCheckboxenText();
+			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 

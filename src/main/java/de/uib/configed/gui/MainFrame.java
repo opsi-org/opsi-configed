@@ -2716,7 +2716,11 @@ public class MainFrame extends JFrame
 	}
 
 	public void toggleClientFilterAction() {
-		configedMain.toggleFilterClientList();
+		toggleClientFilterAction(true);
+	}
+
+	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
+		configedMain.toggleFilterClientList(rebuildClientListTableModel);
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
 

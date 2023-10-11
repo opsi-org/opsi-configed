@@ -135,10 +135,6 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN);
 		configDataService.retrieveOpsiDefaultDomainPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
-		cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
-		productDataService.checkProductGlobalInfosPD(depotDataService.getDepot());
-
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_IDS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
@@ -170,6 +166,10 @@ public class EssentialDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS);
 		productDataService.retrieveProductOnClientsDisplayFieldsNetbootProducts();
+
+		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
+		cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
+		productDataService.checkProductGlobalInfosPD(depotDataService.getDepot());
 
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 		hardwareDataService.retrieveHardwareOnClientPD();
