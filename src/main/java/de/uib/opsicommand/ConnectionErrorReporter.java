@@ -61,10 +61,6 @@ public final class ConnectionErrorReporter {
 		return instance;
 	}
 
-	public static synchronized void destroy() {
-		instance = null;
-	}
-
 	public void notify(String message, ConnectionErrorType errorType) {
 		switch (errorType) {
 		case FAILED_CERTIFICATE_VALIDATION_ERROR:
