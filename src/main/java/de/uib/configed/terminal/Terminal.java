@@ -52,6 +52,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ProgressBarPainter;
 import utils.Utils;
@@ -441,7 +442,7 @@ public final class Terminal {
 		@Override
 		public void resize(Dimension termWinSize) {
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "terminal_resize_request");
+			data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminalChannel);
