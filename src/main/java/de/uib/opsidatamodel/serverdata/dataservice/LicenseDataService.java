@@ -292,7 +292,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -410,7 +410,7 @@ public class LicenseDataService {
 	// returns the ID of the edited data record
 	public String editLicenceContract(String licenseContractId, String partner, String conclusionDate,
 			String notificationDate, String expirationDate, String notes) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 		String result = "";
@@ -437,7 +437,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenceContract(String licenseContractId) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -452,7 +452,8 @@ public class LicenseDataService {
 
 	// returns the ID of the edited data record
 	public String editLicencePool(String licensePoolId, String description) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 
@@ -475,7 +476,7 @@ public class LicenseDataService {
 	public boolean deleteLicencePool(String licensePoolId) {
 		Logging.info(this, "deleteLicencePool " + licensePoolId);
 
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -488,7 +489,7 @@ public class LicenseDataService {
 	}
 
 	public String editRelationProductId2LPool(String productId, String licensePoolId) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 
@@ -514,7 +515,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteRelationProductId2LPool(String productId, String licensePoolId) {
-		if (userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
 
