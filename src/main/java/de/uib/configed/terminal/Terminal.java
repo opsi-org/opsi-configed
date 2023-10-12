@@ -470,7 +470,7 @@ public final class Terminal {
 		@Override
 		public void write(byte[] bytes) {
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "terminal_data_write");
+			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminalChannel);

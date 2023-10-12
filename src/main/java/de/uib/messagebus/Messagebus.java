@@ -214,7 +214,7 @@ public class Messagebus implements MessagebusListener {
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
 		Map<String, Object> message = new HashMap<>();
-		message.put("type", "channel_subscription_request");
+		message.put("type", WebSocketEvent.CHANNEL_SUBSCRIPTION_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
 		message.put("channel", "service:messagebus");
@@ -237,7 +237,7 @@ public class Messagebus implements MessagebusListener {
 		terminal.display();
 
 		Map<String, Object> message = new HashMap<>();
-		message.put("type", "terminal_open_request");
+		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
 		message.put("channel", "service:config:terminal");

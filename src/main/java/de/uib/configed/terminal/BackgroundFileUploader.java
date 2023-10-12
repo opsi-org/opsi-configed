@@ -26,6 +26,7 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
@@ -111,7 +112,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			buff.flip();
 
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "file_chunk");
+			data.put("type", WebSocketEvent.FILE_CHUNK.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminal.getTerminalChannel());
@@ -167,7 +168,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private void sendFileUploadRequest(File file, String fileId) {
 		try {
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "file_upload_request");
+			data.put("type", WebSocketEvent.FILE_UPLOAD_REQUEST.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminal.getTerminalChannel());

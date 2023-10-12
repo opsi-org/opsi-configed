@@ -31,7 +31,7 @@ public class FileEventHandler implements EventHandler {
 
 	private static void onFileUploadResult(Map<String, Object> eventData, Messagebus messagebus) {
 		Map<String, Object> message = new HashMap<>();
-		message.put("type", "terminal_data_write");
+		message.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
 		message.put("channel", Terminal.getInstance().getTerminalChannel());
