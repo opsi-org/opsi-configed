@@ -76,7 +76,7 @@ public final class Terminal {
 	private String terminalId;
 
 	private CountDownLatch locker;
-	private boolean webSocketConnected;
+	private boolean webSocketTtyConnected;
 
 	private TerminalSettingsProvider settingsProvider;
 
@@ -89,6 +89,10 @@ public final class Terminal {
 		}
 
 		return instance;
+	}
+
+	public static void destroyInstance() {
+		instance = null;
 	}
 
 	public void setMessagebus(Messagebus messagebus) {
@@ -123,8 +127,8 @@ public final class Terminal {
 		return widget.getTerminalDisplay().getRowCount();
 	}
 
-	public boolean isWebSocketConnected() {
-		return webSocketConnected;
+	public boolean isWebSocketTtyConnected() {
+		return webSocketTtyConnected;
 	}
 
 	public void lock() {
@@ -197,15 +201,9 @@ public final class Terminal {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				try {
-					messagebus.disconnect();
-					widget.stop();
-					frame.dispose();
-					frame = null;
-				} catch (InterruptedException ex) {
-					Logging.warning(this, "thread was interrupted");
-					Thread.currentThread().interrupt();
-				}
+				widget.stop();
+				frame.dispose();
+				frame = null;
 			}
 		});
 	}
@@ -399,13 +397,13 @@ public final class Terminal {
 		SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 	}
 
-	public void connectWebSocket() {
+	public void connectWebSocketTty() {
+		WebSocketInputStream.init();
 		TtyConnector connector = new WebSocketTtyConnector(new WebSocketOutputStream(messagebus.getWebSocket()),
 				WebSocketInputStream.getReader());
 		widget.setTtyConnector(connector);
 		widget.start();
-
-		webSocketConnected = true;
+		webSocketTtyConnected = true;
 	}
 
 	@SuppressWarnings("java:S2972")
@@ -426,9 +424,8 @@ public final class Terminal {
 		@Override
 		public void close() {
 			try {
-				writer.close();
 				WebSocketInputStream.close();
-				webSocketConnected = false;
+				webSocketTtyConnected = false;
 			} catch (IOException e) {
 				Logging.warning(this, "failed to close output/input stream: " + e);
 			}

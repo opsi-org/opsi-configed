@@ -85,7 +85,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private IconButton buttonReloadProductStates;
 
-	private IconButton buttonSaveAndExecute;
+	private IconButton buttonExecuteNow;
 
 	private IconButton buttonCollectiveAction;
 
@@ -174,7 +174,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	public void setSaveAndExecuteActionHandler(ActionListener al) {
-		buttonSaveAndExecute.addActionListener(al);
+		buttonExecuteNow.addActionListener(al);
 
 	}
 
@@ -377,7 +377,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonDelete.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
-				"images/reload_blue16.png", "images/reload_blue16.png", " ", true);
+				"images/reload16.png", "images/reload16.png", " ", true);
 
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
@@ -385,14 +385,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
-		buttonSaveAndExecute = new IconButton(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
-				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
-
-		buttonSaveAndExecute.setToolTipText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-
-		buttonSaveAndExecute.addActionListener(this);
-		buttonSaveAndExecute.setPreferredSize(Globals.NEW_SMALL_BUTTON);
-		buttonSaveAndExecute.setVisible(true);
+		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"),
+				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", " ", true);
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
+		buttonExecuteNow.addActionListener(this);
+		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
+		buttonExecuteNow.setVisible(true);
 
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
@@ -607,7 +605,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
+										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 										.addGroup(layoutMain.createSequentialGroup()
@@ -628,7 +626,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGroup(layoutMain.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -688,18 +686,18 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			if (!addedElements.isEmpty()) {
 
 				FShowList fList = new FShowList(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
-						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
+						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
 						450, 400);
 
 				List<String> outlines = new ArrayList<>();
-				outlines.add(Configed.getResourceValue("GroupPanel,addAllDependentProducts"));
+				outlines.add(Configed.getResourceValue("GroupPanel.addAllDependentProducts"));
 				outlines.add("__________");
 				outlines.add("");
 				outlines.addAll(addedElements);
 				fList.setLines(new ArrayList<>(outlines));
 				fList.setVisible(true);
 
-				if (fList.getResult() == 1) {
+				if (fList.getResult() == 2) {
 					associate.setSelection(extendedSelection);
 				}
 			}

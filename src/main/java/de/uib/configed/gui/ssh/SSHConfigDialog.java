@@ -42,20 +42,18 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
 public final class SSHConfigDialog extends FGeneralDialog {
+	private JCheckBox jCheckBoxDefault;
+	private JCheckBox jCheckBoxUseKeyFile;
 
-	private static JCheckBox jCheckBoxDefault;
-	private static JCheckBox jCheckBoxUseKeyFile;
-
-	private static JComboBox<String> jComboBoxHost;
-	private static JButton iconButtonOpenChooser;
-	private static JTextField jTextFieldKeyFile;
-	private static JPasswordField jTextFieldPassphrase;
-	private static JTextField jTextFieldUser;
-	private static JTextField jTextFieldPort;
-	private static JPasswordField jTextFieldPassword;
-	private static boolean jComboBoxUseDefaultState;
-	private static SSHConfigDialog instance;
-	private static SSHConnectionInfo connectionInfo;
+	private JComboBox<String> jComboBoxHost;
+	private JButton iconButtonOpenChooser;
+	private JTextField jTextFieldKeyFile;
+	private JPasswordField jTextFieldPassphrase;
+	private JTextField jTextFieldUser;
+	private JTextField jTextFieldPort;
+	private JPasswordField jTextFieldPassword;
+	private boolean jComboBoxUseDefaultState;
+	private SSHConnectionInfo connectionInfo;
 
 	private ConfigedMain configedMain;
 
@@ -70,7 +68,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private JLabel jLabelConnectionState = new JLabel();
 
-	private SSHConfigDialog(ConfigedMain configedMain) {
+	public SSHConfigDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
 		this.configedMain = configedMain;
 		connectionInfo = SSHConnectionInfo.getInstance();
@@ -86,18 +84,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				.isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
-	}
-
-	public static SSHConfigDialog getInstance(ConfigedMain configedMain) {
-		if (instance == null) {
-			instance = new SSHConfigDialog(configedMain);
-		} else {
-			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-
-		instance.setVisible(true);
-		checkComponents();
-		return instance;
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void checkComponentStates() {
@@ -576,7 +563,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setComponentsEditable(value);
 	}
 
-	private static void setComponentsEditable(boolean value) {
+	private void setComponentsEditable(boolean value) {
 		jComboBoxHost.setEnabled(value);
 		jTextFieldPort.setEnabled(value);
 		jTextFieldUser.setEnabled(value);
@@ -715,7 +702,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		checkComponentStates();
 	}
 
-	private static void checkComponents() {
+	public void checkComponents() {
 		if (jCheckBoxDefault.isSelected()) {
 			connectionInfo.setUserData(ConfigedMain.getHost(), ConfigedMain.getUser(), ConfigedMain.getPassword(),
 					SSHConnect.PORT_SSH);

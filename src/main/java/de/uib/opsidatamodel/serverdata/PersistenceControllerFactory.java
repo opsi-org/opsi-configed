@@ -29,11 +29,6 @@ public final class PersistenceControllerFactory {
 	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
 			String password) {
 		Logging.info("getNewPersistenceController");
-		if (staticPersistControl != null
-				&& staticPersistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
-			Logging.info("a PersistenceController exists and we are connected, the existing one will be returned");
-			return staticPersistControl;
-		}
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
 				user, password);

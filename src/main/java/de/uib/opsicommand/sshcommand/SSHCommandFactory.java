@@ -146,7 +146,7 @@ public final class SSHCommandFactory {
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);
-		pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
+		pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 	}
 
 	/**
@@ -174,6 +174,11 @@ public final class SSHCommandFactory {
 		} else {
 			return new SSHCommandFactory(null);
 		}
+	}
+
+	public static void destroyInstance() {
+		sshCommandsParam.clear();
+		instance = null;
 	}
 
 	public void setAllowedHosts(Collection<String> allowed) {
@@ -209,7 +214,7 @@ public final class SSHCommandFactory {
 		if (pmethodHandler != null) {
 			return pmethodHandler;
 		} else {
-			pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
+			pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 			return pmethodHandler;
 		}
 	}

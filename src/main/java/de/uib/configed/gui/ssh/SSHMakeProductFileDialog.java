@@ -77,13 +77,13 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void initFrame() {
-		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
 				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		setVisible(true);
 	}
 
@@ -468,7 +468,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		EmptyCommand setRights = new EmptyCommand("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
-		SSHConnectionExecDialog.getInstance().setVisible(true);
+		// SSHConnectionExecDialog.getInstance().setVisible(true);
 		ssh.exec(setRights);
 	}
 

@@ -198,48 +198,17 @@ public class MainView implements View {
 		Service<Void> retrieverThread = new Service<>() {
 			@Override
 			protected Task<Void> createTask() {
-				InitialDataRetriever dataRetriever = new InitialDataRetriever();
-				dataRetriever.setOnSucceeded(workerStateEvent -> onSucceeded());
-				return dataRetriever;
+				InitialDataRetriever initialDataRetriever = new InitialDataRetriever();
+				initialDataRetriever.setOnSucceeded(workerStateEvent -> loadData());
+				return initialDataRetriever;
 			}
 		};
-
 		retrieverThread.start();
-	}
-
-	private void onSucceeded() {
-		ViewManager.displayView(Dashboard.MAIN_VIEW);
-
-		// When initial data is retrieved, we create and start another thread.
-		// The created thread makes sure to load extra data, without dissallowing
-		// for user to use dashbaord.
-		Service<Void> extraDataRetrieverThread = new Service<>() {
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception {
-						ProductData.retrieveUnusedProducts();
-						return null;
-					}
-				};
-			}
-		};
-
-		extraDataRetrieverThread.setOnSucceeded(
-				workerStateEvent -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotComboBox.getValue()));
-		extraDataRetrieverThread.start();
 	}
 
 	private class InitialDataRetriever extends Task<Void> {
 		@Override
 		public Void call() {
-			ClientData.clear();
-			ProductData.clear();
-			ModuleData.clear();
-			LicenseData.clear();
-			DepotData.clear();
-
 			setBlurriness(5);
 			dataLoadingScreenVBox.setVisible(true);
 

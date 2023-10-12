@@ -16,6 +16,11 @@ import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.dashboard.collector.ClientData;
+import de.uib.configed.dashboard.collector.DepotData;
+import de.uib.configed.dashboard.collector.LicenseData;
+import de.uib.configed.dashboard.collector.ModuleData;
+import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
@@ -56,6 +61,12 @@ public class Dashboard {
 			public void windowClosing(WindowEvent e) {
 				frame.setVisible(false);
 				Platform.runLater(() -> ViewManager.displayView(MAIN_VIEW));
+
+				ClientData.clear();
+				ProductData.clear();
+				ModuleData.clear();
+				LicenseData.clear();
+				DepotData.clear();
 			}
 		});
 
@@ -68,7 +79,7 @@ public class Dashboard {
 		});
 	}
 
-	public void initFX(final JFXPanel fxPanel) throws IOException {
+	private void initFX(final JFXPanel fxPanel) throws IOException {
 		mainView = new MainView(fxPanel);
 		ClientView clientView = new ClientView(fxPanel);
 		ProductView productView = new ProductView(fxPanel);
@@ -82,11 +93,10 @@ public class Dashboard {
 	}
 
 	public void show() {
-		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		frame.setVisible(true);
-
-		if (mainView != null) {
+		if (!frame.isVisible()) {
 			mainView.init();
 		}
+		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		frame.setVisible(true);
 	}
 }

@@ -48,6 +48,10 @@ public class SavedStates {
 		properties.remove(key);
 	}
 
+	public void removeAll() {
+		properties.clear();
+	}
+
 	public void store() throws IOException {
 		store("");
 	}

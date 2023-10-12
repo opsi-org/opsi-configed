@@ -11,8 +11,6 @@ import java.nio.ByteBuffer;
 
 import org.java_websocket.WebSocket;
 
-import de.uib.utilities.logging.Logging;
-
 public class WebSocketOutputStream extends OutputStream {
 	private final WebSocket webSocket;
 
@@ -33,14 +31,5 @@ public class WebSocketOutputStream extends OutputStream {
 	@Override
 	public void write(byte[] b, int off, int len) {
 		webSocket.send(ByteBuffer.wrap(b, off, len));
-	}
-
-	@Override
-	public void close() {
-		if (!webSocket.isClosed() && !webSocket.isClosing()) {
-			webSocket.close();
-		} else {
-			Logging.info(this, "websocket is closed");
-		}
 	}
 }

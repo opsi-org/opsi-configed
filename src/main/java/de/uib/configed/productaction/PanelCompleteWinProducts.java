@@ -90,7 +90,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		initComponentsForNameProducer();
 
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
-		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
 		panelMountShare = new PanelMountShare(this, rootFrame) {
 			@Override
@@ -161,7 +161,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
-			SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
+			SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 			evaluateWinProducts();
 		});
 

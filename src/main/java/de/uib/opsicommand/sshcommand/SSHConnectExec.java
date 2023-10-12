@@ -145,7 +145,7 @@ public class SSHConnectExec extends SSHConnect {
 				multiDialog = dialog;
 			} else {
 				Logging.info(this, "exec_list, create SSHConnectionExecDialog");
-				multiDialog = SSHConnectionExecDialog.getInstance();
+				multiDialog = new SSHConnectionExecDialog();
 			}
 			outputDialog = multiDialog;
 			final SSHConnectionExecDialog finalDialog = multiDialog;
@@ -263,7 +263,7 @@ public class SSHConnectExec extends SSHConnect {
 					outputDialog.setVisible(true);
 				}
 			} else {
-				outputDialog = SSHConnectionExecDialog.getInstance();
+				outputDialog = new SSHConnectionExecDialog();
 			}
 
 			outputDialog.setTitle(Configed.getResourceValue("SSHConnection.Exec.title") + " "
