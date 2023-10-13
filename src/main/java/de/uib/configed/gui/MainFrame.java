@@ -3414,7 +3414,6 @@ public class MainFrame extends JFrame
 				@Override
 				protected void reload() {
 					super.reload();
-					configedMain.clearHwInfo();
 
 					// otherwise we get a wait cursor only in table component
 					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);

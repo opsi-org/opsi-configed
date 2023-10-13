@@ -254,8 +254,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	// collection of retrieved software audit and hardware maps
 
-	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
-
 	private String myServer;
 	private List<String> editableDomains;
 	private boolean multiDepot;
@@ -3061,17 +3059,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private void checkHwInfo() {
-		if (hwInfoClientmap == null) {
-			hwInfoClientmap = new HashMap<>();
-		}
-	}
-
-	public void clearHwInfo() {
-		checkHwInfo();
-		hwInfoClientmap.clear();
-	}
-
 	private boolean setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
@@ -3084,11 +3071,7 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			checkHwInfo();
-			Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.computeIfAbsent(firstSelectedClient,
-					s -> persistenceController.getHardwareInfo(firstSelectedClient));
-
-			mainFrame.setHardwareInfo(hwInfo);
+			mainFrame.setHardwareInfo(persistenceController.getHardwareInfo(firstSelectedClient));
 		}
 
 		return true;
@@ -3537,7 +3520,6 @@ public class ConfigedMain implements ListSelectionListener {
 			OpsiDataBackend.getInstance().setReloadRequested();
 
 			clearSwInfo();
-			clearHwInfo();
 
 			// sets dataReady
 			preloadData();
