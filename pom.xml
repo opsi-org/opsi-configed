@@ -272,13 +272,6 @@
             <version>2.0.7</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-pmd-plugin -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.20.0</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms -->
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>
@@ -309,7 +302,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.23.0</version>
+            <version>1.24.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.tukaani/xz -->
