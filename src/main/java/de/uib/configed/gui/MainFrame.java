@@ -498,7 +498,7 @@ public class MainFrame extends JFrame
 		JMenuItem jMenuFileReload = new JMenuItem();
 		JMenu jMenuTheme = new JMenu(); // submenu
 		JMenu jMenuFileLanguage = new JMenu(); // submenu
-		JMenuItem jMenuFileRelogin = new JMenuItem();
+		JMenuItem jMenuFileLogout = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
@@ -568,8 +568,8 @@ public class MainFrame extends JFrame
 			});
 		}
 
-		jMenuFileRelogin.setText(Configed.getResourceValue("MainFrame.jMenuFileRelogin"));
-		jMenuFileRelogin.addActionListener((ActionEvent e) -> {
+		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
+		jMenuFileLogout.addActionListener((ActionEvent e) -> {
 			configedMain.closeInstance(true);
 			ConfigedMain.setHost(null);
 			ConfigedMain.setUser(null);
@@ -589,7 +589,7 @@ public class MainFrame extends JFrame
 			jMenuFile.add(jMenuTheme);
 		}
 
-		jMenuFile.add(jMenuFileRelogin);
+		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 	}
 
