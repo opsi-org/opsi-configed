@@ -239,8 +239,7 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 			String[] sourceVars, Map<String, String> translateValues) {
 		Map<String, String> detailMap = new HashMap<>();
 
-		for (int i = 0; i < sourceVars.length; i++) {
-			String value = sourceVars[i];
+		for (String value : sourceVars) {
 			String val = String.valueOf(originalMap.get(value));
 
 			if (translateValues != null && translateValues.get(val) != null) {

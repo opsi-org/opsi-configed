@@ -102,8 +102,8 @@ public class HostInfo {
 	private static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
 	private static final Set<Character> notLegalChars = new HashSet<>();
 	static {
-		for (int i = 0; i < NOT_LEGAL_CHARS_0.length(); i++) {
-			notLegalChars.add(NOT_LEGAL_CHARS_0.charAt(i));
+		for (char notLegalChar : NOT_LEGAL_CHARS_0.toCharArray()) {
+			notLegalChars.add(notLegalChar);
 		}
 	}
 

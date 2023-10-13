@@ -1228,7 +1228,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.debug(this, "setAwareOfTableChangedListener  " + b);
 
 		awareOfTableChangedListener = b;
-
 	}
 
 	public boolean isAwareOfTableChangedListener() {

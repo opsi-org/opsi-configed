@@ -167,7 +167,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		// should be name of client, delivered from info textfield
 		textPanes[i].setInfo(info);
 		textPanes[i].setText(document);
-
 	}
 
 	private void setDocument(String ident, final String document, final String info) {

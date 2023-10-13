@@ -808,8 +808,8 @@ public class ModuleDataService {
 			List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
 
 			// to null
-			for (int i = 0; i < signature1.size(); i++) {
-				String element = (String) signature1.get(i);
+			for (Object elementObject : signature1) {
+				String element = (String) elementObject;
 
 				if (element != null && element.length() > 0 && element.charAt(0) == '*') {
 					signature.add(element.substring(1));
@@ -817,7 +817,7 @@ public class ModuleDataService {
 					signature.add(element);
 				}
 
-				Logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
+				Logging.debug(this, "mapOfMethodSignatures :: " + name + ": " + signature);
 			}
 			mapOfMethodSignatures.put(name, signature);
 		}

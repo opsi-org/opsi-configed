@@ -63,8 +63,8 @@ public class LogDataService {
 	private static Map<String, String> getEmptyLogfiles() {
 		Map<String, String> logfiles = new HashMap<>();
 		String[] logtypes = Utils.getLogTypes();
-		for (int i = 0; i < logtypes.length; i++) {
-			logfiles.put(logtypes[i], "");
+		for (String logtype : logtypes) {
+			logfiles.put(logtype, "");
 		}
 		return logfiles;
 	}

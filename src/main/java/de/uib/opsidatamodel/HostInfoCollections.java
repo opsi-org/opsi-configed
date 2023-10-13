@@ -449,16 +449,16 @@ public class HostInfoCollections {
 		depots.add(depotId);
 
 		config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
-		for (int i = 0; i < clients.length; i++) {
+		for (String client : clients) {
 			// collect data
-			persistenceController.getConfigDataService().setAdditionalConfiguration(clients[i], config);
+			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
 		}
 		// send data
 		persistenceController.getConfigDataService().setAdditionalConfiguration();
 
 		// change transitory data
-		for (int i = 0; i < clients.length; i++) {
-			setDepot(clients[i], depotId);
+		for (String client : clients) {
+			setDepot(client, depotId);
 		}
 
 		// we hope to have completely changed the internal data

@@ -329,8 +329,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		// lines
 
 		// Perform the actual import.
-		for (int i = 0; i < values.length; i++) {
-			String value = values[i];
+		for (String value : values) {
 
 			String importID = null;
 			String sourceParentID = null;
@@ -347,7 +346,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				importID = parts[parts.length - 1];
 			}
 
-			Logging.debug(this, "importData " + i + " values[i] " + importID);
+			Logging.debug(this, "importData " + importID);
 
 			TreePath sourcePath = tree.getActiveTreePath(importID);
 			Logging.debug(this, "active source tree path for importID " + importID + ": " + sourcePath);
@@ -384,7 +383,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			}
 
-			Logging.debug(this, "importData ready " + i + " importID " + importID);
+			Logging.debug(this, "importData ready, importID " + importID);
 
 		}
 

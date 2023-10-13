@@ -948,8 +948,8 @@ public class ProductDataService {
 		for (Map<String, Object> map : properties) {
 			List<?> valueList = (List<?>) map.get("values");
 			Set<String> values = new HashSet<>();
-			for (int i = 0; i < valueList.size(); i++) {
-				values.add((String) valueList.get(i));
+			for (Object value : valueList) {
+				values.add((String) value);
 			}
 
 			if (starting) {

@@ -90,8 +90,7 @@ public class OpsiMethodCall {
 		sb.append("params=");
 		sb.append("[");
 		if (parameters != null && parameters.length > 0) {
-			for (int i = 0; i < parameters.length; i++) {
-				Object paramI = parameters[i];
+			for (Object paramI : parameters) {
 
 				if (paramI instanceof Object[]) {
 					sb.append(Arrays.toString((Object[]) paramI));
@@ -122,15 +121,15 @@ public class OpsiMethodCall {
 		Map<String, Object> map = new HashMap<>();
 		List<Object> params = new ArrayList<>();
 
-		for (int i = 0; i < parameters.length; i++) {
-			if (parameters[i] instanceof Object[]) {
-				List<Object> list = Arrays.asList((Object[]) parameters[i]);
+		for (Object parameter : parameters) {
+			if (parameter instanceof Object[]) {
+				List<Object> list = Arrays.asList((Object[]) parameter);
 
 				params.add(list);
-			} else if (parameters[i] instanceof Map) {
-				params.add(parameters[i]);
+			} else if (parameter instanceof Map) {
+				params.add(parameter);
 			} else {
-				params.add(parameters[i]);
+				params.add(parameter);
 			}
 		}
 

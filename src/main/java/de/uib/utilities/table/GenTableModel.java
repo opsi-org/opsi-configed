@@ -88,8 +88,8 @@ public class GenTableModel extends AbstractTableModel {
 				this.finalCols.add(keyCol);
 			}
 		} else {
-			for (int i = 0; i < finalColumns.length; i++) {
-				this.finalCols.add(finalColumns[i]);
+			for (int finalColumn : finalColumns) {
+				this.finalCols.add(finalColumn);
 			}
 		}
 

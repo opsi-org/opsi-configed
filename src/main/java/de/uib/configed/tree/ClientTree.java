@@ -529,14 +529,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return clientPath;
 	}
 
-	private void produceClients(Object[] x, DefaultMutableTreeNode parent) {
-		produceClients(x, parent, false);
+	private void produceClients(String[] clientIds, DefaultMutableTreeNode parent) {
+		produceClients(clientIds, parent, false);
 	}
 
 	// expects Strings as Objects
-	private void produceClients(Object[] x, DefaultMutableTreeNode parent, boolean register) {
-		for (int i = 0; i < x.length; i++) {
-			String clientId = (String) x[i];
+	private void produceClients(String[] clientIds, DefaultMutableTreeNode parent, boolean register) {
+		for (String clientId : clientIds) {
 			IconNode node = produceClientNode(clientId);
 			if (register) {
 				clientNodesInDIRECTORY.put(clientId, node);
@@ -558,11 +557,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	private void produceClients(Object[] x) {
-		produceClients(x, groupNodeAllClients);
+	private void produceClients(String[] clientIds) {
+		produceClients(clientIds, groupNodeAllClients);
 	}
 
-	public void produceTreeForALL(Object[] x) {
+	public void produceTreeForALL(String[] x) {
 
 		clientNodesInDIRECTORY.clear();
 		produceClients(x);
@@ -711,19 +710,18 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			} else {
 				boolean register = isInDIRECTORY(groupNode);
-				produceClients(entry.getValue().toArray(), groupNode, register);
+				produceClients(entry.getValue().toArray(new String[0]), groupNode, register);
 			}
 
 		}
 
 		// check produced DIRECTORY
-		for (int i = 0; i < clientIds.length; i++) {
-			checkDIRECTORY(clientIds[i], null);
+		for (String clientId : clientIds) {
+			checkDIRECTORY(clientId, null);
 		}
 
 		// build membersOfDIRECTORY_NOT_ASSIGNED
-		for (int i = 0; i < clientIds.length; i++) {
-			String clientId = clientIds[i];
+		for (String clientId : clientIds) {
 			Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
 
 			// client is not in any DIRECTORY group
@@ -1299,12 +1297,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		activeParents.clear();
 	}
 
-	public void produceActiveParents(String[] clients) {
+	public void produceActiveParents(String[] clientIds) {
 
 		initActiveParents();
 
-		for (int i = 0; i < clients.length; i++) {
-			activeParents.addAll(collectParentIDs(clients[i]));
+		for (String clientId : clientIds) {
+			activeParents.addAll(collectParentIDs(clientId));
 		}
 
 		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
