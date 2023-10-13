@@ -26,7 +26,6 @@ public class MapBasedTableEditItem extends TableEditItem {
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			result.put(columnNames.get(i), rowV.get(i));
-
 		}
 
 		return result;

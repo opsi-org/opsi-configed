@@ -167,8 +167,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public void setSelection(int[] selection) {
 		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();
-		for (int i = 0; i < selection.length; i++) {
-			table.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
+		for (int selectionElement : selection) {
+			table.getSelectionModel().addSelectionInterval(selectionElement, selectionElement);
 		}
 	}
 

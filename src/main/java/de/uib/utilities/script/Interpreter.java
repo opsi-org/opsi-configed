@@ -82,8 +82,8 @@ public class Interpreter {
 
 	private void initSpecialValues(String[] specials) {
 		specialValues = new LinkedHashMap<>();
-		for (int i = 0; i < specials.length; i++) {
-			specialValues.put(specials[i], "");
+		for (String special : specials) {
+			specialValues.put(special, "");
 		}
 	}
 

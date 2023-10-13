@@ -646,21 +646,21 @@ public class GenTableModel extends AbstractTableModel {
 			return;
 		}
 
-		for (int i = 0; i < selection.length; i++) {
-			if (!checkDeletionOfAddedRow(selection[i])) {
+		for (int element : selection) {
+			if (!checkDeletionOfAddedRow(element)) {
 				return;
 			}
 		}
 
 		// do with original row nums
-		for (int i = 0; i < selection.length; i++) {
-			List<Object> oldValues = new ArrayList<>(rows.get(selection[i]));
+		for (int element : selection) {
+			List<Object> oldValues = new ArrayList<>(rows.get(element));
 			Logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
-			if (updatedRows.contains(selection[i])) {
-				Logging.debug(this, "deleteRows, remove from updatedRows  " + selection[i]);
-				updatedRows.remove(selection[i]);
+			if (updatedRows.contains(element)) {
+				Logging.debug(this, "deleteRows, remove from updatedRows  " + element);
+				updatedRows.remove(element);
 			}
 		}
 

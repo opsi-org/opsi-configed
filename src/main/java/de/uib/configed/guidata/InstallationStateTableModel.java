@@ -146,10 +146,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		productNamesInDeliveryOrder = new ArrayList<>();
 		if (listOfInstallableProducts != null) {
-			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
-				String product = listOfInstallableProducts.get(i);
-				productNamesInDeliveryOrder.add(product);
-			}
+			productNamesInDeliveryOrder.addAll(listOfInstallableProducts);
 		}
 
 		tsProductNames = new TreeSet<>(myCollator);
@@ -1065,9 +1062,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 				// Add in values in correct ordering
 				String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-				for (int i = 0; i < displayLabels.length; i += 1) {
-					if (actionList.contains(displayLabels[i])) {
-						actionsForProduct.add(displayLabels[i]);
+				for (String displayLabel : displayLabels) {
+					if (actionList.contains(displayLabel)) {
+						actionsForProduct.add(displayLabel);
 					}
 				}
 

@@ -605,9 +605,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void fireListSelectionEmpty(Object source) {
-		for (int i = 0; i < selectionmodel.getListSelectionListeners().length; i++) {
-			ListSelectionListener[] listen = selectionmodel.getListSelectionListeners();
-			listen[i].valueChanged(new ListSelectionEvent(source, 0, 0, false));
+		for (ListSelectionListener listener : selectionmodel.getListSelectionListeners()) {
+			listener.valueChanged(new ListSelectionEvent(source, 0, 0, false));
 		}
 	}
 

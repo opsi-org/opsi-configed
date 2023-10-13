@@ -70,11 +70,9 @@ public class DefaultTableProvider {
 			return;
 		}
 
-		for (int i = 0; i < rows.size(); i++) {
-			List<Object> row = new ArrayList<>(rows.get(i));
-			rowsCopy.add(row);
+		for (List<Object> row : rows) {
+			rowsCopy.add(new ArrayList<>(row));
 		}
-
 	}
 
 	// should set the working copy as new original values
@@ -86,8 +84,8 @@ public class DefaultTableProvider {
 			if (rowsCopy != null) {
 				rows.clear();
 
-				for (int i = 0; i < rowsCopy.size(); i++) {
-					rows.add(rowsCopy.get(i));
+				for (List<Object> rowCopy : rowsCopy) {
+					rows.add(rowCopy);
 				}
 			}
 		}

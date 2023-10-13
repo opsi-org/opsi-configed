@@ -52,8 +52,8 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		menuItems = new JMenuItemFormatted[popups.length];
 
-		for (int i = 0; i < popups.length; i++) {
-			addPopup(popups[i]);
+		for (Integer popup : popups) {
+			addPopup(popup);
 		}
 	}
 
@@ -207,8 +207,8 @@ public class PopupMenuTrait extends JPopupMenu {
 	}
 
 	public void addPopupListenersTo(JComponent[] components) {
-		for (int i = 0; i < components.length; i++) {
-			components[i].addMouseListener(new PopupMouseListener(this));
+		for (JComponent component : components) {
+			component.addMouseListener(new PopupMouseListener(this));
 		}
 	}
 
