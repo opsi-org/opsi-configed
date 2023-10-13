@@ -2220,38 +2220,38 @@ public class ConfigedMain implements ListSelectionListener {
 				}
 
 				// merge the other clients
-				for (int i = 1; i < getSelectedClients().length; i++) {
-					productPropertiesFor1Client = persistenceController.getProductDataService()
-							.getProductPropertiesPD(getSelectedClients()[i], productEdited);
+				mergeOtherClients(productEdited);
+			}
+		}
+	}
 
-					productProperties.add(productPropertiesFor1Client);
+	private void mergeOtherClients(String productEdited) {
+		for (String selectedClient : getSelectedClients()) {
+			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
+					.getProductPropertiesPD(selectedClient, productEdited);
 
-					iter = productPropertiesFor1Client.keySet().iterator();
+			productProperties.add(productPropertiesFor1Client);
 
-					while (iter.hasNext()) {
-						String key = iter.next();
-						List<?> value = (List<?>) productPropertiesFor1Client.get(key);
+			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
+				List<?> value = (List<?>) productProperty.getValue();
 
-						if (mergedProductProperties.get(key) == null) {
-							// we need a new property. it is not common
+				if (mergedProductProperties.get(productProperty.getValue()) == null) {
+					// we need a new property. it is not common
 
-							ListMerger merger = new ListMerger(value);
+					ListMerger merger = new ListMerger(value);
 
-							merger.setHavingNoCommonValue();
-							mergedProductProperties.put(key, merger);
-						} else {
-							ListMerger merger = mergedProductProperties.get(key);
+					merger.setHavingNoCommonValue();
+					mergedProductProperties.put(productProperty.getKey(), merger);
+				} else {
+					ListMerger merger = mergedProductProperties.get(productProperty.getKey());
 
-							ListMerger mergedValue = merger.merge(value);
+					ListMerger mergedValue = merger.merge(value);
 
-							// on merging we check if the value is the same as before
-							mergedProductProperties.put(key, mergedValue);
-						}
-					}
+					// on merging we check if the value is the same as before
+					mergedProductProperties.put(productProperty.getKey(), mergedValue);
 				}
 			}
 		}
-
 	}
 
 	private static void clearProductEditing() {
@@ -2363,37 +2363,33 @@ public class ConfigedMain implements ListSelectionListener {
 						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
 					clearTree();
 					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-				} else {
-					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
-						clearTree();
+				} else if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+					clearTree();
 
-						TreePath[] selTreePaths = treeClients.getSelectionPaths();
+					for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
+						DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath
+								.getLastPathComponent();
 
-						for (int i = 0; i < selTreePaths.length; i++) {
-							DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i]
-									.getLastPathComponent();
+						activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
+						activePaths.add(selectedTreePath);
+						treeClients.collectParentIDsFrom(selNode);
+					}
 
-							activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
-							activePaths.add(selTreePaths[i]);
-							treeClients.collectParentIDsFrom(selNode);
-						}
-
-						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-					} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
-						DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-						if (treeClients.isPathSelected(mousePath)) {
-							activeTreeNodes.remove(selNode.getUserObject());
-							activePaths.add(mousePath);
-						} else {
-							activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
-							activePaths.add(mousePath);
-							treeClients.collectParentIDsFrom(selNode);
-							activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-						}
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+				} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+					DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+					if (treeClients.isPathSelected(mousePath)) {
+						activeTreeNodes.remove(selNode.getUserObject());
+						activePaths.add(mousePath);
 					} else {
-						clearTree();
+						activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
+						activePaths.add(mousePath);
+						treeClients.collectParentIDsFrom(selNode);
 						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 					}
+				} else {
+					clearTree();
+					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
 				}
 
 				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);

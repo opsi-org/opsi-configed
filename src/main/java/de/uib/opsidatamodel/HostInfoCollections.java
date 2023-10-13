@@ -299,10 +299,10 @@ public class HostInfoCollections {
 
 			if (depotId != null && masterDepots.keySet().contains(depotId)) {
 				depotFound = true;
+			} else if (depotId != null) {
+				Logging.warning("Host " + name + " is in " + depotId + " which is not a master depot");
 			} else {
-				if (depotId != null) {
-					Logging.warning("Host " + name + " is in " + depotId + " which is not a master depot");
-				}
+				// Do nothing if depotId is null
 			}
 
 			Logging.debug(this, "getConfigs for " + name);
