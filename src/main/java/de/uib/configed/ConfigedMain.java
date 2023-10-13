@@ -1246,7 +1246,7 @@ public class ConfigedMain implements ListSelectionListener {
 				mainFrame.setClientID("");
 			}
 
-			hostInfo.resetGui(mainFrame);
+			hostInfo.resetGui();
 
 			mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 
@@ -3887,7 +3887,7 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
-					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, client, (Map<?, ?>) source.get(client));
+					hostInfo.showAndSaveInternally(selectionPanel, client, (Map<?, ?>) source.get(client));
 				}
 				persistenceController.getHostDataService().updateHosts();
 
@@ -3950,7 +3950,7 @@ public class ConfigedMain implements ListSelectionListener {
 					clientInfoDataChangedKeeper.save();
 				} else {
 					// reset to old values
-					hostInfo.resetGui(mainFrame);
+					hostInfo.resetGui();
 				}
 			} else {
 				clientInfoDataChangedKeeper.save();

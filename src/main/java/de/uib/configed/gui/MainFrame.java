@@ -962,7 +962,6 @@ public class MainFrame extends JFrame
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		SSHConnectionInfo connectionInfo = SSHConnectionInfo.getInstance();
 
-		factory.setMainFrame(this);
 		JMenu menuOpsi = new JMenu();
 		menuOpsi.setText(SSHCommandFactory.PARENT_OPSI);
 

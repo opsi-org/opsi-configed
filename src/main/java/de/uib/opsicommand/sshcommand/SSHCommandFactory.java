@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.MainFrame;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -126,7 +125,6 @@ public final class SSHCommandFactory {
 
 	/** ConfigedMain instance **/
 	private ConfigedMain configedMain;
-	private MainFrame mainFrame;
 
 	private List<String> createdProducts = new ArrayList<>();
 
@@ -216,12 +214,6 @@ public final class SSHCommandFactory {
 		} else {
 			pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 			return pmethodHandler;
-		}
-	}
-
-	public void setMainFrame(MainFrame mf) {
-		if (mf != null) {
-			mainFrame = mf;
 		}
 	}
 
@@ -574,15 +566,10 @@ public final class SSHCommandFactory {
 	}
 
 	public void updateConnectionInfo(String status) {
-		Logging.info(this, "mainFrame " + mainFrame);
 		Logging.info(this, "ConfigedMain.getMainFrame() " + ConfigedMain.getMainFrame());
-
 		Logging.info(this, "status " + status);
-		if (mainFrame == null) {
-			ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(status);
-		} else {
-			mainFrame.updateSSHConnectedInfoMenu(status);
-		}
+
+		ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(status);
 	}
 
 	public static boolean hasColoredOutput() {

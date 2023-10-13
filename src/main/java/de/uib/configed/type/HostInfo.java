@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -429,7 +430,9 @@ public class HostInfo {
 		return selectionPanel.findModelRowFromValue(client, 0);
 	}
 
-	public void resetGui(MainFrame mainFrame) {
+	public void resetGui() {
+		MainFrame mainFrame = ConfigedMain.getMainFrame();
+
 		Logging.info(this, "resetGui for " + toString());
 		mainFrame.setClientDescriptionText(clientDescription);
 		mainFrame.setClientInventoryNumberText(clientInventoryNumber);
@@ -445,8 +448,7 @@ public class HostInfo {
 		mainFrame.setOpsiHostKey(hostKey);
 	}
 
-	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame, String client,
-			Map<?, ?> sourceOfChanges) {
+	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
@@ -457,6 +459,8 @@ public class HostInfo {
 		if (sourceOfChanges == null) {
 			return;
 		}
+
+		MainFrame mainFrame = ConfigedMain.getMainFrame();
 
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();

@@ -99,7 +99,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JTextPane commands instance **/
 	private JTextPane jTextPaneCommands = new JTextPane();
 
-	/** MainFrame instance **/
 	private ConfigedMain configedMain;
 	/** SSHCommandFactory instance **/
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
