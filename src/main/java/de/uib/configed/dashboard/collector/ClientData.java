@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import de.uib.configed.Configed;
@@ -60,7 +61,7 @@ public final class ClientData {
 		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
 
-			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
+			for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
 				HostInfo hostInfo = entry.getValue();
 
 				if (hostInfo.getInDepot().equals(depot)) {
@@ -153,7 +154,7 @@ public final class ClientData {
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		final LocalDate currentDate = LocalDate.now();
 
-		for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
+		for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
 			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().trim().isEmpty()) {
 				continue;
 			}

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -43,7 +44,7 @@ public class Graph {
 	}
 
 	public void addEdges(Map<String, List<Map<String, String>>> dependencies, Map<String, Integer> productMap) {
-		for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
+		for (Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
 			Integer first = productMap.get(entry.getKey());
 
 			if (first == null) {

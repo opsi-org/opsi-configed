@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -349,7 +350,7 @@ public final class LicensingInfoMap {
 		Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES), new TypeReference<Map<String, Object>>() {
 		});
 
-		for (Map.Entry<String, Object> entry : datesM.entrySet()) {
+		for (Entry<String, Object> entry : datesM.entrySet()) {
 			dates.add(entry.getKey());
 		}
 		Collections.sort(dates);
@@ -484,7 +485,7 @@ public final class LicensingInfoMap {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.Boolean");
 
-		for (Map.Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
 			columnNames.add(date.getKey());
 			classNames.add("java.lang.String");
 		}
@@ -501,7 +502,7 @@ public final class LicensingInfoMap {
 			line.put(Configed.getResourceValue("LicensingInfo.available"), availableModules.contains(currentModule));
 
 			// rest columns
-			for (Map.Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+			for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
 				line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
 			}
 
@@ -683,7 +684,7 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
 		if (resultMap.get(latestDateString) != null) {
-			for (Map.Entry<String, Map<String, Object>> mod : resultMap.get(latestDateString).entrySet()) {
+			for (Entry<String, Map<String, Object>> mod : resultMap.get(latestDateString).entrySet()) {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 

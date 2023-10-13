@@ -8,6 +8,7 @@ package de.uib.configed.gui.hostconfigs;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 
 import javax.swing.GroupLayout;
@@ -82,7 +83,7 @@ public class PanelHostConfig extends JPanel {
 				.getHostConfig(PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
 						.getConfigServer());
 
-		for (Map.Entry<String, Object> entry : configs.entrySet()) {
+		for (Entry<String, Object> entry : configs.entrySet()) {
 			String key = entry.getKey();
 
 			if (key.startsWith(PROPERTY_CLASS_ROLE + ".")) {

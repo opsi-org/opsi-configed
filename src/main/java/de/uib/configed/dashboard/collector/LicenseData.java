@@ -9,6 +9,7 @@ package de.uib.configed.dashboard.collector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.stream.Collectors;
@@ -79,7 +80,7 @@ public final class LicenseData {
 			return;
 		}
 
-		for (Map.Entry<String, NavigableSet<String>> entry : expiredLicenceContracts.entrySet()) {
+		for (Entry<String, NavigableSet<String>> entry : expiredLicenceContracts.entrySet()) {
 			NavigableSet<String> expiredLicenceContractSet = entry.getValue();
 
 			for (String expiredLicence : expiredLicenceContractSet) {

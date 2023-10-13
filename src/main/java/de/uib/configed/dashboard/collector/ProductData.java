@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -142,7 +143,7 @@ public final class ProductData {
 					.getProductDataService().getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
-				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
+				for (Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
 					String hostname = entry.getKey();
 					fillProductStatesListsWithClientProducts(entry.getValue(), depot, hostname, installedProductsList,
 							failedProductsList, allUnusedProducts);

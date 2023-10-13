@@ -1019,7 +1019,7 @@ public class MainFrame extends JFrame
 			Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
 			boolean commandsExist = false;
-			for (Map.Entry<String, List<SSHCommandTemplate>> entry : sortedComs.entrySet()) {
+			for (Entry<String, List<SSHCommandTemplate>> entry : sortedComs.entrySet()) {
 				String parentMenuName = entry.getKey();
 				LinkedList<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
 				Collections.sort(listCom);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
@@ -200,7 +201,7 @@ public class ConnectionHandler {
 			}
 
 			if (requestProperties != null && !requestProperties.isEmpty()) {
-				for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
+				for (Entry<String, String> entry : requestProperties.entrySet()) {
 					connection.setRequestProperty(entry.getKey(), entry.getValue());
 				}
 			}

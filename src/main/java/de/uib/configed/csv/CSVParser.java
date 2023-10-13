@@ -8,7 +8,6 @@ package de.uib.configed.csv;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
@@ -159,7 +158,7 @@ public class CSVParser {
 		}
 		Optional<Entry<Integer, Long>> optional = numberOfFieldsPerLine.stream()
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
-				.max(Map.Entry.comparingByValue());
+				.max(Entry.comparingByValue());
 
 		if (optional.isPresent()) {
 			return pendingFieldCount != 0 || numberOfFieldsPerLine.stream()

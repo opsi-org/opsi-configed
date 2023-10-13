@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
@@ -102,7 +103,7 @@ public final class SSHCommandParameterMethods {
 	public static String[] getParameterMethodLocalNames() {
 		String[] mymethods = new String[methods.size()];
 		int counter = 0;
-		for (Map.Entry<String, String> entry : methods.entrySet()) {
+		for (Entry<String, String> entry : methods.entrySet()) {
 			mymethods[counter] = entry.getKey();
 			counter++;
 		}
@@ -113,7 +114,7 @@ public final class SSHCommandParameterMethods {
 	public static String[] getParameterMethods() {
 		String[] mymethods = new String[methods.size()];
 		int counter = 0;
-		for (Map.Entry<String, String> entry : methods.entrySet()) {
+		for (Entry<String, String> entry : methods.entrySet()) {
 			mymethods[counter] = entry.getValue();
 			counter++;
 		}
@@ -121,7 +122,7 @@ public final class SSHCommandParameterMethods {
 	}
 
 	public static String getMethodFromName(String name) {
-		for (Map.Entry<String, String> entry : methods.entrySet()) {
+		for (Entry<String, String> entry : methods.entrySet()) {
 			if (name.equals(entry.getKey())) {
 				return entry.getValue();
 			}
@@ -222,7 +223,7 @@ public final class SSHCommandParameterMethods {
 
 	public static String getTranslatedMethod(String localeMethod) {
 		String method = "";
-		for (Map.Entry<String, String> entry : methods.entrySet()) {
+		for (Entry<String, String> entry : methods.entrySet()) {
 			if (entry.getKey().equals(localeMethod)) {
 				method = entry.getValue();
 			}

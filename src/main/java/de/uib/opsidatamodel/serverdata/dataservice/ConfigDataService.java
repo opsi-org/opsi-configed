@@ -850,7 +850,7 @@ public class ConfigDataService {
 			}
 		}
 
-		for (Map.Entry<String, Object> entry : settings.entrySet()) {
+		for (Entry<String, Object> entry : settings.entrySet()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
 

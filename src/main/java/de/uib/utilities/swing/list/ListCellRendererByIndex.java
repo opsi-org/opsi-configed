@@ -41,7 +41,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 			// Load the item values
 			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry<String, String> entry = iter.next();
+				Entry<String, String> entry = iter.next();
 				String key = entry.getKey();
 				String stringval = entry.getValue();
 

@@ -1653,11 +1653,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		};
 
-		Map<String, Boolean> pclist = new HashMap<>();
-		// dont make pclist global and clear it here
-		// since pclist is bound to a variable in persistencecontroller
-		// which will be cleared
-
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
 		Logging.debug(this, " unfilteredList ");
@@ -1712,29 +1707,24 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
+		Map<String, Boolean> pclist = new HashMap<>();
+		// dont make pclist global and clear it here
+		// since pclist is bound to a variable in persistencecontroller
+		// which will be cleared
+
 		Map<String, Boolean> pclist0 = filterMap(unfilteredList, clientsFilteredByTree);
 
 		Logging.info(this, " filterClientList " + filterClientList);
 
 		if (filterClientList) {
 
-			if (pclist0 != null) {
+			Logging.info(this,
+					"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
 
-				Logging.info(this,
-						"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
-
-				for (Entry<String, Boolean> pcEntry : pclist0.entrySet()) {
-
-					for (int j = 0; j < getSelectedClients().length; j++) {
-
-						if (getSelectedClients()[j].equals(pcEntry.getKey())) {
-
-							pclist.put(pcEntry.getKey(), pcEntry.getValue());
-							break;
-						}
-					}
+			for (String selectedClient : getSelectedClients()) {
+				if (pclist0.containsKey(selectedClient)) {
+					pclist.put(selectedClient, pclist0.get(selectedClient));
 				}
-
 			}
 		} else {
 			pclist = pclist0;
@@ -1743,46 +1733,44 @@ public class ConfigedMain implements ListSelectionListener {
 		// building table model
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
-		if (pclist != null) {
-			hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
+		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
 
-			// test
+		// test
 
-			for (Map.Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
+		for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
+			if (Boolean.TRUE.equals(entry.getValue())) {
+				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
+			}
+		}
+
+		Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
+
+		for (String clientName : pclist.keySet()) {
+
+			HostInfo pcinfo = pcinfos.get(clientName);
+			if (pcinfo == null) {
+				pcinfo = new HostInfo();
+			}
+
+			Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
+
+			String sessionValue = "";
+			if (sessionInfo.get(clientName) != null) {
+				sessionValue = "" + sessionInfo.get(clientName);
+			}
+
+			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
+			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientName));
+
+			List<Object> rowItems = new ArrayList<>();
+
+			for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
-					model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
+					rowItems.add(rowmap.get(entry.getKey()));
 				}
 			}
 
-			Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
-
-			for (String clientName : pclist.keySet()) {
-
-				HostInfo pcinfo = pcinfos.get(clientName);
-				if (pcinfo == null) {
-					pcinfo = new HostInfo();
-				}
-
-				Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
-
-				String sessionValue = "";
-				if (sessionInfo.get(clientName) != null) {
-					sessionValue = "" + sessionInfo.get(clientName);
-				}
-
-				rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientName));
-
-				List<Object> rowItems = new ArrayList<>();
-
-				for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
-					if (Boolean.TRUE.equals(entry.getValue())) {
-						rowItems.add(rowmap.get(entry.getKey()));
-					}
-				}
-
-				model.addRow(rowItems.toArray());
-			}
+			model.addRow(rowItems.toArray());
 		}
 
 		Logging.info(this, "buildPclistTableModel, model column count " + model.getColumnCount());

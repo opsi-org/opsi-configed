@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 public class CSVFormat {
@@ -110,7 +111,7 @@ public class CSVFormat {
 			}
 		}
 
-		fieldSeparator = Collections.max(possibleFieldSeparators.entrySet(), Map.Entry.comparingByValue()).getKey();
+		fieldSeparator = Collections.max(possibleFieldSeparators.entrySet(), Entry.comparingByValue()).getKey();
 	}
 
 	private void detectStringSeparator(String fileAsString) {
@@ -123,7 +124,7 @@ public class CSVFormat {
 		possibleStringSeparators.put(singleQuote, singleQuoteCount);
 		possibleStringSeparators.put(doubleQuote, doubleQuoteCount);
 
-		stringSeparator = Collections.max(possibleStringSeparators.entrySet(), Map.Entry.comparingByValue()).getKey();
+		stringSeparator = Collections.max(possibleStringSeparators.entrySet(), Entry.comparingByValue()).getKey();
 	}
 
 	private void detectHeader(List<String> fileAsList) {
