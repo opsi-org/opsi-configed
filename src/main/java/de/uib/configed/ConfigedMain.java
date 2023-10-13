@@ -3444,9 +3444,9 @@ public class ConfigedMain implements ListSelectionListener {
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
 		String[] depotsListSelectedValues = getSelectedDepots();
 		Logging.debug(this, "selected after fetch " + getSelectedDepots().length);
-		for (int j = 0; j < depotsListSelectedValues.length; j++) {
+		for (String depotListSelectedValue : depotsListSelectedValues) {
 			// collect all indices where the value had been selected
-			depotsList.setSelectedValue(depotsListSelectedValues[j], false);
+			depotsList.setSelectedValue(depotListSelectedValue, false);
 			if (depotsList.getSelectedIndex() > -1) {
 				depotsListIsSelected[depotsList.getSelectedIndex()] = true;
 			}
