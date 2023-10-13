@@ -20,6 +20,11 @@
 
 ## Fixed
 
+## [4.2.22.16] - 2023-10-13
+### Fixed
+- Fix bug showing 'processor' information in hardware information
+
+
 ## [4.2.22.15] - 2023-10-02
 ### Fixed
 - Surround user password in quotation marks (password is acquired from SSH deploy opsi-client-agent frame)
