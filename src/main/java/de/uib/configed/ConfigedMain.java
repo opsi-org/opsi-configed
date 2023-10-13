@@ -1646,12 +1646,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, "buildPclistTableModel rebuildTree " + rebuildTree);
-		DefaultTableModel model = new DefaultTableModel() {
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
 
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
@@ -1662,9 +1656,16 @@ public class ConfigedMain implements ListSelectionListener {
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
 		if (rebuildTree) {
+			Set<String> permittedHostGroups = null;
+
+			if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+				Logging.info(this, "buildPclistTableModel not full hostgroups permission");
+				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
+			}
+
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
-			rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}));
+			rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}), permittedHostGroups);
 		}
 
 		// changes the produced unfilteredList
@@ -1682,35 +1683,11 @@ public class ConfigedMain implements ListSelectionListener {
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				Logging.info(this, "buildPclistTableModel, rebuildTree " + rebuildTree);
-				String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
-
-				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
-
-				treeClients.clear();
-				treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
-
-				treeClients.produceTreeForALL(allPCs);
-
-				Logging.info(this,
-						"buildPclistTableModel, directly allowed groups " + treeClients.getDirectlyAllowedGroups());
-				treeClients.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
-
-				Logging.info(this, "buildPclistTableModel, allPCs (2) " + allPCs.length);
-
-				// we got already allowedClients, therefore don't need the parameter
-				// hostgroupsPermitted
-				treeClients.associateClientsToGroups(allPCs,
-						persistenceController.getGroupDataService().getFObject2GroupsPD(), null);
-
-				Logging.info(this, "tree produced");
+				rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}), null);
 			}
 		}
 
-		Map<String, Boolean> pclist = new HashMap<>();
-		// dont make pclist global and clear it here
-		// since pclist is bound to a variable in persistencecontroller
-		// which will be cleared
+		Set<String> pclist;
 
 		Map<String, Boolean> pclist0 = filterMap(unfilteredList, clientsFilteredByTree);
 
@@ -1718,24 +1695,31 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (filterClientList) {
 
-			Logging.info(this,
-					"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
+			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs "
+					+ getSelectedClients().length);
 
-			for (String selectedClient : getSelectedClients()) {
-				if (pclist0.containsKey(selectedClient)) {
-					pclist.put(selectedClient, pclist0.get(selectedClient));
-				}
-			}
+			// selected clients that are in the pclist0
+			pclist = Set.of(getSelectedClients());
+			pclist.retainAll(pclist0.keySet());
 		} else {
-			pclist = pclist0;
+			pclist = pclist0.keySet();
 		}
 
 		// building table model
+		return buildTableModel(pclist);
+	}
+
+	private TableModel buildTableModel(Set<String> clientIds) {
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return false;
+			}
+		};
+
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
-
-		// test
 
 		for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
@@ -1745,9 +1729,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
-		for (String clientName : pclist.keySet()) {
+		for (String clientId : clientIds) {
 
-			HostInfo pcinfo = pcinfos.get(clientName);
+			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
 				pcinfo = new HostInfo();
 			}
@@ -1755,12 +1739,12 @@ public class ConfigedMain implements ListSelectionListener {
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
 
 			String sessionValue = "";
-			if (sessionInfo.get(clientName) != null) {
-				sessionValue = "" + sessionInfo.get(clientName);
+			if (sessionInfo.get(clientId) != null) {
+				sessionValue = "" + sessionInfo.get(clientId);
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientName));
+			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -1778,13 +1762,7 @@ public class ConfigedMain implements ListSelectionListener {
 		return model;
 	}
 
-	private void rebuildTree(String[] allPCs) {
-		Set<String> permittedHostGroups = null;
-
-		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
-		}
+	private void rebuildTree(String[] allPCs, Set<String> permittedHostGroups) {
 
 		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
@@ -2147,11 +2125,11 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 	}
 
-	public void setFilterClientList(boolean b) {
+	private void setFilterClientList(boolean b) {
 		setFilterClientList(b, true);
 	}
 
-	public void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
+	private void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel();
