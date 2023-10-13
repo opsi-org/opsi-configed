@@ -1658,13 +1658,6 @@ public class ConfigedMain implements ListSelectionListener {
 		// since pclist is bound to a variable in persistencecontroller
 		// which will be cleared
 
-		Set<String> permittedHostGroups = null;
-
-		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
-		}
-
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
 		Logging.debug(this, " unfilteredList ");
@@ -1674,29 +1667,9 @@ public class ConfigedMain implements ListSelectionListener {
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
 		if (rebuildTree) {
-			Logging.info(this, "buildPclistTableModel, rebuildTree " + rebuildTree);
-
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
-			String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
-			Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
-
-			treeClients.clear();
-			treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
-
-			treeClients.produceTreeForALL(allPCs);
-
-			treeClients.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
-
-			Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
-			Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.length);
-			allowedClients = treeClients.associateClientsToGroups(allPCs,
-					persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
-
-			if (allowedClients != null) {
-				Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
-			}
-
+			rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}));
 		}
 
 		// changes the produced unfilteredList
@@ -1815,6 +1788,33 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "buildPclistTableModel, model column count " + model.getColumnCount());
 
 		return model;
+	}
+
+	private void rebuildTree(String[] allPCs) {
+		Set<String> permittedHostGroups = null;
+
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
+			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
+		}
+
+		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
+
+		treeClients.clear();
+		treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
+
+		treeClients.produceTreeForALL(allPCs);
+
+		treeClients.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
+
+		Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
+		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.length);
+		allowedClients = treeClients.associateClientsToGroups(allPCs,
+				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
+
+		if (allowedClients != null) {
+			Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
+		}
 	}
 
 	public void setClient(String clientName) {
