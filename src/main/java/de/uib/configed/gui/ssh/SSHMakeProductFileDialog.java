@@ -468,7 +468,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		EmptyCommand setRights = new EmptyCommand("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
-		// SSHConnectionExecDialog.getInstance().setVisible(true);
+
 		ssh.exec(setRights);
 	}
 

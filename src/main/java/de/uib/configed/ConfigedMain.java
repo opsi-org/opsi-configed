@@ -3710,7 +3710,9 @@ public class ConfigedMain implements ListSelectionListener {
 			updateCollection.doCall();
 			checkErrorList();
 
-			clearUpdateCollectionAndTell();
+			Logging.info(this, "we clear the update collection " + updateCollection.getClass());
+
+			updateCollection.clearElements();
 		}
 
 		public void save() {
@@ -5071,12 +5073,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (!found) {
 			Logging.checkErrorList(mainFrame);
 		}
-	}
-
-	private void clearUpdateCollectionAndTell() {
-		Logging.info(this, "we clear the update collection " + updateCollection.getClass());
-
-		updateCollection.clearElements();
 	}
 
 	protected void checkErrorList() {
