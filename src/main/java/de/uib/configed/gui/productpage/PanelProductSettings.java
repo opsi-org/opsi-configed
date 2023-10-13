@@ -767,10 +767,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public Set<String> getSelectedIDs() {
 		Set<String> result = new HashSet<>();
 
-		int[] selection = tableProducts.getSelectedRows();
-
-		for (int i = 0; i < selection.length; i++) {
-			result.add((String) tableProducts.getValueAt(selection[i], 0));
+		for (int selectionElement : tableProducts.getSelectedRows()) {
+			result.add((String) tableProducts.getValueAt(selectionElement, 0));
 		}
 
 		return result;
@@ -783,8 +781,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public List<Integer> getSelectedRowsInModelTerms() {
 		int[] selection = tableProducts.getSelectedRows();
 		ArrayList<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
-		for (int i = 0; i < selection.length; i++) {
-			selectionInModelTerms.add(convertRowIndexToModel(selection[i]));
+		for (int selectionElement : selection) {
+			selectionInModelTerms.add(convertRowIndexToModel(selectionElement));
 		}
 
 		return selectionInModelTerms;

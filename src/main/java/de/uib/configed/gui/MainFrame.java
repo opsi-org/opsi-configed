@@ -2855,11 +2855,11 @@ public class MainFrame extends JFrame
 	}
 
 	private void initializeMenuItemsForClientsDependentOnSelectionCount() {
-		for (int i = 0; i < clientMenuItemsDependOnSelectionCount.length; i++) {
-			clientMenuItemsDependOnSelectionCount[i].setEnabled(false);
+		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+			jMenuItem.setEnabled(false);
 		}
-		for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
-			clientPopupsDependOnSelectionCount[i].setEnabled(false);
+		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+			jMenuItem.setEnabled(false);
 
 		}
 
@@ -2882,23 +2882,23 @@ public class MainFrame extends JFrame
 			popupAddClient.setEnabled(true);
 		} else {
 			if (countSelectedClients >= 1) {
-				for (int i = 0; i < clientMenuItemsDependOnSelectionCount.length; i++) {
-					clientMenuItemsDependOnSelectionCount[i].setEnabled(true);
+				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+					jMenuItem.setEnabled(true);
 				}
 
-				for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
-					clientPopupsDependOnSelectionCount[i].setEnabled(true);
+				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+					jMenuItem.setEnabled(true);
 				}
 
 				jMenuResetProducts.setEnabled(true);
 				popupResetProducts.setEnabled(true);
 			} else {
-				for (int i = 0; i < clientMenuItemsDependOnSelectionCount.length; i++) {
-					clientMenuItemsDependOnSelectionCount[i].setEnabled(false);
+				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+					jMenuItem.setEnabled(false);
 				}
 
-				for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
-					clientPopupsDependOnSelectionCount[i].setEnabled(false);
+				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+					jMenuItem.setEnabled(false);
 				}
 
 				jMenuResetProducts.setEnabled(false);

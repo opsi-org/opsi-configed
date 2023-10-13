@@ -1229,8 +1229,8 @@ public class ConfigDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_BACKEND_INFOS_LIST_OF_HASHES, new String[] {});
 		List<Object> list = exec.getListResult(omc);
 		Map<String, List<Map<String, Object>>> backends = new HashMap<>();
-		for (int i = 0; i < list.size(); i++) {
-			Map<String, Object> listEntry = exec.getMapFromItem(list.get(i));
+		for (Object element : list) {
+			Map<String, Object> listEntry = exec.getMapFromItem(element);
 			String backendName = "UNKNOWN";
 
 			if (listEntry.containsKey("name")) {
@@ -1256,10 +1256,9 @@ public class ConfigDataService {
 
 			List<Map<String, Object>> backendEntries = backends.get(backendName);
 
-			for (int i = 0; i < backendEntries.size(); i++) {
-				Map<String, Object> listEntry = backendEntries.get(i);
+			for (Map<String, Object> backendEntry : backendEntries) {
 
-				Iterator<String> eIt = listEntry.keySet().iterator();
+				Iterator<String> eIt = backendEntry.keySet().iterator();
 
 				boolean entryIsEven = false;
 
@@ -1276,7 +1275,7 @@ public class ConfigDataService {
 						bgColor = bgColor1;
 					}
 
-					Object value = listEntry.get(key);
+					Object value = backendEntry.get(key);
 					buf.append("<tr height='8px'>");
 					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
 							+ fontSizeBig + "'>" + key + "</font></td>");

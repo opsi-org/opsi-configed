@@ -1200,19 +1200,15 @@ public class ConfigedMain implements ListSelectionListener {
 					"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
 
 			if (getSelectedClients().length > 0) {
-				String selClient = getSelectedClients()[0];
-				hostInfo.setBy(pcinfos.get(selClient).getMap());
+				hostInfo.setBy(pcinfos.get(getSelectedClients()[0]).getMap());
 
-				Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + selClient);
+				Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients()[0]);
 				Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
 
 				HostInfo secondInfo = new HostInfo();
 
-				// test
-
 				for (int i = 1; i < getSelectedClients().length; i++) {
-					selClient = getSelectedClients()[i];
-					secondInfo.setBy(pcinfos.get(selClient).getMap());
+					secondInfo.setBy(pcinfos.get(getSelectedClients()[i]).getMap());
 					hostInfo.combineWith(secondInfo);
 				}
 			}
@@ -1354,9 +1350,9 @@ public class ConfigedMain implements ListSelectionListener {
 		ArrayList<Integer> savedSelectedDepots = new ArrayList<>();
 		// we collect the indices of the old depots in the current list
 
-		for (int i = 0; i < oldSelectedDepots.length; i++) {
+		for (String oldSelectedDepot : oldSelectedDepots) {
 			for (int j = 0; j < depotsList.getModel().getSize(); j++) {
-				if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepots[i])) {
+				if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepot)) {
 					savedSelectedDepots.add(j);
 				}
 			}
@@ -2178,11 +2174,10 @@ public class ConfigedMain implements ListSelectionListener {
 			depotsOfSelectedClients = new TreeSet<>();
 		}
 
-		for (int i = 0; i < getSelectedClients().length; i++) {
-			if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-					.get(getSelectedClients()[i]) != null) {
-				depotsOfSelectedClients.add(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-						.get(getSelectedClients()[i]));
+		for (String selectedClient : getSelectedClients()) {
+			if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient) != null) {
+				depotsOfSelectedClients.add(
+						persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
 			}
 		}
 
@@ -2438,15 +2433,15 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
 		clearTree();
 
-		for (int i = 0; i < selTreePaths.length; i++) {
-			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i].getLastPathComponent();
+		for (TreePath selectedTreePath : selTreePaths) {
+			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath.getLastPathComponent();
 
 			if (selNode.getAllowsChildren()) {
 				continue;
 			}
 
-			activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
-			activePaths.add(selTreePaths[i]);
+			activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
+			activePaths.add(selectedTreePath);
 			treeClients.collectParentIDsFrom(selNode);
 		}
 
@@ -3216,8 +3211,8 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < Utils.getLogTypes().length; i++) {
-				logfiles.put(Utils.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (String logType : Utils.getLogTypes()) {
+				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
 			mainFrame.activateLoadingPane();
@@ -4336,11 +4331,11 @@ public class ConfigedMain implements ListSelectionListener {
 		StringBuilder messageBuffer = new StringBuilder(
 				"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
 
-		for (int i = 0; i < getSelectedClients().length; i++) {
-			messageBuffer.append(getSelectedClients()[i]);
+		for (String selectedClient : getSelectedClients()) {
+			messageBuffer.append(selectedClient);
 			messageBuffer.append("     (from: ");
-			messageBuffer.append(persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-					.get(getSelectedClients()[i]));
+			messageBuffer.append(
+					persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
 
 			messageBuffer.append(") ");
 

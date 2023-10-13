@@ -595,8 +595,8 @@ public final class OpsiDataBackend {
 	private void getHardwareOnClient(String[] clientNames) {
 		hardwareOnClient = persistenceController.getHardwareDataService().getHardwareOnClientPD();
 		clientToHardware = new HashMap<>();
-		for (int i = 0; i < clientNames.length; i++) {
-			clientToHardware.put(clientNames[i], new LinkedList<>());
+		for (String clientName : clientNames) {
+			clientToHardware.put(clientName, new LinkedList<>());
 		}
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);

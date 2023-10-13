@@ -25,8 +25,8 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 
 	public SimpleTreePath(Object[] path) {
 		super();
-		for (int i = 0; i < path.length; i++) {
-			super.add(path[i].toString());
+		for (Object pathPart : path) {
+			super.add(pathPart.toString());
 		}
 	}
 
