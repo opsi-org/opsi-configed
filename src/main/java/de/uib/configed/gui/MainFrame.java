@@ -977,9 +977,16 @@ public class MainFrame extends JFrame
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
+
+		String connectionState;
+
 		if (Configed.isSSHConnectionOnStart()) {
-			factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
+			connectionState = factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
+		} else {
+			connectionState = factory.getConnectionState();
 		}
+
+		updateSSHConnectedInfoMenu(connectionState);
 
 		if (factory.checkSSHCommandMethod()) {
 			Logging.info(this, "setupMenuServer add commandcontrol");

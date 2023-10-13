@@ -537,10 +537,13 @@ public final class SSHCommandFactory {
 			session.disconnect();
 		}
 		connectionState = NOT_CONNECTED;
-		updateConnectionInfo(connectionState);
+
+		Logging.info(this, "connectionState " + connectionState);
+		ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(connectionState);
+
 	}
 
-	public void testConnection(String user, String host) {
+	public String testConnection(String user, String host) {
 		SSHCommand command = new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false);
 		connectionState = UNKNOWN;
 
@@ -561,15 +564,9 @@ public final class SSHCommandFactory {
 			Logging.warning(this, "cannot connect to " + user + "@" + host);
 		}
 
-		updateConnectionInfo(connectionState);
 		Logging.info(this, "testConnection connection state " + connectionState);
-	}
 
-	public void updateConnectionInfo(String status) {
-		Logging.info(this, "ConfigedMain.getMainFrame() " + ConfigedMain.getMainFrame());
-		Logging.info(this, "status " + status);
-
-		ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(status);
+		return connectionState;
 	}
 
 	public static boolean hasColoredOutput() {

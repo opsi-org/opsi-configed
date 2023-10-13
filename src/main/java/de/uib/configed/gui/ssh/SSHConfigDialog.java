@@ -640,7 +640,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 
-		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
+		String connectionState = factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
+		ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(connectionState);
 
 		SSHCommandFactory.setColoredOutput(jCheckBoxUseOutputColor.isSelected());
 		SSHCommandFactory.setAlwaysExecInBackground(jCheckBoxExecInBackground.isSelected());
