@@ -569,17 +569,7 @@ public class MainFrame extends JFrame
 		}
 
 		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
-		jMenuFileLogout.addActionListener((ActionEvent e) -> {
-			configedMain.closeInstance(true);
-			ConfigedMain.setHost(null);
-			ConfigedMain.setUser(null);
-			ConfigedMain.setPassword(null);
-			CacheManager.getInstance().clearAllCachedData();
-			SSHCommandFactory.destroyInstance();
-			Terminal.destroyInstance();
-			Configed.getSavedStates().removeAll();
-			Configed.restartConfiged();
-		});
+		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
@@ -591,6 +581,18 @@ public class MainFrame extends JFrame
 
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
+	}
+
+	private void logout() {
+		configedMain.closeInstance(true);
+		ConfigedMain.setHost(null);
+		ConfigedMain.setUser(null);
+		ConfigedMain.setPassword(null);
+		CacheManager.getInstance().clearAllCachedData();
+		SSHCommandFactory.destroyInstance();
+		Terminal.destroyInstance();
+		Configed.getSavedStates().removeAll();
+		Configed.restartConfiged();
 	}
 
 	private void initMenuData() {
@@ -1100,7 +1102,6 @@ public class MainFrame extends JFrame
 		jMenuSSHCommandControl.setEnabled(true);
 
 		jMenuServer.setEnabled(userConfigExists && !isReadOnly
-
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
 	}
 

@@ -2354,52 +2354,7 @@ public class ConfigedMain implements ListSelectionListener {
 			mouseNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
 			if (!mouseNode.getAllowsChildren()) {
-				if (activePaths.size() == 1
-						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
-					clearTree();
-					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-				} else if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
-					clearTree();
-
-					for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
-						DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath
-								.getLastPathComponent();
-
-						activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
-						activePaths.add(selectedTreePath);
-						treeClients.collectParentIDsFrom(selNode);
-					}
-
-					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-				} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
-					DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-					if (treeClients.isPathSelected(mousePath)) {
-						activeTreeNodes.remove(selNode.getUserObject());
-						activePaths.add(mousePath);
-					} else {
-						activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
-						activePaths.add(mousePath);
-						treeClients.collectParentIDsFrom(selNode);
-						activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-					}
-				} else {
-					clearTree();
-					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-				}
-
-				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-
-				Logging.info(this,
-						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
-
-				if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
-					mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
-				} else {
-					mainFrame.getHostsStatusPanel().setGroupName("");
-				}
-
-				mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
-						getSelectedClientsString(), clientInDepot);
+				treeClientMouseAction(mouseEvent, mouseNode, mousePath);
 			} else {
 				activateGroupByTree(false, mouseNode, mousePath);
 			}
@@ -2414,6 +2369,53 @@ public class ConfigedMain implements ListSelectionListener {
 				setGroup(mouseNode.toString());
 			}
 		}
+	}
+
+	private void treeClientMouseAction(MouseEvent mouseEvent, DefaultMutableTreeNode mouseNode, TreePath mousePath) {
+		if (activePaths.size() == 1
+				&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
+			clearTree();
+			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+		} else if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+			clearTree();
+
+			for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
+				DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath.getLastPathComponent();
+
+				activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
+				activePaths.add(selectedTreePath);
+				treeClients.collectParentIDsFrom(selNode);
+			}
+
+			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+		} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+			DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+			if (treeClients.isPathSelected(mousePath)) {
+				activeTreeNodes.remove(selNode.getUserObject());
+				activePaths.add(mousePath);
+			} else {
+				activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
+				activePaths.add(mousePath);
+				treeClients.collectParentIDsFrom(selNode);
+				activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+			}
+		} else {
+			clearTree();
+			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+		}
+
+		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+		Logging.info(this, " treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
+
+		if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
+			mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
+		} else {
+			mainFrame.getHostsStatusPanel().setGroupName("");
+		}
+
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+				getSelectedClientsString(), clientInDepot);
 	}
 
 	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
