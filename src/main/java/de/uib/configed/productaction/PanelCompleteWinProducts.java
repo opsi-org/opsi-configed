@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -143,7 +142,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);

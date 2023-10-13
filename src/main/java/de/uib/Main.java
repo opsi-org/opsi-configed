@@ -305,6 +305,15 @@ public class Main {
 
 		parseArgs(cmd);
 
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("buttonCancel"));
+		UIManager.put("FileChooser.cancelButtonToolTipText", "");
+		// TODO Translate
+		UIManager.put("FileChooser.lookInLabelText", "Suchen in:");
+
+		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
+		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
+		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
+
 		if (THEMES) {
 			setOpsiLaf();
 		} else {

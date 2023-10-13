@@ -38,7 +38,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -69,10 +68,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		baseContainer = super.getContentPane();
 		guiInit();
-
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override

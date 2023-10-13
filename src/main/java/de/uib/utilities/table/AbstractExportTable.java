@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
@@ -123,7 +122,7 @@ public abstract class AbstractExportTable {
 
 				FTextArea fChoice = new FTextArea(null,
 						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
-						new String[] { Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel"),
+						new String[] { Configed.getResourceValue("buttonCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
 								Configed.getResourceValue(
 										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
@@ -169,10 +168,6 @@ public abstract class AbstractExportTable {
 
 			chooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
 			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));
-			UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
-			UIManager.put("FileChooser.cancelButtonToolTipText", "");
-
-			UIManager.put("FileChooser.lookInLabelText", "Suchen in:");
 
 			SwingUtilities.updateComponentTreeUI(chooser);
 

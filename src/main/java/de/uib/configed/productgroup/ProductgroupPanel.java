@@ -366,7 +366,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
-		buttonCancel = new IconButton(Configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
+		buttonCancel = new IconButton(Configed.getResourceValue("buttonCancel"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
 		buttonCancel.setPreferredSize(Globals.NEW_SMALL_BUTTON);

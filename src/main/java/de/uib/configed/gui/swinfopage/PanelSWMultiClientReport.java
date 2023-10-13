@@ -18,7 +18,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -166,7 +165,6 @@ public class PanelSWMultiClientReport extends JPanel {
 		chooserDirectory.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserDirectory.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);

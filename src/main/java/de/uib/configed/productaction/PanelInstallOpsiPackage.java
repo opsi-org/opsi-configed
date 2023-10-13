@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -240,7 +239,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage.addChoosableFileFilter(filter);
 		chooserPackage.setFileFilter(filter);
 		chooserPackage.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserPackage);
 
 		chooserPackage.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -250,7 +248,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);

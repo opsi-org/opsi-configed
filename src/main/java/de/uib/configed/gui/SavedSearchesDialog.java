@@ -93,7 +93,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		buttonCommit.setDisabledIcon(Utils.createImageIcon("images/execute_disabled.png", ""));
 		buttonCommit.setPreferredSize(new java.awt.Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
-		buttonCancel.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override

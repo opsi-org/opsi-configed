@@ -63,8 +63,8 @@ public class FDialogRemoteControl extends FEditStringList {
 				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
 				"images/executing_command_22_disabled.png", true);
 
-		buttonCancel.createIconButton(Configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel.createIconButton(Configed.getResourceValue("buttonCancel"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png", true);
 
 		extraField.getDocument().addDocumentListener(this);
 

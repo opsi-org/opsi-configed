@@ -37,7 +37,7 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 						Globals.APPNAME + " " + Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 						new Object[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO"),
-								Configed.getResourceValue("SensitiveCellEditor.editHiddenText.cancel") },
+								Configed.getResourceValue("buttonCancel") },
 						JOptionPane.YES_OPTION);
 
 				Logging.info(this,

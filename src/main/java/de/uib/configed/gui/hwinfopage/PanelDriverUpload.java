@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -247,7 +246,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserDriverPath.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooserDriverPath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDriverPath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
 
 		chooserDriverPath.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -258,7 +256,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);

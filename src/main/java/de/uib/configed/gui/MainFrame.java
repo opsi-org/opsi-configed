@@ -76,7 +76,6 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -452,10 +451,6 @@ public class MainFrame extends JFrame
 
 		guiInit();
 		initData();
-
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override
