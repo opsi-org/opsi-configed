@@ -847,7 +847,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
