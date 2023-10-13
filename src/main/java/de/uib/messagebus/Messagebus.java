@@ -214,7 +214,7 @@ public class Messagebus implements MessagebusListener {
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
 		Map<String, Object> message = new HashMap<>();
-		message.put("type", "channel_subscription_request");
+		message.put("type", WebSocketEvent.CHANNEL_SUBSCRIPTION_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
 		message.put("channel", "service:messagebus");
@@ -237,7 +237,7 @@ public class Messagebus implements MessagebusListener {
 		terminal.display();
 
 		Map<String, Object> message = new HashMap<>();
-		message.put("type", "terminal_open_request");
+		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
 		message.put("channel", "service:config:terminal");
@@ -361,13 +361,19 @@ public class Messagebus implements MessagebusListener {
 			initialSubscriptionReceived = true;
 		} else if (WebSocketEvent.GENERAL_EVENT.toString().equals(type)) {
 			onEvent(message);
+		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
+			Logging.error(this, "Error occured on the server " + message.get("error"));
+		} else if (WebSocketEvent.TERMINAL_RESIZE_EVENT.toString().equals(type)) {
+			// Resizing is handled by the user, we only notify server by
+			// sending terminal_resize_request event. On the client side, there is
+			// no need to handle terminal_resize_event.
 		} else {
 			eventDispatcher.dispatch(type, message);
 		}
 	}
 
 	private void onEvent(Map<String, Object> message) {
-		// Sleep for a little because otherwise we cannot get the needed Data from the Server
+		// Sleep for a little because otherwise we cannot get the needed data from the server.
 		Utils.threadSleep(this, 5);
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),

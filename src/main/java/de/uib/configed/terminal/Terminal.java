@@ -52,6 +52,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ProgressBarPainter;
 import utils.Utils;
@@ -78,6 +79,7 @@ public final class Terminal {
 	private boolean webSocketTtyConnected;
 
 	private TerminalSettingsProvider settingsProvider;
+	private String theme;
 
 	private Terminal() {
 	}
@@ -246,8 +248,17 @@ public final class Terminal {
 			} else {
 				TerminalSettingsProvider.setTerminalDarkTheme();
 			}
-			widget.repaint();
+			theme = selectedTheme;
+			if (widget != null) {
+				widget.repaint();
+			}
 		});
+
+		if (theme == null) {
+			theme = Configed.getResourceValue("Terminal.settings.theme.dark");
+		}
+
+		themeComboBox.setSelectedItem(theme);
 
 		JButton buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
@@ -438,7 +449,7 @@ public final class Terminal {
 		@Override
 		public void resize(Dimension termWinSize) {
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "terminal_resize_request");
+			data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminalChannel);
@@ -466,7 +477,7 @@ public final class Terminal {
 		@Override
 		public void write(byte[] bytes) {
 			Map<String, Object> data = new HashMap<>();
-			data.put("type", "terminal_data_write");
+			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
 			data.put("channel", terminalChannel);
