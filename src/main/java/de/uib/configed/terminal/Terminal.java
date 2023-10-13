@@ -79,6 +79,7 @@ public final class Terminal {
 	private boolean webSocketTtyConnected;
 
 	private TerminalSettingsProvider settingsProvider;
+	private String theme;
 
 	private Terminal() {
 	}
@@ -247,8 +248,17 @@ public final class Terminal {
 			} else {
 				TerminalSettingsProvider.setTerminalDarkTheme();
 			}
-			widget.repaint();
+			theme = selectedTheme;
+			if (widget != null) {
+				widget.repaint();
+			}
 		});
+
+		if (theme == null) {
+			theme = Configed.getResourceValue("Terminal.settings.theme.dark");
+		}
+
+		themeComboBox.setSelectedItem(theme);
 
 		JButton buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
