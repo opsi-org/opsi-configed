@@ -341,13 +341,13 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
-			ConfigedMain.host = host;
+			setHost(host);
 		}
 		if (ConfigedMain.user == null) {
-			ConfigedMain.user = user;
+			setUser(user);
 		}
 		if (ConfigedMain.password == null) {
-			ConfigedMain.password = password;
+			setPassword(password);
 		}
 
 		SSHConnectionInfo.getInstance().setHost(host);
