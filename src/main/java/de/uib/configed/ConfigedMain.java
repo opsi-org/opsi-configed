@@ -2658,7 +2658,6 @@ public class ConfigedMain implements ListSelectionListener {
 				depotRepresentative = myServer;
 			}
 		} else {
-
 			depotsOfSelectedClients = getDepotsOfSelectedClients();
 
 			Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
@@ -2718,11 +2717,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		Iterator<String> iter = displayFieldsLocalbootProducts.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			if (Boolean.TRUE.equals(displayFieldsLocalbootProducts.get(key))) {
-				result.add(key);
+		for (Entry<String, Boolean> productDisplay : displayFieldsLocalbootProducts.entrySet()) {
+			if (Boolean.TRUE.equals(productDisplay.getValue())) {
+				result.add(productDisplay.getKey());
 			}
 		}
 
@@ -2731,11 +2728,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private List<String> getNetbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		Iterator<String> iter = displayFieldsNetbootProducts.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			if (Boolean.TRUE.equals(displayFieldsNetbootProducts.get(key))) {
-				result.add(key);
+
+		for (Entry<String, Boolean> productDisplay : displayFieldsNetbootProducts.entrySet()) {
+			if (Boolean.TRUE.equals(productDisplay.getValue())) {
+				result.add(productDisplay.getKey());
 			}
 		}
 
@@ -3489,17 +3485,13 @@ public class ConfigedMain implements ListSelectionListener {
 		if (everythingReady) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
-			Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
-			while (iter.hasNext()) {
-				AbstractControlMultiTablePanel cmtp = iter.next();
+			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
 				if (cmtp != null) {
-					for (int i = 0; i < cmtp.getTablePanes().size(); i++) {
-						PanelGenEditTable p = cmtp.getTablePanes().get(i);
+					for (PanelGenEditTable p : cmtp.getTablePanes()) {
 						p.reload();
 					}
 				}
 			}
-
 		}
 	}
 

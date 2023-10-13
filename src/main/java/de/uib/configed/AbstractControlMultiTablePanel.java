@@ -44,21 +44,13 @@ public abstract class AbstractControlMultiTablePanel {
 	}
 
 	public void refreshTables() {
-		Iterator<GenTableModel> iterM = tableModels.iterator();
-
-		while (iterM.hasNext()) {
-			GenTableModel m = iterM.next();
-
-			m.invalidate();
-			m.reset();
+		for (GenTableModel tableModel : tableModels) {
+			tableModel.invalidate();
+			tableModel.reset();
 		}
 
-		Iterator<PanelGenEditTable> iterP = tablePanes.iterator();
-
-		while (iterP.hasNext()) {
-			PanelGenEditTable p = iterP.next();
-
-			p.setDataChanged(false);
+		for (PanelGenEditTable tablePanel : tablePanes) {
+			tablePanel.setDataChanged(false);
 		}
 	}
 
