@@ -754,7 +754,8 @@ public class ConfigedMain implements ListSelectionListener {
 
 					loginDialog.setVisible(false);
 
-					mainFrame.disactivateLoadingPane();
+					Logging.info("setting mainframe visible");
+					mainFrame.setVisible(true);
 					mainFrame.toFront();
 
 				});
@@ -1384,17 +1385,16 @@ public class ConfigedMain implements ListSelectionListener {
 		mainFrame.validate();
 
 		// center the frame:
-		locateAndDisplay();
+		locateFrame();
 
 		// set splitpanes before making the frame visible
 		mainFrame.initSplitPanes();
 
 		// init visual states
 		Logging.debug(configedMain, "mainframe nearly initialized");
-
 	}
 
-	private static void locateAndDisplay() {
+	private static void locateFrame() {
 		Rectangle screenRectangle = loginDialog.getGraphicsConfiguration().getBounds();
 		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
@@ -1406,12 +1406,6 @@ public class ConfigedMain implements ListSelectionListener {
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
-
-		// always loading on start
-		mainFrame.activateLoadingPane(Configed.getResourceValue("LoadingObserver.start"));
-
-		Logging.info("setting mainframe visible");
-		mainFrame.setVisible(true);
 	}
 
 	private void initLicencesFrame() {
