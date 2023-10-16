@@ -173,10 +173,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		return type;
 	}
 
-	public void setType(TYPE type) {
-		this.type = type;
-	}
-
 	@Override
 	public ListCellOptions deepCopy() {
 		ConfigOption configOption = new ConfigOption();
