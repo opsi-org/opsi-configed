@@ -1,9 +1,9 @@
 # Changelog
 
-## [unversioned] - xxxx-xx-xx
+## [4.3.0.9] - 2023-10-16
 
 ### Changed
-- Themes
+- Themes (Light / Dark)
 - Open Sans Font
 - Don't load software information on start (performance)
 - Only save shown software information (less memory usage)
