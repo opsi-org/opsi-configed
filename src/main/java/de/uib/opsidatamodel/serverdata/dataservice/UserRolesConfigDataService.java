@@ -761,7 +761,7 @@ public class UserRolesConfigDataService {
 		// WAN_CONFIGURATION
 		// does it exist?
 
-		Map<String, ConfigOption> wanConfigOptions = configDataService.getWANConfigOptionsPD();
+		Map<String, ConfigOption> wanConfigOptions = configDataService.retrieveWANConfigOptionsPD();
 		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
 			Logging.info(this, "build default wanConfigOptions");
 			readyObjects = buildWANConfigOptions(readyObjects);

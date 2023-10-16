@@ -114,9 +114,7 @@ public class ProductDataService {
 	}
 
 	public List<String> getAllNetbootProductNames(String depotId) {
-		Object2Product2VersionList netbootProducts = cacheManager
-				.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Object2Product2VersionList.class);
-
+		Object2Product2VersionList netbootProducts = getDepot2NetbootProductsPD();
 		return netbootProducts.get(depotId) != null ? new ArrayList<>(netbootProducts.get(depotId).keySet())
 				: new ArrayList<>();
 	}
@@ -262,12 +260,8 @@ public class ProductDataService {
 	}
 
 	public List<List<Object>> getProductRowsForDepots(Iterable<String> depotIds) {
-
-		Map<String, Set<OpsiPackage>> depot2packages = cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES,
-				Map.class);
-
+		Map<String, TreeSet<OpsiPackage>> depot2packages = getDepot2PackagesPD();
 		List<List<Object>> productRows = new ArrayList<>();
-
 		for (String depotId : depotIds) {
 			Set<OpsiPackage> packages = depot2packages.get(depotId);
 
@@ -292,7 +286,6 @@ public class ProductDataService {
 				}
 			}
 		}
-
 		persistenceController.notifyPanelCompleteWinProducts();
 		return productRows;
 	}
@@ -517,7 +510,7 @@ public class ProductDataService {
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
 	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients) {
-		Logging.info(this, "produceProductPropertyStates new hosts " + clients/* + " old hosts " + hosts */);
+		Logging.info(this, "produceProductPropertyStates new hosts " + clients);
 		List<String> newClients = null;
 		if (clients == null) {
 			newClients = new ArrayList<>();
@@ -730,6 +723,17 @@ public class ProductDataService {
 	 *
 	 * @param clientNames -
 	 */
+	public void retrieveProductPropertiesPD(List<String> clientNames) {
+		retrieveProductPropertiesPD(new HashSet<>(clientNames));
+	}
+
+	/**
+	 * This method collects properties for all selected clients and all
+	 * products,<br \> as a sideeffect, it produces the depot specific default
+	 * values <br \>
+	 *
+	 * @param clientNames -
+	 */
 	public void retrieveProductPropertiesPD(final Set<String> clientNames) {
 		boolean existing = true;
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
@@ -870,17 +874,6 @@ public class ProductDataService {
 
 			return depot2product2properties.get(depotId);
 		}
-	}
-
-	/**
-	 * This method collects properties for all selected clients and all
-	 * products,<br \> as a sideeffect, it produces the depot specific default
-	 * values <br \>
-	 *
-	 * @param clientNames -
-	 */
-	public void retrieveProductPropertiesPD(List<String> clientNames) {
-		retrieveProductPropertiesPD(new HashSet<>(clientNames));
 	}
 
 	public Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2propertiesPD() {
@@ -1105,7 +1098,6 @@ public class ProductDataService {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
-
 		updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
@@ -1144,7 +1136,7 @@ public class ProductDataService {
 	private boolean updateProductOnClients(List<Map<String, Object>> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -1163,7 +1155,7 @@ public class ProductDataService {
 	}
 
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -1176,7 +1168,7 @@ public class ProductDataService {
 	}
 
 	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -1219,7 +1211,7 @@ public class ProductDataService {
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -1512,6 +1504,22 @@ public class ProductDataService {
 		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_LOCKED);
 	}
 
+	public Map<String, String> getProductPreRequirements(String depotId, String productname) {
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_BEFORE);
+	}
+
+	public Map<String, String> getProductRequirements(String depotId, String productname) {
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_NEUTRAL);
+	}
+
+	public Map<String, String> getProductPostRequirements(String depotId, String productname) {
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_AFTER);
+	}
+
+	public Map<String, String> getProductDeinstallRequirements(String depotId, String productname) {
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_ON_DEINSTALL);
+	}
+
 	private Map<String, String> getProductRequirements(String depotId, String productname, String requirementType) {
 		Map<String, String> result = new HashMap<>();
 
@@ -1565,22 +1573,6 @@ public class ProductDataService {
 		Logging.info(this, "getProductRequirements " + result);
 
 		return result;
-	}
-
-	public Map<String, String> getProductPreRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_BEFORE);
-	}
-
-	public Map<String, String> getProductRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_NEUTRAL);
-	}
-
-	public Map<String, String> getProductPostRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_AFTER);
-	}
-
-	public Map<String, String> getProductDeinstallRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_ON_DEINSTALL);
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {

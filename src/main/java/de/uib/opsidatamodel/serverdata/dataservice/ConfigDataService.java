@@ -235,19 +235,21 @@ public class ConfigDataService {
 			}
 		}
 
-		getWANConfigOptionsPD();
+		retrieveWANConfigOptionsPD();
 		Logging.debug(this, "getConfigOptions() work finished");
 	}
 
 	public Map<String, List<Object>> getWanConfigurationPD() {
+		retrieveWANConfigOptionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.WAN_CONFIGURATION, Map.class);
 	}
 
 	public Map<String, List<Object>> getNotWanConfigurationPD() {
+		retrieveWANConfigOptionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.NOT_WAN_CONFIGURATION, Map.class);
 	}
 
-	public Map<String, ConfigOption> getWANConfigOptionsPD() {
+	public Map<String, ConfigOption> retrieveWANConfigOptionsPD() {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + OpsiServiceNOMPersistenceController.WAN_PARTKEY);
 
@@ -264,6 +266,7 @@ public class ConfigDataService {
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
 			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+				Logging.debug(this, "WAN config option key " + notWanConfigOption.getKey() + " is non BOOL_CONFIG");
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
@@ -290,7 +293,7 @@ public class ConfigDataService {
 	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
 		HashMap<String, ConfigOption> result = new HashMap<>();
 		retrieveConfigOptionsPD();
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Map<String, ConfigOption> configOptions = getConfigOptionsPD();
 		for (Entry<String, ConfigOption> configOption : configOptions.entrySet()) {
 			if (configOption.getKey().startsWith(s) && configOption.getKey().length() > s.length()) {
 				String xKey = configOption.getKey().substring(s.length());
@@ -405,7 +408,7 @@ public class ConfigDataService {
 
 	public List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
 			List<Map<String, Object>> jsonObjects) {
-		getWANConfigOptionsPD();
+		retrieveWANConfigOptionsPD();
 
 		Map<String, List<Object>> wanConfiguration = getWanConfigurationPD();
 		Map<String, List<Object>> notWanConfiguration = getNotWanConfigurationPD();
@@ -850,7 +853,7 @@ public class ConfigDataService {
 			}
 		}
 
-		for (Entry<String, Object> entry : settings.entrySet()) {
+		for (Map.Entry<String, Object> entry : settings.entrySet()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
 
@@ -1038,6 +1041,29 @@ public class ConfigDataService {
 		return result;
 	}
 
+	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
+		return setHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
+				clientId, shutdownInstall);
+	}
+
+	// for checking if WAN default configuration is set
+	public boolean findBooleanConfigurationComparingToDefaults(String host,
+			Map<String, List<Object>> defaultConfiguration) {
+		boolean tested = false;
+		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
+			if (configuration.getValue() == null) {
+				Logging.debug(this, "We encountered non BOOL_CONFIG option " + configuration.getKey() + "; We skip it");
+			} else {
+				tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
+						(Boolean) (configuration.getValue().get(0)));
+				if (!tested) {
+					break;
+				}
+			}
+		}
+		return tested;
+	}
+
 	private Boolean valueFromConfigStateAsExpected(Map<String, Object> configs, String configKey, boolean expectValue) {
 		Logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
 		boolean result = false;
@@ -1064,26 +1090,6 @@ public class ConfigDataService {
 
 		}
 		return result;
-	}
-
-	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
-		return setHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				clientId, shutdownInstall);
-	}
-
-	// for checking if WAN default configuration is set
-	public boolean findBooleanConfigurationComparingToDefaults(String host,
-			Map<String, List<Object>> defaultConfiguration) {
-		boolean tested = false;
-		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
-			tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
-					(Boolean) (configuration.getValue().get(0)));
-			if (!tested) {
-				break;
-			}
-		}
-
-		return tested;
 	}
 
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
@@ -1229,8 +1235,8 @@ public class ConfigDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_BACKEND_INFOS_LIST_OF_HASHES, new String[] {});
 		List<Object> list = exec.getListResult(omc);
 		Map<String, List<Map<String, Object>>> backends = new HashMap<>();
-		for (Object element : list) {
-			Map<String, Object> listEntry = exec.getMapFromItem(element);
+		for (int i = 0; i < list.size(); i++) {
+			Map<String, Object> listEntry = exec.getMapFromItem(list.get(i));
 			String backendName = "UNKNOWN";
 
 			if (listEntry.containsKey("name")) {
@@ -1256,9 +1262,10 @@ public class ConfigDataService {
 
 			List<Map<String, Object>> backendEntries = backends.get(backendName);
 
-			for (Map<String, Object> backendEntry : backendEntries) {
+			for (int i = 0; i < backendEntries.size(); i++) {
+				Map<String, Object> listEntry = backendEntries.get(i);
 
-				Iterator<String> eIt = backendEntry.keySet().iterator();
+				Iterator<String> eIt = listEntry.keySet().iterator();
 
 				boolean entryIsEven = false;
 
@@ -1275,7 +1282,7 @@ public class ConfigDataService {
 						bgColor = bgColor1;
 					}
 
-					Object value = backendEntry.get(key);
+					Object value = listEntry.get(key);
 					buf.append("<tr height='8px'>");
 					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
 							+ fontSizeBig + "'>" + key + "</font></td>");
