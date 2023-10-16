@@ -90,17 +90,17 @@ public class HostDataService {
 		List<Map<String, Object>> configStatesJsonObject = new ArrayList<>();
 
 		for (List<Object> client : clients) {
-			String hostname = (String) client.get(0);
-			String domainname = (String) client.get(1);
-			String depotId = (String) client.get(2);
-			String description = (String) client.get(3);
-			String inventorynumber = (String) client.get(4);
-			String notes = (String) client.get(5);
-			String systemUUID = (String) client.get(6);
-			String macaddress = (String) client.get(7);
-			String ipaddress = (String) client.get(8);
-			String group = (String) client.get(9);
-			String productNetboot = (String) client.get(10);
+			String hostname = ((String) client.get(0)).trim();
+			String domainname = ((String) client.get(1)).trim();
+			String depotId = ((String) client.get(2)).trim();
+			String description = ((String) client.get(3)).trim();
+			String inventorynumber = ((String) client.get(4)).trim();
+			String notes = ((String) client.get(5)).trim();
+			String systemUUID = ((String) client.get(6)).trim();
+			String macaddress = ((String) client.get(7)).trim();
+			String ipaddress = ((String) client.get(8)).trim();
+			String group = ((String) client.get(9)).trim();
+			String productNetboot = ((String) client.get(10)).trim();
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));

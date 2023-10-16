@@ -589,13 +589,11 @@ public final class NewClientDialog extends FGeneralDialog {
 						ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.nonBooleanValue.title")
 								+ " (" + Globals.APPNAME + ") ",
 						false, new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-
 				StringBuilder message = new StringBuilder("");
 				message.append(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
 				fInfo.setMessage(message.toString());
 				fInfo.setAlwaysOnTop(true);
 				fInfo.setVisible(true);
-
 				return;
 			}
 
@@ -787,7 +785,6 @@ public final class NewClientDialog extends FGeneralDialog {
 			if (csvImportDataDialog.getResult() == 2) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
-
 				createClients(rows);
 			}
 		}

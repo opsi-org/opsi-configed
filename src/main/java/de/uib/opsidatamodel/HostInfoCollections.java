@@ -467,18 +467,27 @@ public class HostInfoCollections {
 	// update derived data (caution!), does not create a HostInfo
 	public void addOpsiHostName(String newName) {
 		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
+		if (opsiHostNames == null) {
+			opsiHostNames = new ArrayList<>();
+		}
 		opsiHostNames.add(newName);
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
 
 	public void addOpsiHostNames(String[] newNames) {
 		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
+		if (opsiHostNames == null) {
+			opsiHostNames = new ArrayList<>();
+		}
 		opsiHostNames.addAll(Arrays.asList(newNames));
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
 
 	public void removeOpsiHostName(String name) {
 		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
+		if (opsiHostNames == null) {
+			opsiHostNames = new ArrayList<>();
+		}
 		opsiHostNames.remove(name);
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
