@@ -407,10 +407,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
-		SwingUtilities.invokeLater(() -> {
-			initialTreeActivation();
-			loginDialog.setVisible(false);
-		});
+		initialTreeActivation();
 
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
 
@@ -431,7 +428,6 @@ public class ConfigedMain implements ListSelectionListener {
 		anyDataChanged = false;
 
 		// restrict visibility of clients to some group
-
 		setRebuiltClientListTableModel();
 
 		Logging.debug(this, "initialTreeActivation");
@@ -439,6 +435,9 @@ public class ConfigedMain implements ListSelectionListener {
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
 		setReachableInfo(selectedClients);
+
+		mainFrame.updateHostCheckboxenText();
+		mainFrame.enableAfterLoading();
 	}
 
 	private static String getSavedStatesDefaultLocation() {
@@ -745,19 +744,20 @@ public class ConfigedMain implements ListSelectionListener {
 
 				preloadData();
 
-				initGui();
+				SwingUtilities.invokeLater(() -> {
 
-				everythingReady = true;
+					initGui();
 
-				mainFrame.updateHostCheckboxenText();
-				mainFrame.enableAfterLoading();
+					everythingReady = true;
 
-				checkErrorList();
+					checkErrorList();
 
-				loginDialog.setVisible(false);
+					loginDialog.setVisible(false);
 
-				mainFrame.toFront();
-				mainFrame.disactivateLoadingPane();
+					mainFrame.disactivateLoadingPane();
+					mainFrame.toFront();
+
+				});
 			}
 		}.start();
 	}
