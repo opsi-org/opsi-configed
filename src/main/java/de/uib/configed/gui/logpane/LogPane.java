@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -696,9 +697,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private void parse() {
 
-		char levC = '0';
-		int lev = 0;
-		maxExistingLevel = 0;
 		lineLevels = new int[lines.length];
 		lineStyles = new Style[lines.length];
 
@@ -708,25 +706,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StringBlock nextBlock = new StringBlock();
 		StringBlock testBlock = new StringBlock();
 
-		Style lineStyle = getStyleByLevelNo(0);
+		for (int i = 0; i < lines.length; i++) {
 
-		int countLines = lines.length;
-		for (int i = 0; i < countLines; i++) {
-			// keep last levC if not newly set
-			if (lines[i].length() >= 3 && lines[i].charAt(0) == '[' && lines[i].charAt(2) == ']') {
-				levC = lines[i].charAt(1);
-			}
-			if (Character.isDigit(levC)) {
-				lev = Character.getNumericValue(levC);
-				if (lev > maxExistingLevel) {
-					maxExistingLevel = lev;
-				}
+			int levelForLine = getLoglevelForLine(lines[i]);
 
-				lineLevels[i] = lev;
-
-				lineStyle = getStyleByLevelNo(lev);
-			}
-			lineStyles[i] = lineStyle;
+			lineLevels[i] = levelForLine;
+			lineStyles[i] = getStyleByLevelNo(levelForLine);
 
 			// search type
 			String type = "";
@@ -767,7 +752,21 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			lineTypes[i] = typeIndex;
 		}
 
+		maxExistingLevel = IntStream.range(0, lineLevels.length).map(i -> lineLevels[i]).max().getAsInt();
+
 		adaptComboType();
+	}
+
+	private static int getLoglevelForLine(String line) {
+		// keep last levC if not newly set
+		if (line.length() >= 3 && line.charAt(0) == '[' && line.charAt(2) == ']') {
+			int level = Character.getNumericValue(line.charAt(1));
+
+			// Return 0, if value negative (and therefore invalid)
+			return Math.max(0, level);
+		} else {
+			return 0;
+		}
 	}
 
 	private void adaptComboType() {

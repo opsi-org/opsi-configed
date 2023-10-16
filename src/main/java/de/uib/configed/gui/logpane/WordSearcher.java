@@ -11,6 +11,7 @@ import java.util.Locale;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
@@ -22,7 +23,7 @@ public class WordSearcher {
 	private JTextComponent comp;
 	private Highlighter.HighlightPainter painter;
 	private int lastReturnedOffset;
-	private boolean cS;
+	private boolean caseSensitive;
 
 	public WordSearcher(JTextComponent comp) {
 		this.comp = comp;
@@ -31,8 +32,8 @@ public class WordSearcher {
 	}
 
 	// Set case sensitivity
-	public void setCaseSensitivity(boolean cs) {
-		this.cS = cs;
+	public void setCaseSensitivity(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
 	}
 
 	public void setLastReturnedOffset(int lastReturnedOffset) {
@@ -43,13 +44,11 @@ public class WordSearcher {
 	// next occurrence. Highlights are added for all
 	// occurrences found.
 	public int search(String word) {
-
 		Highlighter compHighlighter = comp.getHighlighter();
 
 		// Remove any existing highlights for last word
-		Highlighter.Highlight[] highlights = compHighlighter.getHighlights();
-		for (int i = 0; i < highlights.length; i++) {
-			Highlighter.Highlight h = highlights[i];
+		Highlight[] highlights = compHighlighter.getHighlights();
+		for (Highlight h : highlights) {
 			if (h.getPainter() instanceof UnderlineHighlightPainter) {
 				compHighlighter.removeHighlight(h);
 			}
@@ -64,7 +63,7 @@ public class WordSearcher {
 		try {
 			Document d = comp.getDocument();
 
-			if (cS) {
+			if (caseSensitive) {
 				content = d.getText(0, d.getLength());
 			} else {
 				content = d.getText(0, d.getLength()).toLowerCase(Locale.ROOT);
@@ -75,10 +74,14 @@ public class WordSearcher {
 			return -1;
 		}
 
-		if (!cS) {
+		if (!caseSensitive) {
 			word = word.toLowerCase(Locale.ROOT);
 		}
 
+		return getOffset(content, word, compHighlighter);
+	}
+
+	private int getOffset(String content, String word, Highlighter compHighlighter) {
 		int lastIndex = 0;
 		int wordSize = word.length();
 		int firstOffset = -1;
@@ -103,7 +106,7 @@ public class WordSearcher {
 		if (returnOffset == lastReturnedOffset) {
 			returnOffset = firstOffset;
 		}
-		lastReturnedOffset = returnOffset;
+
 		return returnOffset;
 	}
 }
