@@ -266,7 +266,7 @@ public class ConfigDataService {
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
 			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				Logging.debug(this, "WAN config option key " + notWanConfigOption.getKey() + " is non BOOL_CONFIG");
+				Logging.error(this, "WAN config option key " + notWanConfigOption.getKey() + " is non BOOL_CONFIG");
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
@@ -1052,7 +1052,7 @@ public class ConfigDataService {
 		boolean tested = false;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
 			if (configuration.getValue() == null) {
-				Logging.debug(this, "We encountered non BOOL_CONFIG option " + configuration.getKey() + "; We skip it");
+				Logging.info(this, "We encountered non BOOL_CONFIG option " + configuration.getKey() + "; We skip it");
 			} else {
 				tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
 						(Boolean) (configuration.getValue().get(0)));
