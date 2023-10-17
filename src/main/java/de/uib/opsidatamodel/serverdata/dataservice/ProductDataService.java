@@ -246,10 +246,17 @@ public class ProductDataService {
 
 			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = cacheManager
 					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class);
-			String productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
-					.getProductName();
-			productRow.add(productName);
-			p.appendValues(productRow);
+
+			Map<String, OpsiProductInfo> versionInfo2Infos = product2versionInfo2infos.get(p.getProductId());
+
+			if (versionInfo2Infos != null) {
+				String productName = versionInfo2Infos.get(p.getVersionInfo()).getProductName();
+				productRow.add(productName);
+				p.appendValues(productRow);
+			} else {
+				Logging.warning(this, "retrieveProductsAllDepotsPD : product " + p.getProductId()
+						+ " seems not to exist in product table");
+			}
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, depot2Packages);
