@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.17] - 2023-10-17
+### Fixed
+- Fix ability to erase non-editable property
+- Fix `NullPointerException` in `sendChangeEvents`
 
 ## [4.2.22.16] - 2023-10-02
 ### Fixed
