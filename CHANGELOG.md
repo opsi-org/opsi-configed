@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [4.2.22.18] - 2023-10-17
+### Fixed
+- Nullpointerexception when product does not exist in general, but only on depot
+
 ## [4.2.22.17] - 2023-10-17
 ### Fixed
 - Fix ability to erase non-editable property
