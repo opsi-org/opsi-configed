@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.x.x] - xxxx-xx-xx
+
+### Fixed
+- Bug changing product properties
+
+
 ## [4.3.0.9] - 2023-10-16
 
 ### Changed
@@ -17,8 +23,6 @@
 - Client tree selection / navigation reworked
 - Open multiple windows in logviewer when opening archives with several files
 - Remove UEFI-Boot information in opsi 4.3 (only show as active, if client has entry in "clientconfig.uefinetbootlabel" config)
-
-## Fixed
 
 ## [4.2.22.16] - 2023-10-13
 ### Fixed

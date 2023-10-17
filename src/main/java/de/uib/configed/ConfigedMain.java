@@ -2215,7 +2215,9 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void mergeOtherClients(String productEdited) {
-		for (String selectedClient : getSelectedClients()) {
+		for (int i = 1; i < getSelectedClients().length; i++) {
+			String selectedClient = getSelectedClients()[i];
+
 			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
 					.getProductPropertiesPD(selectedClient, productEdited);
 
