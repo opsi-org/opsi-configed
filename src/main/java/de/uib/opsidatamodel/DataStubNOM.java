@@ -326,15 +326,18 @@ public class DataStubNOM {
 				depotpackages.add(p);
 
 				List<Object> productRow = new ArrayList<>();
-
 				productRow.add(p.getProductId());
 
-				String productName = null;
+				Map<String, OpsiProductInfo> versionInfo2Infos = product2versionInfo2infos.get(p.getProductId());
 
-				productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getProductName();
-
-				productRow.add(productName);
-				p.appendValues(productRow);
+				if (versionInfo2Infos != null) {
+					String productName = versionInfo2Infos.get(p.getVersionInfo()).getProductName();
+					productRow.add(productName);
+					p.appendValues(productRow);
+				} else {
+					Logging.warning(this, "retrieveProductsAllDepotsPD : product " + p.getProductId()
+							+ " seems not to exist in product table");
+				}
 
 				if (depotsWithThisVersion.size() == 1) {
 					productRows.add(productRow);
