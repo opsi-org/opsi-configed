@@ -1,9 +1,10 @@
 # Changelog
 
-## [4.3.x.x] - xxxx-xx-xx
+## [4.3.0.10] - 2023-10-17
 
 ### Fixed
 - Bug changing product properties
+- Nullpointerexception when product does not exist in general, but only on depot
 
 
 ## [4.3.0.9] - 2023-10-16
