@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [4.2.22.18] - 2023-10-17
+## [4.2.22.18] - 2023-10-18
 ### Fixed
 - Nullpointerexception when product does not exist in general, but only on depot
 
