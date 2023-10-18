@@ -18,11 +18,13 @@ import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowMode;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
@@ -32,7 +34,6 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
@@ -428,8 +429,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelLicencepools.setEditableColumns(new int[] { 0, 1 });
 		thePanel.getPanelLicencepools().setEmphasizedColumns(new int[] { 0, 1 });
 
-		JMenuItemFormatted menuItemAddPool = new JMenuItemFormatted(
-				Configed.getResourceValue("ConfigedMain.Licences.NewLicencepool"));
+		JMenuItem menuItemAddPool = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licences.NewLicencepool"));
 		menuItemAddPool.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[2];
 			a[0] = "";
@@ -481,7 +481,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelProductId2LPool.setEditableColumns(new int[] { 0, 1 });
 		thePanel.getPanelProductId2LPool().setEmphasizedColumns(new int[] { 0, 1 });
 
-		JMenuItemFormatted menuItemAddRelationProductId2LPool = new JMenuItemFormatted(
+		JMenuItem menuItemAddRelationProductId2LPool = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewRelationProductId2LPool"));
 		menuItemAddRelationProductId2LPool.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[2];
@@ -609,7 +609,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().showFiltered(false);
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 
-		JMenuItemFormatted menuItemSoftwareShowAssigned = new JMenuItemFormatted(
+		JMenuItem menuItemSoftwareShowAssigned = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAssigned"));
 		menuItemSoftwareShowAssigned.addActionListener((ActionEvent e) -> {
 			// save values
@@ -620,7 +620,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware()
 				.setFiltermarkActionListener(actionEvent -> registeredSoftwareFiltermarkAction());
 
-		JMenuItemFormatted menuItemSoftwareShowAll = new JMenuItemFormatted(
+		JMenuItem menuItemSoftwareShowAll = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAll"));
 		menuItemSoftwareShowAll.addActionListener((ActionEvent e) -> {
 			softwareShow = SoftwareShowMode.ALL;

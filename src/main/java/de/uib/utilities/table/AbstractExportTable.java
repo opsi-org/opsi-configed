@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
@@ -25,7 +26,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import utils.Utils;
 
 public abstract class AbstractExportTable {
@@ -63,9 +63,8 @@ public abstract class AbstractExportTable {
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
-	public JMenuItemFormatted getMenuItemExport() {
-		JMenuItemFormatted menuItem = new JMenuItemFormatted(
-				Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
+	public JMenuItem getMenuItemExport() {
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
 
 		);
 		menuItem.addActionListener(actionEvent -> execute(null, false));
@@ -77,9 +76,8 @@ public abstract class AbstractExportTable {
 		popup.add(getMenuItemExportSelected());
 	}
 
-	public JMenuItemFormatted getMenuItemExportSelected() {
-		JMenuItemFormatted menuItem = new JMenuItemFormatted(
-				Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+	public JMenuItem getMenuItemExportSelected() {
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 
 		);
 		menuItem.addActionListener((ActionEvent actionEvent) -> {

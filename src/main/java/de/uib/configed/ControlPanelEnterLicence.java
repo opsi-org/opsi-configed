@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.JMenuItem;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
@@ -19,7 +20,6 @@ import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.GenTableModel;
@@ -160,7 +160,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 	private void initPopupMenu() {
 		// --- PopupMenu
-		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
+		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
 

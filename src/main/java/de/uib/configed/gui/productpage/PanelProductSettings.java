@@ -77,7 +77,6 @@ import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
@@ -460,7 +459,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu("");
 
-		JMenuItem save = new JMenuItemFormatted();
+		JMenuItem save = new JMenuItem();
 		save.setText(Configed.getResourceValue("save"));
 		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
@@ -474,7 +473,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		popup.add(save);
 
-		itemOnDemand = new JMenuItemFormatted();
+		itemOnDemand = new JMenuItem();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
@@ -484,7 +483,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		popup.add(itemOnDemand);
 
-		JMenuItem itemOnDemandForSelectedProducts = new JMenuItemFormatted();
+		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem();
 		itemOnDemandForSelectedProducts
 				.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_processActionRequests"));
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
@@ -500,7 +499,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		showPopupOpsiclientdEvent(true);
 
-		JMenuItem reload = new JMenuItemFormatted();
+		JMenuItem reload = new JMenuItem();
 
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
@@ -511,7 +510,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		});
 		popup.add(reload);
 
-		JMenuItem createReport = new JMenuItemFormatted();
+		JMenuItem createReport = new JMenuItem();
 		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Utils.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.addActionListener((ActionEvent e) -> createReport());

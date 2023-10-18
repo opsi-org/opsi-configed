@@ -41,7 +41,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.swing.FEditText;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.swing.XCellEditor;
 import de.uib.utilities.table.DefaultListCellOptions;
@@ -170,17 +169,17 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			if (keylistExtendible) {
 
-				popupItemAddStringListEntry = new JMenuItemFormatted(
+				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
 
-				popupItemAddStringListEntry = new JMenuItemFormatted(
+				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
 
-				popupItemAddBooleanListEntry = new JMenuItemFormatted(
+				popupItemAddBooleanListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
@@ -189,20 +188,19 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			if (entryRemovable) {
 
-				popupItemDeleteEntry0 = new JMenuItemFormatted(defaultPropertyHandler.getRemovalMenuText());
+				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
 				popupEditOptions.add(popupItemDeleteEntry0);
 				// the menu item seems to work only for one menu
 
-				popupItemDeleteEntry1 = new JMenuItemFormatted(
-						removingSpecificValuesPropertyHandler.getRemovalMenuText(),
+				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText(),
 						Utils.createImageIcon("images/no-value.png", ""));
 				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
-				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
+				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
 						Utils.createImageIcon("images/fixed-value.png", ""));
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 

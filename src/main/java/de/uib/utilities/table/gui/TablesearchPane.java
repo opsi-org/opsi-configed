@@ -29,6 +29,7 @@ import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -43,7 +44,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
@@ -79,13 +79,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private NavigationPanel navPane;
 	private PanelGenEditTable associatedPanel;
 
-	private LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
+	private LinkedHashMap<JMenuItem, Boolean> searchMenuEntries;
 
-	private JMenuItemFormatted popupSearch;
-	private JMenuItemFormatted popupSearchNext;
-	private JMenuItemFormatted popupMarkHits;
-	private JMenuItemFormatted popupMarkAndFilter;
-	private JMenuItemFormatted popupEmptySearchfield;
+	private JMenuItem popupSearch;
+	private JMenuItem popupSearchNext;
+	private JMenuItem popupMarkHits;
+	private JMenuItem popupMarkAndFilter;
+	private JMenuItem popupEmptySearchfield;
 
 	public enum SearchMode {
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
@@ -344,12 +344,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		fieldSearch.addKeyListener(this);
 
-		popupSearch = new JMenuItemFormatted();
-		popupSearchNext = new JMenuItemFormatted();
-		JMenuItemFormatted popupNewSearch = new JMenuItemFormatted();
-		popupMarkHits = new JMenuItemFormatted();
-		popupMarkAndFilter = new JMenuItemFormatted();
-		popupEmptySearchfield = new JMenuItemFormatted();
+		popupSearch = new JMenuItem();
+		popupSearchNext = new JMenuItem();
+		JMenuItem popupNewSearch = new JMenuItem();
+		popupMarkHits = new JMenuItem();
+		popupMarkAndFilter = new JMenuItem();
+		popupEmptySearchfield = new JMenuItem();
 
 		searchMenuEntries = new LinkedHashMap<>();
 		searchMenuEntries.put(popupSearch, true);
@@ -534,7 +534,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void buildMenuSearchfield() {
 		Logging.info(this, "buildMenuSearchfield");
 		JPopupMenu searchMenu = new JPopupMenu();
-		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
+		for (Entry<JMenuItem, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
 			if (Boolean.TRUE.equals(searchMenuEntry.getValue())) {
 				searchMenu.add(searchMenuEntry.getKey());
 			}

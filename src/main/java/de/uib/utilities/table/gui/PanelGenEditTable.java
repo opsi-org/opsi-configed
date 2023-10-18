@@ -62,7 +62,6 @@ import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.AbstractExportTable;
@@ -123,9 +122,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private List<Integer> internalpopups;
 
-	private JMenuItemFormatted menuItemDeleteRelation;
-	private JMenuItemFormatted menuItemSave;
-	private JMenuItemFormatted menuItemCancel;
+	private JMenuItem menuItemDeleteRelation;
+	private JMenuItem menuItemSave;
+	private JMenuItem menuItemCancel;
 
 	private JScrollPane scrollpane;
 	protected JTable theTable;
@@ -598,7 +597,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_SAVE:
-				menuItemSave = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.saveData"));
+				menuItemSave = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.saveData"));
 				menuItemSave.setEnabled(false);
 				menuItemSave.addActionListener(actionEvent -> commit());
 				addPopupItem(menuItemSave);
@@ -606,7 +605,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_CANCEL:
-				menuItemCancel = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
+				menuItemCancel = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
 				menuItemCancel.setEnabled(false);
 				menuItemCancel.addActionListener(actionEvent -> cancel());
 				addPopupItem(menuItemCancel);
@@ -618,7 +617,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_SORT_AGAIN:
-				JMenuItemFormatted menuItemSortAgain = new JMenuItemFormatted(
+				JMenuItem menuItemSortAgain = new JMenuItem(
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
 
@@ -632,8 +631,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_PRINT:
-				JMenuItemFormatted menuItemPrint = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.print"));
+				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
 				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
 
 				addPopupItem(menuItemPrint);
@@ -646,19 +644,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_EXPORT_CSV:
-				JMenuItemFormatted menuItemExportCSV = exportTable.getMenuItemExport();
+				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 
 				break;
 
 			case POPUP_EXPORT_SELECTED_CSV:
-				JMenuItemFormatted menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 
 				break;
 
 			case POPUP_PDF:
-				JMenuItemFormatted menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
 						Utils.createImageIcon("images/acrobat_reader16.png", ""));
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
@@ -674,8 +672,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void addPopupItemReload() {
-		JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
-				Configed.getResourceValue("PanelGenEditTable.reload"),
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.reload"),
 				Utils.createImageIcon("images/reload16.png", ""));
 
 		// does not work
@@ -688,8 +685,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void addPopupMenuFloatingCopy() {
-		JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
-				Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
+		JMenuItem menuItemFloatingCopy = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
 		menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
 
 		if (popupIndex > 1) {
@@ -700,7 +696,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void addPopupMenuDeleteRow() {
-		menuItemDeleteRelation = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
+		menuItemDeleteRelation = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
 		menuItemDeleteRelation.setEnabled(false);
 		menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
 		addPopupItem(menuItemDeleteRelation);

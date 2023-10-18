@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
@@ -25,7 +26,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.GenTableModel;
@@ -95,8 +95,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		modelLicencekeys.setEditableColumns(new int[] { 0, 1, 2 });
 		thePanel.getPanelKeys().setEmphasizedColumns(new int[] { 2 });
 
-		JMenuItemFormatted menuItemAddKey = new JMenuItemFormatted(
-				Configed.getResourceValue("ConfigedMain.Licences.NewLicencekey"));
+		JMenuItem menuItemAddKey = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licences.NewLicencekey"));
 		menuItemAddKey.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[3];
 			a[0] = "";
@@ -193,13 +192,13 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		// expiration date
 
 		// --- PopupMenu
-		JMenuItemFormatted menuItemAddLicence = new JMenuItemFormatted(
+		JMenuItem menuItemAddLicence = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewSoftwarelicence"));
 		menuItemAddLicence.addActionListener((ActionEvent e) -> addLicence());
 
 		thePanel.getPanelSoftwarelicences().addPopupItem(menuItemAddLicence);
 
-		JMenuItemFormatted menuItemPickSoftwarelicence = new JMenuItemFormatted(
+		JMenuItem menuItemPickSoftwarelicence = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromSoftwarelicenceToLicencekey"));
 		menuItemPickSoftwarelicence.addActionListener((ActionEvent e) -> pickSoftwareLicence());
 
@@ -249,13 +248,13 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		thePanel.getPanelLicencecontracts().setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
 
 		// --- PopupMenu
-		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
+		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
 
 		thePanel.getPanelLicencecontracts().addPopupItem(menuItemAddContract);
 
-		JMenuItemFormatted menuItemPickLicencecontract = new JMenuItemFormatted(Configed
+		JMenuItem menuItemPickLicencecontract = new JMenuItem(Configed
 				.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromLicencecontractToSoftwarelicence"));
 		menuItemPickLicencecontract.addActionListener((ActionEvent e) -> pickLicenceContract());
 

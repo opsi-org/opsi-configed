@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -45,12 +46,12 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private List<Integer> listPopups;
 
-	private JMenuItemFormatted[] menuItems;
+	private JMenuItem[] menuItems;
 
 	public PopupMenuTrait(Integer[] popups) {
 		listPopups = Arrays.asList(popups);
 
-		menuItems = new JMenuItemFormatted[popups.length];
+		menuItems = new JMenuItem[popups.length];
 
 		for (Integer popup : popups) {
 			addPopup(popup);
@@ -62,7 +63,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		switch (p) {
 		case POPUP_RELOAD:
 			i = listPopups.indexOf(POPUP_RELOAD);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.reload"),
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
 					Utils.createImageIcon("images/reload16.png", ""));
 
 			// not work
@@ -80,8 +81,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(POPUP_SAVE);
 
 			String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("save"),
-					Utils.createImageIcon(iconSavePath, ""));
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("save"), Utils.createImageIcon(iconSavePath, ""));
 
 			// not work
 
@@ -91,7 +91,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_AS_ZIP:
 			i = listPopups.indexOf(POPUP_SAVE_AS_ZIP);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveAsZip"),
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.saveAsZip"),
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -100,7 +100,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_LOADED_AS_ZIP:
 			i = listPopups.indexOf(POPUP_SAVE_LOADED_AS_ZIP);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -109,7 +109,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_ALL_AS_ZIP:
 			i = listPopups.indexOf(POPUP_SAVE_ALL_AS_ZIP);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -118,7 +118,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_PDF:
 			i = listPopups.indexOf(POPUP_PDF);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
 					Utils.createImageIcon("images/acrobat_reader16.png", ""));
 
 			addItem(p);
@@ -127,7 +127,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_CSV:
 			i = listPopups.indexOf(POPUP_EXPORT_CSV);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
 
 			);
 
@@ -137,7 +137,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_SELECTED_CSV:
 			i = listPopups.indexOf(POPUP_EXPORT_SELECTED_CSV);
-			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 
 			);
 
@@ -147,7 +147,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_DELETE:
 			i = listPopups.indexOf(POPUP_DELETE);
-			menuItems[i] = new JMenuItemFormatted("delete", Utils.createImageIcon("images/edit-delete.png", ""));
+			menuItems[i] = new JMenuItem("delete", Utils.createImageIcon("images/edit-delete.png", ""));
 
 			addItem(p);
 
@@ -155,7 +155,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_ADD:
 			i = listPopups.indexOf(POPUP_ADD);
-			menuItems[i] = new JMenuItemFormatted("add", Utils.createImageIcon("images/list-add.png", ""));
+			menuItems[i] = new JMenuItem("add", Utils.createImageIcon("images/list-add.png", ""));
 
 			addItem(p);
 
@@ -169,7 +169,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private void addPopupFloatingCopy() {
 		int i = listPopups.indexOf(POPUP_FLOATINGCOPY);
-		menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.floatingInstance"),
+		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.floatingInstance"),
 				Utils.createImageIcon("images/edit-copy.png", ""));
 
 		// not work

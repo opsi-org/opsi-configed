@@ -125,7 +125,6 @@ import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
@@ -257,29 +256,29 @@ public class MainFrame extends JFrame
 	private JPopupMenu popupClients = new JPopupMenu();
 
 	private JMenu popupResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
-	private JMenuItemFormatted popupResetLocalbootProductOnClientWithStates = new JMenuItemFormatted();
-	private JMenuItemFormatted popupResetLocalbootProductOnClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupResetNetbootProductOnClientWithStates = new JMenuItemFormatted();
-	private JMenuItemFormatted popupResetNetbootProductOnClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
-	private JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
+	private JMenuItem popupResetLocalbootProductOnClientWithStates = new JMenuItem();
+	private JMenuItem popupResetLocalbootProductOnClient = new JMenuItem();
+	private JMenuItem popupResetNetbootProductOnClientWithStates = new JMenuItem();
+	private JMenuItem popupResetNetbootProductOnClient = new JMenuItem();
+	private JMenuItem popupResetProductOnClientWithStates = new JMenuItem();
+	private JMenuItem popupResetProductOnClient = new JMenuItem();
 
-	private JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupCopyClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
-	private JMenuItemFormatted popupDeletePackageCaches = new JMenuItemFormatted();
+	private JMenuItem popupAddClient = new JMenuItem();
+	private JMenuItem popupCopyClient = new JMenuItem();
+	private JMenuItem popupDeleteClient = new JMenuItem();
+	private JMenuItem popupFreeLicences = new JMenuItem();
+	private JMenuItem popupDeletePackageCaches = new JMenuItem();
 	private JMenu popupWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-	private JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
-	private JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
+	private JMenuItem popupWakeOnLanDirect = new JMenuItem();
+	private JMenuItem popupWakeOnLanScheduler = new JMenuItem();
 
-	private JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
-	private JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
-	private JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupRebootClient = new JMenuItemFormatted();
-	private JMenuItemFormatted popupChangeDepot = new JMenuItemFormatted();
-	private JMenuItemFormatted popupChangeClientID = new JMenuItemFormatted();
-	private JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
+	private JMenuItem popupShowPopupMessage = new JMenuItem();
+	private JMenuItem popupRequestSessionInfo = new JMenuItem();
+	private JMenuItem popupShutdownClient = new JMenuItem();
+	private JMenuItem popupRebootClient = new JMenuItem();
+	private JMenuItem popupChangeDepot = new JMenuItem();
+	private JMenuItem popupChangeClientID = new JMenuItem();
+	private JMenuItem popupRemoteControl = new JMenuItem();
 
 	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
 			popupCopyClient, popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
@@ -297,14 +296,14 @@ public class MainFrame extends JFrame
 	private JCheckBoxMenuItem popupShowInstallByShutdownColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowDepotColumn = new JCheckBoxMenuItem();
 
-	private JMenuItemFormatted popupSelectionGetGroup = new JMenuItemFormatted();
-	private JMenuItemFormatted popupSelectionGetSavedSearch = new JMenuItemFormatted();
+	private JMenuItem popupSelectionGetGroup = new JMenuItem();
+	private JMenuItem popupSelectionGetSavedSearch = new JMenuItem();
 
 	private JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
-	private JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
-			Configed.getResourceValue("PopupMenuTrait.reload"), Utils.createImageIcon("images/reload16.png", ""));
-	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+	private JMenuItem popupRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
+			Utils.createImageIcon("images/reload16.png", ""));
+	private JMenuItem popupCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Utils.createImageIcon("images/acrobat_reader16.png", ""));
 
 	private JButton jButtonServerConfiguration;
@@ -1161,7 +1160,7 @@ public class MainFrame extends JFrame
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
-			JMenuItem item = new JMenuItemFormatted(entry.getValue());
+			JMenuItem item = new JMenuItem(entry.getValue());
 
 			item.addActionListener((ActionEvent e) -> configedMain
 					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
@@ -1594,7 +1593,7 @@ public class MainFrame extends JFrame
 		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
-			JMenuItem item = new JMenuItemFormatted(event);
+			JMenuItem item = new JMenuItem(event);
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 

@@ -30,6 +30,7 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -56,7 +57,6 @@ import de.uib.configed.HealthInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import utils.Utils;
 
 public class HealthCheckDialog extends FGeneralDialog {
@@ -213,7 +213,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(Configed.getResourceValue("save"),
+		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("save"),
 				Utils.createImageIcon(iconSavePath, ""));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());

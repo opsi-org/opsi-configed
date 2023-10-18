@@ -30,7 +30,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditStringList;
-import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import utils.Utils;
 
@@ -112,7 +111,7 @@ public class SavedSearchesDialog extends FEditStringList {
 			addElement();
 		});
 
-		JMenuItem reload = new JMenuItemFormatted();
+		JMenuItem reload = new JMenuItem();
 
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
@@ -123,7 +122,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		});
 		popup.add(reload);
 
-		JMenuItem remove = new JMenuItemFormatted();
+		JMenuItem remove = new JMenuItem();
 
 		// find itscontext
 		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
@@ -134,7 +133,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		});
 		popup.add(remove);
 
-		JMenuItem edit = new JMenuItemFormatted();
+		JMenuItem edit = new JMenuItem();
 		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
