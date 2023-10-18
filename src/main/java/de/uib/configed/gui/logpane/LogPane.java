@@ -200,10 +200,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextPane.setEditable(true);
-		if (!Main.FONT) {
-			jTextPane.setFont(Globals.DEFAULT_FONT);
-		}
-
 		jTextPane.addKeyListener(this);
 
 		JScrollPane scrollpane = new JScrollPane();
@@ -213,9 +209,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super.add(scrollpane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
-		if (!Main.FONT) {
-			labelSearch.setFont(Globals.DEFAULT_FONT);
-		}
 
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
@@ -223,9 +216,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jComboBoxSearch.addActionListener(this);
 
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
-		if (!Main.FONT) {
-			buttonSearch.setFont(Globals.DEFAULT_FONT);
-		}
+
 		buttonSearch.addActionListener(this);
 		buttonSearch.addKeyListener(this);
 
@@ -243,24 +234,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
-		if (!Main.FONT) {
-			labelLevel.setFont(Globals.DEFAULT_FONT);
-		}
 
 		Logging.info(this, "levels minL, maxL " + MIN_LEVEL + ", " + MAX_LEVEL);
 
 		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, produceInitialMaxShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
-		if (!Main.FONT) {
-			labelDisplayRestriction.setFont(Globals.DEFAULT_FONT);
-		}
 
 		comboModelTypes = new DefaultComboBoxModel<>();
 		comboType = new JComboBox<>(comboModelTypes);
-		if (!Main.FONT) {
-			comboType.setFont(Globals.DEFAULT_FONT);
-		}
+
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 

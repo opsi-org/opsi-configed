@@ -18,7 +18,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -118,9 +117,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
-		if (!Main.FONT) {
-			reload.setFont(Globals.DEFAULT_FONT);
-		}
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();
@@ -132,9 +128,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		// find itscontext
 		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
-		if (!Main.FONT) {
-			remove.setFont(Globals.DEFAULT_FONT);
-		}
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
@@ -143,9 +136,6 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		JMenuItem edit = new JMenuItemFormatted();
 		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
-		if (!Main.FONT) {
-			edit.setFont(Globals.DEFAULT_FONT);
-		}
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
 

@@ -59,9 +59,6 @@ public class JComboBoxToolTip extends JComboBox<String> {
 					setForeground(listForegroundColor);
 				}
 			}
-			if (!Main.FONT) {
-				setFont(list.getFont());
-			}
 
 			if (value == null) {
 				setText("");

@@ -129,10 +129,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		if (!Main.FONT) {
-			labelDepotServer.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		}
-
 		buttonSelectDepotsWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
@@ -146,7 +142,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
 
-		searchPane.setFieldFont(Globals.DEFAULT_FONT);
 		searchPane.setFieldBackground(getMyColor());
 		if (!multidepot) {
 			searchPane.setEnabled(false);
@@ -166,10 +161,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
-
-		if (!Main.FONT) {
-			depotslist.setFont(Globals.DEFAULT_FONT);
-		}
 
 		if (!Main.THEMES) {
 			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

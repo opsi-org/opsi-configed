@@ -543,7 +543,7 @@ public class HardwareDataService {
 			List<OpsiHwAuditDevicePropertyType> deviceProperties, Map<String, Boolean> tableConfigUpdates) {
 		List<Object> oldDefaultValues = new ArrayList<>();
 
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
 		if (configOptions.get(configKey) != null) {
 			oldDefaultValues = configOptions.get(configKey).getDefaultValues();
 		}
@@ -584,7 +584,7 @@ public class HardwareDataService {
 	public boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems) {
 		configDataService.retrieveConfigOptionsPD();
 
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
 		List<Object> readyObjects = new ArrayList<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = cacheManager

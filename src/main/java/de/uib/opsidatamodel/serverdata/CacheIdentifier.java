@@ -23,6 +23,13 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
  */
 public enum CacheIdentifier {
 	/**
+	 * Identifier for all data in the cache.
+	 * <p>
+	 * This identifier is used to indicate removal of all data.
+	 */
+	ALL_DATA("all_data"),
+
+	/**
 	 * return type {@code Map<String, Map<String, String>>}
 	 */
 	PRODUCT_GROUPS("product_groups"),

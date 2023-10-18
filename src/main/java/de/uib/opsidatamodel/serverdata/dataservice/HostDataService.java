@@ -629,7 +629,7 @@ public class HostDataService {
 
 	private List<String> produceHostDisplayFields(List<String> givenList) {
 		List<String> result = null;
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
 		Logging.info(this,
 				"produceHost_displayFields configOptions.get(key) " + configOptions.get(KEY_HOST_DISPLAYFIELDS));
 

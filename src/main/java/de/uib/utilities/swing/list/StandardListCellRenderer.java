@@ -64,10 +64,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 					unselectedEven, unselectedUneven);
 		}
 
-		if (!Main.FONT) {
-			jc.setFont(Globals.DEFAULT_FONT);
-		}
-
 		if (jc instanceof JLabel) {
 			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}

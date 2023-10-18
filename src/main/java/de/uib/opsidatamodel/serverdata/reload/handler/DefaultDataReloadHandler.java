@@ -65,6 +65,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		});
 		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTIES.toString(),
 				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
+		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> cacheManager.clearAllCachedData());
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {

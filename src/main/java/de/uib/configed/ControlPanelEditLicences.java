@@ -19,7 +19,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
-import de.uib.Main;
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -114,10 +113,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 		TableColumn col = thePanel.getPanelKeys().getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
-		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> poolIds = configedMain.licencePoolTableProvider.getOrderedColumn(
 					configedMain.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
@@ -179,17 +174,10 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		TableColumn col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
-		if (!Main.FONT) {
-			comboLicenceTypes.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
-		if (!Main.FONT) {
-			selectionComboBox.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
 					.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()))

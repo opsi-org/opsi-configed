@@ -51,9 +51,6 @@ public class CheckBoxList extends JList<JCheckBox> {
 			}
 
 			checkbox.setEnabled(isEnabled());
-			if (!Main.FONT) {
-				checkbox.setFont(getFont());
-			}
 			checkbox.setFocusPainted(false);
 			checkbox.setBorderPainted(true);
 			checkbox.setBorder(noFocusBorder);

@@ -282,7 +282,7 @@ public class SoftwareDataService {
 		Logging.debug(this, "getSWident for " + i);
 		retrieveInstalledSoftwareInformationPD();
 		String swIdent = null;
-		List<String> softwareList = cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
+		List<String> softwareList = getSoftwareListPD();
 		if (softwareList == null || softwareList.size() < i + 1 || i == -1) {
 			if (softwareList != null) {
 				Logging.info(this, "getSWident " + " until now softwareList.size() " + softwareList.size());

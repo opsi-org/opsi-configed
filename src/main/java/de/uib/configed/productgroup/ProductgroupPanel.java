@@ -428,9 +428,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
-		if (!Main.FONT) {
-			listChooseAction.setFont(Globals.DEFAULT_FONT_SMALL_BOLD);
-		}
 
 		if (!Main.THEMES) {
 			listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -456,9 +453,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		labelStrip.setOpaque(true);
-		if (!Main.FONT) {
-			labelStrip.setFont(Globals.DEFAULT_FONT);
-		}
+
 		if (!Main.THEMES) {
 			labelStrip.setForeground(Globals.LIGHT_BLACK);
 		}
@@ -473,10 +468,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonEditDialog.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
-
-		if (!Main.FONT) {
-			labelSelectedGroup.setFont(Globals.DEFAULT_FONT);
-		}
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
@@ -512,15 +503,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
-		if (!Main.FONT) {
-			labelSave.setFont(Globals.DEFAULT_FONT);
-		}
 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.BUTTON_DIMENSION);
-		if (!Main.FONT) {
-			descriptionField.setFont(Globals.DEFAULT_FONT);
-		}
+
 		if (!Main.THEMES) {
 			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}

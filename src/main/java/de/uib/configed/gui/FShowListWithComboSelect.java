@@ -31,9 +31,7 @@ public class FShowListWithComboSelect extends FShowList {
 		}
 		northPanel.add(labelChoice);
 		combo = new JComboBox<>(choices);
-		if (!Main.FONT) {
-			combo.setFont(Globals.DEFAULT_FONT_BIG);
-		}
+
 		northPanel.add(combo);
 
 		super.pack();

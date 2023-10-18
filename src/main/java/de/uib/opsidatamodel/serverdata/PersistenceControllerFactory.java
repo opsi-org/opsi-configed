@@ -49,12 +49,9 @@ public final class PersistenceControllerFactory {
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
-			persistenceController.getModuleDataService().retrieveOpsiModules();
-
 			Utils.setMultiFactorAuthenticationEnabled(
 					persistenceController.getUserDataService().usesMultiFactorAuthentication());
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
-
 			if (!Utils.isCertificateVerificationDisabled()) {
 				CertificateManager.updateCertificate();
 			}

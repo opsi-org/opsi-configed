@@ -6,7 +6,6 @@
 
 package de.uib.utilities.swing;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -47,7 +46,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	private String title;
 	private Map<Enum<E>, JRadioButton> groupedButtons;
 	private Consumer<Enum<E>> enumSetter;
-	private Font primaryFont;
 	private int vGap;
 	private int hGap;
 
@@ -130,7 +128,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initComponents() {
-		primaryFont = Globals.DEFAULT_FONT;
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<>();
 
@@ -143,9 +140,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			button.setIcon(deactivatedIcon);
 			button.setSelectedIcon(activatedIcon);
 			button.setHorizontalTextPosition(SwingConstants.RIGHT);
-			if (!Main.FONT) {
-				button.setFont(primaryFont);
-			}
 
 			buttonGroup.add(button);
 
@@ -199,10 +193,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		JLabel labelTitle = new JLabel("");
 		if (title != null) {
 			labelTitle.setText(title);
-		}
-
-		if (!Main.FONT) {
-			labelTitle.setFont(primaryFont);
 		}
 
 		GroupLayout layout = new GroupLayout(this);

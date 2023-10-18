@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.util.List;
 
-import de.uib.Main;
 import de.uib.configed.gui.FShowList;
 
 public abstract class AbstractErrorListProducer extends Thread {
@@ -26,9 +25,7 @@ public abstract class AbstractErrorListProducer extends Thread {
 		// final
 		FShowList fListFeedback = new FShowList(ConfigedMain.getMainFrame(), title, false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 800, 200);
-		if (!Main.FONT) {
-			fListFeedback.setFont(Globals.DEFAULT_FONT);
-		}
+
 		fListFeedback.setMessage("");
 		fListFeedback.setButtonsEnabled(true);
 		fListFeedback.setCursor(Globals.WAIT_CURSOR);

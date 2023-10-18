@@ -129,16 +129,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		northPanel.setOpaque(true);
 
-		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		if (!Main.FONT) {
-			importOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-		JLabel splittingOptionsLabel = new JLabel(
-				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		if (!Main.FONT) {
-			splittingOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
 
@@ -232,6 +222,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		});
 
 		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
+
+		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
+
+		JLabel splittingOptionsLabel = new JLabel(
+				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);

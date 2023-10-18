@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
@@ -56,13 +55,6 @@ public class FShowList extends FTextArea {
 		}
 	}
 
-	@Override
-	public void setFont(Font f) {
-		if (jTextArea1 != null && !Main.FONT) {
-			jTextArea1.setFont(f);
-		}
-	}
-
 	public void setLineWrap(boolean b) {
 		jTextArea1.setLineWrap(b);
 	}
@@ -82,9 +74,6 @@ public class FShowList extends FTextArea {
 		}
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		if (!Main.FONT) {
-			jTextArea1.setFont(new Font("Dialog", 0, 14));
-		}
 
 		scrollpane.getViewport().add(jTextArea1, null);
 

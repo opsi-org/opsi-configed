@@ -187,8 +187,6 @@ public class ModuleDataService {
 	}
 
 	private void produceOpsiModulesInfoClassicOpsi43PD() {
-		produceOpsiInformationPD();
-
 		// keeps the info for displaying to the user
 		Map<String, Object> opsiModulesDisplayInfo = new HashMap<>();
 
@@ -198,7 +196,7 @@ public class ModuleDataService {
 
 		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
-		Map<String, Object> opsiInformation = cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
+		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
 		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
 		Logging.info(this, "opsi module information " + opsiModulesInfo);
@@ -462,13 +460,11 @@ public class ModuleDataService {
 	}
 
 	private void produceOpsiModulesInfoClassicPD() {
-		produceOpsiInformationPD();
-
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		Map<String, Boolean> opsiModules = new HashMap<>();
 
-		Map<String, Object> opsiInformation = cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
+		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		String opsiVersion = (String) opsiInformation.get("opsiVersion");
 		Logging.info(this, "opsi version information " + opsiVersion);
 

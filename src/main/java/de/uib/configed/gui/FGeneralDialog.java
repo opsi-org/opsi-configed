@@ -89,9 +89,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		registerWithRunningInstances();
 		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(title);
-		if (!Main.FONT) {
-			super.setFont(Globals.DEFAULT_FONT);
-		}
+
 		checkAdditionalPane();
 		super.setLocationRelativeTo(owner);
 	}
@@ -103,9 +101,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
-		if (!Main.FONT) {
-			super.setFont(Globals.DEFAULT_FONT);
-		}
+
 		super.setIconImage(Utils.getMainIcon());
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
@@ -187,9 +183,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		this.preferredHeight = preferredHeight;
 
 		setTitle(title);
-		if (!Main.FONT) {
-			setFont(Globals.DEFAULT_FONT);
-		}
 
 		additionalPane = addPane;
 
@@ -375,9 +368,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.setLayout(gridLayout1);
 		jPanelButtonGrid.setOpaque(false);
 
-		if (!Main.FONT) {
-			jButton1.setFont(Globals.DEFAULT_FONT);
-		}
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 		if (button1Text == null) {
@@ -389,9 +379,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
-			if (!Main.FONT) {
-				jButton2.setFont(Globals.DEFAULT_FONT);
-			}
+
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 			if (button2Text == null) {
@@ -404,9 +392,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		}
 		if (noOfButtons > 2) {
-			if (!Main.FONT) {
-				jButton3.setFont(Globals.DEFAULT_FONT);
-			}
+
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 			if (button3Text == null) {

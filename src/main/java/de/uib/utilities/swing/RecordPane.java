@@ -126,10 +126,6 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 			jLabel.setText(labels.get(dataEntry.getKey()));
 		}
 
-		if (!Main.FONT) {
-			jLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		return jLabel;
 	}
 
@@ -150,9 +146,6 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 			jTextField.setText("");
 		}
 
-		if (!Main.FONT) {
-			jTextField.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		jTextField.getCaret().setBlinkRate(0);
 
 		if (hints != null) {

@@ -11,9 +11,6 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class ColoredListCellRenderer extends DefaultListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
@@ -21,10 +18,6 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 		CellAlternatingColorizer.colorize(c, isSelected, index % 2 == 0, true);
-
-		if (!Main.FONT) {
-			c.setFont(Globals.DEFAULT_FONT);
-		}
 
 		return c;
 	}

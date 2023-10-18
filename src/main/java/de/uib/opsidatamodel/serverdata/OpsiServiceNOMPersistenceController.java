@@ -46,7 +46,6 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHa
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
-import de.uib.opsidatamodel.serverdata.reload.handler.EssentialDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -369,18 +368,6 @@ public class OpsiServiceNOMPersistenceController {
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
-		EssentialDataReloadHandler essentialDataReloadHandler = new EssentialDataReloadHandler();
-		essentialDataReloadHandler.setConfigDataService(configDataService);
-		essentialDataReloadHandler.setUserRolesConfigDataService(userRolesConfigDataService);
-		essentialDataReloadHandler.setDepotDataService(depotDataService);
-		essentialDataReloadHandler.setGroupDataService(groupDataService);
-		essentialDataReloadHandler.setHardwareDataService(hardwareDataService);
-		essentialDataReloadHandler.setHostDataService(hostDataService);
-		essentialDataReloadHandler.setModuleDataService(moduleDataService);
-		essentialDataReloadHandler.setProductDataService(productDataService);
-		essentialDataReloadHandler.setHostInfoCollections(hostInfoCollections);
-		reloadDispatcher.registerHandler(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString(), essentialDataReloadHandler);
-
 		HostDataReloadHandler hostDataReloadHandler = new HostDataReloadHandler();
 		hostDataReloadHandler.setConfigDataService(configDataService);
 		hostDataReloadHandler.setGroupDataService(groupDataService);
@@ -447,6 +434,7 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTIES.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.ALL_DATA.toString(), defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {

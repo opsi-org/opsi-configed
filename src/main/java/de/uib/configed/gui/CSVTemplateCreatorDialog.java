@@ -146,17 +146,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected JPanel initPanel() {
 		format = new CSVFormat();
 
-		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		if (!Main.FONT) {
-			importOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
-		JLabel splittingOptionsLabel = new JLabel(
-				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		if (!Main.FONT) {
-			splittingOptionsLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
 
@@ -240,15 +229,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		centerPanel.setLayout(centerLayout);
 
 		JLabel dataLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
-		if (!Main.FONT) {
-			dataLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
 		JLabel csvFormatLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
-		if (!Main.FONT) {
-			csvFormatLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		JLabel fieldSeparatorLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 

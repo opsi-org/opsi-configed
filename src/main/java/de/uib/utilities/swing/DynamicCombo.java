@@ -13,7 +13,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -86,13 +85,6 @@ public class DynamicCombo extends JPanel {
 
 		add(table);
 
-	}
-
-	@Override
-	public void setFont(Font font) {
-		if (combo != null && !Main.FONT) {
-			combo.setFont(font);
-		}
 	}
 
 	public void setModelSource(ComboBoxModeller modelSource) {

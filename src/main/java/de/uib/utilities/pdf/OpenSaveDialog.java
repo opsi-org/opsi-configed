@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -31,17 +30,10 @@ public class OpenSaveDialog implements ActionListener {
 
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
 
-		if (!Main.FONT) {
-			saveBtn.setFont(Globals.DEFAULT_FONT);
-		}
-
 		saveBtn.addActionListener(this);
 
 		openBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.open"));
 
-		if (!Main.FONT) {
-			openBtn.setFont(Globals.DEFAULT_FONT);
-		}
 		openBtn.addActionListener(this);
 
 		JPanel buttonPane = new JPanel();

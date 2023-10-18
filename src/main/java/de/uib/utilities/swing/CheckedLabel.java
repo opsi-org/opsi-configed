@@ -6,32 +6,25 @@
 
 package de.uib.utilities.swing;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.TextAttribute;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 //a class similar to JCheckBox
-public class CheckedLabel extends JPanel implements FocusListener {
+public class CheckedLabel extends JPanel {
 
 	private static final int SET_CHECKED_ON = 1;
 	private static final int SET_CHECKED_OFF = 0;
@@ -43,9 +36,6 @@ public class CheckedLabel extends JPanel implements FocusListener {
 	private JLabel unselectedLabel;
 	private JLabel nullLabel;
 	private JLabel textLabel;
-
-	private Font textFont;
-	private Font focusedTextFont;
 
 	private Boolean selected;
 
@@ -80,18 +70,9 @@ public class CheckedLabel extends JPanel implements FocusListener {
 		super.setFocusable(true);
 		super.setRequestFocusEnabled(true);
 
-		super.addFocusListener(this);
-
 		myListeners = new ArrayList<>();
 
 		textLabel = new JLabel(text);
-
-		textFont = textLabel.getFont();
-
-		Map<TextAttribute, Integer> focusAttributes = new HashMap<>();
-		focusAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-
-		focusedTextFont = textFont.deriveFont(focusAttributes);
 
 		selectedLabel = new JLabel(selectedIcon);
 		unselectedLabel = new JLabel(unselectedIcon);
@@ -193,21 +174,6 @@ public class CheckedLabel extends JPanel implements FocusListener {
 		selectedLabel.setToolTipText(s);
 		unselectedLabel.setToolTipText(s);
 		textLabel.setToolTipText(s);
-	}
-
-	// FocusListener
-	@Override
-	public void focusGained(FocusEvent e) {
-		if (!Main.FONT) {
-			textLabel.setFont(focusedTextFont);
-		}
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		if (!Main.FONT) {
-			textLabel.setFont(textFont);
-		}
 	}
 
 	private void setLayout() {

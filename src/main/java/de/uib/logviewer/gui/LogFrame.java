@@ -247,9 +247,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private void guiInit() {
 		this.addWindowListener(this);
-		if (!Main.FONT) {
-			this.setFont(Globals.DEFAULT_FONT);
-		}
+
 		this.setIconImage(Utils.getMainIcon());
 
 		setupIcons();

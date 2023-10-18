@@ -814,9 +814,6 @@ public class MainFrame extends JFrame
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			if (!Main.FONT) {
-				item.setFont(Globals.DEFAULT_FONT);
-			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
@@ -1165,9 +1162,6 @@ public class MainFrame extends JFrame
 
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItemFormatted(entry.getValue());
-			if (!Main.FONT) {
-				item.setFont(Globals.DEFAULT_FONT);
-			}
 
 			item.addActionListener((ActionEvent e) -> configedMain
 					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
@@ -1571,9 +1565,6 @@ public class MainFrame extends JFrame
 		popupSelectionToggleClientFilter
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		popupSelectionToggleClientFilter.setState(false);
-		if (!Main.FONT) {
-			popupSelectionToggleClientFilter.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 
 		popupSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
@@ -1604,9 +1595,6 @@ public class MainFrame extends JFrame
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
-			if (!Main.FONT) {
-				item.setFont(Globals.DEFAULT_FONT);
-			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
@@ -1740,9 +1728,7 @@ public class MainFrame extends JFrame
 
 	private void guiInit() {
 		this.addWindowListener(this);
-		if (!Main.FONT) {
-			this.setFont(Globals.DEFAULT_FONT);
-		}
+
 		this.setIconImage(Utils.getMainIcon());
 
 		JPanel allPanel = new JPanel();
@@ -1781,12 +1767,9 @@ public class MainFrame extends JFrame
 		clientPane.setLayout(layoutClientPane);
 
 		labelHostID = new JLabel("");
-		if (!Main.FONT) {
-			labelHostID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		} else {
-			labelHostID.setFont(labelHostID.getFont()
-					.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
-		}
+
+		labelHostID.setFont(labelHostID.getFont()
+				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
@@ -1803,18 +1786,12 @@ public class MainFrame extends JFrame
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-		if (!Main.FONT) {
-			jTextFieldDescription.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		jTextFieldDescription.addKeyListener(this);
 		jTextFieldDescription.addMouseListener(this);
 
 		jTextFieldInventoryNumber = new JTextEditorField("");
 		jTextFieldInventoryNumber.setEditable(true);
 		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-		if (!Main.FONT) {
-			jTextFieldInventoryNumber.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		jTextFieldInventoryNumber.addKeyListener(this);
 		jTextFieldInventoryNumber.addMouseListener(this);
 
@@ -1823,9 +1800,7 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.setEditable(true);
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
-		if (!Main.FONT) {
-			jTextAreaNotes.setFont(Globals.DEFAULT_FONT_BIG);
-		}
+
 		GraphicsEnvironment.getLocalGraphicsEnvironment();
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
@@ -2075,10 +2050,6 @@ public class MainFrame extends JFrame
 
 		if (!Main.THEMES) {
 			jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
-		}
-
-		if (!Main.FONT) {
-			treeClients.setFont(Globals.DEFAULT_FONT);
 		}
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
@@ -2490,9 +2461,6 @@ public class MainFrame extends JFrame
 		initHardwareInfo();
 
 		labelNoSoftware = new JLabel();
-		if (!Main.FONT) {
-			labelNoSoftware.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
 		showSoftwareLogNotFound.add(labelNoSoftware);

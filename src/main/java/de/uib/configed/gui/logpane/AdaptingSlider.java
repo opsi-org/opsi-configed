@@ -18,7 +18,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -36,10 +35,6 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 		this.logPane = logPane;
 
 		super.addChangeListener(this);
-
-		if (!Main.FONT) {
-			super.setFont(Globals.DEFAULT_FONT);
-		}
 
 		produceLabels();
 

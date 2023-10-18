@@ -149,10 +149,6 @@ public class PanelSWInfo extends JPanel {
 
 		labelSuperTitle = new JLabel();
 
-		if (!Main.FONT) {
-			labelSuperTitle.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true);
 
 		panelTable.setTitle("");
