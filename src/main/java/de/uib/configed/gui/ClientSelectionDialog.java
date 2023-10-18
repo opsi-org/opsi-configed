@@ -268,37 +268,26 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 		});
 
-		GroupLayout.SequentialGroup saveHGroup = additionalLayout.createSequentialGroup();
-		saveHGroup.addGap(Globals.GAP_SIZE);
-		saveHGroup.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.GAP_SIZE / 2);
-		saveHGroup.addComponent(saveNameField, 40, 100, 200);
-		saveHGroup.addGap(Globals.GAP_SIZE);
-		saveHGroup.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.GAP_SIZE / 2);
-		saveHGroup.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE);
-		saveHGroup.addGap(Globals.GAP_SIZE);
-		saveHGroup.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH);
-		saveHGroup.addGap(Globals.GAP_SIZE);
-		saveHGroup.addComponent(buttonReload, 20, 20, 20);
-		saveHGroup.addGap(Globals.GAP_SIZE / 2);
-		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
+		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE / 2).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
+				.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE / 2).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.GAP_SIZE / 2)
+				.addComponent(buttonRestart, 20, 20, 20).addGap(Globals.GAP_SIZE));
 
-		saveHGroup.addGap(Globals.GAP_SIZE);
-		additionalLayout.setHorizontalGroup(saveHGroup);
-
-		GroupLayout.ParallelGroup saveVGroup = additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER);
-		saveVGroup.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(saveNameField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(saveDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(saveDescriptionField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-
-		additionalLayout.setVerticalGroup(saveVGroup);
+		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(saveNameField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(saveDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(saveDescriptionField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 
 		additionalPane.setVisible(true);
 	}

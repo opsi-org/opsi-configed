@@ -1,6 +1,11 @@
 # Changelog
 
 ## [4.3.0.10] - 2023-10-17
+### Fixed
+- Make search button text visible in logpane
+
+
+## [4.3.0.10] - 2023-10-17
 
 ### Fixed
 - Bug changing product properties
