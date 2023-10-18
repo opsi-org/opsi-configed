@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
@@ -304,7 +303,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void defineLayout() {
-		setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.topic"));
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.info"));

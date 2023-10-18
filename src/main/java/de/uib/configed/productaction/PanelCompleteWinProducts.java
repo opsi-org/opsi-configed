@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -383,7 +382,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void defineLayout() {
-		setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 
 		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));

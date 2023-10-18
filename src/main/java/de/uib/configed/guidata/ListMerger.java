@@ -6,11 +6,8 @@
 
 package de.uib.configed.guidata;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.uib.configed.Globals;
 
 public class ListMerger extends ArrayList<Object> {
 
@@ -76,22 +73,6 @@ public class ListMerger extends ArrayList<Object> {
 		} else {
 			// li is ArrayList
 			return li;
-		}
-	}
-
-	public Color getTextColor() {
-		if (!havingCommonValue) {
-			return Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR;
-		} else {
-			return Globals.LIST_MERGER_NORMAL_VALUE_TEXT_COLOR;
-		}
-	}
-
-	public Color getBackgroundColor() {
-		if (!havingCommonValue) {
-			return Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR;
-		} else {
-			return Globals.LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR;
 		}
 	}
 }

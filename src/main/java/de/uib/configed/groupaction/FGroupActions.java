@@ -19,7 +19,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -134,7 +133,6 @@ public class FGroupActions extends SecondaryFrame {
 		defineTopPanel(topPanel);
 
 		JPanel imageActionPanel = new JPanel();
-		imageActionPanel.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 
 		defineImageActionPanel(imageActionPanel);
 

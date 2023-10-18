@@ -910,31 +910,7 @@ public class MainFrame extends JFrame
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
 				+ SSHConnectionInfo.getInstance().getHost();
 
-		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		if (!Main.THEMES) {
-			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
-		}
-
-		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
-
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.LIGHT_BLACK);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
-		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
-
-		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
-		} else {
-			Logging.warning(this, "unexpected status of ssh connection " + status);
-		}
+		jMenuSSHConnection.setText(connectiondata.trim() + " " + status);
 	}
 
 	public void reloadServerMenu() {

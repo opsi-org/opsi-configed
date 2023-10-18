@@ -38,11 +38,6 @@ import de.uib.utilities.savedstates.UserPreferences;
 
 public class Main {
 
-	// Flags
-
-	// Are themes enabled?
-	public static final boolean THEMES = true;
-
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes
 

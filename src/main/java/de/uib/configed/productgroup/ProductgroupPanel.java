@@ -421,9 +421,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		JList<String> listChooseAction = new JList<>(modelChooseAction);
 		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(null, values, "");
 
-		renderActionList.setAlternatingColors(Globals.BACKGROUND_COLOR_7, Globals.BACKGROUND_COLOR_7,
-				Globals.BACKGROUND_COLOR_3, Globals.SECONDARY_BACKGROUND_COLOR);
-
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
 

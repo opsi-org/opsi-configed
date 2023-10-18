@@ -65,16 +65,7 @@ public final class Globals {
 	public static final Color LOG_COLOR_TRACE = new Color(139, 139, 139);
 	public static final Color LOG_COLOR_SECRET = new Color(213, 0, 249);
 
-	public static final Color OPSI_LOGO_BLUE = new Color(106, 128, 174);
-	public static final Color OPSI_LOGO_LIGHT_BLUE = new Color(195, 200, 222);
-
 	// New colors
-
-	public static final Color OPSI_BLUE_2 = new Color(42, 60, 111);
-	public static final Color OPSI_DARK_BLUE_2 = new Color(30, 43, 80);
-
-	public static final Color OPSI_LIGHT_BLUE = new Color(159, 172, 210);
-	public static final Color OPSI_LIGHT_BLUE_2 = new Color(141, 154, 192);
 
 	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
 	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
@@ -101,19 +92,12 @@ public final class Globals {
 	public static final Color PRIMARY_FOREGROUND_COLOR = Color.BLACK;
 
 	public static final Color PRIMARY_BACKGROUND_COLOR = Color.WHITE;
-	public static final Color SECONDARY_BACKGROUND_COLOR = new Color(245, 245, 245);
-
-	public static final Color BACKGROUND_COLOR_3 = new Color(230, 230, 230);
-	public static final Color BACKGROUND_COLOR_4 = new Color(220, 220, 220);
-	public static final Color BACKGROUND_COLOR_5 = new Color(200, 200, 250);
 
 	public static final Color BACKGROUND_COLOR_6 = new Color(200, 200, 250);
 	public static final Color BACKGROUND_COLOR_7 = new Color(220, 228, 242);
 	public static final Color BACKGROUND_COLOR_8 = new Color(240, 240, 245);
 
 	public static final Color BACKGROUND_COLOR_9 = new Color(250, 248, 221);
-
-	public static final Color FAILED_BACKGROUND_COLOR = new Color(100, 100, 100);
 
 	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
 	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
@@ -132,35 +116,15 @@ public final class Globals {
 	public static final Color BLUE_GREY = new Color(180, 190, 190);
 	public static final Color GREYED = new Color(150, 150, 150);
 
-	public static final Color CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND = Color.BLUE;
-
-	public static final Color CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color DEPOTS_LIST_FOREGROUND_COLOR = PRIMARY_FOREGROUND_COLOR;
-
-	public static final Color F_DIALOG_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color F_GENERAL_DIALOG_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
 	// also used for GlassPane...
-	public static final Color F_GENERAL_DIALOG_FADING_MIRROR_COLOR = new Color(230, 230, 250);
 
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
 
 	public static final Color NEW_CLIENT_DIALOG_BORDER_COLOR = new Color(122, 138, 153);
 
-	public static final Color PANELREINST_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR = Color.YELLOW;
-
 	public static final Color DEPENDENCIES_TREE_PANEL_BORDER_COLOR = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
-
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
-
-	public static final Color PANEL_PRODUCT_INFO_PANE_ACTIVE = PRIMARY_FOREGROUND_COLOR;
-	public static final Color PANEL_PRODUCT_INFO_PANE_INACTIVE = GREYED;
 
 	public static final Color SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR = Color.GREEN;
 	public static final Color SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR = FAILED_COLOR;
@@ -181,34 +145,12 @@ public final class Globals {
 
 	public static final Color PRODUCT_STATUS_MIXED_COLOR = LOG_COLOR_SECRET;
 
-	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
-	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
-	public static final Color LIST_MERGER_NORMAL_VALUE_TEXT_COLOR = PRIMARY_FOREGROUND_COLOR;
-	public static final Color LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR = PRIMARY_FOREGROUND_COLOR;
-
-	public static final Color ICON_NODE_RENDERER_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
 	public static final Color EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR = FAILED_COLOR;
 
 	public static final Color EDIT_MAP_PANEL_X_FOREGROUND_COLOR = FAILED_COLOR;
 	public static final Color EDIT_MAP_PANEL_X_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color JTABLE_SELECTION_PANEL_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
 	public static final Color F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER = Color.BLUE;
-
-	public static final Color X_CELL_EDITOR_SELECTED_FOREGROUND = PRIMARY_BACKGROUND_COLOR;
-	public static final Color X_CELL_EDITOR_NOT_SELECTED_FOREGROUND = PRIMARY_FOREGROUND_COLOR;
-
-	public static final Color PANEL_GEN_EDIT_TABLE_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color NIMBUS_SELECTION_BACKGROUND = new Color(57, 105, 138);
-	public static final Color NIMBUS_BACKGROUND = new Color(214, 217, 223);
-	public static final Color BACK_NIMBUS = new Color(214, 219, 222);
 
 	// in table, change colors by row
 	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_1 = PRIMARY_BACKGROUND_COLOR;
@@ -216,21 +158,6 @@ public final class Globals {
 
 	public static final Color DEFAULT_TABLE_SELECTION_ROW_DARK = new Color(204, 220, 238);
 	public static final Color DEFAULT_TABLE_SELECTED_ROW_BRIGHT = new Color(221, 233, 249);
-
-	// in table, change colors by row and column
-	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_00 = BACKGROUND_COLOR_9;
-	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_01 = new Color(236, 235, 214);
-	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_10 = PRIMARY_BACKGROUND_COLOR;
-	public static final Color DEFAULT_TABLE_CELL_GB_COLOR_11 = SECONDARY_BACKGROUND_COLOR;
-
-	public static final Color DEFAULT_TABLE_HEADER_BG_COLOR = new Color(222, 231, 247);
-	public static final Color DEFAULT_TABLE_CELL_SELECTED_BG_COLOR = new Color(206, 224, 235);
-	public static final Color DEFAULT_TABLE_CELL_SELECTED_BG_COLOR_NOT_EDITABLE = new Color(189, 207, 231);
-
-	public static final Color opsiLogoBlue = new Color(106, 128, 174);
-	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
-
-	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
 
 	public static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 
@@ -315,8 +242,6 @@ public final class Globals {
 			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
-
-	public static final boolean THEMES_ENABLED = false;
 
 	private Globals() {
 	}
