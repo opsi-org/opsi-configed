@@ -56,7 +56,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -386,8 +385,6 @@ public class MainFrame extends JFrame
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
-	private String[] options = new String[] { "off", "on", "setup" };
-	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
 	private ButtonGroup buttonGroupRequired = new ButtonGroup();
 	private JRadioButton jRadioRequiredAll = new JRadioButton();

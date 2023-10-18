@@ -24,7 +24,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowMode;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;

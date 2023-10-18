@@ -26,7 +26,6 @@ import javax.swing.WindowConstants;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
-import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -226,33 +225,5 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		buildFrame = false;
 		Logging.debug(this, "cancel");
 		super.doAction2();
-	}
-
-	private static class InputFilter extends DocumentFilter {
-		JTextPane editor;
-
-		public InputFilter(JTextPane editor) {
-			this.editor = editor;
-		}
-
-		@Override
-		public void remove(final FilterBypass fb, final int offset, final int length) throws BadLocationException {
-			if (!isReadOnly()) {
-				super.remove(fb, offset, length);
-			}
-		}
-
-		@Override
-		public void replace(final FilterBypass fb, final int offset, final int length, final String text,
-				final AttributeSet attrs) throws BadLocationException {
-			if (!isReadOnly()) {
-				super.replace(fb, offset, length, text, attrs);
-			}
-		}
-
-		private boolean isReadOnly() {
-			AttributeSet attributeSet = editor.getCharacterAttributes();
-			return attributeSet != null && attributeSet.getAttribute("readonly") != null;
-		}
 	}
 }

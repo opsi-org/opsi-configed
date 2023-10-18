@@ -13,7 +13,6 @@ import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.gui.logpane.UnderlineHighlightPainter;
 import de.uib.utilities.logging.Logging;
 
@@ -28,7 +27,7 @@ public class LinkSearcher {
 
 	public LinkSearcher(JTextComponent comp) {
 		this.comp = comp;
-		this.painter = new UnderlineHighlightPainter(Globals.F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER);
+		this.painter = new UnderlineHighlightPainter();
 	}
 
 	// Set case sensitivity
