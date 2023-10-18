@@ -9,7 +9,6 @@ package de.uib.configed;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.text.DateFormat;
 
 import de.uib.Main;
@@ -86,11 +85,6 @@ public final class Globals {
 	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
 	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
 
-	public static final Font DEFAULT_FONT = new Font("SansSerif", 0, 11);
-	public static final Font DEFAULT_FONT_STANDARD_BOLD = new Font("SansSerif", Font.BOLD, 11);
-	public static final Font DEFAULT_FONT_SMALL = new Font("SansSerif", 0, 9);
-	public static final Font DEFAULT_FONT_SMALL_BOLD = new Font("SansSerif", Font.BOLD, 9);
-
 	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
 	public static final Color OPSI_OK_DARK = new Color(36, 107, 50);
 
@@ -101,10 +95,6 @@ public final class Globals {
 	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
 
 	// End new colors
-
-	public static final Font DEFAULT_FONT_BIG = new Font("SansSerif", 0, 12);
-	public static final Font DEFAULT_FONT_BOLD = new Font("SansSerif", Font.BOLD, 12);
-	public static final Font DEFAULT_FONT_TILTE = new Font("SansSerif", 0, 16);
 
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
