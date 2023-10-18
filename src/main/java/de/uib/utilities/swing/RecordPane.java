@@ -20,7 +20,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
@@ -65,9 +64,6 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 	}
 
 	private void initComponents() {
-		if (!Main.THEMES) {
-			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		GroupLayout baseLayout = new GroupLayout(this);
 		this.setLayout(baseLayout);

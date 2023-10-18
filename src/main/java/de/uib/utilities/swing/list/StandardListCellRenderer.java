@@ -15,9 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 import utils.Utils;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
@@ -58,11 +56,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		JComponent jc = (JComponent) c;
-
-		if (!Main.THEMES) {
-			CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
-					unselectedEven, unselectedUneven);
-		}
 
 		if (jc instanceof JLabel) {
 			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));

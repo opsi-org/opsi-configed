@@ -29,7 +29,7 @@ public final class CellAlternatingColorizer {
 				unselectedUneven);
 	}
 
-	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
+	private static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
 		if (textColoring && !Main.THEMES) {

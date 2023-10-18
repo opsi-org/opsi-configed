@@ -13,9 +13,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
 
@@ -27,10 +24,6 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-		if (!Main.THEMES) {
-			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
-		}
 
 		if (cell instanceof JComponent) {
 			JComponent jc = (JComponent) cell;

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -42,7 +43,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.swing.XCellEditor;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.ListModelProducer;
@@ -60,7 +60,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private TableColumn editableColumn;
 	private TableCellEditor theCellEditor;
 	private JComboBox<?> editorfield;
-	private TableCellEditor defaultCellEditor;
 
 	private ListModelProducer<String> modelProducer;
 
@@ -136,8 +135,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		editorfield = new JComboBox<>();
 		editorfield.setEditable(true);
-		defaultCellEditor = new XCellEditor(editorfield);
-		theCellEditor = defaultCellEditor;
+		theCellEditor = new DefaultCellEditor(editorfield);
 
 		if (tableCellRenderer == null) {
 			editableColumn.setCellRenderer(new ColorTableCellRenderer());

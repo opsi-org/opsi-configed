@@ -40,7 +40,6 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ServerFacade;
@@ -274,9 +273,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 		table.setWidthPercentage(98);
 
-		BaseColor headerBackground = new BaseColor(150, 150, 150);
-		BaseColor evenBackground = new BaseColor(230, 230, 230);
-		BaseColor oddBackground = new BaseColor(250, 250, 250);
 		Font symbolFont;
 		try {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
@@ -286,24 +282,19 @@ public class ExporterToPDF extends AbstractExportTable {
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
-		if (!Main.THEMES) {
-			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
-		} else {
-			defaultCell.setBackgroundColor(new BaseColor(Globals.OPSI_BACKGROUND_LIGHT.getRed(),
-					Globals.OPSI_BACKGROUND_LIGHT.getGreen(), Globals.OPSI_BACKGROUND_LIGHT.getBlue()));
-		}
+
+		defaultCell.setBackgroundColor(new BaseColor(Globals.OPSI_BACKGROUND_LIGHT.getRed(),
+				Globals.OPSI_BACKGROUND_LIGHT.getGreen(), Globals.OPSI_BACKGROUND_LIGHT.getBlue()));
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
 			h = new PdfPCell(new Phrase(theTable.getColumnName(i)));
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
-			if (!Main.THEMES) {
-				h.setBackgroundColor(headerBackground);
-			} else {
-				h.setBackgroundColor(new BaseColor(Globals.OPSI_GREY.getRed(), Globals.OPSI_GREY.getGreen(),
-						Globals.OPSI_GREY.getBlue()));
-			}
+			h.setBackgroundColor(new BaseColor(Globals.OPSI_GREY.getRed(), Globals.OPSI_GREY.getGreen(),
+					Globals.OPSI_GREY.getBlue()));
+
 			table.addCell(h);
 		}
+
 		table.setHeaderRows(1);
 
 		for (int j = 0; j < theTable.getRowCount(); j++) {
@@ -326,17 +317,10 @@ public class ExporterToPDF extends AbstractExportTable {
 						value = new PdfPCell(new Phrase(s, small));
 						break;
 					}
-					if (!Main.THEMES) {
-						if (j % 2 == 0) {
-							value.setBackgroundColor(evenBackground);
-						} else {
-							value.setBackgroundColor(oddBackground);
-						}
-					} else {
-						if (j % 2 == 0) {
-							value.setBackgroundColor(new BaseColor(Globals.OPSI_LIGHT_GREY.getRed(),
-									Globals.OPSI_LIGHT_GREY.getGreen(), Globals.OPSI_LIGHT_GREY.getBlue()));
-						}
+
+					if (j % 2 == 0) {
+						value.setBackgroundColor(new BaseColor(Globals.OPSI_LIGHT_GREY.getRed(),
+								Globals.OPSI_LIGHT_GREY.getGreen(), Globals.OPSI_LIGHT_GREY.getBlue()));
 					}
 
 					value.setHorizontalAlignment(Element.ALIGN_CENTER);
