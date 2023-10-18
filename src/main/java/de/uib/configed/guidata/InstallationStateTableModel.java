@@ -1215,10 +1215,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return getDisplayLabelForPosition();
 
 		case 12:
-			return !"not_installed"
-					.equals(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct))
-							? actualProductVersion()
-							: "";
+			return actualProductVersion();
 
 		case 13:
 			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
@@ -1244,6 +1241,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private String actualProductVersion() {
+		if ("not_installed".equals(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct))
+				&& (!"once".equals(combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct))
+						&& !"custom"
+								.equals(combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct)))) {
+			return "";
+		}
+
 		String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 				.get(ProductState.KEY_VERSION_INFO);
 		String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
