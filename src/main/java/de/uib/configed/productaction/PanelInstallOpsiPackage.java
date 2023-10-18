@@ -6,7 +6,6 @@
 
 package de.uib.configed.productaction;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +26,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -283,10 +281,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
-		if (!Main.THEMES) {
-			fieldServerPath.setForeground(Globals.GREYED);
-		}
-
 		fieldServerPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
@@ -303,20 +297,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.execute"));
 
 		buttonCallExecute.addActionListener((ActionEvent e) -> {
-			final Color saveColor = buttonCallExecute.getBackground();
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-			}
-
 			Logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
 					+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
-
 			execute();
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(saveColor);
-			}
 		});
 	}
 

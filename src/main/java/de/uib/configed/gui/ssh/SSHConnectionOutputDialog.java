@@ -23,18 +23,15 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -181,10 +178,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	private void initOutputGui() {
 
 		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-		if (!Main.THEMES) {
-			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 		mainPanelLayout = new GroupLayout(mainPanel);
@@ -200,27 +194,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		output = new JTextPane();
 		output.setEditable(false);
 
-		// THEME color question
-		if (!Main.THEMES) {
-			output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-		}
 		output.setContentType("text/rtf");
 		output.setPreferredSize(new Dimension(250, 200));
-		StyledDocument doc = (StyledDocument) output.getDocument();
-		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-		Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
-
-		if (!Main.THEMES) {
-			// Kein grün :(
-			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-
-			// Was ist rot?
-			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
-		}
-
-		SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
-		readOnlyAttributeSet.addAttribute("readonly", true);
-		((AbstractDocument) doc).setDocumentFilter(new InputFilter(output));
 
 		DefaultCaret caret = (DefaultCaret) output.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);

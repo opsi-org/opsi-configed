@@ -26,7 +26,6 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -69,9 +68,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		super.pack();
 		super.setSize(Globals.dialogFrameDefaultSize);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!Main.THEMES) {
-			super.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -99,10 +95,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!Main.THEMES) {
-			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

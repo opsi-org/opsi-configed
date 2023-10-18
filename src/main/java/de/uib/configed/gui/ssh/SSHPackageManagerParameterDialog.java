@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -46,9 +45,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!Main.THEMES) {
-			super.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 

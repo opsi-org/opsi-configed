@@ -13,7 +13,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -35,10 +34,6 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
-
-		if (!Main.THEMES) {
-			jLabelProductProperties.setForeground(Globals.LIGHT_BLACK);
-		}
 
 		buttonSetValuesFromServerDefaults = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
@@ -99,9 +94,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
-		if (!Main.THEMES) {
-			jLabelProductProperties.setForeground(activated ? Globals.LIGHT_BLACK : Globals.GREYED);
-		}
+
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
 		buttonRemoveSpecificValues.setEnabled(activated);
 	}

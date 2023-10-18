@@ -20,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
@@ -63,7 +62,9 @@ public class SSHCompletionComboButton {
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
 		createInstances();
-		initTextfield();
+
+		textfield = new JTextField();
+
 		if (comboboxDefaultPath != null) {
 			textfield.setText(comboboxDefaultPath);
 		}
@@ -124,13 +125,6 @@ public class SSHCompletionComboButton {
 
 	public List<String> getDefaultValues() {
 		return defaultvalues;
-	}
-
-	private void initTextfield() {
-		textfield = new JTextField();
-		if (!Main.THEMES) {
-			textfield.setBackground(Globals.BACKGROUND_COLOR_9);
-		}
 	}
 
 	private void createInstances() {

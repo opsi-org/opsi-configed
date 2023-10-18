@@ -32,7 +32,6 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -288,16 +287,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
 							+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
 							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-			}
-
 			execute();
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(buttonCallExecute.getBackground());
-			}
 		});
 
 	}

@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
@@ -83,9 +82,6 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		if (!Main.THEMES) {
-			this.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout layout = new GroupLayout(this);
 

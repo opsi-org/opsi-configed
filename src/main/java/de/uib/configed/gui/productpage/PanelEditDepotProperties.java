@@ -34,7 +34,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -120,12 +119,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		if (!Main.THEMES) {
-			buttonSelectAll.setForeground(Globals.BLUE);
-			buttonSelectWithEqualProperties.setForeground(Globals.BLUE);
-		}
-
-		// jLabelProductProperties = new JLabel (
 
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
@@ -189,9 +182,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	@Override
 	public void setTitlePanelActivated(boolean actived) {
-		if (!Main.THEMES) {
-			jLabelEditDepotProductProperties.setForeground(actived ? Globals.LIGHT_BLACK : Globals.GREYED);
-		}
+		// Do nothing
 	}
 
 	public void clearDepotListData() {

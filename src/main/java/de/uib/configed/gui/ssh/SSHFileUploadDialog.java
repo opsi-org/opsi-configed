@@ -23,7 +23,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -87,9 +86,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!Main.THEMES) {
-			super.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		wgetAuthPanel.isOpen = true;
@@ -104,10 +101,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!Main.THEMES) {
-			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -151,9 +144,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
-		if (!Main.THEMES) {
-			jTextFieldLocalPath.setBackground(Globals.BACKGROUND_COLOR_9);
-		}
 
 		jComboBoxSetRights = new JCheckBox();
 		jComboBoxSetRights.setSelected(true);

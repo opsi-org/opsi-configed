@@ -29,7 +29,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -212,9 +211,7 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		if (!Main.THEMES) {
-			checkWithMsUpdates.setForeground(Globals.BLUE);
-		}
+
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
 
@@ -223,9 +220,7 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		if (!Main.THEMES) {
-			checkWithMsUpdates2.setForeground(Globals.BLUE);
-		}
+
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
 
@@ -233,10 +228,6 @@ public class PanelSWInfo extends JPanel {
 
 		labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
-
-		if (!Main.THEMES) {
-			subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 	}
 
 	private void setupTableLayout() {
@@ -292,9 +283,6 @@ public class PanelSWInfo extends JPanel {
 	private void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
-		if (!Main.THEMES) {
-			labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		JTable jTable = new JTable(voidTableModel, null);
 
@@ -315,9 +303,6 @@ public class PanelSWInfo extends JPanel {
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
 		JScrollPane scrollPaneSWInfo = new JScrollPane(jTable);
-		if (!Main.THEMES) {
-			scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);

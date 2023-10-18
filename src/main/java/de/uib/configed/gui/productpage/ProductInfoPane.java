@@ -23,7 +23,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiPackage;
@@ -98,30 +97,16 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-		if (!Main.THEMES) {
-			jLabelProductID.setBackground(null);
-		}
 
 		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
-		if (!Main.THEMES) {
-			jLabelProductVersion.setBackground(null);
-		}
-
-		if (!Main.THEMES) {
-			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		if (!Main.THEMES) {
-			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -129,20 +114,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 
-		if (!Main.THEMES) {
-			dependenciesTextLabel.setForeground(Globals.GREYED);
-		}
-
-		if (!Main.THEMES) {
-			depotForDependenciesLabel.setForeground(Globals.GREYED);
-		}
-
 		dependenciesActivateButton.setText("▶");
 		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 
-		if (!Main.THEMES) {
-			dependenciesActivateButton.setForeground(Globals.LIGHT_BLACK);
-		}
 		dependenciesActivateButton.addActionListener(this);
 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
@@ -150,9 +124,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton.setText("▼");
 		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 
-		if (!Main.THEMES) {
-			propertiesActivateButton.setForeground(Globals.LIGHT_BLACK);
-		}
 		propertiesActivateButton.addActionListener(this);
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
@@ -268,19 +239,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
-
-			if (!Main.THEMES) {
-				dependenciesTextLabel
-						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
-			}
-
-			if (!Main.THEMES) {
-				depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
-				depotForDependenciesLabel
-						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
-			}
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 		} else if (event.getSource() == propertiesActivateButton) {
