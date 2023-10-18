@@ -588,7 +588,7 @@ public class ConfigDataService {
 			configCollection = new ArrayList<>();
 		}
 
-		Map<String, ConfigOption> configOptions = cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		Map<String, ConfigOption> configOptions = getConfigOptionsPD();
 
 		for (Entry<String, List<Object>> setting : settings.entrySet()) {
 			Logging.debug(this, "setConfig,  key, settings.get(key): " + setting.getKey() + ", " + setting.getValue());
@@ -695,8 +695,7 @@ public class ConfigDataService {
 
 	public void deleteSavedSearch(String name) {
 		Logging.debug(this, "deleteSavedSearch " + name);
-		SavedSearches savedSearches = cacheManager.getCachedData(CacheIdentifier.SAVED_SEARCHES, SavedSearches.class);
-
+		SavedSearches savedSearches = getSavedSearchesPD();
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		Map<String, Object> item;
 
