@@ -82,7 +82,6 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
-import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -121,7 +120,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
@@ -2481,11 +2479,6 @@ public class MainFrame extends JFrame
 		jTabbedPaneConfigPanes.setSelectedIndex(0);
 
 		setTitle(configedMain.getAppTitle());
-
-		Containership csJPanelAllContent = new Containership(allPanel);
-
-		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-				new Class[] { boolean.class }, JTextComponent.class);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
