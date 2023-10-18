@@ -6,7 +6,6 @@
 
 package de.uib.utilities.table.gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -134,8 +133,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JLabel label;
 
 	private JPanel titlePane;
-
-	private Color backgroundColorEditFieldsSelected = Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR;
 
 	private JPopupMenu popupMenu;
 
@@ -984,10 +981,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 
 			for (int j = 0; j < cols.length; j++) {
-				theTable.getColumnModel().getColumn(cols[j])
-						.setCellRenderer(new TableCellRendererConfigured(null, Globals.LIGHT_BLACK,
-								Globals.DEFAULT_TABLE_CELL_BG_COLOR_1, Globals.DEFAULT_TABLE_CELL_BG_COLOR_2,
-								backgroundColorEditFieldsSelected));
+				theTable.getColumnModel().getColumn(cols[j]).setCellRenderer(new ColorTableCellRenderer());
 			}
 		}
 	}

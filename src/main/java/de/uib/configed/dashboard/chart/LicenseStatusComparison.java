@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
@@ -78,11 +77,9 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 					.bindBidirectional(new SimpleIntegerProperty(totalExpiredLicenses));
 		}
 
-		if (Main.THEMES) {
-			ComponentStyler.stylePieChartComponent(licenseStatusComparisonPieChart);
-			licenseStatusNoDataText
-					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
-		}
+		ComponentStyler.stylePieChartComponent(licenseStatusComparisonPieChart);
+		licenseStatusNoDataText
+				.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 import javax.swing.UIManager;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
@@ -276,9 +275,7 @@ public class ClientView implements View {
 		Platform.runLater(() -> {
 			fxPanel.setScene(scene);
 			loadData();
-			if (Main.THEMES) {
-				styleAccordingToSelectedTheme();
-			}
+			styleAccordingToSelectedTheme();
 		});
 	}
 

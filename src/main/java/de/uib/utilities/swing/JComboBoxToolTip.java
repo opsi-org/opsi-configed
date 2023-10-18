@@ -16,7 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import de.uib.Main;
 import de.uib.utilities.logging.Logging;
 
 public class JComboBoxToolTip extends JComboBox<String> {
@@ -49,11 +48,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 				setText(value.toString());
 			}
 
-			if (Main.THEMES) {
-				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			}
-
-			return this;
+			return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		}
 	}
 

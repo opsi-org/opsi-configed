@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
@@ -204,7 +203,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 
-		if (Main.THEMES && FlatLaf.isLafDark()) {
+		if (FlatLaf.isLafDark()) {
 			orangeWarningLabel.setIcon(Utils.createImageIcon("images/warning_orange_dark.png", ""));
 			redWarningLabel.setIcon(Utils.createImageIcon("images/warning_red_dark.png", ""));
 		} else {

@@ -140,7 +140,7 @@ public class Main {
 			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
 		}
 
-		if (UserPreferences.get(UserPreferences.THEME) != null && THEMES) {
+		if (UserPreferences.get(UserPreferences.THEME) != null) {
 			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
 			Main.setOpsiLaf();
 		}

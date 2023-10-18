@@ -52,7 +52,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -303,14 +302,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		String logoPath;
-		if (Main.THEMES) {
-			logoPath = Globals.ICON_OPSI;
-		} else {
-			logoPath = "images/opsi-logo.png";
-		}
 
-		JLabel missingData0 = new JLabel(Utils.createImageIcon(logoPath, ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 

@@ -34,7 +34,6 @@ import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -170,18 +169,14 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setIconImage(Utils.getMainIcon());
 
 		// Opsilogo
-		if (Main.THEMES) {
-			String logoPath;
-			if (FlatLaf.isLafDark()) {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-			} else {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-			}
-
-			jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
+		String logoPath;
+		if (FlatLaf.isLafDark()) {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
 		} else {
-			jLabelLogo = new JLabel();
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 		}
+
+		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 
 		jLabelTitle.setText(Globals.APPNAME);
 		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("

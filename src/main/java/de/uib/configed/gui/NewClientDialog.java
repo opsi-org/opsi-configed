@@ -38,7 +38,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -225,14 +224,12 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel jLabelSystemUUID = new JLabel();
 		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));
-		jLabelSystemUUID.setVisible(Main.THEMES);
 		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(Main.THEMES);
 
 		JLabel jLabelMacAddress = new JLabel();
 		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));

@@ -573,11 +573,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
-
-		if (Main.THEMES) {
-			jMenuFile.add(jMenuTheme);
-		}
-
+		jMenuFile.add(jMenuTheme);
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 	}
@@ -2341,31 +2337,26 @@ public class MainFrame extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		if (Main.THEMES) {
-			c.weightx = 0.0;
-		} else {
-			c.weightx = 1.0;
-		}
+		c.weightx = 0.0;
+
 		c.gridx = 0;
 		c.gridy = 0;
 		iconBarPane.add(iconsTopLeft, c);
 
-		if (Main.THEMES) {
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.0;
-			c.gridx = 1;
-			c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
+		c.gridx = 1;
+		c.gridy = 0;
 
-			String logoPath;
+		String logoPath;
 
-			if (FlatLaf.isLafDark()) {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-			} else {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-			}
-
-			iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
+		if (FlatLaf.isLafDark()) {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
+		} else {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 		}
+
+		iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
