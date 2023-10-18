@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -31,7 +30,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.tree.ClientTreeUI;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -214,45 +212,6 @@ public class Main {
 		return isLogviewer;
 	}
 
-	public static void configureUI() {
-		boolean trynimbus = true;
-		boolean found = false;
-
-		try {
-			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					Logging.info("setting Nimbus look&feel");
-					UIManager.setLookAndFeel(info.getClassName());
-					Logging.info("Nimbus look&feel set, by " + info.getClassName());
-
-					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-
-					UIManager.put("TreeUI", ClientTreeUI.class.getName());
-
-					found = true;
-					break;
-				}
-			}
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
-				| IllegalAccessException e) {
-			// handle exception
-			Logging.error("Failed to configure ui " + e);
-		}
-
-		if (!found) {
-			trynimbus = false;
-		}
-
-		if (!trynimbus) {
-			try {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
-					| IllegalAccessException ex) {
-				Logging.warning("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')", ex);
-			}
-		}
-	}
-
 	public static void setOpsiLaf() {
 		Logging.info("set look and feel " + Messages.getSelectedTheme());
 
@@ -313,11 +272,7 @@ public class Main {
 		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
 		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
 
-		if (THEMES) {
-			setOpsiLaf();
-		} else {
-			configureUI();
-		}
+		setOpsiLaf();
 
 		// Turn on antialiasing for text (not for applets)
 		System.setProperty("swing.aatext", "true");

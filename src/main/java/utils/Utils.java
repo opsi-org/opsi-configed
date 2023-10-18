@@ -30,7 +30,6 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
@@ -290,11 +289,7 @@ public final class Utils {
 
 		String iconPath;
 
-		if (Main.THEMES) {
-			iconPath = "gui/" + Globals.ICON_OPSI;
-		} else {
-			iconPath = Globals.ICON_RESOURCE_NAME;
-		}
+		iconPath = "gui/" + Globals.ICON_OPSI;
 
 		URL resource = Globals.class.getResource(iconPath);
 		if (resource == null) {

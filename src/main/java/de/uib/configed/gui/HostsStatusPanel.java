@@ -18,7 +18,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
@@ -186,7 +185,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		String pathConnectedIcon;
 		String pathDisconnectedIcon;
 
-		if (Main.THEMES && FlatLaf.isLafDark()) {
+		if (FlatLaf.isLafDark()) {
 			pathConnectedIcon = "images/network-wireless-connected-100_invert.png";
 			pathDisconnectedIcon = "images/network-wireless-disconnected_invert.png";
 		} else {
