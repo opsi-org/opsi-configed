@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -32,7 +31,6 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
@@ -152,15 +150,6 @@ public class FGroupActions extends SecondaryFrame {
 		layout.setHorizontalGroup(
 				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		if (!Main.THEMES) {
-			Containership csAll = new Containership(getContentPane());
-			csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-					JPanel.class);
-
-			csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-					javax.swing.text.JTextComponent.class);
-		}
 	}
 
 	private void defineImageActionPanel(JPanel panel) {

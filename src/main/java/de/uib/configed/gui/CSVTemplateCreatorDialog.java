@@ -39,7 +39,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -71,10 +70,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -82,9 +77,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!Main.THEMES) {
-			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-		}
 		centerPanel.setOpaque(true);
 
 		southPanel = createSouthPanel();
@@ -131,12 +123,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		southPanel.setOpaque(false);
-
-		if (!Main.THEMES) {
-			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-		}
 
 		southPanel.setOpaque(true);
 

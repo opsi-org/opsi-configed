@@ -17,8 +17,6 @@ import javax.swing.ListModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import de.uib.Main;
-
 public class CheckBoxList extends JList<JCheckBox> {
 	private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
@@ -44,11 +42,6 @@ public class CheckBoxList extends JList<JCheckBox> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox, int index,
 				boolean isSelected, boolean cellHasFocus) {
-
-			if (!Main.THEMES) {
-				checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
-				checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
-			}
 
 			checkbox.setEnabled(isEnabled());
 			checkbox.setFocusPainted(false);

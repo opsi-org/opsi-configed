@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -62,18 +61,11 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 		// we could design an adapted layout and infuse it in guiInit
 		Logging.info(this, "allLayout");
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
-		}
-
-		if (!Main.THEMES) {
-			centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
 		southPanel = new JPanel();
@@ -97,10 +89,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		if (!Main.THEMES) {
-			southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -131,9 +119,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
-		if (!Main.THEMES) {
-			thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theList.setCellRenderer(new StandardListCellRenderer());

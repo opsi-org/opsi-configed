@@ -15,9 +15,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 
 public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
@@ -26,15 +24,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	public HostConfigNodeRenderer() {
 		super();
 
-		if (!Main.THEMES) {
-			super.setOpaque(true);
-		}
-
-		if (!Main.THEMES) {
-			super.setForeground(Globals.LIGHT_BLACK);
-			super.setTextSelectionColor(Globals.LIGHT_BLACK);
-			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
@@ -71,16 +60,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			} else {
 				setFont(getFont().deriveFont(Font.PLAIN));
 				setFocusable(true);
-			}
-
-			if (!Main.THEMES) {
-				// assuming that row 0 contains sort of header
-				if (sel && row != 0) {
-					setBackground(Globals.BACKGROUND_COLOR_7);
-
-				} else {
-					setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-				}
 			}
 
 			if (leaf) {

@@ -53,7 +53,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -289,9 +288,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void initComponents() {
-		if (!Main.THEMES) {
-			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		addComponentListener(this);
 
@@ -303,9 +299,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		if (!Main.THEMES) {
-			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		theTable = new JTableWithToolTips();
 
@@ -332,11 +325,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		theTable.addMouseListener(this);
 
-		if (!Main.THEMES) {
-			theTable.setShowHorizontalLines(true);
-			theTable.setGridColor(Globals.PANEL_GEN_EDIT_TABLE_GRID_COLOR);
-		}
-
 		theTable.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()));
 
@@ -356,18 +344,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!Main.THEMES) {
-				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-			}
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			Logging.warning(this, "strange exception on creating scrollpane " + ex);
 
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!Main.THEMES) {
-				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-			}
 		}
 
 		JPanel controlPanel = initControlPanel();
@@ -524,16 +506,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		this.title = title;
 		label.setText(title);
 
-	}
-
-	public void setTitlePaneBackground(Color c) {
-		if (!Main.THEMES) {
-			if (c == null) {
-				titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			} else {
-				titlePane.setBackground(c);
-			}
-		}
 	}
 
 	public void setTitlePane(JComponent[] components, int height) {

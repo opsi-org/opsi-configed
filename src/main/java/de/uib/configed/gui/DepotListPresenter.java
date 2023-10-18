@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -92,28 +90,21 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * gives the color for setting back color of this panel in master panel
-	 * 
-	 * @return java.awt.Color
-	 */
-	public Color getMyColor() {
-		return Globals.SECONDARY_BACKGROUND_COLOR;
-	}
-
-	/**
 	 * allows to show that a depot selection change is in progress
 	 * 
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (!Main.THEMES) {
+		/*if (!Main.THEMES) {
 			if (active) {
 				depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 			} else {
 				depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			}
 			// colorize as hint that we have changed the depots selection
-		}
+		}*/
+
+		// TODO do what when depot is active / inactive
 	}
 
 	private void initComponents() {
@@ -124,10 +115,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
 		}
 		labelDepotServer.setOpaque(false);
-
-		if (!Main.THEMES) {
-			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -142,13 +129,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
 
-		searchPane.setFieldBackground(getMyColor());
 		if (!multidepot) {
 			searchPane.setEnabled(false);
-		}
-
-		if (!Main.THEMES) {
-			searchPane.setBackground(getMyColor());
 		}
 
 		searchPane.setNarrow(true);
@@ -161,10 +143,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
-
-		if (!Main.THEMES) {
-			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 	}
 
 	private void layouting() {

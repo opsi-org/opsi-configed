@@ -44,7 +44,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
@@ -313,12 +312,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void finishAndMakeVisible() {
-		if (!Main.THEMES) {
-			Containership csPanel = new Containership(getContentPane());
-
-			csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-					JPanel.class);
-		}
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");

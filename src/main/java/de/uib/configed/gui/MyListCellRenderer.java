@@ -14,9 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -68,9 +66,6 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 
 			String depot = (String) value;
 			if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
-				if (!Main.THEMES) {
-					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
-				}
 
 				((JLabel) jc).setToolTipText(
 						"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));

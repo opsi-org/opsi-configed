@@ -6,12 +6,9 @@
 
 package de.uib.configed.gui;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -33,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -294,16 +290,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jButton3.setToolTipText(tooltip3);
 	}
 
-	public void setContentBackground(Color c) {
-		if (!Main.THEMES) {
-			allpane.setBackground(c);
-		}
-	}
-
 	protected void allLayout() {
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
@@ -311,11 +298,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		northPanel.setOpaque(false);
 
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
-
-		if (!Main.THEMES) {
-			scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
-		}
 
 		scrollpane.setOpaque(false);
 
@@ -653,16 +635,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			}
 
 			repaint();
-		}
-
-		@Override
-		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-
-			if (!Main.THEMES) {
-				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
-				g.fillRect(0, 0, getWidth(), getHeight());
-			}
 		}
 	}
 }

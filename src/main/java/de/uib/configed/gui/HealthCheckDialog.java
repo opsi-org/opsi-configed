@@ -80,10 +80,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "start allLayout");
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
 		northPanel = createNorthPanel();
@@ -151,9 +147,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		textPane.setCaretPosition(0);
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
-		if (!Main.THEMES) {
-			scrollPane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
-		}
+
 		scrollPane.setOpaque(false);
 		scrollPane.setInheritsPopupMenu(true);
 

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
@@ -29,7 +28,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -73,19 +71,10 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-			allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		}
-
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
-		}
-
-		if (!Main.THEMES) {
-			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
 		centerPanel.setOpaque(true);
@@ -121,12 +110,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(false);
-
-		if (!Main.THEMES) {
-			northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-		}
-
 		northPanel.setOpaque(true);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -327,11 +310,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
-		southPanel.setOpaque(false);
-
-		if (!Main.THEMES) {
-			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-		}
 		southPanel.setOpaque(true);
 
 		return southPanel;

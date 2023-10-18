@@ -1337,14 +1337,8 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 			selectOldSelectedDepots();
 		}
+
 		depotsListValueChanged();
-
-		// we correct the result of the first selection
-
-		if (!Main.THEMES) {
-			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-
 	}
 
 	private void selectOldSelectedDepots() {

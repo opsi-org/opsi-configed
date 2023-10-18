@@ -35,7 +35,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -212,10 +211,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		additionalPane.setLayout(additionalLayout);
 		additionalPane.setMinimumSize(new Dimension(200, 200));
 
-		if (!Main.THEMES) {
-			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		saveNameField = new LowerCaseTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
@@ -232,19 +227,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		if (!Main.THEMES) {
-			buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
-
 		buttonReload.addActionListener((ActionEvent e) -> reload());
 
 		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
-
-		if (!Main.THEMES) {
-			buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		buttonRestart.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "actionPerformed");
@@ -285,10 +272,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private void init() {
 		contentPane = new JPanel();
-
-		if (!Main.THEMES) {
-			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		layout = new GroupLayout(contentPane);
 		contentPane.setLayout(layout);
@@ -526,17 +509,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		if (!Main.THEMES) {
-			propertyIdGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
-		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		if (!Main.THEMES) {
-			propertyValueGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
-		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
@@ -568,17 +545,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		if (!Main.THEMES) {
-			propertyIdGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
-		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		if (!Main.THEMES) {
-			propertyValueGroup.elementLabel.setForeground(Globals.CLIENT_SELECTION_DIALOG_ELEMENT_FOREGROUND);
-		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
 		result.groupList.getLast().connectionType.setVisible(false);

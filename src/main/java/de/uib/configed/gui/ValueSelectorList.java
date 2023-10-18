@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -101,10 +100,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		labelValue.setOpaque(false);
 
-		if (!Main.THEMES) {
-			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		buttonSelectValuesWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
@@ -118,14 +113,10 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
 
-		searchPane.setFieldBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
 
-		if (!Main.THEMES) {
-			searchPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
@@ -136,10 +127,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.getViewport().add(valueList);
 		scrollPaneValueList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
-
-		if (!Main.THEMES) {
-			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 	}
 
 	private void layouting() {

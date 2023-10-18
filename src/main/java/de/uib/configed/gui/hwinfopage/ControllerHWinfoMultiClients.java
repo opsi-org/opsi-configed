@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -151,12 +150,9 @@ public class ControllerHWinfoMultiClients {
 		buttonCopySelection.addActionListener(
 				actionEvent -> configedMain.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
-		panel.setTitlePane(new JComponent[] {
-
-				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
-		if (!Main.THEMES) {
-			panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
-		}
+		panel.setTitlePane(
+				new JComponent[] { buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns },
+				20);
 
 		panel.addListSelectionListener(listSelectionEvent -> buttonCopySelection
 				.setEnabled(!((ListSelectionModel) listSelectionEvent.getSource()).isSelectionEmpty()));

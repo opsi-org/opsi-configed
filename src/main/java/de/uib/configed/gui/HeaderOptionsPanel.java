@@ -16,18 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class HeaderOptionsPanel extends JPanel {
 	public HeaderOptionsPanel(ListModel<JCheckBox> model) {
 		init(model);
 	}
 
 	private void init(ListModel<JCheckBox> model) {
-		if (!Main.THEMES) {
-			setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-		}
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 

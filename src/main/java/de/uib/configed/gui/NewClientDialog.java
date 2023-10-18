@@ -292,9 +292,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		if (!Main.THEMES) {
-			panel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout.Group uefiVerticalGroup = gpl.createSequentialGroup();
 		GroupLayout.Group uefiHorizontalGroup = gpl.createSequentialGroup();

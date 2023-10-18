@@ -14,9 +14,6 @@ import java.util.Map;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class DepotsList extends JList<String> implements ComponentListener {
 
 	private MyListCellRenderer myListCellRenderer;
@@ -25,12 +22,6 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	private Map<String, Map<String, Object>> depotInfo;
 
 	public DepotsList() {
-		if (!Main.THEMES) {
-			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			super.setSelectionBackground(Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR);
-			super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
-		}
-
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer();
 		super.setCellRenderer(myListCellRenderer);

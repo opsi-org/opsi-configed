@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
@@ -172,9 +171,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
-		if (!Main.THEMES) {
-			panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
@@ -242,10 +238,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						.addGap(Globals.GAP_SIZE)));
 
 		super.setAdditionalPane(panelSWx);
-
-		if (!Main.THEMES) {
-			additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		super.setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);

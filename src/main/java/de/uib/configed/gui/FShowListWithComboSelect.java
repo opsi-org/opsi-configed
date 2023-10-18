@@ -10,9 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 /**
  * This class is intended to show a list in text area
  */
@@ -26,9 +23,7 @@ public class FShowListWithComboSelect extends FShowList {
 
 		labelChoice = new JLabel(choiceTitle + ": ");
 		labelChoice.setOpaque(true);
-		if (!Main.THEMES) {
-			labelChoice.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
+
 		northPanel.add(labelChoice);
 		combo = new JComboBox<>(choices);
 

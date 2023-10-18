@@ -43,7 +43,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -389,11 +388,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	protected void buildPanel() {
 		splitPane = new JSplitPane();
 
-		if (!Main.THEMES) {
-			splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
-			setBackground(Globals.BACK_NIMBUS);
-		}
-
 		tree = new XTree();
 
 		ToolTipManager.sharedInstance().registerComponent(tree);
@@ -643,11 +637,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 								} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
 									Logging.warning(this, "no default Value found");
 
-									if (!Main.THEMES) {
-										jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
-									} else {
-										jc.setForeground(Globals.OPSI_ERROR);
-									}
+									jc.setForeground(Globals.OPSI_ERROR);
+
 									jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 									jc.setFont(jc.getFont().deriveFont(Font.BOLD));
@@ -682,19 +673,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					table.setDefaultRenderer(Object.class, colorized);
 					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 					table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-
-					if (!Main.THEMES) {
-						table.setShowGrid(true);
-						table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
-					}
-
 					table.addMouseWheelListener(
 							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
 					jScrollPane = new JScrollPane(table);
-					if (!Main.THEMES) {
-						jScrollPane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-					}
 
 					add(jScrollPane, BorderLayout.CENTER);
 				}

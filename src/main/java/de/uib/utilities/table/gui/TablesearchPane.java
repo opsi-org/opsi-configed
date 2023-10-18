@@ -6,7 +6,6 @@
 
 package de.uib.utilities.table.gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -37,7 +36,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -214,12 +212,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.selectMode = select;
 	}
 
-	public void setFieldBackground(Color color) {
-		if (!Main.THEMES) {
-			fieldSearch.setBackground(color);
-		}
-	}
-
 	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
@@ -284,9 +276,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		if (!Main.THEMES) {
-			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		navPane = new NavigationPanel(associatedPanel);
 
@@ -332,10 +321,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
-		if (!Main.THEMES) {
-			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
-		}
 
 		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
 		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));

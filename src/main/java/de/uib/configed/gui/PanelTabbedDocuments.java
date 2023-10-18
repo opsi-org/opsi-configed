@@ -22,7 +22,6 @@ import javax.swing.JFileChooser;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -49,10 +48,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		identsList = Arrays.asList(idents);
 
 		super.setProportionOfTotalWidth(0.5);
-
-		if (!Main.THEMES) {
-			super.setForeground(Globals.BLUE);
-		}
 
 		textPanes = new LogPane[idents.length];
 

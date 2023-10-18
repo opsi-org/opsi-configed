@@ -11,9 +11,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class FEditorPane extends FGeneralDialog {
 
 	private JEditorPane editPane = new JEditorPane();
@@ -26,10 +23,6 @@ public class FEditorPane extends FGeneralDialog {
 
 	private void init() {
 		editPane.setOpaque(true);
-
-		if (!Main.THEMES) {
-			editPane.setBackground(Globals.BACKGROUND_COLOR_4);
-		}
 
 		editPane.setText("          ");
 		editPane.setEditable(false);

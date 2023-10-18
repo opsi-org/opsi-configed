@@ -16,10 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -59,9 +57,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 		additionalPane.add(infoLabel);
-		if (!Main.THEMES) {
-			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 		additionalPane.setVisible(true);
 
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));

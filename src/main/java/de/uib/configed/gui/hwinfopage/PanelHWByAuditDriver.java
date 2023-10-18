@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -15,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -44,26 +42,14 @@ public class PanelHWByAuditDriver extends JPanel {
 	private void buildPanel() {
 
 		fieldVendor = new JTextShowField();
-		if (!Main.THEMES) {
-			fieldVendor.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
+
 		fieldLabel = new JTextShowField();
-		if (!Main.THEMES) {
-			fieldLabel.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		fieldVendor2 = new JTextShowField();
-		if (!Main.THEMES) {
-			fieldVendor2.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		fieldLabel2 = new JTextShowField();
-		if (!Main.THEMES) {
-			fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		JLabel labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
-
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
 		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
@@ -150,13 +136,6 @@ public class PanelHWByAuditDriver extends JPanel {
 						.addComponent(fieldLabel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2))
 				.addGap(2 * Globals.MIN_GAP_SIZE, 4 * Globals.MIN_GAP_SIZE, Short.MAX_VALUE));
-		if (!Main.THEMES) {
-			setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
-		if (!Main.THEMES) {
-			setBorder(BorderFactory.createLineBorder(Globals.GREYED));
-		}
 	}
 
 	public void emptyByAuditStrings() {

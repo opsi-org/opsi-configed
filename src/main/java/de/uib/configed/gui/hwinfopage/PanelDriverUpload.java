@@ -30,7 +30,6 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -312,10 +311,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldServerPath = new JTextShowField(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		if (!Main.THEMES) {
-			fieldServerPath.setForeground(Globals.GREYED);
-		}
-
 		JButton buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
@@ -462,13 +457,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
 					+ fieldServerPath.getText());
 
-			if (!Main.THEMES) {
-				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-			}
 			execute();
-			if (!Main.THEMES) {
-				buttonUploadDrivers.setBackground(buttonUploadDrivers.getBackground());
-			}
 		});
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
@@ -600,11 +589,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						.addGap(hGap, hGap, Short.MAX_VALUE)
 
 						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
-
-		if (!Main.THEMES) {
-			setBackground(Globals.BACKGROUND_COLOR_3);
-		}
-
 	}
 
 	private void initValues() {

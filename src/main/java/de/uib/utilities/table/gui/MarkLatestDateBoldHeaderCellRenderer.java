@@ -12,8 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class MarkLatestDateBoldHeaderCellRenderer extends ColorTableCellRenderer {
@@ -29,10 +27,6 @@ public class MarkLatestDateBoldHeaderCellRenderer extends ColorTableCellRenderer
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-		if (!Main.THEMES) {
-			cell.setBackground(Globals.DEFAULT_TABLE_HEADER_BG_COLOR);
-		}
 
 		JComponent jc = (JComponent) cell;
 

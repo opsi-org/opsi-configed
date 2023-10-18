@@ -37,7 +37,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelEnterLicence;
@@ -475,9 +474,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGap(0, 1, 5)));
 
 		JPanel panelTask = new JPanel();
-		if (!Main.THEMES) {
-			panelTask.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
+
 		GroupLayout layoutTask = new GroupLayout(panelTask);
 		panelTask.setLayout(layoutTask);
 
@@ -540,10 +537,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		JPanel bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
-		if (!Main.THEMES) {
-			topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);

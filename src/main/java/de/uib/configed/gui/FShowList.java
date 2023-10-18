@@ -12,8 +12,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -69,9 +67,6 @@ public class FShowList extends FTextArea {
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
 
-		if (!Main.THEMES) {
-			jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 

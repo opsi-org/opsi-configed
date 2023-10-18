@@ -18,7 +18,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.Main;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
@@ -79,14 +78,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// construct content panes
 		JPanel panelInfoWindowsSoftware = new JPanel();
-		if (!Main.THEMES) {
-			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		JPanel panelInfoConfigWindowsSoftware = new JPanel();
-		if (!Main.THEMES) {
-			panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		JLabel titleWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
@@ -184,9 +177,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelWorkNamebased = new JPanel();
 		panelWorkNamebased.setBorder(new LineBorder(Globals.BLUE_GREY, 3, true));
-		if (!Main.THEMES) {
-			panelWorkNamebased.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 		panelWorkNamebased.setOpaque(true);
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
 		panelWorkNamebased.setLayout(layoutNamebased);
@@ -250,15 +240,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
-		if (!Main.THEMES) {
-			panelRadiobuttonsDirectionOfAssignmentX.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-
 		GroupLayout layoutPanelInfo = new GroupLayout(panelInfoWindowsSoftware);
 		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
-		if (!Main.THEMES) {
-			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		layoutPanelInfo.setHorizontalGroup(layoutPanelInfo.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
@@ -461,9 +444,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		if (!Main.THEMES) {
-			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutBottomPane.createSequentialGroup()

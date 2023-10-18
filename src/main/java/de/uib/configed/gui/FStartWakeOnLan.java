@@ -31,7 +31,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.InternationalFormatter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -190,9 +189,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		if (!Main.THEMES) {
-			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		scrollpane.setViewportView(contentPane);
 

@@ -33,7 +33,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -128,9 +127,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
 
 		table.setDragEnabled(true);
-		if (!Main.THEMES) {
-			table.setBackground(Globals.NIMBUS_BACKGROUND);
-		}
 
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
