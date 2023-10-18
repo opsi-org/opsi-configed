@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigOption;
@@ -589,7 +587,7 @@ public class HostDataService {
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
 			if (setting.getValue() instanceof String && "".equals(((String) setting.getValue()).trim())) {
-				corrected.put(setting.getKey(), JSONObject.NULL);
+				corrected.put(setting.getKey(), null);
 			} else {
 				corrected.put(setting.getKey(), setting.getValue());
 			}
