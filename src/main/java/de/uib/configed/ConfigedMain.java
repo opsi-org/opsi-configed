@@ -457,7 +457,7 @@ public class ConfigedMain implements ListSelectionListener {
 		return locationName + File.separator + host.replace(":", "_");
 	}
 
-	private void initSavedStates() {
+	public void initSavedStates() {
 		File savedStatesDir = null;
 
 		if (Configed.getSavedStatesLocationName() != null) {
@@ -731,7 +731,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "call initData");
 		initData();
-		initSavedStates();
 
 		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
 				.replaceAll("").split(",");

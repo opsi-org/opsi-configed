@@ -445,6 +445,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			@Override
 			public void run() {
 				Logging.info(this, "get persis");
+				configedMain.initSavedStates();
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 						String.valueOf(passwordField.getPassword()));
