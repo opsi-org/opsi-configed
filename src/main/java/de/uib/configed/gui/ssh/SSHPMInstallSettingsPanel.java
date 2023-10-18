@@ -130,15 +130,15 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup()
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE).addComponent(jTextFieldSelecteddepots,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE))
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 								.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -160,8 +160,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)))
-				.addGap(Globals.GAP_SIZE));
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)

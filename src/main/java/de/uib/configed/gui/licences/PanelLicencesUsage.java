@@ -94,28 +94,25 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		GroupLayout panelGetAndAssignSLLayout = new GroupLayout(panelGetAndAssignSL);
 		panelGetAndAssignSL.setLayout(panelGetAndAssignSLLayout);
-		panelGetAndAssignSLLayout.setHorizontalGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addGap(20, 20, 20)
-						.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(panelGetAndAssignSLLayout.createSequentialGroup()
-										.addComponent(labelGetAndAssignSL).addGap(20, 20, 20).addComponent(comboClient,
-												GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-								.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(buttonGet, buttonWidth, buttonWidth, buttonWidth))
-						.addGap(20, 20, 20)));
-		panelGetAndAssignSLLayout.setVerticalGroup(
-				panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-						panelGetAndAssignSLLayout.createSequentialGroup().addGap(5, 5, 5)
-								.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelGetAndAssignSL, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(comboClient, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(5, 5, 5)
-								.addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
-								.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight).addGap(5, 5, 5)));
+		panelGetAndAssignSLLayout.setHorizontalGroup(panelGetAndAssignSLLayout.createSequentialGroup()
+				.addGap(20, 20, 20)
+				.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addComponent(labelGetAndAssignSL)
+								.addGap(20, 20, 20)
+								.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(buttonGet, buttonWidth, buttonWidth, buttonWidth))
+				.addGap(20, 20, 20));
 
+		panelGetAndAssignSLLayout.setVerticalGroup(panelGetAndAssignSLLayout.createSequentialGroup().addGap(5, 5, 5)
+				.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(labelGetAndAssignSL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(5, 5, 5).addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
+				.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight).addGap(5, 5, 5));
 	}
 
 	private void initComponents() {

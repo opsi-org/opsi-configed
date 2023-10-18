@@ -487,7 +487,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 										.addComponent(jTextFieldPassphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-								// )
 								.addGap(Globals.GAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(jLabelConnectionState,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))

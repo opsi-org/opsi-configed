@@ -345,6 +345,7 @@ public final class Terminal {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(fileUploadProgressBar, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
+
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(southLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

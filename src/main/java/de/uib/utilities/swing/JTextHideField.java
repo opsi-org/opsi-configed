@@ -82,11 +82,11 @@ public class JTextHideField extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup()
 						.addComponent(invisibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addComponent(visibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)));
+				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH));
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createParallelGroup()
@@ -95,7 +95,6 @@ public class JTextHideField extends JPanel {
 				.addComponent(button, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 
 		setEnabled(false);
-
 	}
 
 	private void setHidden() {

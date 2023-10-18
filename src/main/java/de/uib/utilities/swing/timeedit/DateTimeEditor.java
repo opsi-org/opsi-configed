@@ -109,32 +109,29 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		GroupLayout layout = new GroupLayout(this);
 		super.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonBack, BUTTON_W, BUTTON_W, BUTTON_W)
-								.addComponent(buttonYearBack, BUTTON_W, BUTTON_W, BUTTON_W))
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+						.addComponent(buttonBack, BUTTON_W, BUTTON_W, BUTTON_W)
+						.addComponent(buttonYearBack, BUTTON_W, BUTTON_W, BUTTON_W))
 
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-								.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonForward, BUTTON_W, BUTTON_W, BUTTON_W)
-								.addComponent(buttonYearForward, BUTTON_W, BUTTON_W, BUTTON_W))
-						.addGap(1, 1, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, BUTTON_H, BUTTON_H, BUTTON_H)
-								.addComponent(buttonYearBack, BUTTON_H, BUTTON_H, BUTTON_H))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+						.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 						.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(
-								layout.createSequentialGroup().addComponent(buttonForward, BUTTON_H, BUTTON_H, BUTTON_H)
-										.addComponent(buttonYearForward, BUTTON_H, BUTTON_H, BUTTON_H))
-						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))));
+								GroupLayout.PREFERRED_SIZE))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+						.addComponent(buttonForward, BUTTON_W, BUTTON_W, BUTTON_W)
+						.addComponent(buttonYearForward, BUTTON_W, BUTTON_W, BUTTON_W))
+				.addGap(1, 1, Short.MAX_VALUE));
+
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addComponent(buttonBack, BUTTON_H, BUTTON_H, BUTTON_H)
+						.addComponent(buttonYearBack, BUTTON_H, BUTTON_H, BUTTON_H))
+				.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup().addComponent(buttonForward, BUTTON_H, BUTTON_H, BUTTON_H)
+						.addComponent(buttonYearForward, BUTTON_H, BUTTON_H, BUTTON_H))
+				.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	private void setToMidnight() {

@@ -497,16 +497,15 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-				GroupLayout.Alignment.TRAILING,
-				layoutTopPane.createSequentialGroup().addContainerGap()
-						.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addContainerGap()
+				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-								.addComponent(panelLicencepools, GroupLayout.Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(panelProductId2LPool, GroupLayout.Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addContainerGap()));
+						.addComponent(panelLicencepools, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panelProductId2LPool, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addContainerGap());
+
 		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
 
@@ -532,6 +531,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addComponent(panelRegisteredSoftware).addComponent(panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
 				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addComponent(panelInfoWindowsSoftware).addComponent(panelInfoConfigWindowsSoftware))

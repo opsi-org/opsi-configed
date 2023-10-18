@@ -460,13 +460,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 								.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH)
 
-								.addComponent(checkBoxKeepFiles, pref, pref, pref)
-
-						)
-
-				)
-
-		);
+								.addComponent(checkBoxKeepFiles, pref, pref, pref))));
 
 		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(jLabelUninstall)
 				.addGap(Globals.GAP_SIZE)

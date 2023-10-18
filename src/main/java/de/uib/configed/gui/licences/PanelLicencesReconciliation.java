@@ -45,23 +45,15 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup().addContainerGap()
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-										// for testing purposes:
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(panelReconciliation,
+						GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+						Short.MAX_VALUE))
+				.addContainerGap());
 
-										// Short.MAX_VALUE)
-										.addComponent(panelReconciliation, GroupLayout.Alignment.LEADING,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-
-						.addComponent(panelReconciliation, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
-
-		);
+		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
+				.addComponent(panelReconciliation, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 	}
 
 	public PanelGenEditTable getPanelReconciliation() {

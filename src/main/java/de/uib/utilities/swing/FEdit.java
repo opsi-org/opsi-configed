@@ -125,9 +125,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		GroupLayout layout1 = new GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(layout1.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		layout1.setHorizontalGroup(
+				layout1.createSequentialGroup().addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
@@ -139,7 +138,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 										.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)));
+						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+
 		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

@@ -486,11 +486,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		GroupLayout panelEnterKeyLayout = new GroupLayout(panelEnterKey);
 		panelEnterKey.setLayout(panelEnterKeyLayout);
-		panelEnterKeyLayout.setHorizontalGroup(panelEnterKeyLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelEnterKeyLayout.createSequentialGroup().addContainerGap()
-						.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
-						.addGap(5, 5, 5).addComponent(jTextFieldLKey, MIN_FIELD_WIDTH, 326, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(10, Short.MAX_VALUE)));
+		panelEnterKeyLayout.setHorizontalGroup(panelEnterKeyLayout.createSequentialGroup().addContainerGap()
+				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE).addGap(5, 5, 5)
+				.addComponent(jTextFieldLKey, MIN_FIELD_WIDTH, 326, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(10, Short.MAX_VALUE));
+
 		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(panelEnterKeyLayout.createSequentialGroup().addGap(0, 1, 5)
 						.addGroup(panelEnterKeyLayout.createParallelGroup(Alignment.BASELINE)
@@ -542,8 +542,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 												GroupLayout.DEFAULT_SIZE, MAX_WIDTH))
 								.addGap(10, 10, 10))));
 
-		layoutTask.setVerticalGroup(layoutTask.createParallelGroup(Alignment.LEADING).addGroup(layoutTask
-				.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask).addGap(5, 5, 5)
+		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
+				.addGap(5, 5, 5)
 				.addComponent(panelLicencecontracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
 				.addGap(5, 5, 5).addComponent(jLabelConfigure).addGap(2, 2, 2)
 				.addGroup(layoutTask.createParallelGroup(Alignment.BASELINE)
@@ -557,7 +557,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				.addGap(2, 2, 2)
 				.addComponent(panelEnterKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5)));
+				.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3);
@@ -598,6 +598,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 												.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH)
 												.addGap(10, 10, 10)))
 						.addGap(10, 10, 10));
+
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(5, 5, 5)
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(10, 10, 10).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,

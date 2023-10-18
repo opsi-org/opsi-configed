@@ -105,7 +105,6 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 				.addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-
 				.addGroup(layout.createParallelGroup()
 						.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

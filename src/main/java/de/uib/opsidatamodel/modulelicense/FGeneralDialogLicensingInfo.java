@@ -307,9 +307,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		gLayout.setAutoCreateContainerGaps(true);
 
 		gLayout.setHorizontalGroup(
-				// 1
 				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-
 						.addGroup(gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
 								.addComponent(orangeWarningLabel))
 						.addGroup(gLayout
@@ -381,7 +379,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addComponent(panel));
 
 		return xPanel;
-
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
