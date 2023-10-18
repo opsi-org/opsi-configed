@@ -93,12 +93,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton = new JButton();
 
 		// do this so that you can mark and copy content of the label
-		if (!Main.FONT) {
-			jLabelProductID.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		} else {
-			jLabelProductID.setFont(jLabelProductID.getFont()
-					.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
-		}
+		jLabelProductID.setFont(jLabelProductID.getFont()
+				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
 
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
@@ -106,28 +102,15 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 			jLabelProductID.setBackground(null);
 		}
 
-		if (!Main.FONT) {
-			jLabelProductName.setFont(Globals.DEFAULT_FONT_BIG);
-		}
-
-		if (!Main.FONT) {
-			jLabelLabelProductVersion.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
-		if (!Main.FONT) {
-			jLabelProductVersion.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
 		if (!Main.THEMES) {
 			jLabelProductVersion.setBackground(null);
 		}
 
-		if (!Main.FONT) {
-			jTextAreaProductInfo.setFont(Globals.DEFAULT_FONT);
-		}
 		if (!Main.THEMES) {
 			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
@@ -136,9 +119,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		if (!Main.FONT) {
-			jTextAreaProductAdvice.setFont(Globals.DEFAULT_FONT);
-		}
 		if (!Main.THEMES) {
 			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
@@ -148,26 +128,17 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
-		if (!Main.FONT) {
-			dependenciesTextLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
+
 		if (!Main.THEMES) {
 			dependenciesTextLabel.setForeground(Globals.GREYED);
 		}
 
-		if (!Main.FONT) {
-			depotForDependenciesLabel.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		if (!Main.THEMES) {
 			depotForDependenciesLabel.setForeground(Globals.GREYED);
 		}
 
 		dependenciesActivateButton.setText("▶");
-		if (!Main.FONT) {
-			dependenciesActivateButton.setFont(Globals.DEFAULT_FONT);
-		} else {
-			dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
-		}
+		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 
 		if (!Main.THEMES) {
 			dependenciesActivateButton.setForeground(Globals.LIGHT_BLACK);
@@ -177,11 +148,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
 		propertiesActivateButton.setText("▼");
-		if (!Main.FONT) {
-			propertiesActivateButton.setFont(Globals.DEFAULT_FONT);
-		} else {
-			propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
-		}
+		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
+
 		if (!Main.THEMES) {
 			propertiesActivateButton.setForeground(Globals.LIGHT_BLACK);
 		}

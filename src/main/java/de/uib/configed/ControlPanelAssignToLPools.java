@@ -23,7 +23,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 
-import de.uib.Main;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
@@ -503,9 +502,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 		TableColumn col = thePanel.getPanelProductId2LPool().getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-		if (!Main.FONT) {
-			comboLP0.setFont(Globals.DEFAULT_FONT_BIG);
-		}
+
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = configedMain.licencePoolTableProvider.getOrderedColumn(
 					configedMain.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
@@ -520,9 +517,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelProductId2LPool().getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
-		if (!Main.FONT) {
-			comboLP1.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP1, (row, column) -> new DefaultComboBoxModel<>(
 				persistenceController.getProductDataService().getProductIdsPD().toArray(new String[0]))));
 

@@ -28,7 +28,6 @@ public class LicencesFrame extends SecondaryFrame {
 
 	@Override
 	public void setGlobals(Map<String, Object> globals) {
-		panel.setGlobals(globals);
 		setIconImage((Image) globals.get("mainIcon"));
 		setTitle((String) globals.get("APPNAME"));
 	}

@@ -15,7 +15,6 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -57,7 +56,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	private AbstractCellEditor servedCellEditor;
 
 	private JTextComponent caller;
-	private Font callerFont;
 
 	public FEdit(String initialText) {
 		this(initialText, null);
@@ -89,9 +87,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		editingArea = new JPanel(new BorderLayout());
 
 		labelHint = new JLabel();
-		if (!Main.FONT) {
-			labelHint.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		}
 
 		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
 				"images/apply_disabled.png", true) {
@@ -230,42 +225,17 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		return init(areaDimension);
 	}
 
-	private void enter() {
-		if (caller != null) {
-			callerFont = caller.getFont();
-			if (!Main.FONT) {
-				caller.setFont(callerFont.deriveFont(Font.ITALIC));
-			}
-		}
-	}
-
-	public void deactivate() {
-		if (caller != null) {
-			if (!Main.FONT) {
-				caller.setFont(callerFont);
-			}
-			caller.validate();
-		}
-	}
-
 	private void leave() {
 		Logging.debug(this, "leave");
 		updateCaller(initialText);
 		buttonCommit.setEnabled(false);
 		setVisible(false);
-
-		// no effect probably because of reentering the field
-		deactivate();
 	}
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			enter();
-		} else {
-			// Do nothing with this event
 		}
 
 		super.processWindowEvent(e);

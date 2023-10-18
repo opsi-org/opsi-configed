@@ -149,9 +149,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		scrollpane.getViewport().add(table);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		if (!Main.FONT) {
-			labelSearch.setFont(Globals.DEFAULT_FONT);
-		}
 
 		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
@@ -163,9 +160,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-		if (!Main.FONT) {
-			fieldSearch.setFont(Globals.DEFAULT_FONT);
-		}
 
 		if (!Main.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
@@ -332,9 +326,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		JLabel missingData0 = new JLabel(Utils.createImageIcon(logoPath, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-		if (!Main.FONT) {
-			missingData1.setFont(Globals.DEFAULT_FONT_TILTE);
-		}
 
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 

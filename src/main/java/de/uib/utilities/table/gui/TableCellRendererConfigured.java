@@ -40,10 +40,6 @@ public class TableCellRendererConfigured extends ColorTableCellRenderer {
 			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (f != null && !Main.FONT) {
-			result.setFont(f);
-		}
-
 		if (bg1 != null && !Main.THEMES) {
 			if (selectionEditingBackground != null && isSelected) {
 				result.setBackground(selectionEditingBackground);

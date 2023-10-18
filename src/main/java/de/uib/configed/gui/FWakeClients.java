@@ -15,9 +15,7 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -32,9 +30,7 @@ public class FWakeClients extends FShowList {
 
 	public FWakeClients(JFrame master, String title) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
-		if (!Main.FONT) {
-			super.setFont(Globals.DEFAULT_FONT);
-		}
+
 		super.setMessage("");
 		super.setButtonsEnabled(true);
 	}

@@ -98,15 +98,9 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		if (!Main.FONT) {
-			labelSwauditMultiClientReport1.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
-		if (!Main.FONT) {
-			labelSwauditMultiClientReport2.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
@@ -127,9 +121,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
 
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
-		if (!Main.FONT) {
-			labelAskForOverwrite.setFont(Globals.DEFAULT_FONT);
-		}
+
 		JCheckBox checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
 		checkAskForOverwrite.addItemListener((ItemEvent e) -> {
@@ -182,13 +174,8 @@ public class PanelSWMultiClientReport extends JPanel {
 		buttonCallSelectExportDirectory.addActionListener((ActionEvent e) -> buttonCallSelectExportDirectory());
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
-		if (!Main.FONT) {
-			labelWithMsUpdates.setFont(Globals.DEFAULT_FONT);
-		}
+
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
-		if (!Main.FONT) {
-			labelWithMsUpdates2.setFont(Globals.DEFAULT_FONT);
-		}
 
 		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.addItemListener((ItemEvent e) -> {

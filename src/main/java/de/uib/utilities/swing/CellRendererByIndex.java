@@ -9,7 +9,6 @@ package de.uib.utilities.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -20,8 +19,6 @@ import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class CellRendererByIndex extends JLabel implements ListCellRenderer<String> {
-
-	private Font uhOhFont;
 
 	private Map<String, String> mapOfStrings;
 	private Map<String, String> mapOfTooltips;
@@ -61,14 +58,6 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 		String selectedString = null;
 		String selectedTooltip = null;
 
-		if (uhOhFont == null) {
-			// lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10);
-		}
-		if (!Main.FONT) {
-			setFont(uhOhFont);
-		}
-
 		if (value != null) {
 			if (mapOfStrings != null) {
 				selectedString = mapOfStrings.get(value);
@@ -90,10 +79,6 @@ public class CellRendererByIndex extends JLabel implements ListCellRenderer<Stri
 		setText(selectedString);
 
 		setToolTipText(selectedTooltip);
-
-		if (!Main.FONT) {
-			setFont(Globals.DEFAULT_FONT);
-		}
 
 		if (!Main.THEMES) {
 			Dimension d = getPreferredSize();

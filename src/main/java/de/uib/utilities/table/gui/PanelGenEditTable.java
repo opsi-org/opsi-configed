@@ -297,21 +297,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		addComponentListener(this);
 
 		label = new JLabel(title);
-		if (!Main.FONT) {
-			label.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		}
+
 		if (title == null || title.isEmpty()) {
 			label.setVisible(false);
-		}
-
-		JLabel labelRowCount = new JLabel(title);
-		if (!Main.FONT) {
-			labelRowCount.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		}
-
-		JLabel labelMarkedCount = new JLabel("");
-		if (!Main.FONT) {
-			labelMarkedCount.setFont(Globals.DEFAULT_FONT);
 		}
 
 		titlePane = new PanelLinedComponents();

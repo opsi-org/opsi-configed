@@ -58,9 +58,6 @@ public final class Utils {
 	}
 
 	public static void formatButtonSmallText(AbstractButton button) {
-		if (!Main.FONT) {
-			button.setFont(Globals.DEFAULT_FONT_SMALL);
-		}
 		button.setPreferredSize(new Dimension(45, 20));
 		if (!Main.THEMES) {
 			button.setForeground(Globals.LIGHT_BLACK);
@@ -69,7 +66,6 @@ public final class Utils {
 		button.setOpaque(false);
 
 		button.setBorderPainted(false);
-
 	}
 
 	public static void showAboutAction(JFrame parent) {
@@ -107,7 +103,6 @@ public final class Utils {
 		if (objects == null) {
 			objects = new HashMap<>();
 			objects.put("mainIcon", getMainIcon());
-			objects.put("defaultFont", Globals.DEFAULT_FONT);
 			objects.put("APPNAME", Globals.APPNAME);
 		}
 		return new HashMap<>(objects);

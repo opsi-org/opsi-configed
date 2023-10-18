@@ -16,8 +16,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -303,9 +301,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations = new JTextField();
 
 		comboClient = new JComboBox<>();
-		if (!Main.FONT) {
-			comboClient.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 
 		comboClient.setPreferredSize(new Dimension(200, 20));
 
@@ -338,18 +333,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 					fEditDate.setVisible(true);
 				}
 
-			}
-		});
-		jTextFieldEndOfLicence.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				/* Not needed */}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (fEditDate != null) {
-					fEditDate.deactivate();
-				}
 			}
 		});
 
@@ -392,13 +375,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jButtonSend.addActionListener(this);
 
 		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
-		if (!Main.FONT) {
-			jLabelTask.setFont(Globals.DEFAULT_FONT_BIG);
-		}
+
 		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
-		if (!Main.FONT) {
-			jLabelConfigure.setFont(Globals.DEFAULT_FONT_STANDARD_BOLD);
-		}
 
 		panelLicenceModel.setBorder(BorderFactory.createEtchedBorder());
 

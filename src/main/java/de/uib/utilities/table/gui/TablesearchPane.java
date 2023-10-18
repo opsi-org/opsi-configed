@@ -214,12 +214,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.selectMode = select;
 	}
 
-	public void setFieldFont(java.awt.Font font) {
-		if (!Main.FONT) {
-			fieldSearch.setFont(font);
-		}
-	}
-
 	public void setFieldBackground(Color color) {
 		if (!Main.THEMES) {
 			fieldSearch.setBackground(color);
@@ -299,9 +293,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		if (!Main.FONT) {
-			labelSearch.setFont(Globals.DEFAULT_FONT);
-		}
 
 		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
@@ -342,9 +333,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		if (!Main.FONT) {
-			fieldSearch.setFont(Globals.DEFAULT_FONT_BIG);
-		}
 		if (!Main.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
@@ -418,16 +406,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.LOWER_BUTTON_DIMENSION);
-		if (!Main.FONT) {
-			comboSearchFields.setFont(Globals.DEFAULT_FONT);
-		}
 
 		setSearchFieldsAll();
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
-		if (!Main.FONT) {
-			labelSearchMode.setFont(Globals.DEFAULT_FONT);
-		}
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 
@@ -441,9 +423,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFieldsMode = new JComboBoxToolTip();
-		if (!Main.FONT) {
-			comboSearchFieldsMode.setFont(Globals.DEFAULT_FONT);
-		}
 
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);

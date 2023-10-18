@@ -23,9 +23,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
 	private static final int LABEL_HEIGHT = 22;
 
-	private Font emphasized;
-	private Font standard;
-
 	public HostConfigNodeRenderer() {
 		super();
 
@@ -33,13 +30,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			super.setOpaque(true);
 		}
 
-		standard = Globals.DEFAULT_FONT_BIG;
-
-		emphasized = Globals.DEFAULT_FONT_STANDARD_BOLD;
-
-		if (!Main.FONT) {
-			super.setFont(standard);
-		}
 		if (!Main.THEMES) {
 			super.setForeground(Globals.LIGHT_BLACK);
 			super.setTextSelectionColor(Globals.LIGHT_BLACK);
@@ -76,19 +66,11 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			node.setEnabled(enabled);
 
 			if (row == 0) {
-				if (!Main.FONT) {
-					setFont(emphasized);
-				} else {
-					setFont(getFont().deriveFont(Font.BOLD));
-					setFocusable(false);
-				}
+				setFont(getFont().deriveFont(Font.BOLD));
+				setFocusable(false);
 			} else {
-				if (!Main.FONT) {
-					setFont(standard);
-				} else {
-					setFont(getFont().deriveFont(Font.PLAIN));
-					setFocusable(true);
-				}
+				setFont(getFont().deriveFont(Font.PLAIN));
+				setFocusable(true);
 			}
 
 			if (!Main.THEMES) {

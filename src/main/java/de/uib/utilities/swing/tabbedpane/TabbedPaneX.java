@@ -8,17 +8,14 @@ package de.uib.utilities.swing.tabbedpane;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
-import de.uib.Main;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
@@ -32,12 +29,6 @@ public class TabbedPaneX extends JPanel {
 	public TabbedPaneX(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		init();
-	}
-
-	public void setGlobals(Map<String, Object> globals) {
-		if (!Main.FONT) {
-			setFont((Font) globals.get("defaultFont"));
-		}
 	}
 
 	private void init() {
