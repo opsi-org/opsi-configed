@@ -12,9 +12,7 @@ import java.util.Collections;
 
 import javax.swing.JTree;
 
-import de.uib.Main;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
 	private ConfigedMain configedMain;
@@ -22,22 +20,12 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	public IconNodeRendererClientTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
-		if (!Main.THEMES) {
-			super.setOpaque(true);
-			super.setForeground(Globals.LIGHT_BLACK);
-			super.setTextSelectionColor(Globals.LIGHT_BLACK);
-			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		}
 	}
 
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-		if (!Main.THEMES) {
-			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
-		}
 
 		if (value instanceof IconNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);

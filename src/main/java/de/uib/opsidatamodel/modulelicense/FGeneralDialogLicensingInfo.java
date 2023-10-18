@@ -83,19 +83,11 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
-		}
-
-		if (!Main.THEMES) {
-			centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		}
 
 		centerPanel.setOpaque(true);
@@ -123,10 +115,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
-		southPanel.setOpaque(false);
-		if (!Main.THEMES) {
-			southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
-		}
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
@@ -285,9 +273,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		if (!Main.THEMES) {
-			extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
+
 		extraInfoPanel.setOpaque(true);
 
 		JPanel panel = new JPanel();
@@ -358,9 +344,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		if (!Main.THEMES) {
-			xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
+
 		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)

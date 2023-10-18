@@ -6,10 +6,8 @@
 
 package de.uib.utilities.swing;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -17,11 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.Painter;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -43,23 +38,6 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 
 	private WaitingWorker worker;
 
-	private static class MyPainter implements Painter<JProgressBar> {
-
-		private final Color color;
-
-		public MyPainter(Color c1) {
-			this.color = c1;
-		}
-
-		@Override
-		public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-			if (!Main.THEMES) {
-				gd.setColor(color);
-				gd.fillRect(0, 0, width, height);
-			}
-		}
-	}
-
 	public FLoadingWaiter(Component owner, String title, String startMessage) {
 		super(title);
 
@@ -76,17 +54,10 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		progressBar.setValue(0);
 		progressBar.setMaximum(JPROGRESSBAR_MAX_VALUE);
 
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new MyPainter(Globals.OPSI_LOGO_BLUE));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new MyPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
-		progressBar.putClientProperty("Nimbus.Overrides", defaults);
-
 		infoLabel = new JLabel();
 
 		JPanel panel = new JPanel();
-		if (!Main.THEMES) {
-			panel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 

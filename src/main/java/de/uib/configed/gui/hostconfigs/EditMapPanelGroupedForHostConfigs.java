@@ -60,7 +60,6 @@ import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
@@ -658,7 +657,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 									} else if (jc instanceof JTextComponent) {
 										((JTextComponent) jc).setText(Globals.STARRED_STRING);
 									} else {
-										CellAlternatingColorizer.colorizeSecret(jc);
+										// Do nothing
 									}
 								}
 

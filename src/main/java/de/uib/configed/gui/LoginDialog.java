@@ -30,7 +30,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -45,7 +44,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
-import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 import utils.Utils;
@@ -211,10 +209,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
-
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());

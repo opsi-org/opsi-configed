@@ -109,18 +109,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		scrollpane = new JScrollPane();
 
-		if (!Main.THEMES) {
-			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		table = new JTable();
 
 		table.setDragEnabled(true);
-
-		if (!Main.THEMES) {
-			table.setShowGrid(true);
-			table.setGridColor(Globals.JTABLE_SELECTION_PANEL_GRID_COLOR);
-		}
 
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
@@ -160,10 +151,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
-		if (!Main.THEMES) {
-			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
-		}
 
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
@@ -330,9 +317,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 		JPanel mdPanel = new JPanel();
-		if (!Main.THEMES) {
-			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout mdLayout = new GroupLayout(mdPanel);
 		mdPanel.setLayout(mdLayout);

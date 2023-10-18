@@ -6,7 +6,6 @@
 
 package de.uib.utilities.swing;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +17,11 @@ import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.Main;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class JComboBoxToolTip extends JComboBox<String> {
 
 	private Map<String, String> selectValues;
-
-	private Color listBackgroundColorSelected;
-	private Color listForegroundColor;
 
 	private boolean addEmpty;
 
@@ -34,10 +29,6 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	public JComboBoxToolTip() {
 		super();
-
-		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
-		listForegroundColor = Globals.LIGHT_BLACK;
-
 	}
 
 	private class NewComboBoxRenderer extends BasicComboBoxRenderer {
@@ -45,18 +36,10 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
-				if (!Main.THEMES) {
-					setBackground(listBackgroundColorSelected);
-					setForeground(listForegroundColor);
-				}
+
 				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
 				if (-1 < index && index < tooltips.size()) {
 					list.setToolTipText(tooltips.get(index));
-				}
-			} else {
-				if (!Main.THEMES) {
-					setBackground(listBackgroundColorSelected);
-					setForeground(listForegroundColor);
 				}
 			}
 

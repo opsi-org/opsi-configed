@@ -26,7 +26,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -186,9 +185,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-		if (!Main.THEMES) {
-			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		JLabel labelTitle = new JLabel("");
 		if (title != null) {

@@ -33,13 +33,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -429,10 +427,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
 
-		if (!Main.THEMES) {
-			listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-
 		JScrollPane scrollChooseAction = new JScrollPane(listChooseAction,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		listChooseAction.addMouseListener(new MouseAdapter() {
@@ -449,14 +443,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		if (!Main.THEMES) {
-			labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 		labelStrip.setOpaque(true);
-
-		if (!Main.THEMES) {
-			labelStrip.setForeground(Globals.LIGHT_BLACK);
-		}
 
 		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
@@ -471,9 +458,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
-		if (!Main.THEMES) {
-			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		AbstractDocumentListener groupsEditFieldListener = new AbstractDocumentListener() {
 			@Override
@@ -497,9 +481,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		groupsCombo.setPreferredSize(Globals.BUTTON_DIMENSION);
 		saveNameEditor.setPreferredSize(Globals.BUTTON_DIMENSION);
-		if (!Main.THEMES) {
-			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
@@ -507,9 +488,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		if (!Main.THEMES) {
-			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
-		}
 		descriptionField.getCaret().setBlinkRate(0);
 
 		descriptionFieldListener = new AbstractDocumentListener() {
@@ -522,10 +500,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		descriptionField.getDocument().addDocumentListener(descriptionFieldListener);
 
 		panelEdit = new JPanel();
-
-		if (!Main.THEMES) {
-			panelEdit.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 
 		GroupLayout layoutPanelEdit = new GroupLayout(panelEdit);
 		panelEdit.setLayout(layoutPanelEdit);
@@ -570,10 +544,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		setGroupEditing(false);
-
-		if (!Main.THEMES) {
-			panelEdit.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
-		}
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
