@@ -783,8 +783,6 @@ public class ConfigedMain implements ListSelectionListener {
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
-		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
-
 		if (ServerFacade.isOpsi43()) {
 			initMessagebus();
 		}
@@ -825,6 +823,8 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
+
+		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
 	}
 
 	public void toggleColumnIPAddress() {
@@ -3532,7 +3532,9 @@ public class ConfigedMain implements ListSelectionListener {
 		if (everythingReady) {
 			allowedClients = null;
 
-			persistenceController.reloadData(ReloadEvent.ESSENTIAL_DATA_RELOAD.toString());
+			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
+			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+			preloadData();
 
 			FOpsiLicenseMissingText.reset();
 			mainFrame.getPanelProductProperties().reload();
@@ -3541,7 +3543,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			requestRefreshDataForClientSelection();
-			preloadData();
 
 			mainFrame.updateHostCheckboxenText();
 			mainFrame.enableAfterLoading();
