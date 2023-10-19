@@ -3,7 +3,7 @@
 ## [4.3.0.11] - xxxx-xx-xx
 ### Fixed
 - Make search button text visible in logpane
-- Bug changing depot configuration
+- Serialization issue, when trying to save depot configuration
 - Initialize saved states before login
 
 ## [4.3.0.10] - 2023-10-17
