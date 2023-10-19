@@ -1,5 +1,8 @@
 # Changelog
 
+## [4.2.22.19] - 2023-10-19
+### Fixed
+- Serialization issue, when trying to save depot configuration
 
 ## [4.2.22.18] - 2023-10-18
 ### Fixed
