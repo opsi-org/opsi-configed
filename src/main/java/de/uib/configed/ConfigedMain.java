@@ -4740,7 +4740,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		JPanel additionalPane = new JPanel();
-		additionalPane.setOpaque(false);
 		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalPaneLayout);
 
@@ -4761,10 +4760,6 @@ public class ConfigedMain implements ListSelectionListener {
 				.addComponent(jLabelHostname)
 				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
 				.addComponent(jTextHostname));
-
-		additionalPane.add(jLabelHostname);
-		additionalPane.add(jTextHostname);
-		additionalPane.setVisible(true);
 
 		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
