@@ -1,10 +1,16 @@
 # Changelog
 
-## [4.3.0.11] - xxxx-xx-xx
+## [4.3.0.11] - 2023-10-19
 ### Fixed
 - Make search button text visible in logpane
 - Serialization issue, when trying to save depot configuration
 - Initialize saved states before login
+- Show hardware info for multiple clients on opsi-server 4.2 or before (NullpointerException)
+- Not all products are displayed in depot-configuration
+
+### Changed
+- Rework reload mechanism so that reload loads exactly the same data as the starting process
+- All product actions now save data before acting
 
 ## [4.3.0.10] - 2023-10-17
 
