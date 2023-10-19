@@ -65,7 +65,7 @@ public final class Globals {
 	public static final Color LOG_COLOR_TRACE = new Color(139, 139, 139);
 	public static final Color LOG_COLOR_SECRET = new Color(213, 0, 249);
 
-	// New colors
+	// Colors for tables etc.
 
 	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
 	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
@@ -91,13 +91,9 @@ public final class Globals {
 
 	public static final Color PRIMARY_FOREGROUND_COLOR = Color.BLACK;
 
-	public static final Color PRIMARY_BACKGROUND_COLOR = Color.WHITE;
-
 	public static final Color BACKGROUND_COLOR_6 = new Color(200, 200, 250);
 	public static final Color BACKGROUND_COLOR_7 = new Color(220, 228, 242);
 	public static final Color BACKGROUND_COLOR_8 = new Color(240, 240, 245);
-
-	public static final Color BACKGROUND_COLOR_9 = new Color(250, 248, 221);
 
 	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
 	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
@@ -126,11 +122,6 @@ public final class Globals {
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 
-	public static final Color SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR = Color.GREEN;
-	public static final Color SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR = FAILED_COLOR;
-
-	public static final Color F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
-
 	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
 	public static final Color ACTION_REQUEST_SETUP_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_UPDATE_COLOR = ACTION_COLOR;
@@ -145,20 +136,7 @@ public final class Globals {
 
 	public static final Color PRODUCT_STATUS_MIXED_COLOR = LOG_COLOR_SECRET;
 
-	public static final Color EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR = FAILED_COLOR;
-
-	public static final Color EDIT_MAP_PANEL_X_FOREGROUND_COLOR = FAILED_COLOR;
-	public static final Color EDIT_MAP_PANEL_X_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
-
-	public static final Color F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER = Color.BLUE;
-
 	// in table, change colors by row
-	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_1 = PRIMARY_BACKGROUND_COLOR;
-	public static final Color DEFAULT_TABLE_CELL_BG_COLOR_2 = BACKGROUND_COLOR_9;
-
-	public static final Color DEFAULT_TABLE_SELECTION_ROW_DARK = new Color(204, 220, 238);
-	public static final Color DEFAULT_TABLE_SELECTED_ROW_BRIGHT = new Color(221, 233, 249);
-
 	public static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
@@ -203,7 +181,6 @@ public final class Globals {
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;
 
-	public static final int CHECKBOX_WIDTH = 20;
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
 	public static final int WIDTH_FRAME_RENAME_CLIENT = 350;
@@ -216,10 +193,7 @@ public final class Globals {
 	// Just enough so that the button is not hidden
 	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220;
 
-	public static final int POPUP_ON_CLIENTS_FRAME_WIDTH = 380;
-	public static final int POPUP_ON_CLIENTS_FRAME_HEIGHT = 300;
-
-	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
+	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 

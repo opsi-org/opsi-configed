@@ -274,7 +274,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		buttonCallChooserPackage = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserPackage.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallChooserPackage.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserPackage.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
 		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
@@ -284,7 +284,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallChooserServerpath.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
@@ -292,7 +292,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallExecute = new JButton("", Utils.createImageIcon("images/installpackage.png", ""));
 
 		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/installpackage.png", ""));
-		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.execute"));
 
 		buttonCallExecute.addActionListener((ActionEvent e) -> {

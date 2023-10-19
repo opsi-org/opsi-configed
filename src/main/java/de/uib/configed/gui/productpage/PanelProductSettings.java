@@ -846,8 +846,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			JComboBox<String> targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
 
-			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
-					TargetConfiguration.getLabel2DisplayLabel()));
+			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
@@ -858,8 +857,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			JComboBox<String> statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
 
-			statusColumn.setCellEditor(
-					new AdaptingCellEditorValuesByIndex(statesCombo, istm, InstallationStatus.getLabel2DisplayLabel()));
+			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -888,8 +886,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JComboBox<String> actionsCombo = new JComboBox<>();
 			actionsCombo.setRenderer(standardListCellRenderer);
-			actionColumn.setCellEditor(
-					new AdaptingCellEditorValuesByIndex(actionsCombo, istm, ActionRequest.getLabel2DisplayLabel()));
+			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm));
 			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
 		}

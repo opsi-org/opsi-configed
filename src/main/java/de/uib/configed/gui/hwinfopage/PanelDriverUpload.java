@@ -304,7 +304,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		JButton buttonCallSelectDriverFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectDriverFiles.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallSelectDriverFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
@@ -313,7 +313,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		JButton buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallChooserServerpath.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());

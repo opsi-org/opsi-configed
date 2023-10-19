@@ -36,7 +36,7 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		CellAlternatingColorizer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0, true);
+		CellAlternatingColorizer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0);
 
 		if (hasFocus) {
 			if (focusBorder == null) {

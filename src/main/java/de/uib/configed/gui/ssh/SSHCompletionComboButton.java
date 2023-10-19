@@ -358,7 +358,7 @@ public class SSHCompletionComboButton {
 
 					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
 						Logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");
-						CellAlternatingColorizer.colorize(jc, isSelected, true, true);
+						CellAlternatingColorizer.colorize(jc, isSelected, true);
 					}
 
 					if (getText.startsWith(basicPath) && !getText.equals(basicPath)
