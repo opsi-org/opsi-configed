@@ -277,9 +277,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				public void action(int p) {
 					super.action(p);
 					if (p == PopupMenuTrait.POPUP_RELOAD) {
-						ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+						ConfigedMain.getMainFrame().activateLoadingPane();
 						actor.reloadData();
-						ConfigedMain.getMainFrame().setCursor(null);
+						ConfigedMain.getMainFrame().disactivateLoadingPane();
 					}
 				}
 			};

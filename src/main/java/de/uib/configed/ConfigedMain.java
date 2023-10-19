@@ -4183,7 +4183,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.activateLoadingPane();
 
 		if (resetLocalbootProducts) {
 			persistenceController.getProductDataService().resetLocalbootProducts(getSelectedClients(),
@@ -4195,7 +4195,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
-		mainFrame.setCursor(null);
+		mainFrame.disactivateLoadingPane();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -4382,11 +4382,11 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void reloadHosts() {
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.activateLoadingPane();
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 
-		mainFrame.setCursor(null);
+		mainFrame.disactivateLoadingPane();
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -4783,7 +4783,7 @@ public class ConfigedMain implements ListSelectionListener {
 		fAskCopyClient.setVisible(true);
 
 		if (fAskCopyClient.getResult() == 2) {
-			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			mainFrame.activateLoadingPane();
 			String newClientName = jTextHostname.getText();
 			boolean proceed = true;
 			if (newClientName.isEmpty()) {
@@ -4809,7 +4809,7 @@ public class ConfigedMain implements ListSelectionListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.setCursor(null);
+			mainFrame.disactivateLoadingPane();;
 		}
 	}
 

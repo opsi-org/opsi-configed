@@ -536,7 +536,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				private void reload() {
-					ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+					ConfigedMain.getMainFrame().activateLoadingPane();;
 					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
@@ -549,7 +549,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						tree.scrollRowToVisible(row);
 					}
 
-					ConfigedMain.getMainFrame().setCursor(null);
+					ConfigedMain.getMainFrame().disactivateLoadingPane();;
 				}
 
 				@Override
@@ -850,7 +850,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	protected void reload() {
-		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+		ConfigedMain.getMainFrame().activateLoadingPane();
 		// partial reload
 		buildUserConfig();
 
@@ -867,7 +867,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			tree.scrollRowToVisible(row);
 		}
 
-		ConfigedMain.getMainFrame().setCursor(null);
+		ConfigedMain.getMainFrame().disactivateLoadingPane();
 	}
 
 	private void addUser() {
