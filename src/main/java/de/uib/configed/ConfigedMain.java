@@ -1481,7 +1481,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void startLicencesFrame() {
 		licencesFrame = new LicencesFrame(this);
 		Utils.setMasterFrame(licencesFrame);
-		licencesFrame.setGlobals(Utils.getMap());
+		licencesFrame.setIconImage(Utils.getMainIcon());
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 

@@ -95,15 +95,6 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	public static Map<String, Object> getMap() {
-		if (objects == null) {
-			objects = new HashMap<>();
-			objects.put("mainIcon", getMainIcon());
-			objects.put("APPNAME", Globals.APPNAME);
-		}
-		return new HashMap<>(objects);
-	}
-
 	public static boolean isWindows() {
 		String osName = System.getProperty("os.name");
 		return osName.toLowerCase(Locale.ROOT).startsWith("windows");

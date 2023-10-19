@@ -8,8 +8,6 @@ package de.uib.configed.gui.licences;
 
 import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Image;
-import java.util.Map;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
@@ -24,12 +22,6 @@ public class LicencesFrame extends SecondaryFrame {
 		super();
 		panel = new TabbedPaneX(configedMain);
 		init();
-	}
-
-	@Override
-	public void setGlobals(Map<String, Object> globals) {
-		setIconImage((Image) globals.get("mainIcon"));
-		setTitle((String) globals.get("APPNAME"));
 	}
 
 	private void init() {

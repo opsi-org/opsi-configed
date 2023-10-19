@@ -26,7 +26,8 @@ public class FDriverUpload extends SecondaryFrame {
 		this.configedMain = configedMain;
 
 		init();
-		super.setGlobals(Utils.getMap());
+
+		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
 	}
 
