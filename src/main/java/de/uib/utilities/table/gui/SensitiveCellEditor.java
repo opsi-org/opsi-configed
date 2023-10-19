@@ -147,8 +147,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			} else {
 				StringBuilder buf = new StringBuilder("");
 
-				for (Object element : list) {
-					buf.append("" + element + ",");
+				for (int i = 0; i < list.size() - 1; i++) {
+					buf.append("" + list.get(i) + ",");
 				}
 
 				buf.append("" + list.get(list.size() - 1));
