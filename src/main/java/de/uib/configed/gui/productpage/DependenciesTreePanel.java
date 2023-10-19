@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -25,7 +24,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
@@ -64,26 +62,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		dependenciesTree.addMouseListener(this);
 		dependenciesTree.addMouseMotionListener(this);
-
-		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
-
-			@Override
-			public Component getTreeCellRendererComponent(final JTree tree, Object value, boolean sel, boolean expanded,
-					boolean leaf, int row, boolean hasFocus) {
-
-				JLabel label = new JLabel(value.toString()); // (JLabel)
-
-				if (sel) {
-					label.setBorder(BorderFactory.createLineBorder(Globals.DEPENDENCIES_TREE_PANEL_BORDER_COLOR, 1));
-				} else {
-					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-				}
-
-				return label;
-			}
-		};
-
-		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {
 

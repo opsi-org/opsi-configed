@@ -89,12 +89,6 @@ public final class Globals {
 	// some value which shall be interpreted as identical
 	public static final Color INVISIBLE = new Color(11, 13, 17);
 
-	public static final Color PRIMARY_FOREGROUND_COLOR = Color.BLACK;
-
-	public static final Color BACKGROUND_COLOR_6 = new Color(200, 200, 250);
-	public static final Color BACKGROUND_COLOR_7 = new Color(220, 228, 242);
-	public static final Color BACKGROUND_COLOR_8 = new Color(240, 240, 245);
-
 	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
 	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
 
@@ -117,8 +111,6 @@ public final class Globals {
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
 
 	public static final Color NEW_CLIENT_DIALOG_BORDER_COLOR = new Color(122, 138, 153);
-
-	public static final Color DEPENDENCIES_TREE_PANEL_BORDER_COLOR = PRIMARY_FOREGROUND_COLOR;
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 
@@ -212,8 +204,6 @@ public final class Globals {
 
 	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
 	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
-	public static final Dimension dialogFrameDefaultSize = new Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
-			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
