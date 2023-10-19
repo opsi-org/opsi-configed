@@ -33,7 +33,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -4664,7 +4663,7 @@ public class OpsiserviceNOMPersistenceController {
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
 			if (setting.getValue() instanceof String && "".equals(((String) setting.getValue()).trim())) {
-				corrected.put(setting.getKey(), JSONObject.NULL);
+				corrected.put(setting.getKey(), null);
 			} else {
 				corrected.put(setting.getKey(), setting.getValue());
 			}
