@@ -49,7 +49,6 @@ public final class Utils {
 
 	private static JFrame masterFrame;
 	private static Image mainIcon;
-	private static Map<String, Object> objects;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
 

@@ -3551,10 +3551,6 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void setChangedDepotSelectionActive(boolean active) {
-		depotListPresenter.setChangedDepotSelectionActive(active);
-	}
-
 	@Override
 	public void paint(Graphics g) {
 		try {

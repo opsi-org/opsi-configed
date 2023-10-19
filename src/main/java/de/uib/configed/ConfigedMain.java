@@ -2599,10 +2599,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		changeDepotSelection();
 
-		if (depotsList.getModel().getSize() > 1 && mainFrame != null) {
-			mainFrame.setChangedDepotSelectionActive(true);
-		}
-
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
@@ -3451,10 +3447,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		if (mainFrame != null) {
-			mainFrame.setChangedDepotSelectionActive(false);
-		}
-
 		depotsList.getSelectionModel().setValueIsAdjusting(false);
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 	}
@@ -3495,20 +3487,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void changeDepotSelection() {
 		Logging.info(this, "changeDepotSelection");
-		if (mainFrame != null) {
-			// by starting a thread the visual marker of changing in progress works
-			SwingUtilities.invokeLater(() -> {
-				mainFrame.setChangedDepotSelectionActive(true);
-				refreshClientListKeepingGroup();
-				mainFrame.setChangedDepotSelectionActive(false);
-			});
-		} else {
-			refreshClientListKeepingGroup();
-		}
+		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
 	public void reload() {
-		mainFrame.setChangedDepotSelectionActive(false);
 		SwingUtilities.invokeLater(this::reloadData);
 	}
 

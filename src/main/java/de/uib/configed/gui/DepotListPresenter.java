@@ -89,24 +89,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		return scrollpaneDepotslist;
 	}
 
-	/**
-	 * allows to show that a depot selection change is in progress
-	 * 
-	 * @param boolean We are in progress
-	 */
-	public void setChangedDepotSelectionActive(boolean active) {
-		/*if (!Main.THEMES) {
-			if (active) {
-				depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
-			} else {
-				depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			}
-			// colorize as hint that we have changed the depots selection
-		}*/
-
-		// TODO do what when depot is active / inactive
-	}
-
 	private void initComponents() {
 		labelDepotServer = new JLabel();
 		if (multidepot) {
