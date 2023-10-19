@@ -269,6 +269,7 @@ public class ProductDataService {
 	public List<List<Object>> getProductRowsForDepots(Iterable<String> depotIds) {
 		Map<String, TreeSet<OpsiPackage>> depot2packages = getDepot2PackagesPD();
 		List<List<Object>> productRows = new ArrayList<>();
+		Set<String> packagesAdded = new HashSet<>();
 		for (String depotId : depotIds) {
 			Set<OpsiPackage> packages = depot2packages.get(depotId);
 
@@ -286,9 +287,8 @@ public class ProductDataService {
 				productRow.add(productName);
 				p.appendValues(productRow);
 
-				List<String> depotsWithThisVersion = getProduct2VersionInfo2DepotsPD().get(p.getProductId())
-						.get(p.getVersionInfo());
-				if (depotsWithThisVersion.size() == 1) {
+				if (!packagesAdded.contains(p.getProductId() + ";" + p.getVersionInfo())) {
+					packagesAdded.add(p.getProductId() + ";" + p.getVersionInfo());
 					productRows.add(productRow);
 				}
 			}
