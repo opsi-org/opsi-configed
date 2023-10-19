@@ -44,7 +44,7 @@ import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import utils.Utils;
 
-public class FGeneralDialogLicensingInfo extends FGeneralDialog {
+public class LicensingInfoDialog extends FGeneralDialog {
 
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
@@ -60,7 +60,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
+	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 
@@ -158,15 +158,14 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				false) {
 			@Override
 			public void reload() {
-				Logging.info(this,
-						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced " + !LicensingInfoDialog.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-						!FGeneralDialogLicensingInfo.extendedView);
+						!LicensingInfoDialog.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
 				buildModel();
@@ -356,14 +355,14 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
-		FGeneralDialogLicensingInfo.extendedView = isExtendedView;
+		LicensingInfoDialog.extendedView = isExtendedView;
 		Logging.info("extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}
 
 	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
-		FGeneralDialogLicensingInfo.showOnlyAvailableModules = showOnlyAvailableModules;
+		LicensingInfoDialog.showOnlyAvailableModules = showOnlyAvailableModules;
 		LicensingInfoMap.requestRefresh();
 	}
 

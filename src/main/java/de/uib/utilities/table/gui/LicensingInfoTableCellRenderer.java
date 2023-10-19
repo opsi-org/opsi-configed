@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -114,7 +116,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
 						.toString();
 				if (clientNum != null && prevClientNum != null && !clientNum.equals(prevClientNum)) {
-					//jc.setFont(Globals.DEFAULT_FONT_BOLD);
+					jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 				}
 			}
 		} else {

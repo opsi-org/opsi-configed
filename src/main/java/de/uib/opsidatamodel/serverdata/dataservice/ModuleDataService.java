@@ -25,8 +25,8 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.HostInfoCollections;
-import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -150,7 +150,7 @@ public class ModuleDataService {
 								.getCurrentOverLimitModuleList());
 
 		LicensingInfoMap licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(),
-				configDefaultValues, !FGeneralDialogLicensingInfo.isExtendedView());
+				configDefaultValues, !LicensingInfoDialog.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 

@@ -107,7 +107,7 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -380,7 +380,7 @@ public class MainFrame extends JFrame
 
 	private PanelTabbedDocuments showLogfiles;
 
-	private FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
+	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
@@ -2131,7 +2131,7 @@ public class MainFrame extends JFrame
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!FGeneralDialogLicensingInfo.isExtendedView());
+					!LicensingInfoDialog.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -2157,7 +2157,7 @@ public class MainFrame extends JFrame
 		}
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
+		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(this);
 		jButtonOpsiLicenses.setFocusable(false);
 
@@ -2955,9 +2955,9 @@ public class MainFrame extends JFrame
 
 	private void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
-			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
+			fDialogOpsiLicensingInfo = new LicensingInfoDialog(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 680, true);
+					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 700, true);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
@@ -3624,7 +3624,7 @@ public class MainFrame extends JFrame
 		return controllerHWinfoMultiClients;
 	}
 
-	public FGeneralDialogLicensingInfo getFDialogOpsiLicensingInfo() {
+	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
 		return fDialogOpsiLicensingInfo;
 	}
 }

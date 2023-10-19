@@ -127,7 +127,6 @@ public class Main {
 		formatter.printHelp(Main.USAGE_INFO, options);
 	}
 
-	@SuppressWarnings("unused")
 	private static void setGlobalValues() {
 		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
 			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));

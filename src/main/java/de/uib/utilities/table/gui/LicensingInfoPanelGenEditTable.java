@@ -6,7 +6,14 @@
 
 package de.uib.utilities.table.gui;
 
+import java.awt.Component;
+
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import com.itextpdf.text.Font;
 
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
@@ -30,8 +37,23 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 	}
 
 	public void setMarkBoldHeaderCellRenderer() {
-		theTable.getTableHeader().setDefaultRenderer(new MarkLatestDateBoldHeaderCellRenderer(
-				theTable.getTableHeader().getDefaultRenderer(), LicensingInfoMap.getInstance()));
+		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+				JComponent jc = (JComponent) cell;
+
+				if (value != null && value.toString().equals(LicensingInfoMap.getInstance().getLatestDate())) {
+					jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+				}
+
+				return cell;
+			}
+		});
+
 		theTable.getTableHeader().setReorderingAllowed(false);
 	}
 }

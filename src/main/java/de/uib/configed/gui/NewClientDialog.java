@@ -86,7 +86,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
-				700, 650 + (ServerFacade.isOpsi43() ? 0 : 30));
+				730, 670 + (ServerFacade.isOpsi43() ? 0 : 30));
 
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
