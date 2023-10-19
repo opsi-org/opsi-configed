@@ -6,7 +6,8 @@
 
 package de.uib.opsidatamodel.productstate;
 
-import java.util.ArrayList;
+import static java.util.Map.entry;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,54 +46,18 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_POSITION = "position";
 	public static final String KEY_PRODUCT_NAME = "productName";
 
-	public static final List<String> KEYS = new ArrayList<>();
-	static {
-		KEYS.add(KEY_PRODUCT_ID);
-		KEYS.add(KEY_PRODUCT_NAME);
+	public static final List<String> KEYS = List.of(KEY_PRODUCT_ID, KEY_PRODUCT_NAME, KEY_TARGET_CONFIGURATION,
+			KEY_INSTALLATION_STATUS, KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION,
+			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION,
+			KEY_PACKAGE_VERSION, KEY_POSITION, KEY_LAST_STATE_CHANGE);
 
-		KEYS.add(KEY_TARGET_CONFIGURATION);
-		KEYS.add(KEY_INSTALLATION_STATUS);
-
-		KEYS.add(KEY_INSTALLATION_INFO);
-
-		KEYS.add(KEY_ACTION_RESULT);
-		KEYS.add(KEY_ACTION_PROGRESS);
-		KEYS.add(KEY_LAST_ACTION);
-
-		KEYS.add(KEY_PRODUCT_PRIORITY);
-		KEYS.add(KEY_ACTION_SEQUENCE);
-		KEYS.add(KEY_ACTION_REQUEST);
-
-		KEYS.add(KEY_VERSION_INFO);
-
-		KEYS.add(KEY_PRODUCT_VERSION);
-		KEYS.add(KEY_PACKAGE_VERSION);
-
-		KEYS.add(KEY_POSITION);
-
-		KEYS.add(KEY_LAST_STATE_CHANGE);
-	}
-
-	public static final Map<String, String> key2servicekey = new HashMap<>();
-	static {
-		key2servicekey.put(KEY_PRODUCT_ID, "productId");
-
-		key2servicekey.put(KEY_TARGET_CONFIGURATION, "targetConfiguration");
-		key2servicekey.put(KEY_INSTALLATION_STATUS, "installationStatus");
-
-		key2servicekey.put(KEY_ACTION_RESULT, "actionResult");
-		key2servicekey.put(KEY_ACTION_PROGRESS, "actionProgress");
-		key2servicekey.put(KEY_LAST_ACTION, "lastAction");
-
-		key2servicekey.put(KEY_POSITION, "priority");
-		key2servicekey.put(KEY_ACTION_SEQUENCE, "actionSequence");
-		key2servicekey.put(KEY_ACTION_REQUEST, "actionRequest");
-
-		key2servicekey.put(KEY_PRODUCT_VERSION, "productVersion");
-		key2servicekey.put(KEY_PACKAGE_VERSION, "packageVersion");
-
-		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
-	}
+	public static final Map<String, String> key2servicekey = Map.ofEntries(entry(KEY_PRODUCT_ID, "productId"),
+			entry(KEY_TARGET_CONFIGURATION, "targetConfiguration"),
+			entry(KEY_INSTALLATION_STATUS, "installationStatus"), entry(KEY_ACTION_RESULT, "actionResult"),
+			entry(KEY_ACTION_PROGRESS, "actionProgress"), entry(KEY_LAST_ACTION, "lastAction"),
+			entry(KEY_POSITION, "position"), entry(KEY_ACTION_SEQUENCE, "actionSequence"),
+			entry(KEY_ACTION_REQUEST, "actionRequest"), entry(KEY_PRODUCT_VERSION, "productVersion"),
+			entry(KEY_PACKAGE_VERSION, "packageVersion"), entry(KEY_LAST_STATE_CHANGE, "modificationTime"));
 
 	private final Map<String, String> retrieved;
 

@@ -6,6 +6,7 @@
 
 package de.uib.configed.type.licences;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -47,7 +48,7 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	public static final String RETAIL_SERVICE = "RetailSoftwareLicense";
 	public static final String CONCURRENT_SERVICE = "ConcurrentSoftwareLicense";
 
-	public static final String[] LICENCE_TYPES = new String[] { VOLUME, OEM, RETAIL, CONCURRENT };
+	public static final List<String> LICENCE_TYPES = List.of(VOLUME, OEM, RETAIL, CONCURRENT);
 
 	public LicenceEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);

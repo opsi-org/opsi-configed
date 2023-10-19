@@ -33,17 +33,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 		LICENCE_ATTRIBUTES.add(PRODUCT_ID_KEY);
 	}
 
-	private static final List<String> SERVICE_ATTRIBUTES;
-	static {
-		SERVICE_ATTRIBUTES = new LinkedList<>();
-		SERVICE_ATTRIBUTES.add(ID_KEY);
-		SERVICE_ATTRIBUTES.add(PRODUCTS_KEY);
-	}
-
-	public static final String[] SERVICE_ATTRIBUTES_asArray;
-	static {
-		SERVICE_ATTRIBUTES_asArray = SERVICE_ATTRIBUTES.toArray(new String[] {});
-	}
+	public static final List<String> SERVICE_ATTRIBUTES = List.of(ID_KEY, PRODUCTS_KEY);
 
 	public LicencePoolXOpsiProduct() {
 		super(LICENCE_ATTRIBUTES);

@@ -326,11 +326,11 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			}
 
 			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.DIRECTORY_PE);
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
+							+ winProduct + "/" + SmbConnect.DIRECTORY_PE);
 			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.DIRECTORY_INSTALL_FILES);
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
+							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			rootFrame.disactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,

@@ -369,7 +369,7 @@ public class LicenseDataService {
 		Logging.info(this, "retrieveLicencePoolXOpsiProduct");
 		// integrates two database calls
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_POOL_GET_OBJECTS,
-				new Object[] { LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap<>() });
+				new Object[] { LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES, new HashMap<>() });
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
 		LicencePoolXOpsiProduct licencePoolXOpsiProduct = new LicencePoolXOpsiProduct();
 		for (Map<String, Object> map : retrieved) {

@@ -13,7 +13,6 @@ import java.util.List;
 import de.uib.configed.Globals;
 
 public class ListMerger extends ArrayList<Object> {
-
 	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
@@ -53,7 +52,6 @@ public class ListMerger extends ArrayList<Object> {
 	public ListMerger merge(List<?> listToMergeIn) {
 		if (havingCommonValue && !equals(listValue, listToMergeIn)) {
 			havingCommonValue = false;
-
 			listValue = NO_COMMON_VALUE;
 		}
 

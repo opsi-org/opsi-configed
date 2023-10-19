@@ -4169,6 +4169,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}.start();
 	}
 
+	@SuppressWarnings({ "java:S1874" })
 	public String getBackendInfos() {
 		return persistenceController.getConfigDataService().getBackendInfos();
 	}

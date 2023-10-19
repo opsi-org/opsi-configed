@@ -666,8 +666,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			}
 
 			if (stateServerPath) {
-				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-						+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
+				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
+						+ winProduct + "/" + SmbConnect.unixPath(DIRECTORY_DRIVERS);
 				Logging.info(this, "set rights for " + driverDir);
 				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}

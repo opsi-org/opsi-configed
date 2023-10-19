@@ -33,8 +33,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	public static final String SW_ID = "swId";
 
-	public static final List<String> SOFTWARE_ATTRIBUTES;
-
+	private static final List<String> SOFTWARE_ATTRIBUTES;
 	static {
 		SOFTWARE_ATTRIBUTES = new LinkedList<>();
 		SOFTWARE_ATTRIBUTES.add(LicencepoolEntry.ID_SERVICE_KEY);
@@ -46,14 +45,14 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	}
 
-	public static final List<String> INTERFACED_ATTRIBUTES;
+	private static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>(SOFTWARE_ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SW_ID);
 	}
 
-	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
-			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
+	public static final List<String> SERVICE_ATTRIBUTES = List.of(LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
+			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE);
 
 	public AuditSoftwareXLicencePool() {
 		super(SOFTWARE_ATTRIBUTES);

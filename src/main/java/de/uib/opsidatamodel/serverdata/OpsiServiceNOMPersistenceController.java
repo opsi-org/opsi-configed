@@ -81,14 +81,11 @@ public class OpsiServiceNOMPersistenceController {
 		}
 	};
 
-	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
-	static {
-		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
-		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
-	}
+	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = Set.of("type", "id");
 
 	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
 
+	@SuppressWarnings({ "java:S103" })
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
@@ -124,6 +121,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	// keys for default wan configuration
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
+	@SuppressWarnings({ "java:S103" })
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
 	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
 	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";

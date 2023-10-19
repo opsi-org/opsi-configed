@@ -6,7 +6,6 @@
 
 package de.uib.configed.type;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -55,17 +54,9 @@ public class SWAuditClientEntry {
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 
-	public static final List<String> KEYS = new ArrayList<>();
-	static {
-		KEYS.add(SWAuditEntry.ID);
-		KEYS.add(SWAuditEntry.NAME);
-		KEYS.add(SWAuditEntry.VERSION);
-		KEYS.add(SWAuditEntry.SUB_VERSION);
-		KEYS.add(SWAuditEntry.ARCHITECTURE);
-		KEYS.add(SWAuditEntry.LANGUAGE);
-		KEYS.add(LICENCE_KEY);
-		KEYS.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
-	}
+	public static final List<String> KEYS = List.of(SWAuditEntry.ID, SWAuditEntry.NAME, SWAuditEntry.VERSION,
+			SWAuditEntry.SUB_VERSION, SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENCE_KEY,
+			SWAuditEntry.WINDOWS_SOFTWARE_ID);
 
 	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
@@ -82,7 +73,7 @@ public class SWAuditClientEntry {
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
+	private static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
@@ -94,12 +85,7 @@ public class SWAuditClientEntry {
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
 	}
 
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
-	static {
-		for (String value : DB_COLUMNS.values()) {
-			DB_COLUMN_NAMES.add(value);
-		}
-	}
+	public static final List<String> DB_COLUMN_NAMES = List.of(DB_COLUMNS.values().toArray(String[]::new));
 
 	private Integer swId;
 	private String swIdent;

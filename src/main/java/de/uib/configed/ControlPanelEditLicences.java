@@ -172,7 +172,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		// --- special treatment of columns
 
 		TableColumn col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(2);
-		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
+		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES.toArray(String[]::new));
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(4);
@@ -328,7 +328,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		Object[] a = new Object[6];
 		a[0] = "l_" + Utils.getSeconds();
 		a[1] = "";
-		a[2] = LicenceEntry.LICENCE_TYPES[0];
+		a[2] = LicenceEntry.LICENCE_TYPES.get(0);
 		a[3] = "1";
 		a[4] = "";
 		a[5] = Globals.ZERODATE;
