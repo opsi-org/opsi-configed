@@ -28,7 +28,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CellAlternatingColorizer;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 // Verwendung in Beisspielsweise SSHOpsiSetRightsDialog.java
 public class SSHCompletionComboButton {
@@ -358,7 +358,7 @@ public class SSHCompletionComboButton {
 
 					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
 						Logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");
-						CellAlternatingColorizer.colorize(jc, isSelected, true);
+						ColorTableCellRenderer.colorize(jc, isSelected, true);
 					}
 
 					if (getText.startsWith(basicPath) && !getText.equals(basicPath)

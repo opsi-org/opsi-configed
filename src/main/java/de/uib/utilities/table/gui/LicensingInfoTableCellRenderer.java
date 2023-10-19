@@ -19,7 +19,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 import utils.Utils;
 
 public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
@@ -38,7 +37,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		JLabel jc = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0);
+		ColorTableCellRenderer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0);
 
 		String latestChange = licensingInfoMap.getLatestDate();
 		String columnName = licensingInfoMap.getColumnNames().get(column);
