@@ -483,8 +483,7 @@ public class HardwareDataService {
 
 		List<String> client2HwRowsColumnNames = new ArrayList<>(hostColumnNames);
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = cacheManager
-				.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
+		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = getHwAuditDeviceClassesPD();
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
 
