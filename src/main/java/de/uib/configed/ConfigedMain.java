@@ -95,7 +95,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.RemoteControl;
-import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
@@ -768,7 +767,6 @@ public class ConfigedMain implements ListSelectionListener {
 		// we start with a language
 
 		InstallationStateTableModel.restartColumnDict();
-		SWAuditEntry.setLocale();
 
 		List<String> savedServers = readLocallySavedServerNames();
 
