@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.json.JSONArray;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -159,14 +157,7 @@ public class ConfigDataService {
 			List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
 
 			Logging.info(this, "configOptions retrieved ");
-
 			for (Map<String, Object> configItem : retrievedList) {
-				// map to java type
-				for (Entry<String, Object> configItemEntry : configItem.entrySet()) {
-					if (configItemEntry.getValue() instanceof JSONArray) {
-						configItem.put(configItemEntry.getKey(), ((JSONArray) configItemEntry.getValue()).toList());
-					}
-				}
 
 				String key = (String) configItem.get("ident");
 
@@ -176,7 +167,6 @@ public class ConfigDataService {
 
 				String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
 						+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
-				//
 
 				if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
 					Logging.warning(this, "user entry " + key
