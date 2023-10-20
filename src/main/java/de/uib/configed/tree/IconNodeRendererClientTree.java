@@ -7,10 +7,10 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.awt.font.TextAttribute;
-import java.util.Collections;
 
 import javax.swing.JTree;
+
+import com.itextpdf.text.Font;
 
 import de.uib.configed.ConfigedMain;
 
@@ -64,10 +64,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			if (tree.getLeadSelectionPath() != null && node.equals(tree.getLeadSelectionPath().getLastPathComponent())
 					&& tree.hasFocus()) {
-				setFont(getFont()
-						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+				setFont(getFont().deriveFont(Font.UNDERLINE));
 			} else {
-				setFont(getFont().deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, -1)));
+				setFont(getFont().deriveFont(Font.NORMAL));
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());

@@ -28,7 +28,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -83,6 +82,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.itextpdf.text.Font;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -1731,8 +1731,7 @@ public class MainFrame extends JFrame
 
 		labelHostID = new JLabel("");
 
-		labelHostID.setFont(labelHostID.getFont()
-				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
+		labelHostID.setFont(labelHostID.getFont().deriveFont(Font.BOLD));
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);

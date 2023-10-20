@@ -9,8 +9,6 @@ package de.uib.configed.gui.productpage;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.font.TextAttribute;
-import java.util.Collections;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -92,8 +90,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton = new JButton();
 
 		// do this so that you can mark and copy content of the label
-		jLabelProductID.setFont(jLabelProductID.getFont()
-				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
+		jLabelProductID.setFont(jLabelProductID.getFont().deriveFont(Font.BOLD));
 
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
