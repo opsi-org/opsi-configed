@@ -23,8 +23,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -912,9 +910,8 @@ public class ProductDataService {
 					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
 					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
-			properties.put((String) map.get("propertyId"), new JSONArray((List<?>) map.get("values")).toList());
-			properties.getRetrieved().put((String) map.get("propertyId"),
-					new JSONArray((List<?>) map.get("values")).toList());
+			properties.put((String) map.get("propertyId"), map.get("values"));
+			properties.getRetrieved().put((String) map.get("propertyId"), map.get("values"));
 
 			Logging.debug(this,
 					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
