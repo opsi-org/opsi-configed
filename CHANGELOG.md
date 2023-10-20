@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.22.20] - 2023-10-20
+### Fixed
+- Displayed column editing in "Hardware Information" tab
+- Showing if column is displayed in "opsi config editor hardware classes / database columns" dialog
+
+### Changed
+- Remove HARDWARE prefix from column names in "Hardware Information" tab
+
 ## [4.2.22.19] - 2023-10-19
 ### Fixed
 - Serialization issue, when trying to save depot configuration
