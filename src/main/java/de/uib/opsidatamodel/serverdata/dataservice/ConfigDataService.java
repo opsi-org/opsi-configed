@@ -222,8 +222,8 @@ public class ConfigDataService {
 				if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 					remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 					savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-					hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 				}
+				hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 			}
 
 			cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
