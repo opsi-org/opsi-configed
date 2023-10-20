@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -82,7 +83,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 
 import com.formdev.flatlaf.FlatLaf;
-import com.itextpdf.text.Font;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
