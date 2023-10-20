@@ -61,7 +61,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		ImageIcon icon = Utils.createImageIcon("images/configed_icon.png", "");
+		ImageIcon icon = Utils.createImageIcon(Globals.ICON_OPSI, "");
 		JLabel iconLabel = new JLabel(icon);
 
 		layout.setHorizontalGroup(
