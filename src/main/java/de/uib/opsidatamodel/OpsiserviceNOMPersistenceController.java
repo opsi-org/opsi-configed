@@ -4517,8 +4517,8 @@ public class OpsiserviceNOMPersistenceController {
 					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 						remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 						savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-						hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 					}
+					hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 				}
 
 				Logging.debug(this,

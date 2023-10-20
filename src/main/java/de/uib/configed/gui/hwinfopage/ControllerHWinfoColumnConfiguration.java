@@ -211,14 +211,9 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-
 				Logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
-
-				buildUpdateItem(
-
-						new ColumnIdent((String) rowmap.get(COL_OPSI_COLUMN_NAME)),
+				buildUpdateItem(new ColumnIdent((String) rowmap.get(COL_OPSI_COLUMN_NAME)),
 						(Boolean) rowmap.get(COL_USE_IN_QUERY));
-
 				return "";
 			}
 
@@ -226,7 +221,6 @@ public class ControllerHWinfoColumnConfiguration {
 			public boolean sendDelete(Map<String, Object> rowmap) {
 				Logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
 				// method is not used since we don*t delete rows
-
 				return true;
 			}
 		}, updateCollection));
