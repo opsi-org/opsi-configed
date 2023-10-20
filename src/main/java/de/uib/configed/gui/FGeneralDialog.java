@@ -332,7 +332,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 
 		getContentPane().add(allpane);
-
 	}
 
 	public void setupLayout() {
