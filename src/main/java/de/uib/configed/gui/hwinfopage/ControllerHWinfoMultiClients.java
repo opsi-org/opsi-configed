@@ -91,9 +91,7 @@ public class ControllerHWinfoMultiClients {
 			protected Object modifyHeaderValue(Object s) {
 				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
 					return ((String) s).substring(DELETE_PREFIX.length());
-
 				}
-
 				return s;
 			}
 		};
