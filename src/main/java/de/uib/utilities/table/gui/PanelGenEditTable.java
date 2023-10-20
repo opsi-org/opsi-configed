@@ -246,6 +246,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return result;
 	}
 
+	protected Object modifyHeaderValue(Object value) {
+		return value;
+	}
+
 	/**
 	 * sets frame to return to e.g. from option dialogs
 	 *
@@ -364,7 +368,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 					@Override
 					protected Object modifyValue(Object value) {
-						return value;
+						return modifyHeaderValue(value);
 					}
 				});
 
