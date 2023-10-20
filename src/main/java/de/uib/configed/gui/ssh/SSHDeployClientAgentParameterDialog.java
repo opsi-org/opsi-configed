@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -185,7 +186,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		winAuthPanel.setBorder(new LineBorder(Globals.BLUE_GREY, 2, true));
+		winAuthPanel.setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
 		inputPanel.setPreferredSize(new Dimension(376, 220));
 
 		jCheckBoxApplySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
@@ -505,6 +506,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 																Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 														.addGap(Globals.GAP_SIZE)))
 								.addGap(Globals.GAP_SIZE));
+
 		winAuthPanelLayout
 				.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -531,10 +533,10 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelUserData,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jButtonCopySelectedClients,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(winAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 
@@ -559,9 +561,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 										.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
 										.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))
-
-						)));
+												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))))
+				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout
 				.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
