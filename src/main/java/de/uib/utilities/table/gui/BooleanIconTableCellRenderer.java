@@ -56,7 +56,7 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		label.setText("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 
-		if (Boolean.TRUE.equals(value)) {
+		if (objAsBoolean(value).booleanValue()) {
 			label.setIcon(trueIcon);
 		} else {
 			label.setIcon(falseIcon);
@@ -65,4 +65,17 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		return comp;
 	}
 
+	private Boolean objAsBoolean(Object obj) {
+		Boolean result = Boolean.FALSE;
+		if (obj != null) {
+			if (obj instanceof Boolean) {
+				result = (Boolean) obj;
+			} else if (obj instanceof String) {
+				result = Boolean.valueOf((String) obj);
+			} else {
+				Logging.warning(this, "Unexpected obj type " + obj);
+			}
+		}
+		return result;
+	}
 }
