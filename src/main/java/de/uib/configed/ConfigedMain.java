@@ -4803,7 +4803,7 @@ public class ConfigedMain implements ListSelectionListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.disactivateLoadingPane();;
+			mainFrame.disactivateLoadingPane();
 		}
 	}
 
