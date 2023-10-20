@@ -38,6 +38,7 @@ import utils.Utils;
 public class ControllerHWinfoMultiClients {
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
+	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	private PanelGenEditTable panel;
 	private GenTableModel model;
@@ -84,6 +85,16 @@ public class ControllerHWinfoMultiClients {
 			public void reload() {
 				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 				super.reload();
+			}
+
+			@Override
+			protected Object modifyHeaderValue(Object s) {
+				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
+					return ((String) s).substring(DELETE_PREFIX.length());
+
+				}
+
+				return s;
 			}
 		};
 

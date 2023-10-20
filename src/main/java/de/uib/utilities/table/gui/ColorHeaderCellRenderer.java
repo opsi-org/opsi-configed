@@ -13,6 +13,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.utilities.logging.Logging;
+
 public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
 
@@ -20,10 +22,17 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 		this.rend = rend;
 	}
 
+	// to override in subclasses for manipulation the value
+	protected Object modifyValue(Object value) {
+		return value;
+	}
+
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		Logging.devel(this, "value " + value + " modified " + modifyValue(value));
+		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
+				column);
 
 		if (cell instanceof JComponent) {
 			JComponent jc = (JComponent) cell;
