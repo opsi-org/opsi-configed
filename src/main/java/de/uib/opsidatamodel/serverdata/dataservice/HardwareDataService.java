@@ -525,14 +525,16 @@ public class HardwareDataService {
 	private String cutClassName(String columnName) {
 		String result = null;
 
-		if (!columnName.startsWith("HOST") && columnName.startsWith(HW_INFO_CONFIG)) {
+		if (columnName.startsWith(HW_INFO_CONFIG)) {
 			result = columnName.substring(HW_INFO_CONFIG.length());
 			result = result.substring(0, result.indexOf('.'));
 		} else if (columnName.startsWith(HW_INFO_DEVICE)) {
 			result = columnName.substring(HW_INFO_DEVICE.length());
 			result = result.substring(0, result.indexOf('.'));
 		} else {
-			Logging.warning(this, "cutClassName " + "unexpected columnName " + columnName);
+			if (!columnName.startsWith("HOST")) {
+				Logging.warning(this, "cutClassName unexpected columnName " + columnName);
+			}
 		}
 
 		return result;
