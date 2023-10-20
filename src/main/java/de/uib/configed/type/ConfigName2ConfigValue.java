@@ -36,13 +36,10 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		}
 
 		if (configOptions != null) {
+
+			// Fill up with default values
 			for (Entry<String, ConfigOption> option : configOptions.entrySet()) {
-				// fill up by default values
-				if (retrieved.get(option.getKey()) == null) {
-
-					retrieved.put(option.getKey(), option.getValue().get("defaultValues"));
-
-				}
+				retrieved.putIfAbsent(option.getKey(), option.getValue().get("defaultValues"));
 			}
 		}
 
