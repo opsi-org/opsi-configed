@@ -44,31 +44,15 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		}
 
 		for (Entry<String, Object> entry : retrieved.entrySet()) {
-			List<?> list = null;
-			// the retrieved object always are lists, we could correct this by observing the
-			// config options
 
 			if (!(entry.getValue() instanceof List)) {
 				Logging.warning(this, "list expected , for key " + entry.getKey() + " found " + entry.getValue());
 				Logging.error(this, "list expected , for key " + entry.getKey());
 
 				continue;
-			} else {
-				list = (List<?>) entry.getValue();
 			}
 
-			if (configOptions != null && configOptions.get(entry.getKey()) != null) {
-				ConfigOption configOption = configOptions.get(entry.getKey());
-
-				if ("java.lang.Boolean".equals(configOption.get("classname"))) {
-					put(entry.getKey(), list.get(0));
-				} else {
-					put(entry.getKey(), list);
-				}
-			} else {
-				Logging.debug(this, "no config (option) found for key " + entry.getKey());
-				put(entry.getKey(), list);
-			}
+			put(entry.getKey(), entry.getValue());
 		}
 	}
 }

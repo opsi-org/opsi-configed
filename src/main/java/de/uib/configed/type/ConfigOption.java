@@ -108,8 +108,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			}
 		}
 
-		put("classname", "List");
-
 		if (retrieved == null) {
 			put("editable", true);
 		} else if (retrieved.get("editable") == null) {
@@ -174,7 +172,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		configOption.put("editable", get("editable"));
 		configOption.put("selectionMode", get("selectionMode"));
 		configOption.put("nullable", get("nullable"));
-		configOption.put("classname", get("classname"));
 		return configOption;
 	}
 }
