@@ -119,15 +119,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 				Map<String, String> logfiles = new HashMap<>();
 				if (loadMissingDocs) {
-					for (int logNo = 0; logNo < idents.length; logNo++) {
+					for (String ident : idents) {
 						Map<String, String> logfile = PersistenceControllerFactory.getPersistenceController()
-								.getLogDataService().getLogfile(configedMain.getSelectedClients()[0], idents[logNo]);
-						if (logfile.get(idents[logNo]).split("\n").length > 1) {
-							logfiles.put(idents[logNo], logfile.get(idents[logNo]));
+								.getLogDataService().getLogfile(configedMain.getSelectedClients()[0], ident);
+						if (logfile.get(ident).split("\n").length > 1) {
+							logfiles.put(ident, logfile.get(ident));
 						}
 
-						Logging.info(this,
-								"saveAllAsZip " + idents[logNo] + " " + logfile.get(idents[logNo]).split("\n").length);
+						Logging.info(this, "saveAllAsZip " + ident + " " + logfile.get(ident).split("\n").length);
 					}
 				}
 				saveAllToZipFile(pathname, logfiles);
@@ -239,12 +238,12 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void saveAllToZipFile(String pn, Map<String, String> logfiles) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			for (int logNo = 0; logNo < idents.length; logNo++) {
-				if (logfiles.get(idents[logNo]) != null && logfiles.get(idents[logNo]).split("\n").length > 1) {
+			for (String ident : idents) {
+				if (logfiles.get(ident) != null && logfiles.get(ident).split("\n").length > 1) {
 					ZipEntry entry = new ZipEntry(
-							configedMain.getSelectedClients()[0].replace(".", "_") + "___" + idents[logNo] + ".log");
+							configedMain.getSelectedClients()[0].replace(".", "_") + "___" + ident + ".log");
 					out.putNextEntry(entry);
-					writeToOutputStream(logfiles.get(idents[logNo]).split("\n"), out);
+					writeToOutputStream(logfiles.get(ident).split("\n"), out);
 				}
 				out.closeEntry();
 			}
