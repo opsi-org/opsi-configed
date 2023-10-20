@@ -301,9 +301,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
-		for (int j = 0; j < hwConfig.size(); j++) {
+		for (Map<String, List<Map<String, Object>>> whc : hwConfig) {
 
-			Map<String, List<Map<String, Object>>> whc = hwConfig.get(j);
 			if (whc != null) {
 				Map<String, Object> whcClass = whc.get("Class").get(0);
 				if (whcClass.get("Opsi").equals(hwClass)) {
@@ -311,7 +310,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					break;
 				}
 			} else {
-				Logging.error(this, "hwConfig.get(" + j + ") is null");
+				Logging.error(this, "hwConfig element is null");
 			}
 		}
 
@@ -335,8 +334,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<String[]> data = new ArrayList<>();
 		if (values != null) {
-			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> value = values.get(j);
+			for (Map<String, Object> value : values) {
 				String opsi = (String) value.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
 
@@ -571,9 +569,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		Arrays.sort(names);
 
-		for (int j = 0; j < names.length; j++) {
+		for (String name : names) {
 			for (int k = 0; k < devices.size(); k++) {
-				if (names[j].equals(devices.get(k).get("displayName"))) {
+				if (name.equals(devices.get(k).get("displayName"))) {
 					IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
 					iconNode.setClosedIcon(classIcon);
 					iconNode.setLeafIcon(classIcon);
@@ -593,8 +591,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
 			List<Map<String, Object>> values = hardwareMap.get("Values");
-			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> valuesMap = values.get(j);
+			for (Map<String, Object> valuesMap : values) {
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
 				hwOpsiToUI.putIfAbsent(type, name);

@@ -364,15 +364,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 
 			// check if products for clients exist
-			for (int j = 0; j < productsV.size(); j++) {
+			for (String productId : productsV) {
 
-				String productId = productsV.get(j);
 				Map<String, String> stateAndAction = productStates.get(productId);
 
 				if (stateAndAction == null) {
 
 					// build visual states
-					Iterator<String> iter = ProductState.KEYS.iterator();
 
 					String priority = "";
 
@@ -380,8 +378,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						priority = "" + globalProductInfos.get(productId).get("priority");
 					}
 
-					while (iter.hasNext()) {
-						String key = iter.next();
+					for (String key : ProductState.KEYS) {
 
 						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
 							mixToVisualState(combinedVisualValues.get(key), productId, priority);

@@ -391,9 +391,8 @@ public class GenTableModel extends AbstractTableModel {
 			return;
 		}
 
-		for (int j = 0; j < editable.length; j++) {
-
-			colEditable[editable[j]] = true;
+		for (int editableIndex : editable) {
+			colEditable[editableIndex] = true;
 		}
 	}
 
