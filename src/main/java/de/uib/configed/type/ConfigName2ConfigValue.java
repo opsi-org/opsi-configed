@@ -39,20 +39,15 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 			// Fill up with default values
 			for (Entry<String, ConfigOption> option : configOptions.entrySet()) {
-				retrieved.putIfAbsent(option.getKey(), option.getValue().get("defaultValues"));
+				Object defaultValues = option.getValue().get("defaultValues");
+				retrieved.putIfAbsent(option.getKey(), defaultValues);
+
+				if (defaultValues instanceof List) {
+					put(option.getKey(), defaultValues);
+				} else {
+					Logging.error(this, "list expected , for key " + option.getKey() + " found " + defaultValues);
+				}
 			}
-		}
-
-		for (Entry<String, Object> entry : retrieved.entrySet()) {
-
-			if (!(entry.getValue() instanceof List)) {
-				Logging.warning(this, "list expected , for key " + entry.getKey() + " found " + entry.getValue());
-				Logging.error(this, "list expected , for key " + entry.getKey());
-
-				continue;
-			}
-
-			put(entry.getKey(), entry.getValue());
 		}
 	}
 }
