@@ -305,8 +305,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 					finalAction = (CommandDeployClientAgent.FinalActionType) val;
 				}), 2, 2);
 
-		panelFinalAction.setOpaque(false);
-
 		jLabelOperatingSystem
 				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
 		jComboBoxOperatingSystem = new JComboBox<>(

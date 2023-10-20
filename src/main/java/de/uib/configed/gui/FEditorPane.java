@@ -22,7 +22,6 @@ public class FEditorPane extends FGeneralDialog {
 	}
 
 	private void init() {
-		editPane.setOpaque(true);
 
 		editPane.setText("          ");
 		editPane.setEditable(false);

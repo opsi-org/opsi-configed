@@ -24,7 +24,6 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public CheckBoxTableCellRenderer() {
 		super();
 
-		super.setOpaque(true);
 		super.setBorderPainted(true);
 		super.setHorizontalAlignment(SwingConstants.CENTER);
 		super.setVerticalAlignment(SwingConstants.CENTER);

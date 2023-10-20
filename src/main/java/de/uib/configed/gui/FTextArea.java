@@ -77,7 +77,6 @@ public class FTextArea extends FGeneralDialog {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
-		jTextArea1.setOpaque(true);
 
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);

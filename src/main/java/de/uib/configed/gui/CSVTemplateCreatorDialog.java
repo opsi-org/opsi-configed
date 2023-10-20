@@ -77,8 +77,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setOpaque(true);
-
 		southPanel = createSouthPanel();
 
 		GroupLayout allLayout = new GroupLayout(allpane);
@@ -103,7 +101,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
@@ -123,8 +120,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		southPanel.setOpaque(true);
 
 		return southPanel;
 	}

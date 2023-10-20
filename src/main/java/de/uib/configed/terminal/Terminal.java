@@ -205,7 +205,6 @@ public final class Terminal {
 
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(false);
 
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
@@ -227,7 +226,6 @@ public final class Terminal {
 
 	private JPanel createSettingsPanel() {
 		JPanel settingsPanel = new JPanel();
-		settingsPanel.setOpaque(false);
 
 		GroupLayout settingsLayout = new GroupLayout(settingsPanel);
 		settingsPanel.setLayout(settingsLayout);
@@ -314,7 +312,6 @@ public final class Terminal {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 		southPanel.setVisible(false);
 
 		JLabel uploadingFileLabel = new JLabel(Configed.getResourceValue("Terminal.uploadingFile"));

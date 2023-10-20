@@ -31,9 +31,10 @@ public class GlassPane extends JPanel implements KeyListener {
 	private JLabel jLabelInfo;
 
 	public GlassPane() {
-		super.setOpaque(false);
 		super.setLayout(new GridBagLayout());
 		super.setBackground(initBackground());
+		super.setOpaque(false);
+
 		initLayout();
 		addEventCatchers();
 	}
@@ -61,6 +62,7 @@ public class GlassPane extends JPanel implements KeyListener {
 
 	private void initLayout() {
 		wheel = new JXBusyLabel();
+
 		jLabelInfo = new JLabel();
 
 		GroupLayout layout = new GroupLayout(this);

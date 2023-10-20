@@ -440,8 +440,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		labelStrip.setOpaque(true);
-
 		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");

@@ -58,8 +58,6 @@ public final class Utils {
 	public static void formatButtonSmallText(AbstractButton button) {
 		button.setPreferredSize(new Dimension(45, 20));
 
-		button.setOpaque(false);
-
 		button.setBorderPainted(false);
 	}
 

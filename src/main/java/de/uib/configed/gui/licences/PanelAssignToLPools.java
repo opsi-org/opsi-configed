@@ -177,7 +177,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelWorkNamebased = new JPanel();
 		panelWorkNamebased.setBorder(new LineBorder(Globals.BLUE_GREY, 3, true));
-		panelWorkNamebased.setOpaque(true);
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
 		panelWorkNamebased.setLayout(layoutNamebased);
 

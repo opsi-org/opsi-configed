@@ -282,8 +282,6 @@ public class PanelSWInfo extends JPanel {
 
 	private void buildPanel() {
 
-		labelSuperTitle.setOpaque(true);
-
 		JTable jTable = new JTable(voidTableModel, null);
 
 		jTable.setAutoCreateRowSorter(true);

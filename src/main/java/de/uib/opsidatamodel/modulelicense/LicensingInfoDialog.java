@@ -89,10 +89,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setOpaque(true);
-
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
@@ -113,8 +110,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -272,8 +267,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 
-		extraInfoPanel.setOpaque(true);
-
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);
 		panel.setLayout(gLayout);
@@ -342,8 +335,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-
-		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(extraInfoPanel).addComponent(panel));

@@ -195,7 +195,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.setText(defaultText);
 		}
 
-		jTextPane.setOpaque(true);
 		jTextPane.setEditable(true);
 		jTextPane.addKeyListener(this);
 

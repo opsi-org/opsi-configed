@@ -106,7 +106,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.GREYED, 1));
-		dependenciesTreePathLabel.setOpaque(true);
 
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);

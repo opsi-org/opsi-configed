@@ -295,11 +295,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
 		northPanel = new JPanel();
-		northPanel.setOpaque(false);
-
 		southPanel = new JPanel();
-
-		scrollpane.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
@@ -348,7 +344,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		allLayout();
 
 		jPanelButtonGrid.setLayout(gridLayout1);
-		jPanelButtonGrid.setOpaque(false);
 
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
@@ -570,7 +565,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public void glassTransparency(boolean vanishing, int initialWaitMs, int delayMs, float step) {
 		glass.setVisible(true);
-		glass.setOpaque(false);
 		glass.setStep(step);
 		glass.setDirection(vanishing);
 		glass.setDelay(initialWaitMs, delayMs);

@@ -96,7 +96,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		} else {
 			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
 		}
-		labelDepotServer.setOpaque(false);
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties

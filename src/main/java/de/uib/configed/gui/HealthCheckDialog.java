@@ -112,7 +112,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(false);
 
 		JPopupMenu popupMenu = createPopupMenu();
 		northPanel.setComponentPopupMenu(popupMenu);
@@ -147,7 +146,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 
-		scrollPane.setOpaque(false);
 		scrollPane.setInheritsPopupMenu(true);
 
 		northLayout.setHorizontalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
@@ -328,7 +326,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel();
-		centerPanel.setOpaque(false);
 
 		GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
 		centerPanel.setLayout(centerPanelLayout);
@@ -381,7 +378,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);

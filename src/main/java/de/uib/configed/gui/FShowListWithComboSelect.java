@@ -22,7 +22,6 @@ public class FShowListWithComboSelect extends FShowList {
 		super(owner, title, modal, buttonList);
 
 		labelChoice = new JLabel(choiceTitle + ": ");
-		labelChoice.setOpaque(true);
 
 		northPanel.add(labelChoice);
 		combo = new JComboBox<>(choices);

@@ -277,7 +277,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		spinnerDelay = new JSpinner();
 
 		JPanel panelTimeSelection = new JPanel();
-		panelTimeSelection.setOpaque(false);
 
 		GroupLayout lPanelTimeSelection = new GroupLayout(panelTimeSelection);
 
@@ -303,7 +302,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 				Integer.valueOf(spinnerMinute.getValue().toString())));
 
 		JPanel panelSpinnerDelay = new JPanel();
-		panelSpinnerDelay.setOpaque(false);
 		GroupLayout lPanelSpinnerDelay = new GroupLayout(panelSpinnerDelay);
 		panelSpinnerDelay.setLayout(lPanelSpinnerDelay);
 
