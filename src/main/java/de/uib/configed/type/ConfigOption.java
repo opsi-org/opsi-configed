@@ -51,8 +51,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public ConfigOption(Map<String, Object> object) {
 		super(object);
 		build();
-
-		Logging.devel(toString());
 	}
 
 	private ConfigOption() {
