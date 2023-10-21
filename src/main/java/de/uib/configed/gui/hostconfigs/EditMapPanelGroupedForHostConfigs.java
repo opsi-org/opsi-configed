@@ -442,10 +442,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			classify(visualdata, keyclasses);
 
 			for (String key : keyclasses) {
-
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
-
-				partialPanels.get(key).mapTableModel.setObservers(this.mapTableModel.getObservers());
+				partialPanels.get(key).getMapTableModel().setObservers(this.mapTableModel.getObservers());
 			}
 		}
 	}

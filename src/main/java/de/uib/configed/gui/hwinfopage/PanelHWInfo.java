@@ -597,6 +597,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				hwOpsiToUI.putIfAbsent(type, name);
 			}
 		}
+
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
 			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
 			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
