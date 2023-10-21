@@ -23,11 +23,9 @@ public class RetrievedMap extends HashMap<String, Object> {
 	}
 
 	protected void build() {
-		if (retrieved == null) {
-			return;
+		if (retrieved != null) {
+			putAll(retrieved);
 		}
-
-		putAll(retrieved);
 	}
 
 	public Map<String, Object> getRetrieved() {

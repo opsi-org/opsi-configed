@@ -818,7 +818,7 @@ public class ProductDataService {
 					}
 				}
 
-				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product, null);
+				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product);
 				productproperties1Client.put(product, state);
 			}
 		}
