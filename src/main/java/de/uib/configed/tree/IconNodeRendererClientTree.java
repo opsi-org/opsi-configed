@@ -7,9 +7,6 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.font.TextAttribute;
-import java.util.Collections;
 
 import javax.swing.JTree;
 
@@ -51,10 +48,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			} else {
 				// group
 
-				String visualText = modify(stringValue);
-
-				setText(visualText);
-
 				// default,will be changed, if clients are childs
 				setIcon(node.getClosedIcon());
 
@@ -63,35 +56,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 			}
 
-			if (tree.getLeadSelectionPath() != null && node.equals(tree.getLeadSelectionPath().getLastPathComponent())
-					&& tree.hasFocus()) {
-				setFont(getFont()
-						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
-			} else {
-				setFont(getFont().deriveFont(Font.PLAIN));
-			}
-
 			setComponentOrientation(tree.getComponentOrientation());
 		}
 
 		return this;
-	}
-
-	private static String modify(final String in) {
-		if (in == null) {
-			return null;
-		}
-
-		int l = in.length();
-		int i = l - 1;
-		while (i > 0 && in.charAt(i) == '_') {
-			i--;
-		}
-
-		if (i == l - 1) {
-			return in;
-		}
-
-		return in.substring(0, i + 1);
 	}
 }
