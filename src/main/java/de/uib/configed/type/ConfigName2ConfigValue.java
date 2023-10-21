@@ -7,10 +7,7 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import de.uib.utilities.logging.Logging;
 
 public class ConfigName2ConfigValue extends RetrievedMap {
 	private Map<String, ConfigOption> configOptions;
@@ -42,11 +39,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 				Object defaultValues = option.getValue().get("defaultValues");
 				retrieved.putIfAbsent(option.getKey(), defaultValues);
 
-				if (defaultValues instanceof List) {
-					put(option.getKey(), defaultValues);
-				} else {
-					Logging.error(this, "list expected , for key " + option.getKey() + " found " + defaultValues);
-				}
+				put(option.getKey(), defaultValues);
 			}
 		}
 	}

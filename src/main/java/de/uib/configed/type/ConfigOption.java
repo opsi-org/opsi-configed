@@ -59,7 +59,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	@Override
 	protected void build() {
 		// overwrite values
-
 		if (retrieved == null || retrieved.get("possibleValues") == null) {
 			put("possibleValues", new ArrayList<>());
 		} else {
