@@ -957,7 +957,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (visible == null) {
 			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
 					JOptionPane.OK_OPTION);
-			// == null can occur if an old configed runs somewhere
 		} else {
 			persistenceController.getHostDataService().getHostDisplayFields()
 					.put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
@@ -2631,68 +2630,66 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		boolean result = true;
-
 		if (getSelectedClients().length == 0) {
 			if (depotRepresentative == null) {
 				depotRepresentative = myServer;
 			}
+
+			return true;
+		}
+
+		depotsOfSelectedClients = getDepotsOfSelectedClients();
+
+		Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
+
+		Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
+
+		if (!checkSynchronous(depotsOfSelectedClients)) {
+			return false;
+		}
+
+		String oldRepresentative = depotRepresentative;
+
+		Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
+				+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
+
+		depotRepresentative = null;
+
+		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
+
+		Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
+
+		if (!depotsIterator.hasNext()) {
+			depotRepresentative = myServer;
+			Logging.debug(this,
+					"setDepotRepresentative  without next change depotRepresentative " + " up to now "
+							+ oldRepresentative + " new " + depotRepresentative + " equal "
+							+ oldRepresentative.equals(depotRepresentative));
 		} else {
-			depotsOfSelectedClients = getDepotsOfSelectedClients();
+			depotRepresentative = depotsIterator.next();
 
-			Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
-
-			String oldRepresentative = depotRepresentative;
-
-			Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
-
-			if (!checkSynchronous(depotsOfSelectedClients)) {
-				result = false;
-			} else {
-				Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
-						+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
-
-				depotRepresentative = null;
-
-				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
-
-				Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
-
-				if (!depotsIterator.hasNext()) {
+			while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
+				String depot = depotsIterator.next();
+				if (depot.equals(myServer)) {
 					depotRepresentative = myServer;
-					Logging.debug(this,
-							"setDepotRepresentative  without next change depotRepresentative " + " up to now "
-									+ oldRepresentative + " new " + depotRepresentative + " equal "
-									+ oldRepresentative.equals(depotRepresentative));
-				} else {
-					depotRepresentative = depotsIterator.next();
-
-					while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
-						String depot = depotsIterator.next();
-						if (depot.equals(myServer)) {
-							depotRepresentative = myServer;
-						}
-					}
-				}
-
-				Logging.debug(this, "depotRepresentative: " + depotRepresentative);
-
-				Logging.info(this,
-						"setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
-								+ " new " + depotRepresentative + " equal "
-								+ oldRepresentative.equals(depotRepresentative));
-
-				if (!oldRepresentative.equals(depotRepresentative)) {
-					Logging.info(this, " new depotRepresentative " + depotRepresentative);
-					persistenceController.getDepotDataService().setDepot(depotRepresentative);
-
-					// everything
-					persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 				}
 			}
 		}
 
-		return result;
+		Logging.debug(this, "depotRepresentative: " + depotRepresentative);
+
+		Logging.info(this, "setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
+				+ " new " + depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
+
+		if (!oldRepresentative.equals(depotRepresentative)) {
+			Logging.info(this, " new depotRepresentative " + depotRepresentative);
+			persistenceController.getDepotDataService().setDepot(depotRepresentative);
+
+			// everything
+			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
+		}
+
+		return true;
 	}
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
