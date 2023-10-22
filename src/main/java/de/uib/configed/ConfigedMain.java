@@ -2633,7 +2633,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		boolean result = true;
 
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			if (depotRepresentative == null) {
 				depotRepresentative = myServer;
 			}
@@ -3284,8 +3284,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, " visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
 
-		boolean problem = false;
-
 		dependenciesModel.setActualProduct("");
 
 		// if we are leaving some tab we check first if we possibly have to save
@@ -3299,25 +3297,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		checkSaveAll(true);
 
-		// we will only leave view 0 if a PC is selected
-
-		// check if change of view index to the value of visualViewIndex can be allowed
-		if (isVisualIndexAllowed(visualViewIndex)) {
-
-			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
-
-			// should not occur
-			if (getSelectedClients() == null) {
-				Logging.debug(this, " getSelectedClients()  null");
-
-				problem = true;
-				JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
-						Configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-				viewIndex = VIEW_CLIENTS;
-			}
-		}
-
-		if (!problem && everythingReady) {
+		if (everythingReady) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3366,20 +3346,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 			// dont keep product editing across views
 		}
-	}
-
-	private static boolean isVisualIndexAllowed(int visualViewIndex) {
-		// We cannot change to clients
-		if (visualViewIndex == VIEW_CLIENTS) {
-			return false;
-		}
-
-		// We cannot change to network configuration if the server is edited
-		if (visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER) {
-			return false;
-		}
-
-		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
 	}
 
 	public void initServer() {
@@ -3534,28 +3500,26 @@ public class ConfigedMain implements ListSelectionListener {
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
 			for (String client : savedSelectedValues) {
-				if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client) != null) {
-					String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-							.get(client);
 
-					if (selectedDepotsV.contains(clientDepot)) {
-						clientsLeft.add(client);
-					}
+				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+						.get(client);
+
+				if (depotForClient != null && selectedDepotsV.contains(depotForClient)) {
+					clientsLeft.add(client);
 				}
 			}
+
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			if (selectionPanel != null) {
-				// reactivate selection listener
-				Logging.debug(this, " reset the values, particularly in list ");
-				selectionPanel.removeListSelectionListener(this);
-				selectionPanel.addListSelectionListener(this);
-				setSelectedClientsCollectionOnPanel(clientsLeft);
+			// reactivate selection listener
+			Logging.debug(this, " reset the values, particularly in list ");
+			selectionPanel.removeListSelectionListener(this);
+			selectionPanel.addListSelectionListener(this);
+			setSelectedClientsCollectionOnPanel(clientsLeft);
 
-				// no list select item is provided
-				if (clientsLeft.isEmpty()) {
-					selectionPanel.fireListSelectionEmpty(this);
-				}
+			// no list select item is provided
+			if (clientsLeft.isEmpty()) {
+				selectionPanel.fireListSelectionEmpty(this);
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
@@ -4159,7 +4123,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4198,7 +4162,7 @@ public class ConfigedMain implements ListSelectionListener {
 	public boolean freeAllPossibleLicencesForSelectedClients() {
 		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().length);
 
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return true;
 		}
 
@@ -4237,7 +4201,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callChangeClientIDDialog() {
-		if (getSelectedClients() == null || getSelectedClients().length != 1) {
+		if (getSelectedClients().length != 1) {
 			return;
 		}
 
@@ -4288,7 +4252,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callChangeDepotDialog() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4490,7 +4454,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void deletePackageCachesOfSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4503,7 +4467,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void fireOpsiclientdEventOnSelectedClients(final String event) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4517,7 +4481,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void processActionRequests() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4533,7 +4497,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void showPopupOnSelectedClients(final String message, final Float seconds) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4676,7 +4640,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void shutdownSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4692,7 +4656,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void rebootSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4707,7 +4671,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void deleteSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4726,7 +4690,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void copySelectedClient() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
