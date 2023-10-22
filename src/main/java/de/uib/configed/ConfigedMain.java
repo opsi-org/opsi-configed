@@ -3428,10 +3428,8 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
-				if (cmtp != null) {
-					for (PanelGenEditTable p : cmtp.getTablePanes()) {
-						p.reload();
-					}
+				for (PanelGenEditTable p : cmtp.getTablePanes()) {
+					p.reload();
 				}
 			}
 		}
@@ -4969,12 +4967,10 @@ public class ConfigedMain implements ListSelectionListener {
 		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
 			AbstractControlMultiTablePanel cmtp = iter.next();
-			if (cmtp != null) {
-				Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
-				while (!change && iterP.hasNext()) {
-					PanelGenEditTable p = iterP.next();
-					change = p.isDataChanged();
-				}
+			Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
+			while (!change && iterP.hasNext()) {
+				PanelGenEditTable p = iterP.next();
+				change = p.isDataChanged();
 			}
 		}
 
