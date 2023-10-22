@@ -411,12 +411,12 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
 
 		if (messagebus != null) {
-			messagebus.getWebSocket().registerListener(mainFrame.getMessagebusListener());
+			messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
 			if (messagebus.getWebSocket().isOpen()) {
 				// Fake opening event on registering listener since this listener
 				// does not know yet if it's open
-				mainFrame.getMessagebusListener().onOpen(null);
+				mainFrame.getHostsStatusPanel().onOpen(null);
 			} else {
 				Logging.warning(this, "Messagebus is not open, but should be on start");
 			}

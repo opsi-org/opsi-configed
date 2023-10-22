@@ -100,7 +100,6 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -458,10 +457,6 @@ public class MainFrame extends JFrame
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
-		return statusPane;
-	}
-
-	public MessagebusListener getMessagebusListener() {
 		return statusPane;
 	}
 

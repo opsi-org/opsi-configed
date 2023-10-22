@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/**
-	private ColoredTableCellRenderer.java
-	
-	utility class for PanelProductSettings
-	
-*/
-
 package de.uib.configed.guidata;
 
 import java.awt.Component;
