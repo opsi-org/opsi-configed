@@ -37,8 +37,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			for (Entry<String, ConfigOption> option : configOptions.entrySet()) {
 				Object defaultValues = option.getValue().get("defaultValues");
 				retrieved.putIfAbsent(option.getKey(), defaultValues);
-
-				put(option.getKey(), defaultValues);
+				putIfAbsent(option.getKey(), defaultValues);
 			}
 		}
 	}
