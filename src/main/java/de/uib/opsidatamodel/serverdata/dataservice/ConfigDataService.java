@@ -514,16 +514,12 @@ public class ConfigDataService {
 
 				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
 					callsConfigDeleteCollection.add(callConfig);
+				} else if (!restrictToMissing || missingConfigIds.contains(callConfig.get("ident"))) {
+					callConfig.put("defaultValues", callConfig.get("defaultValues"));
+					callConfig.put("possibleValues", callConfig.get("possibleValues"));
+					callsConfigUpdateCollection.add(callConfig);
 				} else {
-					Logging.debug(this, "setConfig config with ident " + callConfig.get("ident"));
-
-					boolean isMissing = missingConfigIds.contains(callConfig.get("ident"));
-
-					if (!restrictToMissing || isMissing) {
-						callConfig.put("defaultValues", callConfig.get("defaultValues"));
-						callConfig.put("possibleValues", callConfig.get("possibleValues"));
-						callsConfigUpdateCollection.add(callConfig);
-					}
+					// Do nothing, config does not need to be deleted or updated
 				}
 			}
 
@@ -568,62 +564,57 @@ public class ConfigDataService {
 				Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
 						+ setting.getValue() + " , " + setting.getValue().getClass().getName());
 
-				if (setting.getValue() instanceof List) {
-					List<Object> oldValue = null;
+				List<Object> oldValue = null;
 
+				if (configOptions.get(setting.getKey()) != null) {
+					oldValue = configOptions.get(setting.getKey()).getDefaultValues();
+				}
+
+				Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
+
+				List<Object> valueList = setting.getValue();
+
+				if (valueList != null && !valueList.equals(oldValue)) {
+					Map<String, Object> config = new HashMap<>();
+
+					config.put("ident", setting.getKey());
+
+					String type = "UnicodeConfig";
+
+					Logging.debug(this, "setConfig, key,  configOptions.get(key):  " + setting.getKey() + ", "
+							+ configOptions.get(setting.getKey()));
 					if (configOptions.get(setting.getKey()) != null) {
-						oldValue = configOptions.get(setting.getKey()).getDefaultValues();
+						type = (String) configOptions.get(setting.getKey()).get("type");
+					} else {
+						if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
+							type = "BoolConfig";
+						}
 					}
 
-					Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
+					config.put("type", type);
 
-					List<Object> valueList = setting.getValue();
+					config.put("defaultValues", valueList);
 
-					if (valueList != null && !valueList.equals(oldValue)) {
-						Map<String, Object> config = new HashMap<>();
-
-						config.put("ident", setting.getKey());
-
-						String type = "UnicodeConfig";
-
-						Logging.debug(this, "setConfig, key,  configOptions.get(key):  " + setting.getKey() + ", "
-								+ configOptions.get(setting.getKey()));
-						if (configOptions.get(setting.getKey()) != null) {
-							type = (String) configOptions.get(setting.getKey()).get("type");
-						} else {
-							if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-								type = "BoolConfig";
-							}
+					List<Object> possibleValues = null;
+					if (configOptions.get(setting.getKey()) == null) {
+						possibleValues = new ArrayList<>();
+						if (type.equals(ConfigOption.BOOL_TYPE)) {
+							possibleValues.add(true);
+							possibleValues.add(false);
 						}
-
-						config.put("type", type);
-
-						config.put("defaultValues", valueList);
-
-						List<Object> possibleValues = null;
-						if (configOptions.get(setting.getKey()) == null) {
-							possibleValues = new ArrayList<>();
-							if (type.equals(ConfigOption.BOOL_TYPE)) {
-								possibleValues.add(true);
-								possibleValues.add(false);
-							}
-						} else {
-							possibleValues = configOptions.get(setting.getKey()).getPossibleValues();
-						}
-
-						for (Object item : valueList) {
-							if (possibleValues.indexOf(item) == -1) {
-								possibleValues.add(item);
-							}
-						}
-
-						config.put("possibleValues", possibleValues);
-
-						configCollection.add(config);
+					} else {
+						possibleValues = configOptions.get(setting.getKey()).getPossibleValues();
 					}
-				} else {
-					Logging.error("setConfig,  setting.getKey(), setting.getValue(): " + setting.getKey() + ", "
-							+ setting.getValue() + " \nUnexpected type");
+
+					for (Object item : valueList) {
+						if (possibleValues.indexOf(item) == -1) {
+							possibleValues.add(item);
+						}
+					}
+
+					config.put("possibleValues", possibleValues);
+
+					configCollection.add(config);
 				}
 			}
 		}

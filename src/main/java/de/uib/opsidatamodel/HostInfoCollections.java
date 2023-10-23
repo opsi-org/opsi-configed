@@ -389,13 +389,11 @@ public class HostInfoCollections {
 				for (String clientName : depot2Host2HostInfo.get(depot).keySet()) {
 					HostInfo hostInfo = depot2Host2HostInfo.get(depot).get(clientName);
 
-					if (allowedClients != null && !allowedClients.contains(clientName)) {
-						continue;
+					if (allowedClients == null || allowedClients.contains(clientName)) {
+						mapOfPCs.put(clientName, false);
+						mapPCInfomap.put(clientName, hostInfo);
+						mapPcBelongsToDepot.put(clientName, depot);
 					}
-
-					mapOfPCs.put(clientName, false);
-					mapPCInfomap.put(clientName, hostInfo);
-					mapPcBelongsToDepot.put(clientName, depot);
 				}
 			}
 		}

@@ -47,17 +47,17 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 
 		if (value.equals(Globals.CONFLICT_STATE_STRING)) {
 			c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
-		} else {
-			if (mapOfTextColors != null && value instanceof String) {
-				Color textcolor = mapOfTextColors.get(value);
-				if (textcolor != null) {
-					if (textcolor.equals(Globals.INVISIBLE)) {
-						c.setForeground(c.getBackground());
-					} else {
-						c.setForeground(textcolor);
-					}
+		} else if (mapOfTextColors != null && value instanceof String) {
+			Color textcolor = mapOfTextColors.get(value);
+			if (textcolor != null) {
+				if (textcolor.equals(Globals.INVISIBLE)) {
+					c.setForeground(c.getBackground());
+				} else {
+					c.setForeground(textcolor);
 				}
 			}
+		} else {
+			// Do nothing. Leave default foreground color since no special coloring was found
 		}
 
 		return c;
