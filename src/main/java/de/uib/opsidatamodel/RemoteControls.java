@@ -86,5 +86,4 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 			return rc;
 		}
 	}
-
 }

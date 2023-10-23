@@ -122,11 +122,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 						Logging.debug(this, "retrieveMap");
 						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
-				})),
-
-				-1, new int[] { 0, 1 },
-
-				thePanel.getPanelReconciliation(), updateCollection);
+				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
