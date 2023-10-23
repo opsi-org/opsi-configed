@@ -346,17 +346,17 @@ public class ConfigDataService {
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
-			Object id = hostConfig.getKey();
 
-			if (id instanceof String && !"".equals(id)) {
-				String hostId = (String) id;
-				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
+			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
+				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
+						arg -> new HashMap<>());
 				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
 						new TypeReference<Map<String, Object>>() {
 						});
 
 				for (Entry<String, Object> config : configs.entrySet()) {
-					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + hostConfig);
+					Logging.debug(this,
+							"retrieveHostConfigs objectId,  element " + hostConfig.getKey() + ": " + hostConfig);
 
 					String configId = config.getKey();
 
