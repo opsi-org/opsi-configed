@@ -14,6 +14,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
@@ -80,6 +81,11 @@ public enum ReloadEvent {
 	 * Triggers {@link LicenseDataReloadHandler}.
 	 */
 	LICENSE_DATA_RELOAD("license_data_reload"),
+
+	/**
+	 * Triggers {@link LicenseContractDataReloadHandler}.
+	 */
+	LICENSE_CONTRACT_DATA_RELOAD("license_contract_data_reload"),
 
 	/**
 	 * Triggers {@link HostDataReloadHandler}.

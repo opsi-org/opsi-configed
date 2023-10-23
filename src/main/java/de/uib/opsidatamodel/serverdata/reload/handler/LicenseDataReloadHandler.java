@@ -50,6 +50,13 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
 		softwareDataService.retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
+		cacheManager.clearCachedData(CacheIdentifier.LICENSES);
+		licenseDataService.retrieveLicencesPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
+		licenseDataService.retrieveLicenceContractsPD();
+
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
 		licenseDataService.retrieveLicenceUsagesPD();
 

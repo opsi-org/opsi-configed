@@ -1419,8 +1419,10 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencePoolsPD()));
+		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+			persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
+			return (Map) persistenceController.getLicenseDataService().getLicencePoolsPD();
+		}));
 
 		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
@@ -1451,8 +1453,10 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicenceContractsPD()));
+		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+			persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+			return (Map) persistenceController.getLicenseDataService().getLicenceContractsPD();
+		}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
@@ -1470,8 +1474,10 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencesPD()));
+		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+			persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+			return (Map) persistenceController.getLicenseDataService().getLicencesPD();
+		}));
 	}
 
 	private void startLicencesFrame() {
