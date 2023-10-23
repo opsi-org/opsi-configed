@@ -345,6 +345,7 @@ public class ConfigDataService {
 				new Object[] { configIds, objectIds, false });
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
+
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
 
 			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
@@ -354,19 +355,10 @@ public class ConfigDataService {
 						new TypeReference<Map<String, Object>>() {
 						});
 
-				for (Entry<String, Object> config : configs.entrySet()) {
-					Logging.debug(this,
-							"retrieveHostConfigs objectId,  element " + hostConfig.getKey() + ": " + hostConfig);
+				Logging.debug(this,
+						"retrieveHostConfigs objectId,  element " + hostConfig.getKey() + ": " + hostConfig);
 
-					String configId = config.getKey();
-
-					if (hostConfig.getValue() == null) {
-						configs1Host.put(configId, new ArrayList<>());
-						// is a data error but can occur
-					} else {
-						configs1Host.put(configId, config.getValue());
-					}
-				}
+				configs1Host.putAll(configs);
 			}
 		}
 
