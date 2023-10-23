@@ -3084,7 +3084,7 @@ public class ConfigedMain implements ListSelectionListener {
 			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
 					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
+					OpsiServiceNOMPersistenceController.getPropertyClassesServer());
 		} else if (editingTarget == EditingTarget.DEPOTS) {
 			depotsList.setEnabled(true);
 			depotsList.requestFocus();
@@ -3092,18 +3092,18 @@ public class ConfigedMain implements ListSelectionListener {
 			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedDepots()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
-					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
 					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedDepots())));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
 					additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, false);
+					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
 		} else {
 			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
-					OpsiServiceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 			if (ServerFacade.isOpsi43() && getSelectedClients().length != 0) {
@@ -3121,7 +3121,7 @@ public class ConfigedMain implements ListSelectionListener {
 					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedClients())));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
 					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_CLIENT, originalMap, true);
+					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 		}
 
 		return true;

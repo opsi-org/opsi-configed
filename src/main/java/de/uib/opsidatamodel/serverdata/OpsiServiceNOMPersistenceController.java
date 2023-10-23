@@ -158,49 +158,14 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONFIG_ID = "configId";
 	public static final String VALUES_ID = "values";
 
-	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
-	static {
-		PROPERTY_CLASSES_SERVER.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
-		PROPERTY_CLASSES_SERVER.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
-		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
-		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
-		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
-				"HostConfigNodeRenderer.configed.query_supplementary");
-		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
-		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
-		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
-		PROPERTY_CLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
-				"HostConfigNodeRenderer.configed.usecolumns_hwaudit");
-		PROPERTY_CLASSES_SERVER.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
-
-		PROPERTY_CLASSES_SERVER.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
-		PROPERTY_CLASSES_SERVER.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
-		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROOT,
-				"EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip");
-		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT, "EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip");
-	}
-
-	public static final NavigableMap<String, String> PROPERTY_CLASSES_CLIENT = new TreeMap<>();
-	static {
-		PROPERTY_CLASSES_CLIENT.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
-		PROPERTY_CLASSES_CLIENT.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
-		PROPERTY_CLASSES_CLIENT.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
-		PROPERTY_CLASSES_CLIENT.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
-		PROPERTY_CLASSES_CLIENT.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
-	}
-
-	public static final Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
-	static {
-		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
-		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTY_CLASSES_CLIENT.keySet());
-		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
-		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
-	}
-
 	// opsi module information
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
+
+	private static NavigableMap<String, String> propertyClassesServer;
+	private static NavigableMap<String, String> propertyClassesClient;
+	private static Set<String> configKeyStartersNotForClients;
 
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
@@ -234,6 +199,8 @@ public class OpsiServiceNOMPersistenceController {
 		this.user = user;
 
 		Logging.debug(this.getClass(), "create");
+
+		init();
 
 		exec = new ServerFacade(server, user, password);
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
@@ -449,6 +416,40 @@ public class OpsiServiceNOMPersistenceController {
 		}
 	}
 
+	private static void init() {
+		propertyClassesServer = new TreeMap<>();
+		propertyClassesServer.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		propertyClassesServer.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		propertyClassesServer.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
+		propertyClassesServer.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
+		propertyClassesServer.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
+				"HostConfigNodeRenderer.configed.query_supplementary");
+		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
+		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
+		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
+		propertyClassesServer.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
+				"HostConfigNodeRenderer.configed.usecolumns_hwaudit");
+		propertyClassesServer.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
+
+		propertyClassesServer.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
+		propertyClassesServer.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
+		propertyClassesServer.put(KEY_USER_ROOT,
+				"EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip");
+		propertyClassesServer.put(KEY_USER_ROLE_ROOT, "EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip");
+
+		propertyClassesClient = new TreeMap<>();
+		propertyClassesClient.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		propertyClassesClient.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		propertyClassesClient.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
+		propertyClassesClient.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
+		propertyClassesClient.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
+
+		configKeyStartersNotForClients = new HashSet<>(propertyClassesServer.keySet());
+		configKeyStartersNotForClients.removeAll(propertyClassesClient.keySet());
+		configKeyStartersNotForClients.add(KEY_PRODUCT_SORT_ALGORITHM);
+		configKeyStartersNotForClients.add("configed");
+	}
+
 	public AbstractExecutioner retrieveWorkingExec(String depot) {
 		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
 				+ hostInfoCollections.getConfigServer() + " ( named as " + connectionServer + ")");
@@ -538,5 +539,17 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		return isUEFI;
+	}
+
+	public static NavigableMap<String, String> getPropertyClassesServer() {
+		return propertyClassesServer;
+	}
+
+	public static NavigableMap<String, String> getPropertyClassesClient() {
+		return propertyClassesClient;
+	}
+
+	public static Set<String> getConfigKeyStartersNotForClients() {
+		return configKeyStartersNotForClients;
 	}
 }
