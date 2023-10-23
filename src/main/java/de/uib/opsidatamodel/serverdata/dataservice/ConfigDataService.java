@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
@@ -62,6 +63,7 @@ public class ConfigDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
+	private HardwareDataService hardwareDataService;
 
 	private List<Map<String, Object>> configCollection;
 	private List<Map<String, Object>> configStateCollection;
@@ -75,6 +77,10 @@ public class ConfigDataService {
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
 		this.userRolesConfigDataService = userRolesConfigDataService;
+	}
+
+	public void setHardwareDataService(HardwareDataService hardwareDataService) {
+		this.hardwareDataService = hardwareDataService;
 	}
 
 	/**
@@ -140,6 +146,8 @@ public class ConfigDataService {
 
 		RemoteControls remoteControls = new RemoteControls();
 		SavedSearches savedSearches = new SavedSearches();
+		OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
+				hardwareDataService.getHwAuditDeviceClassesPD());
 
 		// metaConfig for wan configuration is rebuilt in
 		// getWANConfigOptions
@@ -149,11 +157,9 @@ public class ConfigDataService {
 
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
-
 			String key = (String) configItem.get("ident");
 
 			// build a ConfigOption from the retrieved item
-
 			// eliminate key produced by old version for role branch
 
 			String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
@@ -172,17 +178,15 @@ public class ConfigDataService {
 			}
 
 			ConfigOption configOption = new ConfigOption(configItem);
-
 			configOptions.put(key, configOption);
-
 			configListCellOptions.put(key, configOption);
-
 			configDefaultValues.put(key, configOption.getDefaultValues());
 
 			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 				remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 			}
+			hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
