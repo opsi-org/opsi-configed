@@ -982,41 +982,29 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	private static void setTimestampRenderer(String classname, TableColumn col) {
-
-		if ("java.sql.Timestamp".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererDate());
-		}
-
-	}
-
-	private static void setBigDecimalRenderer(String classname, TableColumn col) {
-		if ("java.math.BigDecimal".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererCurrency());
-		}
-
-	}
-
-	private static void setBooleanRenderer(String classname, TableColumn col) {
-		if ("java.lang.Boolean".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererByBoolean());
-		}
-
-	}
-
 	protected void setCellRenderers() {
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			String name = tableModel.getColumnName(i);
-			TableColumn col = theTable.getColumn(name);
+			TableColumn tableColumn = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);
 
-			setTimestampRenderer(classname, col);
-			setBigDecimalRenderer(classname, col);
-			setBooleanRenderer(classname, col);
+			switch (classname) {
+			case "java.sql.Timestamp":
+				tableColumn.setCellRenderer(new TableCellRendererDate());
+				break;
 
-			if (col.getCellRenderer() == null) {
+			case "java.math.BigDecimal":
+				tableColumn.setCellRenderer(new TableCellRendererCurrency());
+				break;
+
+			case "java.lang.Boolean":
+				tableColumn.setCellRenderer(new TableCellRendererByBoolean());
+				break;
+
+			default:
 				// no special renderer set
-				col.setCellRenderer(new StandardTableCellRenderer());
+				tableColumn.setCellRenderer(new StandardTableCellRenderer());
+				break;
 			}
 		}
 	}

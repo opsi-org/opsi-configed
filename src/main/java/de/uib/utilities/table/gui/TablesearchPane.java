@@ -726,7 +726,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
 
 					if (valJ != null) {
-						String valSJ = ("" + valJ).toLowerCase(Locale.ROOT);
+						String valSJ = valJ.toString().toLowerCase(Locale.ROOT);
 
 						buffRow.append(valSJ);
 					}

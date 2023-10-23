@@ -16,10 +16,8 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 
-	private JLabel booleanString = new JLabel();
-
 	public TableCellRendererByBoolean() {
-		booleanString.setText("");
+		super();
 	}
 
 	@Override

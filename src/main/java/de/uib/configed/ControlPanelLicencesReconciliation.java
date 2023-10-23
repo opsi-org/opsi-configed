@@ -95,6 +95,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames = new ArrayList<>();
 
 		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
+		classNames.add("java.lang.String");
 
 		for (String fieldName : extraHostFields) {
 			columnNames.add(fieldName);
@@ -108,8 +109,6 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		indexSWInventoryUsed = columnNames.size() - 1;
 		Logging.debug(this, "columnNames: " + columnNames);
 		Logging.debug(this, "cols index_used_by_opsi  " + indexUsedByOpsi + " , " + indexSWInventoryUsed);
-
-		classNames.add("java.lang.String");
 
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.Boolean");
