@@ -68,7 +68,6 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
-import de.uib.utilities.table.TableCellRendererByBoolean;
 import de.uib.utilities.table.TableCellRendererCurrency;
 import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
@@ -995,10 +994,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case "java.math.BigDecimal":
 				tableColumn.setCellRenderer(new TableCellRendererCurrency());
-				break;
-
-			case "java.lang.Boolean":
-				tableColumn.setCellRenderer(new TableCellRendererByBoolean());
 				break;
 
 			default:

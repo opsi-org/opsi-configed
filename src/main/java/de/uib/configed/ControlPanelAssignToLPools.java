@@ -56,6 +56,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private static final String LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED = "restrictToNonAssociated";
 
+	private static final int COLUMN_MARK_CURSOR_ROW = 0;
+
 	private PanelAssignToLPools thePanel;
 
 	private GenTableModel modelLicencepools;
@@ -91,8 +93,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 
 	private Integer totalShownEntries;
-
-	private int colMarkCursorRow;
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
@@ -541,17 +541,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
 
 		// introducing a column for displaying the cursor row
-		columnNames.add(colMarkCursorRow, "CURSOR");
+		columnNames.add(COLUMN_MARK_CURSOR_ROW, "");
+		classNames.add("java.lang.Boolean");
 
 		columnNames.remove("licenseKey");
 
 		classNames = new ArrayList<>();
-		for (int i = 0; i <= columnNames.size(); i++) {
+		for (int i = 1; i <= columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-
-		// introducing a column for displaying the cursor row
-		classNames.set(colMarkCursorRow, "java.lang.Boolean");
 
 		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
 				+ columnNames);
@@ -571,7 +569,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		tablePanes.add(thePanel.getPanelRegisteredSoftware());
 
 		modelWindowsSoftwareIds.reset();
-		modelWindowsSoftwareIds.setColMarkCursorRow(colMarkCursorRow);
+		modelWindowsSoftwareIds.setColMarkCursorRow(COLUMN_MARK_CURSOR_ROW);
 
 		thePanel.getPanelRegisteredSoftware().setTableModel(modelWindowsSoftwareIds);
 		thePanel.getPanelRegisteredSoftware().setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -631,17 +629,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// special treatment of columns
 
-		if (colMarkCursorRow > -1) {
-
-			// row cursor column
-			col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(colMarkCursorRow);
-			col.setMaxWidth(12);
-			col.setHeaderValue("");
-
-			col.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
-							Utils.createImageIcon("images/minibarpointervoid.png", "")));
-		}
+		// row cursor column
+		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(COLUMN_MARK_CURSOR_ROW);
+		col.setMaxWidth(12);
+		col.setCellRenderer(new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
+				Utils.createImageIcon("images/minibarpointervoid.png", "")));
 
 		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
 		col.setMaxWidth(MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE);
