@@ -58,7 +58,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -778,7 +777,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		return sortKeys;
-
 	}
 
 	private void setSorter() {
@@ -790,15 +788,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 
-		for (int j = 0; j < tableModel.getColumnCount(); j++) {
-
-			// TODO check if this is ever used
-			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
-
-				sorter.setComparator(j, new IntComparatorForStrings());
-			}
-		}
-
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
 		if (sortKeys != null && !sortKeys.isEmpty()) {
@@ -806,7 +795,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		theTable.setRowSorter(sorter);
-
 	}
 
 	public void setTableModel(GenTableModel m) {
