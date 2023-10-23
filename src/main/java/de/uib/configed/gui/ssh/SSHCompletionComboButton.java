@@ -20,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
@@ -29,7 +28,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CellAlternatingColorizer;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 // Verwendung in Beisspielsweise SSHOpsiSetRightsDialog.java
 public class SSHCompletionComboButton {
@@ -63,7 +62,9 @@ public class SSHCompletionComboButton {
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
 		createInstances();
-		initTextfield();
+
+		textfield = new JTextField();
+
 		if (comboboxDefaultPath != null) {
 			textfield.setText(comboboxDefaultPath);
 		}
@@ -124,13 +125,6 @@ public class SSHCompletionComboButton {
 
 	public List<String> getDefaultValues() {
 		return defaultvalues;
-	}
-
-	private void initTextfield() {
-		textfield = new JTextField();
-		if (!Main.THEMES) {
-			textfield.setBackground(Globals.BACKGROUND_COLOR_9);
-		}
 	}
 
 	private void createInstances() {
@@ -364,7 +358,7 @@ public class SSHCompletionComboButton {
 
 					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
 						Logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");
-						CellAlternatingColorizer.colorize(jc, isSelected, true, true);
+						ColorTableCellRenderer.colorize(jc, isSelected, true);
 					}
 
 					if (getText.startsWith(basicPath) && !getText.equals(basicPath)

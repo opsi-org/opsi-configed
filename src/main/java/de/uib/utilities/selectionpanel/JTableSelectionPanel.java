@@ -52,7 +52,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -109,18 +108,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		scrollpane = new JScrollPane();
 
-		if (!Main.THEMES) {
-			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		table = new JTable();
 
 		table.setDragEnabled(true);
-
-		if (!Main.THEMES) {
-			table.setShowGrid(true);
-			table.setGridColor(Globals.JTABLE_SELECTION_PANEL_GRID_COLOR);
-		}
 
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
@@ -160,10 +150,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
-		if (!Main.THEMES) {
-			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
-		}
 
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
@@ -316,23 +302,14 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-		String logoPath;
-		if (Main.THEMES) {
-			logoPath = Globals.ICON_OPSI;
-		} else {
-			logoPath = "images/opsi-logo.png";
-		}
 
-		JLabel missingData0 = new JLabel(Utils.createImageIcon(logoPath, ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 		JPanel mdPanel = new JPanel();
-		if (!Main.THEMES) {
-			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout mdLayout = new GroupLayout(mdPanel);
 		mdPanel.setLayout(mdLayout);
@@ -474,10 +451,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		int lastAddedI = -1;
 
 		ListSelectionListener[] listeners = ((DefaultListSelectionModel) lsm).getListeners(ListSelectionListener.class);
-
 		// remove all listeners
-		for (int l = 0; l < listeners.length; l++) {
-			lsm.removeListSelectionListener(listeners[l]);
+		for (ListSelectionListener listener : listeners) {
+			lsm.removeListSelectionListener(listener);
 		}
 
 		Logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
@@ -495,8 +471,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		lsm.removeSelectionInterval(lastAddedI, lastAddedI);
 
 		// get again the listeners
-		for (int l = 0; l < listeners.length; l++) {
-			lsm.addListSelectionListener(listeners[l]);
+		for (ListSelectionListener listener : listeners) {
+			lsm.addListSelectionListener(listener);
 		}
 
 		// and repeat the last addition

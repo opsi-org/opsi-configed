@@ -14,7 +14,6 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 // A simple class that searches for a word in
@@ -27,7 +26,7 @@ public class WordSearcher {
 
 	public WordSearcher(JTextComponent comp) {
 		this.comp = comp;
-		this.painter = new UnderlineHighlightPainter(Globals.FAILED_COLOR);
+		this.painter = new UnderlineHighlightPainter();
 		this.lastReturnedOffset = -1;
 	}
 

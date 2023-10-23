@@ -6,7 +6,6 @@
 
 package de.uib.utilities.swing;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
@@ -19,7 +18,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -126,13 +124,6 @@ public class JTextHideField extends JPanel {
 		validate();
 		repaint();
 
-	}
-
-	@Override
-	public void setBackground(Color c) {
-		if (!Main.THEMES && visibleField != null) {
-			visibleField.setBackground(c);
-		}
 	}
 
 	public void setText(String s) {

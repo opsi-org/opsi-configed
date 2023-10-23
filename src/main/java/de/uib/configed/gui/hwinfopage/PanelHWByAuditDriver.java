@@ -25,11 +25,11 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	private JRadioButton selectionBaseBoard;
 
-	private JTextField fieldVendor;
-	private JTextField fieldLabel;
+	private JTextField fieldComputerSystemVendor;
+	private JTextField fieldComputerSystemLabel;
 
-	private JTextField fieldVendor2;
-	private JTextField fieldLabel2;
+	private JTextField fieldBaseBoardVendor;
+	private JTextField fieldBaseBoardLabel;
 
 	private FDriverUpload fDriverUpload;
 	private ConfigedMain configedMain;
@@ -41,19 +41,25 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	private void buildPanel() {
 
-		fieldVendor = new JTextShowField();
+		fieldComputerSystemVendor = new JTextShowField();
 
-		fieldLabel = new JTextShowField();
+		fieldComputerSystemLabel = new JTextShowField();
 
-		fieldVendor2 = new JTextShowField();
+		fieldBaseBoardVendor = new JTextShowField();
 
-		fieldLabel2 = new JTextShowField();
+		fieldBaseBoardLabel = new JTextShowField();
 
 		JLabel labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
-		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
-		JLabel labelProduct = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
+		JLabel labelComputerSystemVendor = new JLabel(
+				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsComputerSystemVendor"));
+		JLabel labelBaseBoardVendor = new JLabel(
+				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsBaseBoardVendor"));
+		JLabel labelProductOrModel = new JLabel(
+				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProductOrModel"));
+		JLabel labelProductOrModel2 = new JLabel(
+				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProductOrModel"));
 
 		JButton buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.title"));
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
@@ -68,40 +74,47 @@ public class PanelHWByAuditDriver extends JPanel {
 		this.setLayout(layoutByAuditInfo);
 
 		layoutByAuditInfo
-				.setVerticalGroup(layoutByAuditInfo.createSequentialGroup()
-						.addGroup(layoutByAuditInfo.createParallelGroup()
-								.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								layoutByAuditInfo.createParallelGroup()
+				.setVerticalGroup(
+						layoutByAuditInfo.createSequentialGroup()
+								.addGroup(layoutByAuditInfo.createParallelGroup()
+										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelProductOrModel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layoutByAuditInfo.createParallelGroup()
 										.addGroup(layoutByAuditInfo.createSequentialGroup()
 												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 														Globals.MIN_GAP_SIZE)
 												.addComponent(selectionComputerSystem))
-										.addComponent(fieldVendor, GroupLayout.PREFERRED_SIZE,
+										.addComponent(fieldComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelSeparator, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-						).addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addGroup(
-								layoutByAuditInfo.createParallelGroup()
+										.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGroup(
+										layoutByAuditInfo.createParallelGroup()
+												.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layoutByAuditInfo.createParallelGroup()
 										.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGroup(layoutByAuditInfo.createSequentialGroup()
 												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 														Globals.MIN_GAP_SIZE)
 												.addComponent(selectionBaseBoard))
-										.addComponent(fieldVendor2, GroupLayout.PREFERRED_SIZE,
+										.addComponent(fieldBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelSeparator2, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldLabel2, GroupLayout.PREFERRED_SIZE,
+										.addComponent(fieldBaseBoardLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
@@ -118,32 +131,36 @@ public class PanelHWByAuditDriver extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(labelComputerSystemVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(fieldComputerSystemVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldVendor2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(labelBaseBoardVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldBaseBoardVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelSeparator)
 						.addComponent(labelSeparator2))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelProduct, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(labelProductOrModel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(fieldComputerSystemLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldLabel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+						.addComponent(labelProductOrModel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldBaseBoardLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2))
 				.addGap(2 * Globals.MIN_GAP_SIZE, 4 * Globals.MIN_GAP_SIZE, Short.MAX_VALUE));
 	}
 
 	public void emptyByAuditStrings() {
 		byAuditPath = "";
-		fieldVendor.setText("");
-		fieldLabel.setText("");
-		fieldVendor2.setText("");
-		fieldLabel2.setText("");
+		fieldComputerSystemVendor.setText("");
+		fieldComputerSystemLabel.setText("");
+		fieldBaseBoardVendor.setText("");
+		fieldBaseBoardLabel.setText("");
 
 		if (fDriverUpload != null) {
 			fDriverUpload.setUploadParameters("");
@@ -176,11 +193,11 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	public void setByAuditFields(String vendorStringComputerSystem, String vendorStringBaseBoard, String modelString,
 			String productString) {
-		fieldVendor.setText(vendorStringComputerSystem);
-		fieldLabel.setText(modelString);
+		fieldComputerSystemVendor.setText(vendorStringComputerSystem);
+		fieldComputerSystemLabel.setText(modelString);
 
-		fieldVendor2.setText(vendorStringBaseBoard);
-		fieldLabel2.setText(productString);
+		fieldBaseBoardVendor.setText(vendorStringBaseBoard);
+		fieldBaseBoardLabel.setText(productString);
 
 		if (fDriverUpload != null) {
 			fDriverUpload.setUploadParameters(byAuditPath);
@@ -189,11 +206,11 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	private void startDriverUploadFrame() {
 		if (selectionBaseBoard.isSelected()) {
-			byAuditPath = eliminateIllegalPathChars(fieldVendor2.getText()) + "/"
-					+ eliminateIllegalPathChars(fieldLabel2.getText());
+			byAuditPath = eliminateIllegalPathChars(fieldBaseBoardVendor.getText()) + "/"
+					+ eliminateIllegalPathChars(fieldBaseBoardLabel.getText());
 		} else {
-			byAuditPath = eliminateIllegalPathChars(fieldVendor.getText()) + "/"
-					+ eliminateIllegalPathChars(fieldLabel.getText());
+			byAuditPath = eliminateIllegalPathChars(fieldComputerSystemVendor.getText()) + "/"
+					+ eliminateIllegalPathChars(fieldComputerSystemLabel.getText());
 		}
 
 		if (fDriverUpload == null) {

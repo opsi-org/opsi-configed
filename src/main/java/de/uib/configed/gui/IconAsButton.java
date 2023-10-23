@@ -52,8 +52,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 	public IconAsButton(String desc, String inactive, String over, String active, String disabled) {
 		super();
 
-		super.setOpaque(false);
-
 		setDisplay(desc, inactive, over, active, disabled);
 		label = new JLabel(iconInactive, SwingConstants.CENTER);
 		label.setToolTipText(desc);

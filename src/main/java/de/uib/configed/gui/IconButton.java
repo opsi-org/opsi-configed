@@ -143,7 +143,7 @@ public class IconButton extends JButton {
 	private void createIconButton(boolean enabled) {
 		setIcon(Utils.createImageIcon(this.imageURLActive, ""));
 		setToolTipText(description);
-		setPreferredSize(Globals.graphicButtonDimension);
+		setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		setEnabled(enabled);
 		setSelectedIcon(Utils.createImageIcon(this.imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
@@ -166,7 +166,7 @@ public class IconButton extends JButton {
 			boolean enabled) {
 		setIcon(Utils.createImageIcon(imageURLActive, ""));
 		setToolTipText(desc);
-		setPreferredSize(Globals.graphicButtonDimension);
+		setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		setEnabled(enabled);
 		setSelectedIcon(Utils.createImageIcon(imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {

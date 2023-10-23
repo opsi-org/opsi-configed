@@ -8,11 +8,11 @@ package de.uib.configed.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.font.TextAttribute;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -618,8 +618,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
 
-		result.topLabel.setFont(result.topLabel.getFont()
-				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
+		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
 		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
 				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);

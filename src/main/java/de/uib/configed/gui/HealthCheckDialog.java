@@ -49,7 +49,6 @@ import org.json.JSONObject;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -113,7 +112,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(false);
 
 		JPopupMenu popupMenu = createPopupMenu();
 		northPanel.setComponentPopupMenu(popupMenu);
@@ -148,7 +146,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 
-		scrollPane.setOpaque(false);
 		scrollPane.setInheritsPopupMenu(true);
 
 		northLayout.setHorizontalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
@@ -206,7 +203,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
+		String iconSavePath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
 		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("save"),
 				Utils.createImageIcon(iconSavePath, ""));
 
@@ -329,7 +326,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel();
-		centerPanel.setOpaque(false);
 
 		GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
 		centerPanel.setLayout(centerPanelLayout);
@@ -382,7 +378,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);

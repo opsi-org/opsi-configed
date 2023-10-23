@@ -6,7 +6,6 @@
 
 package de.uib.utilities.swing.list;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -15,7 +14,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.uib.configed.Globals;
 import utils.Utils;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
@@ -26,11 +24,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	protected static final int FILL_LENGTH = 20;
 
 	protected String tooltipPrefix = "";
-
-	private Color selectedEven = Globals.DEFAULT_TABLE_SELECTION_ROW_DARK;
-	private Color selectedUneven = Globals.DEFAULT_TABLE_SELECTED_ROW_BRIGHT;
-	private Color unselectedEven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_2;
-	private Color unselectedUneven = Globals.DEFAULT_TABLE_CELL_BG_COLOR_1;
 
 	public StandardListCellRenderer() {
 		super();
@@ -62,13 +55,5 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		return jc;
-	}
-
-	public void setAlternatingColors(Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
-			Color unselectedUnevenColor) {
-		selectedEven = selectedEvenColor;
-		selectedUneven = selectedUnevenColor;
-		unselectedEven = unselectedEvenColor;
-		unselectedUneven = unselectedUnevenColor;
 	}
 }

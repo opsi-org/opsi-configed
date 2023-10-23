@@ -8,10 +8,8 @@ package de.uib.utilities.swing;
 
 import java.awt.Container;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Map;
 
 import javax.swing.JFrame;
 
@@ -35,11 +33,6 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);
-	}
-
-	public void setGlobals(Map<String, Object> globals) {
-		setIconImage((Image) globals.get("mainIcon"));
-		setTitle((String) globals.get("APPNAME"));
 	}
 
 	public void start() {

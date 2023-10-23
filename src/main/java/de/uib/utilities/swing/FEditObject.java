@@ -33,7 +33,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -110,10 +109,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
 
-		if (!Main.THEMES) {
-			loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-
 		JScrollPane scrollpaneL = new JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
 		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -155,9 +150,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected void initComponents() {
 
-		if (!Main.THEMES) {
-			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		extraField.getDocument().addDocumentListener(this);

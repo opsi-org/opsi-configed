@@ -30,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
@@ -105,9 +104,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	private void initComponents() {
-		if (!Main.THEMES) {
-			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
+
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		setHint(hint);

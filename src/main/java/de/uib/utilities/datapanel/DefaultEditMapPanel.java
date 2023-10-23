@@ -28,7 +28,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 // works on a map of pairs of type String - List
 public class DefaultEditMapPanel extends JPanel {
-	public MapTableModel mapTableModel;
+	protected MapTableModel mapTableModel;
 
 	protected boolean reloadable;
 	protected boolean showToolTip = true;
@@ -255,5 +255,9 @@ public class DefaultEditMapPanel extends JPanel {
 		} else {
 			popupmenuAtRow = popupNoEditOptions;
 		}
+	}
+
+	public MapTableModel getMapTableModel() {
+		return mapTableModel;
 	}
 }

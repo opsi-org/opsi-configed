@@ -26,13 +26,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -239,7 +237,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		buttonCallSelectFolderWinPE = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
@@ -257,7 +255,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		buttonCallSelectFolderInstallFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderInstallFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
 
@@ -278,7 +276,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		buttonCallExecute = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
-		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
+		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
 		buttonCallExecute.setEnabled(false);
@@ -288,16 +286,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
 							+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
 							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-			}
-
 			execute();
-
-			if (!Main.THEMES) {
-				buttonCallExecute.setBackground(buttonCallExecute.getBackground());
-			}
 		});
 
 	}
@@ -393,7 +382,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void defineLayout() {
-		setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true));
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 
 		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));

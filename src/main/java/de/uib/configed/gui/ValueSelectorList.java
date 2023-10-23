@@ -98,8 +98,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
 		}
 
-		labelValue.setOpaque(false);
-
 		buttonSelectValuesWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));

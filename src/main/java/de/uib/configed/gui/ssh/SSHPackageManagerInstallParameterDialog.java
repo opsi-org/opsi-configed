@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -183,11 +182,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	private void init() {
-		if (!Main.THEMES) {
-			radioPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);

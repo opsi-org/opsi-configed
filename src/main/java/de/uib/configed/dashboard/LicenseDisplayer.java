@@ -21,7 +21,6 @@ import java.util.TreeSet;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
@@ -100,9 +99,7 @@ public class LicenseDisplayer {
 
 		Platform.runLater(() -> {
 			loadData();
-			if (Main.THEMES) {
-				styleAccordingToSelectedTheme();
-			}
+			styleAccordingToSelectedTheme();
 		});
 	}
 

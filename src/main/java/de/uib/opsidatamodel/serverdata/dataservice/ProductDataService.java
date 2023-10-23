@@ -23,8 +23,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -269,6 +267,7 @@ public class ProductDataService {
 	public List<List<Object>> getProductRowsForDepots(Iterable<String> depotIds) {
 		Map<String, TreeSet<OpsiPackage>> depot2packages = getDepot2PackagesPD();
 		List<List<Object>> productRows = new ArrayList<>();
+		Set<String> packagesAdded = new HashSet<>();
 		for (String depotId : depotIds) {
 			Set<OpsiPackage> packages = depot2packages.get(depotId);
 
@@ -286,9 +285,8 @@ public class ProductDataService {
 				productRow.add(productName);
 				p.appendValues(productRow);
 
-				List<String> depotsWithThisVersion = getProduct2VersionInfo2DepotsPD().get(p.getProductId())
-						.get(p.getVersionInfo());
-				if (depotsWithThisVersion.size() == 1) {
+				if (!packagesAdded.contains(p.getProductId() + ";" + p.getVersionInfo())) {
+					packagesAdded.add(p.getProductId() + ";" + p.getVersionInfo());
 					productRows.add(productRow);
 				}
 			}
@@ -820,7 +818,7 @@ public class ProductDataService {
 					}
 				}
 
-				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product, null);
+				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product);
 				productproperties1Client.put(product, state);
 			}
 		}
@@ -912,9 +910,8 @@ public class ProductDataService {
 					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
 					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
-			properties.put((String) map.get("propertyId"), new JSONArray((List<?>) map.get("values")).toList());
-			properties.getRetrieved().put((String) map.get("propertyId"),
-					new JSONArray((List<?>) map.get("values")).toList());
+			properties.put((String) map.get("propertyId"), map.get("values"));
+			properties.getRetrieved().put((String) map.get("propertyId"), map.get("values"));
 
 			Logging.debug(this,
 					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));

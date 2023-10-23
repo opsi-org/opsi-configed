@@ -4,20 +4,12 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/**
-	private ColoredTableCellRenderer.java
-	
-	utility class for PanelProductSettings
-	
-*/
-
 package de.uib.configed.guidata;
 
 import java.awt.Component;
 
 import javax.swing.JTable;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
@@ -33,12 +25,8 @@ public class ColoredTableCellRenderer extends StandardTableCellRenderer {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value != null && value.equals(Globals.CONFLICT_STATE_STRING)) {
-			if (!Main.THEMES) {
-				c.setBackground(Globals.BACKGROUND_COLOR_4);
-				c.setForeground(Globals.BACKGROUND_COLOR_4);
-			} else {
-				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
-			}
+
+			c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 		}
 
 		return c;

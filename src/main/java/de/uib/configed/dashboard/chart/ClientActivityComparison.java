@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
@@ -71,11 +70,9 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 
 		clientActivityComparisonPieChart.setData(data);
 
-		if (Main.THEMES) {
-			ComponentStyler.stylePieChartComponent(clientActivityComparisonPieChart);
-			clientsActivityNoDataText
-					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
-		}
+		ComponentStyler.stylePieChartComponent(clientActivityComparisonPieChart);
+		clientsActivityNoDataText
+				.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

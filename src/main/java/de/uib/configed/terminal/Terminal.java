@@ -35,7 +35,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollBar;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.WindowConstants;
 
 import org.msgpack.jackson.dataformat.MessagePackMapper;
@@ -47,14 +46,12 @@ import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.model.JediTerminal;
 import com.jediterm.terminal.ui.JediTermWidget;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.ProgressBarPainter;
 import utils.Utils;
 
 public final class Terminal {
@@ -170,9 +167,6 @@ public final class Terminal {
 		frame.setIconImage(Utils.getMainIcon());
 
 		JPanel allPane = new JPanel();
-		if (!Main.THEMES) {
-			allPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout allLayout = new GroupLayout(allPane);
 		allPane.setLayout(allLayout);
@@ -211,7 +205,6 @@ public final class Terminal {
 
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(false);
 
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
@@ -233,7 +226,6 @@ public final class Terminal {
 
 	private JPanel createSettingsPanel() {
 		JPanel settingsPanel = new JPanel();
-		settingsPanel.setOpaque(false);
 
 		GroupLayout settingsLayout = new GroupLayout(settingsPanel);
 		settingsPanel.setLayout(settingsLayout);
@@ -320,7 +312,6 @@ public final class Terminal {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 		southPanel.setVisible(false);
 
 		JLabel uploadingFileLabel = new JLabel(Configed.getResourceValue("Terminal.uploadingFile"));
@@ -328,10 +319,6 @@ public final class Terminal {
 		uploadedFilesLabel = new JLabel();
 
 		fileUploadProgressBar = new JProgressBar();
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
-		fileUploadProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 		fileUploadProgressBar.setStringPainted(true);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);

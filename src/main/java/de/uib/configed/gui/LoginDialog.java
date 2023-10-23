@@ -30,12 +30,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -45,7 +43,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
-import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 import utils.Utils;
@@ -172,18 +169,14 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setIconImage(Utils.getMainIcon());
 
 		// Opsilogo
-		if (Main.THEMES) {
-			String logoPath;
-			if (FlatLaf.isLafDark()) {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-			} else {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-			}
-
-			jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
+		String logoPath;
+		if (FlatLaf.isLafDark()) {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
 		} else {
-			jLabelLogo = new JLabel();
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 		}
+
+		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 
 		jLabelTitle.setText(Globals.APPNAME);
 		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
@@ -211,10 +204,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
-
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_BLUE));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.OPSI_LOGO_LIGHT_BLUE));
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());

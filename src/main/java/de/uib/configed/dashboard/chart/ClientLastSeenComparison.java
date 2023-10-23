@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.swing.UIManager;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
@@ -75,11 +74,9 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 		lastSeenComparisonBarChart.getData().clear();
 		lastSeenComparisonBarChart.getData().add(data);
 
-		if (Main.THEMES) {
-			ComponentStyler.styleBarChartComponent(lastSeenComparisonBarChart);
-			clientsLastSeenNoDataText
-					.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
-		}
+		ComponentStyler.styleBarChartComponent(lastSeenComparisonBarChart);
+		clientsLastSeenNoDataText
+				.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

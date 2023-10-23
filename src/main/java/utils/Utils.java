@@ -30,7 +30,6 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
@@ -50,7 +49,6 @@ public final class Utils {
 
 	private static JFrame masterFrame;
 	private static Image mainIcon;
-	private static Map<String, Object> objects;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
 
@@ -59,8 +57,6 @@ public final class Utils {
 
 	public static void formatButtonSmallText(AbstractButton button) {
 		button.setPreferredSize(new Dimension(45, 20));
-
-		button.setOpaque(false);
 
 		button.setBorderPainted(false);
 	}
@@ -94,15 +90,6 @@ public final class Utils {
 			return -1;
 		}
 		return MAX_LOG_SIZES[index];
-	}
-
-	public static Map<String, Object> getMap() {
-		if (objects == null) {
-			objects = new HashMap<>();
-			objects.put("mainIcon", getMainIcon());
-			objects.put("APPNAME", Globals.APPNAME);
-		}
-		return new HashMap<>(objects);
 	}
 
 	public static boolean isWindows() {
@@ -290,11 +277,7 @@ public final class Utils {
 
 		String iconPath;
 
-		if (Main.THEMES) {
-			iconPath = "gui/" + Globals.ICON_OPSI;
-		} else {
-			iconPath = Globals.ICON_RESOURCE_NAME;
-		}
+		iconPath = "gui/" + Globals.ICON_OPSI;
 
 		URL resource = Globals.class.getResource(iconPath);
 		if (resource == null) {
@@ -420,8 +403,7 @@ public final class Utils {
 		return result;
 	}
 
-	@SuppressWarnings({ "java:S1125" })
 	public static boolean toBoolean(Boolean bool) {
-		return bool == null ? false : bool.booleanValue();
+		return bool != null && bool.booleanValue();
 	}
 }

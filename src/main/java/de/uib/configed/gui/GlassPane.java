@@ -23,7 +23,6 @@ import org.jdesktop.swingx.JXBusyLabel;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class GlassPane extends JPanel implements KeyListener {
@@ -32,9 +31,10 @@ public class GlassPane extends JPanel implements KeyListener {
 	private JLabel jLabelInfo;
 
 	public GlassPane() {
-		super.setOpaque(false);
 		super.setLayout(new GridBagLayout());
 		super.setBackground(initBackground());
+		super.setOpaque(false);
+
 		initLayout();
 		addEventCatchers();
 	}
@@ -51,7 +51,7 @@ public class GlassPane extends JPanel implements KeyListener {
 	private static Color initBackground() {
 		Color base;
 
-		if (Main.THEMES && FlatLaf.isLafDark()) {
+		if (FlatLaf.isLafDark()) {
 			base = Color.BLACK;
 		} else {
 			base = Color.WHITE;
@@ -62,6 +62,7 @@ public class GlassPane extends JPanel implements KeyListener {
 
 	private void initLayout() {
 		wheel = new JXBusyLabel();
+
 		jLabelInfo = new JLabel();
 
 		GroupLayout layout = new GroupLayout(this);

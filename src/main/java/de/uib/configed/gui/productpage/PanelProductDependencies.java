@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesModel;
@@ -45,13 +44,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesTreePanel = new DependenciesTreePanel();
 
-		if (!Main.THEMES) {
-			dependenciesTable.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 		dependenciesPanel.setViewportView(dependenciesTable);
-		if (!Main.THEMES) {
-			dependenciesPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

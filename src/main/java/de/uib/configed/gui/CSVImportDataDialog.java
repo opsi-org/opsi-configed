@@ -77,8 +77,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setOpaque(true);
-
 		northPanel = createNorthPanel();
 		southPanel = createSouthPanel();
 
@@ -109,8 +107,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	}
 
 	private JPanel createNorthPanel() {
-		JPanel northPanel = new JPanel();
-		northPanel.setOpaque(true);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -211,6 +207,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 
+		JPanel northPanel = new JPanel();
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 
@@ -289,7 +286,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private JPanel createSouthPanel() {
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
@@ -309,8 +305,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		southPanel.setOpaque(true);
 
 		return southPanel;
 	}

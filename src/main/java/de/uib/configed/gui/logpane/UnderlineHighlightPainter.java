@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.logpane;
 
-import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -22,13 +21,6 @@ import de.uib.utilities.logging.Logging;
 
 // Painter for underlined highlights
 public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-
-	// The color for the underline
-	private Color color;
-
-	public UnderlineHighlightPainter(Color c) {
-		color = c;
-	}
 
 	@Override
 	public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {

@@ -22,9 +22,9 @@ import utils.Utils;
 
 public class PanelLicencesStatistics extends MultiTablePanel {
 
-	public PanelGenEditTable panelStatistics;
+	private static final int MIN_VSIZE = 50;
 
-	private int minVSize = 50;
+	private PanelGenEditTable panelStatistics;
 
 	/** Creates new form panelLicencesStatistics */
 	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
@@ -53,7 +53,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 				.addContainerGap());
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
-				.addComponent(panelStatistics, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelStatistics, MIN_VSIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 	}
 

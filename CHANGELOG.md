@@ -1,16 +1,31 @@
 # Changelog
 
-## [4.3.0.10] - 2023-10-17
+## [4.3.0.12] - XXXX-XX-XX
+### Fixed
+- Displayed column editing in "Hardware Information" tab
+- Showing if column is displayed in "opsi config editor hardware classes / database columns" dialog
+
+### Changed
+- Remove HARDWARE prefix from column names in "Hardware Information" tab
+- Change labeling for vendors in "Hardware Information" tab
+
+## [4.3.0.11] - 2023-10-19
 ### Fixed
 - Make search button text visible in logpane
+- Serialization issue, when trying to save depot configuration
+- Initialize saved states before login
+- Show hardware info for multiple clients on opsi-server 4.2 or before (NullpointerException)
+- Not all products are displayed in depot-configuration
 
+### Changed
+- Rework reload mechanism so that reload loads exactly the same data as the starting process
+- All product actions now save data before acting
 
 ## [4.3.0.10] - 2023-10-17
 
 ### Fixed
 - Bug changing product properties
 - Nullpointerexception when product does not exist in general, but only on depot
-
 
 ## [4.3.0.9] - 2023-10-16
 

@@ -19,7 +19,6 @@ import java.util.Map;
 
 import javax.swing.JTable;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.TableCellRendererByIndex;
 
@@ -47,12 +46,7 @@ public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 		}
 
 		if (value.equals(Globals.CONFLICT_STATE_STRING)) {
-			if (!Main.THEMES) {
-				c.setBackground(Globals.BACKGROUND_COLOR_4);
-				c.setForeground(Globals.BACKGROUND_COLOR_4);
-			} else {
-				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
-			}
+			c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
 				Color textcolor = mapOfTextColors.get(value);

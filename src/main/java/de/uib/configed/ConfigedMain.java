@@ -95,7 +95,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.RemoteControl;
-import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
@@ -412,12 +411,12 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
 
 		if (messagebus != null) {
-			messagebus.getWebSocket().registerListener(mainFrame.getMessagebusListener());
+			messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
 			if (messagebus.getWebSocket().isOpen()) {
 				// Fake opening event on registering listener since this listener
 				// does not know yet if it's open
-				mainFrame.getMessagebusListener().onOpen(null);
+				mainFrame.getHostsStatusPanel().onOpen(null);
 			} else {
 				Logging.warning(this, "Messagebus is not open, but should be on start");
 			}
@@ -768,7 +767,6 @@ public class ConfigedMain implements ListSelectionListener {
 		// we start with a language
 
 		InstallationStateTableModel.restartColumnDict();
-		SWAuditEntry.setLocale();
 
 		List<String> savedServers = readLocallySavedServerNames();
 
@@ -959,7 +957,6 @@ public class ConfigedMain implements ListSelectionListener {
 		if (visible == null) {
 			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
 					JOptionPane.OK_OPTION);
-			// == null can occur if an old configed runs somewhere
 		} else {
 			persistenceController.getHostDataService().getHostDisplayFields()
 					.put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
@@ -1480,7 +1477,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void startLicencesFrame() {
 		licencesFrame = new LicencesFrame(this);
 		Utils.setMasterFrame(licencesFrame);
-		licencesFrame.setGlobals(Utils.getMap());
+		licencesFrame.setIconImage(Utils.getMainIcon());
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
@@ -2598,10 +2595,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		changeDepotSelection();
 
-		if (depotsList.getModel().getSize() > 1 && mainFrame != null) {
-			mainFrame.setChangedDepotSelectionActive(true);
-		}
-
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
@@ -2637,68 +2630,66 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		boolean result = true;
-
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			if (depotRepresentative == null) {
 				depotRepresentative = myServer;
 			}
+
+			return true;
+		}
+
+		depotsOfSelectedClients = getDepotsOfSelectedClients();
+
+		Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
+
+		Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
+
+		if (!checkSynchronous(depotsOfSelectedClients)) {
+			return false;
+		}
+
+		String oldRepresentative = depotRepresentative;
+
+		Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
+				+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
+
+		depotRepresentative = null;
+
+		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
+
+		Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
+
+		if (!depotsIterator.hasNext()) {
+			depotRepresentative = myServer;
+			Logging.debug(this,
+					"setDepotRepresentative  without next change depotRepresentative " + " up to now "
+							+ oldRepresentative + " new " + depotRepresentative + " equal "
+							+ oldRepresentative.equals(depotRepresentative));
 		} else {
-			depotsOfSelectedClients = getDepotsOfSelectedClients();
+			depotRepresentative = depotsIterator.next();
 
-			Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
-
-			String oldRepresentative = depotRepresentative;
-
-			Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
-
-			if (!checkSynchronous(depotsOfSelectedClients)) {
-				result = false;
-			} else {
-				Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
-						+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
-
-				depotRepresentative = null;
-
-				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
-
-				Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
-
-				if (!depotsIterator.hasNext()) {
+			while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
+				String depot = depotsIterator.next();
+				if (depot.equals(myServer)) {
 					depotRepresentative = myServer;
-					Logging.debug(this,
-							"setDepotRepresentative  without next change depotRepresentative " + " up to now "
-									+ oldRepresentative + " new " + depotRepresentative + " equal "
-									+ oldRepresentative.equals(depotRepresentative));
-				} else {
-					depotRepresentative = depotsIterator.next();
-
-					while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
-						String depot = depotsIterator.next();
-						if (depot.equals(myServer)) {
-							depotRepresentative = myServer;
-						}
-					}
-				}
-
-				Logging.debug(this, "depotRepresentative: " + depotRepresentative);
-
-				Logging.info(this,
-						"setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
-								+ " new " + depotRepresentative + " equal "
-								+ oldRepresentative.equals(depotRepresentative));
-
-				if (!oldRepresentative.equals(depotRepresentative)) {
-					Logging.info(this, " new depotRepresentative " + depotRepresentative);
-					persistenceController.getDepotDataService().setDepot(depotRepresentative);
-
-					// everything
-					persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 				}
 			}
 		}
 
-		return result;
+		Logging.debug(this, "depotRepresentative: " + depotRepresentative);
+
+		Logging.info(this, "setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
+				+ " new " + depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
+
+		if (!oldRepresentative.equals(depotRepresentative)) {
+			Logging.info(this, " new depotRepresentative " + depotRepresentative);
+			persistenceController.getDepotDataService().setDepot(depotRepresentative);
+
+			// everything
+			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
+		}
+
+		return true;
 	}
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
@@ -3290,8 +3281,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, " visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
 
-		boolean problem = false;
-
 		dependenciesModel.setActualProduct("");
 
 		// if we are leaving some tab we check first if we possibly have to save
@@ -3305,25 +3294,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		checkSaveAll(true);
 
-		// we will only leave view 0 if a PC is selected
-
-		// check if change of view index to the value of visualViewIndex can be allowed
-		if (isVisualIndexAllowed(visualViewIndex)) {
-
-			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
-
-			// should not occur
-			if (getSelectedClients() == null) {
-				Logging.debug(this, " getSelectedClients()  null");
-
-				problem = true;
-				JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
-						Configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-				viewIndex = VIEW_CLIENTS;
-			}
-		}
-
-		if (!problem && everythingReady) {
+		if (everythingReady) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3372,20 +3343,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 			// dont keep product editing across views
 		}
-	}
-
-	private static boolean isVisualIndexAllowed(int visualViewIndex) {
-		// We cannot change to clients
-		if (visualViewIndex == VIEW_CLIENTS) {
-			return false;
-		}
-
-		// We cannot change to network configuration if the server is edited
-		if (visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER) {
-			return false;
-		}
-
-		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
 	}
 
 	public void initServer() {
@@ -3450,10 +3407,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		if (mainFrame != null) {
-			mainFrame.setChangedDepotSelectionActive(false);
-		}
-
 		depotsList.getSelectionModel().setValueIsAdjusting(false);
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 	}
@@ -3472,10 +3425,8 @@ public class ConfigedMain implements ListSelectionListener {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
-				if (cmtp != null) {
-					for (PanelGenEditTable p : cmtp.getTablePanes()) {
-						p.reload();
-					}
+				for (PanelGenEditTable p : cmtp.getTablePanes()) {
+					p.reload();
 				}
 			}
 		}
@@ -3494,20 +3445,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void changeDepotSelection() {
 		Logging.info(this, "changeDepotSelection");
-		if (mainFrame != null) {
-			// by starting a thread the visual marker of changing in progress works
-			SwingUtilities.invokeLater(() -> {
-				mainFrame.setChangedDepotSelectionActive(true);
-				refreshClientListKeepingGroup();
-				mainFrame.setChangedDepotSelectionActive(false);
-			});
-		} else {
-			refreshClientListKeepingGroup();
-		}
+		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
 	public void reload() {
-		mainFrame.setChangedDepotSelectionActive(false);
 		SwingUtilities.invokeLater(this::reloadData);
 	}
 
@@ -3554,28 +3495,26 @@ public class ConfigedMain implements ListSelectionListener {
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
 			for (String client : savedSelectedValues) {
-				if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client) != null) {
-					String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-							.get(client);
 
-					if (selectedDepotsV.contains(clientDepot)) {
-						clientsLeft.add(client);
-					}
+				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+						.get(client);
+
+				if (depotForClient != null && selectedDepotsV.contains(depotForClient)) {
+					clientsLeft.add(client);
 				}
 			}
+
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			if (selectionPanel != null) {
-				// reactivate selection listener
-				Logging.debug(this, " reset the values, particularly in list ");
-				selectionPanel.removeListSelectionListener(this);
-				selectionPanel.addListSelectionListener(this);
-				setSelectedClientsCollectionOnPanel(clientsLeft);
+			// reactivate selection listener
+			Logging.debug(this, " reset the values, particularly in list ");
+			selectionPanel.removeListSelectionListener(this);
+			selectionPanel.addListSelectionListener(this);
+			setSelectedClientsCollectionOnPanel(clientsLeft);
 
-				// no list select item is provided
-				if (clientsLeft.isEmpty()) {
-					selectionPanel.fireListSelectionEmpty(this);
-				}
+			// no list select item is provided
+			if (clientsLeft.isEmpty()) {
+				selectionPanel.fireListSelectionEmpty(this);
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
@@ -4180,7 +4119,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4201,7 +4140,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.activateLoadingPane();
 
 		if (resetLocalbootProducts) {
 			persistenceController.getProductDataService().resetLocalbootProducts(getSelectedClients(),
@@ -4213,13 +4152,13 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
-		mainFrame.setCursor(null);
+		mainFrame.disactivateLoadingPane();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
 		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().length);
 
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return true;
 		}
 
@@ -4258,7 +4197,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callChangeClientIDDialog() {
-		if (getSelectedClients() == null || getSelectedClients().length != 1) {
+		if (getSelectedClients().length != 1) {
 			return;
 		}
 
@@ -4309,7 +4248,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void callChangeDepotDialog() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4400,11 +4339,11 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void reloadHosts() {
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.activateLoadingPane();
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 
-		mainFrame.setCursor(null);
+		mainFrame.disactivateLoadingPane();
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -4511,7 +4450,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void deletePackageCachesOfSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4524,7 +4463,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void fireOpsiclientdEventOnSelectedClients(final String event) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4538,7 +4477,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void processActionRequests() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4554,7 +4493,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void showPopupOnSelectedClients(final String message, final Float seconds) {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4697,7 +4636,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void shutdownSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4713,7 +4652,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void rebootSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4728,7 +4667,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void deleteSelectedClients() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4747,7 +4686,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void copySelectedClient() {
-		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+		if (getSelectedClients().length == 0) {
 			return;
 		}
 
@@ -4759,7 +4698,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		JPanel additionalPane = new JPanel();
-		additionalPane.setOpaque(false);
 		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalPaneLayout);
 
@@ -4781,10 +4719,6 @@ public class ConfigedMain implements ListSelectionListener {
 				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
 				.addComponent(jTextHostname));
 
-		additionalPane.add(jLabelHostname);
-		additionalPane.add(jTextHostname);
-		additionalPane.setVisible(true);
-
 		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, null,
@@ -4801,7 +4735,7 @@ public class ConfigedMain implements ListSelectionListener {
 		fAskCopyClient.setVisible(true);
 
 		if (fAskCopyClient.getResult() == 2) {
-			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			mainFrame.activateLoadingPane();
 			String newClientName = jTextHostname.getText();
 			boolean proceed = true;
 			if (newClientName.isEmpty()) {
@@ -4827,7 +4761,7 @@ public class ConfigedMain implements ListSelectionListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.setCursor(null);
+			mainFrame.disactivateLoadingPane();
 		}
 	}
 
@@ -5031,12 +4965,10 @@ public class ConfigedMain implements ListSelectionListener {
 		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
 			AbstractControlMultiTablePanel cmtp = iter.next();
-			if (cmtp != null) {
-				Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
-				while (!change && iterP.hasNext()) {
-					PanelGenEditTable p = iterP.next();
-					change = p.isDataChanged();
-				}
+			Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
+			while (!change && iterP.hasNext()) {
+				PanelGenEditTable p = iterP.next();
+				change = p.isDataChanged();
 			}
 		}
 

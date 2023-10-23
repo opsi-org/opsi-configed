@@ -34,13 +34,11 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.DefaultListCellOptions;
@@ -279,9 +277,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				public void action(int p) {
 					super.action(p);
 					if (p == PopupMenuTrait.POPUP_RELOAD) {
-						ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+						ConfigedMain.getMainFrame().activateLoadingPane();
 						actor.reloadData();
-						ConfigedMain.getMainFrame().setCursor(null);
+						ConfigedMain.getMainFrame().disactivateLoadingPane();
 					}
 				}
 			};
@@ -330,11 +328,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
 						Logging.warning(this, "no default Value found");
 
-						if (!Main.THEMES) {
-							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
-						} else {
-							jc.setForeground(Globals.OPSI_ERROR);
-						}
+						jc.setForeground(Globals.OPSI_ERROR);
+
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 						jc.setFont(jc.getFont().deriveFont(Font.BOLD));
@@ -352,7 +347,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						} else if (jc instanceof JTextComponent) {
 							((JTextComponent) jc).setText(Globals.STARRED_STRING);
 						} else {
-							CellAlternatingColorizer.colorizeSecret(jc);
+							// Do nothing
 						}
 					}
 
@@ -368,17 +363,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
-		if (!Main.THEMES) {
-			table.setShowGrid(true);
-			table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
-		}
-
 		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
 		jScrollPane = new JScrollPane(table);
-		if (!Main.THEMES) {
-			jScrollPane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		add(jScrollPane, BorderLayout.CENTER);
 	}

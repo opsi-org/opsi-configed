@@ -44,8 +44,8 @@ public abstract class AbstractSelectElement {
 	/** Get the localized path joined with '/' */
 	public String getLocalizedPath() {
 		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < localizedPath.length; i++) {
-			s.append(localizedPath[i] + '/');
+		for (String pathPart : localizedPath) {
+			s.append(pathPart + '/');
 		}
 
 		return s.substring(0, s.length() - 1);

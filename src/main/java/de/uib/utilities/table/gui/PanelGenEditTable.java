@@ -6,7 +6,6 @@
 
 package de.uib.utilities.table.gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -59,7 +58,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -135,8 +133,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private JPanel titlePane;
 
-	private Color backgroundColorEditFieldsSelected = Globals.DEFAULT_TABLE_CELL_SELECTED_BG_COLOR;
-
 	private JPopupMenu popupMenu;
 
 	private boolean dataChanged;
@@ -182,9 +178,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		this.internalpopups = new ArrayList<>();
 		if (popupsWanted != null) {
-			for (int j = 0; j < popupsWanted.length; j++) {
-				this.internalpopups.add(popupsWanted[j]);
-				Logging.info(this.getClass(), "add popup " + popupsWanted[j]);
+			for (int wantedPopup : popupsWanted) {
+				this.internalpopups.add(wantedPopup);
+				Logging.info(this.getClass(), "add popup " + wantedPopup);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -251,6 +247,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		return result;
+	}
+
+	protected Object modifyHeaderValue(Object value) {
+		return value;
 	}
 
 	/**
@@ -326,7 +326,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.addMouseListener(this);
 
 		theTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()));
+				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
+					@Override
+					protected Object modifyValue(Object value) {
+						return modifyHeaderValue(value);
+					}
+				});
 
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -515,7 +520,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private static List<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
 			final List<Integer> listOfKeys) {
-		ArrayList<Integer> augmentedList = new ArrayList<>();
+		List<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
 
@@ -524,28 +529,27 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		for (int key : listOfKeys) {
 			if (key == insertpoint) {
 				found = true;
-
-				for (int type : injectKeys) {
-
-					if (!setOfKeys.contains(type)) {
-						augmentedList.add(type);
-						setOfKeys.add(type);
-					}
-				}
+				addMissingKeys(injectKeys, setOfKeys, augmentedList);
 			}
+
 			augmentedList.add(key);
 			setOfKeys.add(key);
 		}
 
 		if (!found) {
-			for (int type : injectKeys) {
-				if (!setOfKeys.contains(type)) {
-					augmentedList.add(type);
-					setOfKeys.add(type);
-				}
+			addMissingKeys(injectKeys, setOfKeys, augmentedList);
+		}
+
+		return augmentedList;
+	}
+
+	private static void addMissingKeys(int[] injectKeys, Set<Integer> setOfKeys, List<Integer> augmentedList) {
+		for (int type : injectKeys) {
+			if (!setOfKeys.contains(type)) {
+				augmentedList.add(type);
+				setOfKeys.add(type);
 			}
 		}
-		return augmentedList;
 	}
 
 	private void addPopupmenuStandardpart() {
@@ -782,7 +786,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		return sortKeys;
-
 	}
 
 	private void setSorter() {
@@ -794,15 +797,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 
-		for (int j = 0; j < tableModel.getColumnCount(); j++) {
-
-			// TODO check if this is ever used
-			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
-
-				sorter.setComparator(j, new IntComparatorForStrings());
-			}
-		}
-
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
 		if (sortKeys != null && !sortKeys.isEmpty()) {
@@ -810,7 +804,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		theTable.setRowSorter(sorter);
-
 	}
 
 	public void setTableModel(GenTableModel m) {
@@ -983,11 +976,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 
-			for (int j = 0; j < cols.length; j++) {
-				theTable.getColumnModel().getColumn(cols[j])
-						.setCellRenderer(new TableCellRendererConfigured(null, Globals.LIGHT_BLACK,
-								Globals.DEFAULT_TABLE_CELL_BG_COLOR_1, Globals.DEFAULT_TABLE_CELL_BG_COLOR_2,
-								backgroundColorEditFieldsSelected));
+			for (int col : cols) {
+				theTable.getColumnModel().getColumn(col).setCellRenderer(new ColorTableCellRenderer());
 			}
 		}
 	}

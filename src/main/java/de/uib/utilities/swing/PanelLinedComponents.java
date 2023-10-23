@@ -44,8 +44,8 @@ public class PanelLinedComponents extends JPanel {
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		hGroup.addGap(Globals.GAP_SIZE);
 		if (components != null) {
-			for (int j = 0; j < components.length; j++) {
-				hGroup.addComponent(components[j], 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
+			for (JComponent component : components) {
+				hGroup.addComponent(component, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 				hGroup.addGap(Globals.GAP_SIZE);
 			}
 		}
@@ -57,8 +57,8 @@ public class PanelLinedComponents extends JPanel {
 		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(Alignment.CENTER);
 
 		if (components != null) {
-			for (int j = 0; j < components.length; j++) {
-				vGroup1.addComponent(components[j], myHeight, myHeight, myHeight);
+			for (JComponent component : components) {
+				vGroup1.addComponent(component, myHeight, myHeight, myHeight);
 			}
 		}
 

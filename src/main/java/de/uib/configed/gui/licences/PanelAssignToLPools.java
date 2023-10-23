@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -176,8 +177,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRadiobuttonsPreselectionForName2Pool.addChangeListener(this);
 
 		JPanel panelWorkNamebased = new JPanel();
-		panelWorkNamebased.setBorder(new LineBorder(Globals.BLUE_GREY, 3, true));
-		panelWorkNamebased.setOpaque(true);
+		panelWorkNamebased.setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 3, true));
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
 		panelWorkNamebased.setLayout(layoutNamebased);
 

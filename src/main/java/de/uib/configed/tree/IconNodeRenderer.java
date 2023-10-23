@@ -12,9 +12,6 @@ import java.awt.Dimension;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 200;
 	private static final int LABEL_HEIGHT = 20;
@@ -22,12 +19,6 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	public IconNodeRenderer() {
 		super();
 
-		if (!Main.THEMES) {
-			super.setOpaque(true);
-			super.setForeground(Globals.LIGHT_BLACK);
-			super.setTextSelectionColor(Globals.LIGHT_BLACK);
-			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		}
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 
@@ -50,15 +41,6 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			boolean enabled = tree.isEnabled();
 			setEnabled(enabled);
 			node.setEnabled(enabled);
-
-			if (!Main.THEMES) {
-				if (sel) {
-					setBackground(Globals.BACKGROUND_COLOR_7);
-
-				} else {
-					setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
-				}
-			}
 
 			if (leaf) {
 				setIcon(node.getLeafIcon());

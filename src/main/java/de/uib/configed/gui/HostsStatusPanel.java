@@ -13,18 +13,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
 
 import org.java_websocket.handshake.ServerHandshake;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.Containership;
 import utils.Utils;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -188,7 +185,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		String pathConnectedIcon;
 		String pathDisconnectedIcon;
 
-		if (Main.THEMES && FlatLaf.isLafDark()) {
+		if (FlatLaf.isLafDark()) {
 			pathConnectedIcon = "images/network-wireless-connected-100_invert.png";
 			pathDisconnectedIcon = "images/network-wireless-disconnected_invert.png";
 		} else {
@@ -261,13 +258,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 								Globals.LINE_HEIGHT)
 						.addComponent(connectionStateLabel))
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		if (!Main.THEMES) {
-
-			Containership csStatusPane = new Containership(this);
-			csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-					JTextComponent.class);
-		}
 	}
 
 	@Override

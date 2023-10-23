@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.Configed;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
@@ -77,8 +76,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 			entry(VERSION, "version"), entry(SUB_VERSION, "subVersion"), entry(ARCHITECTURE, "architecture"),
 			entry(LANGUAGE, "language"), entry(WINDOWS_SOFTWARE_ID, "windowsSoftwareId"));
 
-	private static Map<String, String> locale = new StringIdentityMap(KEYS);
-
 	private String ident;
 	private String identReduced;
 
@@ -116,15 +113,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 		identReduced = Utils.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
 
 		super.put(ID, ident);
-	}
-
-	public static void setLocale() {
-		locale.put(ID, "ID");
-		locale.put(NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
-		locale.put(ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		locale.put(WINDOWS_SOFTWARE_ID, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
 	public static List<String> getDisplayKeys() {

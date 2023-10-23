@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
@@ -45,7 +44,7 @@ import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import utils.Utils;
 
-public class FGeneralDialogLicensingInfo extends FGeneralDialog {
+public class LicensingInfoDialog extends FGeneralDialog {
 
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
@@ -61,7 +60,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
+	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 
@@ -83,10 +82,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		if (!Main.THEMES) {
-			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
-
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -94,14 +89,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!Main.THEMES) {
-			centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
-		}
-
-		centerPanel.setOpaque(true);
-
 		southPanel = new JPanel();
-		southPanel.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
@@ -122,12 +110,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
-
-		southPanel.setOpaque(false);
-		if (!Main.THEMES) {
-			southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
-		}
-		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -171,15 +153,14 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				false) {
 			@Override
 			public void reload() {
-				Logging.info(this,
-						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced " + !LicensingInfoDialog.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-						!FGeneralDialogLicensingInfo.extendedView);
+						!LicensingInfoDialog.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
 				buildModel();
@@ -216,7 +197,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 
-		if (Main.THEMES && FlatLaf.isLafDark()) {
+		if (FlatLaf.isLafDark()) {
 			orangeWarningLabel.setIcon(Utils.createImageIcon("images/warning_orange_dark.png", ""));
 			redWarningLabel.setIcon(Utils.createImageIcon("images/warning_red_dark.png", ""));
 		} else {
@@ -285,10 +266,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		if (!Main.THEMES) {
-			extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-		extraInfoPanel.setOpaque(true);
 
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);
@@ -358,10 +335,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		if (!Main.THEMES) {
-			xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		}
-		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(extraInfoPanel).addComponent(panel));
@@ -373,14 +346,14 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
-		FGeneralDialogLicensingInfo.extendedView = isExtendedView;
+		LicensingInfoDialog.extendedView = isExtendedView;
 		Logging.info("extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}
 
 	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
-		FGeneralDialogLicensingInfo.showOnlyAvailableModules = showOnlyAvailableModules;
+		LicensingInfoDialog.showOnlyAvailableModules = showOnlyAvailableModules;
 		LicensingInfoMap.requestRefresh();
 	}
 

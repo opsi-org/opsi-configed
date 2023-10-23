@@ -16,8 +16,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.utilities.swing.CellAlternatingColorizer;
-
 public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer {
 
 	private Border noFocusBorder;
@@ -26,7 +24,6 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public CheckBoxTableCellRenderer() {
 		super();
 
-		super.setOpaque(true);
 		super.setBorderPainted(true);
 		super.setHorizontalAlignment(SwingConstants.CENTER);
 		super.setVerticalAlignment(SwingConstants.CENTER);
@@ -36,7 +33,7 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		CellAlternatingColorizer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0, true);
+		ColorTableCellRenderer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0);
 
 		if (hasFocus) {
 			if (focusBorder == null) {

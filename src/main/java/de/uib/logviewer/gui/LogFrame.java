@@ -114,9 +114,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
-		if (Main.THEMES) {
-			jMenuFile.add(createJMenuTheme());
-		}
+		jMenuFile.add(createJMenuTheme());
 		jMenuFile.add(createJMenuLanguage());
 		jMenuFile.add(jMenuFileExit);
 		return jMenuFile;
@@ -232,7 +230,7 @@ public class LogFrame extends JFrame implements WindowListener {
 				"images/reload16.png", "");
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		String iconSavePath = Main.THEMES && FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
+		String iconSavePath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
 		iconButtonSave = new IconButton(Configed.getResourceValue("save"), iconSavePath, iconSavePath, "");
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {

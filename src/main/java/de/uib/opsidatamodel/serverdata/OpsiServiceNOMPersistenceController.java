@@ -221,6 +221,7 @@ public class OpsiServiceNOMPersistenceController {
 		hostInfoCollections = new HostInfoCollections(this);
 
 		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
+		configDataService.setHardwareDataService(hardwareDataService);
 
 		userRolesConfigDataService.setConfigDataService(configDataService);
 		userRolesConfigDataService.setGroupDataService(groupDataService);

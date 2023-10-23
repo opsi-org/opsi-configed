@@ -11,8 +11,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
@@ -24,9 +22,6 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-		if (!Main.THEMES) {
-			super.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
 
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 

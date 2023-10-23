@@ -60,8 +60,8 @@ public class BackendMySQL {
 
 		List<String> list = new ArrayList<>();
 
-		for (int i = 0; i < clients.size(); i++) {
-			list.add(clients.get(i).get(0));
+		for (List<String> client : clients) {
+			list.add(client.get(0));
 		}
 
 		return list;

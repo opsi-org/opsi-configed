@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -28,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,7 +56,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -82,7 +81,6 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
-import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -102,14 +100,13 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -121,7 +118,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
@@ -383,13 +379,11 @@ public class MainFrame extends JFrame
 
 	private PanelTabbedDocuments showLogfiles;
 
-	private FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
+	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
-	private String[] options = new String[] { "off", "on", "setup" };
-	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
 	private ButtonGroup buttonGroupRequired = new ButtonGroup();
 	private JRadioButton jRadioRequiredAll = new JRadioButton();
@@ -463,10 +457,6 @@ public class MainFrame extends JFrame
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
-		return statusPane;
-	}
-
-	public MessagebusListener getMessagebusListener() {
 		return statusPane;
 	}
 
@@ -573,11 +563,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
-
-		if (Main.THEMES) {
-			jMenuFile.add(jMenuTheme);
-		}
-
+		jMenuFile.add(jMenuTheme);
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 	}
@@ -914,31 +900,7 @@ public class MainFrame extends JFrame
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
 				+ SSHConnectionInfo.getInstance().getHost();
 
-		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		if (!Main.THEMES) {
-			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
-		}
-
-		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
-
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.LIGHT_BLACK);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
-		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
-
-		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			if (!Main.THEMES) {
-				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
-			}
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
-		} else {
-			Logging.warning(this, "unexpected status of ssh connection " + status);
-		}
+		jMenuSSHConnection.setText(connectiondata.trim() + " " + status);
 	}
 
 	public void reloadServerMenu() {
@@ -1764,8 +1726,7 @@ public class MainFrame extends JFrame
 
 		labelHostID = new JLabel("");
 
-		labelHostID.setFont(labelHostID.getFont()
-				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
+		labelHostID.setFont(labelHostID.getFont().deriveFont(Font.BOLD));
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
@@ -2164,7 +2125,7 @@ public class MainFrame extends JFrame
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!FGeneralDialogLicensingInfo.isExtendedView());
+					!LicensingInfoDialog.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -2190,7 +2151,7 @@ public class MainFrame extends JFrame
 		}
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
+		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(this);
 		jButtonOpsiLicenses.setFocusable(false);
 
@@ -2341,31 +2302,26 @@ public class MainFrame extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		if (Main.THEMES) {
-			c.weightx = 0.0;
-		} else {
-			c.weightx = 1.0;
-		}
+		c.weightx = 0.0;
+
 		c.gridx = 0;
 		c.gridy = 0;
 		iconBarPane.add(iconsTopLeft, c);
 
-		if (Main.THEMES) {
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.0;
-			c.gridx = 1;
-			c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
+		c.gridx = 1;
+		c.gridy = 0;
 
-			String logoPath;
+		String logoPath;
 
-			if (FlatLaf.isLafDark()) {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-			} else {
-				logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-			}
-
-			iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
+		if (FlatLaf.isLafDark()) {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
+		} else {
+			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
 		}
+
+		iconBarPane.add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
@@ -2514,11 +2470,6 @@ public class MainFrame extends JFrame
 		jTabbedPaneConfigPanes.setSelectedIndex(0);
 
 		setTitle(configedMain.getAppTitle());
-
-		Containership csJPanelAllContent = new Containership(allPanel);
-
-		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-				new Class[] { boolean.class }, JTextComponent.class);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
@@ -2998,9 +2949,9 @@ public class MainFrame extends JFrame
 
 	private void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
-			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
+			fDialogOpsiLicensingInfo = new LicensingInfoDialog(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 680, true);
+					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 700, true);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
@@ -3594,10 +3545,6 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void setChangedDepotSelectionActive(boolean active) {
-		depotListPresenter.setChangedDepotSelectionActive(active);
-	}
-
 	@Override
 	public void paint(Graphics g) {
 		try {
@@ -3667,7 +3614,7 @@ public class MainFrame extends JFrame
 		return controllerHWinfoMultiClients;
 	}
 
-	public FGeneralDialogLicensingInfo getFDialogOpsiLicensingInfo() {
+	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
 		return fDialogOpsiLicensingInfo;
 	}
 }

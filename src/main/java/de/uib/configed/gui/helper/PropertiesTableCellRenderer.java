@@ -10,9 +10,6 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
@@ -20,14 +17,9 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		Object sValue = formatList(value);
-		Component result = super.getTableCellRendererComponent(table, sValue, isSelected, hasFocus, row, column);
+		Object formattedValue = formatList(value);
 
-		if (column == 1) {
-			mergeColorize(result, value);
-		}
-
-		return result;
+		return super.getTableCellRendererComponent(table, formattedValue, isSelected, hasFocus, row, column);
 	}
 
 	private static Object formatList(Object value) {
@@ -41,12 +33,5 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		}
 
 		return result;
-	}
-
-	private static void mergeColorize(Component comp, Object value) {
-		if (value == ListMerger.NO_COMMON_VALUE && !Main.THEMES) {
-			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
-			comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
-		}
 	}
 }

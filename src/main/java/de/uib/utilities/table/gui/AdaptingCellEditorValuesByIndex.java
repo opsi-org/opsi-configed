@@ -7,7 +7,6 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Component;
-import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
@@ -24,8 +23,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 	private ComboBoxModeller cbm;
 	private ComboBoxModel<String> nullModel;
 
-	public AdaptingCellEditorValuesByIndex(JComboBox<String> cc, ComboBoxModeller cbm,
-			Map<String, String> universalMapOfStrings) {
+	public AdaptingCellEditorValuesByIndex(JComboBox<String> cc, ComboBoxModeller cbm) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;

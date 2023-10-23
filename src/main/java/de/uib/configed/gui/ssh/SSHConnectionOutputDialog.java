@@ -23,18 +23,14 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
-import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -53,40 +49,40 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	public static final String ANSI_CODE_ERROR = "[0;error;0m";
 	private static final Map<String, Color> ANSI_CODE_COLORS = new HashMap<>();
 	static {
-		ANSI_CODE_COLORS.put("[0;info;0m", Globals.GREYED);
-		ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
+		ANSI_CODE_COLORS.put("[0;info;0m", Globals.LOG_COLOR_TRACE);
+		ANSI_CODE_COLORS.put("[0;error;0m", Globals.LOG_COLOR_NOTICE);
 		ANSI_CODE_COLORS.put("[0;30;40m", null);
 		ANSI_CODE_COLORS.put("[1;30;40m", null);
 		ANSI_CODE_COLORS.put("[0;40;40m", null);
 		ANSI_CODE_COLORS.put("[1;40;40m", null);
-		ANSI_CODE_COLORS.put("[0;31;40m", Globals.ACTION_COLOR);
-		ANSI_CODE_COLORS.put("[1;31;40m", Globals.ACTION_COLOR);
-		ANSI_CODE_COLORS.put("[0;41;40m", Globals.ACTION_COLOR);
-		ANSI_CODE_COLORS.put("[1;41;40m", Globals.ACTION_COLOR);
-		ANSI_CODE_COLORS.put("[0;32;40m", Globals.OK_COLOR);
-		ANSI_CODE_COLORS.put("[1;32;40m", Globals.OK_COLOR);
-		ANSI_CODE_COLORS.put("[0;42;40m", Globals.OK_COLOR);
-		ANSI_CODE_COLORS.put("[1;42;40m", Globals.OK_COLOR);
-		ANSI_CODE_COLORS.put("[0;33;40m", Globals.DARK_ORANGE);
-		ANSI_CODE_COLORS.put("[1;33;40m", Globals.DARK_ORANGE);
-		ANSI_CODE_COLORS.put("[0;43;40m", Globals.DARK_ORANGE);
-		ANSI_CODE_COLORS.put("[1;43;40m", Globals.DARK_ORANGE);
-		ANSI_CODE_COLORS.put("[0;34;40m", Globals.BLUE);
-		ANSI_CODE_COLORS.put("[1;34;40m", Globals.BLUE);
-		ANSI_CODE_COLORS.put("[0;44;40m", Globals.BLUE);
-		ANSI_CODE_COLORS.put("[1;44;40m", Globals.BLUE);
-		ANSI_CODE_COLORS.put("[0;35;40m", Color.MAGENTA);
-		ANSI_CODE_COLORS.put("[1;35;40m", Color.MAGENTA);
-		ANSI_CODE_COLORS.put("[0;45;40m", Color.MAGENTA);
-		ANSI_CODE_COLORS.put("[1;45;40m", Color.MAGENTA);
-		ANSI_CODE_COLORS.put("[0;36;40m", Color.CYAN);
-		ANSI_CODE_COLORS.put("[1;36;40m", Color.CYAN);
-		ANSI_CODE_COLORS.put("[0;46;40m", Color.CYAN);
-		ANSI_CODE_COLORS.put("[1;46;40m", Color.CYAN);
-		ANSI_CODE_COLORS.put("[0;37;40m", Globals.LIGHT_BLACK);
-		ANSI_CODE_COLORS.put("[1;37;40m", Globals.LIGHT_BLACK);
-		ANSI_CODE_COLORS.put("[0;47;40m", Globals.LIGHT_BLACK);
-		ANSI_CODE_COLORS.put("[1;47;40m", Globals.LIGHT_BLACK);
+		ANSI_CODE_COLORS.put("[0;31;40m", Globals.LOG_COLOR_NOTICE);
+		ANSI_CODE_COLORS.put("[1;31;40m", Globals.LOG_COLOR_NOTICE);
+		ANSI_CODE_COLORS.put("[0;41;40m", Globals.LOG_COLOR_NOTICE);
+		ANSI_CODE_COLORS.put("[1;41;40m", Globals.LOG_COLOR_NOTICE);
+		ANSI_CODE_COLORS.put("[0;32;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[1;32;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[0;42;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[1;42;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[0;33;40m", Globals.LOG_COLOR_WARNING);
+		ANSI_CODE_COLORS.put("[1;33;40m", Globals.LOG_COLOR_WARNING);
+		ANSI_CODE_COLORS.put("[0;43;40m", Globals.LOG_COLOR_WARNING);
+		ANSI_CODE_COLORS.put("[1;43;40m", Globals.LOG_COLOR_WARNING);
+		ANSI_CODE_COLORS.put("[0;34;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[1;34;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[0;44;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[1;44;40m", Globals.LOG_COLOR_ESSENTIAL);
+		ANSI_CODE_COLORS.put("[0;35;40m", Globals.LOG_COLOR_SECRET);
+		ANSI_CODE_COLORS.put("[1;35;40m", Globals.LOG_COLOR_SECRET);
+		ANSI_CODE_COLORS.put("[0;45;40m", Globals.LOG_COLOR_SECRET);
+		ANSI_CODE_COLORS.put("[1;45;40m", Globals.LOG_COLOR_SECRET);
+		ANSI_CODE_COLORS.put("[0;36;40m", Globals.LOG_COLOR_ERROR);
+		ANSI_CODE_COLORS.put("[1;36;40m", Globals.LOG_COLOR_ERROR);
+		ANSI_CODE_COLORS.put("[0;46;40m", Globals.LOG_COLOR_ERROR);
+		ANSI_CODE_COLORS.put("[1;46;40m", Globals.LOG_COLOR_ERROR);
+		ANSI_CODE_COLORS.put("[0;37;40m", Globals.LOG_COLOR_TRACE);
+		ANSI_CODE_COLORS.put("[1;37;40m", Globals.LOG_COLOR_TRACE);
+		ANSI_CODE_COLORS.put("[0;47;40m", Globals.LOG_COLOR_TRACE);
+		ANSI_CODE_COLORS.put("[1;47;40m", Globals.LOG_COLOR_TRACE);
 	}
 
 	protected JTextPane output;
@@ -181,10 +177,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	private void initOutputGui() {
 
 		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-		if (!Main.THEMES) {
-			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		}
+
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 		mainPanelLayout = new GroupLayout(mainPanel);
@@ -200,27 +193,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		output = new JTextPane();
 		output.setEditable(false);
 
-		// THEME color question
-		if (!Main.THEMES) {
-			output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-		}
 		output.setContentType("text/rtf");
 		output.setPreferredSize(new Dimension(250, 200));
-		StyledDocument doc = (StyledDocument) output.getDocument();
-		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-		Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
-
-		if (!Main.THEMES) {
-			// Kein grün :(
-			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
-
-			// Was ist rot?
-			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
-		}
-
-		SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
-		readOnlyAttributeSet.addAttribute("readonly", true);
-		((AbstractDocument) doc).setDocumentFilter(new InputFilter(output));
 
 		DefaultCaret caret = (DefaultCaret) output.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -251,33 +225,5 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		buildFrame = false;
 		Logging.debug(this, "cancel");
 		super.doAction2();
-	}
-
-	private static class InputFilter extends DocumentFilter {
-		JTextPane editor;
-
-		public InputFilter(JTextPane editor) {
-			this.editor = editor;
-		}
-
-		@Override
-		public void remove(final FilterBypass fb, final int offset, final int length) throws BadLocationException {
-			if (!isReadOnly()) {
-				super.remove(fb, offset, length);
-			}
-		}
-
-		@Override
-		public void replace(final FilterBypass fb, final int offset, final int length, final String text,
-				final AttributeSet attrs) throws BadLocationException {
-			if (!isReadOnly()) {
-				super.replace(fb, offset, length, text, attrs);
-			}
-		}
-
-		private boolean isReadOnly() {
-			AttributeSet attributeSet = editor.getCharacterAttributes();
-			return attributeSet != null && attributeSet.getAttribute("readonly") != null;
-		}
 	}
 }

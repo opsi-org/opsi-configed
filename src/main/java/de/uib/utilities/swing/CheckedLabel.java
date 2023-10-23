@@ -65,8 +65,6 @@ public class CheckedLabel extends JPanel {
 	public CheckedLabel(String text, Icon selectedIcon, Icon unselectedIcon, Icon nullIcon, boolean selected) {
 		super();
 
-		super.setOpaque(false);
-
 		super.setFocusable(true);
 		super.setRequestFocusEnabled(true);
 

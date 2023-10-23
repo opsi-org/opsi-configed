@@ -16,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -38,6 +37,7 @@ import utils.Utils;
 public class ControllerHWinfoMultiClients {
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
+	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	private PanelGenEditTable panel;
 	private GenTableModel model;
@@ -85,6 +85,14 @@ public class ControllerHWinfoMultiClients {
 				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 				super.reload();
 			}
+
+			@Override
+			protected Object modifyHeaderValue(Object s) {
+				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
+					return ((String) s).substring(DELETE_PREFIX.length());
+				}
+				return s;
+			}
 		};
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
@@ -122,6 +130,7 @@ public class ControllerHWinfoMultiClients {
 
 		// we apply filter
 		panel.reset();
+		translateHostColumns();
 	}
 
 	private void buildSurrounding() {
@@ -157,15 +166,17 @@ public class ControllerHWinfoMultiClients {
 		panel.addListSelectionListener(listSelectionEvent -> buttonCopySelection
 				.setEnabled(!((ListSelectionModel) listSelectionEvent.getSource()).isSelectionEmpty()));
 
-		TableColumn col;
-		col = panel.getColumnModel().getColumn(0);
-		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
-		col = panel.getColumnModel().getColumn(1);
-		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		col = panel.getColumnModel().getColumn(2);
-		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		col = panel.getColumnModel().getColumn(3);
-		col.setHeaderValue(Configed.getResourceValue("PanelHWInfo.lastScanTime"));
+		translateHostColumns();
+	}
+
+	private void translateHostColumns() {
+		panel.getColumnModel().getColumn(0)
+				.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
+		panel.getColumnModel().getColumn(1)
+				.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+		panel.getColumnModel().getColumn(2)
+				.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+		panel.getColumnModel().getColumn(3).setHeaderValue(Configed.getResourceValue("PanelHWInfo.lastScanTime"));
 	}
 
 	private void configureColumns(ActionEvent actionEvent) {

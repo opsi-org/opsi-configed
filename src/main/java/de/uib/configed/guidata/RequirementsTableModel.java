@@ -17,9 +17,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -210,11 +208,8 @@ public class RequirementsTableModel extends AbstractTableModel {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			MyColorizer colorizer = new MyColorizer();
 
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-			colorizer.colorize(cell, row, column);
 
 			if (cell instanceof JComponent) {
 				((JComponent) cell).setToolTipText("" + value);
@@ -239,41 +234,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 			}
 
 			return cell;
-		}
-	}
-
-	private static final class MyColorizer {
-
-		private MyColorizer() {
-		}
-
-		public void colorize(Component cell, int row, int col) {
-			if (!Main.THEMES) {
-				cell.setForeground(Globals.LIGHT_BLACK);
-			}
-
-			int kindOfRow = row % 3;
-
-			if (!Main.THEMES) {
-				switch (kindOfRow) {
-				case 0:
-					cell.setBackground(Globals.BACKGROUND_COLOR_7);
-					break;
-				case 1:
-					cell.setBackground(Globals.BACKGROUND_COLOR_8);
-					break;
-				case 2:
-					cell.setBackground(Globals.BACKGROUND_COLOR_8);
-					break;
-				default:
-					Logging.warning(this, "no case found for kindOfRow in colorize");
-					break;
-				}
-
-				if (kindOfRow == 2 && col > 1) {
-					cell.setBackground(Globals.BACKGROUND_COLOR_4);
-				}
-			}
 		}
 	}
 }

@@ -22,8 +22,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import de.uib.Main;
-import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
 
@@ -48,10 +46,6 @@ public class DynamicCombo extends JPanel {
 		tablemodel.addRow(new String[] { "" });
 
 		table.setModel(tablemodel);
-		if (!Main.THEMES) {
-			table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			table.setSelectionForeground(Globals.LIGHT_BLACK);
-		}
 		table.setShowGrid(false);
 
 		col = table.getColumnModel().getColumn(0);
