@@ -7,6 +7,7 @@
 
 ### Changed
 - Remove HARDWARE prefix from column names in "Hardware Information" tab
+- Change labeling for vendors in "Hardware Information" tab
 
 ## [4.3.0.11] - 2023-10-19
 ### Fixed
