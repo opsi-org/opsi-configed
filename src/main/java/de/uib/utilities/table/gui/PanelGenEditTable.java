@@ -512,7 +512,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private static List<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
 			final List<Integer> listOfKeys) {
-		ArrayList<Integer> augmentedList = new ArrayList<>();
+		List<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
 
@@ -521,28 +521,27 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		for (int key : listOfKeys) {
 			if (key == insertpoint) {
 				found = true;
-
-				for (int type : injectKeys) {
-
-					if (!setOfKeys.contains(type)) {
-						augmentedList.add(type);
-						setOfKeys.add(type);
-					}
-				}
+				addMissingKeys(injectKeys, setOfKeys, augmentedList);
 			}
+
 			augmentedList.add(key);
 			setOfKeys.add(key);
 		}
 
 		if (!found) {
-			for (int type : injectKeys) {
-				if (!setOfKeys.contains(type)) {
-					augmentedList.add(type);
-					setOfKeys.add(type);
-				}
+			addMissingKeys(injectKeys, setOfKeys, augmentedList);
+		}
+
+		return augmentedList;
+	}
+
+	private static void addMissingKeys(int[] injectKeys, Set<Integer> setOfKeys, List<Integer> augmentedList) {
+		for (int type : injectKeys) {
+			if (!setOfKeys.contains(type)) {
+				augmentedList.add(type);
+				setOfKeys.add(type);
 			}
 		}
-		return augmentedList;
 	}
 
 	private void addPopupmenuStandardpart() {
