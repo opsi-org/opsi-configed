@@ -193,7 +193,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		// this.setBorder(new
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);

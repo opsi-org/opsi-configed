@@ -345,13 +345,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
-						Logging.debug(this, "before mixtovisualstate product " + productId + " value "
-								+ stateAndAction.get(colKey));
-					}
 					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 				}
-
 			}
 		}
 	}
@@ -364,33 +359,32 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 
 			// check if products for clients exist
-			for (int j = 0; j < productsV.size(); j++) {
-
-				String productId = productsV.get(j);
+			for (String productId : productsV) {
 				Map<String, String> stateAndAction = productStates.get(productId);
 
 				if (stateAndAction == null) {
-
-					// build visual states
-					Iterator<String> iter = ProductState.KEYS.iterator();
-
-					String priority = "";
-
-					if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
-						priority = "" + globalProductInfos.get(productId).get("priority");
-					}
-
-					while (iter.hasNext()) {
-						String key = iter.next();
-
-						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
-							mixToVisualState(combinedVisualValues.get(key), productId, priority);
-						} else {
-							mixToVisualState(combinedVisualValues.get(key), productId,
-									ProductState.getDefaultProductState().get(key));
-						}
-					}
+					completeProductWithDefaults(productId);
 				}
+			}
+		}
+	}
+
+	private void completeProductWithDefaults(String productId) {
+		// build visual states
+
+		String priority = "";
+
+		if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
+			priority = "" + globalProductInfos.get(productId).get("priority");
+		}
+
+		for (String key : ProductState.KEYS) {
+
+			if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
+				mixToVisualState(combinedVisualValues.get(key), productId, priority);
+			} else {
+				mixToVisualState(combinedVisualValues.get(key), productId,
+						ProductState.getDefaultProductState().get(key));
 			}
 		}
 	}

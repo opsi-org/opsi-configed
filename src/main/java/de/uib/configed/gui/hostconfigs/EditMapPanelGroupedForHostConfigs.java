@@ -442,10 +442,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			classify(visualdata, keyclasses);
 
 			for (String key : keyclasses) {
-
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
-
-				partialPanels.get(key).mapTableModel.setObservers(this.mapTableModel.getObservers());
+				partialPanels.get(key).getMapTableModel().setObservers(this.mapTableModel.getObservers());
 			}
 		}
 	}
@@ -536,7 +534,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				private void reload() {
-					ConfigedMain.getMainFrame().activateLoadingPane();;
+					ConfigedMain.getMainFrame().activateLoadingPane();
 					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
@@ -549,7 +547,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						tree.scrollRowToVisible(row);
 					}
 
-					ConfigedMain.getMainFrame().disactivateLoadingPane();;
+					ConfigedMain.getMainFrame().disactivateLoadingPane();
 				}
 
 				@Override

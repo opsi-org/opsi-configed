@@ -78,8 +78,6 @@ public class SWAuditClientEntry {
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
-	private static Map<String, String> locale = new StringIdentityMap(KEYS);
-
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
 	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
@@ -236,10 +234,6 @@ public class SWAuditClientEntry {
 
 	public static List<String> getDisplayKeys() {
 		return KEYS_FOR_GUI_TABLES;
-	}
-
-	public static String getDisplayKey(int i) {
-		return locale.get(KEYS.get(i));
 	}
 
 	public Map<String, Object> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {

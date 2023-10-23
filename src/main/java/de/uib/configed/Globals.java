@@ -81,6 +81,12 @@ public final class Globals {
 	public static final Color OPSI_ERROR = LOG_COLOR_ERROR;
 	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
 
+	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
+	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
+
+	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
+	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
+
 	// End new colors
 
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
@@ -89,28 +95,14 @@ public final class Globals {
 	// some value which shall be interpreted as identical
 	public static final Color INVISIBLE = new Color(11, 13, 17);
 
-	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
-	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
-
-	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
-	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
-
 	public static final Color FAILED_COLOR = OPSI_ERROR;
 	public static final Color ACTION_COLOR = OPSI_OK;
 	public static final Color OK_COLOR = OPSI_OK;
 	public static final Color UNKNOWN_COLOR = LOG_COLOR_SECRET;
 
-	public static final Color DARK_ORANGE = new Color(218, 180, 4);
-	public static final Color LIGHT_BLACK = new Color(30, 30, 30);
-	public static final Color BLUE = new Color(30, 30, 100);
-	public static final Color BLUE_GREY = new Color(180, 190, 190);
-	public static final Color GREYED = new Color(150, 150, 150);
-
 	// also used for GlassPane...
 
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
-
-	public static final Color NEW_CLIENT_DIALOG_BORDER_COLOR = new Color(122, 138, 153);
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 

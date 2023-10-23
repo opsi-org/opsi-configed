@@ -7,13 +7,11 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class RetrievedMap extends HashMap<String, Object> {
 	// pass the original map
 	protected Map<String, Object> retrieved;
-	protected Map<String, String> classnames;
 
 	public RetrievedMap(Map<String, Object> retrieved) {
 		super();
@@ -25,15 +23,8 @@ public class RetrievedMap extends HashMap<String, Object> {
 	}
 
 	protected void build() {
-		if (retrieved == null) {
-			return;
-		}
-
-		Iterator<String> iter = retrieved.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			Object value = retrieved.get(key);
-			put(key, value);
+		if (retrieved != null) {
+			putAll(retrieved);
 		}
 	}
 

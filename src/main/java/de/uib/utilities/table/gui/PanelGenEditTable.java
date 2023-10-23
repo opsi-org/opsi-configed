@@ -179,9 +179,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		this.internalpopups = new ArrayList<>();
 		if (popupsWanted != null) {
-			for (int j = 0; j < popupsWanted.length; j++) {
-				this.internalpopups.add(popupsWanted[j]);
-				Logging.info(this.getClass(), "add popup " + popupsWanted[j]);
+			for (int wantedPopup : popupsWanted) {
+				this.internalpopups.add(wantedPopup);
+				Logging.info(this.getClass(), "add popup " + wantedPopup);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -989,8 +989,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 
-			for (int j = 0; j < cols.length; j++) {
-				theTable.getColumnModel().getColumn(cols[j]).setCellRenderer(new ColorTableCellRenderer());
+			for (int col : cols) {
+				theTable.getColumnModel().getColumn(col).setCellRenderer(new ColorTableCellRenderer());
 			}
 		}
 	}

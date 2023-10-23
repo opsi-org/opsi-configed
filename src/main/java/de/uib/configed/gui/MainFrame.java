@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -28,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -100,7 +100,6 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -458,10 +457,6 @@ public class MainFrame extends JFrame
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
-		return statusPane;
-	}
-
-	public MessagebusListener getMessagebusListener() {
 		return statusPane;
 	}
 
@@ -1731,8 +1726,7 @@ public class MainFrame extends JFrame
 
 		labelHostID = new JLabel("");
 
-		labelHostID.setFont(labelHostID.getFont()
-				.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD)));
+		labelHostID.setFont(labelHostID.getFont().deriveFont(Font.BOLD));
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);

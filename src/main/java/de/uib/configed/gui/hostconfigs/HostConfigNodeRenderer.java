@@ -56,10 +56,8 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (row == 0) {
 				setFont(getFont().deriveFont(Font.BOLD));
-				setFocusable(false);
 			} else {
 				setFont(getFont().deriveFont(Font.PLAIN));
-				setFocusable(true);
 			}
 
 			if (leaf) {

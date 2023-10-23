@@ -312,7 +312,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		JLabel serverPathLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.serverpath"));
 
 		if (isWindows) {
-			serverPathLabel.setForeground(Globals.GREYED);
 			buttonCallChooserServerpath.setEnabled(false);
 		}
 

@@ -529,8 +529,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchFields(Integer[] cols) {
-		for (int j = 0; j < cols.length; j++) {
-			comboSearchFields.addItem(targetModel.getColumnName(cols[j]));
+		for (int col : cols) {
+			comboSearchFields.addItem(targetModel.getColumnName(col));
 		}
 	}
 

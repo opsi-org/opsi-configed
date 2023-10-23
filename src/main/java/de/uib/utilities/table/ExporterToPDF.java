@@ -42,7 +42,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -374,9 +373,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			String urlPath = ServerFacade.isOpsi43() ? "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png"
-					: "images/opsi_full.png";
-			URL opsiImageURL = getImageResourceURL(urlPath);
+			URL opsiImageURL = getImageResourceURL("opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });

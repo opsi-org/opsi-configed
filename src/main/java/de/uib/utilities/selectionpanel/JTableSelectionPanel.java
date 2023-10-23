@@ -451,10 +451,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		int lastAddedI = -1;
 
 		ListSelectionListener[] listeners = ((DefaultListSelectionModel) lsm).getListeners(ListSelectionListener.class);
-
 		// remove all listeners
-		for (int l = 0; l < listeners.length; l++) {
-			lsm.removeListSelectionListener(listeners[l]);
+		for (ListSelectionListener listener : listeners) {
+			lsm.removeListSelectionListener(listener);
 		}
 
 		Logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
@@ -472,8 +471,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		lsm.removeSelectionInterval(lastAddedI, lastAddedI);
 
 		// get again the listeners
-		for (int l = 0; l < listeners.length; l++) {
-			lsm.addListSelectionListener(listeners[l]);
+		for (ListSelectionListener listener : listeners) {
+			lsm.addListSelectionListener(listener);
 		}
 
 		// and repeat the last addition

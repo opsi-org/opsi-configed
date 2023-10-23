@@ -7,13 +7,12 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-
-import com.itextpdf.text.Font;
 
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 

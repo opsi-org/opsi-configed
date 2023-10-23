@@ -37,11 +37,11 @@ public class CheckedDocument extends PlainDocument {
 		boolean result = false;
 		char cCorrected = c;
 
-		for (int j = 0; j < allowedChars.length; j++) {
-			if (Character.toLowerCase(allowedChars[j]) == Character.toLowerCase(c)) {
-				if (Character.isLowerCase(allowedChars[j])) {
+		for (char allowedChar : allowedChars) {
+			if (Character.toLowerCase(allowedChar) == Character.toLowerCase(c)) {
+				if (Character.isLowerCase(allowedChar)) {
 					cCorrected = Character.toLowerCase(c);
-				} else if (Character.isUpperCase(allowedChars[j])) {
+				} else if (Character.isUpperCase(allowedChar)) {
 					cCorrected = Character.toUpperCase(c);
 				} else {
 					// Character does not fit, so continue

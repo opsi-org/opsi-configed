@@ -403,8 +403,7 @@ public final class Utils {
 		return result;
 	}
 
-	@SuppressWarnings({ "java:S1125" })
 	public static boolean toBoolean(Boolean bool) {
-		return bool == null ? false : bool.booleanValue();
+		return bool != null && bool.booleanValue();
 	}
 }

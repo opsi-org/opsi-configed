@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.json.JSONArray;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -142,104 +140,68 @@ public class ConfigDataService {
 
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 
-		boolean tryIt = true;
+		Map<String, ConfigOption> configOptions = new HashMap<>();
+		Map<String, ListCellOptions> configListCellOptions = new HashMap<>();
+		Map<String, List<Object>> configDefaultValues = new HashMap<>();
 
-		int tryOnceMoreCounter = 0;
-		final int STOP_REPEATING_AT_THIS = 1;
+		RemoteControls remoteControls = new RemoteControls();
+		SavedSearches savedSearches = new SavedSearches();
+		OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
+				hardwareDataService.getHwAuditDeviceClassesPD());
 
-		while (tryIt) {
-			tryIt = false;
-			tryOnceMoreCounter++;
+		// metaConfig for wan configuration is rebuilt in
+		// getWANConfigOptions
 
-			Map<String, ConfigOption> configOptions = new HashMap<>();
-			Map<String, ListCellOptions> configListCellOptions = new HashMap<>();
-			Map<String, List<Object>> configDefaultValues = new HashMap<>();
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
 
-			RemoteControls remoteControls = new RemoteControls();
-			SavedSearches savedSearches = new SavedSearches();
-			OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
-					hardwareDataService.getHwAuditDeviceClassesPD());
+		Logging.info(this, "configOptions retrieved ");
+		for (Map<String, Object> configItem : retrievedList) {
+			String key = (String) configItem.get("ident");
 
-			// metaConfig for wan configuration is rebuilt in
-			// getWANConfigOptions
+			// build a ConfigOption from the retrieved item
+			// eliminate key produced by old version for role branch
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
-			List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
+			String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
+					+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
 
-			Logging.info(this, "configOptions retrieved ");
+			if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
+				Logging.warning(this, "user entry " + key
+						+ " produced by a still somewhere running old configed version , please delete user entry "
+						+ pseudouserProducedByOldVersion);
 
-			for (Map<String, Object> configItem : retrievedList) {
-				// map to java type
-				for (Entry<String, Object> configItemEntry : configItem.entrySet()) {
-					if (configItemEntry.getValue() instanceof JSONArray) {
-						configItem.put(configItemEntry.getKey(), ((JSONArray) configItemEntry.getValue()).toList());
-					}
-				}
+				deleteItems.add(configItem);
 
-				String key = (String) configItem.get("ident");
+				Logging.info(this, "deleteItem " + configItem);
 
-				// build a ConfigOption from the retrieved item
-
-				// eliminate key produced by old version for role branch
-
-				String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-						+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
-				//
-
-				if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
-					Logging.warning(this, "user entry " + key
-							+ " produced by a still somewhere running old configed version , please delete user entry "
-							+ pseudouserProducedByOldVersion);
-
-					deleteItems.add(configItem);
-
-					Logging.info(this, "deleteItem " + configItem);
-
-					continue;
-				}
-
-				ConfigOption configOption = new ConfigOption(configItem);
-
-				configOptions.put(key, configOption);
-
-				configListCellOptions.put(key, configOption);
-
-				if (configOption.getDefaultValues() == null) {
-					Logging.warning(this, "default values missing for config  " + key);
-
-					if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
-						tryIt = true;
-						Logging.warning(this,
-								"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
-
-						Utils.threadSleep(this, 1000);
-						break;
-					}
-				}
-
-				configDefaultValues.put(key, configOption.getDefaultValues());
-
-				if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
-					remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
-					savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
-				}
-				hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
+				continue;
 			}
 
-			cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
-			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
-			cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
-			cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
-			cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+			ConfigOption configOption = new ConfigOption(configItem);
+			configOptions.put(key, configOption);
+			configListCellOptions.put(key, configOption);
+			configDefaultValues.put(key, configOption.getDefaultValues());
+
+			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
+				remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
+				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
+			}
+			hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 		}
+
+		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
+		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
+		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
+		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
 		Logging.info(this, "{ole deleteItems " + deleteItems.size());
 
 		if (!deleteItems.isEmpty()) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+			OpsiMethodCall omcDeleteItems = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
 					new Object[] { deleteItems.toArray() });
 
-			if (exec.doCall(omc)) {
+			if (exec.doCall(omcDeleteItems)) {
 				deleteItems.clear();
 			}
 		}

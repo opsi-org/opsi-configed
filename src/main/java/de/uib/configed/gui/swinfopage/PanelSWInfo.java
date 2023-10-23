@@ -528,7 +528,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public String getColumnName(int column) {
-			return SWAuditClientEntry.getDisplayKey(column + 1);
+			return SWAuditClientEntry.KEYS.get(column + 1);
 		}
 
 		@Override

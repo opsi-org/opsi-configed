@@ -301,9 +301,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
-		for (int j = 0; j < hwConfig.size(); j++) {
+		for (Map<String, List<Map<String, Object>>> whc : hwConfig) {
 
-			Map<String, List<Map<String, Object>>> whc = hwConfig.get(j);
 			if (whc != null) {
 				Map<String, Object> whcClass = whc.get("Class").get(0);
 				if (whcClass.get("Opsi").equals(hwClass)) {
@@ -311,7 +310,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					break;
 				}
 			} else {
-				Logging.error(this, "hwConfig.get(" + j + ") is null");
+				Logging.error(this, "hwConfig element is null");
 			}
 		}
 
@@ -335,8 +334,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<String[]> data = new ArrayList<>();
 		if (values != null) {
-			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> value = values.get(j);
+			for (Map<String, Object> value : values) {
 				String opsi = (String) value.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
 
@@ -571,14 +569,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		Arrays.sort(names);
 
-		for (int j = 0; j < names.length; j++) {
-			for (int k = 0; k < devices.size(); k++) {
-				if (names[j].equals(devices.get(k).get("displayName"))) {
-					IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
+		for (String name : names) {
+			for (Map<String, Object> device : devices) {
+				if (name.equals(device.get("displayName"))) {
+					IconNode iconNode = new IconNode(encodeString((String) device.get("displayName")));
 					iconNode.setClosedIcon(classIcon);
 					iconNode.setLeafIcon(classIcon);
 					iconNode.setOpenIcon(classIcon);
-					iconNode.setDeviceInfo(devices.get(k));
+					iconNode.setDeviceInfo(device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);
 					break;
@@ -593,13 +591,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
 			List<Map<String, Object>> values = hardwareMap.get("Values");
-			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> valuesMap = values.get(j);
+			for (Map<String, Object> valuesMap : values) {
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
 				hwOpsiToUI.putIfAbsent(type, name);
 			}
 		}
+
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
 			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
 			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
@@ -625,11 +623,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
 			List<Map<String, Object>> al = hwInfo.get(hwClassMapping.get(child.toString()));
-			Iterator<Map<String, Object>> alIterator = al.iterator();
 
 			boolean first = true;
-			while (alIterator.hasNext()) {
-				Map<String, Object> hm = alIterator.next();
+			for (Map<String, Object> hm : al) {
+
 				if (first) {
 					// second column, first element
 
@@ -638,10 +635,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					// first column
 					childValues.add(child.toString());
 					childValues.add(hm.get("displayName").toString());
-					Iterator<String> hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hmIterator.hasNext()) {
-						String hmKey = hmIterator.next();
+					for (String hmKey : hm.keySet()) {
 						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
 							if (firstValue) {
 								childValues.add(hwOpsiToUI.get(hmKey));
@@ -665,10 +660,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					// first column empty
 					childValues.add("");
 					childValues.add(hm.get("displayName").toString());
-					Iterator<String> hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hmIterator.hasNext()) {
-						String hmKey = hmIterator.next();
+					for (String hmKey : hm.keySet()) {
 						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
 							if (firstValue) {
 								firstValue = false;

@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
@@ -105,7 +106,8 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 
 		dependenciesTreePathLabel = new JLabel();
-		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.GREYED, 1));
+		dependenciesTreePathLabel
+				.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor"), 1));
 
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);
