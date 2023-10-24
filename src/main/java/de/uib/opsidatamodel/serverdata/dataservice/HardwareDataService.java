@@ -701,14 +701,7 @@ public class HardwareDataService {
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			hardwareInfo.values().removeIf(Objects::isNull);
-			Object lastSeenStr = hardwareInfo.get("lastseen");
-			LocalDateTime lastSeen = scanTime;
-			if (lastSeenStr != null) {
-				lastSeen = LocalDateTime.parse(lastSeenStr.toString(), timeFormatter);
-			}
-			if (scanTime.compareTo(lastSeen) < 0) {
-				scanTime = lastSeen;
-			}
+			scanTime = getScanTime(hardwareInfo.get("lastseen"), scanTime);
 			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
 			hardwareInfo.keySet()
 					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
@@ -727,7 +720,18 @@ public class HardwareDataService {
 		scanProperty.put("scantime", scanTime.format(timeFormatter));
 		scanProperties.add(scanProperty);
 		result.put("SCANPROPERTIES", scanProperties);
-
 		return result.size() > 1 ? result : new HashMap<>();
+	}
+
+	private static LocalDateTime getScanTime(Object currentScanTime, LocalDateTime previousScanTime) {
+		LocalDateTime lastSeen = previousScanTime;
+		if (currentScanTime != null) {
+			lastSeen = LocalDateTime.parse(currentScanTime.toString(),
+					DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		}
+		if (previousScanTime.compareTo(lastSeen) < 0) {
+			previousScanTime = lastSeen;
+		}
+		return previousScanTime;
 	}
 }
