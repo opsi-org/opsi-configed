@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -32,29 +31,22 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
-		boolean result = true;
 
 		if (c.size() != objectIds.length) {
-			result = false;
 			Logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
 			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
 					+ objectIds.length);
+
+			return false;
 		}
 
-		if (result) {
-			Iterator<? extends UpdateCommand> it = c.iterator();
-			int i = 0;
-			while (it.hasNext()) {
-				Map<?, ?> map = null;
-				Object updateCommand = it.next();
+		boolean result = true;
+		int i = 0;
 
-				try {
-					map = (Map<?, ?>) updateCommand;
-				} catch (ClassCastException ccex) {
-					Logging.error(
-							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map",
-							ccex);
-				}
+		// TODO Sometimes these are not updatecommands?!?
+		for (Object updateCommand : (Collection<?>) c) {
+			if (updateCommand instanceof Map) {
+				Map<?, ?> map = (Map<?, ?>) updateCommand;
 
 				Logging.debug(this, "addAll for one obj, map " + map);
 
