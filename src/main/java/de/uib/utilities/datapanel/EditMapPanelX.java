@@ -218,11 +218,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
-		} else if (names != null) {
+		} else if (propertyNames != null) {
 
 			propertyHandler = defaultPropertyHandler;
 
-			removeProperty(names.get(table.getSelectedRow()));
+			removeProperty(propertyNames.get(table.getSelectedRow()));
 		} else {
 			Logging.warning(this, "names list is null, so cannot remove property in deleteEntry");
 		}
@@ -237,10 +237,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
-		} else if (names != null) {
+		} else if (propertyNames != null) {
 			propertyHandler = removingSpecificValuesPropertyHandler;
 
-			removeProperty(names.get(table.getSelectedRow()));
+			removeProperty(propertyNames.get(table.getSelectedRow()));
 		} else {
 			Logging.warning(this, "names list is null, so cannot remove property in deleteSpecificEntry");
 		}
@@ -255,11 +255,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
-		} else if (names != null) {
+		} else if (propertyNames != null) {
 
 			propertyHandler = settingDefaultValuesPropertyHandler;
 
-			removeProperty(names.get(table.getSelectedRow()));
+			removeProperty(propertyNames.get(table.getSelectedRow()));
 		} else {
 			Logging.warning(this, "names list is null, so cannot remove property in removeDefaultAsSpecificEntry");
 		}
@@ -299,7 +299,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				if (c instanceof JComponent && showToolTip) {
 					JComponent jc = (JComponent) c;
 
-					String propertyName = names.get(rowIndex);
+					String propertyName = propertyNames.get(rowIndex);
 
 					String tooltip = null;
 
@@ -450,7 +450,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		if (s != null && !s.isEmpty()) {
 			ok = true;
 
-			if (names.indexOf(s) > -1) {
+			if (propertyNames.indexOf(s) > -1) {
 				ok = JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 						"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
 						Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION);
@@ -541,7 +541,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 */
 	private final void addProperty(String key, Object newval) {
 		mapTableModel.addEntry(key, newval);
-		names = mapTableModel.getKeys();
+		propertyNames = mapTableModel.getKeys();
 	}
 
 	/**
@@ -568,8 +568,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
 		}
 
-		names = mapTableModel.getKeys();
-		Logging.info(this, "removeProperty names left: " + names);
+		propertyNames = mapTableModel.getKeys();
+		Logging.info(this, "removeProperty names left: " + propertyNames);
 
 	}
 
