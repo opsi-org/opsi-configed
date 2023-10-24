@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.21] - 2023-10-24
+### Fixed
+- Exporting hardware information as PDF
+
 ## [4.2.22.20] - 2023-10-20
 ### Fixed
 - Displayed column editing in "Hardware Information" tab
