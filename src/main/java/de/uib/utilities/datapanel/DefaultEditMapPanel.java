@@ -42,7 +42,7 @@ public class DefaultEditMapPanel extends JPanel {
 	protected JPopupMenu popupEditOptions;
 	protected JPopupMenu popupNoEditOptions;
 
-	protected List<String> propertyNames;
+	protected List<String> names;
 	protected Map<String, ListCellOptions> optionsMap;
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
@@ -136,7 +136,7 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.fireTableDataChanged();
 
 		// from mapTableModel, we get back the sorted List of property names:
-		propertyNames = mapTableModel.getKeys();
+		names = mapTableModel.getKeys();
 
 		if (optionsMap == null) {
 			this.optionsMap = new HashMap<>();
@@ -191,7 +191,7 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	public void setVoid() {
-		for (String key : propertyNames) {
+		for (String key : names) {
 			mapTableModel.removeEntryFromStoredMaps(key);
 		}
 
@@ -200,7 +200,7 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setWrite();
 	}
 
-	public List<String> getPropertyNames() {
+	public List<String> getNames() {
 		return mapTableModel.getKeys();
 	}
 

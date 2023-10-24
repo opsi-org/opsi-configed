@@ -1001,15 +1001,20 @@ public class MainFrame extends JFrame
 						jMenuServer.add(jMenuItem);
 					} else {
 						parentMenu.add(jMenuItem);
-						jMenuServer.add(parentMenu);
 						if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
 							menuOpsi = parentMenu;
+							jMenuServer.add(menuOpsi);
+						} else {
+							jMenuServer.add(parentMenu);
 						}
 					}
-
-					jMenuItem.setEnabled(!isReadOnly && !commandsAreDeactivated);
+					if (isReadOnly) {
+						jMenuItem.setEnabled(false);
+					}
+					if (commandsAreDeactivated) {
+						jMenuItem.setEnabled(false);
+					}
 				}
-
 				if (firstParentGroup && commandsExist) {
 					jMenuServer.addSeparator();
 				}

@@ -7,7 +7,9 @@
 package de.uib.configed.gui.hostconfigs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -36,6 +40,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -44,6 +49,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.guidata.ListMerger;
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
@@ -577,12 +583,87 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				protected void buildPanel() {
 					setLayout(new BorderLayout());
 
-					if (showToolTip) {
-						table = new HostConfigTable(mapTableModel, defaultsMap, propertyNames, originalMap,
-								descriptionsMap, includeAdditionalTooltipText);
-					} else {
-						table = new JTable(mapTableModel);
-					}
+					table = new JTable(mapTableModel) {
+						@Override
+						public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+							Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+							if (c instanceof JComponent && showToolTip) {
+								JComponent jc = (JComponent) c;
+
+								String propertyName = names.get(rowIndex);
+
+								StringBuilder tooltip = new StringBuilder();
+
+								Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService()
+										.getConfigOptionsPD();
+								if (propertyName != null && defaultsMap != null
+										&& defaultsMap.get(propertyName) != null) {
+									String propertyOrigin = "(server)";
+									if (serverConfigs != null && serverConfigs.containsKey(propertyName)
+											&& !serverConfigs.get(propertyName).getDefaultValues()
+													.equals(defaultsMap.get(propertyName))) {
+										propertyOrigin = "(depot)";
+									}
+
+									if (includeAdditionalTooltipText) {
+										tooltip.append("default " + propertyOrigin + ": ");
+									} else {
+										tooltip.append("default: ");
+									}
+
+									if (Utils.isKeyForSecretValue(propertyName)) {
+										tooltip.append(Globals.STARRED_STRING);
+									} else {
+										tooltip.append(defaultsMap.get(propertyName));
+									}
+								}
+
+								if (propertyName != null && descriptionsMap != null
+										&& descriptionsMap.get(propertyName) != null) {
+									tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
+								}
+
+								jc.setToolTipText("<html>" + tooltip + "</html>");
+
+								// check equals with default
+
+								Object defaultValue;
+
+								if (defaultsMap == null) {
+									Logging.warning(this, "no default values available, defaultsMap is null");
+								} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
+									Logging.warning(this, "no default Value found");
+
+									jc.setForeground(Globals.OPSI_ERROR);
+
+									jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+
+									jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+								} else {
+
+									Object gotValue = table.getValueAt(rowIndex, 1);
+									if (!defaultValue.equals(gotValue)
+											|| (originalMap != null && originalMap.containsKey(propertyName))) {
+										jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+									}
+								}
+
+								if (vColIndex == 1
+										&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
+									if (jc instanceof JLabel) {
+										((JLabel) jc).setText(Globals.STARRED_STRING);
+									} else if (jc instanceof JTextComponent) {
+										((JTextComponent) jc).setText(Globals.STARRED_STRING);
+									} else {
+										// Do nothing
+									}
+								}
+
+							}
+							return c;
+						}
+
+					};
 
 					TableCellRenderer colorized = new ColorTableCellRenderer();
 
@@ -913,7 +994,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			String key = keyB.toString();
 			Logging.info(this, "deleteUser, selected user key " + key);
 
-			List<String> propertyNames = partialPanels.get(key).getPropertyNames();
+			List<String> propertyNames = partialPanels.get(key).getNames();
 			Logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
 				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
