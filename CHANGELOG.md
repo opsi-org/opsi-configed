@@ -2,12 +2,15 @@
 
 ## [4.3.0.12] - XXXX-XX-XX
 ### Fixed
+- Create PDF-files from Hardware information
 - Displayed column editing in "Hardware Information" tab
 - Showing if column is displayed in "opsi config editor hardware classes / database columns" dialog
 
 ### Changed
+- Remove unnecessaray Logging-operation (performance)
 - Remove HARDWARE prefix from column names in "Hardware Information" tab
 - Change labeling for vendors in "Hardware Information" tab
+- Localization issues in standard-dialogs like JFileChooser or JOptionPane
 
 ## [4.3.0.11] - 2023-10-19
 ### Fixed
