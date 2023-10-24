@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -2602,21 +2603,18 @@ public class OpsiserviceNOMPersistenceController {
 		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
-			if (result.containsKey(hardwareInfo.get("hardwareClass"))) {
-				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareInfo.get("hardwareClass"));
+			hardwareInfo.values().removeIf(Objects::isNull);
+			scanTime = getScanTime(hardwareInfo.get("lastseen"), scanTime);
+			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
+			hardwareInfo.keySet()
+					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
+			if (result.containsKey(hardwareClass)) {
+				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareClass);
 				hardwareClassInfos.add(hardwareInfo);
 			} else {
 				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
 				hardwareClassInfos.add(hardwareInfo);
-				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
-			}
-			Object lastSeenStr = hardwareInfo.get("lastseen");
-			LocalDateTime lastSeen = scanTime;
-			if (lastSeenStr != null) {
-				lastSeen = LocalDateTime.parse(lastSeenStr.toString(), timeFormatter);
-			}
-			if (scanTime.compareTo(lastSeen) < 0) {
-				scanTime = lastSeen;
+				result.put(hardwareClass, hardwareClassInfos);
 			}
 		}
 
@@ -2631,6 +2629,18 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		return new HashMap<>();
+	}
+
+	private static LocalDateTime getScanTime(Object currentScanTime, LocalDateTime previousScanTime) {
+		LocalDateTime lastSeen = previousScanTime;
+		if (currentScanTime != null) {
+			lastSeen = LocalDateTime.parse(currentScanTime.toString(),
+					DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		}
+		if (previousScanTime.compareTo(lastSeen) < 0) {
+			previousScanTime = lastSeen;
+		}
+		return previousScanTime;
 	}
 
 	public void auditHardwareOnHostRequestRefresh() {
