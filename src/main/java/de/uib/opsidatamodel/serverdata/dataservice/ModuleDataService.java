@@ -182,7 +182,7 @@ public class ModuleDataService {
 	}
 
 	public Map<String, Object> getOpsiModulesInfosPD() {
-		produceOpsiModulesInfoClassicOpsi43PD();
+		retrieveOpsiModules();
 		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, Map.class);
 	}
 
