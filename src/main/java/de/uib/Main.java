@@ -258,10 +258,7 @@ public class Main {
 
 		parseArgs(cmd);
 
-		Locale.setDefault(new Locale(UserPreferences.get(UserPreferences.LANGUAGE)));
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
+		Locale.setDefault(Messages.getLocale());
 
 		setOpsiLaf();
 
