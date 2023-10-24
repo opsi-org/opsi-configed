@@ -513,29 +513,29 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	private void updateSelectedCommand(String menuText) {
 		Logging.info(this, "updateSelectedCommand menuText " + menuText);
-		if (menuText != null && menuText.equals(SSHCommandFactory.MENU_NEW)) {
-			menuText = null;
-		}
-
-		if (menuText != null && menuText.length() > 0) {
-			SSHCommandTemplate thiscommand = factory.getSSHCommandByMenu(menuText);
-			if (thiscommand != null) {
-				Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
-						+ thiscommand.getParentMenuText());
-				StringBuilder combuf = new StringBuilder("");
-				for (SSHCommand c : thiscommand.getCommands()) {
-					String rawCommand = c.getCommandRaw();
-					if (rawCommand != null && !rawCommand.isEmpty()) {
-						combuf.append(rawCommand).append("\n");
-					}
-				}
-
-				updateComponents(thiscommand.getParentMenuText(), thiscommand.getToolTipText(),
-						thiscommand.getPriority(), thiscommand.needSudo(), combuf.toString());
-			}
+		if (menuText == null || menuText.isEmpty() || menuText.equals(SSHCommandFactory.MENU_NEW)) {
+			updateComponents(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS, "", SSHCommandFactory.POSITION_DEFAULT,
+					false, "");
 		} else {
-			updateComponents(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS/* parentNull */, "",
-					SSHCommandFactory.POSITION_DEFAULT, false, "");
+			updateComponentsMenuText(menuText);
+		}
+	}
+
+	private void updateComponentsMenuText(String menuText) {
+		SSHCommandTemplate thiscommand = factory.getSSHCommandByMenu(menuText);
+		if (thiscommand != null) {
+			Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
+					+ thiscommand.getParentMenuText());
+			StringBuilder combuf = new StringBuilder("");
+			for (SSHCommand c : thiscommand.getCommands()) {
+				String rawCommand = c.getCommandRaw();
+				if (rawCommand != null && !rawCommand.isEmpty()) {
+					combuf.append(rawCommand).append("\n");
+				}
+			}
+
+			updateComponents(thiscommand.getParentMenuText(), thiscommand.getToolTipText(), thiscommand.getPriority(),
+					thiscommand.needSudo(), combuf.toString());
 		}
 	}
 

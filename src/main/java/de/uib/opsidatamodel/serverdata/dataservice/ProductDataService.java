@@ -581,24 +581,9 @@ public class ProductDataService {
 			}
 
 			if (getProduct2VersionInfo2InfosPD().get(productId) != null) {
-				String versionInfo = null;
 				Map<String, OpsiProductInfo> productAllInfos = getProduct2VersionInfo2InfosPD().get(productId);
 
-				// look for associated product on depot info
-				HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
-				if (product2VersionList != null && product2VersionList.get(productId) != null
-						&& !product2VersionList.get(productId).isEmpty()) {
-					versionInfo = product2VersionList.get(productId).get(0);
-				}
-
-				if (versionInfo == null) {
-					product2VersionList = getDepot2NetbootProductsPD().get(depotId);
-
-					if (product2VersionList != null && product2VersionList.get(productId) != null
-							&& !product2VersionList.get(productId).isEmpty()) {
-						versionInfo = product2VersionList.get(productId).get(0);
-					}
-				}
+				String versionInfo = getVersionInfoForLocalbootProduct(depotId, productId);
 
 				// if found go on
 
@@ -643,6 +628,28 @@ public class ProductDataService {
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, productGlobalInfos);
 		cacheManager.setCachedData(CacheIdentifier.POSSIBLE_ACTIONS, possibleActions);
 		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+	}
+
+	private String getVersionInfoForLocalbootProduct(String depotId, String productId) {
+		// look for associated product on depot info
+		HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
+
+		String versionInfo = null;
+		if (product2VersionList != null && product2VersionList.get(productId) != null
+				&& !product2VersionList.get(productId).isEmpty()) {
+			versionInfo = product2VersionList.get(productId).get(0);
+		}
+
+		if (versionInfo == null) {
+			product2VersionList = getDepot2NetbootProductsPD().get(depotId);
+
+			if (product2VersionList != null && product2VersionList.get(productId) != null
+					&& !product2VersionList.get(productId).isEmpty()) {
+				versionInfo = product2VersionList.get(productId).get(0);
+			}
+		}
+
+		return versionInfo;
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStatesPD() {
@@ -813,9 +820,7 @@ public class ProductDataService {
 				if (retrievedProperties1Product == null) {
 					productsHavingSpecificProperties.remove(product);
 				} else {
-					for (Entry<String, Object> retrievedProperty : retrievedProperties1Product.entrySet()) {
-						properties1Product.put(retrievedProperty.getKey(), retrievedProperty.getValue());
-					}
+					properties1Product.putAll(retrievedProperties1Product);
 				}
 
 				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product);

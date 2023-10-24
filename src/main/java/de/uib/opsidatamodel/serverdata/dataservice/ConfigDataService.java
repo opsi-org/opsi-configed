@@ -1290,9 +1290,8 @@ public class ConfigDataService {
 					unorderedValues.add(entry);
 				} else if (p > 0) {
 					// the only regular case
-					int orderNumber = -1;
 					try {
-						orderNumber = Integer.valueOf(entry.substring(0, p));
+						int orderNumber = Integer.parseInt(entry.substring(0, p));
 						String value = entry.substring(p + 1);
 						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
 							orderedValues.add(entry);
