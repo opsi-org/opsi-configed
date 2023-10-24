@@ -528,10 +528,9 @@ public class MainFrame extends JFrame
 				configedMain.closeInstance(true);
 				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
-
+				Locale.setDefault(new Locale(localeName));
+				JComponent.setDefaultLocale(new Locale(localeName));
 				Configed.restartConfiged();
-
-				// we put it into to special thread to avoid invokeAndWait runtime error
 			});
 		}
 
