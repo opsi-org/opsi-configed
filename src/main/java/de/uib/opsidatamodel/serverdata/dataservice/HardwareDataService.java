@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -699,14 +700,7 @@ public class HardwareDataService {
 		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
-			if (result.containsKey(hardwareInfo.get("hardwareClass"))) {
-				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareInfo.get("hardwareClass"));
-				hardwareClassInfos.add(hardwareInfo);
-			} else {
-				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
-				hardwareClassInfos.add(hardwareInfo);
-				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
-			}
+			hardwareInfo.values().removeIf(Objects::isNull);
 			Object lastSeenStr = hardwareInfo.get("lastseen");
 			LocalDateTime lastSeen = scanTime;
 			if (lastSeenStr != null) {
@@ -714,6 +708,17 @@ public class HardwareDataService {
 			}
 			if (scanTime.compareTo(lastSeen) < 0) {
 				scanTime = lastSeen;
+			}
+			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
+			hardwareInfo.keySet()
+					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
+			if (result.containsKey(hardwareClass)) {
+				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareClass);
+				hardwareClassInfos.add(hardwareInfo);
+			} else {
+				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
+				hardwareClassInfos.add(hardwareInfo);
+				result.put(hardwareClass, hardwareClassInfos);
 			}
 		}
 

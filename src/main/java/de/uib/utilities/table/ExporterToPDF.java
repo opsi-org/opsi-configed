@@ -301,7 +301,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
 					value = new PdfPCell(new Phrase(" "));
-					String s = theTable.getValueAt(j, i).toString();
+					String s = theTable.getValueAt(j, i) != null ? theTable.getValueAt(j, i).toString() : "";
 
 					switch (s) {
 					case "∞":

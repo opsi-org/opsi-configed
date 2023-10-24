@@ -626,7 +626,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			boolean first = true;
 			for (Map<String, Object> hm : al) {
-
 				if (first) {
 					// second column, first element
 
