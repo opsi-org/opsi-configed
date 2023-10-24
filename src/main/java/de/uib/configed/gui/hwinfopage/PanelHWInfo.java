@@ -612,8 +612,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
 		JTable jTableComplete = new JTable(tableModelComplete);
 
-		List<String> childValues;
-
 		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
 		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
 		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_name"));
@@ -626,59 +624,37 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			boolean first = true;
 			for (Map<String, Object> hm : al) {
+				List<String> childValues = new ArrayList<>();
 				if (first) {
-					// second column, first element
-
-					childValues = new ArrayList<>();
-
-					// first column
 					childValues.add(child.toString());
-					childValues.add(hm.get("displayName").toString());
-					boolean firstValue = true;
-					for (String hmKey : hm.keySet()) {
-						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
-							if (firstValue) {
-								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey).toString());
-								firstValue = false;
-							} else {
-								childValues = new ArrayList<>();
-								childValues.add("");
-								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey).toString());
-							}
-							tableModelComplete.addRow(childValues.toArray());
-						}
-					}
-
 					first = false;
 				} else {
-					childValues = new ArrayList<>();
-
-					// first column empty
 					childValues.add("");
-					childValues.add(hm.get("displayName").toString());
-					boolean firstValue = true;
-					for (String hmKey : hm.keySet()) {
-						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
-							if (firstValue) {
-								firstValue = false;
-								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey).toString());
-							} else {
-								childValues = new ArrayList<>();
-								childValues.add("");
-								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey).toString());
-							}
-							tableModelComplete.addRow(childValues.toArray());
-						}
-					}
 				}
+				childValues.add(hm.get("displayName").toString());
+				addRowToModel(hm, childValues, tableModelComplete);
 			}
 		}
 		return jTableComplete;
+	}
+
+	private void addRowToModel(Map<String, Object> hm, List<String> childValues, DefaultTableModel tableModelComplete) {
+		boolean firstValue = true;
+		for (Entry<String, Object> entry : hm.entrySet()) {
+			if (!"displayName".equals(entry.getKey()) && !"type".equals(entry.getKey())) {
+				if (firstValue) {
+					firstValue = false;
+					childValues.add(hwOpsiToUI.get(entry.getKey()));
+					childValues.add(entry.getValue().toString());
+				} else {
+					childValues = new ArrayList<>();
+					childValues.add("");
+					childValues.add("");
+					childValues.add(hwOpsiToUI.get(entry.getKey()));
+					childValues.add(entry.getValue().toString());
+				}
+				tableModelComplete.addRow(childValues.toArray());
+			}
+		}
 	}
 }
