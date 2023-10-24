@@ -1679,7 +1679,7 @@ public class ConfigedMain implements ListSelectionListener {
 					+ getSelectedClients().length);
 
 			// selected clients that are in the pclist0
-			pclist = Set.of(getSelectedClients());
+			pclist = new HashSet<>(Arrays.asList(getSelectedClients()));
 			pclist.retainAll(pclist0.keySet());
 		} else {
 			pclist = pclist0.keySet();
