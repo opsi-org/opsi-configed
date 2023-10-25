@@ -667,17 +667,17 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		activatePacketSelectionHandling(false);
 		clearSelection();
 
-		if (selectedIDs != null) {
-			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
-				tableProducts.addRowSelectionInterval(0, 0);
-				// show first product if no product given
-				Logging.info(this, "setSelection 0");
-			} else {
-				for (int row = 0; row < tableProducts.getRowCount(); row++) {
-					Object productId = tableProducts.getValueAt(row, 0);
-					if (selectedIDs.contains(productId)) {
-						tableProducts.addRowSelectionInterval(row, row);
-					}
+		if (selectedIDs == null) {
+			Logging.info("selectedIds is null");
+		} else if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
+			tableProducts.addRowSelectionInterval(0, 0);
+			// show first product if no product given
+			Logging.info(this, "setSelection 0");
+		} else {
+			for (int row = 0; row < tableProducts.getRowCount(); row++) {
+				Object productId = tableProducts.getValueAt(row, 0);
+				if (selectedIDs.contains(productId)) {
+					tableProducts.addRowSelectionInterval(row, row);
 				}
 			}
 		}

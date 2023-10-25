@@ -792,7 +792,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
-
 	}
 
 	// ListSelectionListener

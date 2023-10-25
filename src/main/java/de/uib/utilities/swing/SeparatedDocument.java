@@ -30,11 +30,10 @@ public class SeparatedDocument extends CheckedDocument {
 			return "";
 		}
 
-		char[] startchars = s.toCharArray();
 		StringBuilder textBuf = new StringBuilder();
 
-		for (int i = 0; i < startchars.length; i++) {
-			if (appendCharIfAllowed(textBuf, startchars[i])) {
+		for (char startchar : s.toCharArray()) {
+			if (appendCharIfAllowed(textBuf, startchar)) {
 				try {
 					if (checkMask && getText(offset, 1).equals(separator)) {
 
