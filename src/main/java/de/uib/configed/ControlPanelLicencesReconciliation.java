@@ -41,8 +41,11 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private int indexUsedByOpsi;
 	private int indexSWInventoryUsed;
 
-	public ControlPanelLicencesReconciliation() {
+	private ConfigedMain configedMain;
+
+	public ControlPanelLicencesReconciliation(ConfigedMain configedMain) {
 		thePanel = new PanelLicencesReconciliation(this);
+		this.configedMain = configedMain;
 
 		init();
 	}
@@ -122,7 +125,9 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
-						persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						}
 						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})),

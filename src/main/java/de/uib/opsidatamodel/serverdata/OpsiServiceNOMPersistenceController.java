@@ -50,6 +50,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHand
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseContractDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
@@ -392,6 +393,12 @@ public class OpsiServiceNOMPersistenceController {
 		installedSoftwareDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString(),
 				installedSoftwareDataReloadHandler);
+
+		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
+		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
+		licenseDataReloadHandler.setHostInfoCollections(hostInfoCollections);
+		licenseDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
 
 		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
 		opsiLicenseReloadHandler.setModuleDataService(moduleDataService);

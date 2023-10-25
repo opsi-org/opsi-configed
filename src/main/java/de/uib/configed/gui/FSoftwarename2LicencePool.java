@@ -24,6 +24,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
@@ -83,11 +84,14 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private boolean foundVariantLicencepools;
 
-	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
+	private ConfigedMain configedMain;
+
+	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
 		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800);
 
 		this.myController = myController;
+		this.configedMain = configedMain;
 
 		panelSWnames = new PanelGenEditTable("", 0, false, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD },
 				true) {
@@ -342,7 +346,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		this.modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					}
 					return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
 				})), 0, new int[] {}, panelSWnames, updateCollection) {
 
@@ -477,7 +483,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
 				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, () -> {
 					Logging.info(this, "retrieveMap for swName " + swName);
-					persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					}
 					return (Map) produceModelSWxLicencepool(swName);
 				})), keyCol, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);

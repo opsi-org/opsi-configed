@@ -138,7 +138,9 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				columnNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
+					}
 					return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);

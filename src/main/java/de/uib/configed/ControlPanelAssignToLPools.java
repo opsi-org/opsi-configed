@@ -177,8 +177,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							new DefaultTableProvider(
 									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
 											thePanel.getFMissingSoftwareInfo().getClassNames(), () -> {
-												persistenceController.reloadData(
-														ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+												if (!configedMain.isAllLicenseDataReloaded()) {
+													persistenceController.reloadData(
+															ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+												}
 												return getMissingSoftwareMap(poolID);
 											})),
 							0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(),
@@ -477,7 +479,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.getLicenseDataService().retrieveLicencePoolXOpsiProductPD();
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persistenceController.getLicenseDataService().retrieveLicencePoolXOpsiProductPD();
+					}
 					return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
@@ -571,7 +575,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					}
 					return (Map) persistenceController.getSoftwareDataService()
 							.getInstalledSoftwareInformationForLicensingPD();
 				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
@@ -674,7 +680,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "frame Softwarename --> LicencePool  in " + Utils.getMasterFrame());
 
 		final ControlPanelAssignToLPools contr = this;
-		thePanel.setFSoftwarename2LicencePool(new FSoftwarename2LicencePool(Utils.getMasterFrame(), contr));
+		thePanel.setFSoftwarename2LicencePool(
+				new FSoftwarename2LicencePool(Utils.getMasterFrame(), contr, configedMain));
 		thePanel.getFSoftwarename2LicencePool().setTableModel(); // test
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicencePool().checkExistNamesWithVariantLicencepools());

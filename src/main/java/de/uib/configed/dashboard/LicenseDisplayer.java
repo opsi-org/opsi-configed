@@ -69,6 +69,12 @@ public class LicenseDisplayer {
 
 	private Stage stage;
 
+	private ConfigedMain configedMain;
+
+	public LicenseDisplayer(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+	}
+
 	public void loadData() {
 		StringBuilder mess = new StringBuilder();
 		mess.append(showLicenceContractWarnings());
@@ -195,7 +201,9 @@ public class LicenseDisplayer {
 
 		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					if (!configedMain.isAllLicenseDataReloaded()) {
+						persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					}
 					return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
 				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override

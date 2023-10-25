@@ -338,6 +338,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private SSHCommandControlDialog sshCommandControlDialog;
 	private NewClientDialog newClientDialog;
 
+	private boolean isAllLicenseDataReloaded;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
@@ -586,7 +588,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "initDashboard " + dashboard);
 		if (dashboard == null) {
-			dashboard = new Dashboard();
+			dashboard = new Dashboard(this);
 			dashboard.initAndShowGUI();
 		} else {
 			dashboard.show();
@@ -1420,7 +1422,9 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
+			if (!isAllLicenseDataReloaded()) {
+				persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
+			}
 			return (Map) persistenceController.getLicenseDataService().getLicencePoolsPD();
 		}));
 
@@ -1454,7 +1458,9 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+			if (!isAllLicenseDataReloaded()) {
+				persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+			}
 			return (Map) persistenceController.getLicenseDataService().getLicenceContractsPD();
 		}));
 
@@ -1475,7 +1481,9 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 
 		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+			if (!isAllLicenseDataReloaded()) {
+				persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+			}
 			return (Map) persistenceController.getLicenseDataService().getLicencesPD();
 		}));
 	}
@@ -1518,14 +1526,15 @@ public class ConfigedMain implements ListSelectionListener {
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation();
+		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(
+				this);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
 		// panelStatistics
 		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
 				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
-		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics();
+		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(this);
 		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
 
@@ -3428,12 +3437,20 @@ public class ConfigedMain implements ListSelectionListener {
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
 		if (everythingReady) {
+			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+			isAllLicenseDataReloaded = true;
+
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
 				for (PanelGenEditTable p : cmtp.getTablePanes()) {
 					p.reload();
 				}
 			}
+			isAllLicenseDataReloaded = false;
 		}
+	}
+
+	public boolean isAllLicenseDataReloaded() {
+		return isAllLicenseDataReloaded;
 	}
 
 	private void refreshClientListKeepingGroup() {

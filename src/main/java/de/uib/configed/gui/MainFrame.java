@@ -3244,7 +3244,7 @@ public class MainFrame extends JFrame
 	public void startLicenceDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
-				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer = new LicenseDisplayer(configedMain);
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
 				Logging.warning(this, "Unable to open FXML file.", ioE);

@@ -30,8 +30,11 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ControlPanelLicencesStatistics() {
+	private ConfigedMain configedMain;
+
+	public ControlPanelLicencesStatistics(ConfigedMain configedMain) {
 		thePanel = new PanelLicencesStatistics(this);
+		this.configedMain = configedMain;
 
 		init();
 	}
@@ -70,7 +73,9 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
-						persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						}
 						return persistenceController.getSoftwareDataService().getLicenseStatistics();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);
