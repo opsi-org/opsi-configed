@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -27,7 +28,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		colorize(cell, isSelected, row % 2 == 0, column % 2 == 0);
-
+		setBorder(new EmptyBorder(0, 0, 0, 0));
 		return cell;
 	}
 
