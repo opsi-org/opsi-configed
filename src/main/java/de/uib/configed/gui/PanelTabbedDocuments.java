@@ -179,7 +179,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void setFileChooser(String fn) {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
-			chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));

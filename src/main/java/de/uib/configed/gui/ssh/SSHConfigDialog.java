@@ -659,7 +659,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
-		chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 

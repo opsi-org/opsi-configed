@@ -158,7 +158,6 @@ public final class Globals {
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
 	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
-	public static final Dimension FILE_CHOOSER_SIZE = new Dimension(600, 400);
 
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;

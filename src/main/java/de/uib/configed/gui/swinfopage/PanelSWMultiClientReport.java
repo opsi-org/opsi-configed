@@ -149,7 +149,6 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		chooserDirectory = new JFileChooser();
-		chooserDirectory.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserDirectory.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);

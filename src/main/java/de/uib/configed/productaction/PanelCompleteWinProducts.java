@@ -136,8 +136,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
-		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
-		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
