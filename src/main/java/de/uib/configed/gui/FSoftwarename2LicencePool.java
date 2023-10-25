@@ -330,13 +330,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	}
 
-	private void setSWInfo(String swId, String pool) {
-		Logging.info(this, " setSWInfo for " + swId + " pool " + pool);
-		Logging.info(this,
-				" setSWInfo in " + persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD()
-						.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
-	}
-
 	public void setTableModel() {
 		Logging.info(this, "init modelSWnames");
 
@@ -503,13 +496,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 								.getFSoftware2LicencePoolPD(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
-						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew)) {
-							setSWInfo(swID, licensePoolIDNew);
-						}
-
 						return persistenceController.getSoftwareDataService().editPool2AuditSoftware(swID,
 								licensePoolIDOld, licensePoolIDNew);
-
 					}
 
 					@Override
