@@ -9,5 +9,7 @@ package de.uib.utilities.table.provider;
 import java.util.Map;
 
 public interface MapRetriever {
+	void reloadMap();
+
 	Map<String, Map<String, Object>> retrieveMap();
 }

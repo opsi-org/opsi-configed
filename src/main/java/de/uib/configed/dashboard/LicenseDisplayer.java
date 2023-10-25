@@ -31,6 +31,7 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableEditItem;
 import javafx.application.Platform;
@@ -200,11 +201,18 @@ public class LicenseDisplayer {
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
 					}
-					return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+					}
 				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {

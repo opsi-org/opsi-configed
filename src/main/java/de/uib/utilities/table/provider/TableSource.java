@@ -20,4 +20,6 @@ public interface TableSource {
 	void setRowCounting(boolean b);
 
 	void requestReload();
+
+	void cancelRequestReload();
 }

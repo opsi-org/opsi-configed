@@ -128,6 +128,7 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -1421,14 +1422,22 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			if (!isAllLicenseDataReloaded()) {
-				persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
-			}
-			return (Map) persistenceController.getLicenseDataService().getLicencePoolsPD();
-		}));
+		licencePoolTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
+						}
+					}
 
-		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicencePoolsPD();
+					}
+				}));
+
+		// persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
@@ -1439,8 +1448,18 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> persistenceController.getSoftwareDataService().getRelationsSoftwareL2LPool()));
+		licenceOptionsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return persistenceController.getSoftwareDataService().getRelationsSoftwareL2LPool();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1457,12 +1476,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			if (!isAllLicenseDataReloaded()) {
-				persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
-			}
-			return (Map) persistenceController.getLicenseDataService().getLicenceContractsPD();
-		}));
+		licenceContractsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicenceContractsPD();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
@@ -1480,12 +1507,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			if (!isAllLicenseDataReloaded()) {
-				persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
-			}
-			return (Map) persistenceController.getLicenseDataService().getLicencesPD();
-		}));
+		softwarelicencesTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicencesPD();
+					}
+				}));
 	}
 
 	private void startLicencesFrame() {

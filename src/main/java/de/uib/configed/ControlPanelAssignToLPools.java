@@ -30,6 +30,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -41,6 +42,7 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -176,12 +178,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0), // dummy
 							new DefaultTableProvider(
 									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
-											thePanel.getFMissingSoftwareInfo().getClassNames(), () -> {
-												if (!configedMain.isAllLicenseDataReloaded()) {
-													persistenceController.reloadData(
-															ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+											thePanel.getFMissingSoftwareInfo().getClassNames(), new MapRetriever() {
+												@Override
+												public void reloadMap() {
+													if (!configedMain.isAllLicenseDataReloaded()) {
+														persistenceController.reloadData(
+																ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+													}
 												}
-												return getMissingSoftwareMap(poolID);
+
+												@Override
+												public Map<String, Map<String, Object>> retrieveMap() {
+													return getMissingSoftwareMap(poolID);
+												}
 											})),
 							0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(),
 							updateCollection));
@@ -478,11 +487,18 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persistenceController.getLicenseDataService().retrieveLicencePoolXOpsiProductPD();
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT.toString());
+						}
 					}
-					return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
+					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
@@ -574,12 +590,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
 					}
-					return (Map) persistenceController.getSoftwareDataService()
-							.getInstalledSoftwareInformationForLicensingPD();
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getSoftwareDataService()
+								.getInstalledSoftwareInformationForLicensingPD();
+					}
 				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
 				updateCollection);
 

@@ -53,6 +53,11 @@ public class ExternalSource implements TableSource {
 	}
 
 	@Override
+	public void cancelRequestReload() {
+		reloadRequested = false;
+	}
+
+	@Override
 	public void setRowCounting(boolean b) {
 		/* Not needed */}
 }

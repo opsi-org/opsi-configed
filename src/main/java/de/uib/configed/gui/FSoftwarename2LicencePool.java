@@ -39,6 +39,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -345,12 +346,19 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		Logging.info(this, "init modelSWnames");
 
 		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
 					}
-					return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
-				})), 0, new int[] {}, panelSWnames, updateCollection) {
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+					}
+				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
 
 			@Override
 			public void produceRows() {
@@ -481,12 +489,19 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				columnNamesSWxLicencepool, 0);
 
 		modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
-				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, () -> {
-					Logging.info(this, "retrieveMap for swName " + swName);
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						Logging.info(this, "retrieveMap for swName " + swName);
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
 					}
-					return (Map) produceModelSWxLicencepool(swName);
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) produceModelSWxLicencepool(swName);
+					}
 				})), keyCol, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		Logging.info(this, "setTableModelSWxLicencepool, we reset the model");

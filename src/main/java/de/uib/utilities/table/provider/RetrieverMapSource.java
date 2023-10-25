@@ -27,6 +27,10 @@ public class RetrieverMapSource extends MapSource {
 
 	@Override
 	protected void fetchData() {
+		if (reloadRequested) {
+			retriever.reloadMap();
+		}
+
 		table = retriever.retrieveMap();
 
 		super.fetchData();

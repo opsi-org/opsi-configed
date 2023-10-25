@@ -123,11 +123,15 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						Logging.debug(this, "retrieveMap");
+					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
 							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
 						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						Logging.debug(this, "retrieveMap");
 						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})),

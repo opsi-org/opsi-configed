@@ -26,6 +26,7 @@ import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -137,11 +138,18 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicencesUsage = new MapTableUpdateItemFactory(modelLicencesUsage,
 				columnNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					if (!configedMain.isAllLicenseDataReloaded()) {
-						persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
+						}
 					}
-					return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
+					}
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 

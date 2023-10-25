@@ -71,11 +71,15 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map retrieveMap() {
-						Logging.info(this, "retrieveMap() for modelStatistics");
+					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
 							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
 						}
+					}
+
+					@Override
+					public Map retrieveMap() {
+						Logging.info(this, "retrieveMap() for modelStatistics");
 						return persistenceController.getSoftwareDataService().getLicenseStatistics();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);
