@@ -113,7 +113,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setDragEnabled(true);
 
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		table.setAutoCreateRowSorter(true);
 

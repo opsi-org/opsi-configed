@@ -301,8 +301,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		theTable = new JTableWithToolTips();
 
-		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-
 		exportTable = new ExporterToCSV(theTable);
 
 		searchPane = new TablesearchPane(this, true, null);

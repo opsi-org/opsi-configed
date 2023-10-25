@@ -599,7 +599,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 					table.setDefaultRenderer(Object.class, colorized);
 					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-					table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 					table.addMouseWheelListener(
 							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
