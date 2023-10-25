@@ -753,9 +753,13 @@ public class ConfigedMain implements ListSelectionListener {
 					loginDialog.setVisible(false);
 
 					Logging.info("setting mainframe visible");
-					mainFrame.setVisible(true);
-					mainFrame.toFront();
 
+					mainFrame.setVisible(true);
+
+					// init splitpanes only when frame already visible
+					mainFrame.initSplitPanes();
+
+					mainFrame.toFront();
 				});
 			}
 		}.start();
@@ -1376,9 +1380,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		// center the frame:
 		locateFrame();
-
-		// set splitpanes before making the frame visible
-		mainFrame.initSplitPanes();
 
 		// init visual states
 		Logging.debug(configedMain, "mainframe nearly initialized");
