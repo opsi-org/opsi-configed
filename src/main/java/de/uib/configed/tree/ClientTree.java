@@ -326,9 +326,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		Logging.debug(this, "mousePressed event " + e);
 		mouseClicked = true;
 
-		ConfigedMain.getMainFrame().activateLoadingPane();
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 		configedMain.treeClientsMouseAction(e);
-		ConfigedMain.getMainFrame().disactivateLoadingPane();
+		ConfigedMain.getMainFrame().disactivateLoadingCursor();
 	}
 
 	@Override

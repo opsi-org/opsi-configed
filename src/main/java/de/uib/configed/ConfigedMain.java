@@ -3197,9 +3197,9 @@ public class ConfigedMain implements ListSelectionListener {
 				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			mainFrame.activateLoadingPane();
+			mainFrame.activateLoadingCursor();
 			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
-			mainFrame.disactivateLoadingPane();
+			mainFrame.disactivateLoadingCursor();
 			Logging.debug(this, "log pages set");
 		}
 
@@ -3449,6 +3449,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void reload() {
+		mainFrame.activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		SwingUtilities.invokeLater(this::reloadData);
 	}
 
@@ -4140,7 +4141,7 @@ public class ConfigedMain implements ListSelectionListener {
 			return;
 		}
 
-		mainFrame.activateLoadingPane();
+		mainFrame.activateLoadingCursor();
 
 		if (resetLocalbootProducts) {
 			persistenceController.getProductDataService().resetLocalbootProducts(getSelectedClients(),
@@ -4152,7 +4153,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		requestReloadStatesAndActions();
-		mainFrame.disactivateLoadingPane();
+		mainFrame.disactivateLoadingCursor();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -4339,11 +4340,11 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void reloadHosts() {
-		mainFrame.activateLoadingPane();
+		mainFrame.activateLoadingCursor();
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 
-		mainFrame.disactivateLoadingPane();
+		mainFrame.disactivateLoadingCursor();
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -4735,7 +4736,7 @@ public class ConfigedMain implements ListSelectionListener {
 		fAskCopyClient.setVisible(true);
 
 		if (fAskCopyClient.getResult() == 2) {
-			mainFrame.activateLoadingPane();
+			mainFrame.activateLoadingCursor();
 			String newClientName = jTextHostname.getText();
 			boolean proceed = true;
 			if (newClientName.isEmpty()) {
@@ -4761,7 +4762,7 @@ public class ConfigedMain implements ListSelectionListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.disactivateLoadingPane();
+			mainFrame.disactivateLoadingCursor();
 		}
 	}
 
