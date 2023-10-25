@@ -32,6 +32,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
@@ -170,42 +171,18 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicencePoolPD(poolID).isEmpty()) {
-			Map<String, Map<String, Object>> missingSoftwareMap = new HashMap<>();
-
-			for (String ID : persistenceController.getSoftwareDataService()
-					.getUnknownSoftwareListForLicencePoolPD(poolID)) {
-				String[] rowValues = ID.split(Globals.PSEUDO_KEY_SEPARATOR);
-
-				Map<String, Object> rowMap = new HashMap<>();
-				for (String colName : thePanel.getFMissingSoftwareInfo().getColumnNames()) {
-					rowMap.put(colName, "");
-				}
-
-				rowMap.put("ID", ID);
-
-				List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
-				if (rowValues.length != identKeys.size()) {
-					Logging.warning(this, "illegal ID " + ID);
-				} else {
-					int i = 0;
-					for (String key : identKeys) {
-						rowMap.put(key, rowValues[i]);
-						i++;
-					}
-				}
-
-				rowMap.put("ID", ID);
-				Logging.info(this, "unknownSoftwareIdsForPool " + rowMap);
-
-				missingSoftwareMap.put(ID, rowMap);
-			}
-
-			thePanel.getFMissingSoftwareInfo().setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0), // dummy
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
-							thePanel.getFMissingSoftwareInfo().getClassNames(), () -> missingSoftwareMap)),
-					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
-
+			thePanel.getFMissingSoftwareInfo()
+					.setTableModel(new GenTableModel(
+							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0), // dummy
+							new DefaultTableProvider(
+									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
+											thePanel.getFMissingSoftwareInfo().getClassNames(), () -> {
+												persistenceController.reloadData(
+														ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+												return getMissingSoftwareMap(poolID);
+											})),
+							0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(),
+							updateCollection));
 		}
 
 		thePanel.getFieldCountAssignedStatus().setToolTipText(" <html><br /></html>");
@@ -276,6 +253,38 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
 
+	}
+
+	private Map<String, Map<String, Object>> getMissingSoftwareMap(String poolID) {
+		Map<String, Map<String, Object>> missingSoftwareMap = new HashMap<>();
+		for (String ID : persistenceController.getSoftwareDataService()
+				.getUnknownSoftwareListForLicencePoolPD(poolID)) {
+			String[] rowValues = ID.split(Globals.PSEUDO_KEY_SEPARATOR);
+
+			Map<String, Object> rowMap = new HashMap<>();
+			for (String colName : thePanel.getFMissingSoftwareInfo().getColumnNames()) {
+				rowMap.put(colName, "");
+			}
+
+			rowMap.put("ID", ID);
+
+			List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
+			if (rowValues.length != identKeys.size()) {
+				Logging.warning(this, "illegal ID " + ID);
+			} else {
+				int i = 0;
+				for (String key : identKeys) {
+					rowMap.put(key, rowValues[i]);
+					i++;
+				}
+			}
+
+			rowMap.put("ID", ID);
+			Logging.info(this, "unknownSoftwareIdsForPool " + rowMap);
+
+			missingSoftwareMap.put(ID, rowMap);
+		}
+		return missingSoftwareMap;
 	}
 
 	private static String produceCount(Integer count) {
@@ -467,9 +476,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool())),
-				-1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persistenceController.getLicenseDataService().retrieveLicencePoolXOpsiProductPD();
+					return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
+				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
 		tableModels.add(modelProductId2LPool);
@@ -560,11 +570,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persistenceController.getSoftwareDataService()
-								.getInstalledSoftwareInformationForLicensingPD(),
-						withRowCounter)),
-				WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(), updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					return (Map) persistenceController.getSoftwareDataService()
+							.getInstalledSoftwareInformationForLicensingPD();
+				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
+				updateCollection);
 
 		Logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);

@@ -3428,8 +3428,6 @@ public class ConfigedMain implements ListSelectionListener {
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
 		if (everythingReady) {
-			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
 				for (PanelGenEditTable p : cmtp.getTablePanes()) {
 					p.reload();

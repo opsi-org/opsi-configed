@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -121,6 +122,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
+						persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
 						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})),

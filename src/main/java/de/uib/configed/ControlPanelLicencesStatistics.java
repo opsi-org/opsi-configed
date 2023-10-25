@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -69,6 +70,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
+						persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
 						return persistenceController.getSoftwareDataService().getLicenseStatistics();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);

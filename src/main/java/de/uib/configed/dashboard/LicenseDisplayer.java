@@ -27,6 +27,7 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -193,9 +194,10 @@ public class LicenseDisplayer {
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD())),
-				0, new int[] {}, (TableModelListener) null, updateCollection) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+					return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
