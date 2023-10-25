@@ -390,7 +390,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		});
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
-		comboSearchFields.setPreferredSize(Globals.LOWER_BUTTON_DIMENSION);
+		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		setSearchFieldsAll();
 
@@ -412,7 +412,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		comboSearchFieldsMode.setPreferredSize(Globals.LOWER_BUTTON_DIMENSION);
+		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
 		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
