@@ -7,12 +7,8 @@
 package de.uib.utilities.swing.list;
 
 import java.awt.Component;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -23,50 +19,13 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 
 	private Map<String, String> mapOfStrings;
 	private Map<String, String> mapOfTooltips;
-	private Map<String, ImageIcon> mapOfImages;
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String tooltipPrefix) {
-		this(mapOfStringValues, mapOfDescriptions, null, tooltipPrefix);
-	}
-
-	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String imagesBase, String tooltipPrefix) {
 		super(tooltipPrefix);
+
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<>();
-
-		if (mapOfStrings != null) {
-			// Load the item values
-			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
-			while (iter.hasNext()) {
-				Entry<String, String> entry = iter.next();
-				String key = entry.getKey();
-				String stringval = entry.getValue();
-
-				ImageIcon image = null;
-
-				if (imagesBase != null && key != null && stringval != null) {
-					String imageFileString = imagesBase + "/" + key + ".png";
-
-					image = Utils.createImageIcon(imageFileString, stringval);
-
-					if (image == null) {
-						// try with gif
-						imageFileString = imagesBase + "/" + stringval + ".gif";
-
-						image = Utils.createImageIcon(imageFileString, stringval);
-
-					}
-
-					if (image != null) {
-						mapOfImages.put(key, image);
-					}
-				}
-			}
-		}
-
 	}
 
 	@Override
@@ -98,6 +57,5 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		}
 
 		return jc;
-
 	}
 }

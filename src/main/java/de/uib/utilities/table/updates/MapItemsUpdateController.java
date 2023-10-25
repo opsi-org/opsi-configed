@@ -104,7 +104,6 @@ public class MapItemsUpdateController implements UpdateController {
 			}
 
 			Logging.checkErrorList(null);
-
 		}
 
 		return success;

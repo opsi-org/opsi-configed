@@ -26,24 +26,29 @@ public class ExporterToTerminal extends AbstractExportTable {
 			return;
 		}
 
-		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
+		for (int row = 0; row < theTable.getRowCount(); row++) {
 
-			if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(rowI)) {
-				List<String> rowV = new ArrayList<>();
-				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
-					if (theTable.getValueAt(rowI, colI) != null && ((classNames == null || classNames.isEmpty())
-							&& theTable.getValueAt(rowI, colI) instanceof String)) {
+			if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(row)) {
+				printRow(row);
+			}
+		}
+	}
 
-						rowV.add((String) theTable.getValueAt(rowI, colI));
-					}
-				}
-				for (int i = 0; i < rowV.size(); i++) {
-					if (!" ".equals(rowV.get(i))) {
-						System.out.print(rowV.get(i));
-						if (i != rowV.size() - 1) {
-							System.out.print(", ");
-						}
-					}
+	private void printRow(int row) {
+		List<String> rowList = new ArrayList<>();
+		for (int col = 0; col < theTable.getColumnCount(); col++) {
+			if (theTable.getValueAt(row, col) != null && ((classNames == null || classNames.isEmpty())
+					&& theTable.getValueAt(row, col) instanceof String)) {
+
+				rowList.add((String) theTable.getValueAt(row, col));
+			}
+		}
+
+		for (int i = 0; i < rowList.size(); i++) {
+			if (!" ".equals(rowList.get(i))) {
+				System.out.print(rowList.get(i));
+				if (i != rowList.size() - 1) {
+					System.out.print(", ");
 				}
 			}
 		}

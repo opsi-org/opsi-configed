@@ -4563,7 +4563,7 @@ public class ConfigedMain implements ListSelectionListener {
 			sortedKeys.sort(Comparator.comparing(String::toString));
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
 
 			dialogRemoteControl
 					.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
