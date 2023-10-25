@@ -1437,8 +1437,6 @@ public class ConfigedMain implements ListSelectionListener {
 					}
 				}));
 
-		// persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
-
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
@@ -1452,12 +1450,15 @@ public class ConfigedMain implements ListSelectionListener {
 				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						// Nothing to reload.
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController
+									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return persistenceController.getSoftwareDataService().getRelationsSoftwareL2LPool();
+						return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
 					}
 				}));
 

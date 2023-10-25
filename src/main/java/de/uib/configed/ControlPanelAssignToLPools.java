@@ -498,7 +498,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
 					}
-				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
+				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection, true);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
 		tableModels.add(modelProductId2LPool);

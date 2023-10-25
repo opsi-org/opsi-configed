@@ -29,6 +29,7 @@ public class RetrieverMapSource extends MapSource {
 	protected void fetchData() {
 		if (reloadRequested) {
 			retriever.reloadMap();
+			reloadRequested = false;
 		}
 
 		table = retriever.retrieveMap();

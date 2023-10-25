@@ -58,7 +58,8 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		licenseDataService.retrieveLicensePoolsPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
-		licenseDataService.retrieveLicenseUsabilitiesPD();
+		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
+		licenseDataService.retrieveSoftwareLicense2LicensePoolPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
 		hostInfoCollections.retrieveOpsiHostsPD();

@@ -161,25 +161,36 @@ public class LicenseDataService {
 	}
 
 	public List<LicenceUsableForEntry> getLicenseUsabilitiesPD() {
-		retrieveLicenseUsabilitiesPD();
+		retrieveSoftwareLicense2LicensePoolPD();
 		return cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class);
 	}
 
-	// SOFTWARE_LICENSE_TO_LICENSE_POOL
-	public void retrieveLicenseUsabilitiesPD() {
+	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
+		retrieveSoftwareLicense2LicensePoolPD();
+		return cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, Map.class);
+	}
+
+	public void retrieveSoftwareLicense2LicensePoolPD() {
 		if (!moduleDataService.isWithLicenceManagementPD()
-				|| cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null) {
+				|| cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null
+				|| cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, List.class) != null) {
 			return;
 		}
+		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
 		List<LicenceUsableForEntry> licenceUsabilities = new ArrayList<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
 				new Object[0]);
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
-		for (Map<String, Object> importedEntry : retrieved) {
-			LicenceUsableForEntry entry = LicenceUsableForEntry.produceFrom(importedEntry);
+		List<Map<String, Object>> softwareL2LPools = exec.getListOfMaps(omc);
+		for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
+			LicenceUsableForEntry entry = LicenceUsableForEntry.produceFrom(softwareL2LPool);
 			licenceUsabilities.add(entry);
+			softwareL2LPool.remove("ident");
+			softwareL2LPool.remove("type");
+			rowsSoftwareL2LPool.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
+					(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
 		}
 		cacheManager.setCachedData(CacheIdentifier.LICENSE_USABILITIES, licenceUsabilities);
+		cacheManager.setCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, rowsSoftwareL2LPool);
 	}
 
 	// retrieves the used software licence - or tries to reserve one - for the given

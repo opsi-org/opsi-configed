@@ -423,27 +423,6 @@ public class SoftwareDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	// without internal caching; legacy license method
-	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
-		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenceManagementPD())) {
-			List<String> callAttributes = new ArrayList<>();
-			Map<String, Object> callFilter = new HashMap<>();
-			List<Map<String, Object>> softwareL2LPools = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
-							new Object[] { callAttributes, callFilter }));
-
-			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
-				softwareL2LPool.remove("ident");
-				softwareL2LPool.remove("type");
-				rowsSoftwareL2LPool
-						.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
-								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
-			}
-		}
-		return rowsSoftwareL2LPool;
-	}
-
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());

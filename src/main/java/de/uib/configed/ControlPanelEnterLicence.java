@@ -106,7 +106,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
 				columnNames, 0);
 		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
-				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection);
+				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection, true);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
 
 		tableModels.add(modelLicencekeys);

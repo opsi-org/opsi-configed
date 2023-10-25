@@ -17,9 +17,9 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -142,7 +142,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.LICENSE_USAGE.toString());
+							persistenceController
+									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
 						}
 					}
 
@@ -150,7 +151,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						return (Map) persistenceController.getLicenseDataService().getRowsLicensesUsagePD();
 					}
-				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
+				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection, true);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 
 		tableModels.add(modelLicencesUsage);

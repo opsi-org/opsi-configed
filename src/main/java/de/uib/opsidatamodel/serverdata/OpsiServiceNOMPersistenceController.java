@@ -56,6 +56,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -432,6 +433,11 @@ public class OpsiServiceNOMPersistenceController {
 		LicensePoolDataReloadHandler licensePoolDataReloadHandler = new LicensePoolDataReloadHandler();
 		licensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(), licensePoolDataReloadHandler);
+
+		SoftwareLicense2LicensePoolDataReloadHandler softwareLicense2LicensePoolDataReloadHandler = new SoftwareLicense2LicensePoolDataReloadHandler();
+		softwareLicense2LicensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
+				softwareLicense2LicensePoolDataReloadHandler);
 
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);

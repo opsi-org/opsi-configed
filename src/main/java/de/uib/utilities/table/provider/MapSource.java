@@ -155,10 +155,7 @@ public class MapSource implements TableSource {
 	@Override
 	public List<List<Object>> retrieveRows() {
 		Logging.info(this, " -- retrieveRows");
-		if (reloadRequested) {
-			fetchData();
-			reloadRequested = false;
-		}
+		fetchData();
 		Logging.info(this, " -- retrieveRows rows.size() " + rows.size());
 		return rows;
 	}
