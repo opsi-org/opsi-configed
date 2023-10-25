@@ -17,7 +17,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	public IconNodeRendererClientTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-
 	}
 
 	@Override
