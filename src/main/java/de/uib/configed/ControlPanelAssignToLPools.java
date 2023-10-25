@@ -496,7 +496,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						Logging.devel(this, "retrieving map");
 						return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);

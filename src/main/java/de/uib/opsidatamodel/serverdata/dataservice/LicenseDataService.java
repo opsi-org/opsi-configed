@@ -354,7 +354,6 @@ public class LicenseDataService {
 		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
 		if (moduleDataService.isWithLicenceManagementPD()) {
 			Logging.info(this, "licencePoolXOpsiProduct size " + getLicencePoolXOpsiProductPD().size());
-			Logging.devel(this, "licencePoolXOpsiProduct size " + getLicencePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicencePoolXOpsiProductPD()) {
 				rowsLicencePoolXOpsiProduct
 						.put(Utils.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
@@ -362,7 +361,6 @@ public class LicenseDataService {
 			}
 		}
 		Logging.info(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
-		Logging.devel(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
 		return rowsLicencePoolXOpsiProduct;
 	}
 
