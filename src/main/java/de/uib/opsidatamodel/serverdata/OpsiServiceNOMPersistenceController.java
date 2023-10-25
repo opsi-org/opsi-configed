@@ -51,6 +51,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
@@ -428,6 +429,10 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString(),
 				licenseContractDataReloadHandler);
 
+		LicensePoolDataReloadHandler licensePoolDataReloadHandler = new LicensePoolDataReloadHandler();
+		licensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(), licensePoolDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
@@ -443,9 +448,6 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.ALL_DATA.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSES.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_POOLS.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT.toString(),
-				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(),
 				defaultDataReloadHandler);
 	}

@@ -1427,13 +1427,13 @@ public class ConfigedMain implements ListSelectionListener {
 					@Override
 					public void reloadMap() {
 						if (!isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.LICENSE_POOLS.toString());
+							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicencePoolsPD();
+						return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
 					}
 				}));
 
@@ -1487,7 +1487,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicenceContractsPD();
+						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
 					}
 				}));
 
@@ -1518,7 +1518,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicencesPD();
+						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
 					}
 				}));
 	}
@@ -4223,10 +4223,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 		for (String client : getSelectedClients()) {
 			Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicencesUsageListPD();
+					.getLicenseDataService().getFClient2LicensesUsageListPD();
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenceUsage(client, m.getLicenceId(),
+				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenceId(),
 						m.getLicensePool());
 			}
 		}

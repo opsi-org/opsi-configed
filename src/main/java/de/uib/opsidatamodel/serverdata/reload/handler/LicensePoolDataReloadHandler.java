@@ -10,11 +10,11 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 
-public class LicenseContractDataReloadHandler implements ReloadHandler {
+public class LicensePoolDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private LicenseDataService licenseDataService;
 
-	public LicenseContractDataReloadHandler() {
+	public LicensePoolDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
 	}
 
@@ -24,8 +24,8 @@ public class LicenseContractDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
-		licenseDataService.retrieveLicenseContractsPD();
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
+		licenseDataService.retrieveLicensePoolsPD();
 	}
 }

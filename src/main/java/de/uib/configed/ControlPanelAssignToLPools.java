@@ -30,7 +30,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -491,12 +490,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT.toString());
+							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
+						Logging.devel(this, "retrieving map");
 						return (Map) persistenceController.getLicenseDataService().getRelationsProductId2LPool();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection);
@@ -735,7 +735,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// hack for avoiding unvoluntary reuse of a licence pool id
 		boolean existsNewRow = configedMain.licencePoolTableProvider.getRows().size() < modelLicencepools.getRowCount();
 
-		if (existsNewRow && persistenceController.getLicenseDataService().getLicencePoolsPD()
+		if (existsNewRow && persistenceController.getLicenseDataService().getLicensePoolsPD()
 				.containsKey(rowmap.get("licensePoolId"))) {
 			// but we leave it until the service methods reflect the situation more
 			// accurately
@@ -754,7 +754,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			modelLicencepools.requestReload();
 		}
 
-		return persistenceController.getLicenseDataService().editLicencePool(
+		return persistenceController.getLicenseDataService().editLicensePool(
 				(String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
 				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 	}
@@ -826,7 +826,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private boolean deleteLicencepool(Map<String, Object> rowmap) {
 		modelLicencepools.requestReload();
-		return persistenceController.getLicenseDataService().deleteLicencePool((String) rowmap.get("licensePoolId"));
+		return persistenceController.getLicenseDataService().deleteLicensePool((String) rowmap.get("licensePoolId"));
 	}
 
 	private void licencePoolValueChanged(ListSelectionEvent listSelectionEvent) {

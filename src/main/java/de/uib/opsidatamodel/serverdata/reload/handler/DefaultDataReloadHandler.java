@@ -46,7 +46,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 	private void registerHandlers() {
 		eventHandlers.put(CacheIdentifier.LICENSE_USAGE.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-			licenseDataService.retrieveLicenceUsagesPD();
+			licenseDataService.retrieveLicenseUsagesPD();
 		});
 		eventHandlers.put(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
@@ -70,15 +70,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> cacheManager.clearAllCachedData());
 		eventHandlers.put(CacheIdentifier.LICENSES.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.LICENSES);
-			licenseDataService.retrieveLicencesPD();
-		});
-		eventHandlers.put(CacheIdentifier.LICENSE_POOLS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
-			licenseDataService.retrieveLicencepoolsPD();
-		});
-		eventHandlers.put(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
-			licenseDataService.retrieveLicencePoolXOpsiProductPD();
+			licenseDataService.retrieveLicensesPD();
 		});
 		eventHandlers.put(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);

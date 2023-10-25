@@ -144,9 +144,9 @@ public class LicenseDisplayer {
 	private String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
-				.getLicenceContractsToNotifyPD();
+				.getLicenseContractsToNotifyPD();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenseDataService()
-				.getLicenceContractsToNotifyPD();
+				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 		Logging.info(this, "contractsToNotify " + contractsToNotify);

@@ -175,7 +175,7 @@ public class GenTableModel extends AbstractTableModel {
 		tableProvider.requestReloadRows();
 	}
 
-	public void cancelRequestReload() {
+	public final void cancelRequestReload() {
 		tableProvider.cancelRequestReload();
 	}
 

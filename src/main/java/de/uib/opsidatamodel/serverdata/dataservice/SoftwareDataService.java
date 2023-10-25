@@ -948,7 +948,7 @@ public class SoftwareDataService {
 		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount();
 		Map<String, LicenceStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
 		// table LICENSE_POOL
-		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		for (String licensePoolId : licensePools.keySet()) {
 			LicenceStatisticsRow rowMap = new LicenceStatisticsRow(licensePoolId);
 			rowsLicenseStatistics.put(licensePoolId, rowMap);
@@ -986,7 +986,7 @@ public class SoftwareDataService {
 		}
 
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = new HashMap<>();
-		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		List<String> extraHostFields = Utils.takeAsStringList(configDefaultValues.get(
@@ -1040,7 +1040,7 @@ public class SoftwareDataService {
 
 	private Map<String, ExtendedInteger> getPool2AllowedUsagesCount() {
 		Logging.info(this, " licence usabilities ");
-		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenceUsabilitiesPD();
+		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenseUsabilitiesPD();
 		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<>();
 		for (LicenceUsableForEntry licenceUsability : licenceUsabilities) {
 			String pool = licenceUsability.getLicencePoolId();
@@ -1049,7 +1049,7 @@ public class SoftwareDataService {
 			// value up this step
 			ExtendedInteger count = pool2allowedUsagesCount.get(pool);
 
-			Map<String, LicenceEntry> licences = licenseDataService.getLicencesPD();
+			Map<String, LicenceEntry> licences = licenseDataService.getLicensesPD();
 
 			// not yet initialized
 			if (count == null) {

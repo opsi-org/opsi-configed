@@ -70,7 +70,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		}
 
 		String licencePoolId = selectedLPoolIds.iterator().next();
-		String result = persistenceController.getLicenseDataService().getLicenceUsage(clientId, licencePoolId);
+		String result = persistenceController.getLicenseDataService().getLicenseUsage(clientId, licencePoolId);
 
 		if (result != null) {
 			thePanel.getPanelUsage().reload();
@@ -148,7 +148,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getRowsLicencesUsagePD();
+						return (Map) persistenceController.getLicenseDataService().getRowsLicensesUsagePD();
 					}
 				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
@@ -191,7 +191,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.getPanelUsage(), modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.getLicenseDataService().editLicenceUsage(
+						return persistenceController.getLicenseDataService().editLicenseUsage(
 								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
@@ -203,7 +203,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persistenceController.getLicenseDataService().deleteLicenceUsage(
+						return persistenceController.getLicenseDataService().deleteLicenseUsage(
 								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));
