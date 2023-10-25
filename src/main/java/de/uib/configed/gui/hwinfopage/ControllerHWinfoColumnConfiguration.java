@@ -143,7 +143,7 @@ public class ControllerHWinfoColumnConfiguration {
 		model = new GenTableModel(updateItemFactory,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public void reloadData() {
+					public void reloadMap() {
 						// Nothing to reload.
 					}
 
