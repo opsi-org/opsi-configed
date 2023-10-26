@@ -5,12 +5,16 @@
 - Create PDF-files from Hardware information
 - Displayed column editing in "Hardware Information" tab
 - Showing if column is displayed in "opsi config editor hardware classes / database columns" dialog
+- Calculation for remaining software license
+- Vanishing new entries on save in license management frame
+- Reloading of license management frame
 
 ### Changed
 - Remove unnecessaray Logging-operation (performance)
 - Remove HARDWARE prefix from column names in "Hardware Information" tab
 - Change labeling for vendors in "Hardware Information" tab
 - Localization issues in standard-dialogs like JFileChooser or JOptionPane
+- Remove duplicate RPC method calls on reloading license and starting license frame
 
 ## [4.3.0.11] - 2023-10-19
 ### Fixed
