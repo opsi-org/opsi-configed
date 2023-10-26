@@ -48,14 +48,14 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 	public void setOpsiUsagesCount(Integer count) {
 		if (count != null) {
 			put(USED_BY_OPSI_KEY, count.toString());
-			put(REMAINING_OPSI_KEY, allowedUsages.add(count).getDisplay());
+			put(REMAINING_OPSI_KEY, allowedUsages.add(-count).getDisplay());
 		}
 	}
 
 	public void setSWauditUsagesCount(Integer count) {
 		if (count != null) {
 			put(SW_INVENTORY_USED_KEY, count.toString());
-			put(SW_INVENTORY_REMAINING_KEY, allowedUsages.add(count).getDisplay());
+			put(SW_INVENTORY_REMAINING_KEY, allowedUsages.add(-count).getDisplay());
 		}
 	}
 }
