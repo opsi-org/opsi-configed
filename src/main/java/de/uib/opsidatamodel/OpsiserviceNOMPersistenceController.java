@@ -2652,7 +2652,7 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, String> filterMap = new HashMap<>();
 			filterMap.put("state", "1");
 			relationsAuditHardwareOnHost = exec.getListOfMaps(
-					new OpsiMethodCall("auditHardwareOnHost_getHashes", new Object[] { new String[0], filterMap }));
+					new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { new String[0], filterMap }));
 		}
 
 		return relationsAuditHardwareOnHost;
