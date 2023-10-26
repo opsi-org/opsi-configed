@@ -838,48 +838,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		} else {
 			selectedLicencePool = getSelectedLicencePool();
 			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
-			thePanel.getPanelProductId2LPool().moveToValue(selectedLicencePool, 0);
 		}
 
 		setSoftwareIdsFromLicencePool(selectedLicencePool);
