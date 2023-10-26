@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.22] - 2023-10-26
+### Fixed
+- Calculation for remaining software license
+
 ## [4.2.22.21] - 2023-10-24
 ### Fixed
 - Exporting hardware information as PDF
