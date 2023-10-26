@@ -72,7 +72,7 @@ public class LicenseDisplayer {
 
 	private ConfigedMain configedMain;
 
-	public LicenseDisplayer(ConfigedMain configedMain) {
+	public void setConfigedMain(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 	}
 
@@ -204,7 +204,7 @@ public class LicenseDisplayer {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
+						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
 							persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
 					}

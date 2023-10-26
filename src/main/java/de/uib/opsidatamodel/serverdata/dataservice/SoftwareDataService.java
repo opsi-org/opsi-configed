@@ -1113,7 +1113,6 @@ public class SoftwareDataService {
 		}
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 		persistenceController.notifyPanelCompleteWinProducts();
 
 		return softwareIdent2clients;

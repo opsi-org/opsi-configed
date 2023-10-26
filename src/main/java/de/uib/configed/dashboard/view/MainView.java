@@ -269,7 +269,8 @@ public class MainView implements View {
 	private void displayLicenseInfo() {
 		if (licenseDisplayer == null) {
 			try {
-				licenseDisplayer = new LicenseDisplayer(configedMain);
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.setConfigedMain(configedMain);
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
 				Logging.warning(this, "Unable to open FXML file.", ioE);
