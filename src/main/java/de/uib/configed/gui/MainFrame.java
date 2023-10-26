@@ -528,10 +528,9 @@ public class MainFrame extends JFrame
 				configedMain.closeInstance(true);
 				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
-
+				Locale.setDefault(new Locale(localeName));
+				JComponent.setDefaultLocale(new Locale(localeName));
 				Configed.restartConfiged();
-
-				// we put it into to special thread to avoid invokeAndWait runtime error
 			});
 		}
 
@@ -2682,12 +2681,7 @@ public class MainFrame extends JFrame
 	}
 
 	private void reloadAction() {
-		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload") + " ...");
 		configedMain.reload();
-	}
-
-	public void activateLoadingPane() {
-		glassPane.activate(true);
 	}
 
 	public void activateLoadingPane(String infoText) {
@@ -2697,6 +2691,14 @@ public class MainFrame extends JFrame
 
 	public void disactivateLoadingPane() {
 		glassPane.activate(false);
+	}
+
+	public void activateLoadingCursor() {
+		setCursor(Globals.WAIT_CURSOR);
+	}
+
+	public void disactivateLoadingCursor() {
+		setCursor(null);
 	}
 
 	private void reloadLicensesAction() {

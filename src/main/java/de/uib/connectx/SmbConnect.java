@@ -7,13 +7,14 @@
 package de.uib.connectx;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public final class SmbConnect {
-	public static final String[] directoryProducts = new String[] { "var", "lib", "opsi", "depot" };
+	public static final List<String> directoryProducts = List.of("var", "lib", "opsi", "depot");
 	public static final String PRODUCT_SHARE_RW = "opsi_depot_rw";
 
 	public static final String DIRECTORY_PE = "winpe";

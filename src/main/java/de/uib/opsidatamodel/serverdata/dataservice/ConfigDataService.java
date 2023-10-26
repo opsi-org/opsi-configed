@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
@@ -62,6 +62,7 @@ public class ConfigDataService {
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
+	private HardwareDataService hardwareDataService;
 
 	private List<Map<String, Object>> configCollection;
 	private List<Map<String, Object>> configStateCollection;
@@ -75,6 +76,10 @@ public class ConfigDataService {
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
 		this.userRolesConfigDataService = userRolesConfigDataService;
+	}
+
+	public void setHardwareDataService(HardwareDataService hardwareDataService) {
+		this.hardwareDataService = hardwareDataService;
 	}
 
 	/**
@@ -140,6 +145,8 @@ public class ConfigDataService {
 
 		RemoteControls remoteControls = new RemoteControls();
 		SavedSearches savedSearches = new SavedSearches();
+		OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
+				hardwareDataService.getHwAuditDeviceClassesPD());
 
 		// metaConfig for wan configuration is rebuilt in
 		// getWANConfigOptions
@@ -149,11 +156,9 @@ public class ConfigDataService {
 
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
-
 			String key = (String) configItem.get("ident");
 
 			// build a ConfigOption from the retrieved item
-
 			// eliminate key produced by old version for role branch
 
 			String pseudouserProducedByOldVersion = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
@@ -172,17 +177,15 @@ public class ConfigDataService {
 			}
 
 			ConfigOption configOption = new ConfigOption(configItem);
-
 			configOptions.put(key, configOption);
-
 			configListCellOptions.put(key, configOption);
-
 			configDefaultValues.put(key, configOption.getDefaultValues());
 
 			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 				remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 			}
+			hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
@@ -341,28 +344,20 @@ public class ConfigDataService {
 				new Object[] { configIds, objectIds, false });
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
-		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
-			Object id = hostConfig.getKey();
 
-			if (id instanceof String && !"".equals(id)) {
-				String hostId = (String) id;
-				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
+		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
+
+			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
+				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
+						arg -> new HashMap<>());
 				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
 						new TypeReference<Map<String, Object>>() {
 						});
 
-				for (Entry<String, Object> config : configs.entrySet()) {
-					Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + hostConfig);
+				Logging.debug(this,
+						"retrieveHostConfigs objectId,  element " + hostConfig.getKey() + ": " + hostConfig);
 
-					String configId = config.getKey();
-
-					if (hostConfig.getValue() == null) {
-						configs1Host.put(configId, new ArrayList<>());
-						// is a data error but can occur
-					} else {
-						configs1Host.put(configId, config.getValue());
-					}
-				}
+				configs1Host.putAll(configs);
 			}
 		}
 
@@ -510,16 +505,12 @@ public class ConfigDataService {
 
 				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
 					callsConfigDeleteCollection.add(callConfig);
+				} else if (!restrictToMissing || missingConfigIds.contains(callConfig.get("ident"))) {
+					callConfig.put("defaultValues", callConfig.get("defaultValues"));
+					callConfig.put("possibleValues", callConfig.get("possibleValues"));
+					callsConfigUpdateCollection.add(callConfig);
 				} else {
-					Logging.debug(this, "setConfig config with ident " + callConfig.get("ident"));
-
-					boolean isMissing = missingConfigIds.contains(callConfig.get("ident"));
-
-					if (!restrictToMissing || isMissing) {
-						callConfig.put("defaultValues", callConfig.get("defaultValues"));
-						callConfig.put("possibleValues", callConfig.get("possibleValues"));
-						callsConfigUpdateCollection.add(callConfig);
-					}
+					// Do nothing, config does not need to be deleted or updated
 				}
 			}
 
@@ -560,69 +551,68 @@ public class ConfigDataService {
 		for (Entry<String, List<Object>> setting : settings.entrySet()) {
 			Logging.debug(this, "setConfig,  key, settings.get(key): " + setting.getKey() + ", " + setting.getValue());
 
-			if (setting.getValue() != null) {
-				Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
-						+ setting.getValue() + " , " + setting.getValue().getClass().getName());
+			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
+					+ setting.getValue() + " , " + setting.getValue().getClass().getName());
 
-				if (setting.getValue() instanceof List) {
-					List<Object> oldValue = null;
+			List<Object> oldValue = null;
 
-					if (configOptions.get(setting.getKey()) != null) {
-						oldValue = configOptions.get(setting.getKey()).getDefaultValues();
-					}
+			if (configOptions.get(setting.getKey()) != null) {
+				oldValue = configOptions.get(setting.getKey()).getDefaultValues();
+			}
 
-					Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
+			Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
 
-					List<Object> valueList = setting.getValue();
+			if (!setting.getValue().equals(oldValue)) {
+				Map<String, Object> config = new HashMap<>();
 
-					if (valueList != null && !valueList.equals(oldValue)) {
-						Map<String, Object> config = new HashMap<>();
+				config.put("ident", setting.getKey());
 
-						config.put("ident", setting.getKey());
+				String type;
 
-						String type = "UnicodeConfig";
-
-						Logging.debug(this, "setConfig, key,  configOptions.get(key):  " + setting.getKey() + ", "
-								+ configOptions.get(setting.getKey()));
-						if (configOptions.get(setting.getKey()) != null) {
-							type = (String) configOptions.get(setting.getKey()).get("type");
-						} else {
-							if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-								type = "BoolConfig";
-							}
-						}
-
-						config.put("type", type);
-
-						config.put("defaultValues", valueList);
-
-						List<Object> possibleValues = null;
-						if (configOptions.get(setting.getKey()) == null) {
-							possibleValues = new ArrayList<>();
-							if (type.equals(ConfigOption.BOOL_TYPE)) {
-								possibleValues.add(true);
-								possibleValues.add(false);
-							}
-						} else {
-							possibleValues = configOptions.get(setting.getKey()).getPossibleValues();
-						}
-
-						for (Object item : valueList) {
-							if (possibleValues.indexOf(item) == -1) {
-								possibleValues.add(item);
-							}
-						}
-
-						config.put("possibleValues", possibleValues);
-
-						configCollection.add(config);
-					}
+				Logging.debug(this, "setConfig, key,  configOptions.get(key):  " + setting.getKey() + ", "
+						+ configOptions.get(setting.getKey()));
+				if (configOptions.get(setting.getKey()) != null) {
+					type = (String) configOptions.get(setting.getKey()).get("type");
+				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
+					type = "BoolConfig";
 				} else {
-					Logging.error("setConfig,  setting.getKey(), setting.getValue(): " + setting.getKey() + ", "
-							+ setting.getValue() + " \nUnexpected type");
+					type = "UnicodeConfig";
 				}
+
+				config.put("type", type);
+
+				config.put("defaultValues", setting.getValue());
+
+				List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
+						configOptions.get(setting.getKey()));
+
+				config.put("possibleValues", possibleValues);
+
+				configCollection.add(config);
 			}
 		}
+	}
+
+	private static List<Object> createPossibleValues(String type, List<Object> defaultValues,
+			ConfigOption configOption) {
+		List<Object> possibleValues;
+		if (configOption == null) {
+			possibleValues = new ArrayList<>();
+			if (type.equals(ConfigOption.BOOL_TYPE)) {
+				possibleValues.add(true);
+				possibleValues.add(false);
+			}
+		} else {
+			possibleValues = configOption.getPossibleValues();
+		}
+
+		for (Object item : defaultValues) {
+			if (!possibleValues.contains(item)) {
+				possibleValues.add(item);
+			}
+		}
+
+		return possibleValues;
 	}
 
 	public void addRoleConfig(String name, String rolename) {
@@ -1189,11 +1179,8 @@ public class ConfigDataService {
 	 * @return available backends
 	 * @deprecated since opsi 4.3
 	 */
+	@Deprecated
 	public String getBackendInfos() {
-		String bgColor0 = "#dedeff";
-		String bgColor1 = "#ffffff";
-		String bgColor = "";
-
 		String titleSize = "14px";
 		String fontSizeBig = "10px";
 		String fontSizeSmall = "8px";
@@ -1209,86 +1196,20 @@ public class ConfigDataService {
 				backendName = (String) listEntry.get("name");
 			}
 
-			if (!backends.containsKey(backendName)) {
-				backends.put(backendName, new ArrayList<>());
-			}
-
-			backends.get(backendName).add(listEntry);
+			List<Map<String, Object>> backend = backends.computeIfAbsent(backendName, name -> new ArrayList<>());
+			backend.add(listEntry);
 		}
 
-		StringBuilder buf = new StringBuilder("");
+		StringBuilder buf = new StringBuilder();
 		buf.append("<table border='0' cellspacing='0' cellpadding='0'>\n");
 
-		Iterator<String> backendIterator = backends.keySet().iterator();
-		while (backendIterator.hasNext()) {
-			String backendName = backendIterator.next();
+		for (Entry<String, List<Map<String, Object>>> backendEntry : backends.entrySet()) {
 
 			buf.append("<tr><td bgcolor='#fbeca5' color='#000000'  width='100%'  colspan='3'  align='left'>");
-			buf.append("<font size='" + titleSize + "'><b>" + backendName + "</b></font></td></tr>");
+			buf.append("<font size='" + titleSize + "'><b>" + backendEntry.getKey() + "</b></font></td></tr>");
 
-			List<Map<String, Object>> backendEntries = backends.get(backendName);
-
-			for (int i = 0; i < backendEntries.size(); i++) {
-				Map<String, Object> listEntry = backendEntries.get(i);
-
-				Iterator<String> eIt = listEntry.keySet().iterator();
-
-				boolean entryIsEven = false;
-
-				while (eIt.hasNext()) {
-					String key = eIt.next();
-					if ("name".equals(key)) {
-						continue;
-					}
-
-					entryIsEven = !entryIsEven;
-					if (entryIsEven) {
-						bgColor = bgColor0;
-					} else {
-						bgColor = bgColor1;
-					}
-
-					Object value = listEntry.get(key);
-					buf.append("<tr height='8px'>");
-					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-							+ fontSizeBig + "'>" + key + "</font></td>");
-
-					if ("config".equals(key)) {
-						buf.append("<td colspan='2'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-								+ fontSizeBig + "'>&nbsp;</font></td>");
-						buf.append("</tr>");
-
-						Map<String, Object> configItems = exec.getMapFromItem(value);
-
-						if (!configItems.isEmpty()) {
-							Iterator<String> configItemsIterator = configItems.keySet().iterator();
-
-							while (configItemsIterator.hasNext()) {
-								String configKey = configItemsIterator.next();
-
-								Object jO = configItems.get(configKey);
-
-								String configVal = "";
-
-								configVal = jO.toString();
-
-								buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
-								buf.append("<td width='200px'  bgcolor='" + bgColor
-										+ "' align='left' valign='top'><font size='" + fontSizeSmall + "'>" + configKey
-										+ "</font></td>");
-								buf.append("<td width='200px'  bgcolor='" + bgColor
-										+ "' align='left' valign='top'><font size='" + fontSizeSmall + "'>" + configVal
-										+ "</font></td>");
-								buf.append("</tr>");
-							}
-						}
-					} else {
-						buf.append("<td width='300px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
-								+ fontSizeBig + "'>" + value + "</font></td>");
-						buf.append("</tr>");
-					}
-				}
-				buf.append("<tr height='10px'><td bgcolor='" + bgColor + "' colspan='3'></td></tr>");
+			for (Map<String, Object> listEntry : backendEntry.getValue()) {
+				addMapEntriesToString(buf, listEntry, fontSizeBig, fontSizeSmall);
 			}
 
 			buf.append(
@@ -1298,6 +1219,52 @@ public class ConfigDataService {
 		buf.append("</table>\n");
 
 		return buf.toString();
+	}
+
+	private void addMapEntriesToString(StringBuilder buf, Map<String, Object> listEntry, String fontSizeBig,
+			String fontSizeSmall) {
+		boolean entryIsEven = false;
+		String bgColor = "#ffffff";
+		for (Entry<String, Object> mapEntry : listEntry.entrySet()) {
+			if ("name".equals(mapEntry.getKey())) {
+				continue;
+			}
+
+			entryIsEven = !entryIsEven;
+			if (entryIsEven) {
+				bgColor = "#dedeff";
+			} else {
+				bgColor = "#ffffff";
+			}
+
+			buf.append("<tr height='8px'>");
+			buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
+					+ fontSizeBig + "'>" + mapEntry.getKey() + "</font></td>");
+
+			if ("config".equals(mapEntry.getKey())) {
+				buf.append("<td colspan='2'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
+						+ fontSizeBig + "'>&nbsp;</font></td>");
+				buf.append("</tr>");
+
+				Map<String, Object> configItems = exec.getMapFromItem(mapEntry.getValue());
+
+				for (Entry<String, Object> configItem : configItems.entrySet()) {
+
+					buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
+					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
+							+ fontSizeSmall + "'>" + configItem.getKey() + "</font></td>");
+					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
+							+ fontSizeSmall + "'>" + configItem.getValue() + "</font></td>");
+					buf.append("</tr>");
+				}
+			} else {
+				buf.append("<td width='300px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
+						+ fontSizeBig + "'>" + mapEntry.getValue() + "</font></td>");
+				buf.append("</tr>");
+			}
+		}
+
+		buf.append("<tr height='10px'><td bgcolor='" + bgColor + "' colspan='3'></td></tr>");
 	}
 
 	public List<String> getDomains() {
@@ -1323,9 +1290,8 @@ public class ConfigDataService {
 					unorderedValues.add(entry);
 				} else if (p > 0) {
 					// the only regular case
-					int orderNumber = -1;
 					try {
-						orderNumber = Integer.valueOf(entry.substring(0, p));
+						int orderNumber = Integer.parseInt(entry.substring(0, p));
 						String value = entry.substring(p + 1);
 						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
 							orderedValues.add(entry);

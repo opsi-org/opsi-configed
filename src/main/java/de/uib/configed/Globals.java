@@ -142,7 +142,6 @@ public final class Globals {
 	public static final int LINE_HEIGHT = 28;
 	public static final int SMALL_HEIGHT = 18;
 	public static final int PROGRESS_BAR_HEIGHT = 10;
-	public static final int TABLE_ROW_HEIGHT = 20;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
@@ -150,7 +149,6 @@ public final class Globals {
 	public static final int SQUARE_BUTTON_WIDTH = 24;
 
 	public static final Dimension BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
-	public static final Dimension LOWER_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT - 4);
 	public static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
 	public static final Dimension SHORT_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
@@ -160,7 +158,6 @@ public final class Globals {
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
 	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
-	public static final Dimension FILE_CHOOSER_SIZE = new Dimension(600, 400);
 
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;

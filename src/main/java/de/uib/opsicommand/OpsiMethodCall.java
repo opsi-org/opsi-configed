@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
@@ -95,18 +96,7 @@ public class OpsiMethodCall {
 				if (paramI instanceof Object[]) {
 					sb.append(Arrays.toString((Object[]) paramI));
 				} else if (paramI instanceof Map) {
-					sb.append("{");
-
-					for (Object key : ((Map<?, ?>) paramI).keySet()) {
-						sb.append("" + key + ": ");
-						if (((Map<?, ?>) paramI).get(key) instanceof Object[]) {
-							sb.append(Arrays.toString((Object[]) ((Map<?, ?>) paramI).get(key)));
-						} else {
-							sb.append("" + ((Map<?, ?>) paramI).get(key));
-						}
-						sb.append(" ");
-					}
-					sb.append("}");
+					sb.append(getMapString((Map<?, ?>) paramI));
 				} else {
 					sb.append("" + paramI);
 				}
@@ -114,6 +104,24 @@ public class OpsiMethodCall {
 		}
 		sb.append("]");
 		sb.append("}");
+		return sb.toString();
+	}
+
+	private static String getMapString(Map<?, ?> map) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("{");
+		for (Entry<?, ?> entry : map.entrySet()) {
+			sb.append(entry.getKey() + ": ");
+			if (entry.getValue() instanceof Object[]) {
+				sb.append(Arrays.toString((Object[]) entry.getValue()));
+			} else {
+				sb.append("" + entry.getValue());
+			}
+			sb.append(" ");
+		}
+		sb.append("}");
+
 		return sb.toString();
 	}
 

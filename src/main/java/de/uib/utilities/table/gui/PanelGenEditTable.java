@@ -58,7 +58,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -69,7 +68,6 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
-import de.uib.utilities.table.TableCellRendererByBoolean;
 import de.uib.utilities.table.TableCellRendererCurrency;
 import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
@@ -250,6 +248,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return result;
 	}
 
+	protected Object modifyHeaderValue(Object value) {
+		return value;
+	}
+
 	/**
 	 * sets frame to return to e.g. from option dialogs
 	 *
@@ -299,8 +301,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		theTable = new JTableWithToolTips();
 
-		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-
 		exportTable = new ExporterToCSV(theTable);
 
 		searchPane = new TablesearchPane(this, true, null);
@@ -323,7 +323,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.addMouseListener(this);
 
 		theTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()));
+				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
+					@Override
+					protected Object modifyValue(Object value) {
+						return modifyHeaderValue(value);
+					}
+				});
 
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -512,7 +517,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private static List<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
 			final List<Integer> listOfKeys) {
-		ArrayList<Integer> augmentedList = new ArrayList<>();
+		List<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
 
@@ -521,28 +526,27 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		for (int key : listOfKeys) {
 			if (key == insertpoint) {
 				found = true;
-
-				for (int type : injectKeys) {
-
-					if (!setOfKeys.contains(type)) {
-						augmentedList.add(type);
-						setOfKeys.add(type);
-					}
-				}
+				addMissingKeys(injectKeys, setOfKeys, augmentedList);
 			}
+
 			augmentedList.add(key);
 			setOfKeys.add(key);
 		}
 
 		if (!found) {
-			for (int type : injectKeys) {
-				if (!setOfKeys.contains(type)) {
-					augmentedList.add(type);
-					setOfKeys.add(type);
-				}
+			addMissingKeys(injectKeys, setOfKeys, augmentedList);
+		}
+
+		return augmentedList;
+	}
+
+	private static void addMissingKeys(int[] injectKeys, Set<Integer> setOfKeys, List<Integer> augmentedList) {
+		for (int type : injectKeys) {
+			if (!setOfKeys.contains(type)) {
+				augmentedList.add(type);
+				setOfKeys.add(type);
 			}
 		}
-		return augmentedList;
 	}
 
 	private void addPopupmenuStandardpart() {
@@ -779,7 +783,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		return sortKeys;
-
 	}
 
 	private void setSorter() {
@@ -791,15 +794,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 
-		for (int j = 0; j < tableModel.getColumnCount(); j++) {
-
-			// TODO check if this is ever used
-			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
-
-				sorter.setComparator(j, new IntComparatorForStrings());
-			}
-		}
-
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
 		if (sortKeys != null && !sortKeys.isEmpty()) {
@@ -807,7 +801,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		theTable.setRowSorter(sorter);
-
 	}
 
 	public void setTableModel(GenTableModel m) {
@@ -986,41 +979,25 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	private static void setTimestampRenderer(String classname, TableColumn col) {
-
-		if ("java.sql.Timestamp".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererDate());
-		}
-
-	}
-
-	private static void setBigDecimalRenderer(String classname, TableColumn col) {
-		if ("java.math.BigDecimal".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererCurrency());
-		}
-
-	}
-
-	private static void setBooleanRenderer(String classname, TableColumn col) {
-		if ("java.lang.Boolean".equals(classname)) {
-			col.setCellRenderer(new TableCellRendererByBoolean());
-		}
-
-	}
-
 	protected void setCellRenderers() {
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			String name = tableModel.getColumnName(i);
-			TableColumn col = theTable.getColumn(name);
+			TableColumn tableColumn = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);
 
-			setTimestampRenderer(classname, col);
-			setBigDecimalRenderer(classname, col);
-			setBooleanRenderer(classname, col);
+			switch (classname) {
+			case "java.sql.Timestamp":
+				tableColumn.setCellRenderer(new TableCellRendererDate());
+				break;
 
-			if (col.getCellRenderer() == null) {
+			case "java.math.BigDecimal":
+				tableColumn.setCellRenderer(new TableCellRendererCurrency());
+				break;
+
+			default:
 				// no special renderer set
-				col.setCellRenderer(new StandardTableCellRenderer());
+				tableColumn.setCellRenderer(new StandardTableCellRenderer());
+				break;
 			}
 		}
 	}

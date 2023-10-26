@@ -71,11 +71,12 @@ public class PanelHostConfig extends JPanel {
 		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
-		OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, (String arg) -> {
-			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
-					+ newpropertyclass + "]");
-			return "";
-		});
+		OpsiServiceNOMPersistenceController.getPropertyClassesServer().computeIfAbsent(newpropertyclass,
+				(String arg) -> {
+					Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
+							+ newpropertyclass + "]");
+					return "";
+				});
 	}
 
 	private void putUsersToPropertyclassesTreeMap() {

@@ -129,7 +129,7 @@ public class UserConfigProducing {
 
 	private void createPropertySubclass(String property, String propertyType) {
 		final String propertyclass = UserConfig.START_USER_KEY + property + '}';
-		OpsiServiceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
+		OpsiServiceNOMPersistenceController.getPropertyClassesServer().computeIfAbsent(propertyclass, (String arg) -> {
 			Logging.info(this, "createPropertySubclass for " + propertyType + " " + property);
 			return "";
 		});

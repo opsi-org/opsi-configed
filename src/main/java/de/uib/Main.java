@@ -11,6 +11,7 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -257,14 +258,7 @@ public class Main {
 
 		parseArgs(cmd);
 
-		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("buttonCancel"));
-		UIManager.put("FileChooser.cancelButtonToolTipText", "");
-		// TODO Translate
-		UIManager.put("FileChooser.lookInLabelText", "Suchen in:");
-
-		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("buttonYES"));
-		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("buttonNO"));
-		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("buttonCancel"));
+		Locale.setDefault(Messages.getLocale());
 
 		setOpsiLaf();
 

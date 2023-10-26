@@ -230,7 +230,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot.setEnabled(false);
 
 		chooserPackage = new JFileChooser();
-		chooserPackage.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);
@@ -242,7 +241,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserServerpath = new JFileChooser();
-		chooserServerpath.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);

@@ -89,46 +89,27 @@ public class MapSource implements TableSource {
 
 				if (obj != null) {
 					vRow.add(obj);
+					warnIfDataWrongClass(obj, classNames.get(i));
+				} else if (mRow.containsKey(columnNames.get(i))) {
+					Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
+							+ " supplement by null");
 
-					try {
-						Class<?> cl = Class.forName(classNames.get(i));
-						if (!dynInstanceOf(obj, cl)) {
-
-							Logging.warning(this, "MapSource fetchData(): data type does not fit");
-							Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
-							Logging.info(this, "class should be " + cl);
-						}
-					} catch (ClassNotFoundException e) {
-						Logging.error(this, "could not find class " + classNames.get(i), e);
-					}
-
+					// we complete the row by null
+					vRow.add(obj);
 				} else {
-					if (mRow.containsKey(columnNames.get(i))) {
-						Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
-								+ " supplement by null");
+					String className = classNames.get(i);
 
-						// we complete the row by null
-						vRow.add(obj);
+					if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
+						vRow.add("" + rowCount);
+					} else if (class2defaultValue.get(className) != null) {
+						vRow.add(class2defaultValue.get(className));
 					} else {
-						String className = classNames.get(i);
-
-						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
-							vRow.add("" + rowCount);
-
-						} else {
-							if (class2defaultValue.get(className) != null) {
-								vRow.add(class2defaultValue.get(className));
-
-							} else {
-								Logging.warning(this,
-										"fetchData row " + mRow
-												+ " ob == null, possibly the column name is not correct, column " + i
-												+ ", " + columnNames.get(i));
-							}
-						}
+						Logging.warning(this,
+								"fetchData row " + mRow
+										+ " ob == null, possibly the column name is not correct, column " + i + ", "
+										+ columnNames.get(i));
 					}
 				}
-
 			}
 
 			if (tableEntry.getKey().startsWith("A")) {
@@ -138,7 +119,20 @@ public class MapSource implements TableSource {
 			rows.add(vRow);
 
 			rowCount++;
+		}
+	}
 
+	private void warnIfDataWrongClass(Object obj, String className) {
+		try {
+			Class<?> cl = Class.forName(className);
+			if (!dynInstanceOf(obj, cl)) {
+
+				Logging.warning(this, "MapSource fetchData(): data type does not fit");
+				Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
+				Logging.info(this, "class should be " + cl);
+			}
+		} catch (ClassNotFoundException e) {
+			Logging.error(this, "could not find class " + className, e);
 		}
 	}
 

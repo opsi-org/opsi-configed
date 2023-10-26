@@ -182,7 +182,7 @@ public class ModuleDataService {
 	}
 
 	public Map<String, Object> getOpsiModulesInfosPD() {
-		produceOpsiModulesInfoClassicOpsi43PD();
+		retrieveOpsiModules();
 		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, Map.class);
 	}
 
@@ -205,7 +205,7 @@ public class ModuleDataService {
 
 		// analyse the real module info
 		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
-		opsiCountModules.keySet().removeAll(exec.getListFromItem(opsiInformation.get("obsolete_modules").toString()));
+		opsiCountModules.keySet().removeAll(exec.getListFromItem(opsiInformation.get("obsolete_modules") + ""));
 		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
@@ -639,9 +639,7 @@ public class ModuleDataService {
 
 						String warningText =
 
-								String.format(
-										// locale.
-										Configed.getResourceValue("Permission.modules.clientcount.error"),
+								String.format(Configed.getResourceValue("Permission.modules.clientcount.error"),
 										"" + countClientsInThisBlock, "" + key,
 										"" + maxAllowedClientsForThisModule.getNumber());
 

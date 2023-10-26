@@ -8,6 +8,7 @@ package de.uib.utilities.table;
 
 import java.awt.Component;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -19,13 +20,10 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererDate extends ColorTableCellRenderer {
 
-	private JLabel label = new JLabel();
-	private java.text.DateFormat dateFormat;
+	private DateFormat dateFormat;
 
 	public TableCellRendererDate() {
-		dateFormat = java.text.DateFormat.getDateInstance(Globals.DATE_FORMAT_STYLE_PATTERN);
-
-		label.setText("");
+		dateFormat = DateFormat.getDateInstance(Globals.DATE_FORMAT_STYLE_PATTERN);
 	}
 
 	@Override

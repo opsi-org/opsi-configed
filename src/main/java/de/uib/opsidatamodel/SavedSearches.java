@@ -51,14 +51,13 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 				i = nextPartAt(remainder);
 
-				if (i == -1) {
-					if (remainder.equals(SavedSearch.DESCRIPTION_KEY)) {
-						rc.setDescription(value);
-					}
-
-				} else {
+				if (i != -1) {
 					// there are no 3rd level keys
 					Logging.error("Remote control key has too many parts");
+				} else if (remainder.equals(SavedSearch.DESCRIPTION_KEY)) {
+					rc.setDescription(value);
+				} else {
+					Logging.warning(this, "Unexpected remainer " + remainder);
 				}
 			}
 

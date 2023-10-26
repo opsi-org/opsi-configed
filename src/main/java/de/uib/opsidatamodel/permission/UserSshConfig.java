@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.permission;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.uib.utilities.logging.Logging;
@@ -25,18 +24,9 @@ public class UserSshConfig extends UserConfigModule {
 	// activate menus of all executable commands in menu server-console
 
 	// addToBoolKeys
-	public static final Set<String> BOOL_KEYS = new LinkedHashSet<>();
-	static {
-		BOOL_KEYS.add(KEY_SSH_MENU_ACTIVE);
-		BOOL_KEYS.add(KEY_SSH_CONFIG_ACTIVE);
-		BOOL_KEYS.add(KEY_SSH_COMMANDCONTROL_ACTIVE);
-		BOOL_KEYS.add(KEY_SSH_COMMANDS_ACTIVE);
-
-		Logging.info(" UserSshConfig BOOL_KEYS " + BOOL_KEYS);
-	}
-
+	public static final Set<String> BOOL_KEYS = Set.of(KEY_SSH_MENU_ACTIVE, KEY_SSH_CONFIG_ACTIVE,
+			KEY_SSH_COMMANDCONTROL_ACTIVE, KEY_SSH_COMMANDS_ACTIVE);
 	public static final UserSshConfig DEFAULT;
-
 	static {
 		Logging.info("init ARCHEO_ for UserSshConfig");
 		DEFAULT = new UserSshConfig(UserConfig.ARCHEO_ROLE_NAME);

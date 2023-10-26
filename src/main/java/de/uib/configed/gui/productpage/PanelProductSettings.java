@@ -204,8 +204,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-
 		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -608,13 +606,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void reloadAction() {
-		ConfigedMain.getMainFrame().activateLoadingPane();
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		configedMain.requestReloadStatesAndActions();
 		configedMain.resetView(configedMain.getViewIndex());
 		configedMain.setDataChanged(false);
 
-		ConfigedMain.getMainFrame().disactivateLoadingPane();
+		ConfigedMain.getMainFrame().disactivateLoadingCursor();
 	}
 
 	protected void saveAndExecuteAction() {
@@ -669,17 +667,17 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		activatePacketSelectionHandling(false);
 		clearSelection();
 
-		if (selectedIDs != null) {
-			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
-				tableProducts.addRowSelectionInterval(0, 0);
-				// show first product if no product given
-				Logging.info(this, "setSelection 0");
-			} else {
-				for (int row = 0; row < tableProducts.getRowCount(); row++) {
-					Object productId = tableProducts.getValueAt(row, 0);
-					if (selectedIDs.contains(productId)) {
-						tableProducts.addRowSelectionInterval(row, row);
-					}
+		if (selectedIDs == null) {
+			Logging.info("selectedIds is null");
+		} else if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
+			tableProducts.addRowSelectionInterval(0, 0);
+			// show first product if no product given
+			Logging.info(this, "setSelection 0");
+		} else {
+			for (int row = 0; row < tableProducts.getRowCount(); row++) {
+				Object productId = tableProducts.getValueAt(row, 0);
+				if (selectedIDs.contains(productId)) {
+					tableProducts.addRowSelectionInterval(row, row);
 				}
 			}
 		}
@@ -856,18 +854,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			laststatechangeColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
-		}
-
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_SEQUENCE)) > -1) {
-			TableColumn priorityclassColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			priorityclassColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
-
-			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
-
-			sorter.setComparator(colIndex, new IntComparatorForStrings());
-
-			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_PRIORITY)) > -1) {

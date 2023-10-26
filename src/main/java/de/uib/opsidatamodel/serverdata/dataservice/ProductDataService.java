@@ -70,8 +70,8 @@ public class ProductDataService {
 	private static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
 	private static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
 
-	private static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
-	private static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT = "configed.productonclient_displayfields_netboot";
+	private static final String KEY_PRODUCT_ON_CLIENT_FIELD_LOCALBOOT = "configed.productonclient_displayfields_localboot";
+	private static final String KEY_PRODUCT_ON_CLIENT_FIELD_NETBOOT = "configed.productonclient_displayfields_netboot";
 
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
@@ -581,24 +581,9 @@ public class ProductDataService {
 			}
 
 			if (getProduct2VersionInfo2InfosPD().get(productId) != null) {
-				String versionInfo = null;
 				Map<String, OpsiProductInfo> productAllInfos = getProduct2VersionInfo2InfosPD().get(productId);
 
-				// look for associated product on depot info
-				HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
-				if (product2VersionList != null && product2VersionList.get(productId) != null
-						&& !product2VersionList.get(productId).isEmpty()) {
-					versionInfo = product2VersionList.get(productId).get(0);
-				}
-
-				if (versionInfo == null) {
-					product2VersionList = getDepot2NetbootProductsPD().get(depotId);
-
-					if (product2VersionList != null && product2VersionList.get(productId) != null
-							&& !product2VersionList.get(productId).isEmpty()) {
-						versionInfo = product2VersionList.get(productId).get(0);
-					}
-				}
+				String versionInfo = getVersionInfoForLocalbootProduct(depotId, productId);
 
 				// if found go on
 
@@ -643,6 +628,28 @@ public class ProductDataService {
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, productGlobalInfos);
 		cacheManager.setCachedData(CacheIdentifier.POSSIBLE_ACTIONS, possibleActions);
 		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+	}
+
+	private String getVersionInfoForLocalbootProduct(String depotId, String productId) {
+		// look for associated product on depot info
+		HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
+
+		String versionInfo = null;
+		if (product2VersionList != null && product2VersionList.get(productId) != null
+				&& !product2VersionList.get(productId).isEmpty()) {
+			versionInfo = product2VersionList.get(productId).get(0);
+		}
+
+		if (versionInfo == null) {
+			product2VersionList = getDepot2NetbootProductsPD().get(depotId);
+
+			if (product2VersionList != null && product2VersionList.get(productId) != null
+					&& !product2VersionList.get(productId).isEmpty()) {
+				versionInfo = product2VersionList.get(productId).get(0);
+			}
+		}
+
+		return versionInfo;
 	}
 
 	public Map<String, Map<String, String>> getProductDefaultStatesPD() {
@@ -813,9 +820,7 @@ public class ProductDataService {
 				if (retrievedProperties1Product == null) {
 					productsHavingSpecificProperties.remove(product);
 				} else {
-					for (Entry<String, Object> retrievedProperty : retrievedProperties1Product.entrySet()) {
-						properties1Product.put(retrievedProperty.getKey(), retrievedProperty.getValue());
-					}
+					properties1Product.putAll(retrievedProperties1Product);
 				}
 
 				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product);
@@ -838,15 +843,14 @@ public class ProductDataService {
 			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
 				ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
 
-				Iterator<String> iterProperties = productPropertyDefinitions.get(product).keySet().iterator();
-				while (iterProperties.hasNext()) {
-					String property = iterProperties.next();
+				for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product)
+						.entrySet()) {
 
-					if (productPropertyConfig.isEmpty() || productPropertyConfig.get(property) == null) {
-						productPropertyDefinitions.get(product).get(property).setDefaultValues(new ArrayList<>());
+					if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
+						propertyEntry.getValue().setDefaultValues(new ArrayList<>());
 					} else {
-						productPropertyDefinitions.get(product).get(property)
-								.setDefaultValues((List<Object>) productPropertyConfig.get(property));
+						propertyEntry.getValue()
+								.setDefaultValues((List<Object>) productPropertyConfig.get(propertyEntry.getKey()));
 					}
 				}
 			}
@@ -1586,7 +1590,7 @@ public class ProductDataService {
 
 	public void retrieveProductOnClientsDisplayFieldsNetbootProducts() {
 		retrieveProductOnClientsDisplayFields(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS,
-				KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT);
+				KEY_PRODUCT_ON_CLIENT_FIELD_NETBOOT);
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
@@ -1597,7 +1601,7 @@ public class ProductDataService {
 
 	public void retrieveProductOnClientsDisplayFieldsLocalbootProducts() {
 		retrieveProductOnClientsDisplayFields(CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
-				KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT);
+				KEY_PRODUCT_ON_CLIENT_FIELD_LOCALBOOT);
 	}
 
 	private void retrieveProductOnClientsDisplayFields(CacheIdentifier cacheId, String key) {

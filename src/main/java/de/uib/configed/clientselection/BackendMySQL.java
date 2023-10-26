@@ -124,6 +124,7 @@ public class BackendMySQL {
 		return list;
 	}
 
+	@SuppressWarnings({ "java:S103" })
 	public List<String> getListFromJSONObject(JSONObject jsonObject) {
 
 		MySQL mySQLRecursion = new MySQL(hwConfig);
@@ -295,6 +296,7 @@ public class BackendMySQL {
 		List<String> subgroups = getListFromSQL(
 				"SELECT groupId FROM `GROUP` WHERE parentGroupId LIKE '" + groupname + "'");
 
+		@SuppressWarnings({ "java:S103" })
 		List<String> clients = getListFromSQL(
 				"SELECT hostId FROM HOST INNER JOIN OBJECT_TO_GROUP a ON (HOST.hostId=a.objectId AND a.groupType LIKE 'HostGroup' ) WHERE a.groupId LIKE '"
 						+ groupname + "'");

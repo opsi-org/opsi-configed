@@ -99,6 +99,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames = new ArrayList<>();
 
 		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
+		classNames.add("java.lang.String");
 
 		for (String fieldName : extraHostFields) {
 			columnNames.add(fieldName);
@@ -112,8 +113,6 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		indexSWInventoryUsed = columnNames.size() - 1;
 		Logging.debug(this, "columnNames: " + columnNames);
 		Logging.debug(this, "cols index_used_by_opsi  " + indexUsedByOpsi + " , " + indexSWInventoryUsed);
-
-		classNames.add("java.lang.String");
 
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.Boolean");
@@ -134,11 +133,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 						Logging.debug(this, "retrieveMap");
 						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
-				})),
-
-				-1, new int[] { 0, 1 },
-
-				thePanel.getPanelReconciliation(), updateCollection);
+				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {

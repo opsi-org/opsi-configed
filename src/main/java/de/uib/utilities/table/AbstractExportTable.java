@@ -159,7 +159,6 @@ public abstract class AbstractExportTable {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
 			chooser.addChoosableFileFilter(exFilter);
-			chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
@@ -220,7 +219,6 @@ public abstract class AbstractExportTable {
 		File defaultFile = new File(writeToFile);
 
 		JFileChooser chooser = new JFileChooser(exportDirectory);
-		chooser.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 

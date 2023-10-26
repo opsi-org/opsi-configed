@@ -136,8 +136,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
-		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
-		chooserFolder.setPreferredSize(Globals.FILE_CHOOSER_SIZE);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
@@ -315,11 +313,11 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			}
 
 			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.DIRECTORY_PE);
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
+							+ winProduct + "/" + SmbConnect.DIRECTORY_PE);
 			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.DIRECTORY_INSTALL_FILES);
+					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
+							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			rootFrame.disactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,

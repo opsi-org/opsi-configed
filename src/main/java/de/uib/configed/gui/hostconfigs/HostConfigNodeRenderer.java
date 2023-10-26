@@ -9,10 +9,8 @@ package de.uib.configed.gui.hostconfigs;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Insets;
 
 import javax.swing.JTree;
-import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Configed;
@@ -24,7 +22,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	public HostConfigNodeRenderer() {
 		super();
 
-		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 
@@ -75,7 +72,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
 		return this;

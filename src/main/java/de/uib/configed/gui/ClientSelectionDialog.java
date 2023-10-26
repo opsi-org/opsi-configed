@@ -1107,23 +1107,27 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private void setGroupValues(ComplexGroup group, List<OperationWithStatus> owsList) {
-		for (int i = 0; i < owsList.size(); i++) {
-			for (SimpleGroup simple : group.groupList) {
-				OperationWithStatus ows = owsList.get(i);
-				AbstractSelectOperation op = ows.getOperation();
-				if (op.getElement().getPath().equals(simple.element.getPath())) {
-					if (op.getElement().supportedOperations().size() > 1) {
-						((JComboBox<?>) simple.operationComponent).setSelectedItem(op.getOperationString());
-					}
-					setComponentData(simple.dataComponent, op.getSelectData());
-					setConnectionTypes(simple.connectionType, simple.negateButton, ows.getStatus());
-					Logging.debug(this, "simple, open, closed: " + simple.element.getClassName()
-							+ ows.isParenthesisOpen() + ows.isParenthesisClosed());
+		for (OperationWithStatus ows : owsList) {
+			for (SimpleGroup simpleGroup : group.groupList) {
+				AbstractSelectOperation selectOperation = ows.getOperation();
+				if (selectOperation.getElement().getPath().equals(simpleGroup.element.getPath())) {
 
+					treatOperation(ows, selectOperation, simpleGroup);
 					break;
 				}
 			}
 		}
+	}
+
+	private void treatOperation(OperationWithStatus ows, AbstractSelectOperation selectOperation,
+			SimpleGroup simpleGroup) {
+		if (selectOperation.getElement().supportedOperations().size() > 1) {
+			((JComboBox<?>) simpleGroup.operationComponent).setSelectedItem(selectOperation.getOperationString());
+		}
+		setComponentData(simpleGroup.dataComponent, selectOperation.getSelectData());
+		setConnectionTypes(simpleGroup.connectionType, simpleGroup.negateButton, ows.getStatus());
+		Logging.debug(this, "simple, open, closed: " + simpleGroup.element.getClassName() + ows.isParenthesisOpen()
+				+ ows.isParenthesisClosed());
 	}
 
 	private static void setComponentData(JComponent component, SelectData data) {

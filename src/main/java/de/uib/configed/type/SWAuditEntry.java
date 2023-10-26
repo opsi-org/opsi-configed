@@ -6,8 +6,8 @@
 
 package de.uib.configed.type;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import static java.util.Map.entry;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -69,33 +69,12 @@ public class SWAuditEntry extends AbstractTableEntry {
 		KEYS_FOR_GUI_TABLES.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	public static final List<String> KEYS_FOR_IDENT = new ArrayList<>();
-	static {
-		KEYS_FOR_IDENT.add(NAME);
-		KEYS_FOR_IDENT.add(VERSION);
-		KEYS_FOR_IDENT.add("subversion");
-		KEYS_FOR_IDENT.add(LANGUAGE);
-		KEYS_FOR_IDENT.add(ARCHITECTURE);
-	}
+	public static final List<String> KEYS_FOR_IDENT = List.of(NAME, VERSION, "subversion", LANGUAGE, ARCHITECTURE);
+	public static final List<String> ID_VARIANTS_COLS = List.of(NAME, EXISTING_IDS);
 
-	public static final List<String> ID_VARIANTS_COLS = new ArrayList<>();
-	static {
-		ID_VARIANTS_COLS.add(NAME);
-		ID_VARIANTS_COLS.add(EXISTING_IDS);
-
-	}
-
-	public static final Map<String, String> key2serverKey;
-	static {
-		key2serverKey = new HashMap<>();
-		key2serverKey.put(NAME, "name");
-		key2serverKey.put(VERSION, "version");
-		key2serverKey.put(SUB_VERSION, "subVersion");
-		key2serverKey.put(ARCHITECTURE, "architecture");
-		key2serverKey.put(LANGUAGE, "language");
-
-		key2serverKey.put(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
-	}
+	public static final Map<String, String> key2serverKey = Map.ofEntries(entry(NAME, "name"),
+			entry(VERSION, "version"), entry(SUB_VERSION, "subVersion"), entry(ARCHITECTURE, "architecture"),
+			entry(LANGUAGE, "language"), entry(WINDOWS_SOFTWARE_ID, "windowsSoftwareId"));
 
 	private String ident;
 	private String identReduced;

@@ -534,7 +534,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				private void reload() {
-					ConfigedMain.getMainFrame().activateLoadingPane();
+					ConfigedMain.getMainFrame().activateLoadingCursor();
 					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
@@ -547,7 +547,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						tree.scrollRowToVisible(row);
 					}
 
-					ConfigedMain.getMainFrame().disactivateLoadingPane();
+					ConfigedMain.getMainFrame().disactivateLoadingCursor();
 				}
 
 				@Override
@@ -588,88 +588,17 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 							Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
 							if (c instanceof JComponent && showToolTip) {
-								JComponent jc = (JComponent) c;
-
-								String propertyName = names.get(rowIndex);
-
-								StringBuilder tooltip = new StringBuilder();
-
-								Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService()
-										.getConfigOptionsPD();
-								if (propertyName != null && defaultsMap != null
-										&& defaultsMap.get(propertyName) != null) {
-									String propertyOrigin = "(server)";
-									if (serverConfigs != null && serverConfigs.containsKey(propertyName)
-											&& !serverConfigs.get(propertyName).getDefaultValues()
-													.equals(defaultsMap.get(propertyName))) {
-										propertyOrigin = "(depot)";
-									}
-
-									if (includeAdditionalTooltipText) {
-										tooltip.append("default " + propertyOrigin + ": ");
-									} else {
-										tooltip.append("default: ");
-									}
-
-									if (Utils.isKeyForSecretValue(propertyName)) {
-										tooltip.append(Globals.STARRED_STRING);
-									} else {
-										tooltip.append(defaultsMap.get(propertyName));
-									}
-								}
-
-								if (propertyName != null && descriptionsMap != null
-										&& descriptionsMap.get(propertyName) != null) {
-									tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
-								}
-
-								jc.setToolTipText("<html>" + tooltip + "</html>");
-
-								// check equals with default
-
-								Object defaultValue;
-
-								if (defaultsMap == null) {
-									Logging.warning(this, "no default values available, defaultsMap is null");
-								} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
-									Logging.warning(this, "no default Value found");
-
-									jc.setForeground(Globals.OPSI_ERROR);
-
-									jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
-
-									jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-								} else {
-
-									Object gotValue = table.getValueAt(rowIndex, 1);
-									if (!defaultValue.equals(gotValue)
-											|| (originalMap != null && originalMap.containsKey(propertyName))) {
-										jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-									}
-								}
-
-								if (vColIndex == 1
-										&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
-									if (jc instanceof JLabel) {
-										((JLabel) jc).setText(Globals.STARRED_STRING);
-									} else if (jc instanceof JTextComponent) {
-										((JTextComponent) jc).setText(Globals.STARRED_STRING);
-									} else {
-										// Do nothing
-									}
-								}
-
+								addTooltip((JComponent) c, this, names.get(rowIndex), rowIndex);
+								setText((JComponent) c, this, vColIndex, rowIndex);
 							}
 							return c;
 						}
-
 					};
 
 					TableCellRenderer colorized = new ColorTableCellRenderer();
 
 					table.setDefaultRenderer(Object.class, colorized);
 					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-					table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 					table.addMouseWheelListener(
 							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
@@ -711,6 +640,84 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
 			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
+		}
+	}
+
+	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
+
+		jc.setToolTipText("<html>" + createTooltipForPropertyName(propertyName) + "</html>");
+
+		// check equals with default
+
+		Object defaultValue;
+
+		if (defaultsMap == null) {
+			Logging.warning(this, "no default values available, defaultsMap is null");
+		} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
+			Logging.warning(this, "no default Value found");
+
+			jc.setForeground(Globals.OPSI_ERROR);
+
+			jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+
+			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+		} else if (!defaultValue.equals(table.getValueAt(rowIndex, 1))
+				|| (originalMap != null && originalMap.containsKey(propertyName))) {
+			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+		} else {
+			// Do nothing, since it's defaultvalue
+		}
+	}
+
+	private static void setText(JComponent jc, JTable table, int vColIndex, int rowIndex) {
+		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))) {
+			if (jc instanceof JLabel) {
+				((JLabel) jc).setText(Globals.STARRED_STRING);
+			} else if (jc instanceof JTextComponent) {
+				((JTextComponent) jc).setText(Globals.STARRED_STRING);
+			} else {
+				// Do nothing
+			}
+		}
+	}
+
+	private String createTooltipForPropertyName(String propertyName) {
+		if (propertyName == null) {
+			return "";
+		}
+
+		StringBuilder tooltip = new StringBuilder();
+
+		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
+
+			if (includeAdditionalTooltipText) {
+				tooltip.append("default (" + getPropertyOrigin(propertyName) + "): ");
+			} else {
+				tooltip.append("default: ");
+			}
+
+			if (Utils.isKeyForSecretValue(propertyName)) {
+				tooltip.append(Globals.STARRED_STRING);
+			} else {
+				tooltip.append(defaultsMap.get(propertyName));
+			}
+		}
+
+		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+			tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
+		}
+
+		return tooltip.toString();
+	}
+
+	private String getPropertyOrigin(String propertyName) {
+		Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService().getConfigOptionsPD();
+
+		if (serverConfigs != null && serverConfigs.containsKey(propertyName)
+				&& !serverConfigs.get(propertyName).getDefaultValues().equals(defaultsMap.get(propertyName))) {
+			return "depot";
+		} else {
+			return "server";
 		}
 	}
 
@@ -848,7 +855,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	protected void reload() {
-		ConfigedMain.getMainFrame().activateLoadingPane();
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 		// partial reload
 		buildUserConfig();
 
@@ -865,7 +872,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			tree.scrollRowToVisible(row);
 		}
 
-		ConfigedMain.getMainFrame().disactivateLoadingPane();
+		ConfigedMain.getMainFrame().disactivateLoadingCursor();
 	}
 
 	private void addUser() {

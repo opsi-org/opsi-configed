@@ -6,7 +6,6 @@
 
 package de.uib.configed.type;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,14 +29,8 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public static final String NETBOOT_PRODUCT_SERVER_STRING = "NetbootProduct";
 
 	// those which form the primary keys
-	public static final List<String> SERVICE_KEYS;
-	static {
-		SERVICE_KEYS = new ArrayList<>();
-		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_ID0);
-		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_VERSION);
-		SERVICE_KEYS.add(SERVICE_KEY_PACKAGE_VERSION);
-		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_TYPE);
-	}
+	public static final List<String> SERVICE_KEYS = List.of(SERVICE_KEY_PRODUCT_ID0, SERVICE_KEY_PRODUCT_VERSION,
+			SERVICE_KEY_PACKAGE_VERSION, SERVICE_KEY_PRODUCT_TYPE);
 
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;

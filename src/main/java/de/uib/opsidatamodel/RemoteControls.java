@@ -47,24 +47,20 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 				i = nextPartAt(remainder);
 
-				if (i == -1) {
-					if (remainder.equals(RemoteControl.DESCRIPTION_KEY)) {
-						rc.setDescription(value);
-					} else if (remainder.equals(RemoteControl.COMMAND_KEY)) {
-						rc.setCommand(value);
-					} else if (remainder.equals(RemoteControl.EDITABLE_KEY)) {
-						rc.setEditable(value);
-					} else {
-						Logging.warning(this, "unexpected remainder " + remainder);
-					}
-				} else {
+				if (i != -1) {
 					// there are no 3rd level keys
 					Logging.error("Remote control key has too many parts");
+				} else if (remainder.equals(RemoteControl.DESCRIPTION_KEY)) {
+					rc.setDescription(value);
+				} else if (remainder.equals(RemoteControl.COMMAND_KEY)) {
+					rc.setCommand(value);
+				} else if (remainder.equals(RemoteControl.EDITABLE_KEY)) {
+					rc.setEditable(value);
+				} else {
+					Logging.warning(this, "unexpected remainder " + remainder);
 				}
 			}
-
 		}
-
 	}
 
 	private static int nextPartAt(String remainder) {
@@ -86,5 +82,4 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 			return rc;
 		}
 	}
-
 }

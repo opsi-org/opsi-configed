@@ -46,7 +46,6 @@ public class DynamicCombo extends JPanel {
 		tablemodel.addRow(new String[] { "" });
 
 		table.setModel(tablemodel);
-		table.setShowGrid(false);
 
 		col = table.getColumnModel().getColumn(0);
 		col.setHeaderRenderer(null);

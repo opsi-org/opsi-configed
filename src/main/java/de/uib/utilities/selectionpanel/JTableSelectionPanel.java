@@ -113,7 +113,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setDragEnabled(true);
 
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		table.setAutoCreateRowSorter(true);
 
@@ -681,7 +680,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				if (compareValue == null) {
 					found = val == null || val.isEmpty();
 				} else {
-					String compareVal = ("" + compareValue).toLowerCase(Locale.ROOT);
+					String compareVal = compareValue.toString().toLowerCase(Locale.ROOT);
 
 					switch (searchMode) {
 					case REGEX_SEARCHING:

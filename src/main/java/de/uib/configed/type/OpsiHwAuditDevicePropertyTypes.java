@@ -22,7 +22,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 	}
 
 	public void checkIn(String key, List<Object> valuesSet) {
-		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY)) {
+		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY) || valuesSet == null) {
 			return;
 		}
 

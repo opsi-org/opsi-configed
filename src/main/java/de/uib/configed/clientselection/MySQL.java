@@ -36,6 +36,7 @@ public class MySQL {
 		this.hwConfig = hwConfig;
 	}
 
+	@SuppressWarnings({ "java:S103" })
 	public String getMySQLInnerJoins() {
 		String joins = "";
 

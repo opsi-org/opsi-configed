@@ -326,9 +326,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		Logging.debug(this, "mousePressed event " + e);
 		mouseClicked = true;
 
-		ConfigedMain.getMainFrame().activateLoadingPane();
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 		configedMain.treeClientsMouseAction(e);
-		ConfigedMain.getMainFrame().disactivateLoadingPane();
+		ConfigedMain.getMainFrame().disactivateLoadingCursor();
 	}
 
 	@Override
@@ -674,7 +674,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			Set<String> permittedHostGroups) {
 		locationsInDIRECTORY.clear();
 
-		HashMap<String, List<String>> group2Members = new HashMap<>();
+		Map<String, List<String>> group2Members = new HashMap<>();
 
 		// we must rebuild this map since the direct call of persist.getFGroup2Members
 		// would eliminate
@@ -686,11 +686,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				for (String groupId : belongingTo) {
 
-					List<String> memberList = group2Members.get(groupId);
-
-					if (memberList == null) {
-						memberList = new ArrayList<>();
-					}
+					List<String> memberList = group2Members.computeIfAbsent(groupId, id -> new ArrayList<>());
 
 					memberList.add(clientId);
 					group2Members.put(groupId, memberList);
