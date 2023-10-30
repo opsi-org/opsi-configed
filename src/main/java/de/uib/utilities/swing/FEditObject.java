@@ -148,7 +148,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	}
 
 	protected void initComponents() {
-
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		extraField.getDocument().addDocumentListener(this);
@@ -205,7 +204,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 		} else {
-
 			GroupLayout layout = new GroupLayout(getContentPane());
 			getContentPane().setLayout(layout);
 			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -250,12 +248,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	}
 
 	public void setStartValue(Object s) {
-
 		initialValue = s;
 	}
 
 	public Object getValue() {
-
 		return initialValue;
 	}
 
@@ -351,7 +347,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	}
 
 	protected void cancel() {
-
 		setStartValue(initialValue);
 		setVisible(false);
 	}
@@ -378,7 +373,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

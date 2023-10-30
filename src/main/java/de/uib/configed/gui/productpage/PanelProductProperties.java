@@ -33,7 +33,6 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
-
 	private PanelGenEditTable paneProducts;
 	private List<String> depotsOfPackage;
 
@@ -54,7 +53,6 @@ public class PanelProductProperties extends JSplitPane {
 	}
 
 	private void init() {
-
 		depotsOfPackage = new ArrayList<>();
 
 		GenTableModel model = createTableModel();
@@ -136,7 +134,6 @@ public class PanelProductProperties extends JSplitPane {
 	}
 
 	private class PaneProducts extends PanelGenEditTable {
-
 		private List<String> columnNames;
 
 		public PaneProducts(List<String> columnNames) {
@@ -158,7 +155,6 @@ public class PanelProductProperties extends JSplitPane {
 			Logging.debug(this, "valueChanged in paneProducts " + e);
 
 			if (!e.getValueIsAdjusting()) {
-
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			}
@@ -177,7 +173,6 @@ public class PanelProductProperties extends JSplitPane {
 				((EditMapPanelX) propertiesPanel).init();
 				panelEditProperties.clearDepotListData();
 			} else {
-
 				int row = lsm.getMinSelectionIndex();
 
 				updateInfoPane(row);
@@ -217,7 +212,6 @@ public class PanelProductProperties extends JSplitPane {
 				Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
 				if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
-
 					infoPane.setEditValues(productEdited,
 							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),

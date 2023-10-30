@@ -18,7 +18,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSwAuditOperation extends SwAuditOperation implements ExecutableOperation {
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -30,7 +29,6 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 	public boolean doesMatch(OpsiDataClient client) {
 		List<SWAuditClientEntry> auditList = client.getSwAuditList();
 		for (SWAuditClientEntry swEntry : auditList) {
-
 			String swIdent = null;
 			Integer swIndex = swEntry.getSWid();
 

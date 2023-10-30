@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
-
 	private Set<? extends Object> filterSet;
 	private int keyCol = -1;
 	private String filterLabel = "";
@@ -32,7 +31,6 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 
 	@Override
 	public boolean test(List<Object> row) {
-
 		if (filterSet == null) {
 			return true;
 		}

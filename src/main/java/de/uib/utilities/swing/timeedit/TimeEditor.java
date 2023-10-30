@@ -53,7 +53,6 @@ public class TimeEditor extends JPanel {
 	}
 
 	private void init() {
-
 		setLayout(new GridLayout(1, 2));
 		setPreferredSize(new Dimension(250, 22));
 		JLabel labelTime = new JLabel(" hh:mm");

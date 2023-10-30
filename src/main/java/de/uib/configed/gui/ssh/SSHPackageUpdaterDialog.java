@@ -75,7 +75,6 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
@@ -137,7 +136,6 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-
 		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
 		String repo = (String) jComboBoxRepos.getSelectedItem();
 		if (repo.equals(

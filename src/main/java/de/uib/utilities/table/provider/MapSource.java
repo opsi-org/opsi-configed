@@ -126,7 +126,6 @@ public class MapSource implements TableSource {
 		try {
 			Class<?> cl = Class.forName(className);
 			if (!dynInstanceOf(obj, cl)) {
-
 				Logging.warning(this, "MapSource fetchData(): data type does not fit");
 				Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
 				Logging.info(this, "class should be " + cl);

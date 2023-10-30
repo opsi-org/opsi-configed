@@ -28,11 +28,9 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (value instanceof SimpleIconNode) {
-
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			if ("".equals(stringValue)) {

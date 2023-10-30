@@ -18,7 +18,6 @@ import de.uib.configed.gui.GlassPane;
 import de.uib.utilities.logging.Logging;
 
 public class SecondaryFrame extends JFrame implements WindowListener {
-
 	protected Container masterFrame;
 
 	private GlassPane glassPane;
@@ -61,7 +60,6 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
-
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			callExit();
 		}

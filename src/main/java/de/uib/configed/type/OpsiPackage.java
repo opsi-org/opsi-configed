@@ -14,7 +14,6 @@ import utils.ProductPackageVersionSeparator;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable<OpsiPackage> {
-
 	public static final String IS_LOCKED_INFO = "LOCKED";
 
 	public static final String DB_KEY_PRODUCT_ID = "productId";
@@ -107,7 +106,6 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public List<Object> appendValues(List<Object> row) {
-
 		row.add(giveProductType(getProductType()));
 		row.add(getProductVersion());
 		row.add(getPackageVersion());

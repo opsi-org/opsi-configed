@@ -12,7 +12,6 @@ import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
 
 public class PropertiesOperation extends AbstractSelectGroupOperation {
-
 	public PropertiesOperation(List<AbstractSelectOperation> operations) {
 		registerChildOperation(operations.get(0));
 	}

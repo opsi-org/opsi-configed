@@ -37,7 +37,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer {
-
 	public static final int DATA_VERSION = 2;
 
 	public static final String ELEMENT_NAME_GROUP = "GroupElement";
@@ -196,7 +195,6 @@ public class OpsiDataSerializer {
 
 	/** Get the data for the given saved search */
 	private Map<String, Object> getData(String name) {
-
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name,
 				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
@@ -441,7 +439,6 @@ public class OpsiDataSerializer {
 		}
 
 		if ("dataType".equals(name)) {
-
 			switch (value) {
 			case "TextType":
 				lastDataType = DataType.TEXT_TYPE;

@@ -39,7 +39,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
-
 	private static String wgetDefText;
 
 	private JPanel inputPanel = new JPanel();
@@ -101,7 +100,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
@@ -232,7 +230,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void initGUI() {
-
 		inputPanelLayout = new GroupLayout(inputPanel);
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);

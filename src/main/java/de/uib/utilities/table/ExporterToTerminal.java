@@ -12,7 +12,6 @@ import java.util.List;
 import javax.swing.JTable;
 
 public class ExporterToTerminal extends AbstractExportTable {
-
 	public ExporterToTerminal(JTable table) {
 		super(table, null);
 	}
@@ -20,14 +19,12 @@ public class ExporterToTerminal extends AbstractExportTable {
 	@SuppressWarnings("java:S106")
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null) {
 			return;
 		}
 
 		for (int row = 0; row < theTable.getRowCount(); row++) {
-
 			if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(row)) {
 				printRow(row);
 			}
@@ -39,7 +36,6 @@ public class ExporterToTerminal extends AbstractExportTable {
 		for (int col = 0; col < theTable.getColumnCount(); col++) {
 			if (theTable.getValueAt(row, col) != null && ((classNames == null || classNames.isEmpty())
 					&& theTable.getValueAt(row, col) instanceof String)) {
-
 				rowList.add((String) theTable.getValueAt(row, col));
 			}
 		}

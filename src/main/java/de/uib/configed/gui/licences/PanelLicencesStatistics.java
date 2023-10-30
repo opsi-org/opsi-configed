@@ -21,7 +21,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelLicencesStatistics extends MultiTablePanel {
-
 	private static final int MIN_VSIZE = 50;
 
 	private PanelGenEditTable panelStatistics;
@@ -33,7 +32,6 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-
 		panelStatistics = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
 				0, true, null, true);

@@ -59,7 +59,6 @@ public class TextInputField extends JPanel {
 		}
 
 		if (proposedValues != null) {
-
 			TreeSet<Character> orderedValues = new TreeSet<>();
 
 			for (String val : proposedValues) {
@@ -91,13 +90,11 @@ public class TextInputField extends JPanel {
 					combo.showPopup();
 
 					if (orderedBeginChars != null) {
-
 						Character ch = e.getKeyChar();
 
 						int i = 0;
 						boolean stop = false;
 						while (i < orderedBeginChars.length && !stop) {
-
 							if (orderedBeginChars[i] > ch) {
 								stop = true;
 								if (i > 0) {

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVScanner {
-
 	private CSVFormat format;
 	private BufferedReader reader;
 

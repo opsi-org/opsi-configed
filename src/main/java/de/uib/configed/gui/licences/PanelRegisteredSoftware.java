@@ -98,7 +98,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
 		if (isAwareOfSelectionListener()) {
 			Logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
 		}

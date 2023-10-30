@@ -18,7 +18,6 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.utilities.logging.Logging;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
-
 	private JList<String> jList;
 
 	private AbstractTableModel tableModel;
@@ -31,7 +30,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private boolean filtered;
 
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
-
 		this.jList = jList;
 		unfilteredV = values;
 		unfilteredD = descriptions;
@@ -54,7 +52,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	}
 
 	private static AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
-
 		return new AbstractTableModel() {
 			@Override
 			public int getRowCount() {

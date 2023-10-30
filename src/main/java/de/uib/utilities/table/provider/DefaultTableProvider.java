@@ -122,7 +122,6 @@ public class DefaultTableProvider {
 			String val = (String) rowsCopy.get(row).get(col);
 
 			if (emptyAllowed || (val != null && !val.isEmpty())) {
-
 				set.add((String) rowsCopy.get(row).get(col));
 			}
 		}

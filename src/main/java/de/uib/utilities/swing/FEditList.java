@@ -120,7 +120,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	@Override
 	public void setEditable(boolean b) {
-
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonAdd.setVisible(b);
@@ -148,7 +147,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 			Object element = model.getElementAt(i);
 
 			if (toSelect.contains(element)) {
-
 				visibleList.addSelectionInterval(i, i);
 			}
 		}
@@ -163,7 +161,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	}
 
 	public void setSelectedValues(List<O> toSelect) {
-
 		initiallySelected = toSelect;
 
 		visibleList.clearSelection();
@@ -172,12 +169,10 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	}
 
 	public void setSelectedValue(O ob) {
-
 		visibleList.setSelectedValue(ob, true);
 	}
 
 	protected void addElement(O element) {
-
 		ListModel<O> limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel<O>) limo).contains(element)) {
@@ -204,7 +199,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	@Override
 	public void setStartValue(Object s) {
-
 		super.setStartValue(s);
 		setTracker(s);
 	}

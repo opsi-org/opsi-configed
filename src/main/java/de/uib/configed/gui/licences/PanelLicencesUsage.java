@@ -71,7 +71,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	}
 
 	private void initSubPanel() {
-
 		panelLicencePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
@@ -113,7 +112,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	}
 
 	private void initComponents() {
-
 		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },

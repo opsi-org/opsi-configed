@@ -26,7 +26,6 @@ import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
 
 public class DynamicCombo extends JPanel {
-
 	private JTable table;
 	private JComboBox<String> combo;
 	private ComboBoxModeller modelsource;
@@ -38,7 +37,6 @@ public class DynamicCombo extends JPanel {
 	}
 
 	private void initComponents() {
-
 		table = new JTable();
 
 		DefaultTableModel tablemodel = new DefaultTableModel(new String[] { "column 0" }, 0);
@@ -61,7 +59,6 @@ public class DynamicCombo extends JPanel {
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-
 				combo.setSelectedItem(combo.getSelectedItem());
 				// ensures that we leave the combo box completely when we set the focus
 				// somewhere else

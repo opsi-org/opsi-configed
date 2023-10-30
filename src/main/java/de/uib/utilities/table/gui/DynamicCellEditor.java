@@ -18,7 +18,6 @@ import javax.swing.JTable;
 import de.uib.utilities.ComboBoxModeller;
 
 public class DynamicCellEditor extends DefaultCellEditor {
-
 	private JComboBox<String> cc;
 	private ComboBoxModeller cbm;
 	private ComboBoxModel<String> nullModel;
@@ -32,7 +31,6 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
 
@@ -45,7 +43,6 @@ public class DynamicCellEditor extends DefaultCellEditor {
 				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
-
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 		}
 

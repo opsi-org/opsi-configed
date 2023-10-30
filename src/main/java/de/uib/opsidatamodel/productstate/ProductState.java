@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 import utils.ProductPackageVersionSeparator;
 
 public class ProductState extends HashMap<String, String> {
-
 	private static ProductState defaultProductState;
 
 	private static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
@@ -88,7 +87,6 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void readRetrieved() {
-
 		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
 
 		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(key2servicekey.get(KEY_TARGET_CONFIGURATION)));
@@ -120,7 +118,6 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void setTransforms() {
-
 		// transformed values
 		StringBuilder installationInfo = new StringBuilder();
 		// the reverse will be found in in setInstallationInfo in
@@ -197,7 +194,6 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private String getRetrievedValue(String key) {
-
 		if (SERVICE_KEYS.indexOf(key) < 0) {
 			Logging.warning("service key " + key + " not known");
 			return "";

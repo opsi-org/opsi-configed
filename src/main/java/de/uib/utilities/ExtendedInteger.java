@@ -35,7 +35,6 @@ public class ExtendedInteger implements Comparable<Integer> {
 	}
 
 	public ExtendedInteger(String s) {
-
 		number = null;
 		value = null;
 
@@ -90,7 +89,6 @@ public class ExtendedInteger implements Comparable<Integer> {
 		if (ei.equals(INFINITE) || this.equals(INFINITE)) {
 			result = new ExtendedInteger(INFINITE);
 		} else {
-
 			int sum = this.getNumber() + ei.getNumber();
 			result = new ExtendedInteger(Integer.valueOf(sum), "" + sum);
 		}
@@ -113,7 +111,6 @@ public class ExtendedInteger implements Comparable<Integer> {
 	// Interface Comparable
 	@Override
 	public int compareTo(Integer integer) {
-
 		if (this.equals(INFINITE)) {
 			return -1;
 		} else {

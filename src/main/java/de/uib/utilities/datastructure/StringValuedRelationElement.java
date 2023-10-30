@@ -11,7 +11,6 @@ import java.util.Map;
 
 //very similar to TableEntry
 public class StringValuedRelationElement extends RelationElement<String, String> {
-
 	public static final String NULLDATE = "0000-00-00";
 
 	public StringValuedRelationElement() {

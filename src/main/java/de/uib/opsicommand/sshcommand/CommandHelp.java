@@ -12,7 +12,6 @@ import java.util.List;
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandHelp /* extends */ implements SSHCommand {
-
 	private boolean needSudo;
 
 	private boolean needParameter;

@@ -19,7 +19,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererDate extends ColorTableCellRenderer {
-
 	private DateFormat dateFormat;
 
 	public TableCellRendererDate() {
@@ -35,7 +34,6 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 		ImageIcon selectedIcon = null;
 
 		if (value instanceof String && !((String) value).isEmpty()) {
-
 			Date d = Timestamp.valueOf((String) value);
 			selectedString = dateFormat.format(d);
 		} else {

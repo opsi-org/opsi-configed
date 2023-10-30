@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import de.uib.utilities.logging.Logging;
 
 public class TabClientAdapter extends JPanel implements TabClient {
-
 	public TabClientAdapter() {
 		super();
 	}

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractExecutioner {
-
 	private static AbstractExecutioner nonExecutioner;
 
 	public abstract ConnectionState getConnectionState();

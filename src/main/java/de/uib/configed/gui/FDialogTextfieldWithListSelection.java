@@ -57,7 +57,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-
 		// we could design an adapted layout and infuse it in guiInit
 		Logging.info(this, "allLayout");
 

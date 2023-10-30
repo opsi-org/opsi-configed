@@ -75,7 +75,6 @@ public class PanelHostProperties extends JPanel {
 		Map<String, ListCellOptions> result = new HashMap<>();
 
 		for (Entry<String, Object> entry : m.entrySet()) {
-
 			ListCellOptions cellOptions = null;
 
 			if ((entry.getValue()) instanceof Boolean) {

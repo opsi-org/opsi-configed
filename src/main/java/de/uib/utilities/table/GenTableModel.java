@@ -25,7 +25,6 @@ import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel {
-
 	private static final String DEFAULT_FILTER_NAME = "default";
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
@@ -406,7 +405,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-
 		return columnNames.get(col);
 	}
 
@@ -427,7 +425,6 @@ public class GenTableModel extends AbstractTableModel {
 		if (markCursorRow && col == colMarkCursorRow && row == cursorrow) {
 			result = true;
 		} else {
-
 			result = rows.get(row).get(col);
 		}
 
@@ -548,7 +545,6 @@ public class GenTableModel extends AbstractTableModel {
 				} else if (updates == null) {
 					Logging.info("updates not initialized");
 				} else {
-
 					updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
 				}
 
@@ -578,9 +574,7 @@ public class GenTableModel extends AbstractTableModel {
 	// does not set values to null, leaves instead the original value
 	// if the values map produces a null
 	public void updateRowValues(int row, Map<String, Object> values) {
-
 		for (int col = 0; col < columnNames.size(); col++) {
-
 			Object val = values.get(getColumnName(col));
 
 			if (val != null) {
@@ -606,13 +600,11 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public void addRow(Object[] a) {
-
 		List<Object> rowV = new ArrayList<>();
 		for (int i = 0; i < colsLength; i++) {
 			rowV.add(null);
 		}
 		for (int j = 0; j < a.length; j++) {
-
 			rowV.set(j, a[j]);
 		}
 
@@ -621,7 +613,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
 		if (addedRows.contains(rowNum)) {
-
 			// deletion of added rows is not adequately managed
 			// therefore we reject it
 

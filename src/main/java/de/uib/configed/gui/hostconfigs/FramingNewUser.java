@@ -13,7 +13,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 
 public class FramingNewUser implements FramingTextfieldWithListselection {
-
 	private List<String> list;
 
 	@Override

@@ -259,7 +259,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
-
 		showFilterIcon(b);
 		checkmarkSearchProgressive.setVisible(b);
 		checkmarkAllColumns.setVisible(b);
@@ -275,7 +274,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-
 		navPane = new NavigationPanel(associatedPanel);
 
 		navPane.setVisible(false);
@@ -353,7 +351,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupNewSearch.setText(Configed.getResourceValue("SearchPane.popup.searchnew"));
 		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-
 			targetModel.setFiltered(false);
 			if (resetFilterModeOnNewSearch) {
 				setFilteredMode(false);
@@ -594,7 +591,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		String remainder = s;
 
 		while (searching) {
-
 			partSearch = stringContains(remainder, parts[i]);
 			if (partSearch.success) {
 				i++;
@@ -664,7 +660,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
 			boolean regex, boolean combineCols) {
-
 		Logging.debug(this,
 				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
 						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
@@ -711,7 +706,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				StringBuilder buffRow = new StringBuilder();
 
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-
 					// we dont compare all values (comparing all values is default)
 					if (colIndices != null && !colIndices.contains(j)) {
 						continue;
@@ -739,7 +733,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				}
 			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-
 					// we dont compare all values (comparing all values is default)
 					if (colIndices != null && !colIndices.contains(j)) {
 						continue;
@@ -759,7 +752,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						String compareVal = ("" + compareValue).toLowerCase(Locale.ROOT);
 
 						if (regex) {
-
 							if (pattern.matcher(compareVal).matches()) {
 								found = true;
 							}
@@ -767,7 +759,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							if (fulltext) {
 								found = stringContainsParts(compareVal, valParts).success;
 							} else {
-
 								found = stringStartsWith(compareVal, val);
 							}
 						}
@@ -855,7 +846,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void getSelectedAndSearch(boolean addSelection, boolean select) {
-
 		int startrow = 0;
 		if (targetModel.getSelectedRow() >= 0) {
 			startrow = targetModel.getSelectedRows()[targetModel.getSelectedRows().length - 1] + 1;
@@ -881,7 +871,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-
 		if (select) {
 			if (addSelection) {
 				addSelectedRow(row);
@@ -897,7 +886,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
-
 		final String value = fieldSearch.getText();
 
 		HashSet<Integer> selectedCols0 = null;
@@ -923,9 +911,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
 			} else {
-
 				if (startrow > 0) {
-
 					searchTheRow(0, addSelection, select);
 				} else {
 					setRow(0, false, select);
@@ -948,7 +934,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOff() {
 		if (targetModel.isFiltered()) {
-
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
 		}
@@ -956,7 +941,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOn() {
 		if (!targetModel.isFiltered()) {
-
 			targetModel.setFiltered(true);
 			setFilteredMode(true);
 		}
@@ -966,7 +950,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		if (e.getDocument() == fieldSearch.getDocument()) {
-
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
 			if (searchInputType == SearchInputType.PROGRESSIVE) {
@@ -990,7 +973,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1004,7 +986,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
 				markAll();
@@ -1081,7 +1062,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
-
 				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 
 				targetModel.setFiltered(false);

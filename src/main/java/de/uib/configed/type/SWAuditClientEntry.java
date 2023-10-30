@@ -22,7 +22,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SWAuditClientEntry {
-
 	/*
 	 * type of auditSoftwareOnClient_getObjects resp
 	 * SOFTWARE_CONFIG in opsi data base
@@ -151,7 +150,6 @@ public class SWAuditClientEntry {
 		}
 
 		if (result == -1 && list != null) {
-
 			int i = 0;
 			while (result == -1 && i < list.size()) {
 				if (list.get(i).equalsIgnoreCase(element)) {

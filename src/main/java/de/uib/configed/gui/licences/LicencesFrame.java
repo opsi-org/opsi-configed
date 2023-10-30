@@ -15,7 +15,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
 
 public class LicencesFrame extends SecondaryFrame {
-
 	private TabbedPaneX panel;
 
 	public LicencesFrame(ConfigedMain configedMain) {

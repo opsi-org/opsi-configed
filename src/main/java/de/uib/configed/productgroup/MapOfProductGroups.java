@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class MapOfProductGroups extends HashMap<String, TreeSetBuddy> {
-
 	public MapOfProductGroups(Map<String, Set<String>> fName2ProductGroup) {
 		super();
 

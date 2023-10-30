@@ -14,7 +14,6 @@ import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.logging.Logging;
 
 public class LicencepoolEntry extends AbstractTableEntry {
-
 	public static final String ID_SERVICE_KEY = "licensePoolId";
 	public static final String ID_KEY = "id";
 	public static final String DESCRIPTION_KEY = "description";

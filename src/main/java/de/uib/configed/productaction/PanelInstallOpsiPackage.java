@@ -36,7 +36,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
-
 	private static final String PAGE_SHARE_S = "opsi_workbench";
 
 	private JButton buttonCallChooserPackage;
@@ -79,7 +78,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private boolean installProductFromWorkbench() {
-
 		String opsiPackageOnWorkbenchS = null;
 		opsiPackageNameS = null;
 
@@ -99,9 +97,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			if (opsiPackageNameS == null || opsiPackageNameS.trim().isEmpty()) {
 				return false;
 			} else {
-
 				if (opsiPackageOnWorkbench.exists()) {
-
 					int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 							Configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
 									+ opsiWorkBenchDirectoryS + " "
@@ -170,7 +166,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void execute() {
-
 		if (installProductFromWorkbench()) {
 			produceServerPath();
 			rootFrame.activateLoadingCursor();
@@ -188,7 +183,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void choosePackage() {
-
 		Logging.debug(this, "buttonCallChooserPackage action  starting ");
 
 		int returnVal = chooserPackage.showOpenDialog(this);
@@ -201,7 +195,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void chooseServerpath() {
-
 		int returnVal = chooserServerpath.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -212,7 +205,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void defineChoosers() {
-
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
@@ -295,7 +287,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void defineLayout() {
-
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.topic"));
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.info"));
 

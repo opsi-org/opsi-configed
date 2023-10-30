@@ -11,7 +11,6 @@ import java.util.Set;
 import de.uib.utilities.logging.Logging;
 
 public class UserSshConfig extends UserConfigModule {
-
 	// not create new user specific ssh configs (use defaults)
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";

@@ -76,7 +76,6 @@ import de.uib.utilities.logging.Logging;
  * used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
-
 	public static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
@@ -533,7 +532,6 @@ public class OpsiServiceNOMPersistenceController {
 	 * returns null if clients have different values or if clientlist is empty
 	 */
 	public Boolean isUEFI43(String[] clients) {
-
 		Boolean isUEFI = null;
 
 		for (String client : clients) {

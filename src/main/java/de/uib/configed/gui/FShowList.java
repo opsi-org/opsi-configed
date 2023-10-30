@@ -18,7 +18,6 @@ import de.uib.utilities.logging.Logging;
  * This class is intended to show a list in text area
  */
 public class FShowList extends FTextArea {
-
 	private JTextArea jTextArea1 = new JTextArea();
 
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList) {
@@ -78,7 +77,6 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void doAction1() {
-
 		Logging.clearErrorList();
 		if (owner != null) {
 			owner.toFront();

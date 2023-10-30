@@ -220,7 +220,6 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-
 				EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
 						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 					/** Sets the command specific error text **/
@@ -246,7 +245,6 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-
 				EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
 						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 				SSHConnectExec ssh = new SSHConnectExec();

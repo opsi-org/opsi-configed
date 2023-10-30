@@ -285,21 +285,18 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(List<Object> row) {
-
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
 		};
 
 		showOnlyNamesWithoutLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL) {
-
 			@Override
 			public void setFilter(Set<Object> filter) {
 				/* Should be empty, but is not empty in superclass */}
 
 			@Override
 			public boolean test(List<Object> row) {
-
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
 		};
@@ -308,7 +305,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
 			if (!e.getValueIsAdjusting()) {
-
 				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
 
 				if (panelSWnames.getSelectedRow() >= 0) {
@@ -351,7 +347,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
-
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -376,7 +371,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	public void setPreselectionForName2Pool(Softwarename2LicencepoolRestriction val) {
-
 		switch (val) {
 		case SHOW_ALL_NAMES:
 			modelSWnames.clearFilter();

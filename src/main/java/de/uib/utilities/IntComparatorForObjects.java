@@ -11,10 +11,8 @@ import java.util.Comparator;
 import de.uib.utilities.logging.Logging;
 
 public class IntComparatorForObjects implements Comparator<Object> {
-
 	@Override
 	public int compare(Object o1, Object o2) {
-
 		int i1 = Integer.MAX_VALUE;
 		int i2 = Integer.MIN_VALUE;
 

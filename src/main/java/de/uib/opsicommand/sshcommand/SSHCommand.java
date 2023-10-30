@@ -14,7 +14,6 @@ import de.uib.configed.gui.FGeneralDialog;
  * Represent a sshcommand object
  **/
 public interface SSHCommand {
-
 	/** @return command String to execute **/
 	String getCommand();
 

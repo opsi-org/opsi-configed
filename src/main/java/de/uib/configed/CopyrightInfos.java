@@ -15,7 +15,6 @@ import java.util.List;
  */
 
 public final class CopyrightInfos {
-
 	private static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
 	private static final List<String> infos;

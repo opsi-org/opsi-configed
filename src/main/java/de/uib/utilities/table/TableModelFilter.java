@@ -20,7 +20,6 @@ public class TableModelFilter {
 	}
 
 	public TableModelFilter(TableModelFilterCondition condition, boolean inverted, boolean used) {
-
 		this.condition = condition;
 		this.inverted = inverted;
 		this.inUse = used;

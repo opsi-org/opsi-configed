@@ -34,7 +34,6 @@ public class ListMerger extends ArrayList<Object> {
 	}
 
 	private static boolean equals(List<?> list1, List<?> list2) {
-
 		if (list1 == null && list2 == null) {
 			return true;
 		}

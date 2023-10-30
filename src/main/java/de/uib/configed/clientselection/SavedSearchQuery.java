@@ -24,7 +24,6 @@ import utils.Utils;
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-
 	private String host;
 	private String user;
 	private String password;
@@ -74,7 +73,6 @@ public class SavedSearchQuery {
 	}
 
 	public List<String> runSearch(boolean printing) {
-
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
 		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
@@ -101,7 +99,6 @@ public class SavedSearchQuery {
 	}
 
 	public void populateHostGroup(List<String> hosts, String groupName) {
-
 		if (hosts == null) {
 			Logging.error("hosts collection not initialized");
 			Main.endApp(4);

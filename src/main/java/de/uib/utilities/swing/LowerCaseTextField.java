@@ -21,10 +21,8 @@ public class LowerCaseTextField extends JTextField {
 	}
 
 	private static class LowerCaseDocument extends PlainDocument {
-
 		@Override
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-
 			if (str == null) {
 				return;
 			}

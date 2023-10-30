@@ -15,7 +15,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class FEditTextWithExtra extends FEditText {
-
 	private JTextField extraField;
 
 	public FEditTextWithExtra(String initialText, String hint, String extraName) {

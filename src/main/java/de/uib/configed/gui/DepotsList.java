@@ -15,7 +15,6 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 public class DepotsList extends JList<String> implements ComponentListener {
-
 	private MyListCellRenderer myListCellRenderer;
 	private List<String> saveV;
 

@@ -61,7 +61,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-
 		return getTableModel().getColumnCount();
 	}
 
@@ -102,13 +101,11 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
 
 	@Override
 	public void setCursorRow(int row) {
-
 		if (table.getRowCount() <= 0) {
 			return;
 		}

@@ -26,7 +26,6 @@ import de.uib.utilities.logging.Logging;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
-
 	private SSHConnectionExecDialog outputDialog;
 	protected boolean multiCommand;
 	private JButton responseButton;
@@ -134,7 +133,6 @@ public class SSHConnectExec extends SSHConnect {
 		if (!isConnectionAllowed()) {
 			Logging.warning(this, "connection forbidden.");
 		} else {
-
 			multiCommand = true;
 			interruptChannel = false;
 			commandInfoName = commands.getMainName();
@@ -186,7 +184,6 @@ public class SSHConnectExec extends SSHConnect {
 			List<SSHCommand> commandList = commandToExec.getCommands();
 			for (SSHCommand co : commandToExec.getCommands()) {
 				if (!foundErrorInCommandList) {
-
 					// ???????? sollte hier eigentlich stehen?!
 					// # nein! co wird vom phander verändert
 					co = pmethodHandler.parseParameter(co, caller);
@@ -275,7 +272,6 @@ public class SSHConnectExec extends SSHConnect {
 		}
 
 		try {
-
 			Logging.info(this, "exec isConnected " + isConnected());
 			SSHCommandWorker task = new SSHCommandWorker(this, command, outputDialog, withGui, rememberPw,
 					interruptChannel);

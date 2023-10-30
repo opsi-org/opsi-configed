@@ -7,7 +7,6 @@
 package de.uib.configed.type;
 
 public class RemoteControl {
-
 	public static final String CONFIG_KEY = "configed.remote_control";
 	public static final String COMMAND_KEY = "command";
 	public static final String DESCRIPTION_KEY = "description";

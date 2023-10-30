@@ -20,7 +20,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
 
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
-
 	private static final String TITLE = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	private JLabel jLabelCopyToModulesD;

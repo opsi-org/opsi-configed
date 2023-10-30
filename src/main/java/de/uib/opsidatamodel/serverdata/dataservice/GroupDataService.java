@@ -205,7 +205,6 @@ public class GroupDataService {
 	}
 
 	public void retrieveAllObject2GroupsPD() {
-
 		// Don't load when one of the two is not null
 		// We only want to load, when both are not yet loaded
 		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null

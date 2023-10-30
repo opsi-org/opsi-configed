@@ -59,7 +59,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == editorContent && (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1)) {
-
 			fEdit.setVisible(true);
 		}
 	}
@@ -102,7 +101,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	@Override
 	public void focusGained(FocusEvent e) {
 		if (e.getSource() == editorContent) {
-
 			editorContent.setText(fEdit.getText());
 		}
 	}

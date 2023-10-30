@@ -42,7 +42,6 @@ import de.uib.utilities.thread.WaitingWorker;
 import utils.Utils;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
-
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
 			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));
 
@@ -200,7 +199,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 		fieldTaskname = new JTextField();
 		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
-
 			private void actOnChange() {
 				Logging.info(this, "changed text");
 			}
@@ -501,7 +499,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	@Override
 	public void doAction2() {
-
 		Logging.info(this, "doAction2");
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {

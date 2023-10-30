@@ -20,7 +20,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
-
 	private String byAuditPath;
 
 	private JRadioButton selectionBaseBoard;
@@ -40,7 +39,6 @@ public class PanelHWByAuditDriver extends JPanel {
 	}
 
 	private void buildPanel() {
-
 		fieldComputerSystemVendor = new JTextShowField();
 
 		fieldComputerSystemLabel = new JTextShowField();
@@ -168,7 +166,6 @@ public class PanelHWByAuditDriver extends JPanel {
 	}
 
 	private static String eliminateIllegalPathChars(String path) {
-
 		if (path == null) {
 			return null;
 		}

@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
 
 public class PopupMouseListener extends MouseAdapter {
-
 	private JPopupMenu popupMenu;
 
 	public PopupMouseListener(JPopupMenu popup) {
@@ -26,7 +25,6 @@ public class PopupMouseListener extends MouseAdapter {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
 		maybeShowPopup(e);
 	}
 

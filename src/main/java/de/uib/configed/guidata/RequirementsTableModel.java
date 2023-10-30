@@ -27,7 +27,6 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import utils.Utils;
 
 public class RequirementsTableModel extends AbstractTableModel {
-
 	private static final int NO_OF_ROW_TYPES = 3;
 
 	private Object[] keyArray;
@@ -63,7 +62,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	public void setActualProduct(String depotId, String product) {
-
 		requMap = null;
 		requBeforeMap = null;
 		requAfterMap = null;
@@ -129,7 +127,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-
 		String myKey = (String) keyArray[row / NO_OF_ROW_TYPES];
 
 		int rowTypeIndex = row % NO_OF_ROW_TYPES;
@@ -139,7 +136,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 		if (col == 0) {
 			switch (rowTypeIndex) {
-
 			case 0:
 				result = myKey;
 				break;
@@ -205,7 +201,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			if (cell instanceof JComponent) {
@@ -217,7 +212,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 			if ((column == 2 || column == 3)
 					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
 							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"))) {
-
 				((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
 
 				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);

@@ -19,7 +19,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
-
 	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 
 	private String savedStateObjTag;

@@ -26,7 +26,6 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.configed.Globals;
 
 public class GlassPane extends JPanel implements KeyListener {
-
 	private JXBusyLabel wheel;
 	private JLabel jLabelInfo;
 
@@ -96,7 +95,6 @@ public class GlassPane extends JPanel implements KeyListener {
 	 *  Make the glass pane visible, start the wheel and change the cursor to the wait cursor
 	 */
 	public void activate(boolean toggle) {
-
 		wheel.setVisible(toggle);
 		wheel.setBusy(toggle);
 		setVisible(toggle);

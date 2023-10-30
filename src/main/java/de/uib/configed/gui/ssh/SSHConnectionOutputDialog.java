@@ -128,7 +128,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	private String findAnsiCodeColor(Entry<String, Color> entry, String key, String line) {
 		if (line.trim().replace("\\t", "").replace(" ", "").startsWith(key)) {
-
 			linecolor = entry.getValue() == null ? getAnsiForegroundColor() : entry.getValue();
 			line = line.replace(key, "");
 			Logging.debug(this, "append parseAnsiCodes found color key " + key + " value " + linecolor);
@@ -175,7 +174,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	}
 
 	private void initOutputGui() {
-
 		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
 
 		getContentPane().add(mainPanel, BorderLayout.CENTER);

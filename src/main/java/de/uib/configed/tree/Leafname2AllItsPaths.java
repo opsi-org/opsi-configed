@@ -62,7 +62,6 @@ public class Leafname2AllItsPaths {
 	}
 
 	public void add(String leafname, TreePath clientPath) {
-
 		add(leafname, new SimpleTreePath(clientPath.getPath()));
 	}
 

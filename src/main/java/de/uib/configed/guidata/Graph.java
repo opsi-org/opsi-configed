@@ -24,7 +24,6 @@ import javax.swing.tree.TreeNode;
 	 * und dann testen, ob dieser einen Zykel enthält
 	 */
 public class Graph {
-
 	private final int numberOfElements;
 	private final List<List<Integer>> adj;
 

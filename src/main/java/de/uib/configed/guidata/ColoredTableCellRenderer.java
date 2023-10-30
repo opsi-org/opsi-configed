@@ -14,7 +14,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public class ColoredTableCellRenderer extends StandardTableCellRenderer {
-
 	public ColoredTableCellRenderer(String tooltipPrefix) {
 		super(tooltipPrefix);
 	}
@@ -25,7 +24,6 @@ public class ColoredTableCellRenderer extends StandardTableCellRenderer {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value != null && value.equals(Globals.CONFLICT_STATE_STRING)) {
-
 			c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 		}
 

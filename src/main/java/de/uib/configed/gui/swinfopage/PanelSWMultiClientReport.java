@@ -28,7 +28,6 @@ import de.uib.utilities.swing.PanelStateSwitch;
 import utils.Utils;
 
 public class PanelSWMultiClientReport extends JPanel {
-
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
 	private JButton buttonStart;
@@ -87,7 +86,6 @@ public class PanelSWMultiClientReport extends JPanel {
 	}
 
 	private void setupPanel() {
-
 		GroupLayout glGlobal = new GroupLayout(this);
 		this.setLayout(glGlobal);
 

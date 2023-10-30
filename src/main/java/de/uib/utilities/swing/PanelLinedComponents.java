@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 
 public class PanelLinedComponents extends JPanel {
-
 	private JComponent[] components;
 
 	private int myHeight;

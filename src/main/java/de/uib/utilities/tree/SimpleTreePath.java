@@ -14,7 +14,6 @@ import java.util.Set;
 import javax.swing.tree.TreePath;
 
 public class SimpleTreePath extends ArrayList<String> implements Comparable<SimpleTreePath> {
-
 	public SimpleTreePath() {
 		super();
 	}

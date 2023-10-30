@@ -127,7 +127,6 @@ public class FDialogRemoteControl extends FEditStringList {
 	}
 
 	private void executeCommand(String firstSelectedClient, String targetClient) {
-
 		String cmd = getValue(firstSelectedClient);
 
 		Interpreter trans = new Interpreter(new String[] { "%host%", "%hostname%", "%ipaddress%", "%inventorynumber%",
@@ -193,7 +192,6 @@ public class FDialogRemoteControl extends FEditStringList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		checkSelected();
 
 		if (e.getClickCount() > 1) {
@@ -239,19 +237,16 @@ public class FDialogRemoteControl extends FEditStringList {
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		saveEditedText();
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		saveEditedText();
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-
 		saveEditedText();
 	}
 

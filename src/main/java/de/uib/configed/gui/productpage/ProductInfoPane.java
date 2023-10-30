@@ -32,7 +32,6 @@ import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
-
 	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
 
 	private JTextField jLabelProductID;
@@ -291,7 +290,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	}
 
 	public void setEditValues(String productId, String productVersion, String packageVersion, String depotId) {
-
 		setProductId(productId);
 		setProductVersion(productVersion + "-" + packageVersion);
 
@@ -309,7 +307,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	}
 
 	public void clearEditing() {
-
 		setProductId("");
 		setProductVersion("");
 
@@ -322,7 +319,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	// DataChangedObserver
 	@Override
 	public void dataHaveChanged(Object source) {
-
 		if (source instanceof EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}

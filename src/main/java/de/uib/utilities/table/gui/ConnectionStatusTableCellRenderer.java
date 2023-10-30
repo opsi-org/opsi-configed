@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer {
-
 	// These strings should be in an alphabetic order since the table will be sorted by these strings
 	public static final String CONNECTED_BY_MESSAGEBUS = "connected_by_messagebus";
 	public static final String REACHABLE = "reachable";
@@ -41,7 +40,6 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (!(c instanceof JLabel)) {
-
 			Logging.warning(this, "component is not a JLabel, but it should be, it is" + c.getClass().toString());
 			return c;
 		}

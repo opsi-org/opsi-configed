@@ -16,7 +16,6 @@ import javax.swing.table.TableCellRenderer;
 import de.uib.utilities.logging.Logging;
 
 public class JTableWithToolTips extends JTable {
-
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int colIndex) {
 		Component c = super.prepareRenderer(renderer, rowIndex, colIndex);
