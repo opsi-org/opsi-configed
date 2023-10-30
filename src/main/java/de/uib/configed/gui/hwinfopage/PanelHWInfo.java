@@ -185,7 +185,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void exportPDF() {
 		Logging.info(this, "create report");
-		// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
 
@@ -252,7 +251,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if ("byte".equalsIgnoreCase(unit)) {
 			mult = 1024;
 		}
-		// TODO: nano, micro
 		if (v.compareTo(BigDecimal.valueOf((long) mult * mult * mult)) >= 0) {
 			result = ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
 		} else if (v.compareTo(BigDecimal.valueOf((long) mult * mult)) >= 0) {

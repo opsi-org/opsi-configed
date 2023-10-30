@@ -78,7 +78,6 @@ public class DefaultTableProvider {
 	// should set the working copy as new original values
 	public void setWorkingCopyAsNewOriginalRows() {
 		if (rows == null) {
-			// TODO: request reload?
 			// in the following reset, we request a reload
 		} else {
 			if (rowsCopy != null) {

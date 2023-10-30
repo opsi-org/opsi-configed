@@ -12,8 +12,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHModulesUploadDialog;
 
 public class CommandModulesUpload extends CommandSFTPUpload {
-
-	// TODO Why are there two directories?
 	public static final String ACTUAL_MODULES_DIRECTORY = "/etc/opsi/";
 	public static final String UNOFFICIAL_MODULES_DIRECTORY = "/etc/opsi/modules.d/";
 	public static final String DEFAULT_FILENAME = "modules";

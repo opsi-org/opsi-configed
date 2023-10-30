@@ -609,7 +609,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	/*
 	 * Does things that should be done for the selected Domain of every new created
-	 * client; Don't really know what's happening here (TODO)
+	 * client.
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
 		List<String> editableDomains = new ArrayList<>();

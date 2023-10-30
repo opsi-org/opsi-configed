@@ -1662,7 +1662,7 @@ public class ProductDataService {
 
 	private List<String> produceProductOnClientDisplayfields(String key) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
-			return null;
+			return new ArrayList<>();
 		}
 
 		List<String> result = getDefaultValuesProductOnClientDisplayFields();

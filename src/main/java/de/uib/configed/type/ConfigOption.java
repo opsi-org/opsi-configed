@@ -20,23 +20,17 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
-		BOOL_CONFIG {
-			@Override
-			public String toString() {
-				return "BoolConfig";
-			}
-		},
-		UNICODE_CONFIG {
-			@Override
-			public String toString() {
-				return "UnicodeConfig";
-			}
-		},
-		UNDEFINED_CONFIG {
-			@Override
-			public String toString() {
-				return "UndefinedConfig";
-			}
+		BOOL_CONFIG("BoolConfig"), UNICODE_CONFIG("UnicodeConfig"), UNDEFINED_CONFIG("UndefinedConfig");
+
+		private final String displayName;
+
+		TYPE(String displayName) {
+			this.displayName = displayName;
+		}
+
+		@Override
+		public String toString() {
+			return displayName;
 		}
 	}
 
