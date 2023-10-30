@@ -92,7 +92,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (pathname != null && !pathname.isEmpty()) {
 					saveToZipFile(pathname, filename, getLines());
 				}
-
 			}
 
 			@Override
@@ -173,7 +172,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		for (String ident : idents) {
 			setDocument(ident, documents.get(ident), info);
 		}
-
 	}
 
 	private void setFileChooser(String fn) {
@@ -221,7 +219,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		while (i < lines.length) {
 			try {
 				fWriter.write(lines[i] + "\n");
-
 			} catch (IOException ex) {
 				Logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

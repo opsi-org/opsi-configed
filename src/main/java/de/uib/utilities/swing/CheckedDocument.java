@@ -20,7 +20,6 @@ public class CheckedDocument extends PlainDocument {
 	protected boolean checkMask;
 
 	public CheckedDocument() {
-
 	}
 
 	public CheckedDocument(char[] allowedChars, int realSize) {

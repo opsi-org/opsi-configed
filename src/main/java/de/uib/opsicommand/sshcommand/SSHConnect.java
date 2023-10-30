@@ -53,7 +53,6 @@ public class SSHConnect {
 	public SSHConnect(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		connectionInfo = SSHConnectionInfo.getInstance();
-
 	}
 
 	public static boolean isConnectionAllowed() {
@@ -135,7 +134,6 @@ public class SSHConnect {
 		}
 
 		return null;
-
 	}
 
 	/**
@@ -240,7 +238,6 @@ public class SSHConnect {
 				}
 
 				return false;
-
 			} else {
 				connect(command);
 			}

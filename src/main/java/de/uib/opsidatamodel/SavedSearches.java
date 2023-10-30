@@ -60,9 +60,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 					Logging.warning(this, "Unexpected remainer " + remainder);
 				}
 			}
-
 		}
-
 	}
 
 	private static int nextPartAt(String remainder) {

@@ -174,7 +174,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 					format.setFieldSeparator(button.getActionCommand().charAt(0));
 					modifier.updateTable(parser, startLine, thePanel);
 				}
-
 			});
 		}
 
@@ -373,7 +372,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			/* Not needed */}
-
 	}
 
 	public CSVImportDataModifier getModifier() {

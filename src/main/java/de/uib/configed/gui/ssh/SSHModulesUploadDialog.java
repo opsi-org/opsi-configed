@@ -55,7 +55,6 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		jLabelCopyToModulesD.setVisible(false);
 		jComboBoxCopyToModulesD.setVisible(false);
 		jComboBoxCopyToModulesD.setSelected(false);
-
 	}
 
 	/**

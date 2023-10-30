@@ -46,7 +46,6 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 			put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
 
 			Logging.debug(this, "addSpecialGroups we have " + this);
-
 		}
 
 		return this;

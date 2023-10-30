@@ -137,7 +137,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
-
 	}
 
 	@Override

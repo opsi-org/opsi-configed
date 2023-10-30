@@ -517,7 +517,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// create pdf
 		pdfExportTable.execute(null, false);
-
 	}
 
 	private void applyChangedValue(ListSelectionEvent listSelectionEvent) {
@@ -622,7 +621,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		configedMain.fireOpsiclientdEventOnSelectedClients(
 				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
-
 	}
 
 	private String infoSortKeys(List<? extends RowSorter.SortKey> sortKeys) {
@@ -639,7 +637,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		result.append("]");
 		Logging.info(this, "infoSortkeys " + result);
 		return " (number " + i + ") ";
-
 	}
 
 	@SuppressWarnings("java:S1452")
@@ -931,7 +928,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);
-
 	}
 
 	public void clearListEditors() {
@@ -949,7 +945,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Logging.info(this, "RowSorterEvent " + e);
 		currentSortKeys = tableProducts.getRowSorter().getSortKeys();
 		Logging.info(this, "sorterChanged, sortKeys: " + infoSortKeys(currentSortKeys));
-
 	}
 
 	public List<String> getSelectedProducts() {

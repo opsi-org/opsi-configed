@@ -88,7 +88,6 @@ public class MapTableModel extends AbstractTableModel {
 			this.data = Collections.synchronizedSortedMap(new TreeMap<>(myCollator));
 			this.data.putAll(data);
 			keys = new ArrayList<>(this.data.keySet());
-
 		}
 		oridata = data;
 	}
@@ -190,7 +189,6 @@ public class MapTableModel extends AbstractTableModel {
 
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();
-
 	}
 
 	// table model
@@ -275,7 +273,6 @@ public class MapTableModel extends AbstractTableModel {
 
 			return Object.class;
 		}
-
 	}
 
 	/*
@@ -352,7 +349,6 @@ public class MapTableModel extends AbstractTableModel {
 				} else {
 					Logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
 				}
-
 			}
 
 			if (toStore) {

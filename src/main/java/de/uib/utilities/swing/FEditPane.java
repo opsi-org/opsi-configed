@@ -83,7 +83,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		}
 
 		// HyperlinkListener hyperlinkListener = new
-
 	}
 
 	@Override
@@ -99,7 +98,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.getDocument().addDocumentListener(this);
 
 		super.setDataChanged(false);
-
 	}
 
 	private void searchAndHighlight() {
@@ -137,7 +135,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public void changedUpdate(DocumentEvent e) {
 
 		setDataChanged(true);
-
 	}
 
 	@Override
@@ -157,7 +154,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		super.setDataChanged(b);
 		searchAndHighlight();
-
 	}
 
 	// MouseListener
@@ -174,7 +170,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				cmdLauncher.launch("\"" + line + "\"");
 			}
 		}
-
 	}
 
 	@Override

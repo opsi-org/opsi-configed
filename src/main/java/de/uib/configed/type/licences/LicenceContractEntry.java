@@ -45,7 +45,6 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 
 		put(TableLicenceContracts.NOTIFICATION_DATE_KEY, removeTime(get(TableLicenceContracts.NOTIFICATION_DATE_KEY)));
 		put(TableLicenceContracts.EXPIRATION_DATE_KEY, removeTime(get(TableLicenceContracts.EXPIRATION_DATE_KEY)));
-
 	}
 
 	public String getId() {

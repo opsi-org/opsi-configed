@@ -196,7 +196,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
 		comboClient.setModel(emptyComboBoxModel);
-
 	}
 
 	private void startVolume() {
@@ -213,7 +212,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations.setEditable(true);
 		comboClient.setEnabled(false);
 		comboClient.setModel(emptyComboBoxModel);
-
 	}
 
 	private void startOEM() {
@@ -231,7 +229,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		comboClient.setModel(
 				new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray(new String[0])));
 		comboClient.setEnabled(true);
-
 	}
 
 	private void startConcurrent() {
@@ -250,7 +247,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
 		comboClient.setModel(emptyComboBoxModel);
-
 	}
 
 	private void initComponents() {
@@ -330,7 +326,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 					fEditDate.setVisible(true);
 				}
-
 			}
 		});
 
@@ -582,7 +577,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
 	}
 
 	private void saveCurrentLicenceData() {
@@ -607,7 +601,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		m.put("licenseKey", jTextFieldLKey.getText());
 
 		enterLicenceController.saveNewLicence(m);
-
 	}
 
 	// ActionListener
@@ -628,7 +621,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		} else {
 			Logging.error(this, "action performed on non-treated source");
 		}
-
 	}
 
 	@Override
@@ -650,6 +642,5 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	public PanelGenEditTable getPanelLicencecontracts() {
 		return panelLicencecontracts;
-
 	}
 }

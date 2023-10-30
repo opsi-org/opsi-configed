@@ -139,7 +139,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		splitPane.setTopComponent(panelUsage);
 		splitPane.setBottomComponent(panelGetAndAssignSL);
 		setupSplit();
-
 	}
 
 	public void setClientsSource(ComboBoxModeller modelsource) {

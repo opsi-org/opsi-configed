@@ -116,7 +116,6 @@ public class RPCMethodExecutor {
 					responses.putAll(responses1);
 				}
 			}
-
 		}
 
 		return collectErrorsFromResponsesByHost(responses, "wakeOnLan");
@@ -165,7 +164,6 @@ public class RPCMethodExecutor {
 
 		Map<String, Object> responses = exec.getMapResult(omc);
 		return collectErrorsFromResponsesByHost(responses, "showPopupOnClients");
-
 	}
 
 	public List<String> shutdownClients(String[] clientIds) {

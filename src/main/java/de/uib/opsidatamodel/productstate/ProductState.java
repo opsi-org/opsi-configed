@@ -147,7 +147,6 @@ public class ProductState extends HashMap<String, String> {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 				installationInfo.append(" ");
 			}
-
 		} else {
 			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
@@ -173,7 +172,6 @@ public class ProductState extends HashMap<String, String> {
 		}
 
 		put(KEY_VERSION_INFO, versionInfo);
-
 	}
 
 	private void setDefaultValues() {
@@ -196,7 +194,6 @@ public class ProductState extends HashMap<String, String> {
 		put(KEY_PACKAGE_VERSION, "");
 
 		put(KEY_LAST_STATE_CHANGE, "");
-
 	}
 
 	private String getRetrievedValue(String key) {

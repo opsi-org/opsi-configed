@@ -163,7 +163,6 @@ public class HardwareDataService {
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
 							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
-
 				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
@@ -332,7 +331,6 @@ public class HardwareDataService {
 					colFound = true;
 					// we found a CONFIG column name
 				}
-
 			}
 
 			if (colFound) {
@@ -415,9 +413,7 @@ public class HardwareDataService {
 				} else {
 					rowMap.put(specificColumns.get(i), value);
 				}
-
 			}
-
 		}
 
 		Logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
@@ -673,7 +669,6 @@ public class HardwareDataService {
 				ConfigOption configOption = new ConfigOption(configItem);
 
 				configOptions.put(hwAuditDeviceClass.getHostConfigKey(), configOption);
-
 			}
 		}
 
@@ -681,7 +676,6 @@ public class HardwareDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
 		return exec.doCall(omc);
-
 	}
 
 	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {

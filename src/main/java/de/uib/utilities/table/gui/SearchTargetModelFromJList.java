@@ -167,7 +167,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			} else {
 				jList.addSelectionInterval(i, i);
 			}
-
 		}
 
 		setValueIsAdjusting(false);

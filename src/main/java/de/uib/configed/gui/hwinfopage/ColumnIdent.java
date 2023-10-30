@@ -48,7 +48,6 @@ public class ColumnIdent {
 
 		Logging.debug(this.getClass(), "from '" + tableValue + "' we get " + " col name " + dbColumnName + " type "
 				+ tableType + " hw class " + hwClass);
-
 	}
 
 	public ColumnIdent(String hwClass, String tableType, String colName) {

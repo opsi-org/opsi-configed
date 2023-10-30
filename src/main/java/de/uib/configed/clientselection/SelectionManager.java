@@ -104,7 +104,6 @@ public class SelectionManager {
 
 		default:
 			throw new IllegalArgumentException(name + " is no valid group operation.");
-
 		}
 
 		groupWithStatusList.add(groupStatus);

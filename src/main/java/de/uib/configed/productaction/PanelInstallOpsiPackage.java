@@ -111,7 +111,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 					return returnedOption == JOptionPane.YES_OPTION;
-
 				} else {
 					// it is not there and we have to copy it
 
@@ -126,7 +125,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 					return true;
 				}
 			}
-
 		} catch (IOException ex) {
 			rootFrame.disactivateLoadingCursor();
 
@@ -134,7 +132,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		}
 
 		return false;
-
 	}
 
 	private void produceServerPath() {
@@ -200,7 +197,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			String opsiPackageGotPathS = chooserPackage.getSelectedFile().getPath();
 			fieldOpsiPackageName.setText(opsiPackageGotPathS);
 			fieldOpsiPackageName.setCaretPosition(opsiPackageGotPathS.length());
-
 		}
 	}
 
@@ -212,9 +208,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			String serverPathGot = chooserServerpath.getSelectedFile().getPath();
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
-
 		}
-
 	}
 
 	private void defineChoosers() {

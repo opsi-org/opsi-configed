@@ -94,7 +94,6 @@ public class FPanel extends SecondaryFrame {
 
 		Logging.info(this, "--------leaveChecked " + result);
 		return result;
-
 	}
 
 	private void leave() {
@@ -117,7 +116,6 @@ public class FPanel extends SecondaryFrame {
 			if (leaving) {
 
 				leave();
-
 			} else {
 				setVisible(true);
 			}

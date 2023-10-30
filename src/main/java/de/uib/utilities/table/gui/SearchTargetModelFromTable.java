@@ -104,7 +104,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public void ensureRowIsVisible(int row) {
 
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
-
 	}
 
 	@Override
@@ -121,7 +120,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		if (table.getModel() instanceof GenTableModel) {
 			((GenTableModel) table.getModel()).setCursorRow(modelrow);
 		}
-
 	}
 
 	@Override
@@ -209,7 +207,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			model.reset();
 
 			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
-
 		} else {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
 

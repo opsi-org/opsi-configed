@@ -81,6 +81,5 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 		thePanel.getPanelStatistics().setTableModel(modelStatistics);
 		modelStatistics.setEditableColumns(new int[] {});
 		thePanel.getPanelStatistics().setEmphasizedColumns(new int[] {});
-
 	}
 }

@@ -507,7 +507,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.info(this, "setTitle " + title);
 		this.title = title;
 		label.setText(title);
-
 	}
 
 	public void setTitlePane(JComponent[] components, int height) {
@@ -716,7 +715,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			// add the popup to the scrollpane if the table is empty
 			scrollpane.addMouseListener(new PopupMouseListener(popupMenu));
-
 		}
 
 		if (item == null) {
@@ -734,7 +732,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (popupIndex == generalPopupPosition) {
 			addPopupmenuStandardpart();
 		}
-
 	}
 
 	public JScrollPane getTheScrollpane() {
@@ -760,7 +757,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 
 				sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
-
 			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
 				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
 
@@ -773,13 +769,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			} else {
 				sortKeys = null;
 			}
-
 		} else {
 
 			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
 				sortKeys.add(new RowSorter.SortKey(entry.getKey(), entry.getValue()));
 			}
-
 		}
 
 		return sortKeys;
@@ -919,7 +913,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			// lazy activation
 		}
 		searchPane.setFiltering(b, withFilterPopup);
-
 	}
 
 	/**
@@ -1144,7 +1137,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.debug(this, "setAwareOfSelectionListener  " + b);
 
 		awareOfSelectionListener = b;
-
 	}
 
 	public boolean isAwareOfSelectionListener() {
@@ -1182,7 +1174,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		return result;
-
 	}
 
 	public void setSelectedValues(List<String> values, int col) {
@@ -1202,7 +1193,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}
-
 	}
 
 	private int findViewRowFromValue(int startviewrow, Object value, int col) {
@@ -1245,7 +1235,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			if (!found) {
 				viewrow++;
 			}
-
 		}
 
 		if (found) {
@@ -1319,11 +1308,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				// try value for col 0 as target for search
 				found = moveToValue(keyValue, 0);
 			}
-
 		}
 
 		return found;
-
 	}
 
 	public void moveToRow(int n) {
@@ -1343,7 +1330,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.scrollRectToVisible(theTable.getCellRect(n, 0, true));
 		theTable.setRowSelectionInterval(n, n);
 		tableModel.setCursorRow(theTable.convertRowIndexToModel(n));
-
 	}
 
 	public boolean setCursorToFirstRow() {
@@ -1470,7 +1456,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			singleSelection = selectedRow == lsm.getMaxSelectionIndex();
 		}
-
 	}
 
 	public boolean isSingleSelection() {

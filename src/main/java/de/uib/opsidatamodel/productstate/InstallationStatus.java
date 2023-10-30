@@ -109,9 +109,7 @@ public final class InstallationStatus {
 		label2displayLabel.put("unknown", "unknown");
 
 		choiceLabels = new String[] { label2displayLabel.get(InstallationStatus.KEY_NOT_INSTALLED),
-				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("unknown")
-
-		};
+				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("unknown") };
 
 		label2textColor = new HashMap<>();
 		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);

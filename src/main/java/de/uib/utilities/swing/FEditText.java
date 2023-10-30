@@ -98,7 +98,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	public void changedUpdate(DocumentEvent e) {
 
 		setDataChanged(true);
-
 	}
 
 	@Override

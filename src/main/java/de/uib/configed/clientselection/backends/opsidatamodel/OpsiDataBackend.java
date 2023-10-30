@@ -397,7 +397,6 @@ public final class OpsiDataBackend {
 				+ operations.size() + " operations");
 		throw new IllegalArgumentException(
 				"The group operation " + operation + " was not found with " + operations.size() + " operations");
-
 	}
 
 	public void setReloadRequested() {
@@ -460,7 +459,6 @@ public final class OpsiDataBackend {
 		}
 
 		reloadRequested = false;
-
 	}
 
 	private List<OpsiDataClient> getClients() {

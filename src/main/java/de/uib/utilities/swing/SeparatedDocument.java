@@ -40,7 +40,6 @@ public class SeparatedDocument extends CheckedDocument {
 						// remove old separators
 						remove(offset, 1);
 					}
-
 				} catch (BadLocationException ex) {
 					Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
 				}

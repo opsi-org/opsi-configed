@@ -53,7 +53,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		init();
 		setGapSize(lg, rg, ug, og);
 		initLayout();
-
 	}
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
@@ -61,7 +60,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
-
 	}
 
 	/** Init components **/
@@ -99,7 +97,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 							.equals(Configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
 
 			jComboBoxParameterFormats.setEnabled(enabled);
-
 		});
 
 		jButtonTestParam = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),

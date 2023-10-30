@@ -77,7 +77,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		initComponents();
 		layouting();
-
 	}
 
 	/**
@@ -167,7 +166,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
 						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				valueList.addToSelection(depotsWithEqualStock);
-
 			}
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());

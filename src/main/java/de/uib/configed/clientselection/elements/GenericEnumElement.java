@@ -21,7 +21,6 @@ public class GenericEnumElement extends AbstractSelectElement {
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
 		this.enumData = new ArrayList<>(Arrays.asList(enumData));
-
 	}
 
 	@Override

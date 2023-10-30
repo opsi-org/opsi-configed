@@ -150,7 +150,6 @@ public abstract class AbstractExportTable {
 		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
 
 		return result;
-
 	}
 
 	protected String checkFile(String filename, FileNameExtensionFilter exFilter) {

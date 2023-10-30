@@ -179,7 +179,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
-
 			}
 
 			if (entryRemovable) {
@@ -201,12 +200,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
-
 			}
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
-
 	}
 
 	private void deleteEntry() {
@@ -350,11 +347,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 							// Do nothing
 						}
 					}
-
 				}
 				return c;
 			}
-
 		};
 
 		TableCellRenderer colorized = new ColorTableCellRenderer();
@@ -454,7 +449,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
 						Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION);
 			}
-
 		}
 
 		return ok;
@@ -490,7 +484,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						}
 					}
 				}
-
 			}
 		};
 
@@ -569,7 +562,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		names = mapTableModel.getKeys();
 		Logging.info(this, "removeProperty names left: " + names);
-
 	}
 
 	private void stopEditing() {

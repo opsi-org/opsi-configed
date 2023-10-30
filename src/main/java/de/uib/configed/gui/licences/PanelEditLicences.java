@@ -135,6 +135,5 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	public PanelGenEditTable getPanelLicencecontracts() {
 		return panelLicencecontracts;
-
 	}
 }

@@ -203,7 +203,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 			private void actOnChange() {
 				Logging.info(this, "changed text");
-
 			}
 
 			@Override
@@ -403,7 +402,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 						.addGap(Globals.GAP_SIZE))
 
 		);
-
 	}
 
 	private void startAction() {
@@ -431,7 +429,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		waitingTask = new WaitingWorker(this);
 
 		waitingTask.execute();
-
 	}
 
 	private static String giveTimeSpan(final long millis) {
@@ -535,7 +532,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		} else {
 			startWaiting();
 		}
-
 	}
 
 	@Override

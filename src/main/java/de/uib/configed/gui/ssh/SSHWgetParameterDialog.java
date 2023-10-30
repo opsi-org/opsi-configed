@@ -205,7 +205,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		changeUrl();
 		changeFreeInput();
-
 	}
 
 	private void updateCommand() {

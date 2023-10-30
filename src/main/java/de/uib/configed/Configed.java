@@ -198,7 +198,6 @@ public final class Configed {
 		if (result == null) {
 			if (Messages.getMessagesBundle() == null) {
 				Logging.warning("Messages.messagesBundle is null...");
-
 			} else if (!Messages.getMessagesBundle().containsKey(key)) {
 				Logging.warning("Messagebundle does not contain key " + key);
 			} else {

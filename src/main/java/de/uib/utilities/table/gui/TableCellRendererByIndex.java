@@ -43,7 +43,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			if (mapOfImages != null) {
 				selectedIcon = mapOfImages.get("" + value);
 			}
-
 		}
 
 		if (result instanceof JLabel) {

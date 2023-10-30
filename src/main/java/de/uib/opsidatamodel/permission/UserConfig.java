@@ -109,7 +109,6 @@ public class UserConfig {
 		}
 
 		return userBoolKeys;
-
 	}
 
 	public static Set<String> getUserStringValueKeys() {
@@ -128,7 +127,6 @@ public class UserConfig {
 		}
 
 		return userStringValueKeysWithoutRole;
-
 	}
 
 	public static Set<String> getUserListKeys() {

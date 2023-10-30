@@ -31,7 +31,6 @@ public class FEditorPane extends FGeneralDialog {
 		editPane.addKeyListener(this);
 
 		pack();
-
 	}
 
 	public boolean setPage(String url) {

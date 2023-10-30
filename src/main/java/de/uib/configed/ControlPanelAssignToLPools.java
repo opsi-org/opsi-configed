@@ -117,7 +117,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "setSoftwareIdsFromLicencePoot, selectedLicencePool " + selectedLicencePool);
 
 		setSoftwareIdsFromLicencePool(selectedLicencePool);
-
 	}
 
 	public void setSoftwareIdsFromLicencePool(final String poolID) {
@@ -205,7 +204,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
 							thePanel.getFMissingSoftwareInfo().getClassNames(), () -> missingSoftwareMap)),
 					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
-
 		}
 
 		thePanel.getFieldCountAssignedStatus().setToolTipText(" <html><br /></html>");
@@ -275,7 +273,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
-
 	}
 
 	private static String produceCount(Integer count) {
@@ -847,7 +844,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 			thePanel.getPanelRegisteredSoftware().setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
 		}
-
 	}
 
 	private void setVisualSelection(List<String> keys) {

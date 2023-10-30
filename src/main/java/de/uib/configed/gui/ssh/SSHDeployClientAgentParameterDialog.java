@@ -137,7 +137,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		} else {
 			defaultWinUser = (String) resultConfigList.get(0);
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER " + ((String) resultConfigList.get(0)));
-
 		}
 
 		resultConfigList = (List<Object>) configs.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
@@ -153,7 +152,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 			jTextFieldPassword.setText((String) resultConfigList.get(0));
 			Logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.CONFIDENTIAL);
-
 		}
 	}
 
@@ -176,7 +174,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jCheckBoxIgnorePing.setEnabled(value);
 		jCheckBoxApplySudo.setEnabled(value);
-
 	}
 
 	private void init() {
@@ -345,7 +342,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		changeVerbosity();
 
 		initLayout();
-
 	}
 
 	private void updateCommand() {

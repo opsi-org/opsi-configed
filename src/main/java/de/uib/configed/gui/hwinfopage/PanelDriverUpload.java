@@ -259,7 +259,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(
 				Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
-
 	}
 
 	private void initComponents() {

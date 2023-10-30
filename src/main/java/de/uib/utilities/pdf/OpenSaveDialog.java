@@ -67,7 +67,6 @@ public class OpenSaveDialog implements ActionListener {
 		if (e.getSource() == openBtn) {
 			saveAction = false;
 			leave();
-
 		} else if (e.getSource() == saveBtn) {
 			saveAction = true;
 			leave();

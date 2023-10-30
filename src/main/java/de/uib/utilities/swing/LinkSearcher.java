@@ -53,7 +53,6 @@ public class LinkSearcher {
 
 		// s0 has : but ends there
 		return linkpos + 1 < s0.length();
-
 	}
 
 	// return first pos in line of recognized string

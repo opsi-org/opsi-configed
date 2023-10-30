@@ -676,7 +676,6 @@ public class MainFrame extends JFrame
 		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> {
 			Logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
 			configedMain.toggleColumnSessionInfo();
-
 		});
 
 		jCheckBoxMenuItemShowInventoryNumberColumn
@@ -775,7 +774,6 @@ public class MainFrame extends JFrame
 			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
 
 			fStartWakeOnLan.setClients();
-
 		});
 
 		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
@@ -1200,7 +1198,6 @@ public class MainFrame extends JFrame
 		}
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
-
 	}
 
 	private void setupMenuHelp() {
@@ -2144,7 +2141,6 @@ public class MainFrame extends JFrame
 				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
 				break;
 			}
-
 		} else {
 			jButtonOpsiLicenses = new JButton("", Utils.createImageIcon("images/opsi-licenses.png", ""));
 		}
@@ -2748,7 +2744,6 @@ public class MainFrame extends JFrame
 		}
 		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
 			jMenuItem.setEnabled(false);
-
 		}
 
 		// sometimes
@@ -3096,7 +3091,6 @@ public class MainFrame extends JFrame
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_DESCRIPTION_KEY);
 				}
-
 			} else if (e.getSource() == jTextFieldInventoryNumber) {
 				if (jTextFieldInventoryNumber.isChangedText()) {
 					changedClientInfo.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, jTextFieldInventoryNumber.getText());
@@ -3230,10 +3224,8 @@ public class MainFrame extends JFrame
 			configedMain.handleLicencesManagementRequest();
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
-
 		} else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
 			configedMain.handleProductActionRequest();
-
 		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
@@ -3265,7 +3257,6 @@ public class MainFrame extends JFrame
 		jButtonLicences.setSelected(b);
 		iconButtonReloadLicenses.setVisible(true);
 		iconButtonReloadLicenses.setEnabled(true);
-
 	}
 
 	public void visualizeEditingTarget(ConfigedMain.EditingTarget t) {
@@ -3368,7 +3359,6 @@ public class MainFrame extends JFrame
 
 			showSoftwareLog = showSoftwareLogMultiClientReport;
 			showSoftwareInfo();
-
 		} else {
 			// handled by the following methods
 			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));

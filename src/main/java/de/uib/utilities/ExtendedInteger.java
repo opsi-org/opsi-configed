@@ -41,7 +41,6 @@ public class ExtendedInteger implements Comparable<Integer> {
 
 		if (s.equals(S_INFINITE) || s.equalsIgnoreCase(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE)) {
 			value = S_INFINITE;
-
 		} else {
 			try {
 				number = Integer.decode(s);

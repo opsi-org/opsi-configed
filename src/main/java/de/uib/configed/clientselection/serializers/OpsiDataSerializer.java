@@ -613,7 +613,6 @@ public class OpsiDataSerializer {
 			map.put(KEY_ELEMENT_NAME, GroupElement.class.getSimpleName());
 			map.put(KEY_SUBELEMENT_NAME, GroupWithSubgroupsElement.class.getSimpleName());
 			map.put(KEY_ELEMENT_PATH, element.getPathArray());
-
 		} else {
 			map.put(KEY_ELEMENT_NAME, element.getClassName());
 			map.put(KEY_ELEMENT_PATH, element.getPathArray());

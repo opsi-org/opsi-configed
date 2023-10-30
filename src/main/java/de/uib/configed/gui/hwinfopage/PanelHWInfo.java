@@ -226,7 +226,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {
 		return Utils.createImageIcon(path, "");
-
 	}
 
 	private void createRoot(String name) {
@@ -362,17 +361,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
 									vendorStringComputerSystem = cv;
-
 								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
 									modelString = cv;
-
 								} else {
 									// Not needed, since other values not used for Description on top
 								}
 							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
 									vendorStringBaseBoard = cv;
-
 								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
 								} else {
@@ -561,7 +557,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		return names;
-
 	}
 
 	private void createIconNodes(String[] names, List<Map<String, Object>> devices, Icon classIcon,

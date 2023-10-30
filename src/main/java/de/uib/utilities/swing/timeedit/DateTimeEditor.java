@@ -231,7 +231,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		if (withMovingSelectionDate) {
 			if (Timestamp.valueOf(calendar).equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
-
 			} else {
 				if (monthView.getFirstSelectionDate() != null) {
 					calendar = monthView.getFirstSelectionDate().toInstant().atZone(ZoneId.systemDefault())

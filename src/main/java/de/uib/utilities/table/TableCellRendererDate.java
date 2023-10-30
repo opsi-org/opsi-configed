@@ -38,7 +38,6 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 
 			Date d = Timestamp.valueOf((String) value);
 			selectedString = dateFormat.format(d);
-
 		} else {
 			selectedString = "";
 		}

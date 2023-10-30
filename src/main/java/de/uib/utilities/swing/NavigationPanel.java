@@ -107,7 +107,6 @@ public class NavigationPanel extends JPanel implements ActionListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(lastButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
-
 	}
 
 	public void next() {

@@ -138,7 +138,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 			} else {
 				jButtonExecute.setEnabled(false);
 			}
-
 		} else {
 			jButtonExecute.setEnabled(true);
 
@@ -225,7 +224,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		} else {
 			textFieldSelectedDepots.setText("" + possibleDepots.get(0));
 		}
-
 	}
 
 	private void init() {
@@ -305,7 +303,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		resetProducts();
 		changeProduct("");
 		changeVerbosity();
-
 	}
 
 	@Override

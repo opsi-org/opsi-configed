@@ -240,7 +240,6 @@ public class IconButton extends JButton {
 		} else {
 			waitingCycle.stop();
 		}
-
 	}
 
 	private void workWithWaitingSignals(List<Integer> chunks) {

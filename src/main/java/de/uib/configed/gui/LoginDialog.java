@@ -120,7 +120,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		}
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
-
 	}
 
 	public void setServers(List<String> hosts) {
@@ -368,7 +367,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			}
 
 			setActivated(true);
-
 		}
 	}
 

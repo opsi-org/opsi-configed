@@ -193,7 +193,6 @@ public final class Logging {
 			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
 				Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
 			}
-
 		}
 
 		if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
@@ -440,7 +439,6 @@ public final class Logging {
 				fErrors.setVisible(true);
 			}
 		}.start();
-
 	}
 
 	public static String getErrorListAsLines() {

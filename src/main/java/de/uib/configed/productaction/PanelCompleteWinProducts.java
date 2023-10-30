@@ -165,7 +165,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			produceTarget();
 		});
-
 	}
 
 	private void checkButtonCallExecute() {
@@ -183,7 +182,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			fieldTargetPath.setText(depotProductDirectory + File.separator + winProduct);
 			checkButtonCallExecute();
 		}
-
 	}
 
 	// implements NameProducer
@@ -286,7 +284,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 			execute();
 		});
-
 	}
 
 	private void execute() {
@@ -360,7 +357,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 					rootFrame.disactivateLoadingCursor();
 				}
 			}
-
 		} catch (IOException ex) {
 			rootFrame.disactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);

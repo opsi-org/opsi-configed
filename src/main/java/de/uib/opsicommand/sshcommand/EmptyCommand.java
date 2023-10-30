@@ -56,7 +56,6 @@ public class EmptyCommand implements SSHCommand {
 	public EmptyCommand(String c) {
 		setCommand(c);
 		getParameterList();
-
 	}
 
 	/**
@@ -309,7 +308,6 @@ public class EmptyCommand implements SSHCommand {
 		}
 
 		return result;
-
 	}
 
 	/**

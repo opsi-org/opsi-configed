@@ -327,7 +327,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		}
 
 		return !updateCollection.isEmpty();
-
 	}
 
 	public void setTableModel() {
@@ -506,10 +505,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						// deleting not activated in panel
 
 						return false;
-
 					}
 				}, updateCollection));
-
 	}
 
 	@Override

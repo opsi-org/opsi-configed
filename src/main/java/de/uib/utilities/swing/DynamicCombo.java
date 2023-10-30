@@ -77,7 +77,6 @@ public class DynamicCombo extends JPanel {
 		setLayout(new BorderLayout());
 
 		add(table);
-
 	}
 
 	public void setModelSource(ComboBoxModeller modelSource) {

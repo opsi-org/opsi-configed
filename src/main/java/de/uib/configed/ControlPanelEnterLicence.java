@@ -155,7 +155,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		thePanel.getPanelLicencecontracts().setTableModel(modelLicencecontracts);
 		modelLicencecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 		thePanel.getPanelLicencecontracts().setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
-
 	}
 
 	private void initPopupMenu() {

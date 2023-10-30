@@ -43,7 +43,6 @@ public class JTextHideField extends JPanel {
 			super.remove(0, super.getLength());
 
 			super.insertString(0, fixed, a);
-
 		}
 	}
 
@@ -55,7 +54,6 @@ public class JTextHideField extends JPanel {
 			protected Document createDefaultModel() {
 				return new FixedDocument();
 			}
-
 		};
 
 		hiddenMode = true;
@@ -105,7 +103,6 @@ public class JTextHideField extends JPanel {
 	public void setEnabled(boolean b) {
 		visibleField.setEnabled(b);
 		button.setEnabled(b);
-
 	}
 
 	public void setMultiValue(boolean b) {
@@ -123,7 +120,6 @@ public class JTextHideField extends JPanel {
 		invisibleField.setVisible(hiddenMode);
 		validate();
 		repaint();
-
 	}
 
 	public void setText(String s) {

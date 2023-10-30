@@ -112,7 +112,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		initComponents();
 
 		initLayout();
-
 	}
 
 	public void addChangeListener(ChangeListener cl) {
@@ -226,7 +225,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(hGap));
 		}
-
 	}
 
 	public Enum<E> getValue() {

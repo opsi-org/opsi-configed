@@ -160,7 +160,6 @@ public final class SSHCommandParameterMethods {
 						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}
-
 			}
 		}
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
@@ -229,7 +228,6 @@ public final class SSHCommandParameterMethods {
 			}
 		}
 		return method;
-
 	}
 
 	private String callMethod(String method, String format) {

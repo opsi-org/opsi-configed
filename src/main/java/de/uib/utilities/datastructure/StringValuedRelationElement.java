@@ -38,7 +38,6 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 				if (get(attribute).startsWith(NULLDATE)) {
 					put(attribute, "");
 				}
-
 			} else {
 				put(attribute, null);
 			}

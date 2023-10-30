@@ -118,7 +118,6 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(2 * Globals.GAP_SIZE));
-
 	}
 
 	public CommandSFTPUpload getCommand() {

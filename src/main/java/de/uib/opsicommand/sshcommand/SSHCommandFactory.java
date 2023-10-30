@@ -197,7 +197,6 @@ public final class SSHCommandFactory {
 		sshCommandsParam.add(new CommandModulesUpload());
 		sshCommandsParam.add(new CommandOpsiSetRights());
 		sshCommandsParam.add(new CommandDeployClientAgent());
-
 	}
 
 	public List<String> getProductHistory() {
@@ -368,7 +367,6 @@ public final class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 			if (parent == null || parent.trim().isEmpty()) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
-
 			}
 			List<SSHCommandTemplate> parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent)) {
@@ -540,7 +538,6 @@ public final class SSHCommandFactory {
 
 		Logging.info(this, "connectionState " + connectionState);
 		ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(connectionState);
-
 	}
 
 	public String testConnection(String user, String host) {

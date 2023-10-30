@@ -203,7 +203,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.setListData(depots.toArray(new String[0]));
 
 		resetSelectedDepots(depots);
-
 	}
 
 	// Interface ListSelectionListener
@@ -313,7 +312,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		return result;
-
 	}
 
 	private void saveSelectedDepots() {
@@ -346,7 +344,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			}
 		}
 		listDepots.setValueIsAdjusting(false);
-
 	}
 
 	// KeyListener
@@ -375,7 +372,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		if (e.getSource() == listDepots) {
 			saveSelectedDepots();
 		}
-
 	}
 
 	@Override
