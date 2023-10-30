@@ -15,49 +15,19 @@ public class SelectData {
 	private DataType dataType;
 	private Object dataObject;
 
-	// TODO: Dont use toString() method anywhere
 	public enum DataType {
-		TEXT_TYPE {
-			@Override
-			public String toString() {
-				return "TextType";
-			}
-		},
-		INTEGER_TYPE {
-			@Override
-			public String toString() {
-				return "IntegerType";
-			}
-		},
-		BIG_INTEGER_TYPE {
-			@Override
-			public String toString() {
-				return "BigIntegerType";
-			}
-		},
-		DOUBLE_TYPE {
-			@Override
-			public String toString() {
-				return "DoubleType";
-			}
-		},
-		ENUM_TYPE {
-			@Override
-			public String toString() {
-				return "EnumType";
-			}
-		},
-		DATE_TYPE {
-			@Override
-			public String toString() {
-				return "DateType";
-			}
-		},
-		NONE_TYPE {
-			@Override
-			public String toString() {
-				return "NoneType";
-			}
+		TEXT_TYPE("TextType"), INTEGER_TYPE("IntegerType"), BIG_INTEGER_TYPE("BigIntegerType"),
+		DOUBLE_TYPE("DoubleType"), ENUM_TYPE("EnumType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType");
+
+		private final String displayName;
+
+		DataType(String displayName) {
+			this.displayName = displayName;
+		}
+
+		@Override
+		public String toString() {
+			return displayName;
 		}
 	}
 
@@ -86,14 +56,12 @@ public class SelectData {
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
-
 		case DATE_TYPE:
-
 			if (!(data instanceof String)) {
+				Logging.error(this.getClass(), "Data is not a (date) string");
 				throw new IllegalArgumentException("Data is not a (date) string");
 			}
 			break;
-
 		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {
 				Logging.error(this.getClass(), "Data is no Double");
