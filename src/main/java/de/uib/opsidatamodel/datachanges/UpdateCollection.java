@@ -149,7 +149,6 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	}
 
 	@Override
-	@SuppressWarnings("unused")
 	public boolean add(UpdateCommand obj) {
 		Logging.debug(this, "###### UpdateCollection add Object  " + obj);
 

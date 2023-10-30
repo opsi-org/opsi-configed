@@ -518,6 +518,7 @@ public class UserRolesConfigDataService {
 		return fullPermission;
 	}
 
+	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = configDataService.getConfigListCellOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there " + result);

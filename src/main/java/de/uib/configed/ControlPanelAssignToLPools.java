@@ -132,8 +132,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
 
-		List<String> selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
-
 		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
 				.isUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED);
 		Logging.info(this, "setSoftwareIdsFromLicencePool wasUsingSelectedFilter " + wasUsingSelectedFilter);
@@ -228,6 +226,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(totalSWEntries));
 		thePanel.getFieldCountDisplayedWindowsSoftware().setText(produceCount(totalShownEntries));
 		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(totalUnassignedSWEntries));
+
+		List<String> selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
 
 		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
 			selectKeys = softwareIdsForPool;

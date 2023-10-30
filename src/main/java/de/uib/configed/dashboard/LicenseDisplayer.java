@@ -178,7 +178,6 @@ public class LicenseDisplayer {
 	}
 
 	private String calculateVariantLicencepools() {
-		StringBuilder result = new StringBuilder();
 		GenTableModel modelSWnames;
 
 		List<String> columnNames;
@@ -241,19 +240,17 @@ public class LicenseDisplayer {
 			Logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
 
+		StringBuilder result = new StringBuilder();
 		result.append("\n");
 		result.append("  ");
 		result.append(Configed.getResourceValue("Dashboard.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
-
 		for (String name : namesWithVariantPools) {
 			result.append(name);
 			result.append("\n");
 		}
-
 		result.append("\n");
 		result.append("\n");
-
 		return result.toString();
 	}
 

@@ -613,16 +613,14 @@ public class GenTableModel extends AbstractTableModel {
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
 		if (addedRows.contains(rowNum)) {
-			// deletion of added rows is not adequately managed
-			// therefore we reject it
-
+			// Deletion of added rows is not adequately managed,
+			// therefore we reject it.
 			Logging.info(this, "no deletion of added rows");
 
 			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
 					"Information", JOptionPane.OK_OPTION);
 			return false;
 		}
-
 		return true;
 	}
 
@@ -642,29 +640,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		for (int element : selection) {
-			if (!checkDeletionOfAddedRow(element)) {
-				return;
-			}
-		}
-
-		// do with original row nums
-		for (int element : selection) {
-			List<Object> oldValues = new ArrayList<>(rows.get(element));
-			Logging.debug(this, "deleteRow values " + oldValues);
-			updates.add(itemFactory.produceDeleteItem(oldValues));
-
-			if (updatedRows.contains(element)) {
-				Logging.debug(this, "deleteRows, remove from updatedRows  " + element);
-				updatedRows.remove(element);
-			}
-		}
-
-		// adapt the model from the upper index downto the lower index (selection has
-		// been sorted)
-		for (int i = selection.length - 1; i >= 0; i--) {
-			rows.remove(selection[i]);
-			rowsLength--;
-			fireTableRowsDeleted(selection[i], selection[i]);
+			deleteRow(element);
 		}
 	}
 
@@ -703,8 +679,6 @@ public class GenTableModel extends AbstractTableModel {
 		rows.remove(rowNum);
 		rowsLength--;
 		fireTableRowsDeleted(rowNum, rowNum);
-
-		Logging.debug(this, "deleted row " + oldValues);
 	}
 
 	@Override

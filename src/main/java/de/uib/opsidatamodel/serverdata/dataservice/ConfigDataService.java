@@ -994,6 +994,50 @@ public class ConfigDataService {
 		return result;
 	}
 
+	/**
+	 * Checks if the given clients have an entry for UEFI boot. That means, the
+	 * client has a client config with an entry
+	 * {@code clientconfig.uefinetbootlabel}.
+	 * <p>
+	 * Should only be used in opsi 4.3 (or later) since in opsi 4.3
+	 * {@code clientconfig.dhcpd.filename} entry has been replaced by
+	 * {@code clientconfig.uefinetbootlabel} entry and is no longer editable.
+	 *
+	 * @param clients for which to check the existence of UEFI boot entry
+	 * @return null if clients have different values or if client list is empty
+	 * @see #isUefiConfigured(String)
+	 */
+	@SuppressWarnings({ "java:S2447" })
+	public Boolean isUEFI43(String[] clients) {
+		Boolean isUEFI = null;
+
+		for (String client : clients) {
+			Map<String, Object> clientConfig = getHostConfigsPD().get(client);
+			if (clientConfig == null) {
+				isUEFI = false;
+				continue;
+			}
+
+			Object uefiConfig = clientConfig.get("clientconfig.uefinetbootlabel");
+
+			if (uefiConfig instanceof List && !((List<?>) uefiConfig).isEmpty()) {
+				if (Boolean.FALSE.equals(isUEFI)) {
+					return null;
+				} else {
+					isUEFI = true;
+				}
+			} else {
+				if (Boolean.TRUE.equals(isUEFI)) {
+					return null;
+				} else {
+					isUEFI = false;
+				}
+			}
+		}
+
+		return isUEFI;
+	}
+
 	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
 		return setHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 				clientId, shutdownInstall);
