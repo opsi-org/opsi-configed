@@ -273,12 +273,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					configedMain.setGroup(selectedNode.toString());
 				}
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			configedMain.clearSelectionOnPanel();
-		} else if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
-			if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
-				configedMain.treeClientsSelectAction(getSelectionPaths());
-			}
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
@@ -289,9 +283,19 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-				&& (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)) {
-			configedMain.treeClientsSelectAction(getSelectionPaths());
+		if (((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK)
+				|| ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)) {
+
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				TreePath selectedPath = this.getLeadSelectionPath();
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+				configedMain.toggleClientSelection(selectedNode, selectedPath);
+				configedMain.treeClientsSelectAction(getSelectionPaths());
+			} else if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)) {
+				configedMain.treeClientsSelectAction(getSelectionPaths());
+			} else {
+				// Do nothing on other keys
+			}
 		}
 	}
 
