@@ -105,6 +105,10 @@ public class DefaultTableProvider {
 		source.requestReload();
 	}
 
+	public void cancelRequestReload() {
+		source.cancelRequestReload();
+	}
+
 	// should initiate reloading the metadata
 	public void structureChanged() {
 		classNames = null;

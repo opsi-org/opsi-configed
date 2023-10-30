@@ -17,6 +17,7 @@ import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
+import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 
 /**
  * Implementation of {@link ReloadHandler} which is responsible for reloading
@@ -32,6 +33,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 	private HardwareDataService hardwareDataService;
 	private GroupDataService groupDataService;
 	private LicenseDataService licenseDataService;
+	private SoftwareDataService softwareDataService;
 
 	private Map<String, Consumer<Void>> eventHandlers;
 
@@ -44,7 +46,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 	private void registerHandlers() {
 		eventHandlers.put(CacheIdentifier.LICENSE_USAGE.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-			licenseDataService.retrieveLicenceUsagesPD();
+			licenseDataService.retrieveLicenseUsagesPD();
 		});
 		eventHandlers.put(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
@@ -66,6 +68,14 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTIES.toString(),
 				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
 		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> cacheManager.clearAllCachedData());
+		eventHandlers.put(CacheIdentifier.LICENSES.toString(), (Void v) -> {
+			cacheManager.clearCachedData(CacheIdentifier.LICENSES);
+			licenseDataService.retrieveLicensesPD();
+		});
+		eventHandlers.put(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(), (Void v) -> {
+			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
+			softwareDataService.retrieveLicenseStatisticsPD();
+		});
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {
@@ -82,6 +92,10 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 
 	public void setLicenseDataService(LicenseDataService licenseDataService) {
 		this.licenseDataService = licenseDataService;
+	}
+
+	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
+		this.softwareDataService = softwareDataService;
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public class MapSource implements TableSource {
 
 	protected List<List<Object>> rows;
 
-	private boolean reloadRequested = true;
+	protected boolean reloadRequested = true;
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
 			boolean rowCounting) {
@@ -148,10 +148,7 @@ public class MapSource implements TableSource {
 	@Override
 	public List<List<Object>> retrieveRows() {
 		Logging.info(this, " -- retrieveRows");
-		if (reloadRequested) {
-			fetchData();
-			reloadRequested = false;
-		}
+		fetchData();
 		Logging.info(this, " -- retrieveRows rows.size() " + rows.size());
 		return rows;
 	}
@@ -159,6 +156,11 @@ public class MapSource implements TableSource {
 	@Override
 	public void requestReload() {
 		reloadRequested = true;
+	}
+
+	@Override
+	public void cancelRequestReload() {
+		reloadRequested = false;
 	}
 
 	@Override

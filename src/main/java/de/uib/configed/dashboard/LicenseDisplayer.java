@@ -27,9 +27,11 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableEditItem;
 import javafx.application.Platform;
@@ -67,6 +69,12 @@ public class LicenseDisplayer {
 	private LicenseDisplayer controller;
 
 	private Stage stage;
+
+	private ConfigedMain configedMain;
+
+	public void setConfigedMain(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+	}
 
 	public void loadData() {
 		StringBuilder mess = new StringBuilder();
@@ -136,9 +144,9 @@ public class LicenseDisplayer {
 	private String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
-				.getLicenceContractsToNotifyPD();
+				.getLicenseContractsToNotifyPD();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenseDataService()
-				.getLicenceContractsToNotifyPD();
+				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 		Logging.info(this, "contractsToNotify " + contractsToNotify);
@@ -193,9 +201,19 @@ public class LicenseDisplayer {
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD())),
-				0, new int[] {}, (TableModelListener) null, updateCollection) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
+							persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+					}
+				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {
 				super.produceRows();

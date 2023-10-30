@@ -128,6 +128,7 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -337,6 +338,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private SSHConfigDialog sshConfigDialog;
 	private SSHCommandControlDialog sshCommandControlDialog;
 	private NewClientDialog newClientDialog;
+
+	private boolean isAllLicenseDataReloaded;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -585,7 +588,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "initDashboard " + dashboard);
 		if (dashboard == null) {
-			dashboard = new Dashboard();
+			dashboard = new Dashboard(this);
 			dashboard.initAndShowGUI();
 		} else {
 			dashboard.show();
@@ -1410,10 +1413,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencePoolsPD()));
+		licencePoolTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
+						}
+					}
 
-		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
@@ -1424,8 +1437,21 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> persistenceController.getSoftwareDataService().getRelationsSoftwareL2LPool()));
+		licenceOptionsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController
+									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1442,8 +1468,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicenceContractsPD()));
+		licenceContractsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
@@ -1461,8 +1499,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencesPD()));
+		softwarelicencesTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
+					}
+				}));
 	}
 
 	private void startLicencesFrame() {
@@ -1503,14 +1553,15 @@ public class ConfigedMain implements ListSelectionListener {
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation();
+		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(
+				this);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
 		// panelStatistics
 		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
 				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
-		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics();
+		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(this);
 		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
 
@@ -3400,13 +3451,19 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "reloadLicensesData");
 		if (everythingReady) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+			isAllLicenseDataReloaded = true;
 
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
 				for (PanelGenEditTable p : cmtp.getTablePanes()) {
 					p.reload();
 				}
 			}
+			isAllLicenseDataReloaded = false;
 		}
+	}
+
+	public boolean isAllLicenseDataReloaded() {
+		return isAllLicenseDataReloaded;
 	}
 
 	private void refreshClientListKeepingGroup() {
@@ -4138,10 +4195,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 		for (String client : getSelectedClients()) {
 			Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicencesUsageListPD();
+					.getLicenseDataService().getFClient2LicensesUsageListPD();
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenceUsage(client, m.getLicenceId(),
+				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenceId(),
 						m.getLicensePool());
 			}
 		}

@@ -172,6 +172,11 @@ public class PanelSWInfo extends JPanel {
 		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						if (hostId == null) {
 							return new HashMap<>();

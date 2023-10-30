@@ -67,7 +67,7 @@ public class GenTableModel extends AbstractTableModel {
 	private CursorrowObserved cursorrowObservable;
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
-			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
+			int[] finalColumns, TableModelListener l, List<TableEditItem> updates, boolean cancelRequestReload) {
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
@@ -76,6 +76,11 @@ public class GenTableModel extends AbstractTableModel {
 		cursorrowObservable = new CursorrowObserved();
 
 		initColumns();
+
+		if (cancelRequestReload) {
+			cancelRequestReload();
+		}
+
 		setRows(dataProvider.getRows());
 
 		addedRows = new HashSet<>();
@@ -110,8 +115,13 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
+			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
+		this(itemFactory, dataProvider, keyCol, finalColumns, l, updates, false);
+	}
+
+	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			TableModelListener l, List<TableEditItem> updates) {
-		this(itemFactory, dataProvider, keyCol, null, l, updates);
+		this(itemFactory, dataProvider, keyCol, null, l, updates, false);
 	}
 
 	private void initColumns() {
@@ -162,6 +172,10 @@ public class GenTableModel extends AbstractTableModel {
 	public void requestReload() {
 		modelDataValid = false;
 		tableProvider.requestReloadRows();
+	}
+
+	public final void cancelRequestReload() {
+		tableProvider.cancelRequestReload();
 	}
 
 	public void structureChanged() {

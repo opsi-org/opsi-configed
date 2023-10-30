@@ -568,6 +568,11 @@ public enum CacheIdentifier {
 	MAP_PC_BELONGS_TO_DEPOT("map_pc_belongs_to_depot"),
 
 	/**
+	 * return type {@code Map<String, Map<String, Object>>}
+	 */
+	RELATIONS_SOFTWARE_L_TO_L_POOL("relations_software_l_to_l_pool"),
+
+	/**
 	 * return type {@code boolean}
 	 */
 	MFA_ENABLED("mfa_enabled");

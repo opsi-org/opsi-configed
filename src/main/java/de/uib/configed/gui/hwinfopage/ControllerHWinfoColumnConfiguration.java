@@ -35,6 +35,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -135,8 +136,17 @@ public class ControllerHWinfoColumnConfiguration {
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
-				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return getHwColumnConfig();
+					}
+				})), KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				boolean result = super.isCellEditable(row, col);

@@ -14,12 +14,15 @@ import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 
 /**
  * Events that trigger specifc reload handlers, that reload required data.
@@ -80,6 +83,21 @@ public enum ReloadEvent {
 	 * Triggers {@link LicenseDataReloadHandler}.
 	 */
 	LICENSE_DATA_RELOAD("license_data_reload"),
+
+	/**
+	 * Triggers {@link LicenseContractDataReloadHandler}.
+	 */
+	LICENSE_CONTRACT_DATA_RELOAD("license_contract_data_reload"),
+
+	/**
+	 * Triggers {@link LicensePoolDataReloadHandler}.
+	 */
+	LICENSE_POOL_DATA_RELOAD("license_pool_data_reload"),
+
+	/**
+	 * Triggers {@link SoftwareLicense2LicensePoolDataReloadHandler}.
+	 */
+	SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD("software_license_to_license_pool_data_reload"),
 
 	/**
 	 * Triggers {@link HostDataReloadHandler}.

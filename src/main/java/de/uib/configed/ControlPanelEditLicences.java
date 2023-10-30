@@ -82,7 +82,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
 				columnNames, 0);
 		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
-				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection);
+				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection, true);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
 
 		tableModels.add(modelLicencekeys);
@@ -306,7 +306,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 				thePanel.getPanelLicencecontracts(), modelLicencecontracts, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.getLicenseDataService().editLicenceContract(
+						return persistenceController.getLicenseDataService().editLicenseContract(
 								(String) rowmap.get("licenseContractId"), (String) rowmap.get("partner"),
 								(String) rowmap.get("conclusionDate"), (String) rowmap.get("notificationDate"),
 								(String) rowmap.get("expirationDate"), (String) rowmap.get("notes"));
@@ -316,7 +316,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
 						return persistenceController.getLicenseDataService()
-								.deleteLicenceContract((String) rowmap.get("licenseContractId"));
+								.deleteLicenseContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));
 	}

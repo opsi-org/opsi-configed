@@ -24,6 +24,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
@@ -31,6 +32,7 @@ import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
@@ -83,11 +85,14 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private boolean foundVariantLicencepools;
 
-	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
+	private ConfigedMain configedMain;
+
+	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
 		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800);
 
 		this.myController = myController;
+		this.configedMain = configedMain;
 
 		panelSWnames = new PanelGenEditTable("", 0, false, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD },
 				true) {
@@ -328,10 +333,20 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void setTableModel() {
 		Logging.info(this, "init modelSWnames");
 
-		this.modelSWnames = new GenTableModel(null, new DefaultTableProvider(new RetrieverMapSource(columnNames,
-				classNames,
-				() -> (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD())), 0,
-				new int[] {}, panelSWnames, updateCollection) {
+		this.modelSWnames = new GenTableModel(null,
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+					}
+				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -459,16 +474,23 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		MapTableUpdateItemFactory updateItemFactoySWxLicencepool = new MapTableUpdateItemFactory(
 				columnNamesSWxLicencepool, 0);
 
-		modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
-				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						Logging.info(this, "retrieveMap for swName " + swName);
-						return produceModelSWxLicencepool(swName);
-					}
-				})),
+		if (modelSWxLicencepool == null) {
+			modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
+					new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, new MapRetriever() {
+						@Override
+						public void reloadMap() {
+							Logging.info(this, "retrieveMap for swName " + swName);
+							if (!configedMain.isAllLicenseDataReloaded()) {
+								persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+							}
+						}
 
-				keyCol, new int[] {}, panelSWnames, updateCollection);
+						@Override
+						public Map<String, Map<String, Object>> retrieveMap() {
+							return (Map) produceModelSWxLicencepool(swName);
+						}
+					})), keyCol, new int[] {}, panelSWnames, updateCollection);
+		}
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		Logging.info(this, "setTableModelSWxLicencepool, we reset the model");
 		modelSWxLicencepool.reset();

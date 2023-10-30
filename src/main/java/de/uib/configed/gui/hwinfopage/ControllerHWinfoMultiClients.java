@@ -9,6 +9,7 @@ package de.uib.configed.gui.hwinfopage;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import utils.Utils;
 
@@ -110,10 +112,19 @@ public class ControllerHWinfoMultiClients {
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 
-		model = new GenTableModel(null, new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-			Logging.info(this, "retrieveMap: getClient2HwRows");
-			return persistenceController.getHardwareDataService().getClient2HwRows(hosts);
-		})), 0, new int[] { KEY_COL }, panel, null);
+		model = new GenTableModel(null,
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						Logging.info(this, "retrieveMap: getClient2HwRows");
+						return persistenceController.getHardwareDataService().getClient2HwRows(hosts);
+					}
+				})), 0, new int[] { KEY_COL }, panel, null);
 
 		panel.setTableModel(model);
 		model.chainFilter(FILTER_SELECTED_CLIENTS, tableModelFilter);
