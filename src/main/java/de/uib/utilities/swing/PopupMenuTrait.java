@@ -21,7 +21,6 @@ import utils.PopupMouseListener;
 import utils.Utils;
 
 public class PopupMenuTrait extends JPopupMenu {
-
 	public static final int POPUP_SEPARATOR = 0;
 	public static final int POPUP_RELOAD = 4;
 

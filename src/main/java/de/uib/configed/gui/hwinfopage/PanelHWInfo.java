@@ -111,7 +111,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void buildPanel() {
-
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
@@ -154,10 +153,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
-
 			PopupMenuTrait popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD,
 					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
-
 				@Override
 				public void action(int p) {
 					switch (p) {
@@ -301,7 +298,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
 		for (Map<String, List<Map<String, Object>>> whc : hwConfig) {
-
 			if (whc != null) {
 				Map<String, Object> whcClass = whc.get("Class").get(0);
 				if (whcClass.get("Opsi").equals(hwClass)) {
@@ -317,7 +313,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
-
 		if (!hasData(node, reduceScanToByAuditClasses)) {
 			return new ArrayList<>();
 		}
@@ -535,7 +530,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,
 			Map<String, List<Map<String, Object>>> displayNames) {
-
 		String[] names = new String[devices.size()];
 
 		int num = 0;
@@ -561,7 +555,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void createIconNodes(String[] names, List<Map<String, Object>> devices, Icon classIcon,
 			IconNode classNode) {
-
 		Arrays.sort(names);
 
 		for (String name : names) {
@@ -581,7 +574,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void getLocalizedHashMap() {
-
 		hwOpsiToUI = new HashMap<>();
 
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {

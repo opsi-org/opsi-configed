@@ -550,7 +550,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
 		if (parent == null || parent.trim().isEmpty()) {
-
 			parent = SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 		}
 		jComboBoxParentMenuText.setSelectedItem(parent);

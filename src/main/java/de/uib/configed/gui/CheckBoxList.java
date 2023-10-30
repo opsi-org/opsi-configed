@@ -42,7 +42,6 @@ public class CheckBoxList extends JList<JCheckBox> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox, int index,
 				boolean isSelected, boolean cellHasFocus) {
-
 			checkbox.setEnabled(isEnabled());
 			checkbox.setFocusPainted(false);
 			checkbox.setBorderPainted(true);

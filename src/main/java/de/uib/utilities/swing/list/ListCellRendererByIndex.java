@@ -16,7 +16,6 @@ import javax.swing.JList;
 import utils.Utils;
 
 public class ListCellRendererByIndex extends StandardListCellRenderer {
-
 	private Map<String, String> mapOfStrings;
 	private Map<String, String> mapOfTooltips;
 

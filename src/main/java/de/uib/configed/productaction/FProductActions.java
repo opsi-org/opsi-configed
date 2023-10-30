@@ -16,7 +16,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
 public class FProductActions extends SecondaryFrame {
-
 	private ConfigedMain configedMain;
 
 	public FProductActions(ConfigedMain configedMain) {

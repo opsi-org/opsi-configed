@@ -21,7 +21,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-
 	// ---
 	public static final String DEPOT_OF_CLIENT_KEY = "depotId";
 	public static final String CLIENT_DESCRIPTION_KEY = "description";
@@ -342,7 +341,6 @@ public class HostInfo {
 	}
 
 	public void setBy(Map<String, Object> pcInfo) {
-
 		// shows pckey
 
 		if (pcInfo == null) {

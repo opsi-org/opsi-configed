@@ -15,7 +15,6 @@ import de.uib.utilities.logging.Logging;
 */
 
 public class UpdateCollection implements UpdateCommand, CountedCollection {
-
 	protected Collection<UpdateCommand> implementor;
 
 	// we delegate all Collection methods to this object extending only add()

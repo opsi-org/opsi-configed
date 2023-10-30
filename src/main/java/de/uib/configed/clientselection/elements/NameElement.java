@@ -15,7 +15,6 @@ import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class NameElement extends AbstractSelectElement {
-
 	public NameElement(String displayLabel) {
 		super(new String[] { "Name" }, displayLabel);
 	}

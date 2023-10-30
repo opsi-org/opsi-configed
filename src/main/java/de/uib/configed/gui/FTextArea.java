@@ -19,7 +19,6 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {
-
 	private JTextPane jTextPane = new JTextPane();
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList) {
@@ -42,7 +41,6 @@ public class FTextArea extends FGeneralDialog {
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
 			int preferredHeight) {
-
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
 		initFTextArea(preferredWidth, preferredHeight);
 	}

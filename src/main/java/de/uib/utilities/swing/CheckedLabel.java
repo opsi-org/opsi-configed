@@ -25,7 +25,6 @@ import de.uib.utilities.logging.Logging;
 
 //a class similar to JCheckBox
 public class CheckedLabel extends JPanel {
-
 	private static final int SET_CHECKED_ON = 1;
 	private static final int SET_CHECKED_OFF = 0;
 	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
@@ -142,7 +141,6 @@ public class CheckedLabel extends JPanel {
 		});
 
 		addKeyListener(new KeyAdapter() {
-
 			@Override
 			public void keyPressed(KeyEvent e) {
 				Logging.info(this, "event " + e);
@@ -152,7 +150,6 @@ public class CheckedLabel extends JPanel {
 
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
 					me.setSelected(selected);
 					notifyActionListeners(
 							new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
@@ -199,7 +196,6 @@ public class CheckedLabel extends JPanel {
 	}
 
 	public void setSelected(Boolean b) {
-
 		nullLabel.setVisible(b == null);
 		selectedLabel.setVisible(b != null && b);
 		unselectedLabel.setVisible(b != null && !b);

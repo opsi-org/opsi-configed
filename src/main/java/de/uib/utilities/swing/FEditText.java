@@ -79,7 +79,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textarea) {
-
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
@@ -96,13 +95,11 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 

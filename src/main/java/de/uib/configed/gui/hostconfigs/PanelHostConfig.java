@@ -29,7 +29,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
-
 	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;
 	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 

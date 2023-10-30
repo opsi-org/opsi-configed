@@ -57,14 +57,12 @@ public class FWakeClients extends FShowList {
 			Set<String> hostsToWakeOnThisTurn = new HashSet<>();
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
-
 				Logging.info(this, "act on depot " + depotEntry.getKey() + ", executioner != NONE  "
 						+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner())
 						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
 				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
-
 					if (executionerForDepots.get(depotEntry.getKey()) == null) {
 						AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depotEntry.getKey());
 						// we try to connect when the first client of a depot should be connected

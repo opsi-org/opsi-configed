@@ -70,7 +70,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private ToolTipManager ttm;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
-
 		@Override
 		public void removeValue(String key) {
 			Logging.info(this, "removing specific value for key " + key);
@@ -89,7 +88,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	}
 
 	private class SettingDefaultValuesHandler extends AbstractPropertyHandler {
-
 		@Override
 		public void removeValue(String key) {
 			Logging.info(this, "setting default value for key " + key);
@@ -164,7 +162,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			table.getTableHeader().setToolTipText(Configed.getResourceValue("EditMapPanel.PopupMenu.EditableToolTip"));
 
 			if (keylistExtendible) {
-
 				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
@@ -182,7 +179,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			}
 
 			if (entryRemovable) {
-
 				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
@@ -209,14 +205,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private void deleteEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
-
 			propertyHandler = defaultPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
@@ -228,7 +222,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private void deleteSpecificEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
@@ -246,14 +239,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private void removeDefaultAsSpecificEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
 					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
 			fAsk.setVisible(true);
 		} else if (names != null) {
-
 			propertyHandler = settingDefaultValuesPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
@@ -263,7 +254,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	}
 
 	protected JPopupMenu definePopup() {
-
 		Logging.info(this, "(EditMapPanelX) definePopup");
 
 		JPopupMenu result = new JPopupMenu();
@@ -331,7 +321,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 						jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 					} else {
-
 						Object gotValue = table.getValueAt(rowIndex, 1);
 						if (!defaultValue.equals(gotValue)) {
 							jc.setFont(jc.getFont().deriveFont(Font.BOLD));
@@ -466,7 +455,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		FEditText fed = new FEditText(initial, Configed.getResourceValue("EditMapPanel.KeyToAdd")) {
-
 			@Override
 			protected void commit() {
 				super.commit();
@@ -542,7 +530,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {
-
 		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " removeProperty for key " + key
 				+ " via  handler " + propertyHandler);
 

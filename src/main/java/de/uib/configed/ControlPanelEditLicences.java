@@ -51,7 +51,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	private ConfigedMain configedMain;
 
 	public ControlPanelEditLicences(ConfigedMain configedMain) {
-
 		// extending TabClientAdapter
 		thePanel = new PanelEditLicences(this);
 		this.configedMain = configedMain;
@@ -207,7 +206,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 				thePanel.getPanelSoftwarelicences(), modelSoftwarelicences, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> m) {
-
 						return persistenceController.getSoftwareDataService().editSoftwareLicence(
 								(String) m.get("softwareLicenseId"), (String) m.get("licenseContractId"),
 								(String) m.get("licenseType"),

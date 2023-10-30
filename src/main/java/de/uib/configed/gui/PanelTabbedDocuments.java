@@ -139,7 +139,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	// override in subclasses
 	public void loadDocument(String ident) {
-
 		Logging.debug(this, "loadDocument ident " + ident);
 	}
 
@@ -249,7 +248,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	}
 
 	private static void saveToZipFile(String pn, String fn, String[] lines) {
-
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
 			ZipEntry entry = new ZipEntry(fn);
@@ -264,7 +262,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	}
 
 	private static void writeToOutputStream(String[] lines, ZipOutputStream out) {
-
 		for (int i = 0; i < lines.length; i++) {
 			try {
 				byte[] buffer = lines[i].getBytes(StandardCharsets.UTF_8);

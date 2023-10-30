@@ -7,7 +7,6 @@
 package de.uib.utilities.table.gui;
 
 public interface SearchTargetModel {
-
 	String getColumnName(int col);
 
 	int findColumn(String name);

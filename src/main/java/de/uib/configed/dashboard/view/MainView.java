@@ -48,7 +48,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MainView implements View {
-
 	private static final String DATA_CHANGED_SERVICE = "changed";
 	private static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
 

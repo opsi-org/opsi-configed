@@ -13,7 +13,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public final class PersistenceControllerFactory {
-
 	private static OpsiServiceNOMPersistenceController staticPersistControl;
 
 	// private constructor to hide the implicit public one

@@ -14,7 +14,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
 public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
-
 	private static final int PRIORITY = 0;
 
 	protected FGeneralDialog dialog;
@@ -169,7 +168,6 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getMenuText() {
-
 		return "File Upload";
 	}
 

@@ -14,12 +14,10 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToPDF;
 
 public class SwPdfExporter extends AbstractSWExporter {
-
 	private JTable theTable;
 	private ExporterToPDF exportTable;
 
 	public SwPdfExporter() {
-
 		theTable = new JTable();
 		exportTable = new ExporterToPDF(theTable);
 	}

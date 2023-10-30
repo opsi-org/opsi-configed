@@ -38,7 +38,6 @@ class JsonParser {
 		int i;
 
 		while ((i = reader.read()) != -1) {
-
 			Logging.debug(this, (char) i + " " + currentPosition.toString());
 			managePosition();
 			char c = (char) i;

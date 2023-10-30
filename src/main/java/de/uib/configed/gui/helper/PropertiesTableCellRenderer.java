@@ -16,14 +16,12 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-
 		Object formattedValue = formatList(value);
 
 		return super.getTableCellRendererComponent(table, formattedValue, isSelected, hasFocus, row, column);
 	}
 
 	private static Object formatList(Object value) {
-
 		Object result = value;
 		if (value != null) {
 			String s = value.toString();

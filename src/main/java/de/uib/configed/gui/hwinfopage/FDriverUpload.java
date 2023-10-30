@@ -15,7 +15,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
 public class FDriverUpload extends SecondaryFrame {
-
 	private PanelDriverUpload panelDriverUpload;
 
 	private ConfigedMain configedMain;

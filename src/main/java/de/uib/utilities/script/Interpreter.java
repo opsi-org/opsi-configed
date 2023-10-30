@@ -17,7 +17,6 @@ import de.uib.utilities.logging.Logging;
 
 //a very rough class for simple command interpreting
 public class Interpreter {
-
 	private Map<String, String> specialValues;
 
 	private String command;
@@ -73,7 +72,6 @@ public class Interpreter {
 		}
 
 		if (partBuff != null) {
-
 			result.add(partBuff.toString());
 		}
 

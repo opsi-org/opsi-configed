@@ -140,7 +140,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setLoglevelStyles() {
-
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
 		StyleConstants.setForeground(logLevelStyles[1], Globals.LOG_COLOR_ESSENTIAL);
 
@@ -318,7 +317,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void initPopupMenu() {
-
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
@@ -409,7 +407,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
 	private static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-
 		ImmutableDefaultStyledDocument(StyleContext styles) {
 			super(styles);
 		}
@@ -553,7 +550,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				}
 
 				if (show) {
-
 					docLinestartPosition2lineCount.put(document.getLength(), i);
 					lineCount2docLinestartPosition.put(i, document.getLength());
 
@@ -583,7 +579,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void activateShowLevel() {
-
 		Integer level = sliderLevel.getValue();
 		if (level > maxExistingLevel) {
 			level = maxExistingLevel;
@@ -644,7 +639,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCaretPosition(startPosition);
 
 		if (jComboBoxSearch.getSelectedIndex() != -1) {
-
 			try {
 				jTextPane.scrollRectToVisible(jTextPane
 						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
@@ -670,7 +664,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void parse() {
-
 		lineLevels = new int[lines.length];
 		lineStyles = new Style[lines.length];
 
@@ -681,7 +674,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StringBlock testBlock = new StringBlock();
 
 		for (int i = 0; i < lines.length; i++) {
-
 			int levelForLine = getLoglevelForLine(lines[i]);
 
 			lineLevels[i] = levelForLine;
@@ -696,7 +688,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			nextBlock.forward(nextStartI, '[', ']');
 
 			if (nextBlock.hasFound()) {
-
 				nextStartI = nextBlock.getIEnd() + 1;
 
 				testBlock.forward(nextStartI, '(', ')');
@@ -707,13 +698,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			if (nextBlock.hasFound()) {
-
 				nextStartI = nextBlock.getIEnd() + 1;
 				nextBlock.forward(nextStartI, '[', ']');
 			}
 
 			if (nextBlock.hasFound()) {
-
 				type = nextBlock.getContent();
 
 				typeIndex = typesList.indexOf(type);
@@ -930,7 +919,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource() == buttonSearch) {
 			search();
 		} else if (e.getSource() == jComboBoxSearch) {

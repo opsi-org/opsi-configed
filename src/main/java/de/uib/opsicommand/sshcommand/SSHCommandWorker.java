@@ -124,7 +124,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 
 			while (true) {
 				while (in.available() > 0) {
-
 					int i = in.read(tmp, 0, size);
 					Logging.info(this, "doInBackground i " + i);
 
@@ -161,14 +160,12 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 					}
 					if (withGui) {
 						for (String line : str.split("\n")) {
-
 							Logging.debug(this, " doInBackground publish " + progress + ": " + line);
 							publish(line);
 							progress++;
 							Utils.threadSleep(this, timeStepMillis);
 						}
 					} else {
-
 						for (String line : str.split("\n")) {
 							Logging.debug(this, "line: " + line);
 						}
@@ -227,7 +224,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 		Logging.info(this, "chunks " + chunks.size());
 
 		if (outputDialog != null) {
-
 			for (String line : chunks) {
 				Logging.debug(this, "process " + line);
 				SSHOutputCollector.appendValue(line);

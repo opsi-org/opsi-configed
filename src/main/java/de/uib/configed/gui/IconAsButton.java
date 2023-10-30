@@ -25,7 +25,6 @@ import utils.Utils;
  * a button-like panel
  */
 public class IconAsButton extends JPanel implements MouseListener {
-
 	private ImageIcon iconActive;
 	private ImageIcon iconInactive;
 	private ImageIcon iconOver;
@@ -98,7 +97,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	@Override
 	public void setEnabled(boolean b) {
-
 		super.setEnabled(b);
 		setIcon();
 		if (isEnabled()) {
@@ -123,12 +121,9 @@ public class IconAsButton extends JPanel implements MouseListener {
 					label.setIcon(iconInactive);
 				}
 			} else {
-
 				if (activated && iconActive != null) {
-
 					label.setIcon(iconActive);
 				} else {
-
 					label.setIcon(iconInactive);
 				}
 			}
@@ -178,7 +173,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		if (isEnabled()) {
 			ActionEvent action = new ActionEvent(this, 1, description);
 			fireActionPerformed(action);

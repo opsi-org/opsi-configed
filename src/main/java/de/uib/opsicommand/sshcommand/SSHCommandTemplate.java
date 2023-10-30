@@ -17,7 +17,6 @@ import de.uib.utilities.logging.Logging;
  * This class represent a ssh-command
  **/
 public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemplate>, SSHMultiCommand {
-
 	private static final String CONFIDENTIAL_INFORMATION = null;
 
 	/** boolean needParameter = false **/
@@ -82,7 +81,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	private void initValues(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
-
 		setId(id);
 		setMenuText(mt);
 		setNeedSudo(ns);
@@ -129,7 +127,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		if (cList != null) {
 			sshCommands.clear();
 			for (String c : cList) {
-
 				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
 				sshCommands.add(sshc);
 				if (firstInitCommands) {

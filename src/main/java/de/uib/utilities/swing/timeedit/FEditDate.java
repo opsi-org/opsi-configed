@@ -25,7 +25,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
 
 public class FEditDate extends FEdit implements DateSelectionListener, MouseListener {
-
 	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
 	private DateTimeEditor dateEditor;
 
@@ -160,7 +159,6 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
 			commit();
 		}

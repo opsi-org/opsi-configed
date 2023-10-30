@@ -30,7 +30,6 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
-
 	private PanelLicencesReconciliation thePanel;
 	private GenTableModel modelLicencesReconciliation;
 

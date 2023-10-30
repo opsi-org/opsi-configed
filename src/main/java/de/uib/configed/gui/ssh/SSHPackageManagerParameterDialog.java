@@ -25,7 +25,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
-
 	protected int frameWidth = 900;
 	protected int frameHeight = 600;
 
@@ -64,7 +63,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
-
 		jButtonHelp = new JButton(Configed.getResourceValue("SSHConnection.buttonHelp"));
 
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));

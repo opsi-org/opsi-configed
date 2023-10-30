@@ -94,7 +94,6 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
-
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
 		buttonRemoveSpecificValues.setEnabled(activated);
 	}

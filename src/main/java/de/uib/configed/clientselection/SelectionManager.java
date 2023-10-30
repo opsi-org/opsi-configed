@@ -151,7 +151,6 @@ public class SelectionManager {
 	}
 
 	public List<String> selectClients() {
-
 		AbstractSelectOperation operation = getTopOperation();
 		if (operation == null) {
 			Logging.info(this, "Nothing selected");

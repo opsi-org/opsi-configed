@@ -21,7 +21,6 @@ import de.uib.utilities.logging.Logging;
 
 // Painter for underlined highlights
 public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-
 	@Override
 	public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
 		// Do nothing: this method will never be called
@@ -29,7 +28,6 @@ public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
 
 	@Override
 	public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-
 		Rectangle alloc = null;
 		if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {
 			if (bounds instanceof Rectangle) {

@@ -29,7 +29,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
-
 	private JDialog main;
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 

@@ -36,7 +36,6 @@ public class SeparatedDocument extends CheckedDocument {
 			if (appendCharIfAllowed(textBuf, startchar)) {
 				try {
 					if (checkMask && getText(offset, 1).equals(separator)) {
-
 						// remove old separators
 						remove(offset, 1);
 					}

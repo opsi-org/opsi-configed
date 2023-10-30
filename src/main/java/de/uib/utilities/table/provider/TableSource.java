@@ -9,7 +9,6 @@ package de.uib.utilities.table.provider;
 import java.util.List;
 
 public interface TableSource {
-
 	List<String> retrieveColumnNames();
 
 	List<String> retrieveClassNames();

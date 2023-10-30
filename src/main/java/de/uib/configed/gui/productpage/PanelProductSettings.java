@@ -91,7 +91,6 @@ import utils.PopupMouseListener;
 import utils.Utils;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
-
 	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
@@ -255,7 +254,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		installationInfoTableCellRenderer = new ColoredTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_INFO)) {
-
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
@@ -358,7 +356,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
-
 		public ProductNameTableCellRenderer(String tooltipPrefix) {
 			super(tooltipPrefix);
 		}
@@ -366,7 +363,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			// Will be done if c==null is true since instanceof
@@ -551,7 +547,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			strippIt = true;
 			String[] actCol = new String[jTable.getColumnCount()];
 			for (int i = 0; i < jTable.getColumnCount(); i++) {
-
 				Object cellValue = jTable.getValueAt(j, i);
 
 				String cellValueString = cellValue == null ? "" : cellValue.toString();
@@ -577,7 +572,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private boolean shouldStrippIt(String columnName, String cellValueString) {
-
 		boolean strippIt = false;
 
 		switch (columnName) {
@@ -880,7 +874,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PACKAGE_VERSION)) > -1) {
-
 			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			packageversionColumn.setPreferredWidth(WIDTH_COLUMN_PACKAGE_VERSION);
 			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);
@@ -913,7 +906,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			// editmappanelx
 			Map<String, ListCellOptions> productpropertyOptionsMap,
 			ProductpropertiesUpdateCollection updateCollection) {
-
 		infoPane.setProductId(productID);
 		infoPane.setProductName(productTitle);
 		infoPane.setProductInfo(productInfo);

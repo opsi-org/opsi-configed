@@ -38,7 +38,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 
 public class Main {
-
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes
 
@@ -140,7 +139,6 @@ public class Main {
 	}
 
 	private static void parseArgs(CommandLine cmd) {
-
 		if (cmd.hasOption("d")) {
 			Logging.setLogDirectoryName(cmd.getOptionValue("d"));
 		}

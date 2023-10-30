@@ -15,7 +15,6 @@ import de.uib.utilities.logging.Logging;
  * Select AND or OR Created for the ClientSelectionDialog.
  */
 public class AndOrSelectButtonByIcon extends IconAsButton implements ActionListener {
-
 	public AndOrSelectButtonByIcon() {
 		super("and/or", "images/boolean_and_or_disabled.png", "images/boolean_and_or_over.png",
 				"images/boolean_and_or.png", null);

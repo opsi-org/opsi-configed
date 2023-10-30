@@ -22,7 +22,6 @@ import de.uib.utilities.logging.Logging;
  */
 
 public class RunningInstances<T> {
-
 	private String classname;
 	private String askForLeave;
 

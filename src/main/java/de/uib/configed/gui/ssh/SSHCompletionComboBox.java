@@ -12,7 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 public class SSHCompletionComboBox<E> extends JComboBox<E> {
-
 	public SSHCompletionComboBox(ComboBoxModel<E> cbm) {
 		super(cbm);
 	}

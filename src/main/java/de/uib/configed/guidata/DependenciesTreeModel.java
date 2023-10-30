@@ -21,7 +21,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
-
 	private Graph graph;
 
 	private List<String> productList;
@@ -39,7 +38,6 @@ public class DependenciesTreeModel {
 	}
 
 	private void initGraph(String depotId) {
-
 		if (depotId == null) {
 			depotId = persistenceController.getDepotDataService().getDepot();
 		}
@@ -81,7 +79,6 @@ public class DependenciesTreeModel {
 	}
 
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
-
 		Logging.debug(this, mainProductId + "-tree wird erstellt");
 
 		if (graphIsInitialized && productMap.containsKey(mainProductId)) {

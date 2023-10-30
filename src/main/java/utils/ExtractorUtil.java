@@ -29,7 +29,6 @@ import org.codehaus.plexus.util.IOUtil;
 import de.uib.utilities.logging.Logging;
 
 public final class ExtractorUtil {
-
 	private ExtractorUtil() {
 	}
 

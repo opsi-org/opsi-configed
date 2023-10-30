@@ -12,7 +12,6 @@ import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.DateGreaterThanOperation;
 
 public class OpsiDataDateGreaterThanOperation extends DateGreaterThanOperation implements ExecutableOperation {
-
 	private AbstractOpsiDataDateMatcher matcher;
 
 	public OpsiDataDateGreaterThanOperation(String map, String key, String data, AbstractSelectElement element) {

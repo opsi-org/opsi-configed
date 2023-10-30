@@ -41,7 +41,6 @@ public class SwExporter implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		Logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
 				+ showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 

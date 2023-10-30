@@ -18,7 +18,6 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 
 public class HostGroups extends TreeMap<String, Map<String, String>> {
-
 	OpsiServiceNOMPersistenceController persistenceController;
 
 	public HostGroups(Map<String, Map<String, String>> source) {

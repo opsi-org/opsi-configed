@@ -17,7 +17,6 @@ import javax.swing.JList;
 import utils.Utils;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
-
 	// this is the normal preferred height for components with content.
 	// We want this height also for empty components
 	private static final int CELL_HEIGHT = 20;

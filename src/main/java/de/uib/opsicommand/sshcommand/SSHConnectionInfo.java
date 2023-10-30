@@ -10,7 +10,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public final class SSHConnectionInfo {
-
 	private static SSHConnectionInfo instance;
 
 	private boolean sshenabled = true;

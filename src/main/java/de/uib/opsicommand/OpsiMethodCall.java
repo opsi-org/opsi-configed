@@ -17,7 +17,6 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
-
 	public static final boolean BACKGROUND_DEFAULT = true;
 	private static final int DEFAULT_JSON_ID = 1;
 	private static final List<String> collectedCalls = new ArrayList<>();
@@ -92,7 +91,6 @@ public class OpsiMethodCall {
 		sb.append("[");
 		if (parameters != null && parameters.length > 0) {
 			for (Object paramI : parameters) {
-
 				if (paramI instanceof Object[]) {
 					sb.append(Arrays.toString((Object[]) paramI));
 				} else if (paramI instanceof Map) {

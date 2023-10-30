@@ -43,7 +43,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
 public class PanelCompleteWinProducts extends JPanel implements NameProducer {
-
 	// file name conventions
 
 	private String winProduct = "";
@@ -225,7 +224,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void initComponents() {
-
 		final JPanel panel = this;
 
 		fieldProductKey = new JTextField("");
@@ -237,7 +235,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
-
 			int returnVal = chooserFolder.showOpenDialog(panel);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -258,7 +255,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		fieldPathInstallFiles = new JTextField();
 
 		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
-
 			int returnVal = chooserFolder.showOpenDialog(panel);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -287,7 +283,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void execute() {
-
 		rootFrame.activateLoadingCursor();
 
 		try {
@@ -342,7 +337,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
 			if (!oldProductKey.equals(productKey)) {
-
 				int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 						Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),

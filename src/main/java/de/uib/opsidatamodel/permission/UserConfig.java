@@ -130,7 +130,6 @@ public class UserConfig {
 	}
 
 	public static Set<String> getUserListKeys() {
-
 		if (userListKeys == null) {
 			userListKeys = new LinkedHashSet<>();
 
@@ -178,12 +177,10 @@ public class UserConfig {
 	}
 
 	public void setValues(String key, List<Object> values) {
-
 		valuesMap.put(key, values);
 	}
 
 	public void setPossibleValues(String key, List<Object> possibleValues) {
-
 		possibleValuesMap.put(key, possibleValues);
 	}
 

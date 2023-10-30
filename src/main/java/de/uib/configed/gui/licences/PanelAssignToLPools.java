@@ -35,7 +35,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-
 	private static final int SPLIT_PANE_H_MARGIN = 1;
 	public static final int TABLES_MAX_WIDTH = 1000;
 
@@ -69,7 +68,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	}
 
 	private void initComponents() {
-
 		// splitpane
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.7);
@@ -479,7 +477,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	}
 
 	private void buttonSupplementSimilarAction() {
-
 		if (!fSoftwarename2LicencePool.isVisible()) {
 			fSoftwarename2LicencePool.setLocationRelativeTo(Utils.getMasterFrame());
 		}

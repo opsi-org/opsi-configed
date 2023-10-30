@@ -15,7 +15,6 @@ import java.util.Set;
 import de.uib.utilities.logging.Logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
-
 	private Map<Object, Boolean> selectionInfo;
 
 	@Override
@@ -46,7 +45,6 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 
 	@Override
 	public boolean test(List<Object> row) {
-
 		if (selectionInfo == null) {
 			return true;
 		}

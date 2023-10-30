@@ -153,14 +153,12 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	// returns false if the "error" key does not exist or is null
 	// Otherwise returns true which means call was successful
 	private boolean checkResponse(Map<String, Object> retrieved) {
-
 		if (retrieved == null) {
 			return false;
 		} else {
 			String errorMessage = getErrorFromResponse(retrieved);
 
 			if (errorMessage != null) {
-
 				Logging.error("Opsi service error: " + errorMessage);
 
 				return false;
@@ -187,7 +185,6 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
-
 		List<Object> resultlist = getListResult(omc);
 
 		if (resultlist == null) {

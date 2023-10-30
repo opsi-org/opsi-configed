@@ -39,7 +39,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
 
 public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManagerParameterDialog {
-
 	private JPanel uninstallPanel = new JPanel();
 
 	private JLabel jLabelUninstall = new JLabel();
@@ -89,7 +88,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 			@Override
 			public void doAction2() {
-
 				textFieldSelectedDepots.setText(produceDepotParameter());
 				super.doAction2();
 			}
@@ -150,7 +148,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 						.indexOf(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
-
 					sb.append(possibleDepots.get(i));
 					sb.append(",");
 				}
@@ -227,7 +224,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	}
 
 	private void init() {
-
 		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));

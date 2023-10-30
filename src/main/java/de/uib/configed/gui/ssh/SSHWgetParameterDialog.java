@@ -95,7 +95,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

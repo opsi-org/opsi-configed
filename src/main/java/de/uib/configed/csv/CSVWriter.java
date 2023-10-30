@@ -12,12 +12,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 public class CSVWriter {
-
 	private CSVFormat format;
 	private BufferedWriter writer;
 
 	public CSVWriter(Writer writer, CSVFormat format) {
-
 		if (writer instanceof BufferedWriter) {
 			this.writer = (BufferedWriter) writer;
 		} else {

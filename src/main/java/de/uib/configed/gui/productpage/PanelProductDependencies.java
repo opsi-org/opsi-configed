@@ -18,7 +18,6 @@ import de.uib.configed.guidata.DependenciesModel;
 import de.uib.utilities.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModel.DependenciesModelListener {
-
 	// The label shown on top of the dependencies-panel
 	private JLabel depotLabel;
 	private DependenciesTreePanel dependenciesTreePanel;
@@ -34,7 +33,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	}
 
 	private void initComponents() {
-
 		JLabel labelInfoProductDependenciesTable = new JLabel(
 				Configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTable"));
 		JLabel labelInfoProductDependenciesTree = new JLabel(
@@ -92,7 +90,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	}
 
 	public void setEditValues(String productId, String depotId) {
-
 		Logging.info(this, "set product  " + productId);
 
 		dependenciesModel.setActualProduct(depotId, productId);

@@ -303,7 +303,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	// called by valueChanged method of ListSelectionListener
 	public void validateWindowsSoftwareKeys() {
-
 		String selectedLicencePool = getSelectedLicencePool();
 		Logging.debug(this, "validateWindowsSoftwareKeys for licencePoolID " + selectedLicencePool);
 
@@ -708,7 +707,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	public boolean updateLicencepool(String poolId, List<String> softwareIds) {
-
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
 

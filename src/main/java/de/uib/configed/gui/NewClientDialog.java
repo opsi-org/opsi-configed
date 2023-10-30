@@ -598,7 +598,6 @@ public final class NewClientDialog extends FGeneralDialog {
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
 			final boolean wanConfig, final String group, final String netbootProduct) {
-
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
 					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct);

@@ -18,7 +18,6 @@ import de.uib.utilities.thread.WaitingCycle;
 import utils.Utils;
 
 public class IconButton extends JButton {
-
 	/** A description used for tooltip if button is active */
 	private String tooltipActive;
 

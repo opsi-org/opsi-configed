@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class OpsiHwAuditDeviceClass {
-
 	public static final String CONFIG_KEY = "configed.usecolumns_hwaudit";
 
 	public static final String HOST_ASSIGNED_TABLE_TYPE = "CONFIG";

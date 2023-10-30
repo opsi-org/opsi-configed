@@ -19,7 +19,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import de.uib.utilities.logging.Logging;
 
 public class JComboBoxToolTip extends JComboBox<String> {
-
 	private Map<String, String> selectValues;
 
 	private boolean addEmpty;
@@ -35,7 +34,6 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
-
 				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
 				if (-1 < index && index < tooltips.size()) {
 					list.setToolTipText(tooltips.get(index));

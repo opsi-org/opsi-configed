@@ -52,7 +52,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 	@Override
 	public Void doInBackground() {
-
 		// startAnotherProcess()
 
 		long timeStepMillis = 500;

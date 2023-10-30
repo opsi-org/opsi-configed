@@ -53,7 +53,6 @@ public class TabbedPaneX extends JPanel {
 			// the recursion breaks since newVisualIndex is identical with
 			// the old and does not yield a different value
 			if (newS != s) {
-
 				jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
 			}
 		});

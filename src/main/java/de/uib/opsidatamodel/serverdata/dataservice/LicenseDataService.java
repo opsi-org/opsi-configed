@@ -452,7 +452,6 @@ public class LicenseDataService {
 
 	// returns the ID of the edited data record
 	public String editLicencePool(String licensePoolId, String description) {
-
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}

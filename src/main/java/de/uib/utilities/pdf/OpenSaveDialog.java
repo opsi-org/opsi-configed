@@ -20,14 +20,12 @@ import de.uib.configed.gui.GeneralFrame;
 import de.uib.utilities.logging.Logging;
 
 public class OpenSaveDialog implements ActionListener {
-
 	private JButton openBtn;
 	private JButton saveBtn;
 	private Boolean saveAction;
 	private GeneralFrame dialogView;
 
 	public OpenSaveDialog(String title) {
-
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
 
 		saveBtn.addActionListener(this);

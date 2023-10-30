@@ -32,7 +32,6 @@ import de.uib.opsicommand.POJOReMapper;
 import de.uib.utilities.logging.Logging;
 
 public final class LicensingInfoMap {
-
 	public static final String RESULT = "result";
 	public static final String CLIENT_NUMBERS_INFO = "client_numbers";
 	public static final String ALL = "all";
@@ -261,7 +260,6 @@ public final class LicensingInfoMap {
 		List<String> result = new ArrayList<>();
 
 		if (jOResult.containsKey(OBSOLETE_MODULES)) {
-
 			result = POJOReMapper.remap(jOResult.get(OBSOLETE_MODULES), new TypeReference<List<String>>() {
 			});
 		}
@@ -425,7 +423,6 @@ public final class LicensingInfoMap {
 
 					moduleInfo.put(AVAILABLE, available);
 					if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
-
 						if (key.equals(latestDateString)) {
 							currentCloseToLimitModuleList.add(currentModule);
 						}
@@ -516,7 +513,6 @@ public final class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0) {
 					newest = key;
@@ -537,7 +533,6 @@ public final class LicensingInfoMap {
 		LocalDate now = LocalDate.now();
 
 		for (String key : dates) {
-
 			LocalDate thisDate = LocalDate.parse(key);
 			if (now.compareTo(thisDate) >= 0) {
 				newest = thisDate;
@@ -585,7 +580,6 @@ public final class LicensingInfoMap {
 	private String checkTimeLeft(Map<String, Object> moduleInfo) {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-
 			List<?> lics = (List<?>) moduleInfo.get(LICENSE_IDS);
 			String validUntil;
 			LocalDate now = LocalDate.now();
@@ -630,10 +624,8 @@ public final class LicensingInfoMap {
 				if (module.equals(MODULE_MACOS_AGENT)) {
 					cNum = clientNumbersMap.get(MAC_OS).toString();
 				} else if (module.equals(MODULE_LINUX_AGENT)) {
-
 					cNum = clientNumbersMap.get(LINUX).toString();
 				} else {
-
 					cNum = clientNumbersMap.get(ALL).toString();
 				}
 
@@ -666,7 +658,6 @@ public final class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
 			Map<String, Map<String, Map<String, Object>>> map) {
-
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
 		if (resultMap.get(latestDateString) != null) {

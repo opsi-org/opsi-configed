@@ -13,7 +13,6 @@ import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
-
 	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
 			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
 			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),
@@ -50,7 +49,6 @@ public class ModulePermissionValue {
 	}
 
 	private static Boolean checkBoolean(Object ob) {
-
 		Boolean result = null;
 
 		if (ob instanceof Boolean) {

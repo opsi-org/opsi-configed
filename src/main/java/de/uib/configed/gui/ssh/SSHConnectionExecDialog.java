@@ -52,7 +52,6 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	private void initGUI() {
-
 		jButtonKillProcess = new IconButton(Configed.getResourceValue("SSHConnection.buttonKillProcess"),
 				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
 		jButtonKillProcess
@@ -110,7 +109,6 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void appendLater(String line) {
-
 		append(line);
 	}
 

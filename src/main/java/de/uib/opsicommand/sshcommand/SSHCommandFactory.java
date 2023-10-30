@@ -188,7 +188,6 @@ public final class SSHCommandFactory {
 	}
 
 	private static void addAditionalParamCommands() {
-
 		sshCommandsParam.add(new CommandPackageUpdater());
 		sshCommandsParam.add(new CommandOpsiPackageManagerInstall());
 		sshCommandsParam.add(new CommandOpsiPackageManagerUninstall());
@@ -248,7 +247,6 @@ public final class SSHCommandFactory {
 	 **/
 	public static SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
-
 		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 		// ArrayList! JsonArray muss nicht sortiert sein!"
 

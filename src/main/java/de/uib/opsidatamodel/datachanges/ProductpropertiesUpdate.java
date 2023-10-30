@@ -28,16 +28,13 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-
 		if (newdata instanceof ConfigName2ConfigValue) {
-
 			persistenceController.getProductDataService().setProductProperties(pcname, productname, newdata);
 		}
 	}
 
 	public void revert() {
 		if (newdata instanceof ConfigName2ConfigValue) {
-
 			((ConfigName2ConfigValue) newdata).rebuild();
 		}
 	}

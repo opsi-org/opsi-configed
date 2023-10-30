@@ -22,7 +22,6 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 
 		workbench = PersistenceControllerFactory.getPersistenceController().getConfigDataService()

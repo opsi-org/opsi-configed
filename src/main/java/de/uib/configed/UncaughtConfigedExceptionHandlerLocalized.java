@@ -13,7 +13,6 @@ import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 public class UncaughtConfigedExceptionHandlerLocalized extends UncaughtConfigedExceptionHandler {
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
-
 		if (e instanceof Exception) {
 			Logging.warning("Error in thread " + t, e);
 

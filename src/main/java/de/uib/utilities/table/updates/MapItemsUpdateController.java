@@ -42,13 +42,11 @@ public class MapItemsUpdateController implements UpdateController {
 		String lastKeyValue = "";
 
 		while (iter.hasNext() && success) {
-
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 
 			Logging.debug(this, " handling updateItem " + updateItem);
 
 			if (updateItem.getSource() == this.tablemodel) {
-
 				if (updateItem instanceof MapDeliveryItem) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
 
@@ -111,7 +109,6 @@ public class MapItemsUpdateController implements UpdateController {
 
 	@Override
 	public boolean cancelChanges() {
-
 		Iterator<TableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();

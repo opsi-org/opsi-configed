@@ -12,7 +12,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
 
 public class CommandRepositoryUpload extends CommandSFTPUpload {
-
 	public CommandRepositoryUpload() {
 		super.setTitle("Repo-file Upload");
 		super.setBaseName("Repo-file Upload");
@@ -39,7 +38,6 @@ public class CommandRepositoryUpload extends CommandSFTPUpload {
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-
 		dialog = new SSHRepositoryUploadDialog();
 	}
 

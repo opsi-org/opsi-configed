@@ -99,7 +99,6 @@ public class DefaultEditMapPanel extends JPanel {
 
 	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
-
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
 		this.keylistExtendible = keylistExtendible;

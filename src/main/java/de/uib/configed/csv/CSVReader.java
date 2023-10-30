@@ -34,7 +34,6 @@ public class CSVReader {
 	}
 
 	public CSVReader(Reader reader, CSVParser parser, int startLine, List<String> headerNames) {
-
 		if (reader instanceof BufferedReader) {
 			this.reader = (BufferedReader) reader;
 		} else {
@@ -85,7 +84,6 @@ public class CSVReader {
 	}
 
 	private Map<String, Object> createLineAsMap(String[] csvLine) {
-
 		List<String> headers = headerNames;
 
 		if (headers == null) {

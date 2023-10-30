@@ -194,7 +194,6 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 

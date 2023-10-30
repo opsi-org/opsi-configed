@@ -89,7 +89,6 @@ public class IconNode extends DefaultMutableTreeNode {
 	 * Try to create grayed icon from aIcon and return it, or return null.
 	 */
 	private static Icon createDisabledIcon(Icon anIcon) {
-
 		// copied from your example: e601. Creating a Gray Version of an Icon
 		if (anIcon instanceof ImageIcon) {
 			Image grayImage = GrayFilter.createDisabledImage(((ImageIcon) anIcon).getImage());

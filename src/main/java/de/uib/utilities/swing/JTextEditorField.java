@@ -40,7 +40,6 @@ public class JTextEditorField extends JTextField implements KeyListener {
 	}
 
 	public boolean isChangedText() {
-
 		if (lastSetS == null && getText() == null) {
 			return false;
 		}
@@ -56,7 +55,6 @@ public class JTextEditorField extends JTextField implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			setText(lastSetS);
 		}

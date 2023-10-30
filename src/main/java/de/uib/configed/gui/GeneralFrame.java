@@ -20,7 +20,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class GeneralFrame extends JDialog implements ActionListener {
-
 	private JButton jButton1 = new JButton();
 
 	public GeneralFrame(Frame owner, String title, boolean modal) {
@@ -30,12 +29,10 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void setup() {
-
 		pack();
 	}
 
 	public void addPanel(JPanel pane) {
-
 		getContentPane().add(pane);
 	}
 
@@ -69,9 +66,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource() == jButton1) {
-
 			doAction1();
 		}
 	}

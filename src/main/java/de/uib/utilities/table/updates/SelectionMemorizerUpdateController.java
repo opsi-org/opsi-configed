@@ -31,7 +31,6 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 
 	@Override
 	public boolean saveChanges() {
-
 		Logging.debug(this, "keysPanel is null " + (keysPanel == null));
 		if (keysPanel.getSelectedRow() < 0) {
 			Logging.info(this, "no row selected");

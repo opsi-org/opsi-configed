@@ -31,7 +31,6 @@ public class JTextHideField extends JPanel {
 	private boolean multiValue;
 
 	private static final class FixedDocument extends PlainDocument {
-
 		private String fixed = "xxx";
 
 		private void setFixed(String s) {
@@ -49,7 +48,6 @@ public class JTextHideField extends JPanel {
 	public JTextHideField() {
 		invisibleField = new JPasswordField();
 		visibleField = new JTextField() {
-
 			@Override
 			protected Document createDefaultModel() {
 				return new FixedDocument();

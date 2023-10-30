@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import utils.Utils;
 
 public class LabelChecked extends JLabel {
-
 	private Icon iconChecked = Utils.createImageIcon("images/checked_box_blue_14.png", "");
 	private Icon iconUnchecked = Utils.createImageIcon("images/checked_box_blue_empty_14.png", "");
 	private Icon iconEmpty = Utils.createImageIcon("images/checked_void.png", "");

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class SSHOutputCollector {
-
 	private static final List<String> values = new ArrayList<>();
 
 	private SSHOutputCollector() {

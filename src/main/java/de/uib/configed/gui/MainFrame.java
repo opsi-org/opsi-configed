@@ -132,7 +132,6 @@ import utils.Utils;
 
 public class MainFrame extends JFrame
 		implements WindowListener, KeyListener, MouseListener, ActionListener, ComponentListener {
-
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
@@ -426,7 +425,6 @@ public class MainFrame extends JFrame
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
-
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -893,7 +891,6 @@ public class MainFrame extends JFrame
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
-
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
 				+ SSHConnectionInfo.getInstance().getHost();
 
@@ -1273,7 +1270,6 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 	// icon pane
 	private void setupIcons1() {
-
 		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReload"), "images/reload.gif",
 				"images/reload_over.gif", " ");
 		iconButtonReload.setFocusable(false);
@@ -2430,7 +2426,6 @@ public class MainFrame extends JFrame
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
-
 			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
 
 			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
@@ -2622,7 +2617,6 @@ public class MainFrame extends JFrame
 	}
 
 	private void getSessionInfo() {
-
 		configedMain.getSessionInfo();
 	}
 
