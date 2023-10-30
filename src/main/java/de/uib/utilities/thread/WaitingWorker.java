@@ -34,7 +34,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		this.statusLabel = waitingSleeper.getLabel();
 		startActionMillis = waitingSleeper.getStartActionMillis();
 		timeoutReached = false;
-
 	}
 
 	public void setReady() {
@@ -78,7 +77,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			publish(elapsedMillis);
 
 			timeoutReached = elapsedMillis >= waitingSleeper.getWaitingMillis();
-
 		}
 
 		Logging.info(this,

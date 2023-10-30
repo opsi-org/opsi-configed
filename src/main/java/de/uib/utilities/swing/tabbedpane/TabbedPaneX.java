@@ -59,7 +59,6 @@ public class TabbedPaneX extends JPanel {
 		});
 
 		add(jTabbedPaneMain, BorderLayout.CENTER);
-
 	}
 
 	/**

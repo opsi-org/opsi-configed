@@ -226,7 +226,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			JOptionPane.showOptionDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
 					Configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
 		}
 
 		return filteredMode;
@@ -462,7 +461,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
 		checkmarkFullText.addActionListener(this);
-
 	}
 
 	private void setupLayout() {
@@ -542,7 +540,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			for (int i = 0; i < targetModel.getColumnCount(); i++) {
 				String colname = targetModel.getColumnName(i);
 				comboSearchFields.addItem(colname);
-
 			}
 
 			comboSearchFields.setSelectedIndex(0);
@@ -612,7 +609,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				} else {
 					result.success = false;
 				}
-
 			} else {
 				result.success = false;
 				searching = false;
@@ -773,7 +769,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							} else {
 
 								found = stringStartsWith(compareVal, val);
-
 							}
 						}
 					}
@@ -816,10 +811,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// adding the next row to selection
 		while (foundrow > startFoundrow) {
 			getSelectedAndSearch(true, true);
-
 		}
 		targetModel.setValueIsAdjusting(false);
-
 	}
 
 	/**
@@ -901,7 +894,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		targetModel.setCursorRow(row);
-
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
@@ -942,7 +934,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		fieldSearch.getCaret().setVisible(true);
-
 	}
 
 	private void addSelectedRow(int row) {
@@ -968,7 +959,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			targetModel.setFiltered(true);
 			setFilteredMode(true);
-
 		}
 	}
 

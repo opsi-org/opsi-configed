@@ -167,7 +167,6 @@ public class SWAuditClientEntry {
 		}
 
 		return result;
-
 	}
 
 	private Integer produceSWid() {
@@ -199,7 +198,6 @@ public class SWAuditClientEntry {
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
-
 	}
 
 	public String getClientId() {

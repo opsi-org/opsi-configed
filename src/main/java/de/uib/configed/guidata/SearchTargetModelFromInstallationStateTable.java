@@ -92,7 +92,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public void ensureRowIsVisible(int row) {
 
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
-
 	}
 
 	@Override
@@ -164,18 +163,15 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
 
 			panelProductSettings.reduceToSelected();
-
 		} else {
 			panelProductSettings.showAll();
 		}
 		filtered = b;
-
 	}
 
 	@Override
 	public boolean isFiltered() {
 		return filtered;
-
 	}
 
 	@Override

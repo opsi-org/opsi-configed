@@ -173,7 +173,6 @@ public class ExporterToPDF extends AbstractExportTable {
 				document.add(createTableDataElement(theTable));
 
 				document.close();
-
 			} catch (FileNotFoundException ex) {
 				Logging.error("file not found: " + fileName, ex);
 			} catch (DocumentException dex) {
@@ -390,7 +389,6 @@ public class ExporterToPDF extends AbstractExportTable {
 				table.writeSelectedRows(0, -1, 34, xHeaderTop, writer.getDirectContent());
 				// add footer image
 				document.add(createElement(opsiImageURL, 100, 100));
-
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
 			}

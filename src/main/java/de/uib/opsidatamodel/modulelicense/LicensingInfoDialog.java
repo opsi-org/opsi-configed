@@ -130,7 +130,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
-
 	}
 
 	private void retrieveData() {

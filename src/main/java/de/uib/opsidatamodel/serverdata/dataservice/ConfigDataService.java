@@ -1043,7 +1043,6 @@ public class ConfigDataService {
 			}
 
 			Logging.debug(this, "valueFromConfigStateAsExpected " + result);
-
 		}
 		return result;
 	}
@@ -1153,7 +1152,6 @@ public class ConfigDataService {
 			Logging.warning(this, "getGlobalBooleanConfigValue type of '" + key + "' should be boolean, but is "
 					+ option.getType() + ", returning default value: " + val);
 			return val;
-
 		}
 
 		List<Object> values = option.getDefaultValues();

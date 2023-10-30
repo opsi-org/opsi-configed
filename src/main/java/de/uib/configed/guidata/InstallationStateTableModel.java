@@ -202,7 +202,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
-
 		}
 
 		if (columnDict.get(column) == null) {
@@ -507,7 +506,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		numberOfColumns = displayColumns.size();
 		Logging.info(this, " -------- numberOfColumns " + numberOfColumns);
-
 	}
 
 	@Override
@@ -525,7 +523,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	@Override
 	public void clearCollectChangedStates() {
 		collectChangedStates.clear();
-
 	}
 
 	private void setInstallationInfo(String product, String value) {
@@ -566,7 +563,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, value);
 		}
-
 	}
 
 	private void checkForContradictingAssignments(String clientId, String product, String stateType, String state) {
@@ -588,7 +584,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			product2request.put(product, state);
 			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
 					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
-
 		} else {
 			boolean contradicting = !existingRequest.equals(state);
 			info = info + " for onGoingCollectiveChangeEventCount " + onGoingCollectiveChangeEventCount
@@ -610,7 +605,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 									JOptionPane.WARNING_MESSAGE);
 						}
 					}.start();
-
 				} else {
 
 					Logging.warning(this,
@@ -640,12 +634,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									JOptionPane.WARNING_MESSAGE);
 						}
-
 					}.start();
 				}
-
 			}
-
 		}
 
 		Logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
@@ -734,9 +725,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			fMissingProducts.setMessage(lines.toString());
 			fMissingProducts.setAlwaysOnTop(true);
 			fMissingProducts.setVisible(true);
-
 		}
-
 	}
 
 	@Override
@@ -760,7 +749,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							"InstallationStateTableModel.missingImplementationForActionRequest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		}
-
 	}
 
 	private void initChangeActionRequests() {
@@ -770,7 +758,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		// for each product, we shall collect the clients that have a changed action
 		// request
 		missingProducts.clear();
-
 	}
 
 	private void setActionRequest(ActionRequest ar, String productId, String clientId) {
@@ -778,7 +765,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				arg -> new HashMap<>());
 		productStates.computeIfAbsent(productId, arg -> new HashMap<>()).put(ProductState.KEY_ACTION_REQUEST,
 				ar.toString());
-
 	}
 
 	private boolean checkActionIsSupported(String productId, ActionRequest ar) {
@@ -844,10 +830,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						}
 					}
 				}
-
 			}
 			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(product.getKey(), newValUntilNow);
-
 		}
 
 		// removes the selection
@@ -855,7 +839,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		// ordering command
 		tellAndClearMissingProducts(productId);
-
 	}
 
 	private void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
@@ -1010,7 +993,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 									Logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
 									// already set for clientId, product "
-
 								} else {
 
 									Logging.info(this, "ar:   ===== recursion into " + requirement.getKey());
@@ -1135,7 +1117,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	@Override
 	public String getColumnName(int col) {
 		return columnTitles.get(col);
-
 	}
 
 	@Override

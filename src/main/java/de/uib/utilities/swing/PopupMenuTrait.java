@@ -202,7 +202,6 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i].addActionListener(actionEvent -> action(p));
 
 		add(menuItems[i]);
-
 	}
 
 	public void addPopupListenersTo(JComponent[] components) {

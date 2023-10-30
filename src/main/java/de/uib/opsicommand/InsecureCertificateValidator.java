@@ -86,6 +86,5 @@ public class InsecureCertificateValidator implements CertificateValidator {
 		public X509Certificate[] getAcceptedIssuers() {
 			return new X509Certificate[0];
 		}
-
 	}
 }

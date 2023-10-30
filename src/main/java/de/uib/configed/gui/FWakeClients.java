@@ -75,7 +75,6 @@ public class FWakeClients extends FShowList {
 						if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
 							appendLine("!! giving up connecting to  " + depotEntry.getKey());
 						}
-
 					}
 
 					if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()) {

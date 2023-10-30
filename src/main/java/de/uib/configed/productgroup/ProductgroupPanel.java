@@ -159,7 +159,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	public void setGuiIsFiltered(boolean b) {
 		Logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);
-
 	}
 
 	public boolean isGuiFiltered() {
@@ -168,12 +167,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
-
 	}
 
 	public void setSaveAndExecuteActionHandler(ActionListener al) {
 		buttonExecuteNow.addActionListener(al);
-
 	}
 
 	private void enterExistingGroup() {
@@ -604,7 +601,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
 				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
 	}
 
 	private boolean save() {
@@ -619,7 +615,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				result = true;
 				setInternalGroupsData();
 			}
-
 		} else {
 			String newGroupID = groupsEditField.getText();
 			String newDescription = descriptionField.getText();
@@ -667,7 +662,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 				setInternalGroupsData();
 			}
-
 		}
 
 		return result;

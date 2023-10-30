@@ -93,7 +93,6 @@ public class ControllerHWinfoColumnConfiguration {
 				Logging.info(this, " we have got updateItems " + updateItems);
 				persistenceController.getHardwareDataService().saveHwColumnConfig(updateItems);
 				updateItems.clear();
-
 			}
 
 			@Override

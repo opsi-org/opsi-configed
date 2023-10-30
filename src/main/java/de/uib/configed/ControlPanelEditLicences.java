@@ -72,7 +72,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		initPanelSoftwarelicences();
 
 		initPanelLicenceContracts();
-
 	}
 
 	private void initPanelKeys() {

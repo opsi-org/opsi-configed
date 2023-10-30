@@ -81,7 +81,6 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		}
 
 		return result;
-
 	}
 
 	@Override
@@ -115,7 +114,6 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 			}
 		});
-
 	}
 
 	private void initPanels() {
@@ -198,7 +196,6 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_KEY_KEY),
 								(String) rowmap.get(LicenceUsageEntry.NOTES_KEY));
-
 					}
 
 					@Override

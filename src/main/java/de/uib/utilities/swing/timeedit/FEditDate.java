@@ -90,7 +90,6 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 				}
 			}
 		}
-
 	}
 
 	@Override

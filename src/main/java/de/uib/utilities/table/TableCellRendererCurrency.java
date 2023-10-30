@@ -41,7 +41,6 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 			} catch (NumberFormatException ex) {
 				Logging.warning(this, " format exception", ex);
 			}
-
 		} else {
 			selectedString = "";
 		}
@@ -50,7 +49,6 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-
 		}
 
 		return result;

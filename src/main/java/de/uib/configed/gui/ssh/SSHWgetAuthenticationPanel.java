@@ -58,7 +58,6 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		((JPasswordField) jTextFieldPassword).setEchoChar('*');
 		jTextFieldUser.setText("");
 		jTextFieldPassword.setText("");
-
 	}
 
 	public void setLabelSizes(int width, int height) {

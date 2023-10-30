@@ -481,7 +481,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		}
 		Logging.debug(this, "equals commands are equal");
 		return true;
-
 	}
 
 	@Override

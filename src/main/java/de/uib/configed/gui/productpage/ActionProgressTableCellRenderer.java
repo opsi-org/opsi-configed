@@ -34,7 +34,6 @@ public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByI
 			result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
 
 			((JLabel) result).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
-
 		} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
 			result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
 					row, column);

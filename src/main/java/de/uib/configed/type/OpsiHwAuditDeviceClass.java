@@ -54,7 +54,6 @@ public class OpsiHwAuditDeviceClass {
 
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
-
 	}
 
 	public void setHostConfigKey(String key) {
@@ -91,12 +90,10 @@ public class OpsiHwAuditDeviceClass {
 
 	public void addHostRelatedProperty(OpsiHwAuditDevicePropertyType devProperty) {
 		deviceHostProperties.add(devProperty);
-
 	}
 
 	public void addHwItemRelatedProperty(OpsiHwAuditDevicePropertyType deviceProperty) {
 		deviceHwItemProperties.add(deviceProperty);
-
 	}
 
 	@Override

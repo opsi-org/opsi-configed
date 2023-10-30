@@ -375,7 +375,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public void removeAllHighlights() {
 		highlighter.removeAllHighlights();
 		applyFontSize();
-
 	}
 
 	public void reduceFontSize() {
@@ -629,7 +628,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
 			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-
 		} else if (!lineCount2docLinestartPosition.isEmpty()) {
 			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
 			int nextLineNo = linesIterator.next();

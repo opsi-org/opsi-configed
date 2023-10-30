@@ -97,7 +97,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		buttonAdd.addActionListener(this);
 		buttonAdd.addKeyListener(this);
-
 	}
 
 	protected void createComponents() {
@@ -205,7 +204,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
 		} else {
 
 			GroupLayout layout = new GroupLayout(getContentPane());
@@ -223,7 +221,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 									Short.MAX_VALUE)
 							.addComponent(loggingPanel, GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
 							.addContainerGap(20, 20)));
-
 		}
 
 		pack();
@@ -250,7 +247,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		}
 
 		buttonCommit.setEnabled(b);
-
 	}
 
 	public void setStartValue(Object s) {

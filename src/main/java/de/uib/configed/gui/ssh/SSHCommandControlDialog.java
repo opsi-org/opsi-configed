@@ -611,7 +611,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				new SSHConnectExec(configedMain, command);
 			}
 		}.start();
-
 	}
 
 	private void checkAllTexts() {

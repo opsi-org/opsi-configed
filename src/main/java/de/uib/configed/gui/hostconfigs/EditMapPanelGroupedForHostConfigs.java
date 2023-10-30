@@ -350,7 +350,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4();
 		pdfExportTable.execute(null, false);
-
 	}
 
 	private JTable createJTableForPDF() {
@@ -574,7 +573,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 								Logging.warning(this, "no case found for JPopupMenu in definePopup");
 								break;
 							}
-
 						}
 					};
 				}
@@ -632,7 +630,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					theUsers.add(user);
 				}
 			}
-
 		}
 
 		Logging.info(this, "theRoles found " + theRoles);
@@ -893,7 +890,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 				setUserConfig(getResultText(), getSelectedListelement());
 			}
-
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewUser();
@@ -966,7 +962,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 				setRoleConfig(getResultText(), getSelectedListelement());
 			}
-
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewRole();

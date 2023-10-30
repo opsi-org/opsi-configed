@@ -55,7 +55,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 			Logging.error("list of data has size " + collection.size() + " differs from  length of clients list  "
 					+ clients.size());
-
 		}
 
 		if (result) {
@@ -92,7 +91,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion");
 		persistenceController.getProductDataService().setProductProperties();
-
 	}
 
 	@Override

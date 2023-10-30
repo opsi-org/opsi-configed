@@ -118,7 +118,6 @@ public class ExporterToCSV extends AbstractExportTable {
 
 										line.append(val);
 									}
-
 								} else {
 
 									if ("java.lang.String".equals(classNames.get(colI))) {
@@ -128,7 +127,6 @@ public class ExporterToCSV extends AbstractExportTable {
 										line.append(STRING_DELIMITER);
 										line.append(inString);
 										line.append(STRING_DELIMITER);
-
 									} else if ("java.lang.Integer".equals(classNames.get(colI))) {
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if ("java.lang.Double".equals(classNames.get(colI))) {
@@ -175,7 +173,6 @@ public class ExporterToCSV extends AbstractExportTable {
 						bw.flush();
 					}
 				}
-
 			} catch (IOException ex) {
 				Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
 			}

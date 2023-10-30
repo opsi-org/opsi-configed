@@ -109,7 +109,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
-
 	}
 
 	public void setListVisible(boolean b) {
@@ -158,14 +157,12 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE));
 
 		return thePanel;
-
 	}
 
 	@Override
 	protected void preAction1() {
 		resultingText = theField.getText();
 		selectedListElement = theList.getSelectedValue();
-
 	}
 
 	public String getResultText() {

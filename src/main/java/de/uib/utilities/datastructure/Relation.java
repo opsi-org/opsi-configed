@@ -15,7 +15,6 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 	public Relation(List<String> attributes) {
 		super();
 		this.attributes = attributes;
-
 	}
 
 	public List<String> getAttributes() {

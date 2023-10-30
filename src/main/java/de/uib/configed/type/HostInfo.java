@@ -405,7 +405,6 @@ public class HostInfo {
 		}
 
 		return this;
-
 	}
 
 	private static int findCol(JTableSelectionPanel selectionPanel, String colName) {
@@ -624,7 +623,6 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
 					wanStandard);
 		}
-
 	}
 
 	@Override

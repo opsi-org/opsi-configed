@@ -135,7 +135,6 @@ public class ClientView implements View {
 		Parent root = fxmlLoader.load();
 		this.scene = new Scene(root);
 		this.fxPanel = fxPanel;
-
 	}
 
 	private void loadData() {

@@ -382,7 +382,6 @@ public class ConfigedMain implements ListSelectionListener {
 				licencesPanels.get(licencesStatus).reset();
 			}
 			// otherwise we return the old status
-
 		}
 
 		return licencesStatus;
@@ -1030,7 +1029,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void handleProductActionRequest() {
 		startProductActionFrame();
-
 	}
 
 	private void startProductActionFrame() {
@@ -1934,7 +1932,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (clientNames.equals(saveSelectedClients)) {
 			Logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
-
 		}
 
 		saveSelectedClients = clientNames;
@@ -2317,7 +2314,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
 			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
-
 		} else {
 			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
 		}
@@ -2562,7 +2558,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		clientsFilteredByTree = treeClients.collectLeafs(node);
 		treeClients.repaint();
-
 	}
 
 	public void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
@@ -3321,7 +3316,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		return result;
-
 	}
 
 	public void setVisualViewIndex(int i) {
@@ -3869,7 +3863,6 @@ public class ConfigedMain implements ListSelectionListener {
 					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
 					Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
 		}
 
 		Logging.debug(this, "checkClose result " + result);
@@ -4562,7 +4555,6 @@ public class ConfigedMain implements ListSelectionListener {
 				return persistenceController.getRPCMethodExecutor().showPopupOnClients(message, getSelectedClients(),
 						seconds);
 			}
-
 		}.start();
 	}
 
@@ -4900,7 +4892,6 @@ public class ConfigedMain implements ListSelectionListener {
 		} else {
 			setSelectedClientsArray(selected.toArray(new String[0]));
 		}
-
 	}
 
 	public void setSelectedClientsCollectionOnPanel(Collection<String> selected, boolean renewFilter) {
@@ -4936,7 +4927,6 @@ public class ConfigedMain implements ListSelectionListener {
 		List<String> result = manager.selectClients();
 
 		setSelectedClientsCollectionOnPanel(result, true);
-
 	}
 
 	public void selectClientsNotCurrentProductInstalled(List<String> selectedProducts,

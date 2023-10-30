@@ -61,7 +61,6 @@ public class Graph {
 				int second = (int) sec;
 
 				addEdge(first, second);
-
 			}
 		}
 	}

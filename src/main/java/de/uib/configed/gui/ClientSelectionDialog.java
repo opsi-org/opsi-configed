@@ -1004,7 +1004,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					break;
 				}
 			}
-
 		}
 	}
 

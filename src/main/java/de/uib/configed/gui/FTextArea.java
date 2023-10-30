@@ -53,7 +53,6 @@ public class FTextArea extends FGeneralDialog {
 				addPane);
 		super.checkAdditionalPane();
 		initFTextArea(preferredWidth, preferredHeight);
-
 	}
 
 	public void setMessage(String message) {

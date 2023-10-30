@@ -38,7 +38,6 @@ public class IconNode extends DefaultMutableTreeNode {
 	public IconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);
 		deviceInfo = null;
-
 	}
 
 	public IconNode(Object userObject) {

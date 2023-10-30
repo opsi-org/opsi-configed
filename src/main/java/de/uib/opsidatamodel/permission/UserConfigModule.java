@@ -38,7 +38,6 @@ public class UserConfigModule {
 		Logging.info(this.getClass(),
 				"for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
 		Logging.info(this.getClass(), "for user " + userName + " bool keys " + boolKeys + " -- list keys " + listKeys);
-
 	}
 
 	@Override

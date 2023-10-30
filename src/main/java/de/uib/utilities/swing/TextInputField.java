@@ -53,7 +53,6 @@ public class TextInputField extends JPanel {
 			} else {
 				inputType = InputType.TEXT;
 			}
-
 		} else {
 			this.proposedValues = proposedValues;
 			proposedValues.add(0, "");
@@ -143,14 +142,11 @@ public class TextInputField extends JPanel {
 							}
 
 							combo.setSelectedItem(proposedValues.get(j));
-
 						}
-
 					}
 
 					comboField.setText("");
 				}
-
 			}
 		});
 
@@ -163,7 +159,6 @@ public class TextInputField extends JPanel {
 		} else {
 			super.add(textfield);
 		}
-
 	}
 
 	public void addValueChangeListener(AbstractValueChangeListener listener) {

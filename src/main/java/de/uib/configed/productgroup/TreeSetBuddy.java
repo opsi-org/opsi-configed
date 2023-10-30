@@ -46,7 +46,6 @@ public class TreeSetBuddy extends TreeSet<String> {
 			if (!str0.equals(str1)) {
 				equal = false;
 			}
-
 		}
 
 		if (equal && otherIter.hasNext()) {

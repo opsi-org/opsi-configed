@@ -87,7 +87,6 @@ public class BackendMySQL {
 			List<String> list = getListFromJSONObject((JSONObject) children.get(i));
 
 			result = union(result, list);
-
 		}
 		return result;
 	}
@@ -366,7 +365,6 @@ public class BackendMySQL {
 			Type newType = getType(jsonObject);
 			try {
 				return doJSONArray(mySQLRecursion, jsonObject.getJSONArray(KEY_CHILDREN), newType);
-
 			} catch (JSONException e) {
 				Logging.warning(this, "Cannot get JSONArray for " + KEY_CHILDREN, e);
 			}
@@ -401,7 +399,6 @@ public class BackendMySQL {
 		}
 
 		return mysql + " ) ";
-
 	}
 
 	private static Type getType(JSONObject json) {

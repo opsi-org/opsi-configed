@@ -128,14 +128,12 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			}
 			result = 2;
 		}
-
 	}
 
 	@Override
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-
 	}
 
 	public PanelGenEditTable getPanelGlobalSoftware() {

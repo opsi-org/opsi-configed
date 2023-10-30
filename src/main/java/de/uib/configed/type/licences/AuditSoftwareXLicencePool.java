@@ -42,7 +42,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.SUB_VERSION);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
-
 	}
 
 	private static final List<String> INTERFACED_ATTRIBUTES;

@@ -63,7 +63,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 		super.setLayout(new BorderLayout());
 		label.addMouseListener(this);
 		super.add(label);
-
 	}
 
 	private void setDisplay(String desc, String inactive, String over, String active, String disabled) {

@@ -67,7 +67,6 @@ public class FDialogRemoteControl extends FEditStringList {
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
 
 		extraField.getDocument().addDocumentListener(this);
-
 	}
 
 	private void noText() {

@@ -40,7 +40,6 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			publish(waitSecs);
 
 			timeoutReached = waitSecs > maxWaitSecs;
-
 		}
 
 		Logging.info(this, " doInBackground finish time in millis " + System.currentTimeMillis());
@@ -52,7 +51,6 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 		}
 
 		return null;
-
 	}
 
 	//

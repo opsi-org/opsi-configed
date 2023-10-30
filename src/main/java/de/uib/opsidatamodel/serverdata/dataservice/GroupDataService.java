@@ -409,7 +409,6 @@ public class GroupDataService {
 		}
 
 		return result;
-
 	}
 
 	public boolean deleteGroup(String groupId) {

@@ -85,7 +85,6 @@ public final class Messages {
 			Logging.info("Get translation resource bundle from: " + BUNDLE_NAME);
 			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 			Logging.debug("Translation bundle is: " + messagesBundle);
-
 		} catch (MissingResourceException ex) {
 			Logging.warning(
 					"Missing translation for locale '" + myLocale + "': " + ex + ", falling back to locale 'en_US'");
@@ -97,7 +96,6 @@ public final class Messages {
 			}
 		}
 		return messagesBundle;
-
 	}
 
 	private static Locale giveLocale(String selection) {

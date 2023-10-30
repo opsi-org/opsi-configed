@@ -87,7 +87,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 				keySet.addAll(requDeinstallMap.keySet());
 			}
 			keyArray = keySet.toArray();
-
 		}
 
 		fireTableDataChanged();
@@ -126,7 +125,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		return result;
-
 	}
 
 	@Override
@@ -184,7 +182,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 			if (result != null) {
 				result = "(" + result + ")";
 			}
-
 		}
 
 		return result;
@@ -228,7 +225,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 				((JLabel) cell).setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
 
 				return cell;
-
 			} else {
 				((JLabel) cell).setIcon(null);
 			}

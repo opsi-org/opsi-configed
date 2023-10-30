@@ -42,7 +42,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reset() {
 		Logging.info(this, "reset");
 		super.reset();
-
 	}
 
 	@Override
@@ -59,7 +58,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			// does not solve the task
 			controller.getTabClient().getFSoftwarename2LicencePool().getPanelSWnames().reset();
 		}
-
 	}
 
 	@Override
@@ -103,9 +101,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		if (isAwareOfSelectionListener()) {
 			Logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
-
 		}
-
 	}
 
 	private boolean mouseInColumnOfMarkCursor(Point p) {
@@ -135,7 +131,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				}
 
 				setDataChanged(true);
-
 			}
 		}
 		super.mouseClicked(e);

@@ -365,7 +365,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			}
 
 			jPanelButtonGrid.add(jButton2, null);
-
 		}
 		if (noOfButtons > 2) {
 
@@ -485,7 +484,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Logging.debug(this, "mouseClicked");
-
 	}
 
 	@Override

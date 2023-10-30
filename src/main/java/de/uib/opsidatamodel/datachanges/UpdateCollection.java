@@ -48,7 +48,6 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 				Logging.debug(this, "by recursion, we will clear " + updateCommand);
 				((Collection<?>) updateCommand).clear();
 			}
-
 		}
 		Logging.debug(this, "to clear elements of implementor " + implementor);
 		implementor.clear();
@@ -81,7 +80,6 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 				// recursively
 
 				((UpdateCollection) updateCommand).revert();
-
 			}
 		}
 	}

@@ -97,7 +97,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		jLabelSetupInstalled.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
 		jCheckBoxSetupInstalled = new JCheckBox();
-
 	}
 
 	private void setFDepotList(JDialog dia) {

@@ -118,7 +118,6 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 			if (outputDialog != null) {
 				outputDialog.removeKillProcessListener(killProcessListener);
 				outputDialog.addKillProcessListener(killProcessListener);
-
 			}
 
 			int supwRetriedTimes = 0;
@@ -233,9 +232,7 @@ public class SSHCommandWorker extends SwingWorker<String, String> {
 				Logging.debug(this, "process " + line);
 				SSHOutputCollector.appendValue(line);
 				outputDialog.append(getCommandName(), line + "\n");
-
 			}
-
 		}
 	}
 

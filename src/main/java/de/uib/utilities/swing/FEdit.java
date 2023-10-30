@@ -160,7 +160,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 						.addContainerGap(20, 20)));
 
 		pack();
-
 	}
 
 	public void setDataChanged(boolean b) {
@@ -209,7 +208,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		if (editingArea.getComponentCount() != 1) {
 			Logging.info(this, " editing area not filled with component");
-
 		}
 
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
@@ -276,7 +274,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		} else {
 			Logging.warning(this, "unexpected event on source " + e.getSource());
 		}
-
 	}
 
 	// interface

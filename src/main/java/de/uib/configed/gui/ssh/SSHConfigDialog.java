@@ -159,7 +159,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				Logging.debug(this, "compareStates 11");
 				return false;
 			}
-
 		} else {
 			// continue with the rest of the method
 		}
@@ -699,7 +698,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		if (jCheckBoxDefault.isSelected()) {
 			connectionInfo.setUserData(ConfigedMain.getHost(), ConfigedMain.getUser(), ConfigedMain.getPassword(),
 					SSHConnect.PORT_SSH);
-
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());
 		jTextFieldUser.setText(connectionInfo.getUser());

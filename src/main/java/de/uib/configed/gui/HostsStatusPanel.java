@@ -110,7 +110,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 			fieldSelectedClientsNames.setToolTipText(
 					"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-
 		}
 
 		if (involvedDepots != null) {

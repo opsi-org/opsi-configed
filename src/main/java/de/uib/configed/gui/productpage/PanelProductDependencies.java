@@ -73,7 +73,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 						.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 2 * Globals.MIN_VSIZE,
 								2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
-
 	}
 
 	public void clearEditing() {

@@ -339,7 +339,6 @@ public class PanelSWInfo extends JPanel {
 
 			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getTheTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
-
 		}
 	}
 
@@ -453,7 +452,6 @@ public class PanelSWInfo extends JPanel {
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
 		pdfExportTable.execute(exportFilename, false);
-
 	}
 
 	private void setSuperTitle(String s) {

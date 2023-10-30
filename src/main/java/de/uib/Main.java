@@ -181,7 +181,6 @@ public class Main {
 		// After setting locale then we can use localization values
 		List<String> existingLocales = Messages.getLocaleNames();
 		Logging.info("Available locales: " + existingLocales);
-
 	}
 
 	public static void endApp(int exitcode) {
@@ -277,6 +276,5 @@ public class Main {
 		// we activate it in case of an appropriate error
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
-
 	}
 }

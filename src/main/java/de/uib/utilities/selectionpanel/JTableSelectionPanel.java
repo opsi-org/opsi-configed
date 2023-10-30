@@ -373,7 +373,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return result;
-
 	}
 
 	public NavigableSet<String> getInvertedSet() {
@@ -386,7 +385,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return result;
-
 	}
 
 	public void initColumnNames() {
@@ -420,7 +418,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return valuesList;
-
 	}
 
 	public void clearSelection() {
@@ -488,7 +485,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
-
 	}
 
 	public void setSelectedValues(String[] values) {
@@ -703,7 +699,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 					default:
 						found = compareVal.startsWith(valLower);
-
 					}
 				}
 
@@ -759,7 +754,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.addRowSelectionInterval(row, row);
 
 		scrollRowToVisible(row);
-
 	}
 
 	public void setSelectedRow(int row) {
@@ -878,9 +872,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
 			searchOnDocumentChange();
-
 		}
-
 	}
 
 	@Override
@@ -890,9 +882,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
 			searchOnDocumentChange();
-
 		}
-
 	}
 
 	@Override

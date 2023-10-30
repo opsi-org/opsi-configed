@@ -48,7 +48,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
 		editorContent.setBorder(null);
-
 	}
 
 	public CellEditor4TableText() {

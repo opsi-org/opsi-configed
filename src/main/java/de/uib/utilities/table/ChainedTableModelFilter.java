@@ -56,7 +56,6 @@ public class ChainedTableModelFilter extends TableModelFilter {
 			if (filter.isInUse()) {
 				testresult = testresult && filter.test(row);
 			}
-
 		}
 
 		if (inverted) {

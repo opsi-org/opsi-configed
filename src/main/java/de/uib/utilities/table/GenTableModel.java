@@ -268,11 +268,9 @@ public class GenTableModel extends AbstractTableModel {
 			}
 			setRows(filteredRows);
 			rowsLength = rows.size();
-
 		}
 
 		Logging.info(this, "produceRows  filtered size " + rows.size());
-
 	}
 
 	public void setSorting(Integer sortCol, boolean sorting) {
@@ -288,7 +286,6 @@ public class GenTableModel extends AbstractTableModel {
 			Logging.info(this, "setSorting: we reset");
 			invalidate();
 			reset();
-
 		}
 	}
 
@@ -321,7 +318,6 @@ public class GenTableModel extends AbstractTableModel {
 				rows.add(value);
 			}
 		}
-
 	}
 
 	private void refresh() {
@@ -340,7 +336,6 @@ public class GenTableModel extends AbstractTableModel {
 
 			fireTableDataChanged();
 			modelDataValid = true;
-
 		}
 	}
 
@@ -377,7 +372,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		Logging.info(this, "setUsingFilter active filter chain: " + chainedFilter.getActiveFilters());
 		Logging.info(this, "setUsingFilter we got rows: " + getRowCount());
-
 	}
 
 	private void clearUpdates() {
@@ -488,7 +482,6 @@ public class GenTableModel extends AbstractTableModel {
 				rows.get(cursorrow).set(colMarkCursorRow, false);
 				change = true;
 				fireTableCellUpdated(cursorrow, colMarkCursorRow);
-
 			}
 
 			cursorrow = modelrow;
@@ -496,7 +489,6 @@ public class GenTableModel extends AbstractTableModel {
 				rows.get(cursorrow).set(colMarkCursorRow, true);
 
 				change = true;
-
 			}
 
 			if (change) {
@@ -638,7 +630,6 @@ public class GenTableModel extends AbstractTableModel {
 			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
 					"Information", JOptionPane.OK_OPTION);
 			return false;
-
 		}
 
 		return true;

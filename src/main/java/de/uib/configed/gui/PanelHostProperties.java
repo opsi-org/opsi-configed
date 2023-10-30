@@ -89,7 +89,6 @@ public class PanelHostProperties extends JPanel {
 			result.put(entry.getKey(), cellOptions);
 		}
 		return result;
-
 	}
 
 	private void setMap(String selectedDepot) {

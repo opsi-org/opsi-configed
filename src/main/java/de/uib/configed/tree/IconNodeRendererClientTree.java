@@ -7,6 +7,8 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
+import java.awt.font.TextAttribute;
+import java.util.Collections;
 
 import javax.swing.JTree;
 
@@ -56,6 +58,13 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
+		}
+
+		if (hasFocus) {
+			setFont(getFont()
+					.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+		} else {
+			setFont(getFont().deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, -1)));
 		}
 
 		return this;

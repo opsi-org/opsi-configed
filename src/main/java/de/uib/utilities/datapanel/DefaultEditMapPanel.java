@@ -91,7 +91,6 @@ public class DefaultEditMapPanel extends JPanel {
 			Logging.debug(this, "getRemovalMenuText " + s);
 			return s;
 		}
-
 	}
 
 	protected AbstractPropertyHandler propertyHandler;
@@ -114,7 +113,6 @@ public class DefaultEditMapPanel extends JPanel {
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
 		propertyHandler = defaultPropertyHandler;
-
 	}
 
 	protected void buildPanel() {
@@ -158,7 +156,6 @@ public class DefaultEditMapPanel extends JPanel {
 
 				descriptionsMap.put(option.getKey(), description);
 				defaultsMap.put(option.getKey(), defaultvalue);
-
 			}
 		}
 
@@ -244,7 +241,6 @@ public class DefaultEditMapPanel extends JPanel {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
 		Logging.debug(this, "logPopupElements " + size);
-
 	}
 
 	public void setOptionsEditable(boolean b) {

@@ -57,7 +57,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			} else {
 				jc.setIcon(Utils.createImageIcon("images/checked_void.png", ""));
 			}
-
 		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
 				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
@@ -82,21 +81,18 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 
 					jc.setForeground(Globals.OPSI_ERROR);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 
 					jc.setForeground(Globals.OPSI_WARNING);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
 					jc.setForeground(Globals.OPSI_ERROR);
 

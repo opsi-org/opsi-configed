@@ -161,7 +161,6 @@ public final class LicensingInfoMap {
 		}
 
 		return instance;
-
 	}
 
 	public static void setReduced(boolean reduced) {
@@ -328,7 +327,6 @@ public final class LicensingInfoMap {
 					daysClientLimitWarning = CLIENT_LIMIT_WARNING_DAYS_DEFAULT;
 				}
 			}
-
 		} catch (NumberFormatException ex) {
 			Logging.error(this, " produceConfigs ", ex);
 		}
@@ -431,7 +429,6 @@ public final class LicensingInfoMap {
 						if (key.equals(latestDateString)) {
 							currentCloseToLimitModuleList.add(currentModule);
 						}
-
 					} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
 						if (key.equals(latestDateString)) {
 							currentOverLimitModuleList.add(currentModule);
@@ -450,18 +447,14 @@ public final class LicensingInfoMap {
 					if (futureCheck != null && moduleInfo.get(STATE) != null
 							&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 						moduleInfo.put(FUTURE_STATE, futureCheck);
-
 					} else {
 						moduleInfo.put(FUTURE_STATE, "null");
 					}
 
 					modulesMapToDate.put(currentModule, moduleInfo);
-
 				}
 				resultMap.put(key, new TreeMap<>(modulesMapToDate));
-
 			}
-
 		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " json exception in produceDatesMap ", ex);
 		}
@@ -530,7 +523,6 @@ public final class LicensingInfoMap {
 				} else {
 					break;
 				}
-
 			}
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " getCurrentlyActiveLicense " + ex);
@@ -583,7 +575,6 @@ public final class LicensingInfoMap {
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
 
 			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange ", ex);
 		}
@@ -613,16 +604,13 @@ public final class LicensingInfoMap {
 					if (timeLeft <= daysClientLimitWarning) {
 						return STATE_DAYS_WARNING;
 					}
-
 				}
 			} catch (ParseException ex) {
 				Logging.error(CLASSNAME + " checkTimeLeft ", ex);
 			}
-
 		}
 
 		return STATE_DAYS_OKAY;
-
 	}
 
 	/**
@@ -641,14 +629,12 @@ public final class LicensingInfoMap {
 
 				if (module.equals(MODULE_MACOS_AGENT)) {
 					cNum = clientNumbersMap.get(MAC_OS).toString();
-
 				} else if (module.equals(MODULE_LINUX_AGENT)) {
 
 					cNum = clientNumbersMap.get(LINUX).toString();
 				} else {
 
 					cNum = clientNumbersMap.get(ALL).toString();
-
 				}
 
 				fNum = moduleInfo.get(CLIENT_NUMBER).toString();
@@ -698,7 +684,6 @@ public final class LicensingInfoMap {
 		}
 
 		return resultMap;
-
 	}
 
 	public Set<String> getCurrentOverLimitModuleList() {

@@ -180,7 +180,6 @@ public class SoftwareDataService {
 
 			for (String colName : SWAuditEntry.getDisplayKeys()) {
 				row.put(colName, entry.get(colName));
-
 			}
 
 			// build fSoftware2LicencePool
@@ -739,7 +738,6 @@ public class SoftwareDataService {
 					// do it locally
 					instSwI.keySet().removeAll(entriesToRemove);
 				}
-
 			}
 
 			ArrayList<Map<String, String>> createItems = new ArrayList<>();

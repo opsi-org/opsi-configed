@@ -93,7 +93,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	protected void initComponents() {
 		super.initComponents();
 		visibleList.addKeyListener(this);
-
 	}
 
 	public void setCellRenderer(ListCellRenderer<Object> render) {
@@ -155,7 +154,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		}
 
 		visibleList.ensureIndexIsVisible(visibleList.getMaxSelectionIndex());
-
 	}
 
 	public void initSelection() {
@@ -171,7 +169,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		visibleList.clearSelection();
 
 		addSelectedValues(toSelect);
-
 	}
 
 	public void setSelectedValue(O ob) {
@@ -192,7 +189,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		} else {
 			Logging.error(this, "for element adding required instance of DefaultListModel");
 		}
-
 	}
 
 	@Override

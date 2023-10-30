@@ -203,7 +203,6 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
 		//////////////////////////////////////////////////////////////////////
 		);
-
 	}
 
 	private void defineTopPanel(JPanel panel) {

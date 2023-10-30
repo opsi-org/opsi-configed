@@ -32,7 +32,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();
 		this.tree = tree;
-
 	}
 
 	private GroupNode transferRepresentsGroup(String treeRepresentation) {
@@ -188,7 +187,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			if (tree.isInDIRECTORY(path)) {
 				Logging.debug(this, "getSourceActions , isInDIRECTORY true");
 				// action depends additionally from target
-
 			}
 		}
 
@@ -222,7 +220,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		}
 
 		return new StringSelection(buff.toString());
-
 	}
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
@@ -249,7 +246,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "chooseMOVE  " + result);
 
 		return result;
-
 	}
 
 	private void handleClientID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
@@ -380,11 +376,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 				handleClientID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
 						dropParentNode, dropParentID);
-
 			}
 
 			Logging.debug(this, "importData ready, importID " + importID);
-
 		}
 
 		return true;

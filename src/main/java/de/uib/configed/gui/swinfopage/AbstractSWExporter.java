@@ -142,11 +142,9 @@ public abstract class AbstractSWExporter {
 
 				line = in.readLine();
 			}
-
 		} catch (IOException iox) {
 			Logging.warning(this, "IOException " + iox);
 		}
-
 	}
 
 	private static void finish(int exitcode) {
@@ -164,7 +162,6 @@ public abstract class AbstractSWExporter {
 		} else {
 			theHost = hostId;
 			updateModel();
-
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");

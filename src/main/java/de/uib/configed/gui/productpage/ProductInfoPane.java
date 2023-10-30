@@ -227,7 +227,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
-
 	}
 
 	@Override

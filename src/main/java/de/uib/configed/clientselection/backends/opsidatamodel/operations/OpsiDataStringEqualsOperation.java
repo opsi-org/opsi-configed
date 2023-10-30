@@ -36,7 +36,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		}
 		startsWith = data.startsWith("*");
 		endsWith = data.endsWith("*");
-
 	}
 
 	@Override

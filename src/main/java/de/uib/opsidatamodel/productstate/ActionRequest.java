@@ -157,7 +157,6 @@ public class ActionRequest {
 		label2textColor.put("always", Globals.ACTION_REQUEST_ALWAYS_COLOR);
 		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
 		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
-
 	}
 
 	public static List<String> getScriptKeys() {
@@ -239,7 +238,6 @@ public class ActionRequest {
 		checkCollections();
 
 		return choiceLabels;
-
 	}
 
 	// instance methods
