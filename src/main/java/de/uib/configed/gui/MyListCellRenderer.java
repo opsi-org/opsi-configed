@@ -36,7 +36,6 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
-
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 		if (!(c instanceof JComponent)) {
@@ -66,7 +65,6 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 
 			String depot = (String) value;
 			if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
-
 				((JLabel) jc).setToolTipText(
 						"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
 			} else {

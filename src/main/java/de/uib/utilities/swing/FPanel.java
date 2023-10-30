@@ -44,7 +44,6 @@ public class FPanel extends SecondaryFrame {
 
 	@Override
 	public void setVisible(boolean b) {
-
 		if (b) {
 			runningInstances.add(this, "");
 		} else {
@@ -114,7 +113,6 @@ public class FPanel extends SecondaryFrame {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			leaving = leaveChecked();
 			if (leaving) {
-
 				leave();
 			} else {
 				setVisible(true);

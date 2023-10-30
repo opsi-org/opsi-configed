@@ -36,7 +36,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
-
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
 
 	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
@@ -76,7 +75,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void initFrame() {
-
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
 				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
@@ -85,7 +83,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void setComponentsEnabled(boolean value) {
-
 		jButtonExec.setEnabled(value);
 		if (!value) {
 			jTextFieldPckageVersion.setEnabled(value);
@@ -106,7 +103,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void initGUI() {
-
 		JPanel workbenchpanel = new JPanel();
 		mainpanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
@@ -534,7 +530,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String getPackageID(String dir) {
-
 		EmptyCommand getPackageId = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_CAT_DIRECTORY
 				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();

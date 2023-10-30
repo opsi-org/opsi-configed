@@ -49,11 +49,14 @@ import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -73,7 +76,6 @@ import de.uib.utilities.logging.Logging;
  * used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
-
 	public static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
@@ -388,11 +390,26 @@ public class OpsiServiceNOMPersistenceController {
 		opsiHostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(), opsiHostDataReloadHandler);
 
+		LicenseContractDataReloadHandler licenseContractDataReloadHandler = new LicenseContractDataReloadHandler();
+		licenseContractDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString(),
+				licenseContractDataReloadHandler);
+
+		LicensePoolDataReloadHandler licensePoolDataReloadHandler = new LicensePoolDataReloadHandler();
+		licensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(), licensePoolDataReloadHandler);
+
+		SoftwareLicense2LicensePoolDataReloadHandler softwareLicense2LicensePoolDataReloadHandler = new SoftwareLicense2LicensePoolDataReloadHandler();
+		softwareLicense2LicensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
+				softwareLicense2LicensePoolDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
 		defaultDataReloadHandler.setConfigDataService(configDataService);
 		defaultDataReloadHandler.setLicenseDataService(licenseDataService);
+		defaultDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);
@@ -401,6 +418,9 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTIES.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.ALL_DATA.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.LICENSES.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(),
+				defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {
@@ -512,7 +532,6 @@ public class OpsiServiceNOMPersistenceController {
 	 * returns null if clients have different values or if clientlist is empty
 	 */
 	public Boolean isUEFI43(String[] clients) {
-
 		Boolean isUEFI = null;
 
 		for (String client : clients) {

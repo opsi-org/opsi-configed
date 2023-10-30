@@ -22,7 +22,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
-
 	private LogPane logPane;
 
 	public AdaptingSlider(LogPane logPane, int min, int max, int value) {
@@ -84,7 +83,6 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 	}
 
 	public void produceLabels() {
-
 		Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
 
 		for (int i = getMinimum(); i <= logPane.getMaxExistingLevel(); i++) {

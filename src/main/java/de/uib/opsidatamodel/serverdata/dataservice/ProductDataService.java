@@ -378,7 +378,6 @@ public class ProductDataService {
 		Iterator<Map<String, Object>> iter = retrieved.iterator();
 
 		while (iter.hasNext()) {
-
 			Map<String, Object> retrievedMap = iter.next();
 			Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
 			// rebuild JSON objects
@@ -844,7 +843,6 @@ public class ProductDataService {
 
 				for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product)
 						.entrySet()) {
-
 					if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
 						propertyEntry.getValue().setDefaultValues(new ArrayList<>());
 					} else {
@@ -1002,7 +1000,6 @@ public class ProductDataService {
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
-
 			String client = (String) m.get("clientId");
 			result.computeIfAbsent(client, arg -> new ArrayList<>())
 					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
@@ -1348,7 +1345,6 @@ public class ProductDataService {
 
 	private void updateState(Map<String, Object> state, List<Map<String, Object>> updateCollection,
 			Map<String, Object> retrievedConfig, String propertyId, Object propertyValue) {
-
 		Logging.debug(this, "setProductProperties,  we have new state " + state);
 		updateCollection.add(state);
 

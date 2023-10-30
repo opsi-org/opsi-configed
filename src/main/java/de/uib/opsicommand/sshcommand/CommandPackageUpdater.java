@@ -20,7 +20,6 @@ import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageUpdaterDialog;
 
 public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParameter {
-
 	private static final int PRIORITY = 105;
 
 	private String command;
@@ -150,7 +149,6 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-
 		dialog = new SSHPackageUpdaterDialog();
 	}
 

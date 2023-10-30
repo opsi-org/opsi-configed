@@ -23,7 +23,6 @@ import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class ExporterToCSV extends AbstractExportTable {
-
 	private static final String CSV_SEPARATOR = ";";
 	private static final Character STRING_DELIMITER = '"';
 	private static final String THIS_EXTENSION = ".csv";
@@ -57,7 +56,6 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-
 		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
 				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
 
@@ -74,11 +72,9 @@ public class ExporterToCSV extends AbstractExportTable {
 		fileName = checkFile(fileName, extensionFilter);
 
 		if (fileName != null) {
-
 			try (OutputStream os = new FileOutputStream(fileName);
 					OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
 					BufferedWriter bw = new BufferedWriter(osw)) {
-
 				// write header
 				StringBuilder line = new StringBuilder();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
@@ -119,9 +115,7 @@ public class ExporterToCSV extends AbstractExportTable {
 										line.append(val);
 									}
 								} else {
-
 									if ("java.lang.String".equals(classNames.get(colI))) {
-
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
 										line.append(STRING_DELIMITER);

@@ -28,7 +28,6 @@ import de.uib.utilities.table.ListCellOptions;
 import utils.Utils;
 
 public class MapTableModel extends AbstractTableModel {
-
 	public static final List<?> nullLIST = new ArrayList<>();
 	static {
 		nullLIST.add(null);
@@ -68,7 +67,6 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
-
 		this.modelProducer = modelProducer;
 	}
 
@@ -78,7 +76,6 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	public void setMap(Map<String, Object> data) {
-
 		this.data = null;
 		resetModifiedKey();
 

@@ -24,7 +24,6 @@ import java.util.TreeSet;
 import de.uib.utilities.logging.Logging;
 
 public final class Messages {
-
 	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
@@ -130,7 +129,6 @@ public final class Messages {
 		Logging.debug("Messages setLocale: " + characteristics);
 		Locale loc = null;
 		if (characteristics != null && !characteristics.isEmpty()) {
-
 			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
 				loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));
 				Logging.info("Locale " + loc.getLanguage() + "_" + loc.getCountry() + " set by param");

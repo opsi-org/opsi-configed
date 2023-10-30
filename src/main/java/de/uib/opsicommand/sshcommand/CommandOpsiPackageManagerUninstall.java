@@ -40,7 +40,6 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getParentMenuText() {
-
 		return super.getMenuText();
 	}
 

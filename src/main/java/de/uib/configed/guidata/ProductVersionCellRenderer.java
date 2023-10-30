@@ -15,7 +15,6 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
 public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
-
 	public ProductVersionCellRenderer(String tooltipPrefix) {
 		super(tooltipPrefix);
 	}
@@ -35,10 +34,8 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 
 			if (val.equals(Globals.CONFLICT_STATE_STRING)
 					|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
-
 				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 			} else {
-
 				String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
 				IFInstallationStateTableModel istm = (IFInstallationStateTableModel) (table.getModel());
 

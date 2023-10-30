@@ -58,7 +58,6 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
-
 				String remainder = key;
 
 				int j = -1;

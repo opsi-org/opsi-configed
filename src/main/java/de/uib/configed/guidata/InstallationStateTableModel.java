@@ -49,7 +49,6 @@ import de.uib.utilities.logging.Logging;
  * getting cell editors.
  */
 public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
-
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
@@ -226,7 +225,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
-
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
 			return;
@@ -301,7 +299,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			List<Map<String, String>> productRowsList1client = client.getValue();
 
 			for (Map<String, String> stateAndAction : productRowsList1client) {
-
 				// deep copy, but seems to be not complete, therefore not used
 
 				String productId = stateAndAction.get(ProductState.KEY_PRODUCT_ID);
@@ -352,7 +349,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	private void completeVisualStatesByDefaults() {
 		for (String clientId : selectedClients) {
-
 			// check if productstates exist
 			allClientsProductStates.putIfAbsent(clientId, new HashMap<>());
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
@@ -378,7 +374,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		for (String key : ProductState.KEYS) {
-
 			if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
 				mixToVisualState(combinedVisualValues.get(key), productId, priority);
 			} else {
@@ -606,7 +601,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						}
 					}.start();
 				} else {
-
 					Logging.warning(this,
 							"checkForContradictingAssignments " + info + " client " + clientId + ", actualproduct "
 									+ actualProduct + ", product " + product + ", stateType " + stateType + ", state "
@@ -626,7 +620,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 									existingRequest);
 
 					new Thread() {
-
 						@Override
 						public void run() {
 							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
@@ -674,7 +667,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public boolean infoIfNoClientsSelected() {
-
 		if (selectedClients.length == 0) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
@@ -701,7 +693,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	private void tellAndClearMissingProducts(String productId) {
 		if (!missingProducts.isEmpty()) {
-
 			Logging.info(this, "required by product " + productId + " but missing " + missingProducts);
 
 			StringBuilder lines = new StringBuilder();
@@ -735,7 +726,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		Logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
 
 		if (!missingImplementationForAR.isEmpty()) {
-
 			StringBuilder products = new StringBuilder("\n\n\n");
 			for (String prod : missingImplementationForAR) {
 				products.append(prod);
@@ -752,7 +742,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private void initChangeActionRequests() {
-
 		product2setOfClientsWithNewAction.clear();
 
 		// for each product, we shall collect the clients that have a changed action
@@ -778,7 +767,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public void collectiveChangeActionRequest(String productId, ActionRequest ar) {
-
 		Logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
 
 		if (!checkActionIsSupported(productId, ar)) {
@@ -814,7 +802,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			boolean started = false;
 
 			for (String clientId : selectedClients) {
-
 				if (!started) {
 					started = true;
 					newValUntilNow = getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST);
@@ -960,7 +947,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 								|| requiredIS == InstallationStatus.NOT_INSTALLED)
 								// the only relevant states for which we should eventually do something
 								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
-
 							// we overwrite the required action request
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
@@ -974,7 +960,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 						// handle resulting action requests
 						if (requiredAR > ActionRequest.NONE) {
-
 							checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
 									ActionRequest.getLabel(requiredAR));
 
@@ -994,7 +979,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 									// already set for clientId, product "
 								} else {
-
 									Logging.info(this, "ar:   ===== recursion into " + requirement.getKey());
 									recursivelyChangeActionRequest(clientId, requirement.getKey(),
 											new ActionRequest(requiredAR));
@@ -1027,7 +1011,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, " possible actions  " + possibleActions);
 			List<String> actionsForProduct = new ArrayList<>();
 			if (possibleActions != null) {
-
 				List<String> actionList = new ArrayList<>();
 				Iterator<String> iter = possibleActions.get(actualProduct).iterator();
 				while (iter.hasNext()) {

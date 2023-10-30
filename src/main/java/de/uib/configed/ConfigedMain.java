@@ -128,6 +128,7 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -337,6 +338,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private SSHConfigDialog sshConfigDialog;
 	private SSHCommandControlDialog sshCommandControlDialog;
 	private NewClientDialog newClientDialog;
+
+	private boolean isAllLicenseDataReloaded;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -585,7 +588,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "initDashboard " + dashboard);
 		if (dashboard == null) {
-			dashboard = new Dashboard();
+			dashboard = new Dashboard(this);
 			dashboard.initAndShowGUI();
 		} else {
 			dashboard.show();
@@ -719,7 +722,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void loadDataAndGo() {
-
 		Logging.clearErrorList();
 
 		// errors are already handled in login
@@ -738,11 +740,9 @@ public class ConfigedMain implements ListSelectionListener {
 		new Thread() {
 			@Override
 			public void run() {
-
 				preloadData();
 
 				SwingUtilities.invokeLater(() -> {
-
 					initGui();
 
 					everythingReady = true;
@@ -1042,13 +1042,11 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void handleLicencesManagementRequest() {
-
 		// show Loading pane only when something needs to be loaded from server
 		if (persistenceController.getModuleDataService().isWithLicenceManagementPD() && licencesFrame == null) {
 			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licences.Loading"));
 		}
 		new Thread() {
-
 			@Override
 			public void run() {
 				Logging.info(this, "handleLicencesManagementRequest called");
@@ -1278,12 +1276,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	// we call this after we have a PersistenceController
 	private void initMainFrame() {
-
 		initDepots();
 
 		// create client selection panel
 		selectionPanel = new JTableSelectionPanel(this) {
-
 			@Override
 			protected void keyPressedOnTable(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -1407,7 +1403,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void initTableData() {
-
 		licencesStatus = LicencesTabStatus.LICENCEPOOL;
 
 		// global table providers
@@ -1418,10 +1413,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencePoolsPD()));
+		licencePoolTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
+						}
+					}
 
-		persistenceController.getSoftwareDataService().retrieveRelationsAuditSoftwareToLicencePoolsPD();
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
@@ -1432,8 +1437,21 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> persistenceController.getSoftwareDataService().getRelationsSoftwareL2LPool()));
+		licenceOptionsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController
+									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1450,8 +1468,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicenceContractsPD()));
+		licenceContractsTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
+					}
+				}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
@@ -1469,8 +1499,20 @@ public class ConfigedMain implements ListSelectionListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		softwarelicencesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-				() -> (Map) persistenceController.getLicenseDataService().getLicencesPD()));
+		softwarelicencesTableProvider = new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
+						}
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
+					}
+				}));
 	}
 
 	private void startLicencesFrame() {
@@ -1511,14 +1553,15 @@ public class ConfigedMain implements ListSelectionListener {
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation();
+		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(
+				this);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
 		// panelStatistics
 		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
 				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
-		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics();
+		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(this);
 		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
 
@@ -1673,7 +1716,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, " filterClientList " + filterClientList);
 
 		if (filterClientList) {
-
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs "
 					+ getSelectedClients().length);
 
@@ -1709,7 +1751,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
 		for (String clientId : clientIds) {
-
 			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
 				pcinfo = new HostInfo();
@@ -1742,7 +1783,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void rebuildTree(String[] allPCs, Set<String> permittedHostGroups) {
-
 		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
 		treeClients.clear();
@@ -1972,7 +2012,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
-
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
@@ -1992,7 +2031,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
-
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
@@ -2010,7 +2048,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL))) {
-
 			List<String> columns = new ArrayList<>();
 
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2177,7 +2214,6 @@ public class ConfigedMain implements ListSelectionListener {
 		productProperties = new ArrayList<>(getSelectedClients().length);
 
 		if (getSelectedClients().length > 0 && possibleActions.get(productEdited) != null) {
-
 			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
 					.getProductPropertiesPD(getSelectedClients()[0], productEdited);
 
@@ -2612,7 +2648,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
-
 		if (depots.size() > 1 && !persistenceController.getDepotDataService().areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
@@ -2930,7 +2965,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	// only has an effect if number of table columns not changed
 	private static void setTableColumnWidths(JTable table, int[] columnWidths) {
-
 		// Only do it if number of columns didn't change
 		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
 			for (int i = 0; i < columnWidths.length; i++) {
@@ -3313,7 +3347,6 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 
 			if (viewIndex == VIEW_CLIENTS) {
-
 				mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 			} else {
 				mainFrame.enableMenuItemsForClients(-1);
@@ -3418,13 +3451,19 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "reloadLicensesData");
 		if (everythingReady) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+			isAllLicenseDataReloaded = true;
 
 			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
 				for (PanelGenEditTable p : cmtp.getTablePanes()) {
 					p.reload();
 				}
 			}
+			isAllLicenseDataReloaded = false;
 		}
+	}
+
+	public boolean isAllLicenseDataReloaded() {
+		return isAllLicenseDataReloaded;
 	}
 
 	private void refreshClientListKeepingGroup() {
@@ -3491,7 +3530,6 @@ public class ConfigedMain implements ListSelectionListener {
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
 			for (String client : savedSelectedValues) {
-
 				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 						.get(client);
 
@@ -3617,7 +3655,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 			if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
 					&& !collectChangedLocalbootStates.keySet().isEmpty()) {
-
 				Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
 
 				while (it0.hasNext()) {
@@ -3874,7 +3911,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 				if (viewIndex == VIEW_CLIENTS && Boolean.TRUE.equals(
 						persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
-
 					reachableInfo = persistenceController.getHostDataService().reachableInfo(null);
 
 					setReachableInfo(selectedClients);
@@ -3893,13 +3929,11 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void getReachableInfo() {
-
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
 		new Thread() {
 			@Override
 			public void run() {
-
 				showReachableInfoDialog();
 
 				reachableInfo = new HashMap<>();
@@ -3965,7 +3999,6 @@ public class ConfigedMain implements ListSelectionListener {
 		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
 		for (int row = 0; row < model.getRowCount(); row++) {
-
 			if (model.getValueAt(row, 0).equals(clientName)) {
 				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
 
@@ -3988,7 +4021,6 @@ public class ConfigedMain implements ListSelectionListener {
 			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
 			for (int row = 0; row < model.getRowCount(); row++) {
-
 				String clientId = (String) model.getValueAt(row, 0);
 
 				model.setValueAt(getConnectionInfoForClient(clientId), row, col);
@@ -4163,10 +4195,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 		for (String client : getSelectedClients()) {
 			Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicencesUsageListPD();
+					.getLicenseDataService().getFClient2LicensesUsageListPD();
 
 			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenceUsage(client, m.getLicenceId(),
+				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenceId(),
 						m.getLicensePool());
 			}
 		}
@@ -4361,7 +4393,6 @@ public class ConfigedMain implements ListSelectionListener {
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
 			final boolean wanConfig, final String group, final String productNetboot) {
-
 		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
@@ -4919,7 +4950,6 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	public void logEventOccurred() {
-
 		if (allFrames == null) {
 			return;
 		}

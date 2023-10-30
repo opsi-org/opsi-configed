@@ -85,7 +85,6 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
-
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
 
 	private static final int FRAME_WIDTH = 750;
@@ -1110,7 +1109,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			for (SimpleGroup simpleGroup : group.groupList) {
 				AbstractSelectOperation selectOperation = ows.getOperation();
 				if (selectOperation.getElement().getPath().equals(simpleGroup.element.getPath())) {
-
 					treatOperation(ows, selectOperation, simpleGroup);
 					break;
 				}

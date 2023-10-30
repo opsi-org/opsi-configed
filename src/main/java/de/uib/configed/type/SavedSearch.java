@@ -7,7 +7,6 @@
 package de.uib.configed.type;
 
 public class SavedSearch {
-
 	public static final String CONFIG_KEY = "configed.saved_search";
 	public static final String NAME_KEY = "name";
 	public static final String DESCRIPTION_KEY = "description";

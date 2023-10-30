@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.util.List;
 
 public interface FramingTextfieldWithListselection {
-
 	String getTitle();
 
 	String getTextfieldLabel();

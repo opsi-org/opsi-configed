@@ -7,7 +7,6 @@
 package de.uib.utilities.logging;
 
 public class TimeCheck {
-
 	private static int loglevel = Logging.LEVEL_NOTICE;
 	private static final int MAX_SHOWN = 500;
 

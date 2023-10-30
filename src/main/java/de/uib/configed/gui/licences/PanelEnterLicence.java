@@ -48,7 +48,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
-
 	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 	private static final int MAX_WIDTH = 1000;
@@ -307,7 +306,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldEndOfLicence.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null) {
 						fEditDate = new FEditDate(jTextFieldEndOfLicence.getText(), false);

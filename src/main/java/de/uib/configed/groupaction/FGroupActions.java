@@ -34,7 +34,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import utils.Utils;
 
 public class FGroupActions extends SecondaryFrame {
-
 	private GlassPane glassPane;
 
 	private JTextField fieldGroupname;

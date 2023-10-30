@@ -45,7 +45,6 @@ import de.uib.utilities.ssh.SSHOutputCollector;
  * This Class handles SSHCommands.
  **/
 public final class SSHCommandParameterMethods {
-
 	/** default parameter replace id beginns with <<< **/
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
 	/** default parameter replace id ends with >>> **/
@@ -210,7 +209,6 @@ public final class SSHCommandParameterMethods {
 		splitted[1] = "";
 
 		if (m.contains(PARAM_SPLITTER_DEFAULT)) {
-
 			splitted = paramSplitterDefaultPattern.split(m);
 
 			Logging.info(this, "splitParameter method " + splitted[0]);
@@ -326,7 +324,6 @@ public final class SSHCommandParameterMethods {
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
-
 		replaceElements(strArr, beginEndElement);
 		Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
 		String formatedResult = createStringOfArray(strArr, beginEndString, separator);

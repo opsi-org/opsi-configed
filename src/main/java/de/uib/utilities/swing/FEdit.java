@@ -104,7 +104,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	private void initComponents() {
-
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		setHint(hint);
@@ -163,7 +162,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public void setDataChanged(boolean b) {
-
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
 	}
@@ -205,7 +203,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public boolean init(Dimension usableAreaSize) {
-
 		if (editingArea.getComponentCount() != 1) {
 			Logging.info(this, " editing area not filled with component");
 		}
@@ -216,7 +213,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public boolean init() {
-
 		return init(areaDimension);
 	}
 

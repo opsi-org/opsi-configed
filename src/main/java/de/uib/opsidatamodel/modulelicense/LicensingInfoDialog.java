@@ -45,7 +45,6 @@ import de.uib.utilities.table.updates.TableEditItem;
 import utils.Utils;
 
 public class LicensingInfoDialog extends FGeneralDialog {
-
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
@@ -79,7 +78,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-
 		// we could design an adapted layout and infuse it in guiInit
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -142,7 +140,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private PanelGenEditTable initMainPanel() {
-
 		retrieveData();
 
 		thePanel = new LicensingInfoPanelGenEditTable("", -1, false, 0, true,
@@ -187,7 +184,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private JPanel initClientInfo() {
-
 		retrieveData();
 
 		JLabel orangeWarningLabel = new JLabel(
@@ -357,7 +353,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private void buildModel() {
-
 		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},

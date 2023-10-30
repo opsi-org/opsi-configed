@@ -17,7 +17,6 @@ import javax.swing.table.TableColumn;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
-
 	public LicensingInfoPanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		super(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
@@ -25,7 +24,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 
 	@Override
 	protected void setCellRenderers() {
-
 		LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			String name = tableModel.getColumnName(i);
@@ -37,7 +35,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 
 	public void setMarkBoldHeaderCellRenderer() {
 		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {

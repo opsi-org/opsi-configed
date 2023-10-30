@@ -105,7 +105,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 			fieldSelectedClientsNames.setText("");
 			fieldSelectedClientsNames.setToolTipText(null);
 		} else {
-
 			fieldSelectedClientsNames.setText(selectedClientNames);
 
 			fieldSelectedClientsNames.setToolTipText(
@@ -148,7 +147,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void initComponents() {
-
 		labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
 
 		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));

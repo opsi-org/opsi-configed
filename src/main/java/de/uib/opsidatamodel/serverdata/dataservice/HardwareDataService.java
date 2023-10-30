@@ -648,7 +648,6 @@ public class HardwareDataService {
 
 			// we have got updates for this table configuration
 			if (tableConfigUpdates != null) {
-
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 

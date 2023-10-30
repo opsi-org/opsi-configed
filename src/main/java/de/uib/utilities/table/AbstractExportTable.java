@@ -89,17 +89,14 @@ public abstract class AbstractExportTable {
 	}
 
 	public void setClient(String clientID) {
-
 		client = clientID;
 	}
 
 	public void setMetaData(Map<String, String> tableMetaData) {
-
 		metaData = tableMetaData;
 	}
 
 	protected String checkExtension(String path) {
-
 		if (path == null) {
 			return null;
 		}
@@ -117,7 +114,6 @@ public abstract class AbstractExportTable {
 		if (onlySelectedRows) {
 			Logging.debug("selectedRows: " + theTable.getSelectedRows().length);
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
-
 				FTextArea fChoice = new FTextArea(null,
 						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
 						new String[] { Configed.getResourceValue("buttonCancel"),

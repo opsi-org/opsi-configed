@@ -104,6 +104,10 @@ public class DefaultTableProvider {
 		source.requestReload();
 	}
 
+	public void cancelRequestReload() {
+		source.cancelRequestReload();
+	}
+
 	// should initiate reloading the metadata
 	public void structureChanged() {
 		classNames = null;
@@ -117,7 +121,6 @@ public class DefaultTableProvider {
 			String val = (String) rowsCopy.get(row).get(col);
 
 			if (emptyAllowed || (val != null && !val.isEmpty())) {
-
 				set.add((String) rowsCopy.get(row).get(col));
 			}
 		}

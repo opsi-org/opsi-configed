@@ -35,7 +35,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		ImageIcon selectedIcon = null;
 
 		if (value != null) {
-
 			if (mapOfStrings != null) {
 				selectedString = mapOfStrings.get("" + value);
 			}
@@ -46,7 +45,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		}
 
 		if (result instanceof JLabel) {
-
 			((JLabel) result).setText(selectedString);
 
 			((JLabel) result).setIcon(selectedIcon);

@@ -94,7 +94,6 @@ public final class Configed {
 	/** construct the application */
 	private Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
 			final String paramClientgroup, final Integer paramTab) {
-
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
 		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
@@ -169,7 +168,6 @@ public final class Configed {
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
 			String paramClient, String paramClientgroup) {
-
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
@@ -335,7 +333,6 @@ public final class Configed {
 	}
 
 	private static void processArgs(CommandLine cmd) {
-
 		processLoginOptions(cmd);
 
 		processGuiOptions(cmd);
@@ -390,7 +387,6 @@ public final class Configed {
 	}
 
 	private static boolean loadLocalizationFile(String extraLocalizationFileName) {
-
 		String[] parts = null;
 
 		File extraLocalizationFile = new File(extraLocalizationFileName);
@@ -418,7 +414,6 @@ public final class Configed {
 	}
 
 	private static boolean loadExtraLocalization(File extraLocalizationFile) {
-
 		extraLocalization = new Properties();
 
 		try (FileInputStream inputStream = new FileInputStream(extraLocalizationFile)) {
@@ -432,7 +427,6 @@ public final class Configed {
 	}
 
 	private static void initLogging() {
-
 		Logging.setLogfileMarker(host);
 		Logging.init();
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
@@ -445,7 +439,6 @@ public final class Configed {
 	 * main-Methode
 	 */
 	public static void main(CommandLine cmd) {
-
 		processArgs(cmd);
 
 		Logging.debug("configed: args recognized");
@@ -459,7 +452,6 @@ public final class Configed {
 		Logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
-
 			Logging.debug("optionCLIQuerySearch");
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 

@@ -25,7 +25,6 @@ import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
-
 	private Set<MessagebusListener> listeners = new HashSet<>();
 
 	public WebSocketClientEndpoint(URI serverURI) {

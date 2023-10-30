@@ -25,7 +25,6 @@ import de.uib.utilities.thread.WaitingWorker;
 import utils.Utils;
 
 public class FLoadingWaiter extends JFrame implements WaitingSleeper {
-
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 

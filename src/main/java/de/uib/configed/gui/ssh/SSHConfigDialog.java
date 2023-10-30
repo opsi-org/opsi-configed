@@ -121,7 +121,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				return false;
 			}
 		} else {
-
 			if (!connectionInfo.getHost().equals(ConfigedMain.getHost())) {
 				Logging.info(this, "compareStates 5 >" + connectionInfo.getHost() + "<     <>    >"
 						+ ConfigedMain.getHost() + "<");
@@ -147,7 +146,6 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			Logging.info(this, "compareStates 9");
 			return false;
 		} else if (jCheckBoxUseKeyFile.isSelected()) {
-
 			if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
 				Logging.debug(this, "compareStates 10");
 				return false;

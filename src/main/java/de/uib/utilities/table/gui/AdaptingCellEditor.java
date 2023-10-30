@@ -18,7 +18,6 @@ import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.ColoredListCellRenderer;
 
 public class AdaptingCellEditor extends DefaultCellEditor {
-
 	private JComboBox<String> cc;
 	private ComboBoxModeller cbm;
 	private ComboBoxModel<String> nullModel;
@@ -34,7 +33,6 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
 		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {

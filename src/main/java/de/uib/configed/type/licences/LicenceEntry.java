@@ -15,7 +15,6 @@ import de.uib.utilities.logging.Logging;
 
 // software license in opsi data base
 public class LicenceEntry extends TreeMap<String, Object> {
-
 	/*
 	 * desc SOFTWARE_LICENSE :
 	 * | Field | Type | Null | Key | Default | Extra

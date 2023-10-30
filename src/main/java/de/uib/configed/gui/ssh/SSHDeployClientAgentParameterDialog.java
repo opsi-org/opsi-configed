@@ -130,7 +130,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		List<Object> resultConfigList = (List<Object>) configs
 				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
-
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
 
 			// the config will be created in this run of configed
@@ -141,7 +140,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		resultConfigList = (List<Object>) configs.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
-
 			Logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
 
 			// the config will be created in this run of configed
@@ -177,7 +175,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

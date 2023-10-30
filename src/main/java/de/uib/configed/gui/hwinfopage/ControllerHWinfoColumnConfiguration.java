@@ -35,6 +35,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -43,7 +44,6 @@ import de.uib.utilities.table.updates.TableEditItem;
 import utils.Utils;
 
 public class ControllerHWinfoColumnConfiguration {
-
 	public static final String COL_LINE_NO = Configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
 	public static final String COL_HOST_VS_ITEM_ASSIGNED = Configed
 			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
@@ -73,7 +73,6 @@ public class ControllerHWinfoColumnConfiguration {
 			.getPersistenceController();
 
 	public ControllerHWinfoColumnConfiguration() {
-
 		initPanel();
 		initModel();
 		updateItems = new HashMap<>();
@@ -82,7 +81,6 @@ public class ControllerHWinfoColumnConfiguration {
 	private void initPanel() {
 		panel = new PanelGenEditTable("", 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
-
 			@Override
 			public void commit() {
 				// we collect for each changed line an update item
@@ -118,7 +116,6 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	private void initModel() {
-
 		List<TableEditItem> updateCollection = new ArrayList<>();
 		columnNames = new ArrayList<>();
 		columnNames.add(COL_LINE_NO);
@@ -139,8 +136,17 @@ public class ControllerHWinfoColumnConfiguration {
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
-				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return getHwColumnConfig();
+					}
+				})), KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				boolean result = super.isCellEditable(row, col);
@@ -202,7 +208,6 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-
 				Logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
 
 				buildUpdateItem(
@@ -248,7 +253,6 @@ public class ControllerHWinfoColumnConfiguration {
 		int id = 0;
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {
-
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClassEntry.getValue();
 			List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass.getDeviceHostProperties();
 			List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();

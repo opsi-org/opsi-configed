@@ -40,10 +40,12 @@ public class Dashboard {
 
 	private final JFrame frame;
 	private MainView mainView;
+	private ConfigedMain configedMain;
 
-	public Dashboard() {
+	public Dashboard(ConfigedMain configedMain) {
 		frame = new JFrame();
 		mainView = null;
+		this.configedMain = configedMain;
 	}
 
 	public void initAndShowGUI() {
@@ -80,7 +82,7 @@ public class Dashboard {
 	}
 
 	private void initFX(final JFXPanel fxPanel) throws IOException {
-		mainView = new MainView(fxPanel);
+		mainView = new MainView(fxPanel, configedMain);
 		ClientView clientView = new ClientView(fxPanel);
 		ProductView productView = new ProductView(fxPanel);
 

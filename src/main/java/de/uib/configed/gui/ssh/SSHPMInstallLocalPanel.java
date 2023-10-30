@@ -23,7 +23,6 @@ import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import utils.Utils;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
-
 	private static SSHPMInstallLocalPanel instance;
 
 	private JLabel jLabelUploadFrom;
@@ -81,7 +80,6 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);

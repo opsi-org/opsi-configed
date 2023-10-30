@@ -23,7 +23,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.TableCellRendererByIndex;
 
 public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
-
 	private Map<String, Color> mapOfTextColors;
 
 	public ColoredTableCellRendererByIndex(Map<String, String> mapOfStringValues, String tooltipPrefix) {

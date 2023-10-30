@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import de.uib.utilities.logging.Logging;
 
 public class MySQL {
-
 	public static final String KEY_OPERATION = "operation";
 
 	private boolean group;
@@ -74,17 +73,14 @@ public class MySQL {
 	}
 
 	public String getMySQLforJSONObject(JSONObject json) {
-
 		Logging.info(this, "json source " + json);
 		try {
 			if (!json.isNull("element")) {
-
 				String data = json.getString("data");
 
 				data = data.replace('*', '%');
 
 				switch (json.getString("element")) {
-
 				// HOST
 				case "GroupElement":
 					group = true;
@@ -215,7 +211,6 @@ public class MySQL {
 	}
 
 	private String setHardware(JSONObject json) {
-
 		JSONArray elementPath = json.getJSONArray("elementPath");
 		String hardwareType = elementPath.getString(0);
 		String column = elementPath.getString(1);
@@ -259,7 +254,6 @@ public class MySQL {
 	}
 
 	private static String getOperationFromElement(String operation) {
-
 		switch (operation) {
 		case "BigIntLessThanOperation":
 		case "IntLessThanOperation":

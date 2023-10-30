@@ -58,7 +58,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		JMenuItem menuItemNull = new JMenuItem("Kein Datum");
 		menuItemNull.addActionListener((ActionEvent actionEvent) -> {
-
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		});
@@ -135,12 +134,10 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	private void setToMidnight() {
-
 		calendar = calendar.withHour(0).withMinute(0).withSecond(0);
 	}
 
 	private void switchMonth(int d) {
-
 		calendar = calendar.plusMonths(d);
 
 		Date newDate = Timestamp.valueOf(calendar);
@@ -152,7 +149,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	private void switchYear(int d) {
-
 		calendar = calendar.plusYears(d);
 
 		Date newDate = Timestamp.valueOf(calendar);
@@ -170,7 +166,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public void setDate(boolean select) {
-
 		calendar = LocalDateTime.now();
 
 		if (!withTime) {

@@ -346,7 +346,6 @@ public class ConfigDataService {
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
-
 			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
 						arg -> new HashMap<>());
@@ -502,7 +501,6 @@ public class ConfigDataService {
 			List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
 
 			for (Map<String, Object> callConfig : configCollection) {
-
 				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
 					callsConfigDeleteCollection.add(callConfig);
 				} else if (!restrictToMissing || missingConfigIds.contains(callConfig.get("ident"))) {
@@ -931,7 +929,6 @@ public class ConfigDataService {
 			List<Map<String, Object>> callsConfigCollection = new ArrayList<>();
 
 			for (Map<String, Object> state : configStateCollection) {
-
 				state.put("values", state.get("values"));
 				callsConfigName2ConfigValueCollection.add(state);
 			}
@@ -1110,7 +1107,6 @@ public class ConfigDataService {
 
 	private Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
 			Boolean defaultVal) {
-
 		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
 		Boolean value = null;
 
@@ -1202,7 +1198,6 @@ public class ConfigDataService {
 		buf.append("<table border='0' cellspacing='0' cellpadding='0'>\n");
 
 		for (Entry<String, List<Map<String, Object>>> backendEntry : backends.entrySet()) {
-
 			buf.append("<tr><td bgcolor='#fbeca5' color='#000000'  width='100%'  colspan='3'  align='left'>");
 			buf.append("<font size='" + titleSize + "'><b>" + backendEntry.getKey() + "</b></font></td></tr>");
 
@@ -1247,7 +1242,6 @@ public class ConfigDataService {
 				Map<String, Object> configItems = exec.getMapFromItem(mapEntry.getValue());
 
 				for (Entry<String, Object> configItem : configItems.entrySet()) {
-
 					buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
 					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
 							+ fontSizeSmall + "'>" + configItem.getKey() + "</font></td>");

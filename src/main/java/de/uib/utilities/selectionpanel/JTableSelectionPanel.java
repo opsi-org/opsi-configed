@@ -64,7 +64,6 @@ import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
 public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
-
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
@@ -301,7 +300,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void setMissingDataPanel() {
-
 		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
 
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
@@ -388,7 +386,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void initColumnNames() {
-
 		String oldSelected = (String) comboSearch.getSelectedItem();
 		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
@@ -473,7 +470,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		// and repeat the last addition
 		if (lastAddedI > -1) {
-
 			lsm.addSelectionInterval(lastAddedI, lastAddedI);
 		}
 
@@ -618,7 +614,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
 			TablesearchPane.SearchMode searchMode) {
-
 		Logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "
 				+ startviewrow + ", " + value + ", " + colIndices + ", " + searchMode);
 
@@ -643,7 +638,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
 		if (searchMode == TablesearchPane.SearchMode.REGEX_SEARCHING) {
-
 			if (fulltext) {
 				val = ".*" + val + ".*";
 			}
@@ -662,9 +656,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
-
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
-
 				// we dont compare all values (comparing all values is default)
 				if (colIndices != null && !colIndices.contains(j)) {
 					continue;
@@ -703,7 +695,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				}
 
 				if (found) {
-
 					break;
 				}
 			}
@@ -722,7 +713,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
 		for (String word : alternativeWords) {
-
 			if (compareVal.indexOf(word) >= 0) {
 				return true;
 			}
@@ -741,7 +731,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public void scrollRowToVisible(int row) {
-
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
 	}
@@ -813,7 +802,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void searchTheRow(int startrow, boolean addSelection) {
-
 		HashSet<Integer> selectedCols = null;
 
 		if (comboSearch.getSelectedIndex() > 0) {
@@ -822,7 +810,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		switch (comboSearchMode.getSelectedIndex()) {
-
 		case 1:
 			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
 			break;
@@ -866,9 +853,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
-
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
 			searchOnDocumentChange();
@@ -877,7 +862,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -887,7 +871,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 			searchOnDocumentChange();
@@ -900,7 +883,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (!(e.getSource() instanceof JTextField)) {
 			keyPressedOnTable(e);
 		}
@@ -910,7 +892,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				markAll();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
-
 			if (!fieldSearch.getText().isEmpty()) {
 				searchTheNextRow();
 			}
@@ -932,9 +913,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	// ActionListener implementation
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource() == checkmarkSearch) {
-
 			fieldSearch.setText("");
 		}
 	}

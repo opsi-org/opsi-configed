@@ -15,7 +15,6 @@ import java.util.List;
  * operation.
  */
 public abstract class AbstractSelectElement {
-
 	public static final String NAME = "Product";
 
 	private String[] path;

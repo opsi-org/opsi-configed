@@ -186,6 +186,11 @@ public abstract class AbstractSWExporter {
 		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
+					public void reloadMap() {
+						// Nothing to reload.
+					}
+
+					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController

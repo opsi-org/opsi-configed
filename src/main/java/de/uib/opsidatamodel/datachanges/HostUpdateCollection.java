@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
-
 	public HostUpdateCollection() {
 		super(new ArrayList<>(0));
 	}

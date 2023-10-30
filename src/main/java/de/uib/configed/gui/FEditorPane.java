@@ -12,7 +12,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
 public class FEditorPane extends FGeneralDialog {
-
 	private JEditorPane editPane = new JEditorPane();
 
 	public FEditorPane(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
@@ -22,7 +21,6 @@ public class FEditorPane extends FGeneralDialog {
 	}
 
 	private void init() {
-
 		editPane.setText("          ");
 		editPane.setEditable(false);
 
@@ -34,7 +32,6 @@ public class FEditorPane extends FGeneralDialog {
 	}
 
 	public boolean setPage(String url) {
-
 		/*
 		 * tip from stackoverflow for a ssl connection:
 		 * 

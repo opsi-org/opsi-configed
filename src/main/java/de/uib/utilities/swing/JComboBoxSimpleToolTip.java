@@ -15,7 +15,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import utils.Utils;
 
 public class JComboBoxSimpleToolTip extends JComboBox<String> {
-
 	private static final int FILL_LENGTH = 40;
 
 	public JComboBoxSimpleToolTip() {
@@ -27,7 +26,6 @@ public class JComboBoxSimpleToolTip extends JComboBox<String> {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
-
 			String val;
 			if (value == null) {
 				val = "";

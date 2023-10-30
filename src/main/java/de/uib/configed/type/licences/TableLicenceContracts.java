@@ -12,7 +12,6 @@ import java.util.List;
 import de.uib.utilities.datastructure.Relation;
 
 public final class TableLicenceContracts extends Relation {
-
 	/*
 	 * describe LICENSE_CONTRACT 
 	 * | Field | Type | Null | Key | Default | Extra

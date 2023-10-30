@@ -35,7 +35,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	}
 
 	private GroupNode transferRepresentsGroup(String treeRepresentation) {
-
 		if (treeRepresentation == null) {
 			return null;
 		}
@@ -134,7 +133,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-
 		Logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
 		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {
@@ -197,7 +195,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	protected Transferable createTransferable(JComponent c) {
-
 		StringBuilder buff = new StringBuilder();
 		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
@@ -326,7 +323,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// Perform the actual import.
 		for (String value : values) {
-
 			String importID = null;
 			String sourceParentID = null;
 

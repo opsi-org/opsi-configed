@@ -50,7 +50,6 @@ import utils.Utils;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
-
 	private JLabel jLabelEditDepotProductProperties;
 
 	private JList<String> listDepots;
@@ -72,7 +71,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	}
 
 	private void initComponents() {
-
 		JPanel panelDepots = new JPanel();
 
 		listDepots = new JList<>();
@@ -190,7 +188,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	}
 
 	public void setDepotListData(List<String> depots, String productEdited) {
-
 		Logging.info(this, "setDepotListData");
 		if (depots == null) {
 			Logging.warning(this, "depots list is null here");
@@ -253,7 +250,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private Map<String, Object> mergeProperties(
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
-
 		Map<String, Object> result = new HashMap<>();
 
 		if (depots == null || depots.isEmpty()) {
@@ -349,7 +345,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getSource() == listDepots) {
 			saveSelectedDepots();
 		}

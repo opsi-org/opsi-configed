@@ -22,7 +22,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class NavigationPanel extends JPanel implements ActionListener {
-
 	private JButton nextButton;
 	private JButton previousButton;
 	private JButton firstButton;
@@ -56,7 +55,6 @@ public class NavigationPanel extends JPanel implements ActionListener {
 	}
 
 	private void initComponents() {
-
 		Logging.info(this, "initComponents");
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);

@@ -152,7 +152,6 @@ public final class OpsiDataBackend {
 		List<String> matchingClients = new LinkedList<>();
 		for (OpsiDataClient client : clients) {
 			if (operation.doesMatch(client)) {
-
 				matchingClients.add(client.getId());
 			}
 		}
@@ -453,7 +452,6 @@ public final class OpsiDataBackend {
 		if (hasHardware) {
 			getHardwareOnClient(clientNames);
 		} else {
-
 			// dont use older data after a reload request
 			hardwareOnClient = null;
 		}

@@ -84,7 +84,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JButton jButtonCommit = new JButton();
 
 	private KeyListener newKeyListener = new KeyAdapter() {
-
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -300,7 +299,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void finishAndMakeVisible() {
-
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
@@ -321,7 +319,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	@Override
 	public void actAfterWaiting() {
-
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 

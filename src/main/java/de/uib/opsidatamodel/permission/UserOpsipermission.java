@@ -14,7 +14,6 @@ import java.util.Set;
 import de.uib.utilities.logging.Logging;
 
 public class UserOpsipermission extends UserConfigModule {
-
 	// permit restrictable action
 
 	public enum ActionPrivilege {

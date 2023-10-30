@@ -131,7 +131,6 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getCommand() {
-
 		if (!packageVersion.isEmpty() || !productVersion.isEmpty()) {
 			keepVersions = "--keep-versions ";
 		}

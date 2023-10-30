@@ -12,7 +12,6 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.utilities.logging.Logging;
 
 public class RemoteControls extends HashMap<String, RemoteControl> {
-
 	public void checkIn(String key, Object value) {
 		if (!key.startsWith(RemoteControl.CONFIG_KEY)) {
 			return;

@@ -13,7 +13,6 @@ import de.uib.utilities.logging.Logging;
 
 //very similar to TableEntry
 public class RelationElement<S, O> extends HashMap<S, O> {
-
 	protected List<S> allowedAttributes;
 
 	public RelationElement() {

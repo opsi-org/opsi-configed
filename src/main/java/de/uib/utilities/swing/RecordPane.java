@@ -64,7 +64,6 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 	}
 
 	private void initComponents() {
-
 		GroupLayout baseLayout = new GroupLayout(this);
 		this.setLayout(baseLayout);
 

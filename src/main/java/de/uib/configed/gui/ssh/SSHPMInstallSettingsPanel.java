@@ -27,7 +27,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
-
 	private JLabel jLabelOn = new JLabel();
 	private JLabel jLabelUpdateInstalled = new JLabel();
 	private JLabel jLabelSetupInstalled = new JLabel();
@@ -48,7 +47,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			.getPersistenceController();
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
-
 		if (dia != null) {
 			setFDepotList(dia);
 		}
@@ -59,7 +57,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	private void initComponents() {
-
 		jLabelOn.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
@@ -121,7 +118,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);

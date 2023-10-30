@@ -18,7 +18,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class FDialogSubTable extends FGeneralDialog {
-
 	public FDialogSubTable(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
 			int preferredWidth, int preferredHeight) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, true);
@@ -28,7 +27,6 @@ public class FDialogSubTable extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-
 		Logging.info(this, "allLayout");
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));

@@ -13,7 +13,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class DependenciesModel {
-
 	private Set<DependenciesModelListener> listeners;
 
 	private RequirementsTableModel requirementsTableModel;
@@ -23,7 +22,6 @@ public class DependenciesModel {
 			.getPersistenceController();
 
 	public DependenciesModel() {
-
 		requirementsTableModel = new RequirementsTableModel();
 		dependenciesTreeModel = new DependenciesTreeModel();
 

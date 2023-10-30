@@ -45,7 +45,6 @@ public class ExtendedDate {
 			if (value.equalsIgnoreCase(INFINITE_IMPORT) || value.equalsIgnoreCase(STRING_INFINITE)) {
 				sDate = STRING_INFINITE;
 			} else {
-
 				// extend
 
 				if (!value.contains(" ")) {

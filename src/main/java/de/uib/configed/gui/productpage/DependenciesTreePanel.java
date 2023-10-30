@@ -35,7 +35,6 @@ import de.uib.configed.guidata.DependenciesTreeModel;
 import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
-
 	private DependenciesTreeModel dependenciesTreeModel;
 
 	private JRadioButton dependenciesNeedsButton;
@@ -65,9 +64,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTree.addMouseMotionListener(this);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {
-
 			private void selectAllWithSameProductId(TreePath selectedPath) {
-
 				String productIdOfSelectedPath = selectedPath.getLastPathComponent().toString();
 
 				for (int i = 0; i < dependenciesTree.getRowCount(); i++) {
@@ -146,7 +143,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-
 		if (event.getSource() == dependenciesNeedsButton) {
 			if (isActive) {
 				treeAbhaengigkeiten = true;
@@ -207,7 +203,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	}
 
 	private void setPathLabel(TreePath path) {
-
 		if (path != null) {
 			String pathString = path.toString();
 

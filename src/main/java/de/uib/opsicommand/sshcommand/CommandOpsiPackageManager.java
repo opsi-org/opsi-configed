@@ -13,7 +13,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandOpsiPackageManager implements SSHCommand {
-
 	private FGeneralDialog dialog;
 	private boolean needSudo;
 	private boolean needParameter = true;

@@ -45,7 +45,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		Map<String, Object> realMap = client.getMap(map);
 		Logging.debug(this, "doesMatch,  we look into map for key " + key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-
 			return false;
 		}
 
@@ -55,7 +54,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	}
 
 	protected boolean checkData(final String realData) {
-
 		String rData = realData.toLowerCase(Locale.ROOT);
 
 		// simple case: no '*'
@@ -66,7 +64,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 			return realData.length() > 0;
 		} else {
-
 			if (!startsWith && !rData.startsWith(dataSplitted[0])) {
 				return false;
 			}
@@ -74,7 +71,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 			int index = 0;
 			int i = 0;
 			while (i < dataSplitted.length && index >= 0) {
-
 				if (!dataSplitted[i].isEmpty()) {
 					index = rData.indexOf(dataSplitted[i], index);
 					if (index >= 0) {

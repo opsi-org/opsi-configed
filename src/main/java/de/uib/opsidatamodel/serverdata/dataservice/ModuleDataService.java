@@ -291,7 +291,6 @@ public class ModuleDataService {
 				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 					opsiModules.put(key, false);
 				} else {
-
 					Integer warningLimit = null;
 					Integer stopLimit = null;
 
@@ -443,7 +442,6 @@ public class ModuleDataService {
 
 	private void callOpsiLicenceMissingModules(List<String> missingModulesPermissionInfo) {
 		if (!missingModulesPermissionInfo.isEmpty()) {
-
 			SwingUtilities.invokeLater(() -> {
 				StringBuilder info = new StringBuilder();
 
@@ -547,7 +545,6 @@ public class ModuleDataService {
 				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 					opsiModules.put(key, false);
 				} else {
-
 					Integer warningLimit = null;
 					Integer stopLimit = null;
 
@@ -702,7 +699,6 @@ public class ModuleDataService {
 
 			// the global max client count is reduced, a real warning and error limit exists
 			if (compareResult < 0) {
-
 				maxClients = specialMaxClientNumber;
 				globalMaxClients = new ExtendedInteger(maxClients);
 			} else {

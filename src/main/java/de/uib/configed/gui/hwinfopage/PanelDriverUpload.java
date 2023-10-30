@@ -98,7 +98,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			boolean result = false;
 
 			if (fieldServerPath != null && fieldDriverPath != null) {
-
 				targetPath = new File(fieldServerPath.getText());
 				driverPath = new File(fieldDriverPath.getText());
 
@@ -292,7 +291,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void buildPanel() {
-
 		fieldByAuditPath = new JTextShowField();
 
 		fieldClientname = new JTextShowField();
@@ -597,7 +595,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		Logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
-
 			int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
@@ -634,7 +631,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private class PanelDriverUploadThread extends Thread {
-
 		@Override
 		public void run() {
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
@@ -692,7 +688,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private void produceTarget() {
 		if (fieldServerPath == null) {
-
 			// caution we are not yet initialized
 			return;
 		}
@@ -707,7 +702,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void chooseServerpath() {
-
 		String oldServerPath = fieldServerPath.getText();
 		File currentDirectory = new File(oldServerPath);
 
@@ -726,7 +720,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	// implements NameProducer
 	@Override
 	public String produceName() {
-
 		if (fieldServerPath != null) {
 			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory " + fieldServerPath.getText()
 					+ " , " + depotProductDirectory);

@@ -28,7 +28,6 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	public boolean appendCharIfAllowed(Appendable s, char c) {
-
 		if (allowedChars == null) {
 			return false;
 		}
@@ -79,13 +78,11 @@ public class CheckedDocument extends PlainDocument {
 		/* To implement in subclass */}
 
 	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
-
 		super.insertString(offs, s, a);
 	}
 
 	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
-
 		if (s == null) {
 			return;
 		}

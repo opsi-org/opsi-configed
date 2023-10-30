@@ -18,7 +18,6 @@ import javax.swing.JTable;
 import de.uib.utilities.ComboBoxModeller;
 
 public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
-
 	private JComboBox<String> cc;
 	private ComboBoxModeller cbm;
 	private ComboBoxModel<String> nullModel;

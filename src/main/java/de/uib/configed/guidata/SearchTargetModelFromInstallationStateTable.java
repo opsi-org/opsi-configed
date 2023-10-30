@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 
 public class SearchTargetModelFromInstallationStateTable implements SearchTargetModel {
-
 	private JTable table;
 
 	private int[] viewRowfilter = new int[0];
@@ -26,7 +25,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	private boolean filtered;
 
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelProductSettings panelProductSettings) {
-
 		this.table = table;
 		Logging.info(this.getClass(), "table null? " + (table == null));
 
@@ -49,7 +47,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public int getColumnCount() {
-
 		return getTableModel().getColumnCount();
 	}
 
@@ -90,7 +87,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
 
@@ -149,7 +145,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setFiltered(boolean b) {
-
 		if (!filtered) {
 			viewRowfilter = table.getSelectedRows();
 		}

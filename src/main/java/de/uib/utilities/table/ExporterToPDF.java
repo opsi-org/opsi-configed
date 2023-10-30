@@ -110,7 +110,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 		if (saveAction != null) {
 			if (Boolean.TRUE.equals(saveAction)) {
-
 				if (fileName == null) {
 					fileName = getFileLocation();
 				}
@@ -295,7 +294,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 		for (int j = 0; j < theTable.getRowCount(); j++) {
 			if (!onlySelectedRows || theTable.isRowSelected(j)) {
-
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
 					value = new PdfPCell(new Phrase(" "));
 					String s = theTable.getValueAt(j, i) != null ? theTable.getValueAt(j, i).toString() : "";

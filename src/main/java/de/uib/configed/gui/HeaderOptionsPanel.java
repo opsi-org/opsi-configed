@@ -22,7 +22,6 @@ public class HeaderOptionsPanel extends JPanel {
 	}
 
 	private void init(ListModel<JCheckBox> model) {
-
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		CheckBoxList list = new CheckBoxList(model);

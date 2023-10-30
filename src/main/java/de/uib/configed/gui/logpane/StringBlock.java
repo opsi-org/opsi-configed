@@ -29,7 +29,6 @@ public class StringBlock {
 	}
 
 	public boolean hasFound() {
-
 		return found;
 	}
 
@@ -63,7 +62,6 @@ public class StringBlock {
 	}
 
 	public void forward(int iStart, char startC, char endC) {
-
 		iEnd = iStart;
 		found = false;
 		this.startC = startC;

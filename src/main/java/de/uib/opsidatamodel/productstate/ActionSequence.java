@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ActionSequence {
-
 	public static final String KEY = "actionSequence";
 
 	private static Map<String, String> displayLabel2label;

@@ -65,7 +65,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 			String licenses = moduleToDateData.get(LicensingInfoMap.LICENSE_IDS).toString().replace(", ", ", <br>");
 			if (!state.equals(LicensingInfoMap.STATE_UNLICENSED)) {
-
 				jc.setToolTipText(
 						"<html>" + "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 			} else {
@@ -73,22 +72,18 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			if (columnName.equals(latestChange)) {
-
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-
 					jc.setForeground(Globals.OPSI_WARNING);
 
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-
 					jc.setForeground(Globals.OPSI_ERROR);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-
 					jc.setForeground(Globals.OPSI_WARNING);
 
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"

@@ -101,13 +101,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void searchAndHighlight() {
-
 		searcher.searchLinks();
 	}
 
 	@Override
 	public String getText() {
-
 		// set new initial text for use in processWindowEvent
 		initialText = textpane.getText();
 		return initialText;
@@ -116,7 +114,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
@@ -133,25 +130,21 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 
 	@Override
 	public void setDataChanged(boolean b) {
-
 		super.setDataChanged(b);
 		searchAndHighlight();
 	}
@@ -159,7 +152,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
 

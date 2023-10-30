@@ -39,7 +39,6 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven) {
-
 		ColorTableCellRenderer.colorize(cell, isSelected, rowEven);
 		makeCellDarker(cell, colEven);
 	}

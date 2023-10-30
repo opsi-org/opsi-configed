@@ -13,7 +13,6 @@ import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
 public abstract class AbstractOpsiDataDateMatcher {
-
 	private String map;
 	private String key;
 	private String data;
@@ -32,7 +31,6 @@ public abstract class AbstractOpsiDataDateMatcher {
 		Map<String, Object> realMap = client.getMap(map);
 
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-
 			return false;
 		}
 
@@ -42,7 +40,6 @@ public abstract class AbstractOpsiDataDateMatcher {
 	}
 
 	private boolean checkData(final String realdata) {
-
 		if (realdata == null) {
 			Logging.debug(this, "OpsiDataDateMatcher no data found");
 			return false;

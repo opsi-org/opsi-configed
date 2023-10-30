@@ -422,27 +422,6 @@ public class SoftwareDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	// without internal caching; legacy license method
-	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
-		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenceManagementPD())) {
-			List<String> callAttributes = new ArrayList<>();
-			Map<String, Object> callFilter = new HashMap<>();
-			List<Map<String, Object>> softwareL2LPools = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS,
-							new Object[] { callAttributes, callFilter }));
-
-			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
-				softwareL2LPool.remove("ident");
-				softwareL2LPool.remove("type");
-				rowsSoftwareL2LPool
-						.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
-								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
-			}
-		}
-		return rowsSoftwareL2LPool;
-	}
-
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(List<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
@@ -944,7 +923,7 @@ public class SoftwareDataService {
 		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount();
 		Map<String, LicenceStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
 		// table LICENSE_POOL
-		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		for (String licensePoolId : licensePools.keySet()) {
 			LicenceStatisticsRow rowMap = new LicenceStatisticsRow(licensePoolId);
 			rowsLicenseStatistics.put(licensePoolId, rowMap);
@@ -982,7 +961,7 @@ public class SoftwareDataService {
 		}
 
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = new HashMap<>();
-		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicencePoolsPD();
+		Map<String, LicencepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		List<String> extraHostFields = Utils.takeAsStringList(configDefaultValues.get(
@@ -1036,7 +1015,7 @@ public class SoftwareDataService {
 
 	private Map<String, ExtendedInteger> getPool2AllowedUsagesCount() {
 		Logging.info(this, " licence usabilities ");
-		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenceUsabilitiesPD();
+		List<LicenceUsableForEntry> licenceUsabilities = licenseDataService.getLicenseUsabilitiesPD();
 		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<>();
 		for (LicenceUsableForEntry licenceUsability : licenceUsabilities) {
 			String pool = licenceUsability.getLicencePoolId();
@@ -1045,7 +1024,7 @@ public class SoftwareDataService {
 			// value up this step
 			ExtendedInteger count = pool2allowedUsagesCount.get(pool);
 
-			Map<String, LicenceEntry> licences = licenseDataService.getLicencesPD();
+			Map<String, LicenceEntry> licences = licenseDataService.getLicensesPD();
 
 			// not yet initialized
 			if (count == null) {
@@ -1129,7 +1108,6 @@ public class SoftwareDataService {
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
 		persistenceController.notifyPanelCompleteWinProducts();
 

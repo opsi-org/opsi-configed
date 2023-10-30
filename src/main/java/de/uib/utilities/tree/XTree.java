@@ -22,7 +22,6 @@ import javax.swing.tree.TreeSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class XTree extends JTree {
-
 	public XTree() {
 		super();
 		init();
@@ -50,7 +49,6 @@ public class XTree extends JTree {
 	}
 
 	public List<Integer> getToggledRows(TreePath parent) {
-
 		List<Integer> result = new ArrayList<>();
 		Enumeration<TreePath> enumer = super.getDescendantToggledPaths(parent);
 		while (enumer.hasMoreElements()) {
@@ -62,14 +60,12 @@ public class XTree extends JTree {
 	public void expandRows(Collection<Integer> rows) {
 		Logging.debug(this, "expandRows " + rows.size());
 		for (Integer row : rows) {
-
 			expandRow(row);
 		}
 	}
 
 	public void expandAll() {
 		for (int row = 0; row < getRowCount(); row++) {
-
 			expandRow(row);
 		}
 	}

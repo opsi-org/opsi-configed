@@ -71,7 +71,6 @@ import utils.Utils;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {
-
 	private static final int USER_START_INDEX = 1;
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
@@ -123,10 +122,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		popupForUserpathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
-
 			@Override
 			public void action(int p) {
-
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
@@ -152,7 +149,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
@@ -174,7 +170,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
@@ -200,7 +195,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
@@ -427,7 +421,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		super.setEditableMap(visualdata, optionsMap);
 		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
-
 			treemodel = new HostConfigTreeModel(givenClasses);
 			tree.setModel(treemodel);
 			tree.expandAll();
@@ -451,7 +444,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		super.setOptionsEditable(b);
 
 		for (String key : keyclasses) {
-
 			partialPanels.get(key).setOptionsEditable(b);
 		}
 	}
@@ -462,7 +454,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		super.setStoreData(data);
 
 		for (String key : keyclasses) {
-
 			partialPanels.get(key).setStoreData(data);
 		}
 	}
@@ -473,7 +464,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {
-
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}
@@ -527,7 +517,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				private void reload() {
@@ -538,7 +527,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					actor.reloadData();
 					Logging.info(this, "reloaded, return to " + p);
 					if (p != null) {
-
 						tree.setExpandsSelectedPaths(true);
 						tree.setSelectionInterval(row, row);
 						tree.scrollRowToVisible(row);
@@ -552,7 +540,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 					return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
 							PopupMenuTrait.POPUP_PDF }) {
-
 						@Override
 						public void action(int p) {
 							switch (p) {
@@ -639,7 +626,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
-
 		jc.setToolTipText("<html>" + createTooltipForPropertyName(propertyName) + "</html>");
 
 		// check equals with default
@@ -684,7 +670,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		StringBuilder tooltip = new StringBuilder();
 
 		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-
 			if (includeAdditionalTooltipText) {
 				tooltip.append("default (" + getPropertyOrigin(propertyName) + "): ");
 			} else {
@@ -718,7 +703,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// Modification info and some userroles cannot be edited
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
-
 		Logging.info(this, "entry " + partialPanelEntry + " key " + key);
 
 		Boolean result = true;
@@ -741,7 +725,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		// rolekey may be edited
 		if (!(key.equals(rolekey))) {
-
 			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
 					.getConfigDefaultValuesPD().get(rolekey);
 
@@ -758,7 +741,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void classify(Map<String, Object> data, NavigableSet<String> classIds) {
-
 		virtualLines = new TreeMap<>();
 
 		for (String id : classIds.descendingSet()) {
@@ -861,7 +843,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		actor.reloadData();
 		Logging.debug(this, "reloaded, return to " + p);
 		if (p != null) {
-
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
 			tree.scrollRowToVisible(row);
@@ -871,14 +852,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
 
 				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Utils.createImageIcon("images/cancel16_small.png", "") },
 				2, 600, 600, true, null) {
-
 			@Override
 			public void doAction1() {
 				Logging.info(this, "doAction1");
@@ -925,7 +904,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		if (newData == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
 		} else {
-
 			if (!newData.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });
 
@@ -937,7 +915,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
 				false, // modal
 
@@ -950,7 +927,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				true,
 				// layout
 				null) {
-
 			@Override
 			public void doAction1() {
 				Logging.info(this, "doAction1");
@@ -978,7 +954,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void deleteUser() {
-
 		TreePath p = tree.getSelectionPath();
 
 		if (p != null) {

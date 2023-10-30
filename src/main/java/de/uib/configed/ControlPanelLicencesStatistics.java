@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -29,8 +30,11 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ControlPanelLicencesStatistics() {
+	private ConfigedMain configedMain;
+
+	public ControlPanelLicencesStatistics(ConfigedMain configedMain) {
 		thePanel = new PanelLicencesStatistics(this);
+		this.configedMain = configedMain;
 
 		init();
 	}
@@ -66,6 +70,13 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 				columnNames, 0);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						}
+					}
+
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");

@@ -18,7 +18,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
-
 	public TextMarkdownPane() {
 		super.addHyperlinkListener(this);
 		super.setEditable(false);
@@ -28,7 +27,6 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	@Override
 	public void setText(String s) {
-
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(s);
 		HtmlRenderer renderer = HtmlRenderer.builder().build();

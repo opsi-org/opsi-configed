@@ -181,7 +181,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		result = new LinkedList<>();
 
 		try {
-
 			List<String> selected = getSelectedList();
 			if (!selected.isEmpty()) {
 				manager.loadSearch(selected.get(0));
@@ -213,7 +212,6 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	private void removeSelectedEntry() {
-
 		int index = visibleList.getSelectedIndex();
 		Logging.debug(this, "remove selected Entry, list index " + index);
 
@@ -274,7 +272,6 @@ public class SavedSearchesDialog extends FEditStringList {
 	// interface MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		if (e.getClickCount() > 1) {
 			commit();
 		}

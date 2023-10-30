@@ -22,7 +22,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class TreePopupMouseListener extends utils.PopupMouseListener {
-
 	private ClientTree tree;
 
 	private TreePath mousePath;
@@ -72,19 +71,15 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 	}
 
 	private void activateElements(ConfigedMain configedMain) {
-
 		TreePath sourcePath = mousePath;
 		if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
-
 			GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 			configedMain.setGroup(node.toString());
 		}
 	}
 
 	private void removeElements(ConfigedMain configedMain) {
-
 		if (mousePath != null && mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode) {
-
 			GroupNode node = (GroupNode) mousePath.getPathComponent(mousePath.getPathCount() - 1);
 
 			Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
@@ -151,7 +146,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
 
 		if (clickNode.getAllowsChildren()) {
-
 			if (((GroupNode) clickNode).allowsSubGroups()) {
 				menuItemCreateNode.setVisible(true);
 				numberVisibleItems++;

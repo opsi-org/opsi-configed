@@ -28,7 +28,6 @@ import javax.swing.plaf.synth.SynthLookAndFeel;
 import javax.swing.plaf.synth.SynthStyle;
 
 public class ClippedTitleTabbedPane extends JTabbedPane {
-
 	private double proportionOfTotalWidth = 1;
 
 	public ClippedTitleTabbedPane() {

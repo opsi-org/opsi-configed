@@ -42,7 +42,6 @@ public class CommandModulesUpload extends CommandSFTPUpload {
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-
 		dialog = new SSHModulesUploadDialog();
 	}
 

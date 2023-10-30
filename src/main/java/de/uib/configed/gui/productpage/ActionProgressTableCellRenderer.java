@@ -28,7 +28,6 @@ public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByI
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-
 		Component result = null;
 		if (!isValueNull(value)) {
 			result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);

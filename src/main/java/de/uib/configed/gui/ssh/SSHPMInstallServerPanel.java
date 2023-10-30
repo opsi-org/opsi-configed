@@ -46,7 +46,6 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	private void initComponents() {
-
 		jLabelOpsiProduct.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
 		jTextFieldProduct = autocompletion.getTextField();
@@ -64,7 +63,6 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
@@ -105,7 +103,6 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {
-
 		if (product == null || product.isEmpty()) {
 			return null;
 		}

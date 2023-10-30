@@ -252,7 +252,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 		protected void process(List<String> chunks) {
 			Logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
-
 				for (String line : chunks) {
 					Logging.debug(this, "process " + line);
 					outputDialog.append(getCommandName(), line + "\n");
@@ -279,7 +278,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		private String getCommandName() {
-
 			String counterInfo = "";
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				counterInfo = "(" + Integer.toString(this.commandNumber) + "/" + Integer.toString(this.maxCommandNumber)

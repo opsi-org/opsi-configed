@@ -21,7 +21,6 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 
 	@Override
 	public void setText(String s) {
-
 		super.setText(s);
 		startText = s;
 		setCaretPosition(0);
@@ -31,7 +30,6 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-
 			setText(startText);
 			setCaretPosition(startText.length());
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {

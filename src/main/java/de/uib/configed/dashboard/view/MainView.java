@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.DataObserver;
@@ -48,7 +49,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MainView implements View {
-
 	private static final String DATA_CHANGED_SERVICE = "changed";
 	private static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
 
@@ -166,8 +166,10 @@ public class MainView implements View {
 
 	private LicenseDisplayer licenseDisplayer;
 
+	private ConfigedMain configedMain;
+
 	@SuppressWarnings("java:S4968")
-	public MainView(JFXPanel fxPanel) throws IOException {
+	public MainView(JFXPanel fxPanel, ConfigedMain configedMain) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
 				Messages.getResource());
 		fxmlLoader.setController(this);
@@ -191,6 +193,8 @@ public class MainView implements View {
 
 		depotSelectionListener = (ObservableValue<? extends String> observable, String oldValue,
 				String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue);
+
+		this.configedMain = configedMain;
 	}
 
 	public void init() {
@@ -265,6 +269,7 @@ public class MainView implements View {
 		if (licenseDisplayer == null) {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.setConfigedMain(configedMain);
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
 				Logging.warning(this, "Unable to open FXML file.", ioE);

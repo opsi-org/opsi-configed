@@ -53,7 +53,6 @@ import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 
 public class PanelSWInfo extends JPanel {
-
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
 	private static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
@@ -145,7 +144,6 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void initTableComponents() {
-
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true);
@@ -174,8 +172,12 @@ public class PanelSWInfo extends JPanel {
 		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
+					public void reloadMap() {
+						// Nothing to reload.
+					}
 
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
 						if (hostId == null) {
 							return new HashMap<>();
 						}
@@ -281,7 +283,6 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-
 		JTable jTable = new JTable(voidTableModel, null);
 
 		jTable.setAutoCreateRowSorter(true);
@@ -324,10 +325,8 @@ public class PanelSWInfo extends JPanel {
 			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
 					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
 					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
-
 				@Override
 				public void action(int p) {
-
 					actionOnPopupMenu(p);
 				}
 			};
@@ -461,7 +460,6 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void floatExternalX() {
-
 		PanelSWInfo copyOfMe;
 		GeneralFrame externalView;
 

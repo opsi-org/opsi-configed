@@ -34,7 +34,6 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 		ImageIcon selectedIcon = null;
 
 		if (value instanceof String && !((String) value).isEmpty()) {
-
 			try {
 				double number = Double.parseDouble((String) value);
 				selectedString = decimalFormat.format(number);

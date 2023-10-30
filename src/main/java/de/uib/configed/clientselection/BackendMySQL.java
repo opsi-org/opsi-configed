@@ -24,7 +24,6 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
-
 	private static final String KEY_CHILDREN = "children";
 	private static final String STRING_MYSQL_WHERE = " WHERE ";
 	private static final String STRING_MYSQL_BASIC_SELECT_STATEMENT = "SELECT DISTINCT HOST.hostId FROM HOST ";
@@ -52,7 +51,6 @@ public class BackendMySQL {
 	}
 
 	private List<String> getListFromSQL(String query) {
-
 		Logging.info(this, query);
 
 		List<List<String>> clients = persistenceController.getExecutioner()
@@ -68,7 +66,6 @@ public class BackendMySQL {
 	}
 
 	public List<String> and(JSONArray children) throws JSONException {
-
 		List<String> result = new ArrayList<>(allHosts);
 
 		for (int i = 0; i < children.length(); i++) {
@@ -125,11 +122,9 @@ public class BackendMySQL {
 
 	@SuppressWarnings({ "java:S103" })
 	public List<String> getListFromJSONObject(JSONObject jsonObject) {
-
 		MySQL mySQLRecursion = new MySQL(hwConfig);
 
 		if (jsonObject.isNull("element")) {
-
 			JSONArray children;
 
 			switch (jsonObject.getString("operation")) {
@@ -328,7 +323,6 @@ public class BackendMySQL {
 
 	// Change this for asking for default values on product properties
 	public String getWhereClauseDefaultProductProperty(String query) {
-
 		query = query.replace("h.propertyId", "v.propertyId");
 		query = query.replace("h.values", "v.value");
 		query = query.replace("h.isDefault", "v.isDefault");
@@ -357,7 +351,6 @@ public class BackendMySQL {
 	}
 
 	private String doJSONObject(MySQL mySQLRecursion, JSONObject jsonObject) {
-
 		if (jsonObject.isNull("element")) {
 			Type newType = getType(jsonObject);
 			try {
@@ -377,7 +370,6 @@ public class BackendMySQL {
 		StringBuilder mysql = new StringBuilder(" ( ");
 
 		for (int i = 0; i < length; i++) {
-
 			if (i == 0) {
 				if (type == Type.NOT) {
 					mysql.append(" " + type);

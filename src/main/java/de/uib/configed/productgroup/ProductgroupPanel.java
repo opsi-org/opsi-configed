@@ -56,7 +56,6 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
 public class ProductgroupPanel extends JPanel implements ListSelectionListener, ActionListener, ItemListener {
-
 	private static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
 	private static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
 	private static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
@@ -107,7 +106,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			.getPersistenceController();
 
 	private abstract static class AbstractDocumentListener implements DocumentListener {
-
 		private boolean enabled = true;
 
 		public abstract void doAction();
@@ -193,7 +191,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void enterEditGroup() {
-
 		descriptionFieldListener.setEnabled(false);
 
 		String currentKey = groupsEditField.getText();
@@ -261,7 +258,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	public void findGroup(Set<String> set) {
-
 		if (namesAndDescriptions == null) {
 			Logging.info(this, " namesAndDescriptions null ");
 			return;
@@ -275,7 +271,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			TreeSetBuddy checkSet = new TreeSetBuddy(set);
 
 			while (!theSetFound && iterNames.hasNext()) {
-
 				String name = iterNames.next();
 
 				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
@@ -291,7 +286,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void updateAssociations() {
-
 		if (membersChanged()) {
 			setDataChanged(true);
 		}
@@ -454,7 +448,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		AbstractDocumentListener groupsEditFieldListener = new AbstractDocumentListener() {
 			@Override
 			public void doAction() {
-
 				enterEditGroup();
 			}
 		};
@@ -630,7 +623,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			addedElements.removeAll(originalSelection);
 
 			if (!addedElements.isEmpty()) {
-
 				FShowList fList = new FShowList(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
 						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
 						450, 400);
@@ -668,7 +660,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void setMembers() {
-
 		if (productGroupMembers == null || groupsCombo == null) {
 			associate.clearSelection();
 			return;
@@ -680,18 +671,15 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void setInternalGroupsData() {
-
 		namesAndDescriptionsSave = new LinkedHashMap<>();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
 		for (String id : new TreeSet<>(theData.keySet())) {
-
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
 
 		namesAndDescriptions = new LinkedHashMap<>();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
 		for (String id : new TreeSet<>(theData.keySet())) {
-
 			namesAndDescriptions.put(id, theData.get(id).get("description"));
 		}
 		groupsCombo.setValues(namesAndDescriptions);
@@ -719,7 +707,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void setGroupEditing(boolean b) {
-
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
 		}
@@ -732,17 +719,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-
 			clearChanges();
 		} else if (e.getSource() == buttonDelete) {
-
 			setDeleted(true);
 			setDataChanged(true);
 		} else if (e.getSource() == buttonEditDialog) {
-
 			setGroupEditing(!panelEdit.isVisible());
 		} else if (e.getSource() == buttonCollectiveAction) {
-
 			handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
 		} else {
 			Logging.warning(this, "unexpected action performed on source " + e.getSource());
@@ -750,7 +733,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
-
 		Logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
 
 		List<String> saveSelectedProducts = associate.getSelectedProducts();
@@ -774,7 +756,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			}
 
 			if (actionType != ActionRequest.INVALID) {
-
 				associate.getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
@@ -842,7 +823,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void setDataChanged(boolean b) {
-
 		if (buttonCommit != null) {
 			buttonCommit.setEnabled(b);
 		}

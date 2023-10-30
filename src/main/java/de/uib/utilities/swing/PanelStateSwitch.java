@@ -36,7 +36,6 @@ import utils.Utils;
 *	with radio buttons to switch between the Enums
 */
 public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
-
 	private Enum<E> producedValue;
 	private Enum<E> startValue;
 	private Class<?> myenumClass;
@@ -62,7 +61,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter, int hGap, int vGap) {
-
 		Logging.info(this.getClass(), " my enum " + myenum);
 
 		this.title = title;
@@ -158,7 +156,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-
 					if (!button.isSelected()) {
 						button.setSelectedIcon(deactivatedIcon);
 					}
@@ -184,7 +181,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-
 		JLabel labelTitle = new JLabel("");
 		if (title != null) {
 			labelTitle.setText(title);
