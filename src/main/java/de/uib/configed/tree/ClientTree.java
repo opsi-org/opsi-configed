@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -717,36 +718,36 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		model.nodeStructureChanged(groupNodeDirectory);
 
+		return getAllowedClients(permittedHostGroups);
+	}
+
+	private Set<String> getAllowedClients(Set<String> permittedHostGroups) {
 		TreeSet<String> allowedClients = null;
 
 		Logging.info(this, "associateClientsToGroups, evaluate permittedHostGroups " + permittedHostGroups);
 
-		if (permittedHostGroups != null) {
-			allowedClients = new TreeSet<>();
+		if (permittedHostGroups == null) {
+			return allowedClients;
+		}
 
-			if (directlyAllowedGroups == null) {
-				directlyAllowedGroups = new TreeSet<>();
-			}
+		allowedClients = new TreeSet<>();
 
-			for (String clientId : leafname2AllItsPaths.keySet()) {
-				for (SimpleTreePath path : leafname2AllItsPaths.get(clientId)) {
-					Set<String> pathElements = new TreeSet<>(path);
-					int allElementsNumber = pathElements.size();
+		if (directlyAllowedGroups == null) {
+			directlyAllowedGroups = new TreeSet<>();
+		}
 
-					// retained are the elements not permitted
-					pathElements.removeAll(permittedHostGroups);
-					int notPermittedNumber = pathElements.size();
-
-					if (notPermittedNumber < allElementsNumber) {
-						allowedClients.add(clientId);
-						directlyAllowedGroups.addAll(path);
-					}
+		for (Entry<String, ArrayList<SimpleTreePath>> entry : leafname2AllItsPaths.entrySet()) {
+			for (SimpleTreePath path : entry.getValue()) {
+				// retained are the elements not permitted
+				if (!Collections.disjoint(path, permittedHostGroups)) {
+					allowedClients.add(entry.getKey());
+					directlyAllowedGroups.addAll(path);
 				}
 			}
-
-			// they were the last element in pathElements
-			directlyAllowedGroups.removeAll(allowedClients);
 		}
+
+		// they were the last element in pathElements
+		directlyAllowedGroups.removeAll(allowedClients);
 
 		Logging.info(this, "associateClientsToGroups allowed Groups " + directlyAllowedGroups);
 

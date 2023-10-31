@@ -1622,11 +1622,6 @@ public class ProductDataService {
 		}
 
 		Map<String, Boolean> productOnClientsDisplayFields = new LinkedHashMap<>();
-		if (configuredByService == null) {
-			Logging.warning(this, "configuredByService is null");
-			cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
-			return;
-		}
 
 		// key names from ProductState
 		productOnClientsDisplayFields.put(ProductState.KEY_PRODUCT_ID, true);
