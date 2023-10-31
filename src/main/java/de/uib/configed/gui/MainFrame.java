@@ -3450,7 +3450,7 @@ public class MainFrame extends JFrame
 		Logging.info(this, "setUefiBoot " + b);
 
 		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.setSelected(persistenceController.isUEFI43(configedMain.getSelectedClients()));
+			cbUefiBoot.setSelected(persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
 		} else {
 			cbUefiBoot.setSelected(b);
 		}

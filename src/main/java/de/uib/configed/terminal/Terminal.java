@@ -233,18 +233,7 @@ public final class Terminal {
 		JComboBox<String> themeComboBox = new JComboBox<>();
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.light"));
-		themeComboBox.addActionListener((ActionEvent e) -> {
-			String selectedTheme = (String) themeComboBox.getSelectedItem();
-			if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
-				TerminalSettingsProvider.setTerminalLightTheme();
-			} else {
-				TerminalSettingsProvider.setTerminalDarkTheme();
-			}
-			theme = selectedTheme;
-			if (widget != null) {
-				widget.repaint();
-			}
-		});
+		themeComboBox.addActionListener((ActionEvent e) -> setTheme((String) themeComboBox.getSelectedItem()));
 
 		if (theme == null) {
 			theme = Configed.getResourceValue("Terminal.settings.theme.dark");
@@ -258,7 +247,6 @@ public final class Terminal {
 			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
 			widget.getTerminalPanel().init(scrollBar);
 			widget.repaint();
-
 			resizeTerminal();
 		});
 
@@ -272,7 +260,6 @@ public final class Terminal {
 			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
 			widget.getTerminalPanel().init(scrollBar);
 			widget.repaint();
-
 			resizeTerminal();
 		});
 
@@ -301,6 +288,18 @@ public final class Terminal {
 				.addGap(Globals.GAP_SIZE));
 
 		return settingsPanel;
+	}
+
+	private void setTheme(String selectedTheme) {
+		if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
+			TerminalSettingsProvider.setTerminalLightTheme();
+		} else {
+			TerminalSettingsProvider.setTerminalDarkTheme();
+		}
+		theme = selectedTheme;
+		if (widget != null) {
+			widget.repaint();
+		}
 	}
 
 	private void resizeTerminal() {

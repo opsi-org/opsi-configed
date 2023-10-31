@@ -54,6 +54,10 @@ public class HardwareDataService {
 	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
 	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
 
+	private static final String HOST_ID = "HOST.hostId";
+	private static final String HOST_DESCRIPTION = "HOST.description";
+	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAddress";
+
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
@@ -470,10 +474,9 @@ public class HardwareDataService {
 
 		List<String> hostColumnNames = new ArrayList<>();
 
-		// todo make static variables
-		hostColumnNames.add("HOST.hostId");
-		hostColumnNames.add("HOST.description");
-		hostColumnNames.add("HOST.hardwareAdress");
+		hostColumnNames.add(HOST_ID);
+		hostColumnNames.add(HOST_DESCRIPTION);
+		hostColumnNames.add(HOST_HARDWARE_ADDRESS);
 		hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
 
 		// there is produced client2HwRowsColumnNames

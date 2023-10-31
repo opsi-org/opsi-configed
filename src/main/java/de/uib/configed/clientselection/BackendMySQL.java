@@ -317,10 +317,7 @@ public class BackendMySQL {
 		query = query.replace("d.lastAction", KEY_DEFAULT_VALUE_NONE);
 		query = query.replace("d.productVersion", KEY_DEFAULT_VALUE_EMPTY);
 		query = query.replace("d.packageVersion", KEY_DEFAULT_VALUE_EMPTY);
-
-		// TODO Date
 		query = query.replace("DATE(d.modificationTime)", "'IRGENDWAS MIT DATUM'");
-
 		return query;
 	}
 

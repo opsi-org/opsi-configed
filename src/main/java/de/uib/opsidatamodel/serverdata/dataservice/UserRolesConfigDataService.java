@@ -518,6 +518,7 @@ public class UserRolesConfigDataService {
 		return fullPermission;
 	}
 
+	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = configDataService.getConfigListCellOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there " + result);
@@ -1005,56 +1006,32 @@ public class UserRolesConfigDataService {
 			Logging.notice(this, "there are no configurations to update");
 		}
 
+		deleteObsoleteDefaultUserConfigs(configDefaultValues);
+
+		return true;
+	}
+
+	private void deleteObsoleteDefaultUserConfigs(Map<String, List<Object>> configDefaultValues) {
 		List<Map<String, Object>> defaultUserConfigsObsolete = new ArrayList<>();
 
-		// delete obsolete configs
-
 		for (Entry<String, List<Object>> configEntry : configDefaultValues.entrySet()) {
-			if (configEntry.getKey().startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "ssh")) {
-				defaultValues = configEntry.getValue();
-
-				if (defaultValues != null) {
-					// still existing
-					Logging.info(this, "handling ssh config key at old location " + configEntry.getKey());
-					Map<String, Object> config = new HashMap<>();
-
-					config.put("id", configEntry.getKey());
-
-					String type = "BoolConfig";
-					config.put("type", type);
-
-					defaultUserConfigsObsolete.add(config);
-				}
+			if ((configEntry.getKey().startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "ssh")
+					|| configEntry.getKey()
+							.startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "{ole."))
+					&& configEntry.getValue() != null) {
+				Map<String, Object> config = new HashMap<>();
+				config.put("id", configEntry.getKey());
+				config.put("type", "BoolConfig");
+				defaultUserConfigsObsolete.add(config);
 			}
 		}
 
-		for (Entry<String, List<Object>> configEntry : configDefaultValues.entrySet()) {
-			if (configEntry.getKey().startsWith(OpsiServiceNOMPersistenceController.ALL_USER_KEY_START + "{ole.")) {
-				defaultValues = configEntry.getValue();
-
-				if (defaultValues != null) {
-					// still existing
-					Logging.info(this, "removing unwillingly generated entry  " + configEntry.getKey());
-					Map<String, Object> config = new HashMap<>();
-
-					config.put("id", configEntry.getKey());
-
-					String type = "BoolConfig";
-					config.put("type", type);
-
-					defaultUserConfigsObsolete.add(config);
-				}
-			}
-		}
-
-		Logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
+		Logging.info(this, "Obsolete default user configs " + defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
 					new Object[] { defaultUserConfigsObsolete }));
 		}
-
-		return true;
 	}
 
 	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {

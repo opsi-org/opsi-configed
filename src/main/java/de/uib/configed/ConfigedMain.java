@@ -2391,11 +2391,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void treeClientMouseAction(MouseEvent mouseEvent, DefaultMutableTreeNode mouseNode, TreePath mousePath) {
-		if (activePaths.size() == 1
-				&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
-			clearTree();
-			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		} else if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+		if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 			clearTree();
 
 			for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {

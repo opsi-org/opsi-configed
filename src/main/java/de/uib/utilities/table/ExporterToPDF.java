@@ -48,7 +48,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
-	// TODO why static fields here everywhere?
 	private static Document document;
 
 	private static final String FILE_EXTENSION = ".pdf";

@@ -331,7 +331,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void createPDF() {
 		String client = tree.getSelectionPath().getPathComponent(0).toString().trim();
 
-		// TODO get Depotname
 		Logging.info(this, "create report");
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
@@ -366,7 +365,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 			values = new ArrayList<>();
 
-			// TODO search another possibility to exclude?
 			if (!key.contains("saved_search")) {
 				values.add(key);
 				values.add(property);

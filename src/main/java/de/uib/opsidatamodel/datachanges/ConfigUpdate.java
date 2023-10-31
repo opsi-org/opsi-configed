@@ -18,7 +18,6 @@ public class ConfigUpdate implements UpdateCommand {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	// TODO check generics here
 	public ConfigUpdate(Map newdata) {
 		this.newdata = newdata;
 	}
