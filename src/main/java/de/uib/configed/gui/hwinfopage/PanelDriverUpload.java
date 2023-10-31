@@ -434,9 +434,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 												.addComponent(fieldByAuditPath, Globals.BUTTON_WIDTH,
 														Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 												.addGap(hGap, hGap, hGap)))
-								.addGap(hGap, hGap, hGap)
-
-				);
+								.addGap(hGap, hGap, hGap));
 
 		driverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
 				Utils.createImageIcon("images/checked_withoutbox.png", ""),

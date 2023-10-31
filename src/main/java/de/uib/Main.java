@@ -259,9 +259,6 @@ public class Main {
 
 		setOpsiLaf();
 
-		// Turn on antialiasing for text (not for applets)
-		System.setProperty("swing.aatext", "true");
-
 		if (isLogviewer) {
 			Logviewer.main(cmd);
 		} else {

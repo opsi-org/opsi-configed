@@ -740,9 +740,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					int colJ = targetModel.getColForVisualCol(j);
 
-					Object compareValue = targetModel.getValueAt(
-
-							targetModel.getRowForVisualRow(viewrow), colJ);
+					Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
 
 					if (compareValue == null) {
 						if (val.isEmpty()) {

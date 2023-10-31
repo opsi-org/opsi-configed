@@ -397,9 +397,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(labelTimeYetToWait, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE))
-
-		);
+						.addGap(Globals.GAP_SIZE)));
 	}
 
 	private void startAction() {

@@ -308,9 +308,7 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(labelAskForOverwrite,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-		);
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
@@ -326,9 +324,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
-						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-
-		);
+						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)));
 
 		glGlobal.setHorizontalGroup(
 				glGlobal.createParallelGroup().addGap(3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE)

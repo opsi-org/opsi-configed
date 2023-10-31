@@ -115,8 +115,8 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
-				true // searchpane
-		);
+				true);
+
 		panelUsage.setMasterFrame(Utils.getMasterFrame());
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

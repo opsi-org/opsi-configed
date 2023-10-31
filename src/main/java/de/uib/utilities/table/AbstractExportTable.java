@@ -64,9 +64,7 @@ public abstract class AbstractExportTable {
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
-		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-
-		);
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
@@ -77,14 +75,14 @@ public abstract class AbstractExportTable {
 	}
 
 	public JMenuItem getMenuItemExportSelected() {
-		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 
-		);
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			boolean onlySelected = true;
 			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
 			execute(null, onlySelected);
 		});
+
 		return menuItem;
 	}
 

@@ -251,8 +251,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
-				new int[] { PanelGenEditTable.POPUP_RELOAD }, false // searchpane
-		);
+				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
 
 		panelKeys.setMasterFrame(Utils.getMasterFrame());
 

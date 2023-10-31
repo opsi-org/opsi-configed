@@ -339,9 +339,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						jButtonAdvancedSettings, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-		);
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		mainpanelLayout.setHorizontalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(mainpanelLayout.createParallelGroup()

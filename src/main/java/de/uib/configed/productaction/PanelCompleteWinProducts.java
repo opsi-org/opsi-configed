@@ -501,8 +501,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
-
-		);
+						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)));
 	}
 }

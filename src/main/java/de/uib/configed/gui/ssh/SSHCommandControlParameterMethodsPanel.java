@@ -176,10 +176,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 						.addComponent(jButtonTestParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(jLabelEmpty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(uGap * 2)
+				.addGap(uGap * 2));
 
-		// correctly appear if not placed inside the frame
-		);
 		repaint();
 		revalidate();
 	}

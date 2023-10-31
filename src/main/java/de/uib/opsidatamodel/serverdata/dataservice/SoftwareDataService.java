@@ -834,9 +834,8 @@ public class SoftwareDataService {
 				readyObjects.add(item);
 
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-						new Object[] { readyObjects }
+						new Object[] { readyObjects });
 
-				);
 				Logging.info(this, "editPool2AuditSoftware call " + omc);
 				if (exec.doCall(omc)) {
 					ok = true;

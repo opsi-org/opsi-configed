@@ -2002,23 +2002,15 @@ public class MainFrame extends JFrame
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setPreferredSize(treeClients.getMaximumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() " +
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
+				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
 
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimum()
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
+				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		);
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
+				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() " +
-
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize()
-
-		);
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() " +
-
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize()
-
-		);
 		JSplitPane splitpaneClientSelection = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false,
 				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
 
@@ -3450,7 +3442,8 @@ public class MainFrame extends JFrame
 		Logging.info(this, "setUefiBoot " + b);
 
 		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.setSelected(persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
+			cbUefiBoot.setSelected(
+					persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
 		} else {
 			cbUefiBoot.setSelected(b);
 		}

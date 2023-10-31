@@ -201,9 +201,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 		for (Enum<E> val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT)
-
-			);
+					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 		}
 
 		vGroup.addGap(vGap);

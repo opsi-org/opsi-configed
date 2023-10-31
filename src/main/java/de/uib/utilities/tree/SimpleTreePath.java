@@ -37,7 +37,6 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 		}
 
 		return set;
-
 	}
 
 	@Override

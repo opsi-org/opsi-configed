@@ -1203,11 +1203,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		while (!found && viewrow < tableModel.getRowCount()) {
-			Object compareValue = tableModel.getValueAt(
-
-					theTable.convertRowIndexToModel(viewrow), col
-
-			);
+			Object compareValue = tableModel.getValueAt(theTable.convertRowIndexToModel(viewrow), col);
 
 			if (compareValue == null) {
 				if (val == null || val.isEmpty()) {

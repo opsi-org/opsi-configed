@@ -182,13 +182,8 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command
-		// SSHConnectionExecDialog.getInstance(
+		SSHConnectExec exec = new SSHConnectExec(command);
 
-		// \""+command.getCommand() + "\" ",
-		// command
-		// )
-		);
 		return exec.getDialog();
 	}
 

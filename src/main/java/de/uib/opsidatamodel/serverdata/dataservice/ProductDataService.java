@@ -594,9 +594,8 @@ public class ProductDataService {
 
 					aProductInfo.put("actions", productInfo.getPossibleActions());
 
-					aProductInfo.put(ProductState.KEY_PRODUCT_ID, productId
-					// productInfo.getProductId()
-					);
+					aProductInfo.put(ProductState.KEY_PRODUCT_ID, productId);
+
 					aProductInfo.put(ProductState.KEY_VERSION_INFO,
 							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
 

@@ -125,9 +125,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_CSV:
 			i = listPopups.indexOf(POPUP_EXPORT_CSV);
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-
-			);
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
 
 			addItem(p);
 
@@ -135,9 +133,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_SELECTED_CSV:
 			i = listPopups.indexOf(POPUP_EXPORT_SELECTED_CSV);
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
-
-			);
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 
 			addItem(p);
 

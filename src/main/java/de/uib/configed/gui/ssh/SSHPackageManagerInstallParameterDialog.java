@@ -171,9 +171,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				.addGroup(mainPanelLayout
 						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-
-		);
+						.addGap(Globals.GAP_SIZE)));
 
 		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 				.addComponent(jLabelInstall).addGap(Globals.GAP_SIZE).addComponent(radioPanel).addGap(Globals.GAP_SIZE)

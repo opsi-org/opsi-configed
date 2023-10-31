@@ -151,9 +151,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSimilarEntriesExist = new JLabel();
 		labelSimilarEntriesExist.setVisible(true);
 
-		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(
-
-				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES,
+		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(null,
+				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES,
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
 				new String[] {
 						Configed.getResourceValue(

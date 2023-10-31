@@ -72,9 +72,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		layout.setVerticalGroup(layout
 				.createSequentialGroup().addComponent(iconLabel, 150, 150, 150).addComponent(progressBar,
 						Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT)
-				.addComponent(infoLabel, 30, 30, 30)
-
-		);
+				.addComponent(infoLabel, 30, 30, 30));
 
 		this.getContentPane().add(panel);
 
