@@ -2414,11 +2414,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, " treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
-		if (getSelectedClients().length == 1 && mouseNode.getParent() != null) {
-			mainFrame.getHostsStatusPanel().setGroupName(mouseNode.getParent().toString());
-		} else {
-			mainFrame.getHostsStatusPanel().setGroupName("");
-		}
+		setGroupNameForNode(mouseNode);
 
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
@@ -2444,7 +2440,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
 
 		if (!selectedNode.getAllowsChildren()) {
-			setClientByTree(selectedNode.toString(), newSelectedPath);
+			setClientByTree(selectedNode, newSelectedPath);
 		}
 
 		return true;
@@ -2475,21 +2471,25 @@ public class ConfigedMain implements ListSelectionListener {
 			treeClients.collectParentIDsFrom(selNode);
 		}
 
-		DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
 				.getLastPathComponent();
 
-		activateClientByTree((String) selNode.getUserObject(), selTreePaths[selTreePaths.length - 1]);
+		activateClientByTree((String) selectedNode.getUserObject(), selTreePaths[selTreePaths.length - 1]);
 
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
-		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusPanel().setGroupName(selNode.getParent().toString());
-		} else {
-			mainFrame.getHostsStatusPanel().setGroupName("");
-		}
+		setGroupNameForNode(selectedNode);
 
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
+	}
+
+	private void setGroupNameForNode(DefaultMutableTreeNode selectedNode) {
+		if (getSelectedClients().length == 1 && selectedNode.getParent() != null) {
+			mainFrame.getHostsStatusPanel().setGroupName(selectedNode.getParent().toString());
+		} else {
+			mainFrame.getHostsStatusPanel().setGroupName("");
+		}
 	}
 
 	private void initTree() {
@@ -2501,17 +2501,12 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getHostInfoCollections().setTree(treeClients);
 	}
 
-	private void setClientByTree(String nodeObject, TreePath pathToNode) {
+	private void setClientByTree(DefaultMutableTreeNode selectedNode, TreePath pathToNode) {
 		clearTree();
-		activateClientByTree(nodeObject, pathToNode);
+		activateClientByTree(selectedNode.toString(), pathToNode);
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
-		if (getSelectedClients().length == 1) {
-			mainFrame.getHostsStatusPanel()
-					.setGroupName(pathToNode.getPathComponent(pathToNode.getPathCount() - 1).toString());
-		} else {
-			mainFrame.getHostsStatusPanel().setGroupName("");
-		}
+		setGroupNameForNode(selectedNode);
 
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
