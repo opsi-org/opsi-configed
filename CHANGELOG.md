@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.23] - 2023-10-31
+### Changed
+- Warn when encountered non `BoolConfig` in WAN config
+
 ## [4.2.22.22] - 2023-10-26
 ### Fixed
 - Calculation for remaining software license
