@@ -1234,10 +1234,14 @@ public class OpsiserviceNOMPersistenceController {
 			Map<String, List<Object>> defaultConfiguration) {
 		boolean tested = false;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
-			tested = valueFromConfigStateAsExpected(getConfig(host), configuration.getKey(),
-					(Boolean) (configuration.getValue().get(0)));
-			if (!tested) {
-				break;
+			if (configuration.getValue() == null) {
+				Logging.info(this, "We encountered non BOOL_CONFIG option " + configuration.getKey() + "; We skip it");
+			} else {
+				tested = valueFromConfigStateAsExpected(getConfig(host), configuration.getKey(),
+						(Boolean) (configuration.getValue().get(0)));
+				if (!tested) {
+					break;
+				}
 			}
 		}
 
@@ -1260,6 +1264,7 @@ public class OpsiserviceNOMPersistenceController {
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
 			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+				Logging.debug(this, "WAN config option key " + notWanConfigOption.getKey() + " is non BOOL_CONFIG");
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
