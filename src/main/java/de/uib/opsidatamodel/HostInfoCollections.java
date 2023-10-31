@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -383,17 +384,13 @@ public class HostInfoCollections {
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
 		for (String depot : depotList) {
-			if (depot2Host2HostInfo.get(depot) == null) {
-				Logging.info(this, "getPcListForDepots depot " + depot + " is null");
-			} else {
-				for (String clientName : depot2Host2HostInfo.get(depot).keySet()) {
-					HostInfo hostInfo = depot2Host2HostInfo.get(depot).get(clientName);
+			for (Entry<String, HostInfo> client : depot2Host2HostInfo.get(depot).entrySet()) {
+				HostInfo hostInfo = client.getValue();
 
-					if (allowedClients == null || allowedClients.contains(clientName)) {
-						mapOfPCs.put(clientName, false);
-						mapPCInfomap.put(clientName, hostInfo);
-						mapPcBelongsToDepot.put(clientName, depot);
-					}
+				if (allowedClients == null || allowedClients.contains(client.getKey())) {
+					mapOfPCs.put(client.getKey(), false);
+					mapPCInfomap.put(client.getKey(), hostInfo);
+					mapPcBelongsToDepot.put(client.getKey(), depot);
 				}
 			}
 		}
