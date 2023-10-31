@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.0.12] - XXXX-XX-XX
+## [4.3.0.12] - 2023-10-31
 ### Fixed
 - Create PDF-files from Hardware information
 - Displayed column editing in "Hardware Information" tab
@@ -8,6 +8,8 @@
 - Calculation for remaining software license
 - Vanishing new entries on save in license management frame
 - Reloading of license management frame
+- Using SPACE+CTRL for (de)selecting clients
+- Retrieve version for products, that were installed as once or custom installation even though installationStatus is not_installed
 
 ### Changed
 - Remove unnecessaray Logging-operation (performance)
