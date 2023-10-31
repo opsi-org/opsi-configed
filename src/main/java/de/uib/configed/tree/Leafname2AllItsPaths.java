@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -26,8 +27,8 @@ public class Leafname2AllItsPaths {
 		invertedSimpleClientPaths = new HashMap<>();
 	}
 
-	public Set<String> keySet() {
-		return invertedSimpleClientPaths.keySet();
+	public Set<Entry<String, ArrayList<SimpleTreePath>>> entrySet() {
+		return invertedSimpleClientPaths.entrySet();
 	}
 
 	public List<SimpleTreePath> get(String k) {
