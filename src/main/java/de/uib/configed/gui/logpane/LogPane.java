@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -53,7 +54,7 @@ import de.uib.utilities.swing.PopupMenuTrait;
 import utils.Utils;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
-	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
+	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
 	private static final int DEFAULT_WIDTH = 1212;
 	private static final int DEFAULT_HEIGHT = 511;
@@ -502,8 +503,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private Integer produceInitialMaxShowLevel() {
-		int result = 1;
-
 		int savedMaxShownLogLevel = DEFAULT_MAX_SHOW_LEVEL;
 		try {
 			if (Configed.getSavedStates() != null) {
@@ -514,18 +513,19 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					"savedMaxShownLogLevel could not be read, value "
 							+ Configed.getSavedStates().getProperty("savedMaxShownLogLevel") + ", fallback to "
 							+ DEFAULT_MAX_SHOW_LEVEL);
-
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
-
-		Logging.info(this, "produceInitialMaxShowLevel " + result);
-
+		Logging.info(this, "produceInitialMaxShowLevel " + savedMaxShownLogLevel);
 		return savedMaxShownLogLevel;
 	}
 
 	private void buildDocument() {
 		Logging.debug(this, "building document");
-		setCursor(Globals.WAIT_CURSOR);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
+		} else {
+			setCursor(Globals.WAIT_CURSOR);
+		}
 		// Switch to an blank document temporarily to avoid repaints
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
@@ -564,7 +564,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
-		setCursor(null);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(null));
+		} else {
+			setCursor(null);
+		}
 	}
 
 	private void setLevelWithoutAction(Object l) {
@@ -651,18 +655,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.getCaret().setVisible(true);
 	}
 
-	private Style getStyleByLevelNo(int lev) {
-		Style result = null;
-
-		if (lev < logLevelStyles.length) {
-			result = logLevelStyles[lev];
-		} else {
-			result = logLevelStyles[logLevelStyles.length - 1];
-		}
-
-		return result;
-	}
-
 	private void parse() {
 		lineLevels = new int[lines.length];
 		lineStyles = new Style[lines.length];
@@ -670,66 +662,53 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		lineTypes = new int[lines.length];
 		typesList = new ArrayList<>();
 
-		StringBlock nextBlock = new StringBlock();
-		StringBlock testBlock = new StringBlock();
-
 		for (int i = 0; i < lines.length; i++) {
 			int levelForLine = getLoglevelForLine(lines[i]);
-
 			lineLevels[i] = levelForLine;
 			lineStyles[i] = getStyleByLevelNo(levelForLine);
-
-			// search type
-			String type = "";
-			int typeIndex = 0;
-			int nextStartI = 0;
-			nextBlock.setString(lines[i]);
-			testBlock.setString(lines[i]);
-			nextBlock.forward(nextStartI, '[', ']');
-
-			if (nextBlock.hasFound()) {
-				nextStartI = nextBlock.getIEnd() + 1;
-
-				testBlock.forward(nextStartI, '(', ')');
-				if (testBlock.hasFound()) {
-					nextStartI = testBlock.getIEnd() + 1;
-				}
-				nextBlock.forward(nextStartI, '[', ']');
-			}
-
-			if (nextBlock.hasFound()) {
-				nextStartI = nextBlock.getIEnd() + 1;
-				nextBlock.forward(nextStartI, '[', ']');
-			}
-
-			if (nextBlock.hasFound()) {
-				type = nextBlock.getContent();
-
-				typeIndex = typesList.indexOf(type);
-				if (typeIndex == -1) {
-					typeIndex = typesList.size();
-					typesList.add(type);
-				}
-			}
-
-			lineTypes[i] = typeIndex;
+			lineTypes[i] = getTypeIndexForLine(lines[i]);
 		}
 
 		maxExistingLevel = IntStream.range(0, lineLevels.length).map(i -> lineLevels[i]).max().getAsInt();
-
 		adaptComboType();
 	}
 
 	private static int getLoglevelForLine(String line) {
-		// keep last levC if not newly set
+		int lineLevel = 0;
 		if (line.length() >= 3 && line.charAt(0) == '[' && line.charAt(2) == ']') {
-			int level = Character.getNumericValue(line.charAt(1));
-
-			// Return 0, if value negative (and therefore invalid)
-			return Math.max(0, level);
-		} else {
-			return 0;
+			lineLevel = Character.getNumericValue(line.charAt(1));
 		}
+		return Math.max(0, lineLevel);
+	}
+
+	private Style getStyleByLevelNo(int lev) {
+		return lev < logLevelStyles.length ? logLevelStyles[lev] : logLevelStyles[logLevelStyles.length - 1];
+	}
+
+	private int getTypeIndexForLine(String line) {
+		String type = "";
+		int typeIndex = 0;
+		int nextStartI = 0;
+		StringBlock nextBlock = new StringBlock();
+		nextBlock.setString(line);
+		nextBlock.forward(nextStartI, '[', ']');
+		if (nextBlock.hasFound()) {
+			nextStartI = nextBlock.getIEnd() + 1;
+			nextBlock.forward(nextStartI, '[', ']');
+		}
+		if (nextBlock.hasFound()) {
+			nextStartI = nextBlock.getIEnd() + 1;
+			nextBlock.forward(nextStartI, '[', ']');
+		}
+		if (nextBlock.hasFound()) {
+			type = nextBlock.getContent();
+			typeIndex = typesList.indexOf(type);
+			if (typeIndex == -1) {
+				typeIndex = typesList.size();
+				typesList.add(type);
+			}
+		}
+		return typeIndex;
 	}
 
 	private void adaptComboType() {
@@ -779,38 +758,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel.setValue(showLevel);
 		buildDocument();
-		jTextPane.setCaretPosition(0);
-		jTextPane.getCaret().setVisible(true);
-	}
-
-	public void setMainText(String s) {
-		Logging.info(this, "setMainText ...");
-		Logging.info(this, "usedmemory " + Utils.usedMemory());
-		if (s == null) {
-			Logging.warning(this, "wont set main text, argument s is null");
-			return;
-		}
-
-		Logging.info(this, "Setting text");
-
-		lines = s.split("\n");
-		parse();
-		if (lines.length > 1) {
-			if (maxExistingLevel > 4) {
-				showLevel = 5;
-			} else {
-				showLevel = maxExistingLevel;
-			}
-			adaptSlider();
-		} else {
-			showLevel = 1;
-			sliderLevel.produceLabels();
-		}
-
-		sliderLevel.setValue(showLevel);
-		buildDocument();
-		Logging.info(this, "usedmemory " + Utils.usedMemory());
-
 		jTextPane.setCaretPosition(0);
 		jTextPane.getCaret().setVisible(true);
 	}

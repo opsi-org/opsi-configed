@@ -2676,11 +2676,19 @@ public class MainFrame extends JFrame
 	}
 
 	public void activateLoadingCursor() {
-		setCursor(Globals.WAIT_CURSOR);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
+		} else {
+			setCursor(Globals.WAIT_CURSOR);
+		}
 	}
 
 	public void disactivateLoadingCursor() {
-		setCursor(null);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(null));
+		} else {
+			setCursor(null);
+		}
 	}
 
 	private void reloadLicensesAction() {
@@ -3352,11 +3360,6 @@ public class MainFrame extends JFrame
 			showSoftwareLog = showSoftwareLogNotFound;
 			showSoftwareInfo();
 		}
-	}
-
-	public void setSoftwareAuditNullInfo(String hostId) {
-		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
-		panelSWInfo.setSoftwareNullInfo(hostId);
 	}
 
 	private void initSoftWareInfo() {

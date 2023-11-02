@@ -299,7 +299,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private void initLogpane() {
 		logPane = new StandaloneLogPane();
-		logPane.setMainText("");
+		logPane.setText("");
 		logPane.setTitle("unknown");
 		setTitle(null);
 		if (fileName != null && !fileName.isEmpty()) {
@@ -307,7 +307,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.setMainText(logText);
+				logPane.setText(logText);
 			}
 		}
 	}
@@ -320,7 +320,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		@Override
 		public void reload() {
 			int caretPosition = getCaretPosition();
-			super.setMainText(reloadFile(fileName));
+			super.setText(reloadFile(fileName));
 			super.setTitle(fileName);
 			super.setCaretPosition(caretPosition);
 			super.removeAllHighlights();
@@ -328,7 +328,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		public void close() {
 			resetFileName();
-			super.setMainText(fileName);
+			super.setText(fileName);
 			super.setTitle(fileName);
 			super.removeAllHighlights();
 		}
@@ -438,7 +438,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory " + Utils.usedMemory());
-			logPane.setMainText(readFile(fileName));
+			logPane.setText(readFile(fileName));
 			Logging.info(this, "Used memory " + Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);

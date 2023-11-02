@@ -1936,9 +1936,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		treeClients.produceActiveParents(getSelectedClients());
 
-		clearLogPage();
-		clearSoftwareInfoPage();
-
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
@@ -2088,6 +2085,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
+		if (mainFrame != null) {
+			mainFrame.activateLoadingCursor();
+		}
 		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
@@ -2138,6 +2138,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
+		if (mainFrame != null) {
+			mainFrame.disactivateLoadingCursor();
+		}
 	}
 
 	private void setFilterClientList(boolean b) {
@@ -2627,6 +2630,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "depotsList selection changed");
 
+		if (mainFrame != null) {
+			mainFrame.activateLoadingCursor();
+		}
+
 		changeDepotSelection();
 
 		// when running after the first run, we deactivate buttons
@@ -2647,6 +2654,9 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		setViewIndex(getViewIndex());
+		if (mainFrame != null) {
+			mainFrame.disactivateLoadingCursor();
+		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -3195,10 +3205,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private static void clearSoftwareInfoPage() {
-		mainFrame.setSoftwareAuditNullInfo("");
-	}
-
 	private boolean setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
@@ -3210,10 +3216,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		return true;
-	}
-
-	private static void clearLogPage() {
-		mainFrame.setLogfilePanel(new HashMap<>());
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -3256,7 +3258,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public boolean resetView(int viewIndex) {
 		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
-
+		mainFrame.activateLoadingCursor();
 		boolean result = true;
 
 		switch (viewIndex) {
@@ -3300,6 +3302,7 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 		}
 
+		mainFrame.disactivateLoadingCursor();
 		return result;
 	}
 
