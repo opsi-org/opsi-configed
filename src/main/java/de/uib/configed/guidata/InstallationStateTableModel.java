@@ -310,7 +310,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private void produceVisualStatesFromExistingEntries() {
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
-			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
+			Map<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
 			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
 		}
 
@@ -1069,7 +1069,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				delivered = "";
 			}
 
-			LinkedHashSet<String> values = new LinkedHashSet<>();
+			Set<String> values = new LinkedHashSet<>();
 
 			if (!defaultDisplayValues.contains(delivered)) {
 				values.add(delivered);

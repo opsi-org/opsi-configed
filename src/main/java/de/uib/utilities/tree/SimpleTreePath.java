@@ -30,7 +30,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	}
 
 	public Set<String> collectNodeNames() {
-		HashSet<String> set = new HashSet<>();
+		Set<String> set = new HashSet<>();
 
 		for (String nodename : this) {
 			set.add(nodename);

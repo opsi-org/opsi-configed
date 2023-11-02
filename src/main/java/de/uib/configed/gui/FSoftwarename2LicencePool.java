@@ -63,7 +63,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
 
-	private ArrayList<TableEditItem> updateCollection;
+	private List<TableEditItem> updateCollection;
 
 	private int keyCol;
 
@@ -449,7 +449,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
 		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
+			Map<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicencePoolPD(swID);
 

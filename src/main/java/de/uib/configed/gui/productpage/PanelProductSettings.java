@@ -487,7 +487,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private void createReport() {
 		Logging.info(this, "create report");
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 
 		// display, if filter is active,
 		// display selected productgroup
@@ -623,14 +623,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		StringBuilder result = new StringBuilder("[");
-		int i = 0;
 		for (RowSorter.SortKey key : sortKeys) {
-			i++;
 			result.append(key.getColumn() + ".." + key);
 		}
 		result.append("]");
 		Logging.info(this, "infoSortkeys " + result);
-		return " (number " + i + ") ";
+		return " (number " + sortKeys.size() + ") ";
 	}
 
 	@SuppressWarnings("java:S1452")
@@ -693,7 +691,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	public List<Integer> getSelectedRowsInModelTerms() {
 		int[] selection = tableProducts.getSelectedRows();
-		ArrayList<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
+		List<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
 		for (int selectionElement : selection) {
 			selectionInModelTerms.add(convertRowIndexToModel(selectionElement));
 		}

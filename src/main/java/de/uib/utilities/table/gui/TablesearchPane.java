@@ -77,7 +77,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private NavigationPanel navPane;
 	private PanelGenEditTable associatedPanel;
 
-	private LinkedHashMap<JMenuItem, Boolean> searchMenuEntries;
+	private Map<JMenuItem, Boolean> searchMenuEntries;
 
 	private JMenuItem popupSearch;
 	private JMenuItem popupSearchNext;
@@ -886,7 +886,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
 		final String value = fieldSearch.getText();
 
-		HashSet<Integer> selectedCols0 = null;
+		Set<Integer> selectedCols0 = null;
 
 		if (comboSearchFields.getSelectedIndex() > 0) {
 			selectedCols0 = new HashSet<>();

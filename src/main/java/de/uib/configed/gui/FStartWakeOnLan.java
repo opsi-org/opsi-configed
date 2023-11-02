@@ -87,7 +87,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {
 		this.labelledDelays = labelledDelays;
-		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
+		List<String> delays = new LinkedList<>(labelledDelays.keySet());
 
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);

@@ -8,10 +8,11 @@ package de.uib.utilities.table;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class ChainedTableModelFilter extends TableModelFilter {
-	private LinkedHashMap<String, TableModelFilter> chain;
+	private Map<String, TableModelFilter> chain;
 
 	public ChainedTableModelFilter() {
 		chain = new LinkedHashMap<>();

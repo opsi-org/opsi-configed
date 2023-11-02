@@ -183,7 +183,7 @@ public class LicenseDisplayer {
 		List<String> columnNames;
 		List<String> classNames;
 
-		ArrayList<TableEditItem> updateCollection;
+		List<TableEditItem> updateCollection;
 
 		columnNames = new ArrayList<>();
 		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {

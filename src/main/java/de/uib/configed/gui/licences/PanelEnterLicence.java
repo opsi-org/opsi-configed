@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -577,7 +578,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void saveCurrentLicenceData() {
-		HashMap<String, String> m = new HashMap<>();
+		Map<String, String> m = new HashMap<>();
 
 		m.put(LicenceEntry.ID_KEY, jTextFieldLicenceID.getText());
 		m.put(LicenceEntry.LICENCE_CONTRACT_ID_KEY, jTextFieldLicenceContract.getText());

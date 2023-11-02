@@ -353,7 +353,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private void buildModel() {
-		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
+		List<TableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
 				thePanel, updateCollection);

@@ -690,7 +690,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void exportTable() {
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 		metaData.put("header", title);
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "");

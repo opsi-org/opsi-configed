@@ -261,7 +261,7 @@ public class ConfigDataService {
 	}
 
 	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
-		HashMap<String, ConfigOption> result = new HashMap<>();
+		Map<String, ConfigOption> result = new HashMap<>();
 		retrieveConfigOptionsPD();
 		Map<String, ConfigOption> configOptions = getConfigOptionsPD();
 		for (Entry<String, ConfigOption> configOption : configOptions.entrySet()) {
@@ -1314,7 +1314,7 @@ public class ConfigDataService {
 			Logging.info(this, "getDomains "
 					+ configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
 
-			HashMap<String, Integer> numberedValues = new HashMap<>();
+			Map<String, Integer> numberedValues = new HashMap<>();
 			TreeSet<String> orderedValues = new TreeSet<>();
 			TreeSet<String> unorderedValues = new TreeSet<>();
 

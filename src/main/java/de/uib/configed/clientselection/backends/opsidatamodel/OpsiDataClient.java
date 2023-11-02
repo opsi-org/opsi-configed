@@ -175,7 +175,7 @@ public class OpsiDataClient {
 		if (hardwareIterator == null) {
 			Logging.debug(this, "getHardwareMap key " + key);
 			Logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
-			HashSet<Map<String, Object>> values = new HashSet<>();
+			Set<Map<String, Object>> values = new HashSet<>();
 			for (Map<String, Object> map : hardwareInfo) {
 				if (key.equals(map.get("hardwareClass"))) {
 					values.add(map);

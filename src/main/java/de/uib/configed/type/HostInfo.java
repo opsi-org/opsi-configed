@@ -140,7 +140,7 @@ public class HostInfo {
 	}
 
 	public Map<String, Object> getDisplayRowMap0() {
-		HashMap<String, Object> unordered = new HashMap<>();
+		Map<String, Object> unordered = new HashMap<>();
 
 		unordered.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
 		unordered.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
@@ -166,7 +166,7 @@ public class HostInfo {
 	}
 
 	public Map<String, Object> getMap() {
-		HashMap<String, Object> unordered = new HashMap<>();
+		Map<String, Object> unordered = new HashMap<>();
 
 		unordered.put(DEPOT_OF_CLIENT_KEY, depotOfClient);
 		unordered.put(CLIENT_DESCRIPTION_KEY, clientDescription);

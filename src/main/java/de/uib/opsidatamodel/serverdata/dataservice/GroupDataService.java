@@ -486,8 +486,8 @@ public class GroupDataService {
 				new Object[] { new Object[] { map } });
 		result = exec.doCall(omc);
 
-		HashSet<String> inNewSetnotInOriSet = new HashSet<>(productSet);
-		HashSet<String> inOriSetnotInNewSet = new HashSet<>();
+		Set<String> inNewSetnotInOriSet = new HashSet<>(productSet);
+		Set<String> inOriSetnotInNewSet = new HashSet<>();
 
 		if (getFProductGroup2Members().get(groupId) != null) {
 			Set<String> oriSet = getFProductGroup2Members().get(groupId);

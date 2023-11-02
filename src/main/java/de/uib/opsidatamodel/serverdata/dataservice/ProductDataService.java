@@ -629,7 +629,7 @@ public class ProductDataService {
 
 	private String getVersionInfoForLocalbootProduct(String depotId, String productId) {
 		// look for associated product on depot info
-		HashMap<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
+		Map<String, List<String>> product2VersionList = getDepot2LocalbootProductsPD().get(depotId);
 
 		String versionInfo = null;
 		if (product2VersionList != null && product2VersionList.get(productId) != null
@@ -800,7 +800,7 @@ public class ProductDataService {
 		Set<String> productsHavingSpecificProperties = new TreeSet<>(products);
 
 		for (String host : clientNames) {
-			HashMap<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
+			Map<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
 			productProperties.put(host, productproperties1Client);
 
 			Map<String, Map<String, Object>> retrievedProperties = productPropertiesRetrieved.get(host);
@@ -964,7 +964,7 @@ public class ProductDataService {
 	}
 
 	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, String[] attributes) {
-		HashMap<String, Object> callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
@@ -1204,7 +1204,7 @@ public class ProductDataService {
 
 	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
 		String[] callAttributes = new String[] {};
-		HashMap<String, Object> callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientIds);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
 				new Object[] { callAttributes, callFilter });
@@ -1271,9 +1271,9 @@ public class ProductDataService {
 	}
 
 	public Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
-		HashSet<String> notHandled = new HashSet<>(startProductSet);
-		HashSet<String> endResultSet = new HashSet<>(startProductSet);
-		HashSet<String> startResultSet = null;
+		Set<String> notHandled = new HashSet<>(startProductSet);
+		Set<String> endResultSet = new HashSet<>(startProductSet);
+		Set<String> startResultSet = null;
 
 		while (!notHandled.isEmpty()) {
 			startResultSet = new HashSet<>(endResultSet);

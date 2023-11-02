@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JSplitPane;
@@ -62,7 +63,7 @@ public class PanelProductProperties extends JSplitPane {
 		paneProducts.setTableModel(model);
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
+		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId

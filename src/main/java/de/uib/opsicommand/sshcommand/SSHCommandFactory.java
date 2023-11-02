@@ -356,7 +356,7 @@ public final class SSHCommandFactory {
 		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
 		Collections.sort(sshCommandList);
 
-		LinkedHashMap<String, List<SSHCommandTemplate>> sortedComs = new LinkedHashMap<>();
+		Map<String, List<SSHCommandTemplate>> sortedComs = new LinkedHashMap<>();
 
 		sortedComs.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
 		sortedComs.put(PARENT_OPSI, new LinkedList<>());

@@ -108,7 +108,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
-	private HashSet<String> activeParents = new HashSet<>();
+	private Set<String> activeParents = new HashSet<>();
 	// groups containing clients (especially the selected ones)
 
 	private Map<String, HostInfo> host2HostInfo;
@@ -772,10 +772,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		Map<String, String> groupData = new LinkedHashMap<>();
 		groupData.put("groupname", groupId);
 		groupData.put("description", groups.get(groupId).get("description"));
-		HashMap<String, String> labels = new HashMap<>();
+		Map<String, String> labels = new HashMap<>();
 		labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
 		labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-		HashMap<String, Boolean> editable = new HashMap<>();
+		Map<String, Boolean> editable = new HashMap<>();
 		editable.put("groupname", false);
 		editable.put("description", true);
 
@@ -812,13 +812,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		if (node.getAllowsChildren()) {
-			LinkedHashMap<String, String> groupData = new LinkedHashMap<>();
+			Map<String, String> groupData = new LinkedHashMap<>();
 			groupData.put("groupname", "");
 			groupData.put("description", "");
-			HashMap<String, String> labels = new HashMap<>();
+			Map<String, String> labels = new HashMap<>();
 			labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
 			labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-			HashMap<String, Boolean> editable = new HashMap<>();
+			Map<String, Boolean> editable = new HashMap<>();
 			editable.put("groupname", true);
 			editable.put("description", true);
 
@@ -1295,7 +1295,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	public Set<String> collectParentIDs(String nodeID) {
-		HashSet<String> allParents = new HashSet<>();
+		Set<String> allParents = new HashSet<>();
 
 		List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
 

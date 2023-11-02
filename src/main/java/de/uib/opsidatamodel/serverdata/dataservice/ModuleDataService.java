@@ -190,7 +190,7 @@ public class ModuleDataService {
 		// keeps the info for displaying to the user
 		Map<String, Object> opsiModulesDisplayInfo = new HashMap<>();
 
-		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
+		Map<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		Map<String, Boolean> opsiModules = new HashMap<>();
 
@@ -458,7 +458,7 @@ public class ModuleDataService {
 	}
 
 	private void produceOpsiModulesInfoClassicPD() {
-		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
+		Map<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		Map<String, Boolean> opsiModules = new HashMap<>();
 

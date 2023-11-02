@@ -362,7 +362,7 @@ public class LicenseDataService {
 	}
 
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
-		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
+		Map<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
 		if (moduleDataService.isWithLicenceManagementPD()) {
 			Logging.info(this, "licencePoolXOpsiProduct size " + getLicencePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicencePoolXOpsiProductPD()) {

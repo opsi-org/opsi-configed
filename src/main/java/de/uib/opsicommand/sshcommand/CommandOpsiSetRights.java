@@ -121,8 +121,8 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	}
 
 	@Override
-	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commandsStringList = new LinkedList<>();
+	public List<String> getCommandsRaw() {
+		List<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
 			if (!(comstr == null || comstr.trim().isEmpty())) {

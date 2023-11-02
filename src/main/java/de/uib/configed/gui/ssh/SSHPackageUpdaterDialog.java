@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -57,7 +58,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			command.setRepos(null);
 		} else {
 			String[] lines = result.split("\n");
-			HashMap<String, String> repos = new HashMap<>();
+			Map<String, String> repos = new HashMap<>();
 			for (int i = 1; i < lines.length; i++) {
 				String repostatus = lines[i].split(":")[0];
 

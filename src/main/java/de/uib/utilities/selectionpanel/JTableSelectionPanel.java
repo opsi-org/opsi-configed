@@ -503,7 +503,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public Set<String> getColumnValues(int col) {
-		HashSet<String> result = new HashSet<>();
+		Set<String> result = new HashSet<>();
 		if (table.getModel() == null || table.getModel().getColumnCount() <= col) {
 			return result;
 		}
@@ -721,7 +721,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	public boolean moveToValue(Object value, int col) {
-		HashSet<Integer> cols = new HashSet<>();
+		Set<Integer> cols = new HashSet<>();
 		cols.add(col);
 		int viewrow = findViewRowFromValue(0, value, cols);
 
@@ -802,7 +802,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void searchTheRow(int startrow, boolean addSelection) {
-		HashSet<Integer> selectedCols = null;
+		Set<Integer> selectedCols = null;
 
 		if (comboSearch.getSelectedIndex() > 0) {
 			selectedCols = new HashSet<>();

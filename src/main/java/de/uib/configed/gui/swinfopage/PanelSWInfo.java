@@ -287,7 +287,7 @@ public class PanelSWInfo extends JPanel {
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
-		ArrayList<RowSorter.SortKey> list = new ArrayList<>(1);
+		List<RowSorter.SortKey> list = new ArrayList<>(1);
 		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
@@ -434,7 +434,7 @@ public class PanelSWInfo extends JPanel {
 	private void sendToPDF() {
 		Logging.info(this, "create report swaudit for " + hostId + " check");
 
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);

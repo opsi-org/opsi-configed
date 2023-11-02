@@ -187,7 +187,7 @@ public final class Messages {
 			return existingLocales;
 		}
 
-		ArrayList<LocaleRepresentation> existingLocales = new ArrayList<>();
+		List<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
 
 		InputStream stream = Messages.class.getResourceAsStream(LOCALISATIONS_CONF);

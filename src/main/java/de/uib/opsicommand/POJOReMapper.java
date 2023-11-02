@@ -32,7 +32,7 @@ public final class POJOReMapper {
 	}
 
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
-		HashMap<String, String> result = new HashMap<>();
+		Map<String, String> result = new HashMap<>();
 		for (Entry<String, Object> entry : m.entrySet()) {
 			if (entry.getValue() == null) {
 				result.put(entry.getKey(), "");

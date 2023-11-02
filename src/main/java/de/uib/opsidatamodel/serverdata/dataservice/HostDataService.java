@@ -476,7 +476,7 @@ public class HostDataService {
 			String packageVersion, boolean includeFailedInstallations) {
 		List<String> result = new ArrayList<>();
 		String[] callAttributes = new String[] {};
-		HashMap<String, String> callFilter = new HashMap<>();
+		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,

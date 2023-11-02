@@ -23,7 +23,7 @@ public abstract class AbstractControlMultiTablePanel {
 
 	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();
 
-	protected ArrayList<TableEditItem> updateCollection = new ArrayList<>();
+	protected List<TableEditItem> updateCollection = new ArrayList<>();
 
 	public abstract TabClientAdapter getTabClient();
 

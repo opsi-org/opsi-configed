@@ -370,7 +370,7 @@ public class UserConfigProducing {
 		List<Object> selectedValuesDepot = null;
 		List<Object> possibleValuesDepot = null;
 		Set<Object> oldPossibleValuesDepot = null;
-		LinkedHashSet<Object> currentPossibleValuesDepotListed = null;
+		Set<Object> currentPossibleValuesDepotListed = null;
 
 		String configKeyUseList = startKey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
@@ -486,7 +486,7 @@ public class UserConfigProducing {
 		List<Object> selectedValuesProductgroups = null;
 		List<Object> possibleValuesProductgroups = null;
 		Set<Object> oldPossibleValuesProductgroups = null;
-		LinkedHashSet<Object> currentPossibleValuesProductgroupsListed = null;
+		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String configKeyUseList = startKey
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;

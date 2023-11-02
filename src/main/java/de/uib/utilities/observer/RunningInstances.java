@@ -6,6 +6,7 @@
 
 package de.uib.utilities.observer;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,7 +27,7 @@ public class RunningInstances<T> {
 	private String askForLeave;
 
 	// collect instances of a class in this map
-	private ConcurrentHashMap<T, String> instances;
+	private Map<T, String> instances;
 
 	public RunningInstances(Class<?> type, String askForLeave) {
 		this.classname = type.getName();

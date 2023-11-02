@@ -87,7 +87,7 @@ public class DepotDataService {
 
 	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
 		Map<String, Map<String, Object>> depotProperties = hostInfoCollections.getAllDepots();
-		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
 		String configServer = hostInfoCollections.getConfigServer();
 		if (userRolesConfigDataService.hasDepotPermission(configServer)) {

@@ -970,7 +970,7 @@ public class MainFrame extends JFrame
 			boolean commandsExist = false;
 			for (Entry<String, List<SSHCommandTemplate>> entry : sortedComs.entrySet()) {
 				String parentMenuName = entry.getKey();
-				LinkedList<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
+				List<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
 				Collections.sort(listCom);
 				JMenu parentMenu = new JMenu();
 				parentMenu.setText(parentMenuName);
@@ -1634,7 +1634,7 @@ public class MainFrame extends JFrame
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
 
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 		String title = Configed.getResourceValue("MainFrame.ClientList");
 
 		if (statusPane.getGroupName().length() != 0) {

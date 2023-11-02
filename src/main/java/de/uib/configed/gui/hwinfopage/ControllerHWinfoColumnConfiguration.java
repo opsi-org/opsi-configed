@@ -174,7 +174,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(Configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
+		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 
 		sortDescriptor.put(KEY_COL, SortOrder.ASCENDING);
 		panel.setSortOrder(sortDescriptor);

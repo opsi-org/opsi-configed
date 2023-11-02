@@ -538,7 +538,7 @@ public final class SSHCommandParameterMethods {
 		final SSHConnect caller = new SSHConnect(configedMain);
 
 		final String scriptFile = method.replace("ssh://", "");
-		final LinkedList<String> commands = new LinkedList<>();
+		final List<String> commands = new LinkedList<>();
 		commands.add(scriptFile);
 		SSHCommandTemplate cmd = new SSHCommandTemplate("", commands, "", false, "", "", 0);
 

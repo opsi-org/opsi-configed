@@ -7,6 +7,7 @@
 package de.uib.configed.gui.swinfopage;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JTable;
 
@@ -29,7 +30,7 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 		Logging.debug(this, "create pdf report swaudit for " + clientName);
 
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 
 		metaData.put("title", "Client " + clientName);
 		metaData.put("subtitle", scanInfo);

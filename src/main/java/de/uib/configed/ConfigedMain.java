@@ -1336,7 +1336,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private void selectOldSelectedDepots() {
-		ArrayList<Integer> savedSelectedDepots = new ArrayList<>();
+		List<Integer> savedSelectedDepots = new ArrayList<>();
 		// we collect the indices of the old depots in the current list
 
 		for (String oldSelectedDepot : oldSelectedDepots) {
@@ -1649,7 +1649,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private static Map<String, Boolean> filterMap(Map<String, Boolean> map0, Set<String> filterset) {
-		HashMap<String, Boolean> result = new HashMap<>();
+		Map<String, Boolean> result = new HashMap<>();
 
 		if (filterset == null) {
 			return result;
@@ -2987,7 +2987,7 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
-		HashMap<String, Object> mergedMap = new HashMap<>();
+		Map<String, Object> mergedMap = new HashMap<>();
 		if (collection == null || collection.isEmpty()) {
 			return mergedMap;
 		}

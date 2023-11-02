@@ -134,7 +134,7 @@ public class FDialogRemoteControl extends FEditStringList {
 
 		trans.setCommand(cmd);
 
-		HashMap<String, String> values = new HashMap<>();
+		Map<String, String> values = new HashMap<>();
 		values.put("%host%", targetClient);
 		String hostName = targetClient;
 		Logging.info(this, " targetClient " + targetClient);

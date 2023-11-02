@@ -176,7 +176,7 @@ public class SoftwareDataService {
 			String swKEY = entry.getIdent();
 
 			// build row for software table
-			LinkedHashMap<String, String> row = new LinkedHashMap<>();
+			Map<String, String> row = new LinkedHashMap<>();
 
 			for (String colName : SWAuditEntry.getDisplayKeys()) {
 				row.put(colName, entry.get(colName));
@@ -709,7 +709,7 @@ public class SoftwareDataService {
 			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
 			if (!onlyAdding) {
-				ArrayList<Map<String, String>> deleteItems = new ArrayList<>();
+				List<Map<String, String>> deleteItems = new ArrayList<>();
 
 				for (String swIdent : oldEntriesTruely) {
 					// software exists in audit software
@@ -740,7 +740,7 @@ public class SoftwareDataService {
 				}
 			}
 
-			ArrayList<Map<String, String>> createItems = new ArrayList<>();
+			List<Map<String, String>> createItems = new ArrayList<>();
 
 			for (String swIdent : softwareToAssignTruely) {
 				Map<String, String> item = new HashMap<>();
@@ -758,7 +758,7 @@ public class SoftwareDataService {
 
 			// we build the correct data locally
 			if (result) {
-				HashSet<String> intermediateSet = new HashSet<>(fLicencePool2SoftwareList.get(licensePoolId));
+				Set<String> intermediateSet = new HashSet<>(fLicencePool2SoftwareList.get(licensePoolId));
 				intermediateSet.removeAll(entriesToRemove);
 				intermediateSet.addAll(softwareToAssign);
 				// dont delete old entries but avoid double entries
@@ -968,7 +968,7 @@ public class SoftwareDataService {
 		Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
 		for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
 			for (String pool : licensePools.keySet()) {
-				HashMap<String, Object> rowMap = new HashMap<>();
+				Map<String, Object> rowMap = new HashMap<>();
 
 				rowMap.put(OpsiServiceNOMPersistenceController.HOST_KEY, clientEntry.getKey());
 

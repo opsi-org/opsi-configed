@@ -9,12 +9,13 @@ package de.uib.opsidatamodel.serverdata;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uib.utilities.logging.Logging;
 
 public class Object2Product2VersionList extends HashMap<String, HashMap<String, List<String>>> {
 	public void addPackage(String depot, String productName, String versionInfo) {
-		HashMap<String, List<String>> pVersions = computeIfAbsent(depot, s -> new HashMap<>());
+		Map<String, List<String>> pVersions = computeIfAbsent(depot, s -> new HashMap<>());
 
 		List<String> versions = pVersions.computeIfAbsent(productName, arg -> new ArrayList<>());
 

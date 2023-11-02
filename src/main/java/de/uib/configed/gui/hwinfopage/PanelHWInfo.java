@@ -182,7 +182,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void exportPDF() {
 		Logging.info(this, "create report");
-		HashMap<String, String> metaData = new HashMap<>();
+		Map<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
 
 		metaData.put("title", treeRootTitle);

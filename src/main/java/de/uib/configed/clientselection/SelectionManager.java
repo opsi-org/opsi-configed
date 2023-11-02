@@ -73,7 +73,7 @@ public class SelectionManager {
 			List<OperationWithStatus> operationsWithStatuses) {
 		Logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
 
-		LinkedList<AbstractSelectOperation> tmpList = new LinkedList<>();
+		List<AbstractSelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
 		Logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
 
@@ -374,7 +374,7 @@ public class SelectionManager {
 			return operation.getOperation();
 		}
 
-		LinkedList<AbstractSelectOperation> arg = new LinkedList<>();
+		List<AbstractSelectOperation> arg = new LinkedList<>();
 		arg.add(operation.getOperation());
 
 		return new NotOperation(arg);

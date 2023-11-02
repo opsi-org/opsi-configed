@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -79,7 +80,7 @@ public class OpsiDataSerializer {
 	 * Get a list of the names of all saved searches.
 	 */
 	public List<String> getSaved() {
-		HashSet<String> set = new HashSet<>();
+		Set<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
 		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
 		return new LinkedList<>(set);
@@ -549,7 +550,7 @@ public class OpsiDataSerializer {
 
 		// Children
 		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
-		LinkedList<AbstractSelectOperation> children = new LinkedList<>();
+		List<AbstractSelectOperation> children = new LinkedList<>();
 		if (childrenData != null) {
 			for (Map<String, Object> child : childrenData) {
 				children.add(getOperation(child, hardware));
