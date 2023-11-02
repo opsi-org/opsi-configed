@@ -28,7 +28,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.Timer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -42,7 +41,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected boolean shiftPressed = true;
 
-	private FadingMirror glass;
 	protected JPanel allpane = new JPanel();
 
 	protected JScrollPane scrollpane = new JScrollPane();
@@ -158,9 +156,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		registerWithRunningInstances();
 
 		setIconImage(Utils.getMainIcon());
-
-		glass = new FadingMirror();
-		setGlassPane(glass);
 
 		if (lastButtonNo > -1) {
 			this.noOfButtons = lastButtonNo;
@@ -552,76 +547,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			postAction3();
 		} else {
 			Logging.warning(this, "unexpected action source " + e.getSource());
-		}
-	}
-
-	public void glassTransparency(boolean vanishing, int initialWaitMs, int delayMs, float step) {
-		glass.setVisible(true);
-		glass.setOpaque(false);
-		glass.setStep(step);
-		glass.setDirection(vanishing);
-		glass.setDelay(initialWaitMs, delayMs);
-		glass.begin();
-	}
-
-	private static class FadingMirror extends JPanel implements ActionListener {
-		private float opacity = 1F;
-		private float step = 0.3F;
-		private Timer fadeTimer;
-		private int initialDelay = 100;
-		private int delay = 100;
-		private boolean vanishing = true;
-
-		public void setDirection(boolean vanishing) {
-			this.vanishing = vanishing;
-
-			if (vanishing) {
-				opacity = 1F;
-			} else {
-				opacity = 0F;
-			}
-		}
-
-		public void setStep(float f) {
-			step = f;
-		}
-
-		public void setDelay(int initialDelayMs, int delayMs) {
-			initialDelay = initialDelayMs;
-			delay = delayMs;
-		}
-
-		public void begin() {
-			fadeTimer = new Timer(initialDelay, this);
-			fadeTimer.setDelay(delay);
-			fadeTimer.start();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (vanishing) {
-				opacity -= step;
-				if (opacity < 0) {
-					opacity = 0;
-					if (fadeTimer != null) {
-						fadeTimer.stop();
-						fadeTimer = null;
-					}
-				}
-			} else {
-				opacity += step;
-
-				if (opacity > 1) {
-					opacity = 1;
-
-					if (fadeTimer != null) {
-						fadeTimer.stop();
-						fadeTimer = null;
-					}
-				}
-			}
-
-			repaint();
 		}
 	}
 }
