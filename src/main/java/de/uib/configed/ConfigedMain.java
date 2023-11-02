@@ -2088,6 +2088,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
+		if (mainFrame != null) {
+			mainFrame.setCursor(Globals.WAIT_CURSOR);
+		}
 		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
@@ -2138,6 +2141,9 @@ public class ConfigedMain implements ListSelectionListener {
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
+		if (mainFrame != null) {
+			mainFrame.setCursor(null);
+		}
 	}
 
 	private void setFilterClientList(boolean b) {
@@ -2625,6 +2631,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "depotsList selection changed");
 
+		if (mainFrame != null) {
+			mainFrame.setCursor(Globals.WAIT_CURSOR);
+		}
+
 		changeDepotSelection();
 
 		// when running after the first run, we deactivate buttons
@@ -2645,6 +2655,9 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		setViewIndex(getViewIndex());
+		if (mainFrame != null) {
+			mainFrame.setCursor(null);
+		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
