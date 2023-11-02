@@ -557,6 +557,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public void glassTransparency(boolean vanishing, int initialWaitMs, int delayMs, float step) {
 		glass.setVisible(true);
+		glass.setOpaque(false);
 		glass.setStep(step);
 		glass.setDirection(vanishing);
 		glass.setDelay(initialWaitMs, delayMs);
