@@ -11,12 +11,16 @@
 
 package de.uib.configed.gui.licences;
 
+import java.util.Map;
+
 import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelLicencesReconciliation;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
@@ -58,5 +62,14 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	public PanelGenEditTable getPanelReconciliation() {
 		return panelReconciliation;
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
+		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null
+				|| panelReconciliation.getTableModel().getRows().isEmpty()) {
+			panelReconciliation.reload();
+		}
 	}
 }

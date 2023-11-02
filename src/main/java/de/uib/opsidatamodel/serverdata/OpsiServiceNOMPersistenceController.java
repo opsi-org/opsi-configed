@@ -56,6 +56,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.StatisticsDataReloadHandler;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -404,6 +405,10 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
 				softwareLicense2LicensePoolDataReloadHandler);
 
+		StatisticsDataReloadHandler statisticsDataReloadHandler = new StatisticsDataReloadHandler();
+		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
@@ -419,8 +424,6 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.ALL_DATA.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSES.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(),
-				defaultDataReloadHandler);
 	}
 
 	public void reloadData(String event) {

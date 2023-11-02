@@ -23,6 +23,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.StatisticsDataReloadHandler;
 
 /**
  * Events that trigger specifc reload handlers, that reload required data.
@@ -98,6 +99,11 @@ public enum ReloadEvent {
 	 * Triggers {@link SoftwareLicense2LicensePoolDataReloadHandler}.
 	 */
 	SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD("software_license_to_license_pool_data_reload"),
+
+	/**
+	 * Triggers {@link StatisticsDataReloadHandler}.
+	 */
+	STATISTICS_DATA_RELOAD("statistics_reload_handler"),
 
 	/**
 	 * Triggers {@link HostDataReloadHandler}.
