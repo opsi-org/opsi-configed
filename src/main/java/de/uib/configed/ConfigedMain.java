@@ -2089,7 +2089,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
 		if (mainFrame != null) {
-			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			mainFrame.activateLoadingCursor();
 		}
 		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
@@ -2142,7 +2142,7 @@ public class ConfigedMain implements ListSelectionListener {
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 		if (mainFrame != null) {
-			mainFrame.setCursor(null);
+			mainFrame.disactivateLoadingCursor();
 		}
 	}
 
@@ -2632,7 +2632,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "depotsList selection changed");
 
 		if (mainFrame != null) {
-			mainFrame.setCursor(Globals.WAIT_CURSOR);
+			mainFrame.activateLoadingCursor();
 		}
 
 		changeDepotSelection();
@@ -2656,7 +2656,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		setViewIndex(getViewIndex());
 		if (mainFrame != null) {
-			mainFrame.setCursor(null);
+			mainFrame.disactivateLoadingCursor();
 		}
 	}
 
@@ -3267,7 +3267,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public boolean resetView(int viewIndex) {
 		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.activateLoadingCursor();
 		boolean result = true;
 
 		switch (viewIndex) {
@@ -3311,7 +3311,7 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 		}
 
-		mainFrame.setCursor(null);
+		mainFrame.disactivateLoadingCursor();
 		return result;
 	}
 

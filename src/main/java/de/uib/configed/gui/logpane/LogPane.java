@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -520,7 +521,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private void buildDocument() {
 		Logging.debug(this, "building document");
-		setCursor(Globals.WAIT_CURSOR);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
+		} else {
+			setCursor(Globals.WAIT_CURSOR);
+		}
 		// Switch to an blank document temporarily to avoid repaints
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
@@ -559,7 +564,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
-		setCursor(null);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> setCursor(null));
+		} else {
+			setCursor(null);
+		}
 	}
 
 	private void setLevelWithoutAction(Object l) {

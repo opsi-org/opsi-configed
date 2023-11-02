@@ -64,14 +64,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			@Override
 			public void reload() {
 				super.reload();
-				ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+				ConfigedMain.getMainFrame().activateLoadingCursor();
 				loadDocument(idents[i]);
-				ConfigedMain.getMainFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			}
 
 			@Override
 			public void save() {
-				ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+				ConfigedMain.getMainFrame().activateLoadingCursor();
 				String filename = idents[i];
 				if (getInfo() != null) {
 					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
@@ -81,14 +81,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (pathname != null && !pathname.isEmpty()) {
 					saveToFile(pathname, getLines());
 				}
-				ConfigedMain.getMainFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			}
 
 			@Override
 			protected void saveAsZip() {
 				Logging.info(this, "saveAsZip");
 
-				ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+				ConfigedMain.getMainFrame().activateLoadingCursor();
 				String filename = idents[i];
 				if (getInfo() != null) {
 					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
@@ -97,7 +97,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (pathname != null && !pathname.isEmpty()) {
 					saveToZipFile(pathname, filename, getLines());
 				}
-				ConfigedMain.getMainFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			}
 
 			@Override
@@ -108,7 +108,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 				Logging.info(this, "saveAllAsZip got ident " + idents[i] + " loadMissingDocs " + loadMissingDocs);
 
-				ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+				ConfigedMain.getMainFrame().activateLoadingCursor();
 				String fname = idents[i];
 				if (getInfo() != null) {
 					fname = getInfo().replace('.', '_') + "_all";
@@ -136,7 +136,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					}
 				}
 				saveAllToZipFile(pathname, logfiles);
-				ConfigedMain.getMainFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			}
 		};
 
