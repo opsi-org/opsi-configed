@@ -3370,11 +3370,6 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void setSoftwareAuditNullInfo(String hostId) {
-		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
-		panelSWInfo.setSoftwareNullInfo(hostId);
-	}
-
 	private void initSoftWareInfo() {
 		panelSWInfo = new PanelSWInfo(configedMain) {
 			@Override

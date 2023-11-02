@@ -1936,9 +1936,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		treeClients.produceActiveParents(getSelectedClients());
 
-		clearLogPage();
-		clearSoftwareInfoPage();
-
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
@@ -3206,10 +3203,6 @@ public class ConfigedMain implements ListSelectionListener {
 		return true;
 	}
 
-	private static void clearSoftwareInfoPage() {
-		mainFrame.setSoftwareAuditNullInfo("");
-	}
-
 	private boolean setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
@@ -3221,10 +3214,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 
 		return true;
-	}
-
-	private static void clearLogPage() {
-		mainFrame.setLogfilePanel(new HashMap<>());
 	}
 
 	public boolean logfileExists(String logtype) {
