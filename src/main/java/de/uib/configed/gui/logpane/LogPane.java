@@ -655,18 +655,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.getCaret().setVisible(true);
 	}
 
-	private Style getStyleByLevelNo(int lev) {
-		Style result = null;
-
-		if (lev < logLevelStyles.length) {
-			result = logLevelStyles[lev];
-		} else {
-			result = logLevelStyles[logLevelStyles.length - 1];
-		}
-
-		return result;
-	}
-
 	private void parse() {
 		lineLevels = new int[lines.length];
 		lineStyles = new Style[lines.length];
@@ -674,66 +662,53 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		lineTypes = new int[lines.length];
 		typesList = new ArrayList<>();
 
-		StringBlock nextBlock = new StringBlock();
-		StringBlock testBlock = new StringBlock();
-
 		for (int i = 0; i < lines.length; i++) {
 			int levelForLine = getLoglevelForLine(lines[i]);
-
 			lineLevels[i] = levelForLine;
 			lineStyles[i] = getStyleByLevelNo(levelForLine);
-
-			// search type
-			String type = "";
-			int typeIndex = 0;
-			int nextStartI = 0;
-			nextBlock.setString(lines[i]);
-			testBlock.setString(lines[i]);
-			nextBlock.forward(nextStartI, '[', ']');
-
-			if (nextBlock.hasFound()) {
-				nextStartI = nextBlock.getIEnd() + 1;
-
-				testBlock.forward(nextStartI, '(', ')');
-				if (testBlock.hasFound()) {
-					nextStartI = testBlock.getIEnd() + 1;
-				}
-				nextBlock.forward(nextStartI, '[', ']');
-			}
-
-			if (nextBlock.hasFound()) {
-				nextStartI = nextBlock.getIEnd() + 1;
-				nextBlock.forward(nextStartI, '[', ']');
-			}
-
-			if (nextBlock.hasFound()) {
-				type = nextBlock.getContent();
-
-				typeIndex = typesList.indexOf(type);
-				if (typeIndex == -1) {
-					typeIndex = typesList.size();
-					typesList.add(type);
-				}
-			}
-
-			lineTypes[i] = typeIndex;
+			lineTypes[i] = getTypeIndexForLine(lines[i]);
 		}
 
 		maxExistingLevel = IntStream.range(0, lineLevels.length).map(i -> lineLevels[i]).max().getAsInt();
-
 		adaptComboType();
 	}
 
 	private static int getLoglevelForLine(String line) {
-		// keep last levC if not newly set
+		int lineLevel = 0;
 		if (line.length() >= 3 && line.charAt(0) == '[' && line.charAt(2) == ']') {
-			int level = Character.getNumericValue(line.charAt(1));
-
-			// Return 0, if value negative (and therefore invalid)
-			return Math.max(0, level);
-		} else {
-			return 0;
+			lineLevel = Character.getNumericValue(line.charAt(1));
 		}
+		return Math.max(0, lineLevel);
+	}
+
+	private Style getStyleByLevelNo(int lev) {
+		return lev < logLevelStyles.length ? logLevelStyles[lev] : logLevelStyles[logLevelStyles.length - 1];
+	}
+
+	private int getTypeIndexForLine(String line) {
+		String type = "";
+		int typeIndex = 0;
+		int nextStartI = 0;
+		StringBlock nextBlock = new StringBlock();
+		nextBlock.setString(line);
+		nextBlock.forward(nextStartI, '[', ']');
+		if (nextBlock.hasFound()) {
+			nextStartI = nextBlock.getIEnd() + 1;
+			nextBlock.forward(nextStartI, '[', ']');
+		}
+		if (nextBlock.hasFound()) {
+			nextStartI = nextBlock.getIEnd() + 1;
+			nextBlock.forward(nextStartI, '[', ']');
+		}
+		if (nextBlock.hasFound()) {
+			type = nextBlock.getContent();
+			typeIndex = typesList.indexOf(type);
+			if (typeIndex == -1) {
+				typeIndex = typesList.size();
+				typesList.add(type);
+			}
+		}
+		return typeIndex;
 	}
 
 	private void adaptComboType() {
