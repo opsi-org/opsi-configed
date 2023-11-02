@@ -3254,7 +3254,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public boolean resetView(int viewIndex) {
 		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
-
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		boolean result = true;
 
 		switch (viewIndex) {
@@ -3298,6 +3298,7 @@ public class ConfigedMain implements ListSelectionListener {
 			break;
 		}
 
+		mainFrame.setCursor(null);
 		return result;
 	}
 
