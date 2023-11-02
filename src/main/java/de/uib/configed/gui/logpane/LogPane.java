@@ -53,7 +53,7 @@ import de.uib.utilities.swing.PopupMenuTrait;
 import utils.Utils;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
-	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
+	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
 	private static final int DEFAULT_WIDTH = 1212;
 	private static final int DEFAULT_HEIGHT = 511;
@@ -502,8 +502,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private Integer produceInitialMaxShowLevel() {
-		int result = 1;
-
 		int savedMaxShownLogLevel = DEFAULT_MAX_SHOW_LEVEL;
 		try {
 			if (Configed.getSavedStates() != null) {
@@ -514,12 +512,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					"savedMaxShownLogLevel could not be read, value "
 							+ Configed.getSavedStates().getProperty("savedMaxShownLogLevel") + ", fallback to "
 							+ DEFAULT_MAX_SHOW_LEVEL);
-
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
-
-		Logging.info(this, "produceInitialMaxShowLevel " + result);
-
+		Logging.info(this, "produceInitialMaxShowLevel " + savedMaxShownLogLevel);
 		return savedMaxShownLogLevel;
 	}
 
@@ -779,38 +774,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel.setValue(showLevel);
 		buildDocument();
-		jTextPane.setCaretPosition(0);
-		jTextPane.getCaret().setVisible(true);
-	}
-
-	public void setMainText(String s) {
-		Logging.info(this, "setMainText ...");
-		Logging.info(this, "usedmemory " + Utils.usedMemory());
-		if (s == null) {
-			Logging.warning(this, "wont set main text, argument s is null");
-			return;
-		}
-
-		Logging.info(this, "Setting text");
-
-		lines = s.split("\n");
-		parse();
-		if (lines.length > 1) {
-			if (maxExistingLevel > 4) {
-				showLevel = 5;
-			} else {
-				showLevel = maxExistingLevel;
-			}
-			adaptSlider();
-		} else {
-			showLevel = 1;
-			sliderLevel.produceLabels();
-		}
-
-		sliderLevel.setValue(showLevel);
-		buildDocument();
-		Logging.info(this, "usedmemory " + Utils.usedMemory());
-
 		jTextPane.setCaretPosition(0);
 		jTextPane.getCaret().setVisible(true);
 	}
