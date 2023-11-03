@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.0.13] - xxxx-xx-xx
+### Fixed
+- Error message not shown in AbstractErrorListProducer
+
+### Changed
+- Removed Fading Glasspane from Error producer and waking clients
+
 ## [4.3.0.12] - 2023-10-31
 ### Fixed
 - Create PDF-files from Hardware information
