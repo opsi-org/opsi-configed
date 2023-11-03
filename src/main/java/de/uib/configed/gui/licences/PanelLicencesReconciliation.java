@@ -72,9 +72,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		super.reset();
-		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null
-				|| panelReconciliation.getTableModel().getRows().isEmpty()) {
+		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null) {
 			ConfigedMain.getMainFrame()
 					.activateLoadingPane(Configed.getResourceValue("PanelLicencesReconciliation.loading.text"));
 			ConfigedMain.getMainFrame().activateLoadingCursor();
@@ -85,6 +83,12 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 				ConfigedMain.getMainFrame().disactivateLoadingPane();
 			});
+		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {
+			panelReconciliation.getTableModel().resetLocally();
+			controller.refreshTables();
+			controller.initializeVisualSettings();
+		} else {
+			super.reset();
 		}
 	}
 }

@@ -379,6 +379,16 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	/**
+	 * Retrieves locally available data and applies it to a model (without
+	 * retrieving it from the server).
+	 */
+	public void resetLocally() {
+		Logging.info(this, "resetLocal");
+		tableProvider.refreshRows();
+		reset();
+	}
+
+	/**
 	 * sets data to the source values (if model is not valid they are
 	 * recollected) clears update collection
 	 */

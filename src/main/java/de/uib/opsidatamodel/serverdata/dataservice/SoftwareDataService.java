@@ -426,13 +426,6 @@ public class SoftwareDataService {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
-
-		StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-
-		for (StackTraceElement element : elements) {
-			Logging.devel(this, element.toString());
-		}
-
 		final int STEP_SIZE = 100;
 
 		while (!clients.isEmpty()) {
@@ -1081,11 +1074,6 @@ public class SoftwareDataService {
 
 	private Map<String, Set<String>> getSoftwareIdentOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
-		StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-
-		for (StackTraceElement element : elements) {
-			Logging.devel(this, element.toString());
-		}
 		int stepSize = 100;
 		Map<String, Set<String>> softwareIdent2clients = new HashMap<>();
 		while (!clients.isEmpty()) {
