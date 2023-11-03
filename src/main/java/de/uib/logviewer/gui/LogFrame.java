@@ -148,22 +148,22 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		String selectedLocale = Messages.getSelectedLocale();
 
-		for (final String localeName : Messages.getLocaleInfo().keySet()) {
+		for (final Entry<String, String> locale : Messages.getLocaleInfo().entrySet()) {
 			ImageIcon localeIcon = null;
-			String imageIconName = Messages.getLocaleInfo().get(localeName);
+			String imageIconName = locale.getValue();
 			if (imageIconName != null && !imageIconName.isEmpty()) {
 				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
-			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
+			JMenuItem menuItem = new JRadioButtonMenuItem(locale.getKey(), localeIcon);
 			Logging.debug(this, "Selected locale " + selectedLocale);
-			menuItem.setSelected(selectedLocale.equals(localeName));
+			menuItem.setSelected(selectedLocale.equals(locale.getKey()));
 			jMenuLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
 
 			menuItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
-				Messages.setLocale(localeName);
+				UserPreferences.set(UserPreferences.LANGUAGE, locale.getKey());
+				Messages.setLocale(locale.getKey());
 				restartLogFrame();
 			});
 		}

@@ -366,7 +366,6 @@ public class ExporterToPDF extends AbstractExportTable {
 		@Override
 		public void onEndPage(PdfWriter writer, Document document) {
 			PdfPTable table = new PdfPTable(3);
-			// TODO: logo, create String from Globals
 
 			URL opsiImageURL = getImageResourceURL("opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png");
 			try {

@@ -315,12 +315,12 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
-			for (String productId : client.getValue().keySet()) {
-				Map<String, String> stateAndAction = client.getValue().get(productId);
+			for (Entry<String, Map<String, String>> product : client.getValue().entrySet()) {
+				Map<String, String> stateAndAction = product.getValue();
 
 				if (stateAndAction == null) {
-					Logging.warning(this,
-							"produceVisualStatesFromExistingEntries, no row for " + client.getKey() + ", " + productId);
+					Logging.warning(this, "produceVisualStatesFromExistingEntries, no row for " + client.getKey() + ", "
+							+ product.getKey());
 					continue;
 				}
 
@@ -333,15 +333,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
 
 				String priority = "";
-				if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
-					priority = "" + globalProductInfos.get(productId).get("priority");
+				if (globalProductInfos != null && globalProductInfos.get(product.getKey()) != null) {
+					priority = "" + globalProductInfos.get(product.getKey()).get("priority");
 				}
 
 				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
+					mixToVisualState(combinedVisualValues.get(colKey), product.getKey(), stateAndAction.get(colKey));
 				}
 			}
 		}

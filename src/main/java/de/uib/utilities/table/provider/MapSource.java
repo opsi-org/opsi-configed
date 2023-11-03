@@ -96,19 +96,14 @@ public class MapSource implements TableSource {
 
 					// we complete the row by null
 					vRow.add(obj);
+				} else if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
+					vRow.add("" + rowCount);
+				} else if (class2defaultValue.get(classNames.get(i)) != null) {
+					vRow.add(class2defaultValue.get(classNames.get(i)));
 				} else {
-					String className = classNames.get(i);
-
-					if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
-						vRow.add("" + rowCount);
-					} else if (class2defaultValue.get(className) != null) {
-						vRow.add(class2defaultValue.get(className));
-					} else {
-						Logging.warning(this,
-								"fetchData row " + mRow
-										+ " ob == null, possibly the column name is not correct, column " + i + ", "
-										+ columnNames.get(i));
-					}
+					Logging.warning(this,
+							"fetchData row " + mRow + " ob == null, possibly the column name is not correct, column "
+									+ i + ", " + columnNames.get(i));
 				}
 			}
 

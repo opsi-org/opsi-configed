@@ -573,28 +573,26 @@ public class ProductDataService {
 		Map<String, Map<String, Object>> productGlobalInfos = new HashMap<>();
 		Map<String, List<String>> possibleActions = new HashMap<>();
 
-		for (String productId : getProduct2VersionInfo2InfosPD().keySet()) {
-			if (getProduct2VersionInfo2InfosPD().get(productId) == null) {
-				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + productId);
-			}
+		for (Entry<String, Map<String, OpsiProductInfo>> product : getProduct2VersionInfo2InfosPD().entrySet()) {
+			if (product.getValue() == null) {
+				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + product.getKey());
+			} else {
+				Map<String, OpsiProductInfo> productAllInfos = product.getValue();
 
-			if (getProduct2VersionInfo2InfosPD().get(productId) != null) {
-				Map<String, OpsiProductInfo> productAllInfos = getProduct2VersionInfo2InfosPD().get(productId);
-
-				String versionInfo = getVersionInfoForLocalbootProduct(depotId, productId);
+				String versionInfo = getVersionInfoForLocalbootProduct(depotId, product.getKey());
 
 				// if found go on
 
 				if (versionInfo != null && productAllInfos.get(versionInfo) != null) {
 					OpsiProductInfo productInfo = productAllInfos.get(versionInfo);
 
-					possibleActions.put(productId, productInfo.getPossibleActions());
+					possibleActions.put(product.getKey(), productInfo.getPossibleActions());
 
 					Map<String, Object> aProductInfo = new HashMap<>();
 
 					aProductInfo.put("actions", productInfo.getPossibleActions());
 
-					aProductInfo.put(ProductState.KEY_PRODUCT_ID, productId);
+					aProductInfo.put(ProductState.KEY_PRODUCT_ID, product.getKey());
 
 					aProductInfo.put(ProductState.KEY_VERSION_INFO,
 							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
@@ -617,7 +615,7 @@ public class ProductDataService {
 
 					Logging.debug(this, "productInfo " + aProductInfo);
 
-					productGlobalInfos.put(productId, aProductInfo);
+					productGlobalInfos.put(product.getKey(), aProductInfo);
 				}
 			}
 		}
