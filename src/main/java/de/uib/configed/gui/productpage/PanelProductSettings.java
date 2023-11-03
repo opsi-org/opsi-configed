@@ -427,7 +427,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		itemOnDemandForSelectedProducts.addActionListener((ActionEvent e) -> configedMain.processActionRequests());
+		itemOnDemandForSelectedProducts
+				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
 
 		if (ServerFacade.isOpsi43()) {
 			popup.add(itemOnDemandForSelectedProducts);
@@ -612,8 +613,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		configedMain.checkSaveAll(false);
 		configedMain.requestReloadStatesAndActions();
 
-		configedMain.fireOpsiclientdEventOnSelectedClients(
-				OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+		if (ServerFacade.isOpsi43()) {
+			configedMain.processActionRequestsAllProducts();
+		} else {
+			configedMain.fireOpsiclientdEventOnSelectedClients(
+					OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+		}
 	}
 
 	private String infoSortKeys(List<? extends RowSorter.SortKey> sortKeys) {

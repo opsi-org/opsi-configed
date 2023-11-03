@@ -4507,7 +4507,15 @@ public class ConfigedMain implements ListSelectionListener {
 		}.start();
 	}
 
-	public void processActionRequests() {
+	public void processActionRequestsAllProducts() {
+		processActionRequests(new String[0]);
+	}
+
+	public void processActionRequestsSelectedProducts() {
+		processActionRequests(mainFrame.getPanelLocalbootProductSettings().getSelectedIDs().toArray(String[]::new));
+	}
+
+	private void processActionRequests(String[] products) {
 		if (getSelectedClients().length == 0) {
 			return;
 		}
@@ -4518,7 +4526,7 @@ public class ConfigedMain implements ListSelectionListener {
 			@Override
 			protected List<String> getErrors() {
 				return persistenceController.getRPCMethodExecutor().processActionRequests(getSelectedClients(),
-						mainFrame.getPanelLocalbootProductSettings().getSelectedIDs().toArray(String[]::new));
+						products);
 			}
 		}.start();
 	}
