@@ -30,6 +30,8 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.configed.Configed;
 import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
@@ -107,6 +109,12 @@ public final class Utils {
 			result.append(' ');
 		}
 		return result.toString();
+	}
+
+	public static ImageIcon getSaveIcon() {
+		String saveIconPath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
+
+		return createImageIcon(saveIconPath, "");
 	}
 
 	public static ImageIcon createImageIcon(String path, String description) {

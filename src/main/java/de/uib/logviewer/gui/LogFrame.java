@@ -29,6 +29,7 @@ import java.util.TreeMap;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -38,8 +39,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-
-import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -59,7 +58,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private IconButton iconButtonOpen;
 	private IconButton iconButtonReload;
-	private IconButton iconButtonSave;
+	private JButton iconButtonSave;
 	private IconButton iconButtonCopy;
 
 	private Container baseContainer;
@@ -230,8 +229,9 @@ public class LogFrame extends JFrame implements WindowListener {
 				"images/reload16.png", "");
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		String iconSavePath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-		iconButtonSave = new IconButton(Configed.getResourceValue("save"), iconSavePath, iconSavePath, "");
+		iconButtonSave = new JButton(Utils.getSaveIcon());
+		iconButtonSave.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
+		iconButtonSave.setToolTipText(Configed.getResourceValue("save"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();

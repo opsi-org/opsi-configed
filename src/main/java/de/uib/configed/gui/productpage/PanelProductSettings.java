@@ -398,8 +398,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu("");
 
-		JMenuItem save = new JMenuItem();
-		save.setText(Configed.getResourceValue("save"));
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
@@ -412,18 +411,18 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		popup.add(save);
 
-		itemOnDemand = new JMenuItem();
-		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
+		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
+				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
-		itemOnDemand.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 
 		popup.add(itemOnDemand);
 
-		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem();
-		itemOnDemandForSelectedProducts.setText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
+		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
+				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"),
+				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
