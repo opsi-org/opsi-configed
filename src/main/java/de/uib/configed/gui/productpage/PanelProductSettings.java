@@ -413,7 +413,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup.add(save);
 
 		itemOnDemand = new JMenuItem();
-		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
+		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 		itemOnDemand.setIcon(Utils.createImageIcon("images/executing_command_blue_16.png", ""));
@@ -423,8 +423,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup.add(itemOnDemand);
 
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem();
-		itemOnDemandForSelectedProducts
-				.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_processActionRequests"));
+		itemOnDemandForSelectedProducts.setText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
