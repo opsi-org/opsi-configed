@@ -17,7 +17,6 @@ import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
-import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 
 /**
  * Implementation of {@link ReloadHandler} which is responsible for reloading
@@ -33,7 +32,6 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 	private HardwareDataService hardwareDataService;
 	private GroupDataService groupDataService;
 	private LicenseDataService licenseDataService;
-	private SoftwareDataService softwareDataService;
 
 	private Map<String, Consumer<Void>> eventHandlers;
 
@@ -88,10 +86,6 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 
 	public void setLicenseDataService(LicenseDataService licenseDataService) {
 		this.licenseDataService = licenseDataService;
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
 	}
 
 	@Override
