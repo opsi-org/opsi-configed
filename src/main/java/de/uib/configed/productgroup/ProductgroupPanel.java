@@ -431,8 +431,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
-		buttonEditDialog.setToolTips(Configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
-				Configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
 		buttonEditDialog.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

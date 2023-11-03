@@ -4051,8 +4051,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		Logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
 
-		mainFrame.getIconButtonSessionInfo().setWaitingState(true);
-
 		// no old values kept
 		sessionInfo = new HashMap<>();
 
@@ -4109,9 +4107,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void sessionInfoFinished() {
 		Logging.info(this, "when sessioninfoFinished");
-		mainFrame.getIconButtonSessionInfo().setWaitingState(false);
-
-		mainFrame.getIconButtonSessionInfo().setEnabled(true);
 
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
