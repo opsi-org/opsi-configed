@@ -92,8 +92,8 @@ public class PanelMountShare extends JPanel {
 		if (leftBound >= 0) {
 			layout.setHorizontalGroup(
 					layout.createSequentialGroup().addGap(leftBound, leftBound, leftBound)
-							.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-									Globals.GRAPHIC_BUTTON_WIDTH)
+							.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+									Globals.GRAPHIC_BUTTON_SIZE)
 							.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
 							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
 									Globals.BUTTON_WIDTH * 3, Short.MAX_VALUE)

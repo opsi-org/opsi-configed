@@ -43,7 +43,6 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
@@ -56,10 +55,10 @@ public class LogFrame extends JFrame implements WindowListener {
 	private static String fileName = "";
 	private StandaloneLogPane logPane;
 
-	private IconButton iconButtonOpen;
-	private IconButton iconButtonReload;
+	private JButton iconButtonOpen;
+	private JButton iconButtonReload;
 	private JButton iconButtonSave;
-	private IconButton iconButtonCopy;
+	private JButton iconButtonCopy;
 
 	private Container baseContainer;
 
@@ -221,16 +220,15 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void setupIcons() {
-		iconButtonOpen = new IconButton(Configed.getResourceValue("LogFrame.jMenuFileOpen"), "images/openfile.gif",
-				"images/openfile.gif", "");
+		iconButtonOpen = new JButton(Utils.createImageIcon("images/openfile.gif", ""));
+		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		iconButtonReload = new IconButton(Configed.getResourceValue("LogFrame.buttonReload"), "images/reload16.png",
-				"images/reload16.png", "");
+		iconButtonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		iconButtonSave = new JButton(Utils.getSaveIcon());
-		iconButtonSave.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		iconButtonSave.setToolTipText(Configed.getResourceValue("save"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
@@ -238,8 +236,8 @@ public class LogFrame extends JFrame implements WindowListener {
 			}
 		});
 
-		iconButtonCopy = new IconButton(Configed.getResourceValue("LogFrame.buttonCopy"), "images/edit-copy.png",
-				"images/edit-copy.png", "");
+		iconButtonCopy = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 	}
 
@@ -256,30 +254,30 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE))
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
 		JMenuBar jMenuBar = new JMenuBar();

@@ -355,18 +355,16 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(fieldOpsiPackageName, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(serverLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-										Globals.FIRST_LABEL_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-										Globals.GRAPHIC_BUTTON_WIDTH)
-								.addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
-										Globals.BUTTON_WIDTH * 2)
+				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+						.addComponent(serverLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
+						.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+								Globals.BUTTON_WIDTH * 2)
 
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
 				.addGroup(layout.createSequentialGroup().addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
@@ -386,7 +384,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addGap(0, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
 						.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(0, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(0, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

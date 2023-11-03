@@ -259,7 +259,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonShowPassword = new JButton(Utils.createImageIcon("images/eye_blue_open.png", ""));
 
-		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		jButtonShowPassword.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
 		jButtonShowPassword.addActionListener(actionEvent -> changeEchoChar());

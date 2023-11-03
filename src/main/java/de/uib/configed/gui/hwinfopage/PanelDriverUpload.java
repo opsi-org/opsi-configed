@@ -531,20 +531,20 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addComponent(jLabelShowDrivers, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
-								.addGap(hGap, hGap, hGap).addComponent(buttonShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
-										Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH))
+								.addGap(hGap, hGap, hGap).addComponent(buttonShowDrivers, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE))
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addComponent(jLabelCreateDrivers, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
-								.addGap(hGap, hGap, hGap).addComponent(btnCreateDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
-										Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH))
+								.addGap(hGap, hGap, hGap).addComponent(btnCreateDrivers, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE))
 						.addGroup(
 								layoutByAuditInfo.createSequentialGroup()
 										.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(hGap, hGap, hGap)
-										.addComponent(buttonCallSelectDriverFiles, Globals.GRAPHIC_BUTTON_WIDTH,
-												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addComponent(buttonCallSelectDriverFiles, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 										.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldDriverPath,
 												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
 						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -557,8 +557,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 												labelDriverToIntegrate.getPreferredSize().width,
 												labelDriverToIntegrate.getPreferredSize().width)
 										.addGap(hGap, hGap, hGap)
-										.addComponent(buttonCallChooserServerpath, Globals.GRAPHIC_BUTTON_WIDTH,
-												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addComponent(buttonCallChooserServerpath, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 										.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldServerPath,
 												Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
 

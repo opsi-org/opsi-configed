@@ -174,7 +174,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	}
 
 	private void initOutputGui() {
-		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
+		Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT + 3);
 
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 

@@ -155,10 +155,10 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		setCenterLayout();
 
-		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
+		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_SIZE,
 				Globals.BUTTON_HEIGHT);
 		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
-		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH, Globals.BUTTON_HEIGHT);
+		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_SIZE, Globals.BUTTON_HEIGHT);
 
 		labelParentMenuText = new JLabel();
 		jComboBoxParentMenuText = new JComboBox<>();
@@ -210,14 +210,14 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		labelPriority.setPreferredSize(dimensionJTextField);
 		jTextFieldPriority.setPreferredSize(dimensionButton);
 		jComboBoxNeedSudo.setSize(dimensionButton);
-		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		labelNeedSudo.setPreferredSize(dimensionJTextField);
 		jComboBoxNeedSudo.setPreferredSize(dimensionButton);
 		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
 		// btn_changeHelpPanelStatus.setPreferredSize(new
 
-		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
-		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
+		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 
 		jComboBoxMenuText.setEditable(true);
 		jComboBoxParentMenuText.setEditable(true);
