@@ -222,14 +222,17 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void setupIcons() {
 		iconButtonOpen = new JButton(Utils.createImageIcon("images/openfile.gif", ""));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
 		iconButtonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
 		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
+		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		iconButtonSave = new JButton(Utils.getSaveIcon());
 		iconButtonSave.setToolTipText(Configed.getResourceValue("save"));
+		iconButtonSave.setFocusable(false);
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();
@@ -238,6 +241,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		iconButtonCopy = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
+		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 	}
 
