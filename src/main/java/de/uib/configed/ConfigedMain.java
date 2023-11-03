@@ -430,7 +430,7 @@ public class ConfigedMain implements ListSelectionListener {
 		anyDataChanged = false;
 
 		// restrict visibility of clients to some group
-		setRebuiltClientListTableModel();
+		setRebuiltClientListTableModel(true);
 
 		Logging.debug(this, "initialTreeActivation");
 
@@ -1634,8 +1634,6 @@ public class ConfigedMain implements ListSelectionListener {
 		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(depots,
 				allowedClients);
 
-		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()) + "\n\n\n");
-
 		if (m != null) {
 			clientCount = m.size();
 		}
@@ -2076,10 +2074,6 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	private void setRebuiltClientListTableModel() {
-		setRebuiltClientListTableModel(true);
-	}
-
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys) {
 		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : " + selectionPanel.getSelectedSet());
 
@@ -2153,7 +2147,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
 		if (rebuildClientListTableModel) {
-			setRebuiltClientListTableModel();
+			setRebuiltClientListTableModel(true);
 		}
 	}
 
@@ -3530,7 +3524,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 
-			setRebuiltClientListTableModel();
+			setRebuiltClientListTableModel(true);
 
 			if (mainFrame.getControllerHWinfoMultiClients() != null) {
 				mainFrame.getControllerHWinfoMultiClients().rebuildModel();
@@ -4361,7 +4355,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "refreshClientList");
 		produceClientListForDepots(getSelectedDepots(), allowedClients);
 
-		setRebuiltClientListTableModel();
+		setRebuiltClientListTableModel(true);
 	}
 
 	private void refreshClientList(String selectClient) {
@@ -4945,7 +4939,7 @@ public class ConfigedMain implements ListSelectionListener {
 				+ clientsToSelect.size());
 
 		setSelectedClientsCollectionOnPanel(clientsToSelect, true);
-		setRebuiltClientListTableModel();
+		setRebuiltClientListTableModel(true);
 	}
 
 	public void selectClientsWithFailedProduct(List<String> selectedProducts) {
