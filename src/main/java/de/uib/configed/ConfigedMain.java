@@ -429,9 +429,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 		anyDataChanged = false;
 
-		// restrict visibility of clients to some group
-		setRebuiltClientListTableModel(true);
-
 		Logging.debug(this, "initialTreeActivation");
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
