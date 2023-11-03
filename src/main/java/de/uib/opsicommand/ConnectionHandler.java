@@ -19,44 +19,6 @@ import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-/**
- * A {@code ConnectionHandler} class handles connection with the server and
- * certificate validation.
- * <p>
- * It connects with the server, that is provided during the initialization of a
- * class. The connection always happens using the HTTPS protocol. The
- * certificate validation depends on whether or not the certificate verification
- * is disabled ({@code Globals.disableCertificateVerification}).
- * <p>
- * Example Usage:
- * <p>
- * <blockquote>
- * 
- * <pre>
- * {@code
- * URL serviceURL = new URL("https://192.168.1.2/rpc");
- * Map<String, String> requestProperties = new HashMap<>();
- * String authorization = Base64.getEncoder().encodeToString(("username:password").getBytes(StandardCharsets.UTF_8));
- * requestProperties.put("Authorization", "Basic " + authorization);
- * requestProperties.put("Content-Type", "application/json");
- * ConnectionHandler handler = new ConnectionHandler(serviceURL, requestProperties);
- * 
- * // true if URL connection should be used for output, otherwise false
- * HttpsURLConnection connection = handler.establishConnection(true);
- * ConnectionState connectionState = handler.getConnectionState();
- * 
- * try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
- * 		BufferedWriter out = new BufferedWriter(writer)) {
- * 	out.write("some text");
- * 	out.flush();
- * } catch (IOException iox) {
- * 	Logging.info(this, "exception on writing json request " + iox);
- * }
- * }
- * </pre>
- * 
- * </blockquote>
- */
 public class ConnectionHandler {
 	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
 

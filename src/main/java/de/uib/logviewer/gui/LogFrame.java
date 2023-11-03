@@ -406,6 +406,8 @@ public class LogFrame extends JFrame implements WindowListener {
 	public void paint(Graphics g) {
 		try {
 			super.paint(g);
+
+			// TODO why catch classcastexception?
 		} catch (ClassCastException ex) {
 			Logging.info(this, "The ugly well known exception " + ex);
 		}

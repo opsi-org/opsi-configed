@@ -8,7 +8,6 @@ package de.uib.configed.dashboard.collector;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
 
 public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
@@ -161,19 +159,15 @@ public final class ClientData {
 
 			String date = entry.getValue().getLastSeen().substring(0, 10);
 
-			try {
-				final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
-				final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
+			final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
+			final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
 
-				if (days <= 14) {
-					fourteenOrLowerDays++;
-				} else if (days <= 30) {
-					betweenFifteenAndThirtyDays++;
-				} else {
-					moreThanThirtyDays++;
-				}
-			} catch (DateTimeParseException ex) {
-				Logging.info("Date couldn't be parsed: " + date);
+			if (days <= 14) {
+				fourteenOrLowerDays++;
+			} else if (days <= 30) {
+				betweenFifteenAndThirtyDays++;
+			} else {
+				moreThanThirtyDays++;
 			}
 		}
 

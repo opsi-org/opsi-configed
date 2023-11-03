@@ -3543,6 +3543,7 @@ public class MainFrame extends JFrame
 	public void paint(Graphics g) {
 		try {
 			super.paint(g);
+			// TODO why catch exception?
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
 		}
