@@ -340,6 +340,7 @@ public class ConfigedMain implements ListSelectionListener {
 	private NewClientDialog newClientDialog;
 
 	private boolean isAllLicenseDataReloaded;
+	private boolean isInitialLicenseDataLoading;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -1077,8 +1078,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void toggleLicencesFrame() {
 		if (licencesFrame == null) {
+			isInitialLicenseDataLoading = true;
 			initLicencesFrame();
 			allFrames.add(licencesFrame);
+			isInitialLicenseDataLoading = false;
 		}
 
 		Logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
@@ -3469,6 +3472,10 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public boolean isAllLicenseDataReloaded() {
 		return isAllLicenseDataReloaded;
+	}
+
+	public boolean isInitialLicenseDataLoading() {
+		return isInitialLicenseDataLoading;
 	}
 
 	private void refreshClientListKeepingGroup() {

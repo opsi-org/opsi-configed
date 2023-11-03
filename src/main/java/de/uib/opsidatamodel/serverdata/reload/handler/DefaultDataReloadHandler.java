@@ -72,10 +72,6 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 			cacheManager.clearCachedData(CacheIdentifier.LICENSES);
 			licenseDataService.retrieveLicensesPD();
 		});
-		eventHandlers.put(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
-			softwareDataService.retrieveLicenseStatisticsPD();
-		});
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {

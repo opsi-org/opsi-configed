@@ -2667,12 +2667,23 @@ public class MainFrame extends JFrame
 	}
 
 	public void activateLoadingPane(String infoText) {
-		glassPane.activate(true);
-		glassPane.setInfoText(infoText);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> {
+				glassPane.activate(true);
+				glassPane.setInfoText(infoText);
+			});
+		} else {
+			glassPane.activate(true);
+			glassPane.setInfoText(infoText);
+		}
 	}
 
 	public void disactivateLoadingPane() {
-		glassPane.activate(false);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> glassPane.activate(false));
+		} else {
+			glassPane.activate(false);
+		}
 	}
 
 	public void activateLoadingCursor() {

@@ -7,6 +7,7 @@
 package de.uib.configed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,8 +16,10 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -43,7 +46,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private ConfigedMain configedMain;
 
 	public ControlPanelLicencesReconciliation(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesReconciliation(this);
+		thePanel = new PanelLicencesReconciliation(this, configedMain);
 		this.configedMain = configedMain;
 
 		init();
@@ -122,15 +125,21 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
+							persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
-						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
+						if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+								Map.class) == null) {
+							return new HashMap<>();
+						}
+						return !configedMain.isInitialLicenseDataLoading()
+								? persistenceController.getSoftwareDataService().getLicensesReconciliationPD()
+								: new HashMap<>();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 

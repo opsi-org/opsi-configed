@@ -7,13 +7,16 @@
 package de.uib.configed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -33,7 +36,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private ConfigedMain configedMain;
 
 	public ControlPanelLicencesStatistics(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesStatistics(this);
+		thePanel = new PanelLicencesStatistics(this, configedMain);
 		this.configedMain = configedMain;
 
 		init();
@@ -72,15 +75,21 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION.toString());
+						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
+							persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
-						return persistenceController.getSoftwareDataService().getLicenseStatistics();
+						if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+								Map.class) == null) {
+							return new HashMap<>();
+						}
+						return !configedMain.isInitialLicenseDataLoading()
+								? persistenceController.getSoftwareDataService().getLicenseStatistics()
+								: new HashMap<>();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);

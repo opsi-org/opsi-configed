@@ -503,6 +503,11 @@ public enum CacheIdentifier {
 	ROWS_LICENSES_RECONCILIATION("rows_licenses_reconcilation"),
 
 	/**
+	 * return type {@code Map<String, LicenseStatisticsRow>}
+	 */
+	ROWS_LICENSES_STATISTICS("rows_licenses_statistics"),
+
+	/**
 	 * return type {@code String}
 	 */
 	DEPOT("depot"),

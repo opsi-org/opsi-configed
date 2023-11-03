@@ -426,7 +426,6 @@ public class SoftwareDataService {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
-
 		final int STEP_SIZE = 100;
 
 		while (!clients.isEmpty()) {
@@ -879,14 +878,16 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, LicenceStatisticsRow> getLicenseStatistics() {
-		return retrieveLicenseStatisticsPD();
+		retrieveLicenseStatisticsPD();
+		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class);
 	}
 
-	// poolId -> LicenceStatisticsRow
-	public Map<String, LicenceStatisticsRow> retrieveLicenseStatisticsPD() {
-		// side effects of this method: rowsLicencesReconciliation
-		if (!moduleDataService.isWithLicenceManagementPD()) {
-			return new HashMap<>();
+	// side effects of this method: rowsLicencesReconciliation
+	public void retrieveLicenseStatisticsPD() {
+		if (!moduleDataService.isWithLicenceManagementPD()
+				|| (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null
+						&& cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) != null)) {
+			return;
 		}
 
 		Logging.info(this, "retrieveLicenseStatistics");
@@ -949,9 +950,9 @@ public class SoftwareDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
+		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
 
 		Logging.debug(this, "rowsLicenceStatistics " + rowsLicenseStatistics);
-		return rowsLicenseStatistics;
 	}
 
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {

@@ -50,6 +50,11 @@ public class DefaultTableProvider {
 		return rowsCopy;
 	}
 
+	public void refreshRows() {
+		rows = null;
+		resetRows();
+	}
+
 	// should set back the copy of the data to the original values
 	private void resetRows() {
 		Logging.info(this, " -- resetRows()");
