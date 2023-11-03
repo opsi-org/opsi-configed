@@ -4108,6 +4108,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private void sessionInfoFinished() {
 		Logging.info(this, "when sessioninfoFinished");
 
+		mainFrame.getIconButtonSessionInfo().setEnabled(true);
+
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
