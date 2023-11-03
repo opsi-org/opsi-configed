@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -3536,16 +3535,6 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-		}
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-			// TODO why catch exception?
-		} catch (ClassCastException ex) {
-			Logging.warning(this, "the ugly well known exception " + ex);
 		}
 	}
 

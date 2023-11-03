@@ -8,7 +8,6 @@ package de.uib.logviewer.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -401,17 +400,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		/* Not needed */}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-
-			// TODO why catch classcastexception?
-		} catch (ClassCastException ex) {
-			Logging.info(this, "The ugly well known exception " + ex);
-		}
-	}
 
 	/**********************************************************************************************/
 	// File operations

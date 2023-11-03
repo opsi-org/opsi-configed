@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -1368,15 +1367,5 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public List<String> getSelectedClientsInTable() {
 		return configedMain.getSelectedClientsInTable();
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-			// TODO why catch this exception here?
-		} catch (ClassCastException ex) {
-			Logging.warning(this, "the ugly well known exception " + ex);
-		}
 	}
 }
