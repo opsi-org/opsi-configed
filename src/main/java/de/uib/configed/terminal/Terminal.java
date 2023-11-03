@@ -21,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +53,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.event.WebSocketEvent;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -213,7 +216,7 @@ public final class Terminal {
 		JediTermWidget termWidget = createTerminalWidget();
 
 		northLayout.setVerticalGroup(
-				northLayout.createSequentialGroup().addComponent(settingsPanel, 40, GroupLayout.PREFERRED_SIZE, 40)
+				northLayout.createSequentialGroup().addComponent(settingsPanel, 70, GroupLayout.PREFERRED_SIZE, 70)
 						.addComponent(termWidget, 0, 0, Short.MAX_VALUE));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
@@ -265,18 +268,34 @@ public final class Terminal {
 
 		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
 
-		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		JComboBox<String> hostComboBox = new JComboBox<>();
+		Set<String> clientsConnectedByMessagebus = new TreeSet<>(PersistenceControllerFactory.getPersistenceController()
+				.getHostDataService().getMessagebusConnectedClients());
+		for (String clientConnectedByMessagebus : clientsConnectedByMessagebus) {
+			hostComboBox.addItem(clientConnectedByMessagebus);
+		}
+		JLabel hostLabel = new JLabel(Configed.getResourceValue("Terminal.connection.host"));
+
+		settingsLayout.setHorizontalGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonFontPlus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(buttonFontMinus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup()
-				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(buttonFontPlus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(buttonFontMinus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(hostLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(hostComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)));
+
+		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(settingsLayout.createParallelGroup()
 						.addComponent(themeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(themeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -284,6 +303,11 @@ public final class Terminal {
 						.addComponent(buttonFontPlus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonFontMinus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGroup(settingsLayout.createParallelGroup()
+						.addComponent(hostLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(hostComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE));
 
