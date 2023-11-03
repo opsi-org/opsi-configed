@@ -1634,6 +1634,8 @@ public class ConfigedMain implements ListSelectionListener {
 		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(depots,
 				allowedClients);
 
+		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()) + "\n\n\n");
+
 		if (m != null) {
 			clientCount = m.size();
 		}
@@ -1687,8 +1689,6 @@ public class ConfigedMain implements ListSelectionListener {
 				Logging.info(this, "buildPclistTableModel not full hostgroups permission");
 				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 			}
-
-			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
 			rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}), permittedHostGroups);
 		}
