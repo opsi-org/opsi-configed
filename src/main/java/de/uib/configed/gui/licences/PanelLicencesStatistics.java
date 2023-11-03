@@ -15,9 +15,11 @@ import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -28,10 +30,12 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
 
 	private PanelGenEditTable panelStatistics;
+	private ConfigedMain configedMain;
 
 	/** Creates new form panelLicencesStatistics */
-	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
+	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller, ConfigedMain configedMain) {
 		super(controller);
+		this.configedMain = configedMain;
 		initComponents();
 	}
 
@@ -68,7 +72,16 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 		super.reset();
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) == null
 				|| panelStatistics.getTableModel().getRows().isEmpty()) {
-			panelStatistics.reload();
+			ConfigedMain.getMainFrame()
+					.activateLoadingPane(Configed.getResourceValue("PanelLicencesStatistics.loading.text"));
+			ConfigedMain.getMainFrame().activateLoadingCursor();
+			configedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			SwingUtilities.invokeLater(() -> {
+				panelStatistics.reload();
+				configedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().disactivateLoadingPane();
+			});
 		}
 	}
 }

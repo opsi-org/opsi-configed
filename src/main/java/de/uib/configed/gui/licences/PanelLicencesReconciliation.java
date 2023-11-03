@@ -15,8 +15,10 @@ import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicencesReconciliation;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -30,9 +32,13 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	private int minVSize = 50;
 	private int tablesMaxWidth = 1000;
 
+	private ConfigedMain configedMain;
+
 	/** Creates new form panelLicencesReconciliation */
-	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
+	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController,
+			ConfigedMain configedMain) {
 		super(licencesReconciliationController);
+		this.configedMain = configedMain;
 		initComponents();
 	}
 
@@ -69,7 +75,16 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 		super.reset();
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null
 				|| panelReconciliation.getTableModel().getRows().isEmpty()) {
-			panelReconciliation.reload();
+			ConfigedMain.getMainFrame()
+					.activateLoadingPane(Configed.getResourceValue("PanelLicencesReconciliation.loading.text"));
+			ConfigedMain.getMainFrame().activateLoadingCursor();
+			configedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			SwingUtilities.invokeLater(() -> {
+				panelReconciliation.reload();
+				configedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().disactivateLoadingPane();
+			});
 		}
 	}
 }

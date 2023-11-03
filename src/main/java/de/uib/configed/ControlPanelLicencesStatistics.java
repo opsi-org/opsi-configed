@@ -36,7 +36,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private ConfigedMain configedMain;
 
 	public ControlPanelLicencesStatistics(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesStatistics(this);
+		thePanel = new PanelLicencesStatistics(this, configedMain);
 		this.configedMain = configedMain;
 
 		init();

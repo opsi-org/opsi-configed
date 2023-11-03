@@ -46,7 +46,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private ConfigedMain configedMain;
 
 	public ControlPanelLicencesReconciliation(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesReconciliation(this);
+		thePanel = new PanelLicencesReconciliation(this, configedMain);
 		this.configedMain = configedMain;
 
 		init();
