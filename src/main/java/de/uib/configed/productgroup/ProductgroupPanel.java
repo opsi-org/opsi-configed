@@ -347,11 +347,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void initComponents() {
-		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
-				"images/apply.png", // inactive
-				"images/apply_over.png", // over
-				"images/apply_disabled.png", // active
-				true); // setEnabled
+		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

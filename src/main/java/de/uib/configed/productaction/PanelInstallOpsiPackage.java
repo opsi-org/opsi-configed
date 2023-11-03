@@ -176,7 +176,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			Logging.info(this, "installPackage wrongly reporesult " + result);
 
 			if (result) {
-				JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+				JOptionPane.showMessageDialog(rootFrame, "Ready",
 						Configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 			}
 		}

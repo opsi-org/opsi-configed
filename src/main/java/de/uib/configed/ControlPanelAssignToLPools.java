@@ -171,7 +171,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicencePoolPD(poolID).isEmpty()) {
 			thePanel.getFMissingSoftwareInfo()
 					.setTableModel(new GenTableModel(
-							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0), // dummy
+							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0),
 							new DefaultTableProvider(
 									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
 											thePanel.getFMissingSoftwareInfo().getClassNames(), new MapRetriever() {

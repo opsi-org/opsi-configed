@@ -915,18 +915,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
-				false, // modal
-
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", false,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
-
 				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Utils.createImageIcon("images/cancel16_small.png", "") },
-				2, 600, 600,
-				// lazylayout, i.e, we have a chance to define components and use them for the
-				true,
-				// layout
-				null) {
+				2, 600, 600, true, null) {
 			@Override
 			public void doAction1() {
 				Logging.info(this, "doAction1");

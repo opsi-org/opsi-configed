@@ -412,7 +412,6 @@ public class UserRolesConfigDataService {
 		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
 		Set<String> hostgroupsPermitted = new HashSet<>();
 
-		// false, //not only as specified but always
 		boolean hostgroupsOnlyIfExplicitlyStated = checkFullPermission(hostgroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
 

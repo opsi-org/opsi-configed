@@ -312,7 +312,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			rootFrame.disactivateLoadingCursor();
 
-			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+			JOptionPane.showMessageDialog(rootFrame, "Ready",
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 			List<String> values = new ArrayList<>();
