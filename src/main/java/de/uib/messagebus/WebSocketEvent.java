@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.messagebus.event;
+package de.uib.messagebus;
 
 public enum WebSocketEvent {
 	GENERAL_EVENT("event"), GENERAL_ERROR("general_error"),

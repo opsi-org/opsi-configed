@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
@@ -29,6 +30,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import org.java_websocket.handshake.ServerHandshake;
+
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.model.JediTerminal;
@@ -38,11 +41,13 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.MessagebusListener;
+import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public final class Terminal {
+public final class Terminal implements MessagebusListener {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	private static final int DEFAULT_TERMINAL_ROWS = 24;
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
@@ -410,5 +415,46 @@ public final class Terminal {
 		widget.setTtyConnector(connector);
 		widget.start();
 		webSocketTtyConnected = true;
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		close();
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		Logging.trace(this, "Messagebus message received: " + message.toString());
+		String type = (String) message.get("type");
+		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
+			WebSocketInputStream.init();
+			setTerminalId((String) message.get("terminal_id"));
+			setTerminalChannel((String) message.get("back_channel"));
+			unlock();
+		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
+			close();
+		} else if (WebSocketEvent.TERMINAL_DATA_READ.toString().equals(type)) {
+			try {
+				WebSocketInputStream.write((byte[]) message.get("data"));
+			} catch (IOException e) {
+				Logging.error("failed to write message: ", e);
+			}
+		} else if (WebSocketEvent.TERMINAL_RESIZE_EVENT.toString().equals(type)) {
+			// Resizing is handled by the user, we only notify server by
+			// sending terminal_resize_request event. On the client side, there is
+			// no need to handle terminal_resize_event.
+		} else {
+			// Other events are handled by other listeners.
+		}
 	}
 }

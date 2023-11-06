@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jediterm.terminal.Questioner;
 import com.jediterm.terminal.TtyConnector;
 
-import de.uib.messagebus.event.WebSocketEvent;
+import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class WebSocketTtyConnector implements TtyConnector {
