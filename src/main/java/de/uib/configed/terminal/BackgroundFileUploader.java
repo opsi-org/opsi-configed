@@ -46,10 +46,12 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> implement
 	private int totalFilesToUpload;
 	private int uploadedFiles;
 
-	public BackgroundFileUploader(FileUploadQueue queue) {
-		this.terminal = Terminal.getInstance();
+	public BackgroundFileUploader(Terminal terminal, FileUploadQueue queue) {
+		this.terminal = terminal;
 		this.queue = queue;
-		terminal.getMessagebus().getWebSocket().registerListener(this);
+		if (terminal.getMessagebus() != null) {
+			terminal.getMessagebus().getWebSocket().registerListener(this);
+		}
 	}
 
 	@Override

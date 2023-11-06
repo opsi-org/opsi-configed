@@ -191,14 +191,12 @@ public class Messagebus implements MessagebusListener {
 		sendMessage(message);
 	}
 
-	public void connectTerminal() {
+	public void connectTerminal(Terminal terminal) {
 		String terminalId = UUID.randomUUID().toString();
 
 		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
-		Terminal terminal = Terminal.getInstance();
 		terminal.setMessagebus(this);
-		terminal.display();
 		messagebusWebSocket.registerListener(terminal);
 
 		Map<String, Object> message = new HashMap<>();

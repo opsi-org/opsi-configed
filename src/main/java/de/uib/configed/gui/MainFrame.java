@@ -572,7 +572,6 @@ public class MainFrame extends JFrame
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		SSHCommandFactory.destroyInstance();
-		Terminal.destroyInstance();
 		Configed.getSavedStates().removeAll();
 		Configed.restartConfiged();
 	}
@@ -1173,14 +1172,9 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
-
-			if (!Terminal.getInstance().isWebSocketTtyConnected()) {
-				configedMain.connectTerminal();
-			} else {
-				Logging.info(this,
-						"terminal is already opened and connected to websocket (displaying current terminal window)");
-				Terminal.getInstance().display();
-			}
+			Terminal terminal = new Terminal();
+			terminal.display();
+			configedMain.connectTerminal(terminal);
 		});
 
 		jMenuFrames.add(jMenuFrameWorkOnProducts);

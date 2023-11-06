@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,10 +29,12 @@ import de.uib.utilities.logging.Logging;
 public class WebSocketTtyConnector implements TtyConnector {
 	private final BufferedReader reader;
 	private final BufferedOutputStream writer;
+	private final Terminal terminal;
 
-	public WebSocketTtyConnector(OutputStream outputStream, InputStream inputStream) {
+	public WebSocketTtyConnector(Terminal terminal, OutputStream outputStream, WebSocketInputStream inputStream) {
+		this.terminal = terminal;
 		this.writer = new BufferedOutputStream(outputStream);
-		this.reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+		this.reader = new BufferedReader(new InputStreamReader(inputStream.getReader(), StandardCharsets.UTF_8));
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 	@Override
 	public void close() {
 		try {
-			WebSocketInputStream.close();
+			reader.close();
 		} catch (IOException e) {
 			Logging.warning(this, "failed to close output/input stream: " + e);
 		}
@@ -61,12 +62,12 @@ public class WebSocketTtyConnector implements TtyConnector {
 		data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
 		data.put("sender", "@");
-		data.put("channel", Terminal.getInstance().getTerminalChannel());
+		data.put("channel", terminal.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("terminal_id", Terminal.getInstance().getTerminalId());
-		data.put("rows", Terminal.getInstance().getRowCount());
-		data.put("cols", Terminal.getInstance().getColumnCount());
+		data.put("terminal_id", terminal.getTerminalId());
+		data.put("rows", terminal.getRowCount());
+		data.put("cols", terminal.getColumnCount());
 
 		try {
 			ObjectMapper mapper = new MessagePackMapper();
@@ -89,10 +90,10 @@ public class WebSocketTtyConnector implements TtyConnector {
 		data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 		data.put("id", UUID.randomUUID().toString());
 		data.put("sender", "@");
-		data.put("channel", Terminal.getInstance().getTerminalChannel());
+		data.put("channel", terminal.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("terminal_id", Terminal.getInstance().getTerminalId());
+		data.put("terminal_id", terminal.getTerminalId());
 		data.put("data", bytes);
 
 		try {
@@ -107,7 +108,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public boolean isConnected() {
-		return Terminal.getInstance().getMessagebus().isConnected();
+		return true;
 	}
 
 	@Override

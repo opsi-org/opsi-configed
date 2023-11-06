@@ -52,7 +52,6 @@ public final class Terminal implements MessagebusListener {
 	private static final int DEFAULT_TERMINAL_ROWS = 24;
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
 
-	private static Terminal instance;
 	private JediTermWidget widget;
 	private JFrame frame;
 	private JProgressBar fileUploadProgressBar;
@@ -66,25 +65,11 @@ public final class Terminal implements MessagebusListener {
 	private String terminalId;
 
 	private CountDownLatch locker;
-	private boolean webSocketTtyConnected;
 
 	private TerminalSettingsProvider settingsProvider;
 	private String theme;
 
-	private Terminal() {
-	}
-
-	public static Terminal getInstance() {
-		if (instance == null) {
-			instance = new Terminal();
-		}
-
-		return instance;
-	}
-
-	public static void destroyInstance() {
-		instance = null;
-	}
+	private WebSocketInputStream webSocketInputStream;
 
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
@@ -118,10 +103,6 @@ public final class Terminal implements MessagebusListener {
 		return widget.getTerminalDisplay().getRowCount();
 	}
 
-	public boolean isWebSocketTtyConnected() {
-		return webSocketTtyConnected;
-	}
-
 	public void lock() {
 		try {
 			locker = new CountDownLatch(1);
@@ -146,7 +127,7 @@ public final class Terminal implements MessagebusListener {
 		}
 
 		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
-		widget.setDropTarget(new FileUpload());
+		widget.setDropTarget(new FileUpload(this));
 
 		scrollBar = new JScrollBar();
 		widget.getTerminalPanel().init(scrollBar);
@@ -409,12 +390,10 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public void connectWebSocketTty() {
-		WebSocketInputStream.init();
-		TtyConnector connector = new WebSocketTtyConnector(new WebSocketOutputStream(messagebus.getWebSocket()),
-				WebSocketInputStream.getReader());
+		TtyConnector connector = new WebSocketTtyConnector(this, new WebSocketOutputStream(messagebus.getWebSocket()),
+				webSocketInputStream);
 		widget.setTtyConnector(connector);
 		widget.start();
-		webSocketTtyConnected = true;
 	}
 
 	@Override
@@ -434,18 +413,28 @@ public final class Terminal implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
+		if (terminalId != null && !String.format("session:%s", terminalId).equals(message.get("channel"))) {
+			return;
+		}
+
 		Logging.trace(this, "Messagebus message received: " + message.toString());
 		String type = (String) message.get("type");
 		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
-			WebSocketInputStream.init();
+			webSocketInputStream = new WebSocketInputStream();
+			webSocketInputStream.init();
 			setTerminalId((String) message.get("terminal_id"));
 			setTerminalChannel((String) message.get("back_channel"));
+			if (frame != null) {
+				frame.setTitle(getTerminalChannel());
+			}
 			unlock();
 		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
 			close();
 		} else if (WebSocketEvent.TERMINAL_DATA_READ.toString().equals(type)) {
 			try {
-				WebSocketInputStream.write((byte[]) message.get("data"));
+				if (webSocketInputStream != null) {
+					webSocketInputStream.write((byte[]) message.get("data"));
+				}
 			} catch (IOException e) {
 				Logging.error("failed to write message: ", e);
 			}
