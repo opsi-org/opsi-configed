@@ -1,11 +1,13 @@
 # Changelog
 
-## [4.3.0.13] - xxxx-xx-xx
+## [4.3.0.13] - 2023-11-xx
 ### Fixed
 - Error message not shown in AbstractErrorListProducer
 
 ### Changed
 - Removed Fading Glasspane from Error producer and waking clients
+- Removed unnecessary calls (performance)
+- All product actions call 'processActionRequests' instead of 'on_demand'
 
 ## [4.3.0.12] - 2023-10-31
 ### Fixed
