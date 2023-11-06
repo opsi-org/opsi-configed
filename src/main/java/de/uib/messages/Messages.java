@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -79,24 +78,6 @@ public final class Messages {
 		return selectedLocaleString;
 	}
 
-	public static ResourceBundle getResource() {
-		try {
-			Logging.info("Get translation resource bundle from: " + BUNDLE_NAME);
-			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
-			Logging.debug("Translation bundle is: " + messagesBundle);
-		} catch (MissingResourceException ex) {
-			Logging.warning(
-					"Missing translation for locale '" + myLocale + "': " + ex + ", falling back to locale 'en_US'");
-			try {
-				Locale enUSLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
-				messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, enUSLocale);
-			} catch (MissingResourceException ex2) {
-				Logging.error("Missing translation for locale 'en_US': " + ex2);
-			}
-		}
-		return messagesBundle;
-	}
-
 	private static Locale giveLocale(String selection) {
 		Logging.debug("Messages: selected locale " + myLocale + " by " + selection);
 		return myLocale;
@@ -145,7 +126,9 @@ public final class Messages {
 			produceLocale();
 		}
 		Logging.notice("Locale set to: " + myLocale);
-		getResource();
+		if (messagesBundle == null) {
+			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+		}
 	}
 
 	public static List<String> getLocaleNames() {
@@ -217,7 +200,7 @@ public final class Messages {
 		return existingLocales;
 	}
 
-	public static ResourceBundle getMessagesBundle() {
+	public static ResourceBundle getResourceBundle() {
 		return messagesBundle;
 	}
 }

@@ -194,12 +194,12 @@ public final class Configed {
 		}
 
 		if (result == null) {
-			if (Messages.getMessagesBundle() == null) {
+			if (Messages.getResourceBundle() == null) {
 				Logging.warning("Messages.messagesBundle is null...");
-			} else if (!Messages.getMessagesBundle().containsKey(key)) {
+			} else if (!Messages.getResourceBundle().containsKey(key)) {
 				Logging.warning("Messagebundle does not contain key " + key);
 			} else {
-				result = Messages.getMessagesBundle().getString(key);
+				result = Messages.getResourceBundle().getString(key);
 			}
 		}
 
