@@ -110,6 +110,7 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
+import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -2923,8 +2924,14 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private List<String> getLocalbootStateAndActionsAttributes() {
 		List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
-		if (ServerFacade.isOpsi43() && getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
-			attributes.add("actionSequence");
+
+		// Position is something different in opsi 4.3 than before...
+		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
+			attributes.remove(ProductState.KEY_POSITION);
+
+			if (ServerFacade.isOpsi43()) {
+				attributes.add(ActionSequence.KEY);
+			}
 		}
 
 		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
