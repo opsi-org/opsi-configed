@@ -23,8 +23,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
@@ -67,7 +71,7 @@ public final class Terminal implements MessagebusListener {
 	private CountDownLatch locker;
 
 	private TerminalSettingsProvider settingsProvider;
-	private String theme;
+	private String selectedTheme;
 
 	private WebSocketInputStream webSocketInputStream;
 
@@ -139,6 +143,7 @@ public final class Terminal implements MessagebusListener {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.setIconImage(Utils.getMainIcon());
+		frame.setJMenuBar(createJMenuBar());
 
 		JPanel allPane = new JPanel();
 
@@ -177,6 +182,75 @@ public final class Terminal implements MessagebusListener {
 		});
 	}
 
+	public JMenuBar createJMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(createFileMenu());
+		menuBar.add(createViewMenu());
+		return menuBar;
+	}
+
+	private JMenu createFileMenu() {
+		JMenuItem jMenuNewWindow = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
+		jMenuNewWindow.addActionListener((ActionEvent e) -> {
+			Terminal terminal = new Terminal();
+			terminal.display();
+			messagebus.connectTerminal(terminal);
+		});
+
+		JMenuItem jMenuItemDarkTheme = new JRadioButtonMenuItem(
+				Configed.getResourceValue("Terminal.settings.theme.dark"));
+		JMenuItem jMenuItemLightTheme = new JRadioButtonMenuItem(
+				Configed.getResourceValue("Terminal.settings.theme.light"));
+		jMenuItemDarkTheme.addActionListener((ActionEvent e) -> {
+			jMenuItemDarkTheme.setSelected(true);
+			jMenuItemLightTheme.setSelected(false);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
+		});
+		jMenuItemLightTheme.addActionListener((ActionEvent e) -> {
+			jMenuItemDarkTheme.setSelected(false);
+			jMenuItemLightTheme.setSelected(true);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
+		});
+		jMenuItemDarkTheme.setSelected(true);
+		jMenuItemLightTheme.setSelected(false);
+
+		JMenu jMenuTheme = new JMenu("Theme");
+		jMenuTheme.add(jMenuItemDarkTheme);
+		jMenuTheme.add(jMenuItemLightTheme);
+
+		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
+		menuFile.add(jMenuNewWindow);
+		menuFile.add(jMenuTheme);
+		return menuFile;
+	}
+
+	private JMenu createViewMenu() {
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
+			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
+			widget.getTerminalPanel().init(scrollBar);
+			widget.repaint();
+			resizeTerminal();
+		});
+
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
+			if ((int) settingsProvider.getTerminalFontSize() == 1) {
+				return;
+			}
+
+			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
+			widget.getTerminalPanel().init(scrollBar);
+			widget.repaint();
+			resizeTerminal();
+		});
+
+		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
+		jMenuView.add(jMenuViewFontsizePlus);
+		jMenuView.add(jMenuViewFontsizeMinus);
+		return jMenuView;
+	}
+
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
 
@@ -207,13 +281,13 @@ public final class Terminal implements MessagebusListener {
 		JComboBox<String> themeComboBox = new JComboBox<>();
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.light"));
-		themeComboBox.addActionListener((ActionEvent e) -> setTheme((String) themeComboBox.getSelectedItem()));
+		themeComboBox.addActionListener((ActionEvent e) -> setSelectedTheme((String) themeComboBox.getSelectedItem()));
 
-		if (theme == null) {
-			theme = Configed.getResourceValue("Terminal.settings.theme.dark");
+		if (selectedTheme == null) {
+			selectedTheme = Configed.getResourceValue("Terminal.settings.theme.dark");
 		}
 
-		themeComboBox.setSelectedItem(theme);
+		themeComboBox.setSelectedItem(selectedTheme);
 
 		JButton buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
@@ -285,13 +359,13 @@ public final class Terminal implements MessagebusListener {
 		return settingsPanel;
 	}
 
-	private void setTheme(String selectedTheme) {
+	private void setSelectedTheme(String selectedTheme) {
 		if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
 			TerminalSettingsProvider.setTerminalLightTheme();
 		} else {
 			TerminalSettingsProvider.setTerminalDarkTheme();
 		}
-		theme = selectedTheme;
+		this.selectedTheme = selectedTheme;
 		if (widget != null) {
 			widget.repaint();
 		}
