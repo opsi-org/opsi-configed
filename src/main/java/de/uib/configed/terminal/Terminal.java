@@ -449,10 +449,6 @@ public final class Terminal implements MessagebusListener {
 			} catch (IOException e) {
 				Logging.error("failed to write message: ", e);
 			}
-		} else if (WebSocketEvent.TERMINAL_RESIZE_EVENT.toString().equals(type)) {
-			// Resizing is handled by the user, we only notify server by
-			// sending terminal_resize_request event. On the client side, there is
-			// no need to handle terminal_resize_event.
 		} else {
 			// Other events are handled by other listeners.
 		}
