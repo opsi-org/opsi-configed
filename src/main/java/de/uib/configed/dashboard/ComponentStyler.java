@@ -38,7 +38,7 @@ public final class ComponentStyler {
 	private ComponentStyler() {
 	}
 
-	@SuppressWarnings({ "java:S5612", "java:S110", "java:S1188" })
+	@SuppressWarnings({ "java:S5612", "java:S1188" })
 	public static <T> void styleTableViewComponent(TableView<T> view) {
 		String tableViewBackgroundColor = getHexColor(UIManager.getColor("Table.background"));
 		String tableViewForegroundColor = FlatLaf.isLafDark() ? getHexColor(Globals.OPSI_FOREGROUND_DARK)
@@ -135,7 +135,7 @@ public final class ComponentStyler {
 		return tableRowColor;
 	}
 
-	@SuppressWarnings({ "java:S5612", "java:S110" })
+	@SuppressWarnings("java:S5612")
 	public static <T> void styleListViewComponent(ListView<T> view) {
 		String listBackgroundColor = getHexColor(UIManager.getColor("List.background"));
 		String listForegroundColor = getHexColor(UIManager.getColor("List.foreground"));

@@ -15,6 +15,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ModuleData;
+import de.uib.utilities.logging.Logging;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
-@SuppressWarnings("java:S110")
 public class ModuleStatusComparison extends StackPane implements DataChangeListener {
 	@FXML
 	private Text moduleStatusNoDataText;
@@ -39,7 +39,7 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			throw new RuntimeException(ioE);
+			Logging.error(this.getClass(), "Could not load fxmlLoader", ioE);
 		}
 	}
 
