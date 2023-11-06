@@ -6,24 +6,14 @@
 
 package de.uib.configed.terminal;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -39,10 +29,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import org.msgpack.jackson.dataformat.MessagePackMapper;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jediterm.terminal.Questioner;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.model.JediTerminal;
@@ -52,7 +38,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.messagebus.Messagebus;
-import de.uib.messagebus.event.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -425,106 +410,5 @@ public final class Terminal {
 		widget.setTtyConnector(connector);
 		widget.start();
 		webSocketTtyConnected = true;
-	}
-
-	@SuppressWarnings("java:S2972")
-	private class WebSocketTtyConnector implements TtyConnector {
-		private final BufferedReader reader;
-		private final BufferedOutputStream writer;
-
-		public WebSocketTtyConnector(OutputStream outputStream, InputStream inputStream) {
-			this.writer = new BufferedOutputStream(outputStream);
-			this.reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-		}
-
-		@Override
-		public boolean init(Questioner q) {
-			return isConnected();
-		}
-
-		@Override
-		public void close() {
-			try {
-				WebSocketInputStream.close();
-				webSocketTtyConnected = false;
-			} catch (IOException e) {
-				Logging.warning(this, "failed to close output/input stream: " + e);
-			}
-		}
-
-		@Override
-		public String getName() {
-			return "";
-		}
-
-		@Override
-		public void resize(Dimension termWinSize) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
-			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
-			data.put("channel", terminalChannel);
-			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
-			data.put("terminal_id", terminalId);
-			data.put("rows", widget.getTerminalDisplay().getRowCount());
-			data.put("cols", widget.getTerminalDisplay().getColumnCount());
-
-			try {
-				ObjectMapper mapper = new MessagePackMapper();
-				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-				writer.write(dataJsonBytes);
-				writer.flush();
-			} catch (IOException ex) {
-				Logging.warning(this, "cannot resize terminal window: ", ex);
-			}
-		}
-
-		@Override
-		public int read(char[] buf, int offset, int length) throws IOException {
-			return reader.read(buf, offset, length);
-		}
-
-		@Override
-		public void write(byte[] bytes) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
-			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
-			data.put("channel", terminalChannel);
-			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
-			data.put("terminal_id", terminalId);
-			data.put("data", bytes);
-
-			try {
-				ObjectMapper mapper = new MessagePackMapper();
-				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-				writer.write(dataJsonBytes);
-				writer.flush();
-			} catch (IOException ex) {
-				Logging.warning("cannot send message to server: ", ex);
-			}
-		}
-
-		@Override
-		public boolean isConnected() {
-			return messagebus.isConnected();
-		}
-
-		@Override
-		public void write(String string) throws IOException {
-			write(string.getBytes(StandardCharsets.UTF_8));
-		}
-
-		@Override
-		public int waitFor() {
-			return 0;
-		}
-
-		@Override
-		public boolean ready() throws IOException {
-			return reader.ready();
-		}
 	}
 }
