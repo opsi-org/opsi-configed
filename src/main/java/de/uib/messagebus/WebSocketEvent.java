@@ -16,8 +16,7 @@ public enum WebSocketEvent {
 
 	TERMINAL_OPEN_REQUEST("terminal_open_request"), TERMINAL_OPEN_EVENT("terminal_open_event"),
 	TERMINAL_CLOSE_EVENT("terminal_close_event"), TERMINAL_DATA_READ("terminal_data_read"),
-	TERMINAL_RESIZE_REQUEST("terminal_resize_request"), TERMINAL_RESIZE_EVENT("terminal_resize_event"),
-	TERMINAL_DATA_WRITE("terminal_data_write"),
+	TERMINAL_RESIZE_REQUEST("terminal_resize_request"), TERMINAL_DATA_WRITE("terminal_data_write"),
 
 	HOST_CONNECTED("host_connected"), HOST_DISCONNECTED("host_disconnected"), HOST_CREATED("host_created"),
 	HOST_DELETED("host_deleted"),

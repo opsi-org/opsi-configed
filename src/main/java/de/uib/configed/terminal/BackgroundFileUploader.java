@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -22,17 +21,15 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
-public class BackgroundFileUploader extends SwingWorker<Void, Integer> implements MessagebusListener {
+public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int MAX_CHUNK_SIZE = 1_500_000;
 	private static final int MIN_CHUNK_SIZE = 8000;
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
@@ -49,9 +46,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> implement
 	public BackgroundFileUploader(Terminal terminal, FileUploadQueue queue) {
 		this.terminal = terminal;
 		this.queue = queue;
-		if (terminal.getMessagebus() != null) {
-			terminal.getMessagebus().getWebSocket().registerListener(this);
-		}
 	}
 
 	@Override
@@ -224,38 +218,5 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> implement
 
 	public void updateTotalFilesToUpload() {
 		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
-	}
-
-	@Override
-	public void onOpen(ServerHandshake handshakeData) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onClose(int code, String reason, boolean remote) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onError(Exception ex) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onMessageReceived(Map<String, Object> message) {
-		Logging.trace(this, "Messagebus message received: " + message.toString());
-		String type = (String) message.get("type");
-		if (WebSocketEvent.FILE_UPLOAD_RESULT.toString().equals(type)) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
-			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
-			data.put("channel", terminal.getTerminalChannel());
-			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
-			data.put("terminal_id", terminal.getTerminalId());
-			data.put("data", ((String) data.get("path")).getBytes(StandardCharsets.UTF_8));
-			terminal.getMessagebus().sendMessage(data);
-		}
 	}
 }

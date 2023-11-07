@@ -11,11 +11,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -400,6 +403,7 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public void close() {
+		messagebus.getWebSocket().unregisterListener(this);
 		SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 	}
 
@@ -452,6 +456,17 @@ public final class Terminal implements MessagebusListener {
 			} catch (IOException e) {
 				Logging.error("failed to write message: ", e);
 			}
+		} else if (WebSocketEvent.FILE_UPLOAD_RESULT.toString().equals(type)) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
+			data.put("id", UUID.randomUUID().toString());
+			data.put("sender", "@");
+			data.put("channel", terminalChannel);
+			data.put("created", System.currentTimeMillis());
+			data.put("expires", System.currentTimeMillis() + 10000);
+			data.put("terminal_id", terminalId);
+			data.put("data", ((String) message.get("path")).getBytes(StandardCharsets.UTF_8));
+			messagebus.sendMessage(data);
 		} else {
 			// Other events are handled by other listeners.
 		}
