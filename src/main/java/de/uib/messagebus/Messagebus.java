@@ -192,18 +192,24 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	public void connectTerminal(Terminal terminal) {
+		connectTerminal(terminal, null);
+	}
+
+	public void connectTerminal(Terminal terminal, String channel) {
 		String terminalId = UUID.randomUUID().toString();
 
 		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
 		terminal.setMessagebus(this);
-		messagebusWebSocket.registerListener(terminal);
+		if (!messagebusWebSocket.isListenerRegistered(terminal)) {
+			messagebusWebSocket.registerListener(terminal);
+		}
 
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
-		message.put("channel", "service:config:terminal");
+		message.put("channel", channel != null ? channel : "service:config:terminal");
 		message.put("back_channel", String.format("session:%s", terminalId));
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);

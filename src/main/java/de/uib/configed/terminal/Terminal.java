@@ -319,6 +319,8 @@ public final class Terminal implements MessagebusListener {
 		for (String clientConnectedByMessagebus : clientsConnectedByMessagebus) {
 			hostComboBox.addItem(clientConnectedByMessagebus);
 		}
+		hostComboBox.addActionListener(
+				(ActionEvent e) -> changeSession(hostComboBox.getItemAt(hostComboBox.getSelectedIndex())));
 		JLabel hostLabel = new JLabel(Configed.getResourceValue("Terminal.connection.host"));
 
 		settingsLayout.setHorizontalGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -376,6 +378,19 @@ public final class Terminal implements MessagebusListener {
 		widget.getTypeAheadManager().onResize();
 		widget.getTerminalStarter().postResize(widget.getTerminalPanel().getTerminalSizeFromComponent(),
 				RequestOrigin.User);
+	}
+
+	private void changeSession(String session) {
+		terminalId = null;
+		terminalChannel = null;
+		widget.getTerminalTextBuffer().clearAll();
+		widget.stop();
+		messagebus.connectTerminal(this, produceSessionChannel(session));
+	}
+
+	private static String produceSessionChannel(String session) {
+		return PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getDepotNamesList()
+				.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 
 	private JPanel createSouthPanel() {

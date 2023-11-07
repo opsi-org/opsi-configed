@@ -43,6 +43,10 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 		}
 	}
 
+	public boolean isListenerRegistered(MessagebusListener listener) {
+		return listeners.contains(listener);
+	}
+
 	@Override
 	public boolean isOpen() {
 		WebSocket con = getConnection();
