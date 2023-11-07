@@ -12,6 +12,9 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -44,6 +47,7 @@ import com.jediterm.terminal.ui.JediTermWidget;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FSelectionList;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -190,12 +194,16 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	private JMenu createFileMenu() {
-		JMenuItem jMenuNewWindow = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
-		jMenuNewWindow.addActionListener((ActionEvent e) -> {
+		JMenuItem jMenuItemNewWindow = new JMenuItem(
+				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
+		jMenuItemNewWindow.addActionListener((ActionEvent e) -> {
 			Terminal terminal = new Terminal();
 			terminal.display();
 			messagebus.connectTerminal(terminal);
 		});
+
+		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
+		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
 		JMenuItem jMenuItemDarkTheme = new JRadioButtonMenuItem(
 				Configed.getResourceValue("Terminal.settings.theme.dark"));
@@ -219,9 +227,25 @@ public final class Terminal implements MessagebusListener {
 		jMenuTheme.add(jMenuItemLightTheme);
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
-		menuFile.add(jMenuNewWindow);
+		menuFile.add(jMenuItemNewWindow);
+		menuFile.add(jMenuItemSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
+	}
+
+	private void displaySessionsDialog() {
+		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
+				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
+				500, 300);
+		List<String> clientsConnectedByMessagebus = new ArrayList<>(PersistenceControllerFactory
+				.getPersistenceController().getHostDataService().getMessagebusConnectedClients());
+		Collections.sort(clientsConnectedByMessagebus);
+		sessionsDialog.setListData(clientsConnectedByMessagebus);
+		sessionsDialog.setVisible(true);
+
+		if (sessionsDialog.getResult() == 2) {
+			changeSession(sessionsDialog.getSelectedValue());
+		}
 	}
 
 	private JMenu createViewMenu() {
