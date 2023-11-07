@@ -4,6 +4,7 @@
 ### Fixed
 - Error message not shown in AbstractErrorListProducer
 - Saving SystemUUID for a client now possible
+- Reactivating user roles working again in dialogue
 
 ### Changed
 - Removed Fading Glasspane from Error producer and waking clients
