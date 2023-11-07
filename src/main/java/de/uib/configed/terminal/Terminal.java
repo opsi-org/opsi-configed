@@ -7,6 +7,9 @@
 package de.uib.configed.terminal;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -32,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
+import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -58,6 +62,9 @@ public final class Terminal implements MessagebusListener {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	private static final int DEFAULT_TERMINAL_ROWS = 24;
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
+	private static final int FONT_SIZE_MIN_LIMIT = 8;
+	private static final int FONT_SIZE_MAX_LIMIT = 62;
+	private static final int FONT_SIZE_SCALING_FACTOR = 2;
 
 	private JediTermWidget widget;
 	private JFrame frame;
@@ -76,6 +83,8 @@ public final class Terminal implements MessagebusListener {
 	private TerminalSettingsProvider settingsProvider;
 
 	private WebSocketInputStream webSocketInputStream;
+
+	private boolean ignoreKeyEvent;
 
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
@@ -109,6 +118,10 @@ public final class Terminal implements MessagebusListener {
 		return widget.getTerminalDisplay().getRowCount();
 	}
 
+	public boolean ignoreKeyEvent() {
+		return ignoreKeyEvent;
+	}
+
 	public void lock() {
 		try {
 			locker = new CountDownLatch(1);
@@ -137,6 +150,22 @@ public final class Terminal implements MessagebusListener {
 
 		scrollBar = new JScrollBar();
 		widget.getTerminalPanel().init(scrollBar);
+
+		widget.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+					setFontSize((int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR);
+					ignoreKeyEvent = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_MINUS
+						&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+					setFontSize((int) settingsProvider.getTerminalFontSize() - FONT_SIZE_SCALING_FACTOR);
+					ignoreKeyEvent = true;
+				} else {
+					ignoreKeyEvent = false;
+				}
+			}
+		});
 
 		return widget;
 	}
@@ -248,24 +277,14 @@ public final class Terminal implements MessagebusListener {
 
 	private JMenu createViewMenu() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
-		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
-			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
-			widget.getTerminalPanel().init(scrollBar);
-			widget.repaint();
-			resizeTerminal();
-		});
+		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> setFontSize(
+				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
-		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
-			if ((int) settingsProvider.getTerminalFontSize() == 1) {
-				return;
-			}
-
-			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
-			widget.getTerminalPanel().init(scrollBar);
-			widget.repaint();
-			resizeTerminal();
-		});
+		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> setFontSize(
+				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -301,11 +320,25 @@ public final class Terminal implements MessagebusListener {
 		}
 	}
 
+	private void setFontSize(int fontSize) {
+		if (((int) settingsProvider.getTerminalFontSize() == FONT_SIZE_MIN_LIMIT && fontSize <= FONT_SIZE_MIN_LIMIT)
+				|| ((int) settingsProvider.getTerminalFontSize() == FONT_SIZE_MAX_LIMIT
+						&& fontSize >= FONT_SIZE_MAX_LIMIT)) {
+			return;
+		}
+
+		TerminalSettingsProvider.setTerminalFontSize(fontSize);
+		resizeTerminal();
+	}
+
 	private void resizeTerminal() {
 		JediTerminal.ensureTermMinimumSize(widget.getTerminalPanel().getTerminalSizeFromComponent());
 		widget.getTypeAheadManager().onResize();
 		widget.getTerminalStarter().postResize(widget.getTerminalPanel().getTerminalSizeFromComponent(),
 				RequestOrigin.User);
+		widget.getTerminal().reset();
+		widget.getTerminalPanel().init(scrollBar);
+		widget.repaint();
 	}
 
 	private void changeSession(String session) {

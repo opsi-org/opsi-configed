@@ -86,6 +86,10 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public void write(byte[] bytes) {
+		if (terminal.ignoreKeyEvent()) {
+			return;
+		}
+
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 		data.put("id", UUID.randomUUID().toString());
