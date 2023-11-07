@@ -292,7 +292,7 @@ public class UserRolesConfigDataService {
 						new String[] { Configed.getResourceValue("buttonClose"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.dontWarnAgain"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.reactivateUserRoles") },
-						500, 200);
+						600, 200);
 				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 
