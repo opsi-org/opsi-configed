@@ -3,6 +3,7 @@
 ## [4.3.0.13] - 2023-11-xx
 ### Fixed
 - Error message not shown in AbstractErrorListProducer
+- Saving SystemUUID for a client now possible
 
 ### Changed
 - Removed Fading Glasspane from Error producer and waking clients
