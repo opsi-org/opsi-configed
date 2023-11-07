@@ -16,14 +16,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -75,7 +71,6 @@ public final class Terminal implements MessagebusListener {
 	private CountDownLatch locker;
 
 	private TerminalSettingsProvider settingsProvider;
-	private String selectedTheme;
 
 	private WebSocketInputStream webSocketInputStream;
 
@@ -281,108 +276,15 @@ public final class Terminal implements MessagebusListener {
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 
-		JPanel settingsPanel = createSettingsPanel();
 		JediTermWidget termWidget = createTerminalWidget();
 
-		northLayout.setVerticalGroup(
-				northLayout.createSequentialGroup().addComponent(settingsPanel, 70, GroupLayout.PREFERRED_SIZE, 70)
-						.addComponent(termWidget, 0, 0, Short.MAX_VALUE));
+		northLayout
+				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(termWidget, 0, 0, Short.MAX_VALUE));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
-				.addGroup(northLayout.createSequentialGroup().addComponent(settingsPanel, 0, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE))
 				.addGroup(northLayout.createSequentialGroup().addComponent(termWidget, 0, 0, Short.MAX_VALUE)));
 
 		return northPanel;
-	}
-
-	private JPanel createSettingsPanel() {
-		JPanel settingsPanel = new JPanel();
-
-		GroupLayout settingsLayout = new GroupLayout(settingsPanel);
-		settingsPanel.setLayout(settingsLayout);
-
-		JComboBox<String> themeComboBox = new JComboBox<>();
-		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
-		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.light"));
-		themeComboBox.addActionListener((ActionEvent e) -> setSelectedTheme((String) themeComboBox.getSelectedItem()));
-
-		if (selectedTheme == null) {
-			selectedTheme = Configed.getResourceValue("Terminal.settings.theme.dark");
-		}
-
-		themeComboBox.setSelectedItem(selectedTheme);
-
-		JButton buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
-		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
-		buttonFontPlus.addActionListener((ActionEvent e) -> {
-			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
-			widget.getTerminalPanel().init(scrollBar);
-			widget.repaint();
-			resizeTerminal();
-		});
-
-		JButton buttonFontMinus = new JButton(Utils.createImageIcon("images/font-minus.png", ""));
-		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
-		buttonFontMinus.addActionListener((ActionEvent e) -> {
-			if ((int) settingsProvider.getTerminalFontSize() == 1) {
-				return;
-			}
-
-			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
-			widget.getTerminalPanel().init(scrollBar);
-			widget.repaint();
-			resizeTerminal();
-		});
-
-		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
-
-		JComboBox<String> hostComboBox = new JComboBox<>();
-		Set<String> clientsConnectedByMessagebus = new TreeSet<>(PersistenceControllerFactory.getPersistenceController()
-				.getHostDataService().getMessagebusConnectedClients());
-		for (String clientConnectedByMessagebus : clientsConnectedByMessagebus) {
-			hostComboBox.addItem(clientConnectedByMessagebus);
-		}
-		hostComboBox.addActionListener(
-				(ActionEvent e) -> changeSession(hostComboBox.getItemAt(hostComboBox.getSelectedIndex())));
-		JLabel hostLabel = new JLabel(Configed.getResourceValue("Terminal.connection.host"));
-
-		settingsLayout.setHorizontalGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(buttonFontPlus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonFontMinus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(hostLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(hostComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)));
-
-		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(settingsLayout.createParallelGroup()
-						.addComponent(themeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(themeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonFontPlus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonFontMinus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(settingsLayout.createParallelGroup()
-						.addComponent(hostLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(hostComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
-
-		return settingsPanel;
 	}
 
 	private void setSelectedTheme(String selectedTheme) {
@@ -391,7 +293,6 @@ public final class Terminal implements MessagebusListener {
 		} else {
 			TerminalSettingsProvider.setTerminalDarkTheme();
 		}
-		this.selectedTheme = selectedTheme;
 		if (widget != null) {
 			widget.repaint();
 		}
