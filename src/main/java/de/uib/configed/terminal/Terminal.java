@@ -282,7 +282,7 @@ public final class Terminal implements MessagebusListener {
 				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
-		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
+		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> setFontSize(
 				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
 
