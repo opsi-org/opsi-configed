@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
@@ -290,16 +289,12 @@ public class UserRolesConfigDataService {
 
 				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
-						new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
+						new String[] { Configed.getResourceValue("buttonClose"),
+								Configed.getResourceValue("RegisterUserWarning.dialog.dontWarnAgain"),
+								Configed.getResourceValue("RegisterUserWarning.dialog.reactivateUserRoles") },
 						500, 200);
 				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
-				msg.append("\n");
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
 				dialog.setMessage(msg.toString());
 				dialog.setVisible(true);
