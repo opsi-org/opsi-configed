@@ -126,9 +126,8 @@ public final class Messages {
 			produceLocale();
 		}
 		Logging.notice("Locale set to: " + myLocale);
-		if (messagesBundle == null) {
-			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
-		}
+
+		messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 	}
 
 	public static List<String> getLocaleNames() {
