@@ -289,15 +289,10 @@ public class UserRolesConfigDataService {
 				Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
 
 				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("RegisterUserWarning.dialog.title"),
-
-						true,
+						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
 						new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
-						new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-								Utils.createImageIcon("images/edit-delete.png", ""),
-								Utils.createImageIcon("images/executing_command_red_16.png", "") },
 						500, 200);
 				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
