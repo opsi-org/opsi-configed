@@ -311,8 +311,8 @@ public final class Terminal implements MessagebusListener {
 	private void changeSession(String session) {
 		terminalId = null;
 		terminalChannel = null;
-		widget.getTerminalTextBuffer().clearAll();
 		widget.stop();
+		widget.getTerminal().reset();
 		messagebus.connectTerminal(this, produceSessionChannel(session));
 	}
 
