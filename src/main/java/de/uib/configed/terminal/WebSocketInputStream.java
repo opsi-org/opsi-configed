@@ -16,14 +16,14 @@ public class WebSocketInputStream {
 	private PipedOutputStream writer;
 	private PipedInputStream reader;
 
-	public void init() {
+	public WebSocketInputStream() {
 		writer = new PipedOutputStream();
 		reader = new PipedInputStream();
 
 		try {
 			reader.connect(writer);
 		} catch (IOException e) {
-			Logging.warning(this, "I/O error occured while connecting reader with writer: " + e.getMessage());
+			Logging.error("I/O error occured while connecting reader with writer: " + e.getMessage());
 		}
 	}
 

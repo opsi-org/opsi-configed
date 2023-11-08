@@ -472,7 +472,6 @@ public final class Terminal implements MessagebusListener {
 		String type = (String) message.get("type");
 		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
 			webSocketInputStream = new WebSocketInputStream();
-			webSocketInputStream.init();
 			setTerminalId((String) message.get("terminal_id"));
 			setTerminalChannel((String) message.get("back_channel"));
 			if (frame != null) {
