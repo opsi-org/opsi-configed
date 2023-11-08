@@ -3080,9 +3080,7 @@ public class ConfigedMain implements ListSelectionListener {
 			}
 		}
 
-		for (String key : keysForDeleting) {
-			m.remove(key);
-		}
+		m.keySet().removeAll(keysForDeleting);
 	}
 
 	@SuppressWarnings({ "unchecked" })

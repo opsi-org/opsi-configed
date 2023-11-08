@@ -651,9 +651,7 @@ public class SoftwareDataService {
 					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
 
 			if (result) {
-				for (String swIdent : softwareIds) {
-					fSoftware2LicencePool.remove(swIdent);
-				}
+				fSoftware2LicencePool.keySet().removeAll(softwareIds);
 
 				if (fLicencePool2SoftwareList.get(licencePoolId) != null) {
 					fLicencePool2SoftwareList.get(licencePoolId).removeAll(softwareIds);
