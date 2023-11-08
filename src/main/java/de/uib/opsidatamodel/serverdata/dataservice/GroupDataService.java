@@ -255,17 +255,15 @@ public class GroupDataService {
 	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
 			String originVar, String imageVar) {
 		Map<String, Set<String>> result = new TreeMap<>();
-		Iterator<String> iter = mappedRelation.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			Map<String, String> relation = mappedRelation.get(key);
-			String originValue = relation.get(originVar);
+		for (Map<String, String> relation : mappedRelation.values()) {
 			String imageValue = relation.get(imageVar);
 			if (imageValue != null) {
+				String originValue = relation.get(originVar);
 				Set<String> assignedSet = result.computeIfAbsent(originValue, arg -> new TreeSet<>());
 				assignedSet.add(imageValue);
 			}
 		}
+
 		return result;
 	}
 
