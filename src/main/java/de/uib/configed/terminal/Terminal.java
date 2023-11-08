@@ -44,7 +44,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
-import com.jediterm.terminal.model.JediTerminal;
 import com.jediterm.terminal.ui.JediTermWidget;
 
 import de.uib.configed.Configed;
@@ -111,11 +110,11 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public int getColumnCount() {
-		return widget.getTerminalDisplay().getColumnCount();
+		return widget.getTerminalPanel().getPixelWidth();
 	}
 
 	public int getRowCount() {
-		return widget.getTerminalDisplay().getRowCount();
+		return widget.getTerminalPanel().getPixelHeight();
 	}
 
 	public boolean ignoreKeyEvent() {
@@ -332,20 +331,18 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	private void resizeTerminal() {
-		JediTerminal.ensureTermMinimumSize(widget.getTerminalPanel().getTerminalSizeFromComponent());
 		widget.getTypeAheadManager().onResize();
-		widget.getTerminalStarter().postResize(widget.getTerminalPanel().getTerminalSizeFromComponent(),
-				RequestOrigin.User);
-		widget.getTerminal().reset();
+		widget.getTerminal().resize(widget.getTerminalPanel().getTerminalSizeFromComponent(), RequestOrigin.User);
 		widget.getTerminalPanel().init(scrollBar);
-		widget.repaint();
 	}
 
 	private void changeSession(String session) {
 		terminalId = null;
 		terminalChannel = null;
-		widget.stop();
-		widget.getTerminal().reset();
+		if (widget.isSessionRunning()) {
+			widget.stop();
+		}
+		widget.getTerminal().reset(true);
 		messagebus.connectTerminal(this, produceSessionChannel(session));
 	}
 

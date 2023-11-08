@@ -6,7 +6,6 @@
 
 package de.uib.configed.terminal;
 
-import java.awt.Dimension;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.UUID;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jediterm.terminal.Questioner;
+import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.TtyConnector;
 
 import de.uib.messagebus.WebSocketEvent;
@@ -38,11 +37,6 @@ public class WebSocketTtyConnector implements TtyConnector {
 	}
 
 	@Override
-	public boolean init(Questioner q) {
-		return isConnected();
-	}
-
-	@Override
 	public void close() {
 		try {
 			reader.close();
@@ -57,7 +51,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 	}
 
 	@Override
-	public void resize(Dimension termWinSize) {
+	public void resize(TermSize termSize) {
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
@@ -66,8 +60,8 @@ public class WebSocketTtyConnector implements TtyConnector {
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("terminal_id", terminal.getTerminalId());
-		data.put("rows", terminal.getRowCount());
-		data.put("cols", terminal.getColumnCount());
+		data.put("rows", termSize.getRows());
+		data.put("cols", termSize.getColumns());
 
 		try {
 			ObjectMapper mapper = new MessagePackMapper();
