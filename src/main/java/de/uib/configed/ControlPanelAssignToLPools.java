@@ -791,10 +791,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				.getSoftwareListByLicencePoolPD(poolId);
 
 		// remove all old assignements
-		for (String swId : oldSWListForPool) {
-			Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-			persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD().remove(swId);
-		}
+		Logging.info(this, "sendUpdate remove " + oldSWListForPool + " from Software2LicencePool ");
+		persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD().keySet()
+				.removeAll(oldSWListForPool);
+
 		// set the current ones
 		for (String ident : softwareIds) {
 			persistenceController.getSoftwareDataService().setFSoftware2LicencePool(ident, poolId);
