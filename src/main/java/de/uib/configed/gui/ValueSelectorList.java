@@ -7,15 +7,12 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,29 +20,20 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
-import utils.Utils;
 
-public class ValueSelectorList extends JPanel implements ActionListener {
+public class ValueSelectorList extends JPanel {
 	private DepotsList valueList;
 	private JScrollPane scrollPaneValueList;
 	// this will not be shown in this panel but exported for use in other panels
 
 	private JLabel labelValue;
-	private JButton buttonSelectValuesWithEqualProperties;
-	private JButton buttonSelectValuesAll;
 
 	private TablesearchPane searchPane;
 
 	private boolean multidepot;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
@@ -97,19 +85,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
 		}
 
-		buttonSelectValuesWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
-		buttonSelectValuesWithEqualProperties
-				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
-		Utils.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
-		buttonSelectValuesWithEqualProperties.addActionListener(this);
-		buttonSelectValuesWithEqualProperties.setEnabled(multidepot);
-
-		buttonSelectValuesAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
-		buttonSelectValuesAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
-		Utils.formatButtonSmallText(buttonSelectValuesAll);
-		buttonSelectValuesAll.addActionListener(this);
-		buttonSelectValuesAll.setEnabled(multidepot);
-
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
@@ -131,44 +106,20 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		this.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelValue,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addComponent(labelValue, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(5, 5, 10)
+				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(5, 5, 10));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layout.createSequentialGroup().addGap(10)
-						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-						.addGap(10, 10, 10))
+						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
 
 	public String getSelectedValue() {
 		return valueList.getSelectedValue();
-	}
-
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == buttonSelectValuesAll) {
-			Logging.info(this, "action on buttonSelectValuesAll");
-
-			valueList.selectAll();
-		} else if (e.getSource() == buttonSelectValuesWithEqualProperties) {
-			Logging.info(this, "action on buttonSelectValuesWithEqualProperties");
-
-			if (valueList.getSelectedIndex() > -1) {
-				String depotSelected = valueList.getSelectedValue();
-				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
-						.getAllDepotsWithIdenticalProductStock(depotSelected);
-				valueList.addToSelection(depotsWithEqualStock);
-			}
-		} else {
-			Logging.warning(this, "unexpected action on source " + e.getSource());
-		}
 	}
 }
