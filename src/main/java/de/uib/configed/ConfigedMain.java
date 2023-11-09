@@ -255,7 +255,6 @@ public class ConfigedMain implements ListSelectionListener {
 	// collection of retrieved software audit and hardware maps
 
 	private String myServer;
-	private boolean multiDepot;
 
 	private JTableSelectionPanel selectionPanel;
 
@@ -1299,7 +1298,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		selectionPanel.initSortKeys();
 
-		startMainFrame(this, selectionPanel, depotsList, treeClients, multiDepot);
+		startMainFrame(this, selectionPanel, depotsList, treeClients);
 	}
 
 	private void initDepots() {
@@ -1363,8 +1362,8 @@ public class ConfigedMain implements ListSelectionListener {
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
-			DepotsList depotsList, ClientTree treeClients, boolean multiDepot) {
-		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients, multiDepot);
+			DepotsList depotsList, ClientTree treeClients) {
+		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients);
 
 		// setting the similar global values as well
 
@@ -3417,9 +3416,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
 
 		depots = persistenceController.getHostInfoCollections().getDepots();
-		multiDepot = depots.size() != 1;
 
-		Logging.debug(this, "we have multidepot " + multiDepot);
 		depotsList.setListData(getLinkedDepots());
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
 		String[] depotsListSelectedValues = getSelectedDepots();

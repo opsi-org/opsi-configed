@@ -52,7 +52,6 @@ import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -137,7 +136,7 @@ public class MainFrame extends JFrame
 	private static final int F_WIDTH_RIGHTHANDED = 200;
 
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
@@ -378,8 +377,6 @@ public class MainFrame extends JFrame
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JCheckBox jCheckBoxSorted = new JCheckBox();
-
 	private JTableSelectionPanel panelClientlist;
 
 	private JLabel labelHostID;
@@ -412,11 +409,11 @@ public class MainFrame extends JFrame
 			.getPersistenceController();
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
-			ClientTree treeClients, boolean multidepot) {
+			ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.multidepot = multidepot;
+		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		panelClientlist = selectionPanel;
 
@@ -1985,7 +1982,7 @@ public class MainFrame extends JFrame
 		if (multidepot) {
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
 		} else {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT);
 		}
 
 		JPanel panelTreeClientSelection = new JPanel();
