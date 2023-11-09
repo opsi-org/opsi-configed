@@ -104,7 +104,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		public String toString() {
 			return displayName;
 		}
-	};
+	}
 
 	private static MyColorPalette colorPalette = new MyColorPalette(DARK_COLORS);
 	private static Theme themeInUse;
