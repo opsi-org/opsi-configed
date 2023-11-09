@@ -208,9 +208,7 @@ public final class Terminal implements MessagebusListener {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				widget.close();
-				frame.dispose();
-				frame = null;
+				close();
 			}
 
 			@Override
@@ -474,11 +472,13 @@ public final class Terminal implements MessagebusListener {
 		widget.requestFocus();
 	}
 
-	public void close() {
+	private void close() {
 		messagebus.getWebSocket().unregisterListener(this);
-		if (frame != null) {
-			SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
-		}
+		SwingUtilities.invokeLater(() -> {
+			widget.close();
+			frame.dispose();
+			frame = null;
+		});
 	}
 
 	public void connectWebSocketTty() {
