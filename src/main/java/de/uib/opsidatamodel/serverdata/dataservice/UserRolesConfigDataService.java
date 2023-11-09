@@ -290,8 +290,8 @@ public class UserRolesConfigDataService {
 				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
 						new String[] { Configed.getResourceValue("buttonClose"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.dontWarnAgain"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.reactivateUserRoles") },
+								Configed.getResourceValue("RegisterUserWarning.dialog.button.dontWarnAgain"),
+								Configed.getResourceValue("RegisterUserWarning.dialog.button.reactivateUserRoles") },
 						600, 200);
 				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
