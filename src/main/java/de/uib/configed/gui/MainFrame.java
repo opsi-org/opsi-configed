@@ -13,7 +13,6 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -64,7 +63,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -381,17 +379,8 @@ public class MainFrame extends JFrame
 	private LicensingInfoMap licensingInfoMap;
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
-	private JButton jButtonSaveList = new JButton();
-
-	private ButtonGroup buttonGroupRequired = new ButtonGroup();
-	private JRadioButton jRadioRequiredAll = new JRadioButton();
-	private JRadioButton jRadioRequiredOff = new JRadioButton();
 
 	private JTableSelectionPanel panelClientlist;
-
-	private JLabel jLabelHostinfos = new JLabel();
-
-	private JLabel jLabelPath = new JLabel();
 
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
@@ -1973,27 +1962,6 @@ public class MainFrame extends JFrame
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		jCheckBoxSorted.setSelected(true);
-		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
-
-		jButtonSaveList.setText(Configed.getResourceValue("save"));
-
-		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
-
-		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredAll.setAlignmentY(0.0F);
-		jRadioRequiredAll.setText(Configed.getResourceValue("MainFrame.jRadioRequiredAll"));
-		jRadioRequiredOff.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredOff.setSelected(true);
-		jRadioRequiredOff.setText(Configed.getResourceValue("MainFrame.jRadioRequiredOff"));
-		jRadioRequiredOff.setToolTipText("");
-
-		jLabelPath.setText(Configed.getResourceValue("MainFrame.jLabelPath"));
-		jLabelHostinfos.setText(Configed.getResourceValue("MainFrame.jLabel_Hostinfos"));
-
-		buttonGroupRequired.add(jRadioRequiredAll);
-		buttonGroupRequired.add(jRadioRequiredOff);
-
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
 		scrollpaneTreeClients.getViewport().add(treeClients);
@@ -2960,10 +2928,6 @@ public class MainFrame extends JFrame
 	}
 
 	// ----------------------------------------------------------------------------------------
-
-	private void jButtonSaveListActionPerformed(ActionEvent e) {
-		configedMain.checkSaveAll(false);
-	}
 
 	/* WindowListener implementation */
 	@Override
