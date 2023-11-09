@@ -369,6 +369,7 @@ public final class Terminal implements MessagebusListener {
 				widget.getTerminalTextBuffer().getScreenLines().trim().split("\n").length);
 	}
 
+	@SuppressWarnings({ "deprecation", "java:S1874" })
 	private void changeSession(String session) {
 		if (!widget.isSessionRunning()) {
 			return;
@@ -379,7 +380,7 @@ public final class Terminal implements MessagebusListener {
 		widget.stop();
 		widget.getTerminal().reset(true);
 		messagebus.connectTerminal(this, produceSessionChannel(session));
-		widget.getTerminal().restoreCursor();
+		widget.getTerminal().setCursorVisible(true);
 	}
 
 	private static String produceSessionChannel(String session) {
