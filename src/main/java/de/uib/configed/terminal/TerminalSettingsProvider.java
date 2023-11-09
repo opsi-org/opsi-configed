@@ -91,7 +91,23 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		LIGHT_COLORS[15] = new Color(255, 255, 255);
 	}
 
+	public enum Theme {
+		LIGHT("Light"), DARK("Dark");
+
+		private String displayName;
+
+		Theme(String displayName) {
+			this.displayName = displayName;
+		}
+
+		@Override
+		public String toString() {
+			return displayName;
+		}
+	};
+
 	private static MyColorPalette colorPalette = new MyColorPalette(DARK_COLORS);
+	private static Theme themeInUse;
 
 	@Override
 	public Font getTerminalFont() {
@@ -134,10 +150,16 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	public static void setTerminalLightTheme() {
 		colorPalette = new MyColorPalette(LIGHT_COLORS);
+		themeInUse = Theme.LIGHT;
 	}
 
 	public static void setTerminalDarkTheme() {
 		colorPalette = new MyColorPalette(DARK_COLORS);
+		themeInUse = Theme.DARK;
+	}
+
+	public static Theme getTerminalThemeInUse() {
+		return themeInUse;
 	}
 
 	private static class MyColorPalette extends ColorPalette {

@@ -73,6 +73,8 @@ public final class Terminal implements MessagebusListener {
 	private JLabel fileNameLabel;
 	private JPanel southPanel;
 	private JScrollBar scrollBar;
+	private JMenuItem jMenuItemDarkTheme;
+	private JMenuItem jMenuItemLightTheme;
 
 	private Messagebus messagebus;
 	private String terminalChannel;
@@ -210,6 +212,11 @@ public final class Terminal implements MessagebusListener {
 				frame.dispose();
 				frame = null;
 			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				setDefaultTheme();
+			}
 		});
 	}
 
@@ -232,10 +239,8 @@ public final class Terminal implements MessagebusListener {
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
-		JMenuItem jMenuItemDarkTheme = new JRadioButtonMenuItem(
-				Configed.getResourceValue("Terminal.settings.theme.dark"));
-		JMenuItem jMenuItemLightTheme = new JRadioButtonMenuItem(
-				Configed.getResourceValue("Terminal.settings.theme.light"));
+		jMenuItemDarkTheme = new JRadioButtonMenuItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
+		jMenuItemLightTheme = new JRadioButtonMenuItem(Configed.getResourceValue("Terminal.settings.theme.light"));
 		jMenuItemDarkTheme.addActionListener((ActionEvent e) -> {
 			jMenuItemDarkTheme.setSelected(true);
 			jMenuItemLightTheme.setSelected(false);
@@ -246,16 +251,7 @@ public final class Terminal implements MessagebusListener {
 			jMenuItemLightTheme.setSelected(true);
 			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
 		});
-
-		if ("Light".equals(UserPreferences.get(UserPreferences.THEME))) {
-			jMenuItemLightTheme.setSelected(true);
-			jMenuItemDarkTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
-		} else {
-			jMenuItemDarkTheme.setSelected(true);
-			jMenuItemLightTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
-		}
+		setDefaultTheme();
 
 		JMenu jMenuTheme = new JMenu("Theme");
 		jMenuTheme.add(jMenuItemDarkTheme);
@@ -266,6 +262,21 @@ public final class Terminal implements MessagebusListener {
 		menuFile.add(jMenuItemSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
+	}
+
+	private void setDefaultTheme() {
+		String defaultTheme = TerminalSettingsProvider.getTerminalThemeInUse() != null
+				? TerminalSettingsProvider.getTerminalThemeInUse().toString()
+				: UserPreferences.get(UserPreferences.THEME);
+		if ("Light".equals(defaultTheme)) {
+			jMenuItemLightTheme.setSelected(true);
+			jMenuItemDarkTheme.setSelected(false);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
+		} else {
+			jMenuItemDarkTheme.setSelected(true);
+			jMenuItemLightTheme.setSelected(false);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
+		}
 	}
 
 	private void displaySessionsDialog() {
