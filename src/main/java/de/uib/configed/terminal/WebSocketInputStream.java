@@ -39,8 +39,5 @@ public class WebSocketInputStream {
 	public void close() throws IOException {
 		writer.close();
 		reader.close();
-
-		writer = null;
-		reader = null;
 	}
 }

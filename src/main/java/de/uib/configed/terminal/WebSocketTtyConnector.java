@@ -26,9 +26,9 @@ import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class WebSocketTtyConnector implements TtyConnector {
-	private final BufferedReader reader;
-	private final BufferedOutputStream writer;
-	private final Terminal terminal;
+	private BufferedReader reader;
+	private BufferedOutputStream writer;
+	private Terminal terminal;
 
 	public WebSocketTtyConnector(Terminal terminal, OutputStream outputStream, WebSocketInputStream inputStream) {
 		this.terminal = terminal;
@@ -39,7 +39,14 @@ public class WebSocketTtyConnector implements TtyConnector {
 	@Override
 	public void close() {
 		try {
-			reader.close();
+			if (reader != null) {
+				reader.close();
+				reader = null;
+			}
+			if (writer != null) {
+				writer.close();
+				writer = null;
+			}
 		} catch (IOException e) {
 			Logging.warning(this, "failed to close output/input stream: " + e);
 		}
@@ -106,7 +113,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public boolean isConnected() {
-		return true;
+		return writer != null && reader != null;
 	}
 
 	@Override
