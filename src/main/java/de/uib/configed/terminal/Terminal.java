@@ -110,11 +110,11 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public int getColumnCount() {
-		return widget.getTerminalPanel().getPixelWidth();
+		return widget.getTerminalPanel().getTerminalSizeFromComponent().getColumns();
 	}
 
 	public int getRowCount() {
-		return widget.getTerminalPanel().getPixelHeight();
+		return widget.getTerminalPanel().getTerminalSizeFromComponent().getRows();
 	}
 
 	public boolean ignoreKeyEvent() {
@@ -205,7 +205,7 @@ public final class Terminal implements MessagebusListener {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				widget.stop();
+				widget.close();
 				frame.dispose();
 				frame = null;
 			}
@@ -265,6 +265,7 @@ public final class Terminal implements MessagebusListener {
 				500, 300);
 		List<String> clientsConnectedByMessagebus = new ArrayList<>(PersistenceControllerFactory
 				.getPersistenceController().getHostDataService().getMessagebusConnectedClients());
+		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
 		sessionsDialog.setVisible(true);
@@ -337,18 +338,25 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	private void changeSession(String session) {
+		if (!widget.isSessionRunning()) {
+			return;
+		}
+
 		terminalId = null;
 		terminalChannel = null;
-		if (widget.isSessionRunning()) {
-			widget.stop();
-		}
+		widget.stop();
 		widget.getTerminal().reset(true);
 		messagebus.connectTerminal(this, produceSessionChannel(session));
+		widget.getTerminal().restoreCursor();
 	}
 
 	private static String produceSessionChannel(String session) {
-		return PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getDepotNamesList()
-				.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
+		if ("Configserver".equals(session)) {
+			return "service:config:terminal";
+		}
+		List<String> depotNames = PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+				.getDepotNamesList();
+		return depotNames.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 
 	private JPanel createSouthPanel() {
@@ -434,7 +442,9 @@ public final class Terminal implements MessagebusListener {
 
 	public void close() {
 		messagebus.getWebSocket().unregisterListener(this);
-		SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
+		if (frame != null) {
+			SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
+		}
 	}
 
 	public void connectWebSocketTty() {
