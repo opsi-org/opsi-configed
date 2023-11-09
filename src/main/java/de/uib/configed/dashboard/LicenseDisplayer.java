@@ -101,13 +101,16 @@ public class LicenseDisplayer {
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
 
+		// Hide stage before showing so that we know the size before it gets visible
+		stage.setOnShowing(event -> stage.hide());
 		stage.setOnShown(event -> centerAndShowStage());
-		stage.show();
+
 		controller = fxmlLoader.getController();
+		loadData();
 
 		Platform.runLater(() -> {
-			loadData();
 			styleAccordingToSelectedTheme();
+			stage.showAndWait();
 		});
 	}
 
@@ -139,6 +142,7 @@ public class LicenseDisplayer {
 		Rectangle mainRectangle = ConfigedMain.getMainFrame().getBounds();
 		stage.setX(mainRectangle.getX() + mainRectangle.getWidth() / 2 - stage.getWidth() / 2);
 		stage.setY(mainRectangle.getY() + mainRectangle.getHeight() / 2 - stage.getHeight() / 2);
+		stage.show();
 	}
 
 	private String showLicenceContractWarnings() {
