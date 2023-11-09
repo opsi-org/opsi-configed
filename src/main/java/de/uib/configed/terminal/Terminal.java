@@ -332,9 +332,23 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	private void resizeTerminal() {
-		widget.getTypeAheadManager().onResize();
+		if (wasTerminalScreenCleared()) {
+			resetCursorAfterClearingTerminalScreen();
+		}
 		widget.getTerminal().resize(widget.getTerminalPanel().getTerminalSizeFromComponent(), RequestOrigin.User);
+		widget.getTypeAheadManager().onResize();
 		widget.getTerminalPanel().init(scrollBar);
+	}
+
+	private boolean wasTerminalScreenCleared() {
+		return widget.getTerminal().getCursorY() < 1 || widget.getTerminal().getCursorX() < 1;
+	}
+
+	private void resetCursorAfterClearingTerminalScreen() {
+		int additionalSpaces = 2;
+		widget.getTerminal().cursorPosition(
+				widget.getTerminalTextBuffer().getScreenLines().trim().length() + additionalSpaces,
+				widget.getTerminalTextBuffer().getScreenLines().trim().split("\n").length);
 	}
 
 	private void changeSession(String session) {
