@@ -65,6 +65,7 @@ public final class Terminal implements MessagebusListener {
 	private static final int FONT_SIZE_MIN_LIMIT = 8;
 	private static final int FONT_SIZE_MAX_LIMIT = 62;
 	private static final int FONT_SIZE_SCALING_FACTOR = 2;
+	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
 
 	private JediTermWidget widget;
 	private JFrame frame;
@@ -79,6 +80,7 @@ public final class Terminal implements MessagebusListener {
 	private Messagebus messagebus;
 	private String terminalChannel;
 	private String terminalId;
+	private String sessionChannel;
 
 	private CountDownLatch locker;
 
@@ -101,7 +103,7 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public String getTerminalChannel() {
-		return this.terminalChannel;
+		return terminalChannel;
 	}
 
 	public void setTerminalId(String value) {
@@ -109,7 +111,7 @@ public final class Terminal implements MessagebusListener {
 	}
 
 	public String getTerminalId() {
-		return this.terminalId;
+		return terminalId;
 	}
 
 	public int getColumnCount() {
@@ -379,13 +381,14 @@ public final class Terminal implements MessagebusListener {
 		terminalChannel = null;
 		widget.stop();
 		widget.getTerminal().reset(true);
-		messagebus.connectTerminal(this, produceSessionChannel(session));
+		this.sessionChannel = produceSessionChannel(session);
+		messagebus.connectTerminal(this, sessionChannel);
 		widget.getTerminal().setCursorVisible(true);
 	}
 
 	private static String produceSessionChannel(String session) {
 		if ("Configserver".equals(session)) {
-			return "service:config:terminal";
+			return CONFIG_SERVER_SESSION_CHANNEL;
 		}
 		List<String> depotNames = PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
 				.getDepotNamesList();
@@ -517,7 +520,11 @@ public final class Terminal implements MessagebusListener {
 			setTerminalId((String) message.get("terminal_id"));
 			setTerminalChannel((String) message.get("back_channel"));
 			if (frame != null) {
-				frame.setTitle(getTerminalChannel());
+				sessionChannel = sessionChannel == null || CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
+						? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+								.getConfigServer()
+						: sessionChannel;
+				frame.setTitle(sessionChannel);
 			}
 			unlock();
 		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
