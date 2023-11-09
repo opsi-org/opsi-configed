@@ -47,13 +47,11 @@ public class FWakeClients extends FShowList {
 
 		for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 			counterByDepots.put(depotEntry.getKey(), 0);
-			if (depotEntry.getValue().size() > maxSize) {
-				maxSize = depotEntry.getValue().size();
-			}
+
+			maxSize = Math.max(maxSize, depotEntry.getValue().size());
 		}
 
-		int turn = 0;
-		while (turn < maxSize && !cancelled) {
+		for (int turn = 0; turn < maxSize && !cancelled; turn++) {
 			Set<String> hostsToWakeOnThisTurn = new HashSet<>();
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
@@ -98,7 +96,6 @@ public class FWakeClients extends FShowList {
 			}
 
 			Utils.threadSleep(this, 1000L * delaySecs);
-			turn++;
 		}
 
 		jButton1.setText(Configed.getResourceValue("buttonClose"));

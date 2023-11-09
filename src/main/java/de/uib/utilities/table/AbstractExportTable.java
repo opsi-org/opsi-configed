@@ -169,10 +169,10 @@ public abstract class AbstractExportTable {
 
 				if (file.isDirectory()) {
 					filename = filename + File.separator + defaultExportFilename;
+				} else if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
+					filename = filename + ".csv";
 				} else {
-					if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
-						filename = filename + ".csv";
-					}
+					// Do nothing when it's a file with ending ".csv"
 				}
 
 				Logging.debug(this, "filename " + filename);

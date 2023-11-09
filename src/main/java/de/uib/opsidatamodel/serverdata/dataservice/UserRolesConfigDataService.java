@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
@@ -162,8 +161,8 @@ public class UserRolesConfigDataService {
 		}
 
 		if (Boolean.TRUE.equals(keyUserRegisterValue)) {
-			keyUserRegisterValue = checkUserRolesModulePD();
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
+			keyUserRegisterValue = checkUserRolesModulePD();
 		}
 
 		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null
@@ -289,22 +288,13 @@ public class UserRolesConfigDataService {
 				Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
 
 				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("RegisterUserWarning.dialog.title"),
-
-						true,
-						new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
-								Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
-						new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-								Utils.createImageIcon("images/edit-delete.png", ""),
-								Utils.createImageIcon("images/executing_command_red_16.png", "") },
-						500, 200);
+						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
+						new String[] { Configed.getResourceValue("buttonClose"),
+								Configed.getResourceValue("RegisterUserWarning.dialog.dontWarnAgain"),
+								Configed.getResourceValue("RegisterUserWarning.dialog.reactivateUserRoles") },
+						600, 200);
 				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
-				msg.append("\n");
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
 				dialog.setMessage(msg.toString());
 				dialog.setVisible(true);
@@ -412,7 +402,6 @@ public class UserRolesConfigDataService {
 		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
 		Set<String> hostgroupsPermitted = new HashSet<>();
 
-		// false, //not only as specified but always
 		boolean hostgroupsOnlyIfExplicitlyStated = checkFullPermission(hostgroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
 

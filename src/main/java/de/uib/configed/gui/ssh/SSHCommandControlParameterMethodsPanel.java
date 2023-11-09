@@ -65,7 +65,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private void init() {
 		Logging.debug(this, "init setting up components ");
 		Dimension jComboBoxDim = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
-		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
+		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT);
 
 		jLabelEmpty.setPreferredSize(jComboBoxDim);
 		jLabelParamMethods.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));

@@ -312,7 +312,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			rootFrame.disactivateLoadingCursor();
 
-			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+			JOptionPane.showMessageDialog(rootFrame, "Ready",
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 			List<String> values = new ArrayList<>();
@@ -440,8 +440,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelServer, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
@@ -450,8 +449,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelWinProduct, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(comboChooseWinProduct, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
@@ -460,8 +458,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelFolderWinPE, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonCallSelectFolderWinPE, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addComponent(buttonCallSelectFolderWinPE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldPathWinPE, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
@@ -469,8 +467,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelFolderInstallFiles, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonCallSelectFolderInstallFiles, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addComponent(buttonCallSelectFolderInstallFiles, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldPathInstallFiles, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
@@ -480,8 +478,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelTargetPath, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldTargetPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
@@ -489,15 +486,14 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelProductKey, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldProductKey, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addGap(0, firstLabelWidth, firstLabelWidth).addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(0, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(0, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

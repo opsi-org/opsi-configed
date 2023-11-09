@@ -18,7 +18,7 @@ import java.text.DateFormat;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-10-31";
+	public static final String VERDATE = "2023-11-07";
 
 	public static final String VERHASHTAG = "";
 
@@ -159,8 +159,7 @@ public final class Globals {
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
 	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
 
-	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
-	public static final int GRAPHIC_BUTTON_WIDTH = 40;
+	public static final int GRAPHIC_BUTTON_SIZE = 40;
 
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
@@ -174,7 +173,7 @@ public final class Globals {
 	// Just enough so that the button is not hidden
 	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220;
 
-	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
+	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 

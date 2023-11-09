@@ -6,6 +6,8 @@
 
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
+import java.util.Map;
+
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -67,7 +69,11 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
 		hostInfoCollections.retrieveFNode2TreeparentsPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
-		softwareDataService.retrieveLicenseStatisticsPD();
+		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null
+				&& cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) != null) {
+			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
+			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
+			softwareDataService.retrieveLicenseStatisticsPD();
+		}
 	}
 }

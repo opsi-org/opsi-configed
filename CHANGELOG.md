@@ -1,5 +1,20 @@
 # Changelog
 
+## [4.3.x.x] - 2023-xx-xx
+### Fixed
+- Configed was not loading when restricted to productgroups
+
+## [4.3.0.13] - 2023-11-07
+### Fixed
+- Error message not shown in AbstractErrorListProducer
+- Saving SystemUUID for a client now possible
+- Reactivating user roles working again in dialogue
+
+### Changed
+- Removed Fading Glasspane from Error producer and waking clients
+- Removed unnecessary calls (performance)
+- All product actions call 'processActionRequests' instead of 'on_demand'
+
 ## [4.3.0.12] - 2023-10-31
 ### Fixed
 - Create PDF-files from Hardware information

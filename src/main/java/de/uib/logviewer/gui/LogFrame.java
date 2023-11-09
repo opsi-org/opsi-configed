@@ -8,7 +8,6 @@ package de.uib.logviewer.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -29,6 +28,7 @@ import java.util.TreeMap;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -39,12 +39,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
@@ -57,10 +54,10 @@ public class LogFrame extends JFrame implements WindowListener {
 	private static String fileName = "";
 	private StandaloneLogPane logPane;
 
-	private IconButton iconButtonOpen;
-	private IconButton iconButtonReload;
-	private IconButton iconButtonSave;
-	private IconButton iconButtonCopy;
+	private JButton iconButtonOpen;
+	private JButton iconButtonReload;
+	private JButton iconButtonSave;
+	private JButton iconButtonCopy;
 
 	private Container baseContainer;
 
@@ -150,22 +147,22 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		String selectedLocale = Messages.getSelectedLocale();
 
-		for (final String localeName : Messages.getLocaleInfo().keySet()) {
+		for (final Entry<String, String> locale : Messages.getLocaleInfo().entrySet()) {
 			ImageIcon localeIcon = null;
-			String imageIconName = Messages.getLocaleInfo().get(localeName);
+			String imageIconName = locale.getValue();
 			if (imageIconName != null && !imageIconName.isEmpty()) {
 				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
-			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
+			JMenuItem menuItem = new JRadioButtonMenuItem(locale.getKey(), localeIcon);
 			Logging.debug(this, "Selected locale " + selectedLocale);
-			menuItem.setSelected(selectedLocale.equals(localeName));
+			menuItem.setSelected(selectedLocale.equals(locale.getKey()));
 			jMenuLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
 
 			menuItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
-				Messages.setLocale(localeName);
+				UserPreferences.set(UserPreferences.LANGUAGE, locale.getKey());
+				Messages.setLocale(locale.getKey());
 				restartLogFrame();
 			});
 		}
@@ -222,24 +219,28 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void setupIcons() {
-		iconButtonOpen = new IconButton(Configed.getResourceValue("LogFrame.jMenuFileOpen"), "images/openfile.gif",
-				"images/openfile.gif", "");
+		iconButtonOpen = new JButton(Utils.createImageIcon("images/openfile.gif", ""));
+		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		iconButtonReload = new IconButton(Configed.getResourceValue("LogFrame.buttonReload"), "images/reload16.png",
-				"images/reload16.png", "");
+		iconButtonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
+		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		String iconSavePath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-		iconButtonSave = new IconButton(Configed.getResourceValue("save"), iconSavePath, iconSavePath, "");
+		iconButtonSave = new JButton(Utils.getSaveIcon());
+		iconButtonSave.setToolTipText(Configed.getResourceValue("save"));
+		iconButtonSave.setFocusable(false);
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.save();
 			}
 		});
 
-		iconButtonCopy = new IconButton(Configed.getResourceValue("LogFrame.buttonCopy"), "images/edit-copy.png",
-				"images/edit-copy.png", "");
+		iconButtonCopy = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
+		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 	}
 
@@ -256,29 +257,31 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+						Globals.GRAPHIC_BUTTON_SIZE)
 				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
-		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutIconPane1.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)));
+		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup()
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE))
+				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
@@ -397,15 +400,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		/* Not needed */}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-		} catch (ClassCastException ex) {
-			Logging.info(this, "The ugly well known exception " + ex);
-		}
-	}
 
 	/**********************************************************************************************/
 	// File operations

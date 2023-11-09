@@ -47,16 +47,17 @@ public class ProductState extends HashMap<String, String> {
 
 	public static final List<String> KEYS = List.of(KEY_PRODUCT_ID, KEY_PRODUCT_NAME, KEY_TARGET_CONFIGURATION,
 			KEY_INSTALLATION_STATUS, KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION,
-			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION,
-			KEY_PACKAGE_VERSION, KEY_POSITION, KEY_LAST_STATE_CHANGE);
+			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_POSITION, KEY_ACTION_REQUEST, KEY_VERSION_INFO,
+			KEY_PRODUCT_VERSION, KEY_PACKAGE_VERSION, KEY_LAST_STATE_CHANGE);
 
 	public static final Map<String, String> key2servicekey = Map.ofEntries(entry(KEY_PRODUCT_ID, "productId"),
 			entry(KEY_TARGET_CONFIGURATION, "targetConfiguration"),
 			entry(KEY_INSTALLATION_STATUS, "installationStatus"), entry(KEY_ACTION_RESULT, "actionResult"),
 			entry(KEY_ACTION_PROGRESS, "actionProgress"), entry(KEY_LAST_ACTION, "lastAction"),
-			entry(KEY_POSITION, "position"), entry(KEY_ACTION_SEQUENCE, "actionSequence"),
-			entry(KEY_ACTION_REQUEST, "actionRequest"), entry(KEY_PRODUCT_VERSION, "productVersion"),
-			entry(KEY_PACKAGE_VERSION, "packageVersion"), entry(KEY_LAST_STATE_CHANGE, "modificationTime"));
+			entry(KEY_PRODUCT_PRIORITY, "priority"), entry(KEY_POSITION, "position"),
+			entry(KEY_ACTION_SEQUENCE, "actionSequence"), entry(KEY_ACTION_REQUEST, "actionRequest"),
+			entry(KEY_PRODUCT_VERSION, "productVersion"), entry(KEY_PACKAGE_VERSION, "packageVersion"),
+			entry(KEY_LAST_STATE_CHANGE, "modificationTime"));
 
 	private final Map<String, String> retrieved;
 
@@ -98,7 +99,7 @@ public class ProductState extends HashMap<String, String> {
 
 		put(KEY_ACTION_REQUEST, getRetrievedValue(key2servicekey.get(KEY_ACTION_REQUEST)));
 
-		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(key2servicekey.get(KEY_POSITION)));
+		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_PRIORITY)));
 		put(KEY_ACTION_SEQUENCE, getRetrievedValue(key2servicekey.get(KEY_ACTION_SEQUENCE)));
 
 		put(KEY_PRODUCT_VERSION, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_VERSION)));

@@ -203,7 +203,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 
 		JLabel splittingOptionsLabel = new JLabel(
-				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
+				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
 		JPanel northPanel = new JPanel();
 		GroupLayout northLayout = new GroupLayout(northPanel);

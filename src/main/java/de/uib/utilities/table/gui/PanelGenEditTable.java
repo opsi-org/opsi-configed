@@ -341,16 +341,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		theTable.setAutoCreateRowSorter(false);
 
-		try {
-			scrollpane = new JScrollPane();
-			scrollpane.setViewportView(theTable);
-		} catch (ClassCastException ex) {
-			// a strange Nimbus exception which occurs sometimes here
-			Logging.warning(this, "strange exception on creating scrollpane " + ex);
-
-			scrollpane = new JScrollPane();
-			scrollpane.setViewportView(theTable);
-		}
+		scrollpane = new JScrollPane();
+		scrollpane.setViewportView(theTable);
 
 		JPanel controlPanel = initControlPanel();
 

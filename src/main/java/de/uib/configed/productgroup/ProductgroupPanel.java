@@ -347,11 +347,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void initComponents() {
-		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
-				"images/apply.png", // inactive
-				"images/apply_over.png", // over
-				"images/apply_disabled.png", // active
-				true); // setEnabled
+		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
@@ -371,9 +368,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
-		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"),
+		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", " ", true);
-		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonExecuteNow.setVisible(true);
 
@@ -431,8 +428,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
-		buttonEditDialog.setToolTips(Configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
-				Configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
 		buttonEditDialog.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -89,10 +88,9 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		super();
 		super.setAllowedAttributes(KEYS);
 
-		Set<String> reducedEntrySet = entry.keySet();
-		reducedEntrySet.remove(IDENT_KEY);
-		for (String key : reducedEntrySet) {
-			super.put(key, "" + entry.get(key));
+		entry.remove(IDENT_KEY);
+		for (Entry<String, Object> mapEntry : entry.entrySet()) {
+			super.put(mapEntry.getKey(), "" + mapEntry.getValue());
 		}
 
 		if (super.get(LICENCE_ID_KEY) == null || super.get(LICENCE_POOL_ID_KEY) == null) {

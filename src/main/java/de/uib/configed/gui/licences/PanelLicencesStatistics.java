@@ -11,12 +11,18 @@
 
 package de.uib.configed.gui.licences;
 
+import java.util.Map;
+
 import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
@@ -24,17 +30,19 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
 
 	private PanelGenEditTable panelStatistics;
+	private ConfigedMain configedMain;
 
 	/** Creates new form panelLicencesStatistics */
-	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
+	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller, ConfigedMain configedMain) {
 		super(controller);
+		this.configedMain = configedMain;
 		initComponents();
 	}
 
 	private void initComponents() {
 		panelStatistics = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
-				0, true, null, true);
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, 0, true, null,
+				true);
 		panelStatistics.setMasterFrame(Utils.getMasterFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -57,5 +65,24 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 	public PanelGenEditTable getPanelStatistics() {
 		return panelStatistics;
+	}
+
+	@Override
+	public void reset() {
+		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) == null) {
+			ConfigedMain.getMainFrame().activateLoadingCursor();
+			configedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			SwingUtilities.invokeLater(() -> {
+				panelStatistics.reload();
+				configedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+			});
+		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {
+			panelStatistics.getTableModel().resetLocally();
+			controller.refreshTables();
+			controller.initializeVisualSettings();
+		} else {
+			super.reset();
+		}
 	}
 }

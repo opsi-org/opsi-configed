@@ -166,16 +166,15 @@ public class HostInfoCollections {
 
 	private void showNoDataDialog(int countHosts) {
 		StringBuilder messbuff = new StringBuilder();
-		final String BASE_LABEL = "PersistenceController.noData";
 
-		messbuff.append(Configed.getResourceValue(BASE_LABEL + "0"));
+		messbuff.append(Configed.getResourceValue("PersistenceController.noData0"));
 		messbuff.append("\n");
-		messbuff.append(Configed.getResourceValue(BASE_LABEL + "1") + " " + countHosts);
+		messbuff.append(Configed.getResourceValue("PersistenceController.noData1") + " " + countHosts);
 		messbuff.append("\n");
 		messbuff.append("\n");
 
 		for (int i = 2; i <= 4; i++) {
-			messbuff.append(Configed.getResourceValue(BASE_LABEL + i));
+			messbuff.append(Configed.getResourceValue("PersistenceController.noData" + i));
 			messbuff.append("\n");
 			messbuff.append("\n");
 		}

@@ -107,14 +107,10 @@ public class OpsiDataSerializer {
 		Map<String, Object> data = produceData(topOperation);
 
 		String jsonString;
-		try {
-			jsonString = "{ \"version\" : \"" + OpsiDataSerializer.DATA_VERSION + "\", \"data\" : ";
-			jsonString += OpsiDataSerializer.createJsonRecursive(data);
-			jsonString += " }";
-		} catch (IllegalArgumentException e) {
-			Logging.error(this, "Saving failed: " + e.getMessage(), e);
-			return null;
-		}
+
+		jsonString = "{ \"version\" : \"" + OpsiDataSerializer.DATA_VERSION + "\", \"data\" : ";
+		jsonString += OpsiDataSerializer.createJsonRecursive(data);
+		jsonString += " }";
 
 		return jsonString;
 	}
@@ -209,14 +205,10 @@ public class OpsiDataSerializer {
 	/** Save the search data with the given name. */
 	private void saveData(String name, String description, Map<String, Object> data) {
 		String jsonString;
-		try {
-			jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
-			jsonString += createJsonRecursive(data);
-			jsonString += " }";
-		} catch (IllegalArgumentException e) {
-			Logging.error(this, "Saving failed: " + e.getMessage(), e);
-			return;
-		}
+
+		jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
+		jsonString += createJsonRecursive(data);
+		jsonString += " }";
 
 		Logging.info(this, name + ": " + jsonString);
 		searches.put(name, jsonString);

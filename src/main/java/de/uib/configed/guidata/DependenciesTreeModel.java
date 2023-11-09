@@ -8,7 +8,6 @@ package de.uib.configed.guidata;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +58,9 @@ public class DependenciesTreeModel {
 		// Die Map zur productList
 		productMap = new HashMap<>();
 
-		Iterator<String> productIterator = productList.iterator();
 		int i = 0;
-		while (productIterator.hasNext()) {
-			productMap.put(productIterator.next(), i);
+		for (String productId : productList) {
+			productMap.put(productId, i);
 			i++;
 		}
 

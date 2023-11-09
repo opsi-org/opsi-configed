@@ -506,7 +506,7 @@ public class HostInfo {
 
 		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
 				&& !((String) (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY))).trim().isEmpty()) {
-			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
+			clientSystemUUID = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
@@ -515,7 +515,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.setClientMacAddress(clientSystemUUID);
+			mainFrame.setClientSystemUUID(clientSystemUUID);
 
 			persistenceController.getHostDataService().setSystemUUID(client, clientSystemUUID);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,

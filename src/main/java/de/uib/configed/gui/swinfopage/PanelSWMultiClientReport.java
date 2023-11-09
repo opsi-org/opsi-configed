@@ -256,8 +256,8 @@ public class PanelSWMultiClientReport extends JPanel {
 
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 
-						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(fieldExportDirectory, 40, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
@@ -274,8 +274,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 
-						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
-								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(fieldFilenamePrefix, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Short.MAX_VALUE / 2)

@@ -54,13 +54,12 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private void initGUI() {
 		jButtonKillProcess = new IconButton(Configed.getResourceValue("SSHConnection.buttonKillProcess"),
 				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
-		jButtonKillProcess
-				.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
+		jButtonKillProcess.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT + 3));
 		jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
 		jButtonClear = new IconButton(Configed.getResourceValue("SSHConnection.buttonClear"), "images/user-trash.png",
 				"images/user-trash.png", "images/user-trash.png", true);
-		jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
+		jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT + 3));
 		jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.buttonClear"));
 		jButtonClear.addActionListener(actionEvent -> clear());
 		createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);

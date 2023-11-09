@@ -565,15 +565,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
 		if (elements == null) {
-			throw new RuntimeException(hardware + " not found in localized hardware list");
-		}
-		for (AbstractSelectElement element : elements) {
-			result.groupList.add(createSimpleGroup(element));
-		}
-		result.groupList.getFirst().connectionType.setVisible(false);
+			Logging.warning(this, hardware + " not found in localized hardware list");
+		} else {
+			for (AbstractSelectElement element : elements) {
+				result.groupList.add(createSimpleGroup(element));
+			}
+			result.groupList.getFirst().connectionType.setVisible(false);
 
-		result.groupList.getLast().connectionType.setVisible(false);
-		createComplexBottom(result);
+			result.groupList.getLast().connectionType.setVisible(false);
+			createComplexBottom(result);
+		}
+
 		return result;
 	}
 

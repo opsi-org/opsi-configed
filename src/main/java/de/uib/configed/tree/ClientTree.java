@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -633,16 +632,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				parent = groupNodes.get(parentId);
 			}
 
-			try {
-				parent.add(node);
-				model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
-			} catch (IllegalArgumentException ex) {
-				Logging.error(this, "Cannot add node to parent " + node + ", " + parent + ": " + ex, ex);
-				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("ClientTree.cannot_add_node.text") + " " + node + " in  " + parent
-								+ "(" + ex + ")",
-						Configed.getResourceValue("ClientTree.cannot_add_node.title"), JOptionPane.ERROR_MESSAGE);
-			}
+			parent.add(node);
+			model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
 		}
 	}
 
@@ -1376,14 +1367,5 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public List<String> getSelectedClientsInTable() {
 		return configedMain.getSelectedClientsInTable();
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-		} catch (ClassCastException ex) {
-			Logging.warning(this, "the ugly well known exception " + ex);
-		}
 	}
 }

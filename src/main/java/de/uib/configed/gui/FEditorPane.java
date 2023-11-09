@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -51,7 +52,7 @@ public class FEditorPane extends FGeneralDialog {
 		editPane.setEditable(false);
 		try {
 			editPane.setPage(url);
-		} catch (java.io.IOException ioe) {
+		} catch (IOException ioe) {
 			result = false;
 			editPane.setContentType("text/html");
 			editPane.setText("<html>Could not load " + url + "<br>" + ioe + "</html>");

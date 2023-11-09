@@ -287,12 +287,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
-		try {
-			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		} catch (ClassCastException ex) {
-			Logging.warning(this, "strange nimbus exception, retry creating", ex);
-			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		}
+		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
 		checkmarkSearch.addActionListener(this);
@@ -688,16 +683,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		Pattern pattern = null;
 		if (regex) {
-			try {
-				if (fulltext) {
-					val = ".*" + val + ".*";
-				}
-
-				pattern = Pattern.compile(val);
-			} catch (java.util.regex.PatternSyntaxException ex) {
-				Logging.info(this, "pattern problem " + ex);
-				return -1;
+			if (fulltext) {
+				val = ".*" + val + ".*";
 			}
+
+			pattern = Pattern.compile(val);
 		}
 
 		String[] valParts = val.split(" ");

@@ -479,9 +479,9 @@ public class ConfigDataService {
 			Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
 
 			List<String> missingConfigIds = new ArrayList<>(usedConfigIds);
-			for (Object configId : existingConfigIds) {
-				missingConfigIds.remove(configId);
-			}
+
+			missingConfigIds.removeAll(existingConfigIds);
+
 			Logging.info(this, "setConfig(), missingConfigIds: " + missingConfigIds);
 			List<Map<String, Object>> createItems = new ArrayList<>();
 			for (String missingId : missingConfigIds) {

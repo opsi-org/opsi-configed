@@ -16,6 +16,7 @@ import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.Product;
 import de.uib.configed.dashboard.collector.ProductData;
+import de.uib.utilities.logging.Logging;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.chart.BarChart;
@@ -23,7 +24,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
-@SuppressWarnings("java:S110")
 public class ProductStatusComparison extends StackPane implements DataChangeListener {
 	@FXML
 	private Text productStatusNoDataText;
@@ -39,7 +39,7 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			throw new RuntimeException(ioE);
+			Logging.error(this.getClass(), "Could not load fxmlLoader", ioE);
 		}
 	}
 

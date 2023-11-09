@@ -388,12 +388,8 @@ public class HostDataService {
 			return;
 		}
 
-		List<Map<String, Object>> updates = new ArrayList<>();
-		for (Map<String, Object> hostUpdateValue : hostUpdates.values()) {
-			updates.add(hostUpdateValue);
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { updates.toArray() });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS,
+				new Object[] { hostUpdates.values().toArray() });
 
 		if (exec.doCall(omc)) {
 			hostUpdates.clear();

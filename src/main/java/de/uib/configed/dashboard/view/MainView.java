@@ -171,7 +171,7 @@ public class MainView implements View {
 	@SuppressWarnings("java:S4968")
 	public MainView(JFXPanel fxPanel, ConfigedMain configedMain) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
-				Messages.getResource());
+				Messages.getResourceBundle());
 		fxmlLoader.setController(this);
 		Parent root = fxmlLoader.load();
 

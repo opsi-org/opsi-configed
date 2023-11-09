@@ -10,11 +10,9 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -54,7 +52,6 @@ import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -65,7 +62,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -140,7 +136,7 @@ public class MainFrame extends JFrame
 	private static final int F_WIDTH_RIGHTHANDED = 200;
 
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
@@ -381,18 +377,7 @@ public class MainFrame extends JFrame
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JCheckBox jCheckBoxSorted = new JCheckBox();
-	private JButton jButtonSaveList = new JButton();
-
-	private ButtonGroup buttonGroupRequired = new ButtonGroup();
-	private JRadioButton jRadioRequiredAll = new JRadioButton();
-	private JRadioButton jRadioRequiredOff = new JRadioButton();
-
 	private JTableSelectionPanel panelClientlist;
-
-	private JLabel jLabelHostinfos = new JLabel();
-
-	private JLabel jLabelPath = new JLabel();
 
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
@@ -424,11 +409,11 @@ public class MainFrame extends JFrame
 			.getPersistenceController();
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
-			ClientTree treeClients, boolean multidepot) {
+			ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.multidepot = multidepot;
+		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		panelClientlist = selectionPanel;
 
@@ -510,24 +495,24 @@ public class MainFrame extends JFrame
 
 		String selectedLocale = Messages.getSelectedLocale();
 
-		for (final String localeName : Messages.getLocaleInfo().keySet()) {
+		for (final Entry<String, String> locale : Messages.getLocaleInfo().entrySet()) {
 			ImageIcon localeIcon = null;
-			String imageIconName = Messages.getLocaleInfo().get(localeName);
+			String imageIconName = locale.getValue();
 			if (imageIconName != null && imageIconName.length() > 0) {
 				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
 			}
 
-			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
-			menuItem.setSelected(selectedLocale.equals(localeName));
+			JMenuItem menuItem = new JRadioButtonMenuItem(locale.getKey(), localeIcon);
+			menuItem.setSelected(selectedLocale.equals(locale.getKey()));
 			jMenuFileLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
 
 			menuItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
-				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
-				Messages.setLocale(localeName);
-				Locale.setDefault(new Locale(localeName));
-				JComponent.setDefaultLocale(new Locale(localeName));
+				UserPreferences.set(UserPreferences.LANGUAGE, locale.getKey());
+				Messages.setLocale(locale.getKey());
+				Locale.setDefault(new Locale(locale.getKey()));
+				JComponent.setDefaultLocale(new Locale(locale.getKey()));
 				Configed.restartConfiged();
 			});
 		}
@@ -1968,27 +1953,6 @@ public class MainFrame extends JFrame
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		jCheckBoxSorted.setSelected(true);
-		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
-
-		jButtonSaveList.setText(Configed.getResourceValue("save"));
-
-		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
-
-		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredAll.setAlignmentY(0.0F);
-		jRadioRequiredAll.setText(Configed.getResourceValue("MainFrame.jRadioRequiredAll"));
-		jRadioRequiredOff.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredOff.setSelected(true);
-		jRadioRequiredOff.setText(Configed.getResourceValue("MainFrame.jRadioRequiredOff"));
-		jRadioRequiredOff.setToolTipText("");
-
-		jLabelPath.setText(Configed.getResourceValue("MainFrame.jLabelPath"));
-		jLabelHostinfos.setText(Configed.getResourceValue("MainFrame.jLabel_Hostinfos"));
-
-		buttonGroupRequired.add(jRadioRequiredAll);
-		buttonGroupRequired.add(jRadioRequiredOff);
-
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
 		scrollpaneTreeClients.getViewport().add(treeClients);
@@ -2012,7 +1976,7 @@ public class MainFrame extends JFrame
 		if (multidepot) {
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
 		} else {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT);
 		}
 
 		JPanel panelTreeClientSelection = new JPanel();
@@ -2661,12 +2625,23 @@ public class MainFrame extends JFrame
 	}
 
 	public void activateLoadingPane(String infoText) {
-		glassPane.activate(true);
-		glassPane.setInfoText(infoText);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> {
+				glassPane.activate(true);
+				glassPane.setInfoText(infoText);
+			});
+		} else {
+			glassPane.activate(true);
+			glassPane.setInfoText(infoText);
+		}
 	}
 
 	public void disactivateLoadingPane() {
-		glassPane.activate(false);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> glassPane.activate(false));
+		} else {
+			glassPane.activate(false);
+		}
 	}
 
 	public void activateLoadingCursor() {
@@ -2944,10 +2919,6 @@ public class MainFrame extends JFrame
 	}
 
 	// ----------------------------------------------------------------------------------------
-
-	private void jButtonSaveListActionPerformed(ActionEvent e) {
-		configedMain.checkSaveAll(false);
-	}
 
 	/* WindowListener implementation */
 	@Override
@@ -3519,15 +3490,6 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-		}
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		try {
-			super.paint(g);
-		} catch (ClassCastException ex) {
-			Logging.warning(this, "the ugly well known exception " + ex);
 		}
 	}
 

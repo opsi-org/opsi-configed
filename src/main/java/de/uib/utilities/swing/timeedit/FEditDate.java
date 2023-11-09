@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 
@@ -77,7 +78,7 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 						s1 = s1 + " 00:00:00";
 					}
 
-					newDate = java.sql.Timestamp.valueOf(s1);
+					newDate = Timestamp.valueOf(s1);
 					Logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
 

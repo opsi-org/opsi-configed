@@ -641,12 +641,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			if (fulltext) {
 				val = ".*" + val + ".*";
 			}
-			try {
-				pattern = Pattern.compile(val);
-			} catch (java.util.regex.PatternSyntaxException ex) {
-				Logging.error(this, "pattern problem " + ex);
-				return -1;
-			}
+
+			pattern = Pattern.compile(val);
 		}
 
 		String valLower = val.toLowerCase(Locale.ROOT);
