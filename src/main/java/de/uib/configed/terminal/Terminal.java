@@ -55,6 +55,7 @@ import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 import utils.Utils;
 
 public final class Terminal implements MessagebusListener {
@@ -245,8 +246,16 @@ public final class Terminal implements MessagebusListener {
 			jMenuItemLightTheme.setSelected(true);
 			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
 		});
-		jMenuItemDarkTheme.setSelected(true);
-		jMenuItemLightTheme.setSelected(false);
+
+		if ("Light".equals(UserPreferences.get(UserPreferences.THEME))) {
+			jMenuItemLightTheme.setSelected(true);
+			jMenuItemDarkTheme.setSelected(false);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
+		} else {
+			jMenuItemDarkTheme.setSelected(true);
+			jMenuItemLightTheme.setSelected(false);
+			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
+		}
 
 		JMenu jMenuTheme = new JMenu("Theme");
 		jMenuTheme.add(jMenuItemDarkTheme);
