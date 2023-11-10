@@ -197,6 +197,7 @@ public class MainFrame extends JFrame
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
+	private JMenu jMenuShowColumns = new JMenu();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
@@ -276,6 +277,7 @@ public class MainFrame extends JFrame
 			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
 			popupRemoteControl };
 
+	private JMenu popupShowColumns = new JMenu();
 	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
@@ -857,22 +859,26 @@ public class MainFrame extends JFrame
 
 		// --
 
-		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
-		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
+		jMenuShowColumns.setText(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+
+		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
 		if (ServerFacade.isOpsi43()) {
-			jMenuClients.add(jCheckBoxMenuItemShowSystemUUIDColumn);
+			jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		}
-		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
-		jMenuClients.add(jCheckBoxMenuItemShowSessionInfoColumn);
-		jMenuClients.add(jCheckBoxMenuItemShowInventoryNumberColumn);
-		jMenuClients.add(jCheckBoxMenuItemShowCreatedColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
 
 		if (!ServerFacade.isOpsi43()) {
-			jMenuClients.add(jCheckBoxMenuItemShowUefiBoot);
+			jMenuShowColumns.add(jCheckBoxMenuItemShowUefiBoot);
 		}
 
-		jMenuClients.add(jCheckBoxMenuItemShowInstallByShutdown);
-		jMenuClients.add(jCheckBoxMenuItemShowDepotColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
+
+		jMenuClients.add(jMenuShowColumns);
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
@@ -1569,24 +1575,6 @@ public class MainFrame extends JFrame
 		if (multidepot) {
 			popupClients.add(popupChangeDepot);
 		}
-		popupClients.addSeparator();
-
-		popupClients.add(popupShowWANactiveColumn);
-		popupClients.add(popupShowIPAddressColumn);
-		if (ServerFacade.isOpsi43()) {
-			popupClients.add(popupShowSystemUUIDColumn);
-		}
-		popupClients.add(popupShowHardwareAddressColumn);
-		popupClients.add(popupShowSessionInfoColumn);
-		popupClients.add(popupShowInventoryNumberColumn);
-		popupClients.add(popupShowCreatedColumn);
-
-		if (!ServerFacade.isOpsi43()) {
-			popupClients.add(popupShowUefiBoot);
-		}
-
-		popupClients.add(popupShowInstallByShutdownColumn);
-		popupClients.add(popupShowDepotColumn);
 
 		// ----
 		popupClients.addSeparator();
@@ -1600,6 +1588,29 @@ public class MainFrame extends JFrame
 		popupClients.add(popupCreatePdf);
 
 		exportTable.addMenuItemsTo(popupClients);
+
+		// ----
+		popupClients.addSeparator();
+
+		popupShowColumns.setText(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		popupShowColumns.add(popupShowWANactiveColumn);
+		popupShowColumns.add(popupShowIPAddressColumn);
+		if (ServerFacade.isOpsi43()) {
+			popupShowColumns.add(popupShowSystemUUIDColumn);
+		}
+		popupShowColumns.add(popupShowHardwareAddressColumn);
+		popupShowColumns.add(popupShowSessionInfoColumn);
+		popupShowColumns.add(popupShowInventoryNumberColumn);
+		popupShowColumns.add(popupShowCreatedColumn);
+
+		if (!ServerFacade.isOpsi43()) {
+			popupShowColumns.add(popupShowUefiBoot);
+		}
+
+		popupShowColumns.add(popupShowInstallByShutdownColumn);
+		popupShowColumns.add(popupShowDepotColumn);
+
+		popupClients.add(popupShowColumns);
 	}
 
 	private void applyLoglevel(ActionEvent actionEvent) {
