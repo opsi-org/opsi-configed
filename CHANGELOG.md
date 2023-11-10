@@ -5,6 +5,9 @@
 - Configed was not loading when restricted to productgroups
 - Center License Information frame before showing it
 
+### Changed
+- Update translations in English, German and French
+
 ## [4.3.0.13] - 2023-11-07
 ### Fixed
 - Error message not shown in AbstractErrorListProducer
