@@ -1062,7 +1062,6 @@ public class ConfigedMain implements ListSelectionListener {
 						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 					// Starting JavaFX-Thread by creating a new JFXPanel, but not
 					// using it since it is not needed.
-
 					new JFXPanel();
 
 					Platform.runLater(mainFrame::startLicenceDisplayer);

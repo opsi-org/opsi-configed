@@ -64,7 +64,6 @@ public class LicenseDisplayer {
 	@FXML
 	private ScrollPane scrollPane;
 
-	private String message = "";
 	private OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 	private LicenseDisplayer controller;
 
@@ -77,18 +76,16 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		StringBuilder mess = new StringBuilder();
-		mess.append(showLicenceContractWarnings());
-		mess.append(calculateVariantLicencepools());
-		message = mess.toString();
-		showInfo();
+		StringBuilder message = new StringBuilder();
+		message.append(showLicenceContractWarnings());
+		message.append(calculateVariantLicencepools());
+		Platform.runLater(() -> showInfo(message.toString()));
 	}
 
-	private void showInfo() {
-		final Text msg = new Text(message);
+	private void showInfo(String info) {
 		final ObservableList<Node> list = controller.textflow.getChildren();
 		list.clear();
-		list.add(msg);
+		list.add(new Text(info));
 	}
 
 	public void initAndShowGUI() throws IOException {
@@ -108,9 +105,10 @@ public class LicenseDisplayer {
 		controller = fxmlLoader.getController();
 		loadData();
 
+		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			styleAccordingToSelectedTheme();
-			stage.showAndWait();
+			stage.show();
 		});
 	}
 
