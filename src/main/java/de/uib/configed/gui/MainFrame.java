@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Rectangle;
@@ -1746,7 +1745,6 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 
-		GraphicsEnvironment.getLocalGraphicsEnvironment();
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
 
@@ -1792,13 +1790,11 @@ public class MainFrame extends JFrame
 
 		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
 				unselectedIcon, nullIcon, false);
-		cbWANConfig.setSelected(false);
 		cbWANConfig.setEnabled(true);
 		cbWANConfig.addActionListener(this);
 
 		cbInstallByShutdown = new CheckedLabel(Configed.getResourceValue("NewClientDialog.installByShutdown"),
 				selectedIcon, unselectedIcon, nullIcon, false);
-		cbInstallByShutdown.setSelected(false);
 		cbInstallByShutdown.setEnabled(true);
 		cbInstallByShutdown.addActionListener(this);
 

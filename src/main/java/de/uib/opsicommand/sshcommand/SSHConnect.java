@@ -114,8 +114,7 @@ public class SSHConnect {
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
 		final JOptionPane opPane = new JOptionPane(
-				new Object[] { new JLabel(Configed.getResourceValue("SSHConnection.sudoPassw1")),
-						new JLabel(Configed.getResourceValue("SSHConnection.sudoPassw2")), passwordField },
+				new Object[] { new JLabel(Configed.getResourceValue("SSHConnection.sudoPassw")), passwordField },
 				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
