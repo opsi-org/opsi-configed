@@ -42,9 +42,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	private JPanel uninstallPanel = new JPanel();
 
 	private JLabel jLabelUninstall = new JLabel();
-	private JLabel jLabelProduct = new JLabel();
 	private JLabel jLabelOn = new JLabel();
-	private JLabel jLabelFullCommand = new JLabel();
 	private JLabel jLabelKeepFiles = new JLabel();
 
 	private JComboBox<String> jComboBoxOpsiProducts;
@@ -247,9 +245,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		checkBoxKeepFiles = new JCheckBox();
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
 
-		jLabelProduct.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
-
 		textFieldProduct = new JTextField();
 
 		textFieldProduct.setEditable(false);
@@ -320,13 +315,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		}
 	}
 
-	private void updateCommand() {
-		jLabelFullCommand.setText(commandPMUninstall.getCommand());
-	}
-
 	private void changeKeepFiles() {
 		commandPMUninstall.setKeepFiles(checkBoxKeepFiles.isSelected());
-		updateCommand();
 	}
 
 	private void changeDepot() {
@@ -339,19 +329,15 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
 		}
-
-		updateCommand();
 	}
 
 	private void changeVerbosity() {
 		Logging.info(this, "changeVerbosity , selected " + jComboBoxVerbosity.getSelectedItem());
 		commandPMUninstall.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
-		updateCommand();
 	}
 
 	private void changeProduct(String prod) {
 		commandPMUninstall.setOpsiproduct(prod);
-		updateCommand();
 	}
 
 	/* This method is called when button 1 is pressed */
