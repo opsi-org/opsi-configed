@@ -108,6 +108,7 @@ public class LicenseDisplayer {
 		controller = fxmlLoader.getController();
 		loadData();
 
+		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			styleAccordingToSelectedTheme();
 			stage.showAndWait();

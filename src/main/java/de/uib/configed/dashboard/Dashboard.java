@@ -72,6 +72,7 @@ public class Dashboard {
 			}
 		});
 
+		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			try {
 				initFX(fxPanel);
