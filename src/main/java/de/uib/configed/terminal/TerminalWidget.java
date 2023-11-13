@@ -223,7 +223,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		if (!isFirstConnection() && !isMessageForThisChannel((String) message.get("channel"))) {
+		if (!isFirstConnection() && !isMessageForThisChannel(message)) {
 			return;
 		}
 
@@ -261,9 +261,10 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		}
 	}
 
-	private boolean isMessageForThisChannel(String messageForChannel) {
-		String currentChannel = "session:" + terminalId;
-		return currentChannel.equals(messageForChannel);
+	private boolean isMessageForThisChannel(Map<String, Object> message) {
+		boolean matchesSenderChannel = terminalChannel.equals(message.get("channel"));
+		boolean matchesReturnChannel = terminalChannel.equals(message.get("back_channel"));
+		return matchesSenderChannel || matchesReturnChannel;
 	}
 
 	private boolean isFirstConnection() {
