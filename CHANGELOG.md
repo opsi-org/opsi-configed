@@ -7,6 +7,7 @@
 
 ### Changed
 - Update translations in English, German and French
+- Don't warn from dependency-requirements in opsi 4.3
 
 ## [4.3.0.13] - 2023-11-07
 ### Fixed
