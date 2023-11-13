@@ -29,6 +29,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.WindowConstants;
 
 import com.jediterm.terminal.ui.JediTermWidget;
 
@@ -74,6 +75,7 @@ public final class TerminalFrame {
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setIconImage(Utils.getMainIcon());
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.setJMenuBar(createJMenuBar());
 
 		JPanel allPane = new JPanel();
@@ -104,6 +106,11 @@ public final class TerminalFrame {
 		frame.setVisible(true);
 
 		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				widget.close();
+			}
+
 			@Override
 			public void windowActivated(WindowEvent e) {
 				setDefaultTheme();
