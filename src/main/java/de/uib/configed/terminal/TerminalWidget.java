@@ -204,6 +204,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	public void close() {
 		super.close();
 		messagebus.getWebSocket().unregisterListener(this);
+		terminal.close();
 	}
 
 	@Override
@@ -262,8 +263,17 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	}
 
 	private boolean isMessageForThisChannel(Map<String, Object> message) {
-		boolean matchesSenderChannel = terminalChannel.equals(message.get("channel"));
-		boolean matchesReturnChannel = terminalChannel.equals(message.get("back_channel"));
+		if (terminalChannel == null) {
+			return false;
+		}
+
+		String currentChannel = terminalChannel;
+		if (!terminalChannel.startsWith("session:")) {
+			currentChannel = "session:" + terminalId;
+		}
+
+		boolean matchesSenderChannel = currentChannel.equals(message.get("channel"));
+		boolean matchesReturnChannel = currentChannel.equals(message.get("back_channel"));
 		return matchesSenderChannel || matchesReturnChannel;
 	}
 

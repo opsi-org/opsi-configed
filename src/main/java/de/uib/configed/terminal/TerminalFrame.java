@@ -322,4 +322,8 @@ public final class TerminalFrame {
 			frame.setTitle(sessionChannel);
 		}
 	}
+
+	public void close() {
+		frame.dispose();
+	}
 }
