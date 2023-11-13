@@ -3,6 +3,11 @@
 ## [4.3.x.x] - 2023-xx-xx
 ### Fixed
 - Configed was not loading when restricted to productgroups
+- Center License Information frame before showing it
+
+### Changed
+- Update translations in English, German and French
+- Don't warn from dependency-requirements in opsi 4.3
 
 ## [4.3.0.13] - 2023-11-07
 ### Fixed

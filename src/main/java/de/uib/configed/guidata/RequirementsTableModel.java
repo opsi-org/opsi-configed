@@ -14,10 +14,10 @@ import java.util.TreeSet;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -207,23 +207,25 @@ public class RequirementsTableModel extends AbstractTableModel {
 				((JComponent) cell).setToolTipText("" + value);
 			}
 
-			// warning
-			String cellValue = String.valueOf(value);
-			if ((column == 2 || column == 3)
-					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
-							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"))) {
-				((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
+			// Don't warn in opsi 4.3, since now not only "setup" is allowed for dependencies
+			if (!ServerFacade.isOpsi43()) {
+				if (shouldWarn(column, String.valueOf(value))) {
+					((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
 
-				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
-
-				((JLabel) cell).setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
-
-				return cell;
-			} else {
-				((JLabel) cell).setIcon(null);
+					((JLabel) cell)
+							.setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
+				} else {
+					((JLabel) cell).setIcon(null);
+				}
 			}
 
 			return cell;
+		}
+
+		private static boolean shouldWarn(int column, String cellValue) {
+			return (column == 2 || column == 3)
+					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
+							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"));
 		}
 	}
 }

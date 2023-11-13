@@ -380,8 +380,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			return result;
 		}
 
-		result.negateButton = new IconAsButton("" /* configed.getResourceValue("ClientSelectionDialog.not") */,
-				"images/boolean_not_disabled.png", "images/boolean_not_over.png", "images/boolean_not.png", null);
+		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
+				"images/boolean_not.png", null);
 		result.negateButton.setActivated(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));

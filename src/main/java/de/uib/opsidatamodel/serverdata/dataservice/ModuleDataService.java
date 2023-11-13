@@ -443,10 +443,7 @@ public class ModuleDataService {
 	private void callOpsiLicenceMissingModules(List<String> missingModulesPermissionInfo) {
 		if (!missingModulesPermissionInfo.isEmpty()) {
 			SwingUtilities.invokeLater(() -> {
-				StringBuilder info = new StringBuilder();
-
-				info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
-				info.append(":\n");
+				StringBuilder info = new StringBuilder(":\n");
 				for (String moduleInfo : missingModulesPermissionInfo) {
 					info.append(moduleInfo + "\n");
 				}

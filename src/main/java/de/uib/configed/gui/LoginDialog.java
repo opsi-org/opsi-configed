@@ -161,8 +161,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void initGuiElements() {
-		MessageFormat messageFormatTitle = new MessageFormat(Configed.getResourceValue("DPassword.title"));
-		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
+		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("DPassword.title"));
 
 		setIconImage(Utils.getMainIcon());
 
@@ -326,10 +325,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			Logging.info(this, "connected with persis " + persistenceController);
 			configedMain.setPersistenceController(persistenceController);
 
-			MessageFormat messageFormatMainTitle = new MessageFormat(
-					Configed.getResourceValue("ConfigedMain.appTitle"));
-			configedMain.setAppTitle(messageFormatMainTitle
-					.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
+			configedMain.setAppTitle(
+					"(" + fieldUser.getText() + ") " + fieldHost.getSelectedItem() + " - " + Globals.APPNAME);
+
 			configedMain.loadDataAndGo();
 		} else {
 			// return to Passwordfield
