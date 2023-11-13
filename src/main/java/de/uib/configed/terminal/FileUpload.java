@@ -20,12 +20,14 @@ import de.uib.utilities.logging.Logging;
 public class FileUpload extends DropTarget {
 	private FileUploadQueue queue;
 	private BackgroundFileUploader fileUploader;
-	private Terminal terminal;
+	private TerminalFrame terminal;
+	private TerminalWidget terminalWidget;
 
-	public FileUpload(Terminal terminal) {
+	public FileUpload(TerminalFrame terminal, TerminalWidget terminalWidget) {
 		this.terminal = terminal;
+		this.terminalWidget = terminalWidget;
 		this.queue = new FileUploadQueue();
-		this.fileUploader = new BackgroundFileUploader(terminal, queue);
+		this.fileUploader = new BackgroundFileUploader(terminal, terminalWidget, queue);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -57,7 +59,7 @@ public class FileUpload extends DropTarget {
 		queue.addAll(files);
 
 		if (fileUploader.isDone()) {
-			fileUploader = new BackgroundFileUploader(terminal, queue);
+			fileUploader = new BackgroundFileUploader(terminal, terminalWidget, queue);
 			fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());
 		} else {
 			fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());

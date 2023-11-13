@@ -8,22 +8,15 @@ package de.uib.configed.terminal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
@@ -34,149 +27,52 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
-import org.java_websocket.handshake.ServerHandshake;
-
-import com.jediterm.terminal.RequestOrigin;
-import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
-import de.uib.messagebus.Messagebus;
-import de.uib.messagebus.MessagebusListener;
-import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import utils.Utils;
 
-public final class Terminal implements MessagebusListener {
+public final class TerminalFrame {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	private static final int DEFAULT_TERMINAL_ROWS = 24;
-	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
-	private static final int FONT_SIZE_MIN_LIMIT = 8;
-	private static final int FONT_SIZE_MAX_LIMIT = 62;
-	private static final int FONT_SIZE_SCALING_FACTOR = 2;
 	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
 
-	private JediTermWidget widget;
+	private TerminalWidget widget;
 	private JFrame frame;
 	private JProgressBar fileUploadProgressBar;
 	private JLabel uploadedFilesLabel;
 	private JLabel fileNameLabel;
 	private JPanel southPanel;
-	private JScrollBar scrollBar;
 	private JMenuItem jMenuItemDarkTheme;
 	private JMenuItem jMenuItemLightTheme;
 
-	private Messagebus messagebus;
-	private String terminalChannel;
-	private String terminalId;
-	private String sessionChannel;
-
-	private CountDownLatch locker;
-
 	private TerminalSettingsProvider settingsProvider;
 
-	private WebSocketInputStream webSocketInputStream;
-
-	private boolean ignoreKeyEvent;
-
-	public void setMessagebus(Messagebus messagebus) {
-		this.messagebus = messagebus;
-	}
-
-	public Messagebus getMessagebus() {
-		return messagebus;
-	}
-
-	public void setTerminalChannel(String value) {
-		this.terminalChannel = value;
-	}
-
-	public String getTerminalChannel() {
-		return terminalChannel;
-	}
-
-	public void setTerminalId(String value) {
-		this.terminalId = value;
-	}
-
-	public String getTerminalId() {
-		return terminalId;
-	}
-
-	public int getColumnCount() {
-		return widget.getTerminalPanel().getTerminalSizeFromComponent().getColumns();
-	}
-
-	public int getRowCount() {
-		return widget.getTerminalPanel().getTerminalSizeFromComponent().getRows();
-	}
-
-	public boolean ignoreKeyEvent() {
-		return ignoreKeyEvent;
-	}
-
-	public void lock() {
-		try {
-			locker = new CountDownLatch(1);
-			if (locker.await(DEFAULT_TIME_TO_BLOCK_IN_MS, TimeUnit.MILLISECONDS)) {
-				Logging.info(this, "thread was unblocked");
-			} else {
-				Logging.info(this, "time ellapsed");
-			}
-		} catch (InterruptedException ie) {
-			Logging.warning(this, "thread was interrupted");
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	public void unlock() {
-		locker.countDown();
+	public TerminalWidget getTerminalWidget() {
+		return widget;
 	}
 
 	private JediTermWidget createTerminalWidget() {
 		if (settingsProvider == null) {
 			settingsProvider = new TerminalSettingsProvider();
 		}
-
-		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
-		widget.setDropTarget(new FileUpload(this));
-
-		scrollBar = new JScrollBar();
-		widget.getTerminalPanel().init(scrollBar);
-
-		widget.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-					setFontSize((int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR);
-					ignoreKeyEvent = true;
-				} else if (e.getKeyCode() == KeyEvent.VK_MINUS
-						&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-					setFontSize((int) settingsProvider.getTerminalFontSize() - FONT_SIZE_SCALING_FACTOR);
-					ignoreKeyEvent = true;
-				} else {
-					ignoreKeyEvent = false;
-				}
-			}
-		});
+		widget = new TerminalWidget(this, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
+		widget.init();
 
 		return widget;
 	}
 
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
-		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.setIconImage(Utils.getMainIcon());
 		frame.setJMenuBar(createJMenuBar());
 
@@ -209,11 +105,6 @@ public final class Terminal implements MessagebusListener {
 
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e) {
-				close();
-			}
-
-			@Override
 			public void windowActivated(WindowEvent e) {
 				setDefaultTheme();
 			}
@@ -231,9 +122,9 @@ public final class Terminal implements MessagebusListener {
 		JMenuItem jMenuItemNewWindow = new JMenuItem(
 				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
 		jMenuItemNewWindow.addActionListener((ActionEvent e) -> {
-			Terminal terminal = new Terminal();
+			TerminalFrame terminal = new TerminalFrame();
 			terminal.display();
-			messagebus.connectTerminal(terminal);
+			widget.getMessagebus().connectTerminal(terminal);
 		});
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
@@ -291,20 +182,20 @@ public final class Terminal implements MessagebusListener {
 		sessionsDialog.setVisible(true);
 
 		if (sessionsDialog.getResult() == 2) {
-			changeSession(sessionsDialog.getSelectedValue());
+			widget.changeSession(sessionsDialog.getSelectedValue());
 		}
 	}
 
 	private JMenu createViewMenu() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> setFontSize(
-				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> widget.setFontSize(
+				(int) settingsProvider.getTerminalFontSize() + TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR));
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> setFontSize(
-				(int) settingsProvider.getTerminalFontSize() + FONT_SIZE_SCALING_FACTOR));
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> widget.setFontSize(
+				(int) settingsProvider.getTerminalFontSize() + TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR));
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -338,61 +229,6 @@ public final class Terminal implements MessagebusListener {
 		if (widget != null) {
 			widget.repaint();
 		}
-	}
-
-	private void setFontSize(int fontSize) {
-		if (((int) settingsProvider.getTerminalFontSize() == FONT_SIZE_MIN_LIMIT && fontSize <= FONT_SIZE_MIN_LIMIT)
-				|| ((int) settingsProvider.getTerminalFontSize() == FONT_SIZE_MAX_LIMIT
-						&& fontSize >= FONT_SIZE_MAX_LIMIT)) {
-			return;
-		}
-
-		TerminalSettingsProvider.setTerminalFontSize(fontSize);
-		resizeTerminal();
-	}
-
-	private void resizeTerminal() {
-		if (wasTerminalScreenCleared()) {
-			resetCursorAfterClearingTerminalScreen();
-		}
-		widget.getTerminal().resize(widget.getTerminalPanel().getTerminalSizeFromComponent(), RequestOrigin.User);
-		widget.getTypeAheadManager().onResize();
-		widget.getTerminalPanel().init(scrollBar);
-	}
-
-	private boolean wasTerminalScreenCleared() {
-		return widget.getTerminal().getCursorY() < 1 || widget.getTerminal().getCursorX() < 1;
-	}
-
-	private void resetCursorAfterClearingTerminalScreen() {
-		int additionalSpaces = 2;
-		widget.getTerminal().cursorPosition(
-				widget.getTerminalTextBuffer().getScreenLines().trim().length() + additionalSpaces,
-				widget.getTerminalTextBuffer().getScreenLines().trim().split("\n").length);
-	}
-
-	@SuppressWarnings({ "deprecation", "java:S1874" })
-	private void changeSession(String session) {
-		if (!widget.isSessionRunning()) {
-			return;
-		}
-
-		terminalId = null;
-		terminalChannel = null;
-		widget.stop();
-		widget.getTerminal().reset(true);
-		this.sessionChannel = produceSessionChannel(session);
-		messagebus.connectTerminal(this, sessionChannel);
-		widget.getTerminal().setCursorVisible(true);
-	}
-
-	private static String produceSessionChannel(String session) {
-		if ("Configserver".equals(session)) {
-			return CONFIG_SERVER_SESSION_CHANNEL;
-		}
-		List<String> depotNames = PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-				.getDepotNamesList();
-		return depotNames.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 
 	private JPanel createSouthPanel() {
@@ -476,80 +312,14 @@ public final class Terminal implements MessagebusListener {
 		widget.requestFocus();
 	}
 
-	private void close() {
-		messagebus.getWebSocket().unregisterListener(this);
-		SwingUtilities.invokeLater(() -> {
-			widget.close();
-			frame.dispose();
-			frame = null;
-		});
-	}
-
-	public void connectWebSocketTty() {
-		TtyConnector connector = new WebSocketTtyConnector(this, new WebSocketOutputStream(messagebus.getWebSocket()),
-				webSocketInputStream);
-		widget.setTtyConnector(connector);
-		widget.start();
-	}
-
-	@Override
-	public void onOpen(ServerHandshake handshakeData) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onClose(int code, String reason, boolean remote) {
-		close();
-	}
-
-	@Override
-	public void onError(Exception ex) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onMessageReceived(Map<String, Object> message) {
-		if (terminalId != null && !String.format("session:%s", terminalId).equals(message.get("channel"))) {
-			return;
-		}
-
-		Logging.trace(this, "Messagebus message received: " + message.toString());
-		String type = (String) message.get("type");
-		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
-			webSocketInputStream = new WebSocketInputStream();
-			setTerminalId((String) message.get("terminal_id"));
-			setTerminalChannel((String) message.get("back_channel"));
-			if (frame != null) {
-				sessionChannel = sessionChannel == null || CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
-						? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-								.getConfigServer()
-						: sessionChannel;
-				frame.setTitle(sessionChannel);
-			}
-			unlock();
-		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
-			close();
-		} else if (WebSocketEvent.TERMINAL_DATA_READ.toString().equals(type)) {
-			try {
-				if (webSocketInputStream != null) {
-					webSocketInputStream.write((byte[]) message.get("data"));
-				}
-			} catch (IOException e) {
-				Logging.error("failed to write message: ", e);
-			}
-		} else if (WebSocketEvent.FILE_UPLOAD_RESULT.toString().equals(type)) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
-			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
-			data.put("channel", terminalChannel);
-			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
-			data.put("terminal_id", terminalId);
-			data.put("data", ((String) message.get("path")).getBytes(StandardCharsets.UTF_8));
-			messagebus.sendMessage(data);
-		} else {
-			// Other events are handled by other listeners.
+	public void changeTitle() {
+		if (frame != null) {
+			String sessionChannel = widget.getSessionChannel() == null
+					|| CONFIG_SERVER_SESSION_CHANNEL.equals(widget.getSessionChannel())
+							? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+									.getConfigServer()
+							: widget.getSessionChannel();
+			frame.setTitle(sessionChannel);
 		}
 	}
 }

@@ -28,10 +28,11 @@ import de.uib.utilities.logging.Logging;
 public class WebSocketTtyConnector implements TtyConnector {
 	private BufferedReader reader;
 	private BufferedOutputStream writer;
-	private Terminal terminal;
+	private TerminalWidget terminalWidget;
 
-	public WebSocketTtyConnector(Terminal terminal, OutputStream outputStream, WebSocketInputStream inputStream) {
-		this.terminal = terminal;
+	public WebSocketTtyConnector(TerminalWidget terminalWidget, OutputStream outputStream,
+			WebSocketInputStream inputStream) {
+		this.terminalWidget = terminalWidget;
 		this.writer = new BufferedOutputStream(outputStream);
 		this.reader = new BufferedReader(new InputStreamReader(inputStream.getReader(), StandardCharsets.UTF_8));
 	}
@@ -63,10 +64,10 @@ public class WebSocketTtyConnector implements TtyConnector {
 		data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
 		data.put("sender", "@");
-		data.put("channel", terminal.getTerminalChannel());
+		data.put("channel", terminalWidget.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("terminal_id", terminal.getTerminalId());
+		data.put("terminal_id", terminalWidget.getTerminalId());
 		data.put("rows", termSize.getRows());
 		data.put("cols", termSize.getColumns());
 
@@ -87,7 +88,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public void write(byte[] bytes) {
-		if (terminal.ignoreKeyEvent()) {
+		if (terminalWidget.ignoreKeyEvent()) {
 			return;
 		}
 
@@ -95,10 +96,10 @@ public class WebSocketTtyConnector implements TtyConnector {
 		data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 		data.put("id", UUID.randomUUID().toString());
 		data.put("sender", "@");
-		data.put("channel", terminal.getTerminalChannel());
+		data.put("channel", terminalWidget.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("terminal_id", terminal.getTerminalId());
+		data.put("terminal_id", terminalWidget.getTerminalId());
 		data.put("data", bytes);
 
 		try {

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -191,18 +191,18 @@ public class Messagebus implements MessagebusListener {
 		sendMessage(message);
 	}
 
-	public void connectTerminal(Terminal terminal) {
+	public void connectTerminal(TerminalFrame terminal) {
 		connectTerminal(terminal, null);
 	}
 
-	public void connectTerminal(Terminal terminal, String channel) {
+	public void connectTerminal(TerminalFrame terminal, String channel) {
 		String terminalId = UUID.randomUUID().toString();
 
 		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
-		terminal.setMessagebus(this);
-		if (!messagebusWebSocket.isListenerRegistered(terminal)) {
-			messagebusWebSocket.registerListener(terminal);
+		terminal.getTerminalWidget().setMessagebus(this);
+		if (!messagebusWebSocket.isListenerRegistered(terminal.getTerminalWidget())) {
+			messagebusWebSocket.registerListener(terminal.getTerminalWidget());
 		}
 
 		Map<String, Object> message = new HashMap<>();
@@ -214,14 +214,14 @@ public class Messagebus implements MessagebusListener {
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("terminal_id", terminalId);
-		message.put("cols", terminal.getColumnCount());
-		message.put("rows", terminal.getRowCount());
+		message.put("cols", terminal.getTerminalWidget().getColumnCount());
+		message.put("rows", terminal.getTerminalWidget().getRowCount());
 
 		Logging.debug(this, "Sending terminal open request: " + message.toString());
 		sendMessage(message);
 
-		terminal.lock();
-		terminal.connectWebSocketTty();
+		terminal.getTerminalWidget().lock();
+		terminal.getTerminalWidget().connectWebSocketTty();
 	}
 
 	public void send(ByteBuffer message) {

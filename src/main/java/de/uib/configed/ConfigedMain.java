@@ -93,7 +93,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
-import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.type.DateExtendedByVars;
@@ -724,7 +724,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		updateConnectionStatusInTable(clientId);
 	}
 
-	public void connectTerminal(Terminal terminal) {
+	public void connectTerminal(TerminalFrame terminal) {
 		messagebus.connectTerminal(terminal);
 	}
 
