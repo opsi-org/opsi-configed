@@ -2646,6 +2646,10 @@ public class ConfigedMain implements ListSelectionListener {
 			initialTreeActivation();
 		}
 
+		if (selectionPanel != null) {
+			selectionPanel.clearSelection();
+		}
+
 		setViewIndex(getViewIndex());
 		if (mainFrame != null) {
 			mainFrame.disactivateLoadingCursor();
