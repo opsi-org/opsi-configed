@@ -136,6 +136,7 @@ public class UserRolesConfigDataService {
 	}
 
 	public final void checkConfigurationPD() {
+		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 		moduleDataService.retrieveOpsiModules();
 		Logging.info(this,
 				"checkConfiguration, modules " + cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class));
