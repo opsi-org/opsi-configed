@@ -56,7 +56,7 @@ public class HardwareDataService {
 
 	private static final String HOST_ID = "HOST.hostId";
 	private static final String HOST_DESCRIPTION = "HOST.description";
-	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAddress";
+	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAdress";
 
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
