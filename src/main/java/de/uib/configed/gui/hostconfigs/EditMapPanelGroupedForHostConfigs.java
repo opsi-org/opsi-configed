@@ -350,8 +350,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		JTable jTable = new JTable(tableModel);
 		List<String> values;
 
-		tableModel.addColumn(Configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
-		tableModel.addColumn(Configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));
+		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderName"));
+		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue"));
 
 		List<String> keys = mapTableModel.getKeys();
 		Logging.info(this, "createJTableForPDF keys " + keys);

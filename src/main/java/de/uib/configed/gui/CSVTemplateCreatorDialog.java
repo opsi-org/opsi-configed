@@ -59,7 +59,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.csvTemplateLabel"), false,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 2,
 				1000, 420, true);
 

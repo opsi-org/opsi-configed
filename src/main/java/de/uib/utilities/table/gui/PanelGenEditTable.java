@@ -631,7 +631,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void addPopupItemReload() {
-		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.reload"),
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"),
 				Utils.createImageIcon("images/reload16.png", ""));
 
 		// does not work

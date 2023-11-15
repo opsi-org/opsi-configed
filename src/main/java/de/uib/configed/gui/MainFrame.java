@@ -1260,7 +1260,7 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 	// icon pane
 	private void setupIcons1() {
-		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReload"), "images/reload.gif",
+		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.jMenuFileReload"), "images/reload.gif",
 				"images/reload_over.gif", " ");
 		iconButtonReload.setFocusable(false);
 
@@ -2051,7 +2051,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
 		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
+		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jButtonWorkOnGroups.setFocusable(false);
 
 		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());

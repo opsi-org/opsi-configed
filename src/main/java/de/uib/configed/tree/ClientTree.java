@@ -772,7 +772,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
 		fEdit.setRecord(groupData, labels, null, editable, null);
-		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode.title") + " (" + Globals.APPNAME + ")");
+		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode") + " (" + Globals.APPNAME + ")");
 		fEdit.init();
 		fEdit.setSize(450, 250);
 		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());

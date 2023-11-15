@@ -4253,7 +4253,7 @@ public class ConfigedMain implements ListSelectionListener {
 		};
 
 		fEdit.init();
-		fEdit.setTitle(Configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
+		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID") + " (" + Globals.APPNAME + ")");
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
 		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fEdit.setSingleLine(true);

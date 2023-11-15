@@ -161,8 +161,8 @@ public class FGroupActions extends SecondaryFrame {
 
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		IconButton buttonReload = new IconButton(Configed.getResourceValue("FGroupAction.buttonReload"),
-				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
+		IconButton buttonReload = new IconButton(Configed.getResourceValue("reloadData"), "images/reload16.png",
+				"images/reload16_over.png", "images/reload16_disabled.png", true);
 
 		buttonReload.addActionListener(actionEvent -> reload());
 
