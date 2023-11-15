@@ -20,8 +20,9 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
+import utils.PopupMouseListener;
 
-public class TreePopupMouseListener extends utils.PopupMouseListener {
+public class TreePopupMouseListener extends PopupMouseListener {
 	private ClientTree tree;
 
 	private TreePath mousePath;

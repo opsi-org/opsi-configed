@@ -498,7 +498,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		return table.getRowSorter().getSortKeys();
 	}
 
-	public void setSortKeys(List<? extends RowSorter.SortKey> orderingKeys) {
+	public void setSortKeys(List<? extends SortKey> orderingKeys) {
 		table.getRowSorter().setSortKeys(orderingKeys);
 	}
 

@@ -27,11 +27,12 @@ import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
+import org.jdesktop.swingx.event.DateSelectionListener;
 
 import de.uib.utilities.logging.Logging;
 import utils.PopupMouseListener;
 
-public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
+public class DateTimeEditor extends JPanel implements DateSelectionListener {
 	private static final int BUTTON_H = 25;
 	private static final int BUTTON_W = 30;
 

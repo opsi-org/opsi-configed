@@ -49,7 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -2091,7 +2091,7 @@ public class ConfigedMain implements ListSelectionListener {
 			valuesToSelect = new ArrayList<>(selectValues);
 		}
 
-		List<? extends RowSorter.SortKey> saveSortKeys = selectionPanel.getSortKeys();
+		List<? extends SortKey> saveSortKeys = selectionPanel.getSortKeys();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected "
 				+ selectionPanel.getSelectedValues().size());
@@ -2804,8 +2804,8 @@ public class ConfigedMain implements ListSelectionListener {
 		persistenceController.getProductDataService().retrieveProductPropertiesPD(selectionPanel.getSelectedValues());
 
 		Set<String> oldProductSelection = mainFrame.getPanelLocalbootProductSettings().getSelectedIDs();
-		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame
-				.getPanelLocalbootProductSettings().getSortKeys();
+		List<? extends SortKey> currentSortKeysLocalbootProducts = mainFrame.getPanelLocalbootProductSettings()
+				.getSortKeys();
 
 		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
 
@@ -2873,7 +2873,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.debug(this, "setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
 				+ endmillis + " diff " + (endmillis - startmillis));
 
-		List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.getPanelNetbootProductSettings()
+		List<? extends SortKey> currentSortKeysNetbootProducts = mainFrame.getPanelNetbootProductSettings()
 				.getSortKeys();
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();

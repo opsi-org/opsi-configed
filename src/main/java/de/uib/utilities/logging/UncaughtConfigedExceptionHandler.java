@@ -6,7 +6,9 @@
 
 package de.uib.utilities.logging;
 
-public class UncaughtConfigedExceptionHandler implements Thread.UncaughtExceptionHandler {
+import java.lang.Thread.UncaughtExceptionHandler;
+
+public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandler {
 	private static String lastException = "";
 
 	@Override

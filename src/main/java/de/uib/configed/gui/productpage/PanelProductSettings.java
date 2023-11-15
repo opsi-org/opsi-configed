@@ -38,7 +38,6 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -620,13 +619,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 	}
 
-	private String infoSortKeys(List<? extends RowSorter.SortKey> sortKeys) {
+	private String infoSortKeys(List<? extends SortKey> sortKeys) {
 		if (sortKeys == null) {
 			return "null";
 		}
 
 		StringBuilder result = new StringBuilder("[");
-		for (RowSorter.SortKey key : sortKeys) {
+		for (SortKey key : sortKeys) {
 			result.append(key.getColumn() + ".." + key);
 		}
 		result.append("]");
