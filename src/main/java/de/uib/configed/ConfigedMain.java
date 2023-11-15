@@ -2655,6 +2655,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			initialTreeActivation();
 		}
 
+		if (selectionPanel != null) {
+			selectionPanel.clearSelection();
+		}
+
 		setViewIndex(getViewIndex());
 		if (mainFrame != null) {
 			mainFrame.disactivateLoadingCursor();

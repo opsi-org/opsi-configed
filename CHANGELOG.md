@@ -1,9 +1,11 @@
 # Changelog
 
-## [4.3.x.x] - 2023-xx-xx
+## [4.3.1.0] - 2023-11-14
 ### Fixed
 - Configed was not loading when restricted to productgroups
 - Center License Information frame before showing it
+- Fix typo for hardware address in host column names
+- Clear client selection on depot change (old selection was kept)
 
 ### Changed
 - Update translations in English, German and French

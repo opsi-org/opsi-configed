@@ -51,7 +51,6 @@ public final class PersistenceControllerFactory {
 			Utils.setMultiFactorAuthenticationEnabled(
 					persistenceController.getUserDataService().usesMultiFactorAuthentication());
 
-			persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 			if (!Utils.isCertificateVerificationDisabled()) {
 				CertificateManager.updateCertificate();
