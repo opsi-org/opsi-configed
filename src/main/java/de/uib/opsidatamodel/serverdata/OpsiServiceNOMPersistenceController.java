@@ -441,7 +441,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private static void init() {
 		propertyClassesServer = new TreeMap<>();
-		propertyClassesServer.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		propertyClassesServer.put("", "HostConfigNodeRenderer.mainNode");
 		propertyClassesServer.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		propertyClassesServer.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
 		propertyClassesServer.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
@@ -461,7 +461,7 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put(KEY_USER_ROLE_ROOT, "EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip");
 
 		propertyClassesClient = new TreeMap<>();
-		propertyClassesClient.put("", "HostConfigNodeRenderer.mainNode.Tooltip");
+		propertyClassesClient.put("", "HostConfigNodeRenderer.mainNode");
 		propertyClassesClient.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		propertyClassesClient.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
 		propertyClassesClient.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");

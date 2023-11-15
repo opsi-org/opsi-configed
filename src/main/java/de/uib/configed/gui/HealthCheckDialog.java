@@ -69,7 +69,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private Map<String, Map<String, Object>> healthData;
 
 	public HealthCheckDialog() {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), false,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 500, true);
 	}
 
