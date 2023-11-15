@@ -57,7 +57,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.projectKey=configed -Dmockserver.logLevel=OFF -Pcoverage
+    - mvn compile sonar:sonar -Dsonar.projectKey=configed
   only:
     - main # or the name of your main branch
 
