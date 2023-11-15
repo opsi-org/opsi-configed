@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +25,11 @@ import de.uib.utilities.table.gui.TablesearchPane;
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TablesearchPane searchPane;
-	private Window masterWindow;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
 		this.owner = owner;
-		this.masterWindow = owner;
-		masterWindow.setVisible(true);
 	}
 
 	@Override
@@ -139,7 +135,6 @@ public class FSelectionList extends FGeneralDialog {
 	public void doAction1() {
 		Logging.debug(this, "doAction1");
 		result = 1;
-		masterWindow.setVisible(true);
 		leave();
 	}
 
@@ -147,7 +142,6 @@ public class FSelectionList extends FGeneralDialog {
 	public void doAction2() {
 		Logging.debug(this, "doAction2");
 		result = 2;
-		masterWindow.setVisible(true);
 		leave();
 	}
 
