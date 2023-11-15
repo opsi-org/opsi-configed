@@ -27,6 +27,7 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
+	private static List<LocaleRepresentation> existingLocales;
 	private static List<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
@@ -129,6 +130,14 @@ public final class Messages {
 		messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 	}
 
+	public static List<String> getLocaleNames() {
+		if (existingLocalesNames == null) {
+			getLocaleRepresentations();
+		}
+
+		return existingLocalesNames;
+	}
+
 	public static Map<String, String> getLocaleInfo() {
 		if (localeInfo == null) {
 			getLocaleRepresentations();
@@ -155,7 +164,10 @@ public final class Messages {
 		}
 	}
 
-	private static void getLocaleRepresentations() {
+	private static List<LocaleRepresentation> getLocaleRepresentations() {
+		if (existingLocales != null) {
+			return existingLocales;
+		}
 
 		List<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
@@ -184,6 +196,7 @@ public final class Messages {
 		existingLocalesNames = new ArrayList<>(names);
 		Logging.debug("Messages, existing locales " + existingLocales);
 		Logging.debug("Messages, localeInfo  " + localeInfo);
+		return existingLocales;
 	}
 
 	public static ResourceBundle getResourceBundle() {
