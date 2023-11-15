@@ -27,7 +27,6 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
-	private static List<LocaleRepresentation> existingLocales;
 	private static List<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
@@ -165,10 +164,6 @@ public final class Messages {
 	}
 
 	private static List<LocaleRepresentation> getLocaleRepresentations() {
-		if (existingLocales != null) {
-			return existingLocales;
-		}
-
 		List<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
 
