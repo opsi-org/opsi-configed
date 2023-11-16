@@ -140,6 +140,8 @@ public class MainFrame extends JFrame
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENCES = "free licences for client";
 
+	private static JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
+
 	private String oldNotes;
 
 	private Map<String, Map<String, String>> changedClientInfos;
@@ -230,18 +232,11 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuFrameTerminal = new JMenuItem();
 
 	private JMenu jMenuHelp = new JMenu();
-	private JMenuItem jMenuHelpSupport = new JMenuItem();
-	private JMenuItem jMenuHelpDoc = new JMenuItem();
-	private JMenuItem jMenuHelpForum = new JMenuItem();
 	private JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
 	private JMenuItem jMenuHelpAbout = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
-	private JMenu jMenuHelpLoglevel = new JMenu();
-	private JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
 	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
-
-	private JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
 	private JPopupMenu popupClients = new JPopupMenu();
 
@@ -1175,20 +1170,24 @@ public class MainFrame extends JFrame
 		jMenuFrames.add(jMenuFrameShowDialogs);
 	}
 
-	private void setupMenuHelp() {
-		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
-
-		jMenuHelpDoc.setText(Configed.getResourceValue("MainFrame.jMenuDoc"));
+	public static void addHelpLinks(JMenu jMenuHelp) {
+		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 		jMenuHelp.add(jMenuHelpDoc);
 
-		jMenuHelpForum.setText(Configed.getResourceValue("MainFrame.jMenuForum"));
+		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
-		jMenuHelpSupport.setText(Configed.getResourceValue("MainFrame.jMenuSupport"));
+		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
+	}
+
+	private void setupMenuHelp() {
+		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
+
+		addHelpLinks(jMenuHelp);
 
 		jMenuHelp.addSeparator();
 
@@ -1210,25 +1209,7 @@ public class MainFrame extends JFrame
 			jMenuHelp.add(jMenuHelpInternalConfiguration);
 		}
 
-		jMenuHelpLoglevel.setText(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
-
-		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
-			rbLoglevelItems[i] = new JRadioButtonMenuItem(
-					"[" + i + "] " + Logging.levelText(i).toLowerCase(Locale.ROOT));
-
-			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == Logging.getLogLevelConsole()) {
-				rbLoglevelItems[i].setSelected(true);
-			}
-
-			rbLoglevelItems[i].addActionListener(this::applyLoglevel);
-		}
-		jMenuHelp.add(jMenuHelpLoglevel);
-
-		jMenuHelpLogfileLocation.setText(Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
-		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
-
-		jMenuHelp.add(jMenuHelpLogfileLocation);
+		addLogfileMenus(jMenuHelp, this);
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
@@ -1243,6 +1224,30 @@ public class MainFrame extends JFrame
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpAbout);
+	}
+
+	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
+		JMenu jMenuHelpLoglevel = new JMenu(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
+
+		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
+			rbLoglevelItems[i] = new JRadioButtonMenuItem(
+					"[" + i + "] " + Logging.levelText(i).toLowerCase(Locale.ROOT));
+
+			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
+			if (i == Logging.getLogLevelConsole()) {
+				rbLoglevelItems[i].setSelected(true);
+			}
+
+			rbLoglevelItems[i].addActionListener(MainFrame::applyLoglevel);
+		}
+
+		jMenuHelp.add(jMenuHelpLoglevel);
+
+		JMenuItem jMenuHelpLogfileLocation = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
+		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction(centerFrame));
+
+		jMenuHelp.add(jMenuHelpLogfileLocation);
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -1600,7 +1605,7 @@ public class MainFrame extends JFrame
 		popupClients.add(popupShowColumns);
 	}
 
-	private void applyLoglevel(ActionEvent actionEvent) {
+	private static void applyLoglevel(ActionEvent actionEvent) {
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
 			if (actionEvent.getSource() == rbLoglevelItems[i]) {
 				rbLoglevelItems[i].setSelected(true);
@@ -2799,8 +2804,8 @@ public class MainFrame extends JFrame
 		backendInfoDialog.setVisible(true);
 	}
 
-	private void showLogfileLocationAction() {
-		FTextArea info = new FTextArea(this, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
+	private static void showLogfileLocationAction(JFrame centerFrame) {
+		FTextArea info = new FTextArea(centerFrame, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },

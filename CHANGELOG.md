@@ -1,5 +1,10 @@
 # Changelog
 
+## [x.x.x.x] - xxxx-xx-xx
+### Changed
+- Add Logviewer options to menubar in opsi-logviewer
+
+
 ## [4.3.1.0] - 2023-11-14
 ### Fixed
 - Configed was not loading when restricted to productgroups

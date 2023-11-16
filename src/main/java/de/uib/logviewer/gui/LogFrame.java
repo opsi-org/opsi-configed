@@ -142,22 +142,18 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private JMenu setupMenuHelp() {
-		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
-
-		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
-
-		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener((ActionEvent e) -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
-
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
 		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
-		jMenuHelp.add(jMenuHelpDoc);
-		jMenuHelp.add(jMenuHelpForum);
-		jMenuHelp.add(jMenuHelpSupport);
+		MainFrame.addHelpLinks(jMenuHelp);
+
+		jMenuHelp.addSeparator();
+
+		MainFrame.addLogfileMenus(jMenuHelp, this);
+
+		jMenuHelp.addSeparator();
+
 		jMenuHelp.add(jMenuHelpAbout);
 		return jMenuHelp;
 	}
