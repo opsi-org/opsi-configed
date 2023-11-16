@@ -490,32 +490,9 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFileLanguage = Messages.createJMenuLanguages(() -> {
-			configedMain.closeInstance(true);
-			Configed.restartConfiged();
-		});
+		jMenuFileLanguage = Messages.createJMenuLanguages(this::restartConfiged);
 
-		jMenuTheme.setText("Theme");
-		ButtonGroup groupThemes = new ButtonGroup();
-		String selectedTheme = Messages.getSelectedTheme();
-		Logging.debug(this, "selectedLocale " + selectedTheme);
-
-		for (final String themeName : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
-			Logging.debug(this, "selectedTheme " + themeName);
-			themeItem.setSelected(selectedTheme.equals(themeName));
-			jMenuTheme.add(themeItem);
-			groupThemes.add(themeItem);
-
-			themeItem.addActionListener((ActionEvent e) -> {
-				configedMain.closeInstance(true);
-				UserPreferences.set(UserPreferences.THEME, themeName);
-				Messages.setTheme(themeName);
-				Main.setOpsiLaf();
-
-				Configed.restartConfiged();
-			});
-		}
+		jMenuTheme = createJMenuTheme(this::restartConfiged);
 
 		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
@@ -528,8 +505,32 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileExit);
 	}
 
+	public static JMenu createJMenuTheme(Runnable runnable) {
+		JMenu jMenuTheme = new JMenu("Theme");
+		ButtonGroup groupThemes = new ButtonGroup();
+		String selectedTheme = Messages.getSelectedTheme();
+		Logging.debug("selectedLocale " + selectedTheme);
+
+		for (final String themeName : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
+			Logging.debug("selectedTheme " + themeName);
+			themeItem.setSelected(selectedTheme.equals(themeName));
+			jMenuTheme.add(themeItem);
+			groupThemes.add(themeItem);
+
+			themeItem.addActionListener((ActionEvent e) -> {
+				UserPreferences.set(UserPreferences.THEME, themeName);
+				Messages.setTheme(themeName);
+				Main.setOpsiLaf();
+
+				runnable.run();
+			});
+		}
+
+		return jMenuTheme;
+	}
+
 	private void logout() {
-		configedMain.closeInstance(true);
 		ConfigedMain.setHost(null);
 		ConfigedMain.setUser(null);
 		ConfigedMain.setPassword(null);
@@ -537,7 +538,17 @@ public class MainFrame extends JFrame
 		SSHCommandFactory.destroyInstance();
 		Terminal.destroyInstance();
 		Configed.getSavedStates().removeAll();
-		Configed.restartConfiged();
+		restartConfiged();
+	}
+
+	private void restartConfiged() {
+		configedMain.closeInstance(true);
+		new Thread() {
+			@Override
+			public void run() {
+				Configed.startConfiged();
+			}
+		}.start();
 	}
 
 	private void initMenuData() {

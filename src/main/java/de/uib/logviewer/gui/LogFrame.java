@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -35,17 +34,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
 import utils.ExtractorUtil;
 import utils.Utils;
 
@@ -110,34 +108,10 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
-		jMenuFile.add(createJMenuTheme());
-		jMenuFile.add(Messages.createJMenuLanguages(() -> restartLogFrame()));
+		jMenuFile.add(MainFrame.createJMenuTheme(this::restartLogFrame));
+		jMenuFile.add(Messages.createJMenuLanguages(this::restartLogFrame));
 		jMenuFile.add(jMenuFileExit);
 		return jMenuFile;
-	}
-
-	private JMenu createJMenuTheme() {
-		JMenu jMenuTheme = new JMenu("Theme");
-		ButtonGroup groupThemes = new ButtonGroup();
-		String selectedTheme = Messages.getSelectedTheme();
-		Logging.debug(this, "Selected theme " + selectedTheme);
-
-		for (final String themeName : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
-			Logging.debug(this, "Selected theme " + themeName);
-			themeItem.setSelected(selectedTheme.equals(themeName));
-			jMenuTheme.add(themeItem);
-			groupThemes.add(themeItem);
-
-			themeItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.THEME, themeName);
-				Messages.setTheme(themeName);
-				Main.setOpsiLaf();
-				restartLogFrame();
-			});
-		}
-
-		return jMenuTheme;
 	}
 
 	private void restartLogFrame() {
