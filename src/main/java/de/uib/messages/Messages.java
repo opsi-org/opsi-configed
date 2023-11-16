@@ -6,6 +6,7 @@
 
 package de.uib.messages;
 
+import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,16 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+
+import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 
 public final class Messages {
 	public static final String APPNAME = "configed";
@@ -172,5 +182,32 @@ public final class Messages {
 
 	public static ResourceBundle getResourceBundle() {
 		return messagesBundle;
+	}
+
+	public static JMenu createJMenuLanguages(Runnable runnable) {
+		JMenu jMenuLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
+		ButtonGroup groupLanguages = new ButtonGroup();
+
+		String selectedLocale = Messages.getSelectedLocale();
+
+		for (String locale : Messages.getLocaleNames()) {
+			ImageIcon localeIcon = new ImageIcon(Messages.class.getResource(locale + ".png"));
+
+			JMenuItem menuItem = new JRadioButtonMenuItem(locale, localeIcon);
+			Logging.debug("Selected locale " + selectedLocale);
+			menuItem.setSelected(selectedLocale.equals(locale));
+			jMenuLanguage.add(menuItem);
+			groupLanguages.add(menuItem);
+
+			menuItem.addActionListener((ActionEvent e) -> {
+				UserPreferences.set(UserPreferences.LANGUAGE, locale);
+				Messages.setLocale(locale);
+				Locale.setDefault(new Locale(locale));
+				JComponent.setDefaultLocale(new Locale(locale));
+				runnable.run();
+			});
+		}
+
+		return jMenuLanguage;
 	}
 }

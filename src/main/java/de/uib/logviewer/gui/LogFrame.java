@@ -27,7 +27,6 @@ import java.util.TreeMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -112,7 +111,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
 		jMenuFile.add(createJMenuTheme());
-		jMenuFile.add(createJMenuLanguage());
+		jMenuFile.add(Messages.createJMenuLanguages(() -> restartLogFrame()));
 		jMenuFile.add(jMenuFileExit);
 		return jMenuFile;
 	}
@@ -139,31 +138,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		return jMenuTheme;
-	}
-
-	private JMenu createJMenuLanguage() {
-		JMenu jMenuLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
-		ButtonGroup groupLanguages = new ButtonGroup();
-
-		String selectedLocale = Messages.getSelectedLocale();
-
-		for (String locale : Messages.getLocaleNames()) {
-			ImageIcon localeIcon = new ImageIcon(Messages.class.getResource(locale + ".png"));
-
-			JMenuItem menuItem = new JRadioButtonMenuItem(locale, localeIcon);
-			Logging.debug(this, "Selected locale " + selectedLocale);
-			menuItem.setSelected(selectedLocale.equals(locale));
-			jMenuLanguage.add(menuItem);
-			groupLanguages.add(menuItem);
-
-			menuItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.LANGUAGE, locale);
-				Messages.setLocale(locale);
-				restartLogFrame();
-			});
-		}
-
-		return jMenuLanguage;
 	}
 
 	private void restartLogFrame() {

@@ -49,7 +49,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -470,7 +469,7 @@ public class MainFrame extends JFrame
 		jMenuFileSaveConfigurations = new JMenuItem();
 		JMenuItem jMenuFileReload = new JMenuItem();
 		JMenu jMenuTheme = new JMenu(); // submenu
-		JMenu jMenuFileLanguage = new JMenu(); // submenu
+		JMenu jMenuFileLanguage; // submenu
 		JMenuItem jMenuFileLogout = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -491,28 +490,10 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFileLanguage.setText(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
-		ButtonGroup groupLanguages = new ButtonGroup();
-
-		String selectedLocale = Messages.getSelectedLocale();
-
-		for (String locale : Messages.getLocaleNames()) {
-			ImageIcon localeIcon = new ImageIcon(Messages.class.getResource(locale + ".png"));
-
-			JMenuItem menuItem = new JRadioButtonMenuItem(locale, localeIcon);
-			menuItem.setSelected(selectedLocale.equals(locale));
-			jMenuFileLanguage.add(menuItem);
-			groupLanguages.add(menuItem);
-
-			menuItem.addActionListener((ActionEvent e) -> {
-				configedMain.closeInstance(true);
-				UserPreferences.set(UserPreferences.LANGUAGE, locale);
-				Messages.setLocale(locale);
-				Locale.setDefault(new Locale(locale));
-				JComponent.setDefaultLocale(new Locale(locale));
-				Configed.restartConfiged();
-			});
-		}
+		jMenuFileLanguage = Messages.createJMenuLanguages(() -> {
+			configedMain.closeInstance(true);
+			Configed.restartConfiged();
+		});
 
 		jMenuTheme.setText("Theme");
 		ButtonGroup groupThemes = new ButtonGroup();
