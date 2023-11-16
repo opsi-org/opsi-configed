@@ -341,6 +341,8 @@ public class ConfigedMain implements ListSelectionListener {
 	private boolean isAllLicenseDataReloaded;
 	private boolean isInitialLicenseDataLoading;
 
+	private InitialDataLoader initialDataLoader;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
@@ -368,6 +370,10 @@ public class ConfigedMain implements ListSelectionListener {
 		return mainFrame;
 	}
 
+	public LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+
 	private void addClient(LicencesTabStatus status, TabClient panel) {
 		licencesPanels.put(status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
@@ -391,7 +397,7 @@ public class ConfigedMain implements ListSelectionListener {
 		return editingTarget;
 	}
 
-	private void initGui() {
+	protected void initGui() {
 		Logging.info(this, "initGui");
 
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
@@ -732,33 +738,8 @@ public class ConfigedMain implements ListSelectionListener {
 		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
 				.replaceAll("").split(",");
 
-		// too early, raises a NPE, if the user entry does not exist
-
-		new Thread() {
-			@Override
-			public void run() {
-				preloadData();
-
-				SwingUtilities.invokeLater(() -> {
-					initGui();
-
-					everythingReady = true;
-
-					checkErrorList();
-
-					loginDialog.setVisible(false);
-
-					Logging.info("setting mainframe visible");
-
-					mainFrame.setVisible(true);
-
-					// init splitpanes only when frame already visible
-					mainFrame.initSplitPanes();
-
-					mainFrame.toFront();
-				});
-			}
-		}.start();
+		initialDataLoader = new InitialDataLoader(this);
+		initialDataLoader.execute();
 	}
 
 	public void init() {
@@ -785,7 +766,7 @@ public class ConfigedMain implements ListSelectionListener {
 		}
 	}
 
-	private void preloadData() {
+	protected void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
 		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
@@ -3328,7 +3309,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 		checkSaveAll(true);
 
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3452,7 +3433,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 			isAllLicenseDataReloaded = true;
 
@@ -3475,7 +3456,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			String oldGroupSelection = activatedGroupModel.getGroupName();
 			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
@@ -3505,7 +3486,7 @@ public class ConfigedMain implements ListSelectionListener {
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			allowedClients = null;
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
