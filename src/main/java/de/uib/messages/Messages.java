@@ -77,28 +77,22 @@ public final class Messages {
 		return selectedLocaleString;
 	}
 
-	private static Locale giveLocale(String selection) {
-		Logging.debug("Messages: selected locale " + myLocale + " by " + selection);
-		return myLocale;
-	}
-
 	private static void produceLocale() {
 		myLocale = Locale.getDefault();
 	}
 
 	private static Locale produceLocale(String language) {
 		myLocale = new Locale.Builder().setLanguage(language).build();
-		return giveLocale("language " + language);
+		return myLocale;
 	}
 
 	private static Locale produceLocale(String language, String country) {
 		myLocale = new Locale.Builder().setLanguage(language).setRegion(country).build();
-		return giveLocale("language " + language + ", country " + country);
+		return myLocale;
 	}
 
 	private static Locale produceLocaleEnUS() {
-		myLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
-		return giveLocale("fallback (en_US)");
+		return produceLocale("en", "US");
 	}
 
 	public static Locale getLocale() {
