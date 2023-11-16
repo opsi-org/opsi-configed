@@ -11,14 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.uib.utilities.logging.Logging;
@@ -29,7 +26,6 @@ public final class Messages {
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
 	private static Set<String> existingLocalesNames;
-	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
 	private static ResourceBundle messagesBundle;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
@@ -40,9 +36,10 @@ public final class Messages {
 	}
 
 	private static String findSelectedLocale(String language, String country) {
-		String result = null;
+
 		String languageRegion = language + "_" + country;
 
+		String result;
 		if (existingLocalesNames.contains(languageRegion)) {
 			result = languageRegion;
 		} else if (existingLocalesNames.contains(language)) {
@@ -128,16 +125,6 @@ public final class Messages {
 		return existingLocalesNames;
 	}
 
-	public static Map<String, String> getLocaleInfo() {
-		if (localeInfo == null) {
-			getLocaleRepresentations();
-		}
-
-		Logging.debug("Messages, getLocaleInfo " + localeInfo);
-
-		return localeInfo;
-	}
-
 	public static String getSelectedTheme() {
 		return selectedTheme;
 	}
@@ -154,9 +141,9 @@ public final class Messages {
 		}
 	}
 
-	private static List<LocaleRepresentation> getLocaleRepresentations() {
-		List<LocaleRepresentation> existingLocales = new ArrayList<>();
-		localeInfo = new TreeMap<>();
+	private static void getLocaleRepresentations() {
+
+		TreeSet<String> names = new TreeSet<>();
 
 		InputStream stream = Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
@@ -164,8 +151,8 @@ public final class Messages {
 			String line = reader.readLine();
 			while (line != null) {
 				line = line.trim();
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					existingLocales.add(new LocaleRepresentation(line));
+				if (!line.isEmpty() && line.charAt(0) != '#') {
+					names.add(line);
 				}
 				line = reader.readLine();
 			}
@@ -173,16 +160,8 @@ public final class Messages {
 			Logging.warning("Messages exception on reading!", ex);
 		}
 
-		TreeSet<String> names = new TreeSet<>();
-		for (LocaleRepresentation representer : existingLocales) {
-			names.add(representer.getName());
-			localeInfo.put(representer.getName(), representer.getIconName());
-		}
 		Logging.debug("Messages, existing names " + names);
 		existingLocalesNames = names;
-		Logging.debug("Messages, existing locales " + existingLocales);
-		Logging.debug("Messages, localeInfo  " + localeInfo);
-		return existingLocales;
 	}
 
 	public static ResourceBundle getResourceBundle() {

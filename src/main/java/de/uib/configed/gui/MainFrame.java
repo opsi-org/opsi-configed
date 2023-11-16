@@ -496,24 +496,20 @@ public class MainFrame extends JFrame
 
 		String selectedLocale = Messages.getSelectedLocale();
 
-		for (final Entry<String, String> locale : Messages.getLocaleInfo().entrySet()) {
-			ImageIcon localeIcon = null;
-			String imageIconName = locale.getValue();
-			if (imageIconName != null && imageIconName.length() > 0) {
-				localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
-			}
+		for (String locale : Messages.getLocaleNames()) {
+			ImageIcon localeIcon = new ImageIcon(Messages.class.getResource(locale + ".png"));
 
-			JMenuItem menuItem = new JRadioButtonMenuItem(locale.getKey(), localeIcon);
-			menuItem.setSelected(selectedLocale.equals(locale.getKey()));
+			JMenuItem menuItem = new JRadioButtonMenuItem(locale, localeIcon);
+			menuItem.setSelected(selectedLocale.equals(locale));
 			jMenuFileLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
 
 			menuItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
-				UserPreferences.set(UserPreferences.LANGUAGE, locale.getKey());
-				Messages.setLocale(locale.getKey());
-				Locale.setDefault(new Locale(locale.getKey()));
-				JComponent.setDefaultLocale(new Locale(locale.getKey()));
+				UserPreferences.set(UserPreferences.LANGUAGE, locale);
+				Messages.setLocale(locale);
+				Locale.setDefault(new Locale(locale));
+				JComponent.setDefaultLocale(new Locale(locale));
 				Configed.restartConfiged();
 			});
 		}
