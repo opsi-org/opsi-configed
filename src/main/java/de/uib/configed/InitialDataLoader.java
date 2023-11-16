@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
 package de.uib.configed;
 
 import javax.swing.SwingWorker;
@@ -21,7 +27,6 @@ public class InitialDataLoader extends SwingWorker<Void, Void> {
 
 	@Override
 	public void done() {
-
 		configedMain.initGui();
 
 		isDataLoaded = true;

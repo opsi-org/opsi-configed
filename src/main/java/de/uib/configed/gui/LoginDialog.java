@@ -324,10 +324,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			// we can finish
 			Logging.info(this, "connected with persis " + persistenceController);
 			configedMain.setPersistenceController(persistenceController);
-
 			configedMain.setAppTitle(
 					"(" + fieldUser.getText() + ") " + fieldHost.getSelectedItem() + " - " + Globals.APPNAME);
-
 			configedMain.loadDataAndGo();
 		} else {
 			// return to Passwordfield
