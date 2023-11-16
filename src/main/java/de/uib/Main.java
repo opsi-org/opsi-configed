@@ -10,8 +10,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -177,7 +177,7 @@ public class Main {
 		}
 
 		// After setting locale then we can use localization values
-		List<String> existingLocales = Messages.getLocaleNames();
+		Set<String> existingLocales = Messages.getLocaleNames();
 		Logging.info("Available locales: " + existingLocales);
 	}
 

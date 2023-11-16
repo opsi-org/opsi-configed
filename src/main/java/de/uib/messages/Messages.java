@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -27,7 +28,7 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
-	private static List<String> existingLocalesNames;
+	private static Set<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
 	private static Locale myLocale;
 	private static ResourceBundle messagesBundle;
@@ -40,18 +41,14 @@ public final class Messages {
 
 	private static String findSelectedLocale(String language, String country) {
 		String result = null;
-		List<String> myLocaleCharacteristics = new ArrayList<>();
-		String characteristics = language + "_" + country;
+		String languageRegion = language + "_" + country;
 
-		myLocaleCharacteristics.add(characteristics);
-		if (existingLocalesNames.indexOf(characteristics) > -1) {
-			result = characteristics;
-		}
-
-		characteristics = language;
-		myLocaleCharacteristics.add(characteristics);
-		if (result == null && existingLocalesNames.indexOf(characteristics) > -1) {
-			result = characteristics;
+		if (existingLocalesNames.contains(languageRegion)) {
+			result = languageRegion;
+		} else if (existingLocalesNames.contains(language)) {
+			result = language;
+		} else {
+			result = null;
 		}
 
 		return result;
@@ -110,7 +107,7 @@ public final class Messages {
 				loc = produceLocale(characteristics);
 				Logging.info("Locale " + loc + " set by param");
 			} else {
-				Logging.info("Bad format for locale, use <language>_<country> or <language>"
+				Logging.warning("Bad format for locale, use <language>_<country> or <language>"
 						+ ", each component consisting of two chars, or just a two char <language>");
 			}
 		}
@@ -123,7 +120,7 @@ public final class Messages {
 		messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 	}
 
-	public static List<String> getLocaleNames() {
+	public static Set<String> getLocaleNames() {
 		if (existingLocalesNames == null) {
 			getLocaleRepresentations();
 		}
@@ -182,7 +179,7 @@ public final class Messages {
 			localeInfo.put(representer.getName(), representer.getIconName());
 		}
 		Logging.debug("Messages, existing names " + names);
-		existingLocalesNames = new ArrayList<>(names);
+		existingLocalesNames = names;
 		Logging.debug("Messages, existing locales " + existingLocales);
 		Logging.debug("Messages, localeInfo  " + localeInfo);
 		return existingLocales;
