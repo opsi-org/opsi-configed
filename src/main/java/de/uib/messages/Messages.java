@@ -26,6 +26,7 @@ public final class Messages {
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
 	private static Set<String> existingLocalesNames;
+	private static String localeString;
 	private static Locale myLocale;
 	private static ResourceBundle messagesBundle;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
@@ -35,92 +36,94 @@ public final class Messages {
 	private Messages() {
 	}
 
-	private static String findSelectedLocale(String language, String country) {
-
-		String languageRegion = language + "_" + country;
-
-		String result;
-		if (existingLocalesNames.contains(languageRegion)) {
-			result = languageRegion;
-		} else if (existingLocalesNames.contains(language)) {
-			result = language;
+	private static String findExistingLocale() {
+		if (existingLocalesNames.contains(myLocale.toString())) {
+			return myLocale.toString();
+		} else if (existingLocalesNames.contains(myLocale.getLanguage())) {
+			return myLocale.getLanguage();
 		} else {
-			result = null;
+			return null;
 		}
-
-		return result;
 	}
 
 	public static String getSelectedLocale() {
-		String selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
+		return localeString;
+	}
 
-		if (selectedLocaleString == null) {
+	private static void produceSelectedLocale() {
+		produceLocaleRepresentations();
+
+		String existingLocale = findExistingLocale();
+
+		if (existingLocale == null) {
 			// not found, now try again for default locale
 			produceLocale();
-			selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
 
-			if (selectedLocaleString == null) {
-				// default locale not found
+			existingLocale = findExistingLocale();
+
+			if (existingLocale == null) {
+				// default locale not found, get english locale
 				produceLocaleEnUS();
-				selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
+
+				existingLocale = findExistingLocale();
 			}
 		}
 
-		Logging.info("Selected locale: " + selectedLocaleString);
+		if (existingLocale == null) {
+			Logging.warning("Locale " + myLocale + " not existing...");
+		}
 
-		return selectedLocaleString;
+		Logging.info("Selected locale: " + existingLocale);
+
+		localeString = existingLocale;
 	}
 
 	private static void produceLocale() {
 		myLocale = Locale.getDefault();
 	}
 
-	private static Locale produceLocale(String language) {
+	private static void produceLocale(String language) {
 		myLocale = new Locale.Builder().setLanguage(language).build();
-		return myLocale;
 	}
 
-	private static Locale produceLocale(String language, String country) {
+	private static void produceLocale(String language, String country) {
 		myLocale = new Locale.Builder().setLanguage(language).setRegion(country).build();
-		return myLocale;
 	}
 
-	private static Locale produceLocaleEnUS() {
-		return produceLocale("en", "US");
+	private static void produceLocaleEnUS() {
+		produceLocale("en", "US");
 	}
 
 	public static Locale getLocale() {
 		return myLocale;
 	}
 
-	public static void setLocale(String characteristics) {
-		Logging.debug("Messages setLocale: " + characteristics);
-		Locale loc = null;
-		if (characteristics != null && !characteristics.isEmpty()) {
-			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
-				loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));
-				Logging.info("Locale " + loc.getLanguage() + "_" + loc.getCountry() + " set by param");
-			} else if (characteristics.length() == 2) {
-				loc = produceLocale(characteristics);
-				Logging.info("Locale " + loc + " set by param");
+	public static void setLocale(String localeString) {
+		Logging.debug("Messages setLocale: " + localeString);
+		if (localeString != null && !localeString.isEmpty()) {
+			if (localeString.length() == 5 && localeString.indexOf('_') == 2) {
+				produceLocale(localeString.substring(0, 2), localeString.substring(3, 5));
+			} else if (localeString.length() == 2) {
+				produceLocale(localeString);
 			} else {
 				Logging.warning("Bad format for locale, use <language>_<country> or <language>"
 						+ ", each component consisting of two chars, or just a two char <language>");
 			}
 		}
 
-		if (loc == null) {
+		if (myLocale == null) {
 			produceLocale();
 		}
+
+		produceSelectedLocale();
+
 		Logging.notice("Locale set to: " + myLocale);
 
 		messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 	}
 
 	public static Set<String> getLocaleNames() {
-		if (existingLocalesNames == null) {
-			getLocaleRepresentations();
-		}
+		produceLocaleRepresentations();
 
 		return existingLocalesNames;
 	}
@@ -141,7 +144,10 @@ public final class Messages {
 		}
 	}
 
-	private static void getLocaleRepresentations() {
+	private static void produceLocaleRepresentations() {
+		if (existingLocalesNames != null) {
+			return;
+		}
 
 		TreeSet<String> names = new TreeSet<>();
 
