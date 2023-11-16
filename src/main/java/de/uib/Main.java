@@ -256,7 +256,6 @@ public class Main {
 		parseArgs(cmd);
 
 		Locale.setDefault(Messages.getLocale());
-		Logging.devel(Locale.getDefault().toString());
 
 		setOpsiLaf();
 
