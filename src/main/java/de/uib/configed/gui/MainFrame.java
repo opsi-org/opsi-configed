@@ -15,7 +15,6 @@ import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
@@ -120,8 +119,7 @@ import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
 import utils.Utils;
 
-public class MainFrame extends JFrame
-		implements WindowListener, KeyListener, MouseListener, ActionListener, ComponentListener {
+public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ComponentListener {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
@@ -291,10 +289,7 @@ public class MainFrame extends JFrame
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
 	private JButton jButtonClientsConfiguration;
-	private JButton jButtonWorkOnGroups;
-	private JButton jButtonWorkOnProducts;
 
-	private JButton jButtonDashboard;
 	private JButton jButtonLicences;
 	private JButton jButtonOpsiLicenses;
 
@@ -1110,18 +1105,18 @@ public class MainFrame extends JFrame
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jMenuFrameWorkOnGroups.setVisible(persistenceController.getModuleDataService().isWithLocalImagingPD());
-		jMenuFrameWorkOnGroups.addActionListener(this);
+		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
-		jMenuFrameWorkOnProducts.addActionListener(this);
+		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
 
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
-		jMenuFrameDashboard.addActionListener(this);
+		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 		jMenuFrameDashboard.setVisible(ServerFacade.isOpsi43());
 
 		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
 		jMenuFrameLicences.setEnabled(false);
-		jMenuFrameLicences.addActionListener(this);
+		jMenuFrameLicences.addActionListener(event -> configedMain.handleLicencesManagementRequest());
 
 		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
@@ -1761,18 +1756,18 @@ public class MainFrame extends JFrame
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
 		if (!ServerFacade.isOpsi43()) {
-			cbUefiBoot.addActionListener(this);
+			cbUefiBoot.addActionListener(event -> uefiBootAction());
 		}
 
 		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
 				unselectedIcon, nullIcon, false);
 		cbWANConfig.setEnabled(true);
-		cbWANConfig.addActionListener(this);
+		cbWANConfig.addActionListener(event -> wanConfigAction());
 
 		cbInstallByShutdown = new CheckedLabel(Configed.getResourceValue("NewClientDialog.installByShutdown"),
 				selectedIcon, unselectedIcon, nullIcon, false);
 		cbInstallByShutdown.setEnabled(true);
-		cbInstallByShutdown.addActionListener(this);
+		cbInstallByShutdown.addActionListener(event -> installByShutdownAction());
 
 		updateHostCheckboxenText();
 
@@ -2022,26 +2017,26 @@ public class MainFrame extends JFrame
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
-		jButtonLicences.addActionListener(this);
+		jButtonLicences.addActionListener(event -> configedMain.handleLicencesManagementRequest());
 
-		jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
+		JButton jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
 		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jButtonWorkOnGroups.setFocusable(false);
 
 		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
-		jButtonWorkOnGroups.addActionListener(this);
+		jButtonWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
-		jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
+		JButton jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setSelectedIcon(Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 		jButtonWorkOnProducts.setFocusable(false);
 
-		jButtonWorkOnProducts.addActionListener(this);
+		jButtonWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
 
-		jButtonDashboard = new JButton("", Utils.createImageIcon("images/dash_unselected.png", ""));
+		JButton jButtonDashboard = new JButton("", Utils.createImageIcon("images/dash_unselected.png", ""));
 		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
@@ -2049,7 +2044,7 @@ public class MainFrame extends JFrame
 
 		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
 		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
-		jButtonDashboard.addActionListener(this);
+		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
 		if (persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
 				&& persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
@@ -2866,6 +2861,36 @@ public class MainFrame extends JFrame
 		}
 	}
 
+	private void uefiBootAction() {
+		Logging.info(this, "actionPerformed on cbUefiBoot");
+
+		for (String client : configedMain.getSelectedClients()) {
+			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
+			changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected().toString());
+			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+		}
+	}
+
+	private void wanConfigAction() {
+		Logging.info(this, "actionPerformed on cbWANConfig");
+
+		for (String client : configedMain.getSelectedClients()) {
+			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
+			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
+			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+		}
+	}
+
+	private void installByShutdownAction() {
+		Logging.info(this, "actionPerformed on cbInstallByShutdown");
+
+		for (String client : configedMain.getSelectedClients()) {
+			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
+			changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, cbInstallByShutdown.isSelected().toString());
+			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+		}
+	}
+
 	// ----------------------------------------------------------------------------------------
 
 	/* WindowListener implementation */
@@ -3092,48 +3117,6 @@ public class MainFrame extends JFrame
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
 
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Logging.debug(this, "actionPerformed on " + e.getSource());
-		if (e.getSource() == cbInstallByShutdown) {
-			Logging.info(this, "actionPerformed on cbInstallByShutdown");
-
-			for (String client : configedMain.getSelectedClients()) {
-				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-						cbInstallByShutdown.isSelected().toString());
-				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-			}
-		} else if (e.getSource() == cbUefiBoot) {
-			Logging.info(this, "actionPerformed on cbUefiBoot");
-
-			for (String client : configedMain.getSelectedClients()) {
-				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected().toString());
-				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-			}
-		} else if (e.getSource() == cbWANConfig) {
-			Logging.info(this, "actionPerformed on cbWANConfig");
-
-			for (String client : configedMain.getSelectedClients()) {
-				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
-				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-			}
-		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
-			configedMain.handleLicencesManagementRequest();
-		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
-			configedMain.handleGroupActionRequest();
-		} else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
-			configedMain.handleProductActionRequest();
-		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
-			configedMain.initDashInfo();
-		} else {
-			Logging.warning(this, "unexpected action on source " + e.getSource());
-		}
-	}
-
 	public void startLicenceDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
@@ -3159,7 +3142,7 @@ public class MainFrame extends JFrame
 		iconButtonReloadLicenses.setEnabled(true);
 	}
 
-	public void visualizeEditingTarget(ConfigedMain.EditingTarget t) {
+	public void visualizeEditingTarget(EditingTarget t) {
 		switch (t) {
 		case CLIENTS:
 			jButtonClientsConfiguration.setSelected(true);
