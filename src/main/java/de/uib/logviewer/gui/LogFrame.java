@@ -115,15 +115,9 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void restartLogFrame() {
-		// We put it into to special thread to avoid invokeAndWait runtime error.
-		new Thread() {
-			@Override
-			public void run() {
-				LogFrame.this.dispose();
-				Logging.info(this, "Initialize new logviewer");
-				Logviewer.init();
-			}
-		}.start();
+		LogFrame.this.dispose();
+		Logging.info(this, "Initialize new logviewer");
+		Logviewer.init();
 	}
 
 	private JMenu setupMenuView() {

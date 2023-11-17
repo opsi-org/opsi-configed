@@ -591,15 +591,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 					final String infoOfChange = String.format(
 							Configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
 							actualProduct, existingRequest, state);
-					new Thread() {
-						@Override
-						public void run() {
-							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
-									Configed.getResourceValue(
-											"InstallationStateTableModel.contradictingProductRequirements.title"),
-									JOptionPane.WARNING_MESSAGE);
-						}
-					}.start();
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
+							Configed.getResourceValue(
+									"InstallationStateTableModel.contradictingProductRequirements.title"),
+							JOptionPane.WARNING_MESSAGE);
 				} else {
 					Logging.warning(this,
 							"checkForContradictingAssignments " + info + " client " + clientId + ", actualproduct "
@@ -619,15 +614,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 											"InstallationStateTableModel.contradictingProductRequirements2"),
 									existingRequest);
 
-					new Thread() {
-						@Override
-						public void run() {
-							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
-									Configed.getResourceValue(
-											"InstallationStateTableModel.contradictingProductRequirements.title"),
-									JOptionPane.WARNING_MESSAGE);
-						}
-					}.start();
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
+							Configed.getResourceValue(
+									"InstallationStateTableModel.contradictingProductRequirements.title"),
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}
