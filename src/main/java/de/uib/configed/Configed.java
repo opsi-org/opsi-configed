@@ -139,15 +139,6 @@ public final class Configed {
 		}
 	}
 
-	public static void restartConfiged() {
-		new Thread() {
-			@Override
-			public void run() {
-				Configed.startConfiged();
-			}
-		}.start();
-	}
-
 	private static void setStartSettings(ConfigedMain configedMain) {
 		if (paramClient != null || paramClientgroup != null) {
 			if (paramClientgroup != null) {
