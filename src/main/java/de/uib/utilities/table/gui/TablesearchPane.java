@@ -269,6 +269,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		labelSearchMode.setVisible(!b);
 	}
 
+	public void setTargetModel(SearchTargetModel searchTargetModel) {
+		this.targetModel = searchTargetModel;
+	}
+
 	public void setToolTipTextCheckMarkAllColumns(String s) {
 		checkmarkAllColumns.setToolTipText(s);
 	}

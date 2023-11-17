@@ -61,6 +61,11 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.java_websocket.handshake.ServerHandshake;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.dashboard.Dashboard;
@@ -88,6 +93,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.type.DateExtendedByVars;
@@ -98,6 +104,8 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.MessagebusListener;
+import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -136,7 +144,7 @@ import javafx.embed.swing.JFXPanel;
 import utils.ProductPackageVersionSeparator;
 import utils.Utils;
 
-public class ConfigedMain implements ListSelectionListener {
+public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final int VIEW_CLIENTS = 0;
@@ -414,6 +422,7 @@ public class ConfigedMain implements ListSelectionListener {
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
 
 		if (messagebus != null) {
+			messagebus.getWebSocket().registerListener(this);
 			messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
 			if (messagebus.getWebSocket().isOpen()) {
@@ -595,7 +604,7 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public boolean initMessagebus() {
 		if (messagebus == null) {
-			messagebus = new Messagebus(this);
+			messagebus = new Messagebus();
 		}
 
 		if (!messagebus.isConnected()) {
@@ -715,8 +724,8 @@ public class ConfigedMain implements ListSelectionListener {
 		updateConnectionStatusInTable(clientId);
 	}
 
-	public void connectTerminal() {
-		messagebus.connectTerminal();
+	public void connectTerminal(TerminalFrame terminal) {
+		messagebus.connectTerminal(terminal);
 	}
 
 	public void loadDataAndGo() {
@@ -5117,5 +5126,62 @@ public class ConfigedMain implements ListSelectionListener {
 
 	public static void setPassword(String password) {
 		ConfigedMain.password = password;
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		// Sleep for a little because otherwise we cannot get the needed data from the server.
+		Utils.threadSleep(this, 5);
+
+		if (!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event")) {
+			return;
+		}
+
+		Logging.trace(this, "Messagebus message received: " + message.toString());
+
+		String eventType = (String) message.get("event");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
+				new TypeReference<Map<String, Object>>() {
+				});
+
+		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)
+				|| WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString().equals(eventType)
+				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
+			updateProduct(eventData);
+		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
+			addClientToConnectedList(getHostId(eventData));
+		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
+			removeClientFromConnectedList(getHostId(eventData));
+		} else if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)) {
+			addClientToTable(getHostId(eventData));
+		} else if (WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {
+			removeClientFromTable(getHostId(eventData));
+		} else {
+			// Other events are handled by other listeners.
+		}
+	}
+
+	private static String getHostId(Map<String, Object> eventData) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+		};
+		Map<String, Object> hostData = objectMapper.convertValue(eventData.get("host"), typeRef);
+		return (String) hostData.get("id");
 	}
 }
