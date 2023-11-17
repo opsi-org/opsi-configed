@@ -12,38 +12,32 @@ import java.io.PipedOutputStream;
 
 import de.uib.utilities.logging.Logging;
 
-public final class WebSocketInputStream {
-	private static PipedOutputStream writer;
-	private static PipedInputStream reader;
+public class WebSocketInputStream {
+	private PipedOutputStream writer;
+	private PipedInputStream reader;
 
-	private WebSocketInputStream() {
-	}
-
-	public static void init() {
+	public WebSocketInputStream() {
 		writer = new PipedOutputStream();
 		reader = new PipedInputStream();
 
 		try {
 			reader.connect(writer);
 		} catch (IOException e) {
-			Logging.warning("I/O error occured while connecting reader with writer: ", e.getMessage());
+			Logging.error("I/O error occured while connecting reader with writer: " + e.getMessage());
 		}
 	}
 
-	public static void write(byte[] message) throws IOException {
+	public void write(byte[] message) throws IOException {
 		writer.write(message);
 		writer.flush();
 	}
 
-	public static PipedInputStream getReader() {
+	public PipedInputStream getReader() {
 		return reader;
 	}
 
-	public static void close() throws IOException {
+	public void close() throws IOException {
 		writer.close();
 		reader.close();
-
-		writer = null;
-		reader = null;
 	}
 }

@@ -23,17 +23,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.terminal.Terminal;
-import de.uib.messagebus.event.EventDispatcher;
-import de.uib.messagebus.event.WebSocketEvent;
-import de.uib.messagebus.event.handler.FileEventHandler;
-import de.uib.messagebus.event.handler.HostEventHandler;
-import de.uib.messagebus.event.handler.ProductOnClientEventHandler;
-import de.uib.messagebus.event.handler.TerminalEventHandler;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -45,21 +38,14 @@ import utils.Utils;
 @SuppressWarnings("java:S1258")
 public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
-	private ConfigedMain configedMain;
 	private int reconnectWaitMillis = 15000;
 	private boolean connected;
 	private boolean disconnecting;
 	private boolean reconnecting;
 	private boolean initialSubscriptionReceived;
-	private EventDispatcher eventDispatcher;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-
-	public Messagebus(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
-		this.eventDispatcher = new EventDispatcher();
-	}
 
 	public WebSocketClientEndpoint getWebSocket() {
 		return messagebusWebSocket;
@@ -100,7 +86,6 @@ public class Messagebus implements MessagebusListener {
 				waitForInitialChannelSubscritionEvent(10000)) {
 			connected = true;
 			Logging.notice(this, "Connected to messagebus");
-			registerEventHandlers();
 			makeStandardChannelSubscriptions();
 		}
 		return connected;
@@ -191,27 +176,6 @@ public class Messagebus implements MessagebusListener {
 		makeChannelSubscriptionRequest(channels);
 	}
 
-	private void registerEventHandlers() {
-		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_OPEN_EVENT.toString(), new TerminalEventHandler());
-		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_CLOSE_EVENT.toString(), new TerminalEventHandler());
-		eventDispatcher.registerHandler(WebSocketEvent.TERMINAL_DATA_READ.toString(), new TerminalEventHandler());
-
-		eventDispatcher.registerHandler(WebSocketEvent.FILE_UPLOAD_RESULT.toString(), new FileEventHandler(this));
-
-		eventDispatcher.registerHandler(WebSocketEvent.HOST_CONNECTED.toString(), new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvent.HOST_DISCONNECTED.toString(),
-				new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvent.HOST_CREATED.toString(), new HostEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvent.HOST_DELETED.toString(), new HostEventHandler(configedMain));
-
-		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString(),
-				new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString(),
-				new ProductOnClientEventHandler(configedMain));
-		eventDispatcher.registerHandler(WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString(),
-				new ProductOnClientEventHandler(configedMain));
-	}
-
 	private void makeChannelSubscriptionRequest(List<String> channels) {
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.CHANNEL_SUBSCRIPTION_REQUEST.toString());
@@ -227,32 +191,37 @@ public class Messagebus implements MessagebusListener {
 		sendMessage(message);
 	}
 
-	public void connectTerminal() {
+	public void connectTerminal(TerminalFrame terminal) {
+		connectTerminal(terminal, null);
+	}
+
+	public void connectTerminal(TerminalFrame terminal, String channel) {
 		String terminalId = UUID.randomUUID().toString();
 
 		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
-		Terminal terminal = Terminal.getInstance();
-		terminal.setMessagebus(this);
-		terminal.display();
+		terminal.getTerminalWidget().setMessagebus(this);
+		if (!messagebusWebSocket.isListenerRegistered(terminal.getTerminalWidget())) {
+			messagebusWebSocket.registerListener(terminal.getTerminalWidget());
+		}
 
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", "@");
-		message.put("channel", "service:config:terminal");
+		message.put("channel", channel != null ? channel : "service:config:terminal");
 		message.put("back_channel", String.format("session:%s", terminalId));
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("terminal_id", terminalId);
-		message.put("cols", terminal.getColumnCount());
-		message.put("rows", terminal.getRowCount());
+		message.put("cols", terminal.getTerminalWidget().getColumnCount());
+		message.put("rows", terminal.getTerminalWidget().getRowCount());
 
 		Logging.debug(this, "Sending terminal open request: " + message.toString());
 		sendMessage(message);
 
-		terminal.lock();
-		terminal.connectWebSocketTty();
+		terminal.getTerminalWidget().lock();
+		terminal.getTerminalWidget().connectWebSocketTty();
 	}
 
 	public void send(ByteBuffer message) {
@@ -359,26 +328,10 @@ public class Messagebus implements MessagebusListener {
 		String type = (String) message.get("type");
 		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
-		} else if (WebSocketEvent.GENERAL_EVENT.toString().equals(type)) {
-			onEvent(message);
 		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
 			Logging.error(this, "Error occured on the server " + message.get("error"));
-		} else if (WebSocketEvent.TERMINAL_RESIZE_EVENT.toString().equals(type)) {
-			// Resizing is handled by the user, we only notify server by
-			// sending terminal_resize_request event. On the client side, there is
-			// no need to handle terminal_resize_event.
 		} else {
-			eventDispatcher.dispatch(type, message);
+			// Other events are handled by other listeners.
 		}
-	}
-
-	private void onEvent(Map<String, Object> message) {
-		// Sleep for a little because otherwise we cannot get the needed data from the server.
-		Utils.threadSleep(this, 5);
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
-				new TypeReference<Map<String, Object>>() {
-				});
-		eventDispatcher.dispatch((String) message.get(WebSocketEvent.GENERAL_EVENT.toString()), eventData);
 	}
 }

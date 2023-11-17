@@ -9,9 +9,10 @@ package de.uib.messagebus;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
@@ -23,9 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
-@SuppressWarnings("java:S109")
+@SuppressWarnings({ "java:S6411" })
 public class WebSocketClientEndpoint extends WebSocketClient {
-	private Set<MessagebusListener> listeners = new HashSet<>();
+	private Set<MessagebusListener> listeners = Collections
+			.newSetFromMap(new ConcurrentHashMap<MessagebusListener, Boolean>());
 
 	public WebSocketClientEndpoint(URI serverURI) {
 		super(serverURI);
@@ -41,6 +43,10 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 		if (listeners.contains(listener)) {
 			listeners.remove(listener);
 		}
+	}
+
+	public boolean isListenerRegistered(MessagebusListener listener) {
+		return listeners.contains(listener);
 	}
 
 	@Override

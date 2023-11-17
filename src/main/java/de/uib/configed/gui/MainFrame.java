@@ -91,7 +91,7 @@ import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
-import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messages.Messages;
@@ -531,7 +531,6 @@ public class MainFrame extends JFrame
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		SSHCommandFactory.destroyInstance();
-		Terminal.destroyInstance();
 		Configed.getSavedStates().removeAll();
 		restartConfiged();
 	}
@@ -1146,14 +1145,9 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
-
-			if (!Terminal.getInstance().isWebSocketTtyConnected()) {
-				configedMain.connectTerminal();
-			} else {
-				Logging.info(this,
-						"terminal is already opened and connected to websocket (displaying current terminal window)");
-				Terminal.getInstance().display();
-			}
+			TerminalFrame terminal = new TerminalFrame();
+			terminal.display();
+			configedMain.connectTerminal(terminal);
 		});
 
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
