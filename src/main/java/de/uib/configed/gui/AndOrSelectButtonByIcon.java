@@ -45,5 +45,4 @@ public class AndOrSelectButtonByIcon extends IconAsButton implements ActionListe
 		Logging.debug(this, "actionPerformed  " + e + " activated " + activated);
 		setActivated(!activated);
 	}
-
 }

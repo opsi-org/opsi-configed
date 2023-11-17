@@ -42,5 +42,4 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 			}
 		}
 	}
-
 }

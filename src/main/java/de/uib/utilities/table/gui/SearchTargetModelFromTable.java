@@ -226,5 +226,4 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public int getListSelectionMode() {
 		return table.getSelectionModel().getSelectionMode();
 	}
-
 }

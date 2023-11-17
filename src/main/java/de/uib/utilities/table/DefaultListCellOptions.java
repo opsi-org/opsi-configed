@@ -124,5 +124,4 @@ public class DefaultListCellOptions implements ListCellOptions {
 	public ListCellOptions deepCopy() {
 		return new DefaultListCellOptions();
 	}
-
 }

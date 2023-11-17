@@ -135,5 +135,4 @@ public class GlassPane extends JPanel implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
-
 }

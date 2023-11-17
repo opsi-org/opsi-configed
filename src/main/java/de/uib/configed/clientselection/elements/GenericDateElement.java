@@ -34,5 +34,4 @@ public class GenericDateElement extends AbstractSelectElement {
 
 		return result;
 	}
-
 }

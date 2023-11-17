@@ -135,5 +135,4 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		// produces strings with ascii null
 		return observingMesg;
 	}
-
 }

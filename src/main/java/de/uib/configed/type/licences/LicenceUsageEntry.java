@@ -126,5 +126,4 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	public String getPseudoKey() {
 		return produceKey(getClientId(), getLicensePool(), getLicenceId());
 	}
-
 }

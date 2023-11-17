@@ -53,5 +53,4 @@ public class IntComparatorForObjects implements Comparator<Object> {
 	public String toString() {
 		return getClass().toString();
 	}
-
 }

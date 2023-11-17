@@ -293,5 +293,4 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		/* Not needed */}
-
 }

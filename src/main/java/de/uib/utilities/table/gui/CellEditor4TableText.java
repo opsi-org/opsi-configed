@@ -162,5 +162,4 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 		Logging.debug(this, "cancelCellEditing");
 		super.cancelCellEditing();
 	}
-
 }

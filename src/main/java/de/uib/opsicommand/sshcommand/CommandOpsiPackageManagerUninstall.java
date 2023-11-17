@@ -134,5 +134,4 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 		}
 		return true;
 	}
-
 }

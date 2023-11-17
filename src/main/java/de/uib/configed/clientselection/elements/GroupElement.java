@@ -17,5 +17,4 @@ public class GroupElement extends GenericEnumElement {
 	public GroupElement(String[] enumData, String[] name, String... localizedName) {
 		super(enumData, name, localizedName);
 	}
-
 }

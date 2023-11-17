@@ -47,5 +47,4 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 
 		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 	}
-
 }

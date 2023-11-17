@@ -78,5 +78,4 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		}
 		return result;
 	}
-
 }

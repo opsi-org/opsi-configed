@@ -32,5 +32,4 @@ public class GenericBigIntegerElement extends AbstractSelectElement {
 		result.add(new BigIntEqualsOperation(this));
 		return result;
 	}
-
 }

@@ -112,5 +112,4 @@ public class CommandHelp /* extends */ implements SSHCommand {
 	public List<String> getParameterList() {
 		return new ArrayList<>();
 	}
-
 }

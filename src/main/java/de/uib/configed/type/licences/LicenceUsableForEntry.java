@@ -49,5 +49,4 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 	public String getLicencePoolId() {
 		return get(LICENSE_POOL_ID_KEY);
 	}
-
 }

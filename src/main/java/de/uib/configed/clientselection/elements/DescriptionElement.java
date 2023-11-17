@@ -26,5 +26,4 @@ public class DescriptionElement extends AbstractSelectElement {
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}
-
 }

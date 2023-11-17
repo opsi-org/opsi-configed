@@ -84,5 +84,4 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 			return rc;
 		}
 	}
-
 }

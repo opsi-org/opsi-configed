@@ -41,5 +41,4 @@ public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 	public TableEditItem produceDeleteItem(List<Object> rowV) {
 		return new MapDeleteItem(source, keyCol, columnNames, rowV);
 	}
-
 }

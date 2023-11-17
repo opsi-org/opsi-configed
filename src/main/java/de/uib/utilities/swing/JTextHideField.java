@@ -130,5 +130,4 @@ public class JTextHideField extends JPanel {
 		((FixedDocument) (visibleField.getDocument())).setFixed(s0);
 		visibleField.setText(s0);
 	}
-
 }

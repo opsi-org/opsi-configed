@@ -592,5 +592,4 @@ public enum CacheIdentifier {
 	public String toString() {
 		return displayName;
 	}
-
 }

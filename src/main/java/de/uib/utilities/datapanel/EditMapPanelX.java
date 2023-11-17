@@ -596,5 +596,4 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}
-
 }

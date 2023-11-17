@@ -328,5 +328,4 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 		buttonRemove.setEnabled(!selectedList.isEmpty());
 	}
-
 }
