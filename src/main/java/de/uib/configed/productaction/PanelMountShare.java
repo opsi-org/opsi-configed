@@ -178,18 +178,8 @@ public class PanelMountShare extends JPanel {
 		}
 
 		setShareMountedInfo(found);
-
-		if (!smbMounted && found) {
-			initialMount();
-		}
-
 		smbMounted = found;
-
 		return smbMounted;
-	}
-
-	private void initialMount() {
-		// for overriding
 	}
 
 	private void checkConnectionToShare(final int seconds) {
