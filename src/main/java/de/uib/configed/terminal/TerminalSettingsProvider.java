@@ -142,10 +142,10 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	private static MyColorPalette getColorPalette(String theme) {
 		switch (theme) {
-		case "Light":
+		case Messages.THEME_LIGHT:
 			return new MyColorPalette(LIGHT_COLORS);
 
-		case "Dark":
+		case Messages.THEME_DARK:
 			return new MyColorPalette(DARK_COLORS);
 
 		default:
