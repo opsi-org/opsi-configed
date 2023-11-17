@@ -12,7 +12,8 @@ import com.jediterm.core.Color;
 import com.jediterm.terminal.emulator.ColorPalette;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
-import de.uib.configed.Configed;
+import de.uib.messages.Messages;
+import de.uib.utilities.logging.Logging;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final int FONT_SIZE_MIN_LIMIT = 8;
@@ -97,23 +98,8 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		LIGHT_COLORS[15] = new Color(255, 255, 255);
 	}
 
-	public enum Theme {
-		LIGHT(Configed.getResourceValue("theme.light")), DARK(Configed.getResourceValue("theme.dark"));
-
-		private String displayName;
-
-		Theme(String displayName) {
-			this.displayName = displayName;
-		}
-
-		@Override
-		public String toString() {
-			return displayName;
-		}
-	}
-
-	private static MyColorPalette colorPalette = new MyColorPalette(DARK_COLORS);
-	private static Theme themeInUse;
+	private static String themeInUse = Messages.getSelectedTheme();
+	private static MyColorPalette colorPalette = getColorPalette(themeInUse);
 
 	@Override
 	public Font getTerminalFont() {
@@ -154,17 +140,26 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		fontSize = size;
 	}
 
-	public static void setTerminalLightTheme() {
-		colorPalette = new MyColorPalette(LIGHT_COLORS);
-		themeInUse = Theme.LIGHT;
+	private static MyColorPalette getColorPalette(String theme) {
+		switch (theme) {
+		case "Light":
+			return new MyColorPalette(LIGHT_COLORS);
+
+		case "Dark":
+			return new MyColorPalette(DARK_COLORS);
+
+		default:
+			Logging.warning("Could not find MyColorPalette for theme " + theme);
+			return new MyColorPalette(DARK_COLORS);
+		}
 	}
 
-	public static void setTerminalDarkTheme() {
-		colorPalette = new MyColorPalette(DARK_COLORS);
-		themeInUse = Theme.DARK;
+	public static void setTerminalTheme(String theme) {
+		themeInUse = theme;
+		colorPalette = getColorPalette(themeInUse);
 	}
 
-	public static Theme getTerminalThemeInUse() {
+	public static String getTerminalThemeInUse() {
 		return themeInUse;
 	}
 
@@ -172,7 +167,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		private Color[] colors;
 
 		public MyColorPalette(Color[] colors) {
-			this.colors = colors.clone();
+			this.colors = colors;
 		}
 
 		@Override

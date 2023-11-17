@@ -498,7 +498,6 @@ public class MainFrame extends JFrame
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = Messages.getSelectedTheme();
-		Logging.debug("selectedLocale " + selectedTheme);
 
 		for (final String theme : Messages.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));

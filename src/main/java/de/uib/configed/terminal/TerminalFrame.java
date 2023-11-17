@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,9 +38,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
+import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
 import utils.Utils;
 
 public final class TerminalFrame {
@@ -53,8 +54,6 @@ public final class TerminalFrame {
 	private JLabel uploadedFilesLabel;
 	private JLabel fileNameLabel;
 	private JPanel southPanel;
-	private JMenuItem jMenuItemDarkTheme;
-	private JMenuItem jMenuItemLightTheme;
 
 	private TerminalSettingsProvider settingsProvider;
 
@@ -113,7 +112,7 @@ public final class TerminalFrame {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				setDefaultTheme();
+				setSelectedTheme(TerminalSettingsProvider.getTerminalThemeInUse());
 			}
 		});
 	}
@@ -137,44 +136,24 @@ public final class TerminalFrame {
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
-		jMenuItemDarkTheme = new JRadioButtonMenuItem(Configed.getResourceValue("theme.dark"));
-		jMenuItemLightTheme = new JRadioButtonMenuItem(Configed.getResourceValue("theme.light"));
-		jMenuItemDarkTheme.addActionListener((ActionEvent e) -> {
-			jMenuItemDarkTheme.setSelected(true);
-			jMenuItemLightTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("theme.dark"));
-		});
-		jMenuItemLightTheme.addActionListener((ActionEvent e) -> {
-			jMenuItemDarkTheme.setSelected(false);
-			jMenuItemLightTheme.setSelected(true);
-			setSelectedTheme(Configed.getResourceValue("theme.light"));
-		});
-		setDefaultTheme();
+		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
+		ButtonGroup groupThemes = new ButtonGroup();
 
-		JMenu jMenuTheme = new JMenu("Theme");
-		jMenuTheme.add(jMenuItemDarkTheme);
-		jMenuTheme.add(jMenuItemLightTheme);
+		for (final String theme : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
+			Logging.debug("selectedTheme in Terminal " + theme);
+			themeItem.setSelected(TerminalSettingsProvider.getTerminalThemeInUse().equals(theme));
+			jMenuTheme.add(themeItem);
+			groupThemes.add(themeItem);
+
+			themeItem.addActionListener((ActionEvent e) -> setSelectedTheme(theme));
+		}
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		menuFile.add(jMenuItemNewWindow);
 		menuFile.add(jMenuItemSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
-	}
-
-	private void setDefaultTheme() {
-		String defaultTheme = TerminalSettingsProvider.getTerminalThemeInUse() != null
-				? TerminalSettingsProvider.getTerminalThemeInUse().toString()
-				: UserPreferences.get(UserPreferences.THEME);
-		if ("Light".equals(defaultTheme)) {
-			jMenuItemLightTheme.setSelected(true);
-			jMenuItemDarkTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("theme.light"));
-		} else {
-			jMenuItemDarkTheme.setSelected(true);
-			jMenuItemLightTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("theme.dark"));
-		}
 	}
 
 	private void displaySessionsDialog() {
@@ -228,11 +207,8 @@ public final class TerminalFrame {
 	}
 
 	private void setSelectedTheme(String selectedTheme) {
-		if (selectedTheme.equals(Configed.getResourceValue("theme.light"))) {
-			TerminalSettingsProvider.setTerminalLightTheme();
-		} else {
-			TerminalSettingsProvider.setTerminalDarkTheme();
-		}
+		TerminalSettingsProvider.setTerminalTheme(selectedTheme);
+
 		if (widget != null) {
 			widget.repaint();
 		}
