@@ -500,16 +500,16 @@ public class MainFrame extends JFrame
 		String selectedTheme = Messages.getSelectedTheme();
 		Logging.debug("selectedLocale " + selectedTheme);
 
-		for (final String themeName : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
-			Logging.debug("selectedTheme " + themeName);
-			themeItem.setSelected(selectedTheme.equals(themeName));
+		for (final String theme : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
+			Logging.debug("selectedTheme " + theme);
+			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
 
 			themeItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.THEME, themeName);
-				Messages.setTheme(themeName);
+				UserPreferences.set(UserPreferences.THEME, theme);
+				Messages.setTheme(theme);
 				Main.setOpsiLaf();
 
 				runnable.run();

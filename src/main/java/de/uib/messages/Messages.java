@@ -142,8 +142,22 @@ public final class Messages {
 		return selectedTheme;
 	}
 
+	public static String getThemeTranslation(String theme) {
+		switch (theme) {
+		case "Light":
+			return Configed.getResourceValue("theme.light");
+
+		case "Dark":
+			return Configed.getResourceValue("theme.dark");
+
+		default:
+			Logging.warning("Cannot find translation for theme " + theme);
+			return null;
+		}
+	}
+
 	public static List<String> getAvailableThemes() {
-		return List.copyOf(availableThemes);
+		return availableThemes;
 	}
 
 	public static void setTheme(String newTheme) {

@@ -137,17 +137,17 @@ public final class TerminalFrame {
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
-		jMenuItemDarkTheme = new JRadioButtonMenuItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
-		jMenuItemLightTheme = new JRadioButtonMenuItem(Configed.getResourceValue("Terminal.settings.theme.light"));
+		jMenuItemDarkTheme = new JRadioButtonMenuItem(Configed.getResourceValue("theme.dark"));
+		jMenuItemLightTheme = new JRadioButtonMenuItem(Configed.getResourceValue("theme.light"));
 		jMenuItemDarkTheme.addActionListener((ActionEvent e) -> {
 			jMenuItemDarkTheme.setSelected(true);
 			jMenuItemLightTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
+			setSelectedTheme(Configed.getResourceValue("theme.dark"));
 		});
 		jMenuItemLightTheme.addActionListener((ActionEvent e) -> {
 			jMenuItemDarkTheme.setSelected(false);
 			jMenuItemLightTheme.setSelected(true);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
+			setSelectedTheme(Configed.getResourceValue("theme.light"));
 		});
 		setDefaultTheme();
 
@@ -169,11 +169,11 @@ public final class TerminalFrame {
 		if ("Light".equals(defaultTheme)) {
 			jMenuItemLightTheme.setSelected(true);
 			jMenuItemDarkTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.light"));
+			setSelectedTheme(Configed.getResourceValue("theme.light"));
 		} else {
 			jMenuItemDarkTheme.setSelected(true);
 			jMenuItemLightTheme.setSelected(false);
-			setSelectedTheme(Configed.getResourceValue("Terminal.settings.theme.dark"));
+			setSelectedTheme(Configed.getResourceValue("theme.dark"));
 		}
 	}
 
@@ -228,7 +228,7 @@ public final class TerminalFrame {
 	}
 
 	private void setSelectedTheme(String selectedTheme) {
-		if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
+		if (selectedTheme.equals(Configed.getResourceValue("theme.light"))) {
 			TerminalSettingsProvider.setTerminalLightTheme();
 		} else {
 			TerminalSettingsProvider.setTerminalDarkTheme();
