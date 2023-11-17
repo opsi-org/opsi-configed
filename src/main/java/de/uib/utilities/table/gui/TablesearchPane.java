@@ -45,7 +45,7 @@ import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
-public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
+public class TablesearchPane extends JPanel implements DocumentListener, KeyListener {
 	private static final int BLINK_RATE = 0;
 	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
 	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
@@ -290,7 +290,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		checkmarkSearch.addActionListener(this);
+		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
 
 		selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
@@ -310,7 +310,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			searchInputType = SearchInputType.LINE;
 		}
 
-		checkmarkSearchProgressive.addActionListener(this);
+		checkmarkSearchProgressive.addActionListener(event -> checkmarkSearchProgressiveEvent());
 		checkmarkSearchProgressive.setChangeStateAutonomously(true);
 		checkmarkSearchProgressive
 				.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
@@ -415,7 +415,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filtermark.addActionListener(this);
+		filtermark.addActionListener(event -> filtermarkEvent());
 
 		labelFilterMarkGap = new JLabel("");
 
@@ -436,7 +436,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
 		checkmarkAllColumns.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
-		checkmarkAllColumns.addActionListener(this);
+		checkmarkAllColumns.addActionListener(event -> checkmarkAllColumnsEvent());
 
 		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
 		selectedIcon = Utils.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
@@ -456,7 +456,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
-		checkmarkFullText.addActionListener(this);
+		checkmarkFullText.addActionListener(event -> checkmarkFullTextEvent());
 	}
 
 	private void setupLayout() {
@@ -938,6 +938,75 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
+	private void checkmarkAllColumnsEvent() {
+		Logging.debug(this, "actionPerformed on checkmarkAllColumns");
+
+		comboSearchFields.setSelectedIndex(0);
+		if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
+			// all columns
+
+			if (Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
+			}
+		} else {
+			if (Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "1");
+			}
+		}
+	}
+
+	private void checkmarkFullTextEvent() {
+		Logging.debug(this, "actionPerformed on checkmarkFullText");
+
+		if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
+			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
+			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
+			}
+		} else {
+			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
+			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
+			}
+		}
+	}
+
+	private void filtermarkEvent() {
+		Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
+
+		if (targetModel.isFiltered()) {
+			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
+
+			targetModel.setFiltered(false);
+			setFilteredMode(false);
+
+			if (unfilteredSelection.length != 0) {
+				targetModel.setSelection(unfilteredSelection);
+			}
+		} else {
+			switchFilterOn();
+		}
+	}
+
+	private void checkmarkSearchProgressiveEvent() {
+		Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
+
+		if (targetModel.isFiltered()) {
+			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
+
+			targetModel.setFiltered(false);
+			setFilteredMode(false);
+
+			if (unfilteredSelection.length != 0) {
+				targetModel.setSelection(unfilteredSelection);
+			}
+		} else {
+			switchFilterOn();
+		}
+	}
+
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
@@ -1011,88 +1080,4 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
-
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == checkmarkAllColumns) {
-			Logging.debug(this, "actionPerformed on checkmarkAllColumns");
-
-			comboSearchFields.setSelectedIndex(0);
-			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
-				// all columns
-
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
-							"0");
-				}
-			} else {
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY,
-							"1");
-				}
-			}
-		} else if (e.getSource() == checkmarkFullText) {
-			Logging.debug(this, "actionPerformed on checkmarkFullText");
-
-			if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
-				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
-				}
-			} else {
-				comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
-				}
-			}
-		} else if (e.getSource() == filtermark) {
-			Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
-
-			if (targetModel.isFiltered()) {
-				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
-
-				targetModel.setFiltered(false);
-				setFilteredMode(false);
-
-				if (unfilteredSelection.length != 0) {
-					targetModel.setSelection(unfilteredSelection);
-				}
-			} else {
-				switchFilterOn();
-			}
-		} else if (e.getSource() == checkmarkSearch) {
-			Logging.debug(this,
-					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
-
-			fieldSearch.setText("");
-		} else if (e.getSource() == checkmarkSearchProgressive) {
-			Logging.debug(this,
-					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
-			if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
-				searchInputType = SearchInputType.PROGRESSIVE;
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY,
-							"0");
-				}
-			} else {
-				searchInputType = SearchInputType.LINE;
-				if (Configed.getSavedStates()
-						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-					Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY,
-							"1");
-				}
-			}
-
-			Logging.debug(this,
-					"actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
-		} else {
-			Logging.warning(this, "action performed on source " + e.getSource() + ", but was not expected");
-		}
-	}
 }
