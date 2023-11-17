@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
+import org.jdesktop.swingx.event.DateSelectionEvent;
 import org.jdesktop.swingx.event.DateSelectionListener;
 
 import de.uib.utilities.logging.Logging;
@@ -208,7 +209,7 @@ public class DateTimeEditor extends JPanel implements DateSelectionListener {
 		return Timestamp.valueOf(calendar);
 	}
 
-	public void addDateSelectionListener(org.jdesktop.swingx.event.DateSelectionListener listener) {
+	public void addDateSelectionListener(DateSelectionListener listener) {
 		monthView.getSelectionModel().addDateSelectionListener(listener);
 	}
 
@@ -223,7 +224,7 @@ public class DateTimeEditor extends JPanel implements DateSelectionListener {
 
 	// DateSelectionListener
 	@Override
-	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
+	public void valueChanged(DateSelectionEvent ev) {
 		if (withMovingSelectionDate) {
 			if (Timestamp.valueOf(calendar).equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion

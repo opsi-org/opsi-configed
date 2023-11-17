@@ -35,11 +35,14 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
+	public static final String THEME_LIGHT = "Light";
+	public static final String THEME_DARK = "Dark";
+
 	private static Set<String> existingLocalesNames;
 	private static String localeString;
 	private static Locale myLocale;
 	private static ResourceBundle messagesBundle;
-	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
+	private static final List<String> availableThemes = Arrays.asList(THEME_LIGHT, THEME_DARK);
 	private static String selectedTheme = availableThemes.get(0);
 
 	// private constructor to hide the implicit public one
@@ -142,8 +145,22 @@ public final class Messages {
 		return selectedTheme;
 	}
 
+	public static String getThemeTranslation(String theme) {
+		switch (theme) {
+		case Messages.THEME_LIGHT:
+			return Configed.getResourceValue("theme.light");
+
+		case Messages.THEME_DARK:
+			return Configed.getResourceValue("theme.dark");
+
+		default:
+			Logging.warning("Cannot find translation for theme " + theme);
+			return null;
+		}
+	}
+
 	public static List<String> getAvailableThemes() {
-		return List.copyOf(availableThemes);
+		return availableThemes;
 	}
 
 	public static void setTheme(String newTheme) {

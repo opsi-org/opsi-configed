@@ -77,6 +77,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
@@ -86,7 +87,7 @@ import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
-import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messages.Messages;
@@ -458,8 +459,6 @@ public class MainFrame extends JFrame
 		JMenuItem jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
 		JMenuItem jMenuFileReload = new JMenuItem();
-		JMenu jMenuTheme = new JMenu(); // submenu
-		JMenu jMenuFileLanguage; // submenu
 		JMenuItem jMenuFileLogout = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -480,37 +479,32 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFileLanguage = Messages.createJMenuLanguages(this::restartConfiged);
-
-		jMenuTheme = createJMenuTheme(this::restartConfiged);
-
 		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
-		jMenuFile.add(jMenuFileLanguage);
-		jMenuFile.add(jMenuTheme);
+		jMenuFile.add(Messages.createJMenuLanguages(this::restartConfiged));
+		jMenuFile.add(createJMenuTheme(this::restartConfiged));
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 	}
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
-		JMenu jMenuTheme = new JMenu("Theme");
+		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = Messages.getSelectedTheme();
-		Logging.debug("selectedLocale " + selectedTheme);
 
-		for (final String themeName : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
-			Logging.debug("selectedTheme " + themeName);
-			themeItem.setSelected(selectedTheme.equals(themeName));
+		for (final String theme : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
+			Logging.debug("selectedTheme " + theme);
+			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
 
 			themeItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.THEME, themeName);
-				Messages.setTheme(themeName);
+				UserPreferences.set(UserPreferences.THEME, theme);
+				Messages.setTheme(theme);
 				Main.setOpsiLaf();
 
 				runnable.run();
@@ -526,7 +520,6 @@ public class MainFrame extends JFrame
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		SSHCommandFactory.destroyInstance();
-		Terminal.destroyInstance();
 		Configed.getSavedStates().removeAll();
 		restartConfiged();
 	}
@@ -1141,14 +1134,9 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
-
-			if (!Terminal.getInstance().isWebSocketTtyConnected()) {
-				configedMain.connectTerminal();
-			} else {
-				Logging.info(this,
-						"terminal is already opened and connected to websocket (displaying current terminal window)");
-				Terminal.getInstance().display();
-			}
+			TerminalFrame terminal = new TerminalFrame();
+			terminal.display();
+			configedMain.connectTerminal(terminal);
 		});
 
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
@@ -2031,9 +2019,9 @@ public class MainFrame extends JFrame
 		jButtonLicences.setToolTipText(Configed.getResourceValue("MainFrame.labelLicences"));
 		jButtonLicences.setFocusable(false);
 
-		jButtonServerConfiguration.addActionListener(this);
-		jButtonDepotsConfiguration.addActionListener(this);
-		jButtonClientsConfiguration.addActionListener(this);
+		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
+		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
+		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 		jButtonLicences.addActionListener(this);
 
 		jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
@@ -2094,7 +2082,7 @@ public class MainFrame extends JFrame
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(this);
+		jButtonOpsiLicenses.addActionListener(e -> showOpsiModules());
 		jButtonOpsiLicenses.setFocusable(false);
 
 		JPanel iconPaneTargets = new JPanel();
@@ -3133,12 +3121,6 @@ public class MainFrame extends JFrame
 				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
-		} else if (e.getSource() == jButtonClientsConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.CLIENTS);
-		} else if (e.getSource() == jButtonDepotsConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.DEPOTS);
-		} else if (e.getSource() == jButtonServerConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
@@ -3147,8 +3129,6 @@ public class MainFrame extends JFrame
 			configedMain.handleProductActionRequest();
 		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
-		} else if (e.getSource() == jButtonOpsiLicenses) {
-			showOpsiModules();
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}

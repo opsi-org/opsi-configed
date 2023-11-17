@@ -1,9 +1,12 @@
 # Changelog
 
 ## [x.x.x.x] - xxxx-xx-xx
-### Changed
-- Add Logviewer options to menubar in opsi-logviewer
+### Added
+- Logviewer options to menubar in opsi-logviewer
+- Connect messagebus-terminal to clients and depot servers
 
+### Fixed
+- Nullpointer exception some time after closing Terminal
 
 ## [4.3.1.0] - 2023-11-14
 ### Fixed

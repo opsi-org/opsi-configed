@@ -213,11 +213,11 @@ public class Main {
 		registerOpenSansFont();
 
 		switch (Messages.getSelectedTheme()) {
-		case "Light":
+		case Messages.THEME_LIGHT:
 			FlatLightLaf.setup();
 			break;
 
-		case "Dark":
+		case Messages.THEME_DARK:
 			FlatDarkLaf.setup();
 			break;
 

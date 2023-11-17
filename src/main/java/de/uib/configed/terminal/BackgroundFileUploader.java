@@ -26,7 +26,7 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.messagebus.event.WebSocketEvent;
+import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
@@ -37,14 +37,16 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int LATENCY_WINDOW_SIZE = 10;
 
 	private FileUploadQueue queue;
-	private Terminal terminal;
+	private TerminalFrame terminal;
+	private TerminalWidget terminalWidget;
 
 	private File currentFile;
 	private int totalFilesToUpload;
 	private int uploadedFiles;
 
-	public BackgroundFileUploader(FileUploadQueue queue) {
-		this.terminal = Terminal.getInstance();
+	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue) {
+		this.terminal = terminal;
+		this.terminalWidget = terminalWidget;
 		this.queue = queue;
 	}
 
@@ -115,7 +117,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			data.put("type", WebSocketEvent.FILE_CHUNK.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
-			data.put("channel", terminal.getTerminalChannel());
+			data.put("channel", terminalWidget.getTerminalChannel());
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);
 			data.put("file_id", fileId);
@@ -127,12 +129,12 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			terminal.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			terminalWidget.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 
 			buff.clear();
 
 			long startWaitingTime = System.currentTimeMillis();
-			while (!last && terminal.getMessagebus().isBusy()) {
+			while (!last && terminalWidget.getMessagebus().isBusy()) {
 				wait(DEFAULT_BUSY_WAIT_IN_MS);
 			}
 			double latency = (double) System.currentTimeMillis() - (double) startWaitingTime;
@@ -171,20 +173,20 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			data.put("type", WebSocketEvent.FILE_UPLOAD_REQUEST.toString());
 			data.put("id", UUID.randomUUID().toString());
 			data.put("sender", "@");
-			data.put("channel", terminal.getTerminalChannel());
+			data.put("channel", terminalWidget.getTerminalChannel());
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);
 			data.put("file_id", fileId);
 			data.put("content_type", "application/octet-stream");
 			data.put("name", file.getName());
 			data.put("size", Files.size(file.toPath()));
-			data.put("terminal_id", terminal.getTerminalId());
+			data.put("terminal_id", terminalWidget.getTerminalId());
 
 			Logging.debug(this, "file upload request: " + data.toString());
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			terminal.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			terminalWidget.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 		} catch (JsonProcessingException ex) {
 			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		} catch (IOException ex) {

@@ -12,7 +12,6 @@ import de.uib.configed.Globals;
 import utils.Utils;
 
 public class IconButton extends JButton {
-
 	/** The url for the image displayed if active */
 	private String imageURLActive;
 
