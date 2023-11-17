@@ -2837,7 +2837,6 @@ public class MainFrame extends JFrame
 	}
 
 	private void showHealthDataAction() {
-		// Only show loading when health data are not yet loaded
 		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
