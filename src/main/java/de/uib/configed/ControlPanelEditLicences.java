@@ -344,21 +344,21 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			}
 		}
 		if (keyNew) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelSoftwarelicences().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelKeys().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -394,21 +394,21 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			}
 		}
 		if (keyNew) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelLicencecontracts().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
 		if (thePanel.getPanelSoftwarelicences().getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return;

@@ -165,7 +165,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getButtonShowAssignedNotExisting().setEnabled(!persistenceController.getSoftwareDataService()
 				.getUnknownSoftwareListForLicencePoolPD(poolID).isEmpty());
 		if (thePanel.getFMissingSoftwareInfo() == null) {
-			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(Utils.getMasterFrame(), this));
+			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(ConfigedMain.getLicencesFrame(), this));
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicencePoolPD(poolID).isEmpty()) {
@@ -384,7 +384,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					Logging.info(
 							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
 
-					FTextArea dialog = new FTextArea(Utils.getMasterFrame(), Globals.APPNAME + " " + title, true,
+					FTextArea dialog = new FTextArea(ConfigedMain.getLicencesFrame(), Globals.APPNAME + " " + title,
+							true,
 							new String[] {
 									Configed.getResourceValue(
 											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
@@ -688,11 +689,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// -- Softwarename --> LicencePool
 
-		Logging.info(this, "frame Softwarename --> LicencePool  in " + Utils.getMasterFrame());
-
 		final ControlPanelAssignToLPools contr = this;
-		thePanel.setFSoftwarename2LicencePool(
-				new FSoftwarename2LicencePool(Utils.getMasterFrame(), contr, configedMain));
+		thePanel.setFSoftwarename2LicencePool(new FSoftwarename2LicencePool(contr, configedMain));
 		thePanel.getFSoftwarename2LicencePool().setTableModel(); // test
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicencePool().checkExistNamesWithVariantLicencepools());

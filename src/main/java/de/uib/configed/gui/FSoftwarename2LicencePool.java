@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -87,8 +86,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private ConfigedMain configedMain;
 
-	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
-		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false,
+	public FSoftwarename2LicencePool(ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
+		super(ConfigedMain.getLicencesFrame(), Configed.getResourceValue("FSoftwarename2LicencePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800);
 
 		this.myController = myController;

@@ -39,7 +39,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
-import utils.Utils;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
@@ -82,7 +81,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		this.configedMain = configedMain;
 
 		setCalToNow();
-		super.setLocationRelativeTo(Utils.getMasterFrame());
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {

@@ -21,6 +21,7 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
@@ -130,7 +131,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
-			fMissingSoftwareInfo.setLocationRelativeTo(Utils.getMasterFrame());
+			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getLicencesFrame());
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
@@ -404,7 +405,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 		panelLicencepools.setResetFilterModeOnNewSearch(false);
-		panelLicencepools.setMasterFrame(Utils.getMasterFrame());
+		panelLicencepools.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
@@ -412,11 +413,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelProductId2LPool.setMasterFrame(Utils.getMasterFrame());
+		panelProductId2LPool.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFiltering(true, false);
-		panelRegisteredSoftware.setMasterFrame(Utils.getMasterFrame());
+		panelRegisteredSoftware.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
@@ -477,7 +478,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private void buttonSupplementSimilarAction() {
 		if (!fSoftwarename2LicencePool.isVisible()) {
-			fSoftwarename2LicencePool.setLocationRelativeTo(Utils.getMasterFrame());
+			fSoftwarename2LicencePool.setLocationRelativeTo(ConfigedMain.getLicencesFrame());
 		}
 
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "

@@ -160,6 +160,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
+	private static LicencesFrame licencesFrame;
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
@@ -278,8 +279,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
 	private List<JFrame> allFrames;
-
-	private LicencesFrame licencesFrame;
 
 	private FGroupActions groupActionFrame;
 	private FProductActions productActionFrame;
@@ -4984,7 +4983,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public LicencesFrame getLicencesFrame() {
+	public static LicencesFrame getLicencesFrame() {
 		return licencesFrame;
 	}
 

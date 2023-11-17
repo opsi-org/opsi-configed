@@ -2650,7 +2650,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			@Override
 			public void run() {
 				configedMain.reloadLicensesData();
-				configedMain.getLicencesFrame().setVisible(true);
+				ConfigedMain.getLicencesFrame().setVisible(true);
 				disactivateLoadingPane();
 			}
 		}.start();

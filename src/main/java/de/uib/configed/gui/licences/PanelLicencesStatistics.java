@@ -24,7 +24,6 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
 
 public class PanelLicencesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
@@ -43,7 +42,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 		panelStatistics = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, 0, true, null,
 				true);
-		panelStatistics.setMasterFrame(Utils.getMasterFrame());
+		panelStatistics.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
@@ -71,10 +70,10 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	public void reset() {
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) == null) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			configedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelStatistics.reload();
-				configedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getLicencesFrame().setCursor(null);
 				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			});
 		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {

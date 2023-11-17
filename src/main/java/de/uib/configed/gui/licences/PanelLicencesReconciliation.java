@@ -24,7 +24,6 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
 
 public class PanelLicencesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
@@ -46,7 +45,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 		panelReconciliation = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, 0,
 				true, null, true);
-		panelReconciliation.setMasterFrame(Utils.getMasterFrame());
+		panelReconciliation.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
@@ -74,10 +73,10 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	public void reset() {
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			configedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelReconciliation.reload();
-				configedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getLicencesFrame().setCursor(null);
 				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			});
 		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {

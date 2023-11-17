@@ -25,11 +25,11 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.DynamicCombo;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
 
 public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
 	private JSplitPane splitPane;
@@ -117,7 +117,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelUsage.setMasterFrame(Utils.getMasterFrame());
+		panelUsage.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelUsage.setFiltering(true);

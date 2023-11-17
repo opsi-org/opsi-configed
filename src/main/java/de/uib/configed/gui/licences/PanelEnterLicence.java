@@ -150,14 +150,14 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 	private boolean checkAndStart() {
 		if (panelLicencepools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicencecontracts.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(configedMain.getLicencesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicencesFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
@@ -252,13 +252,13 @@ public class PanelEnterLicence extends MultiTablePanel {
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
 
-		panelKeys.setMasterFrame(Utils.getMasterFrame());
+		panelKeys.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelLicencepools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), MAX_WIDTH, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
-		panelLicencepools.setMasterFrame(Utils.getMasterFrame());
+		panelLicencepools.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelLicencecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
@@ -266,7 +266,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelLicencecontracts.setMasterFrame(Utils.getMasterFrame());
+		panelLicencecontracts.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		jButtonCreateStandard = new JButton();
 		jButtonCreateStandard.setPreferredSize(Globals.BUTTON_DIMENSION);

@@ -55,7 +55,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		additionalPane.setVisible(true);
 
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
-		owner.setVisible(true);
 
 		jButton1.setEnabled(false);
 		jButton1.setIcon(Utils.createImageIcon("images/cancel.png", ""));
