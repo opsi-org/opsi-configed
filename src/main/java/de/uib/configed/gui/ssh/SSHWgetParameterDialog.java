@@ -230,7 +230,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		updateCommand();
 	}
 
-	/* This method is called when button 3 is pressed */
 	@Override
 	public void doAction3() {
 		if (jTextFieldURL.getText()

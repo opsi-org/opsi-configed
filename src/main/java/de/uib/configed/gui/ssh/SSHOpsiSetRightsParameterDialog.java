@@ -97,12 +97,10 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jButtonDoAction.setEnabled(value);
 	}
 
-	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
 		commandopsisetrights.setDir(completion.comboBoxGetStringItem());
 		Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
-		// we are in the event queure
 		new Thread() {
 			@Override
 			public void run() {
@@ -111,7 +109,6 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		}.start();
 	}
 
-	// /* This method gets called when button 2 is pressed */
 	private void cancel() {
 		super.doAction1();
 	}

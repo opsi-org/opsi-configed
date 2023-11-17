@@ -222,7 +222,6 @@ public class SSHCompletionComboButton {
 			public void run() {
 				EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
 						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-					/** Sets the command specific error text **/
 					@Override
 					public String getErrorText() {
 						return ROOT_DIRECTORY;
@@ -255,10 +254,8 @@ public class SSHCompletionComboButton {
 
 				getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
 						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-					/** Sets the command specific error text **/
 					@Override
 					public String getErrorText() {
-						// no file found
 						return ROOT_DIRECTORY;
 					}
 				};
