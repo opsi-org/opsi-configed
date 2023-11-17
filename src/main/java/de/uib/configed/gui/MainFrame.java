@@ -81,6 +81,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
@@ -2023,9 +2024,9 @@ public class MainFrame extends JFrame
 		jButtonLicences.setToolTipText(Configed.getResourceValue("MainFrame.labelLicences"));
 		jButtonLicences.setFocusable(false);
 
-		jButtonServerConfiguration.addActionListener(this);
-		jButtonDepotsConfiguration.addActionListener(this);
-		jButtonClientsConfiguration.addActionListener(this);
+		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
+		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
+		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 		jButtonLicences.addActionListener(this);
 
 		jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
@@ -2086,7 +2087,7 @@ public class MainFrame extends JFrame
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(this);
+		jButtonOpsiLicenses.addActionListener(e -> showOpsiModules());
 		jButtonOpsiLicenses.setFocusable(false);
 
 		JPanel iconPaneTargets = new JPanel();
@@ -3166,12 +3167,6 @@ public class MainFrame extends JFrame
 				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
-		} else if (e.getSource() == jButtonClientsConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.CLIENTS);
-		} else if (e.getSource() == jButtonDepotsConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.DEPOTS);
-		} else if (e.getSource() == jButtonServerConfiguration) {
-			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
@@ -3180,8 +3175,6 @@ public class MainFrame extends JFrame
 			configedMain.handleProductActionRequest();
 		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
-		} else if (e.getSource() == jButtonOpsiLicenses) {
-			showOpsiModules();
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}

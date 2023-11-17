@@ -132,8 +132,8 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
-		stage.show();
 		loadData();
+		stage.show();
 	}
 
 	private void centerAndShowStage() {
