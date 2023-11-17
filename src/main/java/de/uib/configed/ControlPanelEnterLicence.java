@@ -43,7 +43,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	private ConfigedMain configedMain;
 
 	public ControlPanelEnterLicence(ConfigedMain configedMain) {
-		thePanel = new PanelEnterLicence(this, configedMain);
+		thePanel = new PanelEnterLicence(this);
 		this.configedMain = configedMain;
 		init();
 	}

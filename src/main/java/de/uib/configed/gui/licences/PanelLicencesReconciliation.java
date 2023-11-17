@@ -31,13 +31,9 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	private int minVSize = 50;
 	private int tablesMaxWidth = 1000;
 
-	private ConfigedMain configedMain;
-
 	/** Creates new form panelLicencesReconciliation */
-	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController,
-			ConfigedMain configedMain) {
+	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
 		super(licencesReconciliationController);
-		this.configedMain = configedMain;
 		initComponents();
 	}
 

@@ -991,20 +991,23 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void checkmarkSearchProgressiveEvent() {
-		Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
-
-		if (targetModel.isFiltered()) {
-			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
-
-			targetModel.setFiltered(false);
-			setFilteredMode(false);
-
-			if (unfilteredSelection.length != 0) {
-				targetModel.setSelection(unfilteredSelection);
+		Logging.debug(this,
+				"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
+		if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
+			searchInputType = SearchInputType.PROGRESSIVE;
+			if (Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
 			}
 		} else {
-			switchFilterOn();
+			searchInputType = SearchInputType.LINE;
+			if (Configed.getSavedStates()
+					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "1");
+			}
 		}
+
+		Logging.debug(this, "actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
 	}
 
 	// DocumentListener interface

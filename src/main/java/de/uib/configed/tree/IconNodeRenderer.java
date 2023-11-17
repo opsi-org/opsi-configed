@@ -13,7 +13,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
-	private static final int LABEL_WIDTH = 200;
+	// Make width long enough so that it will be not too small for the whole text
+	private static final int LABEL_WIDTH = 500;
 	private static final int LABEL_HEIGHT = 20;
 
 	public IconNodeRenderer() {

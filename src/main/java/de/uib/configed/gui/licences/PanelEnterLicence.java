@@ -77,22 +77,31 @@ public class PanelEnterLicence extends MultiTablePanel {
 	private JTextField jTextFieldLicenceContract;
 	private JTextField jTextFieldLKey;
 
+	private JLabel jLabelSLid1;
+	private JLabel jLabelSLid2;
+	private JLabel jLabelSLid3;
+	private JLabel jLabelSLid4;
+	private JLabel jLabelSLid5;
+	private JLabel jLabelSLid6;
+	private JLabel jLabelTask;
+	private JLabel jLabelConfigure;
+	private JLabel jLabelSLid3info;
+	private JLabel jLabelLKey;
+
 	private FEditDate fEditDate;
 
 	private ControlPanelEnterLicence enterLicenceController;
 
-	private ConfigedMain configedMain;
-
 	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	/** Creates new form PanelEnterLicence */
-	public PanelEnterLicence(ControlPanelEnterLicence enterLicenceController, ConfigedMain configedMain) {
+	public PanelEnterLicence(ControlPanelEnterLicence enterLicenceController) {
 		super(enterLicenceController);
 
 		this.enterLicenceController = enterLicenceController;
-		this.configedMain = configedMain;
 
 		initComponents();
+		setupLayout();
 		defineListeners();
 	}
 
@@ -277,15 +286,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 		jButtonCreateConcurrent = new JButton();
 		jButtonCreateConcurrent.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		JLabel jLabelTask = new JLabel();
-		JLabel jLabelConfigure = new JLabel();
-		JPanel panelLicenceModel = new JPanel();
-		JLabel jLabelSLid1 = new JLabel();
-		JLabel jLabelSLid2 = new JLabel();
-		JLabel jLabelSLid3 = new JLabel();
-		JLabel jLabelSLid4 = new JLabel();
-		JLabel jLabelSLid5 = new JLabel();
-		JLabel jLabelSLid6 = new JLabel();
 		jTextFieldLicenceID = new JTextField();
 		jTextFieldLicenceType = new JTextField();
 		jTextFieldMaxInstallations = new JTextField();
@@ -293,8 +293,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 		comboClient = new JComboBox<>();
 
 		comboClient.setPreferredSize(new Dimension(200, 20));
-
-		JLabel jLabelSLid3info = new JLabel();
 
 		jTextFieldEndOfLicence = new JTextField();
 
@@ -329,12 +327,9 @@ public class PanelEnterLicence extends MultiTablePanel {
 		jButtonSend = new JButton();
 		jButtonSend.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		JLabel jLabelLKey = new JLabel();
 		jTextFieldLKey = new JTextField();
 
 		deactivate();
-
-		JPanel panelEnterKey = new JPanel();
 
 		jButtonCreateStandard.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense"));
 		jButtonCreateStandard.setToolTipText(
@@ -364,20 +359,25 @@ public class PanelEnterLicence extends MultiTablePanel {
 			jTextFieldLKey.setText("");
 		});
 
-		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
+		jLabelTask = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
 
-		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
+		jLabelConfigure = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
 
+		jLabelSLid1 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid1"));
+		jLabelSLid2 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid2"));
+		jLabelSLid3 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3"));
+		jLabelSLid4 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid4"));
+		jLabelSLid5 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
+		jLabelSLid6 = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid6"));
+
+		jLabelSLid3info = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
+
+		jLabelLKey = new JLabel(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelLicenseKey"));
+	}
+
+	private void setupLayout() {
+		JPanel panelLicenceModel = new JPanel();
 		panelLicenceModel.setBorder(BorderFactory.createEtchedBorder());
-
-		jLabelSLid1.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid1"));
-		jLabelSLid2.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid2"));
-		jLabelSLid3.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3"));
-		jLabelSLid4.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid4"));
-		jLabelSLid5.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
-		jLabelSLid6.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid6"));
-
-		jLabelSLid3info.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
 
 		GroupLayout panelLicenceModelLayout = new GroupLayout(panelLicenceModel);
 		panelLicenceModel.setLayout(panelLicenceModelLayout);
@@ -445,9 +445,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 						.addComponent(jLabelSLid4, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboClient, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)));
 
+		JPanel panelEnterKey = new JPanel();
 		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
-
-		jLabelLKey.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelLicenseKey"));
 
 		GroupLayout panelEnterKeyLayout = new GroupLayout(panelEnterKey);
 		panelEnterKey.setLayout(panelEnterKeyLayout);
