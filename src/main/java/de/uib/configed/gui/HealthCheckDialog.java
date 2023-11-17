@@ -60,6 +60,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	private JTextPane textPane = new JTextPane();
 	private DefaultStyledDocument styledDocument = new DefaultStyledDocument();
 
@@ -71,6 +74,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	public HealthCheckDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 500, true);
+		saveHealthDataToFile();
 	}
 
 	@Override
@@ -241,25 +245,23 @@ public class HealthCheckDialog extends FGeneralDialog {
 		}
 	}
 
-	private void saveDiagnosticDataToFile() {
-		String dirname = ConfigedMain.getHost();
+	private void saveHealthDataToFile() {
+		File healthDataFile = new File(getDirectoryLocation(), Globals.HEALTH_CHECK_LOG_FILE_NAME);
+		writeToFile(healthDataFile, ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
+	}
 
+	private void saveDiagnosticDataToFile() {
+		File diagnosticDataFile = new File(getDirectoryLocation(), Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
+		JSONObject jo = new JSONObject(persistenceController.getHealthDataService().getDiagnosticDataPD());
+		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
+	}
+
+	private static String getDirectoryLocation() {
+		String dirname = ConfigedMain.getHost();
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}
-
-		File diagnosticDataFile = new File(Configed.getSavedStatesLocationName(),
-				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
-
-		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
-			Logging.debug(this, "file already exists");
-			return;
-		}
-
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-		JSONObject jo = new JSONObject(persistenceController.getHealthDataService().getDiagnosticDataPD());
-		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
+		return new File(Configed.getSavedStatesLocationName(), dirname).toString();
 	}
 
 	private void writeToFile(File file, ByteBuffer data) {
