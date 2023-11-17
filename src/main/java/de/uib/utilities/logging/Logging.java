@@ -429,14 +429,9 @@ public final class Logging {
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 		}
 
-		new Thread() {
-			@Override
-			public void run() {
-				fErrors.setMessage(Logging.getErrorListAsLines());
-				fErrors.setAlwaysOnTop(true);
-				fErrors.setVisible(true);
-			}
-		}.start();
+		fErrors.setMessage(Logging.getErrorListAsLines());
+		fErrors.setAlwaysOnTop(true);
+		fErrors.setVisible(true);
 	}
 
 	public static String getErrorListAsLines() {

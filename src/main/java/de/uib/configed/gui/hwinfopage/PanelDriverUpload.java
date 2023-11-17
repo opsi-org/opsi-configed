@@ -611,15 +611,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			@Override
 			public void run() {
 				new SSHConnectExec(configedMain,
-						// Empty_Command(String id, String c, String mt, boolean ns)
-						// id not needed
 						new EmptyCommand("show_drivers.py",
 								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
 										+ fieldClientname.getText(),
-								// menuText - not needed
-								"show_drivers.py",
-								// need Sudo?
-								false));
+								"show_drivers.py", false));
 			}
 		}.start();
 	}

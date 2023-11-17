@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.SwingUtilities;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -511,12 +513,7 @@ public final class SSHCommandFactory {
 	 * Reload configed menu server-konsole
 	 */
 	public void reloadServerMenu() {
-		new Thread() {
-			@Override
-			public void run() {
-				configedMain.reloadServerMenu();
-			}
-		}.start();
+		SwingUtilities.invokeLater(configedMain::reloadServerMenu);
 	}
 
 	public SSHConnect getConnection() {

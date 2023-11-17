@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -218,7 +217,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private SavedSearchesDialog savedSearchesDialog;
 	private ClientSelectionDialog clientSelectionDialog;
-	private FShowList fShowReachableInfo;
 
 	// the properties for one product and all selected clients
 	private Collection<Map<String, Object>> productProperties;
@@ -350,6 +348,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private boolean isAllLicenseDataReloaded;
 	private boolean isInitialLicenseDataLoading;
 
+	private InitialDataLoader initialDataLoader;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
@@ -377,6 +377,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return mainFrame;
 	}
 
+	public LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+
 	private void addClient(LicencesTabStatus status, TabClient panel) {
 		licencesPanels.put(status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
@@ -400,7 +404,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return editingTarget;
 	}
 
-	private void initGui() {
+	protected void initGui() {
 		Logging.info(this, "initGui");
 
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
@@ -742,33 +746,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
 				.replaceAll("").split(",");
 
-		// too early, raises a NPE, if the user entry does not exist
-
-		new Thread() {
-			@Override
-			public void run() {
-				preloadData();
-
-				SwingUtilities.invokeLater(() -> {
-					initGui();
-
-					everythingReady = true;
-
-					checkErrorList();
-
-					loginDialog.setVisible(false);
-
-					Logging.info("setting mainframe visible");
-
-					mainFrame.setVisible(true);
-
-					// init splitpanes only when frame already visible
-					mainFrame.initSplitPanes();
-
-					mainFrame.toFront();
-				});
-			}
-		}.start();
+		initialDataLoader = new InitialDataLoader(this);
+		initialDataLoader.execute();
 	}
 
 	public void init() {
@@ -795,7 +774,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	private void preloadData() {
+	protected void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
 		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
@@ -3338,7 +3317,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		checkSaveAll(true);
 
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			// we have loaded the data
 
 			viewIndex = visualViewIndex;
@@ -3462,7 +3441,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
 			isAllLicenseDataReloaded = true;
 
@@ -3485,7 +3464,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			String oldGroupSelection = activatedGroupModel.getGroupName();
 			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
@@ -3515,7 +3494,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		selectionPanel.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
-		if (everythingReady) {
+		if (initialDataLoader.isDataLoaded()) {
 			allowedClients = null;
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -3951,7 +3930,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		new Thread() {
 			@Override
 			public void run() {
-				showReachableInfoDialog();
+				FShowList fShowReachableInfo = createReachableInfoDialog();
+				fShowReachableInfo.setVisible(true);
+				fShowReachableInfo.toFront();
 
 				reachableInfo = new HashMap<>();
 
@@ -3973,19 +3954,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}.start();
 	}
 
-	private void showReachableInfoDialog() {
-		if (fShowReachableInfo == null) {
-			fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
-		}
-
+	private static FShowList createReachableInfoDialog() {
+		FShowList fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
 		fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
-
 		fShowReachableInfo.setAlwaysOnTop(true);
 		fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
 		fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fShowReachableInfo.setVisible(true);
-		fShowReachableInfo.toFront();
+		return fShowReachableInfo;
 	}
 
 	/*
@@ -4050,103 +4026,19 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void getSessionInfo() {
-		boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
-
-		sessioninfoFinished = false;
-
-		Logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
-
-		// no old values kept
-		sessionInfo = new HashMap<>();
-
-		// leave the Event dispatching thread
-		new Thread() {
-			@Override
-			public void run() {
-				// disable the button
-				disableSessionInfoButton();
-
-				// handling the main perspective
-				startThreadForUpdatingSessionInfo();
-
-				// fetch the data in a separated thread
-				startThreadForLoadingSessionInfo(onlySelectedClients);
-			}
-		}.start();
+		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		mainFrame.getIconButtonSessionInfo().setEnabled(false);
+		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
+		infoRetriever.setOnlySelectedClients(selectedClients != null && selectedClients.length > 0);
+		infoRetriever.execute();
 	}
 
-	private void disableSessionInfoButton() {
-		try {
-			SwingUtilities.invokeAndWait(() -> mainFrame.getIconButtonSessionInfo().setEnabled(false));
-		} catch (InvocationTargetException ex) {
-			Logging.info(this, "invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
-		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
-		}
+	public JTableSelectionPanel getClientTable() {
+		return selectionPanel;
 	}
 
-	private void startThreadForUpdatingSessionInfo() {
-		final int MAX_WAIT_SECONDS = 600;
-		new Thread() {
-			@Override
-			public void run() {
-				int waitSecs = 0;
-
-				Logging.info(this, "counting thread started");
-				while (!sessioninfoFinished && waitSecs <= MAX_WAIT_SECONDS) {
-					Logging.debug(this, "wait secs for session infoi " + waitSecs);
-					try {
-						sleep(1000);
-					} catch (InterruptedException iex) {
-						Logging.info(this, "interrupt at " + waitSecs);
-						Thread.currentThread().interrupt();
-					}
-					waitSecs++;
-				}
-
-				// finishing the task
-				SwingUtilities.invokeLater(ConfigedMain.this::sessionInfoFinished);
-			}
-		}.start();
-	}
-
-	private void sessionInfoFinished() {
-		Logging.info(this, "when sessioninfoFinished");
-
-		mainFrame.getIconButtonSessionInfo().setEnabled(true);
-
-		// update column
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-			AbstractTableModel model = selectionPanel.getTableModel();
-
-			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
-
-			for (int row = 0; row < model.getRowCount(); row++) {
-				String clientId = (String) model.getValueAt(row, 0);
-				model.setValueAt(sessionInfo.get(clientId), row, col);
-			}
-
-			model.fireTableDataChanged();
-			setSelectedClientsOnPanel(selectedClients);
-		}
-	}
-
-	private void startThreadForLoadingSessionInfo(boolean onlySelectedClients) {
-		new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "thread started");
-
-				if (onlySelectedClients) {
-					sessionInfo.putAll(persistenceController.getHostDataService().sessionInfo(getSelectedClients()));
-				} else {
-					sessionInfo = persistenceController.getHostDataService().sessionInfo(null);
-				}
-
-				sessioninfoFinished = true;
-			}
-		}.start();
+	public void setSessionInfo(Map<String, String> sessionInfo) {
+		this.sessionInfo = sessionInfo;
 	}
 
 	@SuppressWarnings({ "java:S1874" })
@@ -4860,7 +4752,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		selectionPanel.clearSelection();
 	}
 
-	private void setSelectedClientsOnPanel(String[] selected) {
+	public void setSelectedClientsOnPanel(String[] selected) {
 		if (selected != null) {
 			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.length);
 		} else {

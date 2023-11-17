@@ -27,11 +27,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,7 +79,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
-import de.uib.configed.HealthInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
@@ -2830,53 +2825,12 @@ public class MainFrame extends JFrame
 	}
 
 	private void showHealthDataAction() {
-		// Only show loading when health data are not yet loaded
 		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
 
-		new Thread() {
-			@Override
-			public void run() {
-				saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
-						ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
-
-				HealthCheckDialog dialog = new HealthCheckDialog();
-				dialog.setupLayout();
-				dialog.setVisible(true);
-
-				disactivateLoadingPane();
-			}
-		}.start();
-	}
-
-	private void saveToFile(String fileName, ByteBuffer data) {
-		String dirname = ConfigedMain.getHost();
-
-		if (dirname.contains(":")) {
-			dirname = dirname.replace(":", "_");
-		}
-
-		File file = new File(Configed.getSavedStatesLocationName(), dirname + File.separator + fileName);
-
-		if (file.exists() && file.length() != 0) {
-			Logging.debug(this, "file already exists");
-			return;
-		}
-
-		writeToFile(file, data);
-	}
-
-	private void writeToFile(File file, ByteBuffer data) {
-		if (file == null) {
-			Logging.error(this, "provided file is null");
-		}
-
-		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
-			channel.write(data);
-		} catch (IOException e) {
-			Logging.error(this, "" + e);
-		}
+		HealthCheckDataLoader healthCheckDataLoader = new HealthCheckDataLoader();
+		healthCheckDataLoader.execute();
 	}
 
 	private void showOpsiModules() {
