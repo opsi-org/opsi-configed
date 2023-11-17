@@ -463,8 +463,6 @@ public class MainFrame extends JFrame
 		JMenuItem jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
 		JMenuItem jMenuFileReload = new JMenuItem();
-		JMenu jMenuTheme = new JMenu(); // submenu
-		JMenu jMenuFileLanguage; // submenu
 		JMenuItem jMenuFileLogout = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -485,23 +483,19 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFileLanguage = Messages.createJMenuLanguages(this::restartConfiged);
-
-		jMenuTheme = createJMenuTheme(this::restartConfiged);
-
 		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
-		jMenuFile.add(jMenuFileLanguage);
-		jMenuFile.add(jMenuTheme);
+		jMenuFile.add(Messages.createJMenuLanguages(this::restartConfiged));
+		jMenuFile.add(createJMenuTheme(this::restartConfiged));
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 	}
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
-		JMenu jMenuTheme = new JMenu("Theme");
+		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = Messages.getSelectedTheme();
 		Logging.debug("selectedLocale " + selectedTheme);

@@ -12,6 +12,8 @@ import com.jediterm.core.Color;
 import com.jediterm.terminal.emulator.ColorPalette;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
+import de.uib.configed.Configed;
+
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final int FONT_SIZE_MIN_LIMIT = 8;
 	public static final int FONT_SIZE_MAX_LIMIT = 62;
@@ -96,7 +98,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	}
 
 	public enum Theme {
-		LIGHT("Light"), DARK("Dark");
+		LIGHT(Configed.getResourceValue("theme.light")), DARK(Configed.getResourceValue("theme.dark"));
 
 		private String displayName;
 
