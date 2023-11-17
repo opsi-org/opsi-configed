@@ -317,8 +317,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
-	private boolean everythingReady;
-
 	private boolean filterClientList;
 
 	public enum EditingTarget {
@@ -333,8 +331,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private Messagebus messagebus;
 
 	private Set<String> connectedHostsByMessagebus;
-
-	private boolean sessioninfoFinished;
 
 	private String[] previousSelectedClients;
 
