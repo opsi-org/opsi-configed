@@ -15,7 +15,6 @@ package de.uib.configed.gui.licences;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -43,12 +42,11 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelEnterLicence;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
-public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
+public class PanelEnterLicence extends MultiTablePanel {
 	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 	private static final int MAX_WIDTH = 1000;
@@ -270,7 +268,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		panelLicencecontracts.setMasterFrame(Utils.getMasterFrame());
 
-		JLabel jLabelLicencePool = new JLabel();
 		jButtonCreateStandard = new JButton();
 		jButtonCreateStandard.setPreferredSize(Globals.BUTTON_DIMENSION);
 		jButtonCreateVolume = new JButton();
@@ -339,31 +336,33 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		JPanel panelEnterKey = new JPanel();
 
-		jLabelLicencePool.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Label"));
-
 		jButtonCreateStandard.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense"));
 		jButtonCreateStandard.setToolTipText(
 				Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense.ToolTip"));
-		jButtonCreateStandard.addActionListener(this);
+		jButtonCreateStandard.addActionListener(event -> startStandard());
 
 		jButtonCreateVolume.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense"));
 		jButtonCreateVolume
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense.ToolTip"));
-		jButtonCreateVolume.addActionListener(this);
+		jButtonCreateVolume.addActionListener(event -> startVolume());
 
 		jButtonCreateOEM.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense"));
 		jButtonCreateOEM
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense.ToolTip"));
-		jButtonCreateOEM.addActionListener(this);
+		jButtonCreateOEM.addActionListener(event -> startOEM());
 
 		jButtonCreateConcurrent
 				.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense"));
 		jButtonCreateConcurrent.setToolTipText(
 				Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense.ToolTip"));
-		jButtonCreateConcurrent.addActionListener(this);
+		jButtonCreateConcurrent.addActionListener(event -> startConcurrent());
 
 		jButtonSend.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Execute"));
-		jButtonSend.addActionListener(this);
+		jButtonSend.addActionListener((ActionEvent event) -> {
+			deactivate();
+			saveCurrentLicenceData();
+			jTextFieldLKey.setText("");
+		});
 
 		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
 
@@ -599,26 +598,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		m.put("licenseKey", jTextFieldLKey.getText());
 
 		enterLicenceController.saveNewLicence(m);
-	}
-
-	// ActionListener
-	@Override
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getSource() == jButtonCreateStandard) {
-			startStandard();
-		} else if (evt.getSource() == jButtonCreateVolume) {
-			startVolume();
-		} else if (evt.getSource() == jButtonCreateOEM) {
-			startOEM();
-		} else if (evt.getSource() == jButtonCreateConcurrent) {
-			startConcurrent();
-		} else if (evt.getSource() == jButtonSend) {
-			deactivate();
-			saveCurrentLicenceData();
-			jTextFieldLKey.setText("");
-		} else {
-			Logging.error(this, "action performed on non-treated source");
-		}
 	}
 
 	@Override
