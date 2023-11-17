@@ -209,7 +209,6 @@ public class ConfigedMain implements ListSelectionListener {
 
 	private SavedSearchesDialog savedSearchesDialog;
 	private ClientSelectionDialog clientSelectionDialog;
-	private FShowList fShowReachableInfo;
 
 	// the properties for one product and all selected clients
 	private Collection<Map<String, Object>> productProperties;
@@ -3922,7 +3921,9 @@ public class ConfigedMain implements ListSelectionListener {
 		new Thread() {
 			@Override
 			public void run() {
-				showReachableInfoDialog();
+				FShowList fShowReachableInfo = createReachableInfoDialog();
+				fShowReachableInfo.setVisible(true);
+				fShowReachableInfo.toFront();
 
 				reachableInfo = new HashMap<>();
 
@@ -3944,19 +3945,14 @@ public class ConfigedMain implements ListSelectionListener {
 		}.start();
 	}
 
-	private void showReachableInfoDialog() {
-		if (fShowReachableInfo == null) {
-			fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
-		}
-
+	private static FShowList createReachableInfoDialog() {
+		FShowList fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
 		fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
-
 		fShowReachableInfo.setAlwaysOnTop(true);
 		fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
 		fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fShowReachableInfo.setVisible(true);
-		fShowReachableInfo.toFront();
+		return fShowReachableInfo;
 	}
 
 	/*
