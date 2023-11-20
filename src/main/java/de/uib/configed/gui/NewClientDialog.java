@@ -499,8 +499,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		createNorthPanel();
 
 		scrollpane.getViewport().add(panel);
-		pack();
-		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void initComboDomain() {
