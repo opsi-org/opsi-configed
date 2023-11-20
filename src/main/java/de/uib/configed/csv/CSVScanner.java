@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVScanner {
-	private CSVFormat format;
+	private CSVFormatDetector format;
 	private BufferedReader reader;
 
 	private StringBuilder field = new StringBuilder();
 	private List<List<CSVToken>> tokens = new ArrayList<>();
 	private boolean inQuotes;
 
-	public CSVScanner(Reader reader, CSVFormat format) {
+	public CSVScanner(Reader reader, CSVFormatDetector format) {
 		if (reader instanceof BufferedReader) {
 			this.reader = (BufferedReader) reader;
 		} else {

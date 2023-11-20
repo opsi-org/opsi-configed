@@ -20,13 +20,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-public class CSVFormat {
+public class CSVFormatDetector {
 	private static final Pattern containsDigitsPattern = Pattern.compile(".*\\d.*");
 	private static final Pattern doubleMinusPattern = Pattern.compile("--");
 
 	private static final char DEFAULT_FIELD_SEPARATOR = ',';
 	private static final char DEFAULT_STRING_SEPARATOR = '"';
-	private static final String FORMAT_HINT_INDICATOR = "//-";
+	private static final String FORMAT_HINT_INDICATOR = "#";
 
 	private char fieldSeparator = DEFAULT_FIELD_SEPARATOR;
 	private char stringSeparator = DEFAULT_STRING_SEPARATOR;

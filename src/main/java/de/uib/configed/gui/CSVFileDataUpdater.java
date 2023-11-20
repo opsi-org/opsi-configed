@@ -6,16 +6,18 @@
 
 package de.uib.configed.gui;
 
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.csv.CSVFormat;
-import de.uib.configed.csv.CSVWriter;
+import org.apache.commons.csv.CSVPrinter;
+
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.updates.MapBasedUpdater;
@@ -23,10 +25,11 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 public class CSVFileDataUpdater implements MapBasedUpdater {
 	private String csvFile;
 	private GenTableModel model;
-	private CSVFormat format;
+	private org.apache.commons.csv.CSVFormat format;
 	private List<String> hiddenColumns;
 
-	public CSVFileDataUpdater(GenTableModel model, String csvFile, CSVFormat format, List<String> hiddenColumns) {
+	public CSVFileDataUpdater(GenTableModel model, String csvFile, org.apache.commons.csv.CSVFormat format,
+			List<String> hiddenColumns) {
 		this.model = model;
 		this.csvFile = csvFile;
 		this.format = format;
@@ -35,31 +38,24 @@ public class CSVFileDataUpdater implements MapBasedUpdater {
 
 	@Override
 	public String sendUpdate(Map<String, Object> rowmap) {
-		CSVWriter writer = null;
-
-		try {
-			writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
-
+		try (BufferedWriter writer = Files.newBufferedWriter(new File(csvFile).toPath(), StandardCharsets.UTF_8);
+				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			// Create a copy of columnNames List to avoid global modification
 			// of columnNames List, that exists in GenTableModel class.
 			List<String> columns = new ArrayList<>(model.getColumnNames());
 			columns.removeAll(hiddenColumns);
-			writer.write(columns);
+			printer.printRecord(columns);
 
-			List<List<Object>> rows = model.getRows();
-
-			for (List<Object> originalRow : rows) {
+			for (List<Object> originalRow : model.getRows()) {
 				List<Object> modifiedRow = modifyRowAccordingToHeaders(originalRow);
-				writer.write(modifiedRow);
+				printer.printRecord(modifiedRow);
 			}
-
-			writer.close();
 		} catch (IOException e) {
 			Logging.error("Unable to write to the CSV file", e);
 			return null;
 		}
 
-		return writer.toString();
+		return "";
 	}
 
 	private List<Object> modifyRowAccordingToHeaders(List<Object> row) {

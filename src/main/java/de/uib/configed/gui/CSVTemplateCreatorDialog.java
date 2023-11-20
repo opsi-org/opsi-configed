@@ -9,9 +9,11 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -39,11 +41,13 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVFormat;
-import de.uib.configed.csv.CSVWriter;
 import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
@@ -125,7 +129,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	protected JPanel initPanel() {
-		format = new CSVFormat();
+		format = CSVFormat.DEFAULT.builder().setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -178,7 +182,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JComboBox<Character> stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				format.setStringSeparator(stringSeparatorOptions.getSelectedItem().toString().charAt(0));
+				format = format.builder().setQuote(stringSeparatorOptions.getSelectedItem().toString().charAt(0))
+						.setQuoteMode(QuoteMode.ALL).build();
 			}
 		});
 
@@ -191,7 +196,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format.setFieldSeparator(button.getActionCommand().charAt(0));
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
 				}
 			});
 		}
@@ -200,7 +205,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			@Override
 			public void performAction() {
 				if (!otherSeparatorInput.getText().isEmpty()) {
-					format.setFieldSeparator(otherSeparatorInput.getText().charAt(0));
+					format = format.builder().setDelimiter(otherSeparatorInput.getText().charAt(0)).build();
 				}
 			}
 		});
@@ -368,8 +373,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	private void write(String csvFile) {
-		try {
-			CSVWriter writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
+		try (BufferedWriter writer = Files.newBufferedWriter(new File(csvFile).toPath(), StandardCharsets.UTF_8);
+				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			List<String> headers = new ArrayList<>();
 
 			headerButtons.forEach((JCheckBox header) -> {
@@ -379,11 +384,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			});
 
 			if (includeFormatHintOption.isSelected()) {
-				writer.insertFormatHint();
+				format = format.builder().setCommentMarker('#').build();
+				printer.printComment(String.format("//- sep=%s -- quote=%c", format.getDelimiterString(),
+						format.getQuoteCharacter()));
 			}
 
-			writer.write(headers);
-			writer.close();
+			printer.printRecord(headers);
 		} catch (IOException e) {
 			Logging.error(this, "Unable to write to file", e);
 		}

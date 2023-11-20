@@ -25,7 +25,7 @@ public class CSVReader {
 	private int startLine;
 	private List<String> headerNames;
 
-	private CSVFormat format;
+	private CSVFormatDetector format;
 	private CSVScanner scanner;
 	private CSVParser parser;
 

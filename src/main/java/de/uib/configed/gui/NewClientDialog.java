@@ -11,10 +11,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +38,6 @@ import javax.swing.text.BadLocationException;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVFormat;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -769,19 +764,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 	}
 
-	private CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		CSVFormat format = new CSVFormat();
-
-		try {
-			String file = new String(Files.readAllBytes(Paths.get(csvFile)), StandardCharsets.UTF_8);
-
-			if (!file.isEmpty()) {
-				format.detectFormat(csvFile);
-			}
-		} catch (IOException e) {
-			Logging.error(this, "Unable to read CSV file", e);
-		}
-
+	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
 		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");
@@ -799,23 +782,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
 
-		if (format.hasHeader() && !format.hasExpectedHeaderNames(columnNames)) {
-			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
-							+ Globals.APPNAME + ") ",
-					false, new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
-					+ columnNames.toString().replace("[", "").replace("]", ""));
-			fInfo.setMessage(message.toString());
-			fInfo.setLocationRelativeTo(this);
-			fInfo.setAlwaysOnTop(true);
-			fInfo.setVisible(true);
-			return null;
-		}
-
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
-		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(modifier, format);
+		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(modifier);
 		JPanel centerPanel = csvImportDataDialog.initPanel();
 
 		if (centerPanel == null) {
@@ -856,14 +824,12 @@ public final class NewClientDialog extends FGeneralDialog {
 		dialog.setVisible(true);
 	}
 
-	/* This method gets called when button 1 is pressed */
 	@Override
 	public void doAction1() {
 		result = 1;
 		setVisible(false);
 	}
 
-	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
 		Logging.info(this, "doAction2");

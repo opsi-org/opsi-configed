@@ -19,11 +19,11 @@ import de.uib.configed.csv.exceptions.CSVParserException;
 import de.uib.utilities.logging.Logging;
 
 public class CSVParser {
-	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
+	private static final CSVFormatDetector DEFAULT_FORMAT = new CSVFormatDetector();
 	private static final boolean DEFAULT_IGNORE_ERRORS = false;
 
 	private String pendingField = "";
-	private CSVFormat format;
+	private CSVFormatDetector format;
 
 	private boolean inQuotes;
 	private boolean isMultiLine;
@@ -37,11 +37,11 @@ public class CSVParser {
 		this(DEFAULT_FORMAT, DEFAULT_IGNORE_ERRORS);
 	}
 
-	public CSVParser(CSVFormat format) {
+	public CSVParser(CSVFormatDetector format) {
 		this(format, DEFAULT_IGNORE_ERRORS);
 	}
 
-	public CSVParser(CSVFormat format, boolean ignoreErrors) {
+	public CSVParser(CSVFormatDetector format, boolean ignoreErrors) {
 		this.format = format;
 		this.ignoreErrors = ignoreErrors;
 	}
@@ -169,7 +169,7 @@ public class CSVParser {
 		}
 	}
 
-	public CSVFormat getFormat() {
+	public CSVFormatDetector getFormat() {
 		return format;
 	}
 

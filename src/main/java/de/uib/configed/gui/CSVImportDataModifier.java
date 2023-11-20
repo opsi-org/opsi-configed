@@ -6,9 +6,12 @@
 
 package de.uib.configed.gui;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +21,14 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVParser;
-import de.uib.configed.csv.CSVReader;
-import de.uib.configed.csv.exceptions.CSVException;
-import de.uib.configed.csv.exceptions.CSVFieldCountException;
-import de.uib.configed.csv.exceptions.CSVParserException;
+import de.uib.configed.csv.CSVFormatDetector;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -48,13 +51,11 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public boolean updateTable(CSVParser parser, int startLine, PanelGenEditTable thePanel) {
-		model = updateModel(thePanel, parser, startLine);
-
+	public boolean updateTable(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
+		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
 			return false;
 		}
-
 		thePanel.setTableModel(model);
 
 		hideEmptyColumns(thePanel);
@@ -64,62 +65,92 @@ public class CSVImportDataModifier {
 		return true;
 	}
 
-	private GenTableModel updateModel(PanelGenEditTable thePanel, CSVParser parser, int startLine) {
-		try {
-			CSVReader reader = null;
-
-			if (parser.getFormat().hasHeader()) {
-				reader = new CSVReader(new FileReader(csvFile, StandardCharsets.UTF_8), parser, startLine);
-			} else {
-				reader = new CSVReader(new FileReader(csvFile, StandardCharsets.UTF_8), parser, startLine, columnNames);
-			}
-
-			List<Map<String, Object>> csvData = reader.readAll();
-			reader.close();
-
-			model = createModel(thePanel, csvData, columnNames, parser);
-
-			if (csvData.isEmpty()) {
-				model.deleteRows(new int[model.getRows().size()]);
-				return model;
-			}
-
-			for (int i = 0; i < csvData.size(); i++) {
-				if (model.getRowCount() != 0) {
-					model.updateRowValues(i, csvData.get(i));
-				}
-			}
-		} catch (IOException ex) {
-			Logging.error(this, "Failed to read CSV file", ex);
-		} catch (CSVException ex) {
-			String title = "";
-			StringBuilder message = new StringBuilder("");
-
-			if (ex instanceof CSVParserException) {
-				title = Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title");
-				message.append(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
-			} else if (ex instanceof CSVFieldCountException) {
-				title = Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title");
-				message.append(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
-			} else {
-				Logging.error(this, "unexpected CSVException of type " + ex.getClass());
-			}
-
-			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-
-			fInfo.setMessage(message.toString());
-			fInfo.setAlwaysOnTop(true);
-			fInfo.setVisible(true);
-
+	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
+		List<Map<String, Object>> csvData = extractDataFromCSV(format, startLine);
+		if (csvData == null) {
 			return null;
+		}
+		model = createModel(thePanel, csvData, columnNames, format);
+
+		if (csvData.isEmpty()) {
+			model.deleteRows(new int[model.getRows().size()]);
+			return model;
+		}
+
+		for (int i = 0; i < csvData.size(); i++) {
+			if (model.getRowCount() != 0) {
+				model.updateRowValues(i, csvData.get(i));
+			}
 		}
 
 		return model;
 	}
 
+	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
+		CSVFormatDetector csvFormatDetector = detectFormat();
+		if (csvFormatDetector == null) {
+			return null;
+		}
+		format = format.builder().setDelimiter(csvFormatDetector.getFieldSeparator())
+				.setQuote(csvFormatDetector.getStringSeparator()).setCommentMarker('#').setHeader().build();
+		List<Map<String, Object>> csvData = new ArrayList<>();
+		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
+				CSVParser parser = new CSVParser(reader, format)) {
+			columnNames = parser.getHeaderNames();
+			for (CSVRecord csvRecord : parser.getRecords()) {
+				Map<String, Object> line = new HashMap<>();
+				if (!csvRecord.isConsistent()) {
+					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
+							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
+					csvData = null;
+					break;
+				}
+				if (csvRecord.getRecordNumber() < startLine) {
+					continue;
+				}
+				for (String columnName : columnNames) {
+					if (csvRecord.isMapped(columnName)) {
+						line.put(columnName, csvRecord.get(columnName));
+					}
+				}
+				csvData.add(line);
+			}
+		} catch (IOException | UncheckedIOException ex) {
+			Logging.warning(this, "Failed to read CSV file", ex);
+			displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
+					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
+			csvData = null;
+		}
+		return csvData;
+	}
+
+	private CSVFormatDetector detectFormat() {
+		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
+		try {
+			csvFormatDetector.detectFormat(csvFile);
+			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
+				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
+								+ columnNames.toString().replace("[", "").replace("]", ""));
+				csvFormatDetector = null;
+			}
+		} catch (IOException e) {
+			Logging.error(this, "Unable to detect format of CSV file", e);
+			csvFormatDetector = null;
+		}
+		return csvFormatDetector;
+	}
+
+	private static void displayInfoDialog(String title, String message) {
+		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
+		fInfo.setMessage(message);
+		fInfo.setAlwaysOnTop(true);
+		fInfo.setVisible(true);
+	}
+
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
-			List<String> columnNames, CSVParser parser) {
+			List<String> columnNames, CSVFormat format) {
 		List<String> classNames = new ArrayList<>();
 		populateClassNames(classNames, columnNames);
 
@@ -135,7 +166,7 @@ public class CSVImportDataModifier {
 
 		updateItemFactory.setSource(createdModel);
 
-		CSVFileDataUpdater updater = new CSVFileDataUpdater(createdModel, csvFile, parser.getFormat(), hiddenColumns);
+		CSVFileDataUpdater updater = new CSVFileDataUpdater(createdModel, csvFile, format, hiddenColumns);
 		MapItemsUpdateController updateController = new MapItemsUpdateController(thePanel, createdModel, updater,
 				updateCollection);
 		thePanel.setUpdateController(updateController);
