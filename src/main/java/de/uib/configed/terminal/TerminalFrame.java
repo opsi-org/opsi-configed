@@ -175,13 +175,11 @@ public final class TerminalFrame {
 	private JMenu createViewMenu() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> widget.setFontSize(
-				(int) settingsProvider.getTerminalFontSize() + TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR));
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> widget.increaseFontSize());
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> widget.setFontSize(
-				(int) settingsProvider.getTerminalFontSize() + TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR));
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> widget.decreaseFontSize());
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);

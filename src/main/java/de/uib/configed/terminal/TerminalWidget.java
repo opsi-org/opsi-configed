@@ -73,13 +73,11 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-					setFontSize((int) settingsProvider.getTerminalFontSize()
-							+ TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR);
+					increaseFontSize();
 					ignoreKeyEvent = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_MINUS
 						&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-					setFontSize((int) settingsProvider.getTerminalFontSize()
-							- TerminalSettingsProvider.FONT_SIZE_SCALING_FACTOR);
+					decreaseFontSize();
 					ignoreKeyEvent = true;
 				} else {
 					ignoreKeyEvent = false;
@@ -138,16 +136,22 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		locker.countDown();
 	}
 
-	public void setFontSize(int fontSize) {
-		if (((int) settingsProvider.getTerminalFontSize() == TerminalSettingsProvider.FONT_SIZE_MIN_LIMIT
-				&& fontSize <= TerminalSettingsProvider.FONT_SIZE_MIN_LIMIT)
-				|| ((int) settingsProvider.getTerminalFontSize() == TerminalSettingsProvider.FONT_SIZE_MAX_LIMIT
-						&& fontSize >= TerminalSettingsProvider.FONT_SIZE_MAX_LIMIT)) {
+	private void setFontSize(int fontSize) {
+		if (fontSize <= TerminalSettingsProvider.FONT_SIZE_MIN_LIMIT
+				|| fontSize >= TerminalSettingsProvider.FONT_SIZE_MAX_LIMIT) {
 			return;
 		}
 
 		TerminalSettingsProvider.setTerminalFontSize(fontSize);
 		resizeTerminal();
+	}
+
+	public void increaseFontSize() {
+		setFontSize((int) (settingsProvider.getTerminalFontSize() * 1.1));
+	}
+
+	public void decreaseFontSize() {
+		setFontSize((int) (((double) settingsProvider.getTerminalFontSize() + 1) / 1.1));
 	}
 
 	public void resizeTerminal() {

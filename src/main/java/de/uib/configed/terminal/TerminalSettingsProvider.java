@@ -18,7 +18,6 @@ import de.uib.utilities.logging.Logging;
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final int FONT_SIZE_MIN_LIMIT = 8;
 	public static final int FONT_SIZE_MAX_LIMIT = 62;
-	public static final int FONT_SIZE_SCALING_FACTOR = 2;
 
 	private static int fontSize = 12;
 	private static final Color[] DARK_COLORS = new Color[16];
