@@ -18,8 +18,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
-import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -31,7 +29,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
 
-	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
 
 	protected ConfigedMain configedMain;
@@ -49,10 +46,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void setComponentsEnabled(boolean value) {
-		if (jButtonHelp != null) {
-			jButtonHelp.setEnabled(value);
-		}
-
 		if (jButtonExecute != null) {
 			jButtonExecute.setEnabled(value);
 		}
@@ -63,10 +56,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
-		jButtonHelp = new JButton(Configed.getResourceValue("SSHConnection.buttonHelp"));
-
-		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));
-
 		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -110,21 +99,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	protected void consolidate() {
 		configedMain.reload();
-	}
-
-	private void doActionHelp(final SSHPackageManagerParameterDialog caller) {
-		SSHConnectionExecDialog dia = null;
-		if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
-			dia = new CommandOpsiPackageManagerUninstall().startHelpDialog();
-		} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
-			dia = new CommandOpsiPackageManagerInstall().startHelpDialog();
-		} else {
-			Logging.warning(this, "caller has unexpected class " + caller.getClass());
-		}
-
-		if (dia != null) {
-			dia.setVisible(true);
-		}
 	}
 
 	private void cancel() {

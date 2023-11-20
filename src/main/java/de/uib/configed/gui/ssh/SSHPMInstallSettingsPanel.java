@@ -67,10 +67,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
-			if (jButtonDepotselection != null) {
-				fDepotList.setLocationRelativeTo(jButtonDepotselection);
-			}
-
+			fDepotList.setLocationRelativeTo(this);
 			fDepotList.setVisible(true);
 		});
 

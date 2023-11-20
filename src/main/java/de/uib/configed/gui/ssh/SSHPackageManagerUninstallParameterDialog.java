@@ -30,7 +30,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
-import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -251,17 +250,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 			textFieldProduct.setText((String) jComboBoxOpsiProducts.getSelectedItem());
 		});
 
-		IconAsButton iconButtonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png",
-				"images/reload16.png", "images/reload16.png", "images/reload16.png");
-
-		iconButtonUpdateList.setToolTipText(Configed.getResourceValue(
-				"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
-
-		iconButtonUpdateList.addActionListener((ActionEvent actionEvent) -> {
-			Logging.info(this, "actionPerformed");
-			resetProducts();
-		});
-
 		jLabelOn.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
 
@@ -269,10 +257,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
-			if (jButtonDepotSelection != null) {
-				fDepotList.setLocationRelativeTo(jButtonDepotSelection);
-			}
-
+			fDepotList.setLocationRelativeTo(this);
 			fDepotList.setVisible(true);
 		});
 

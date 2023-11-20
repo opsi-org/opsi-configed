@@ -23,7 +23,6 @@ import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import utils.Utils;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
-	private static SSHPMInstallLocalPanel instance;
 
 	private JLabel jLabelUploadFrom;
 	private JLabel jLabelUploadTo;
@@ -39,7 +38,6 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		initComponents();
 		initLayout();
-		instance = this;
 	}
 
 	private void initComponents() {
@@ -69,7 +67,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = jFileChooser.showOpenDialog(instance);
+			int returnVal = jFileChooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathModules = jFileChooser.getSelectedFile().getPath();
 				jTextFieldPath.setText(pathModules);
