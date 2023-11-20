@@ -4549,7 +4549,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	/** Starts the control dialog */
 	public void startSSHControlDialog() {
 		if (sshCommandControlDialog == null) {
-			sshCommandControlDialog = new SSHCommandControlDialog(this, getMainFrame());
+			sshCommandControlDialog = new SSHCommandControlDialog(this);
 		}
 		sshCommandControlDialog.setVisible(true);
 	}

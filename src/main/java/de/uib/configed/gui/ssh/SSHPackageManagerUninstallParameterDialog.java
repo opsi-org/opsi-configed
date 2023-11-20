@@ -66,8 +66,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	public SSHPackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
 		super(Globals.APPNAME + "  "
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
-		frameWidth = 850;
-		frameHeight = 350;
 
 		this.configedMain = configedMain;
 
@@ -97,8 +95,9 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		textFieldSelectedDepots.setText("");
 
 		super.pack();
-		super.setSize(frameWidth, frameHeight);
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		super.setSize(800, 350);
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 
@@ -379,13 +378,11 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	}
 
 	private void initLayout() {
-		int pref = GroupLayout.PREFERRED_SIZE;
-		int max = Short.MAX_VALUE;
-		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
 		GroupLayout uninstallPanelLayout = new GroupLayout(uninstallPanel);
 		uninstallPanel.setLayout(uninstallPanelLayout);
 		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(jLabelUninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
+				.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE * 2)
 				.addGroup(uninstallPanelLayout
 						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
 
@@ -396,24 +393,33 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
-										.addComponent(jLabelOn, pref, pref, pref).addGap(5, 10, 10)
-										.addComponent(jButtonDepotSelection, pref, pref, pref))
-								.addComponent(jLabelVerbosity, pref, pref, pref)
-								.addComponent(jLabelKeepFiles, pref, pref, pref))
+										.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(5, 10, 10).addComponent(jButtonDepotSelection,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(uninstallPanelLayout.createParallelGroup(leading)
-								.addComponent(textFieldProduct, pref, pref, max)
-								.addComponent(textFieldSelectedDepots, pref, pref, max)
+						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(textFieldProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH)
 
-								.addComponent(checkBoxKeepFiles, pref, pref, pref))));
+								.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))));
 
 		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(jLabelUninstall)
 				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxOpsiProducts, pref, pref, pref)
+						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
 						.addComponent(textFieldProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 

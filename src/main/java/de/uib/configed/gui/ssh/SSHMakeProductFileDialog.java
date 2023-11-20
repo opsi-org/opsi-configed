@@ -76,8 +76,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
-				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
+		setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		setVisible(true);
 	}

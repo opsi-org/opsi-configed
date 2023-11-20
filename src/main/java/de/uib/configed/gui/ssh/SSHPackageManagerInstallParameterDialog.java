@@ -7,7 +7,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
@@ -61,7 +60,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		initLayout();
 
 		super.pack();
-		super.setSize(new Dimension(frameWidth, frameHeight));
+		super.setSize(900, 600);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setVisible(true);
 	}

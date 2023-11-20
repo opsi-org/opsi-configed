@@ -20,7 +20,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -109,7 +108,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * 
 	 * @param owner Usually the MainFrame
 	 **/
-	public SSHCommandControlDialog(ConfigedMain configedMain, JFrame owner) {
+	public SSHCommandControlDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		this.configedMain = configedMain;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
@@ -117,7 +116,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		init();
 		pack();
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		this.setLocationRelativeTo(owner);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 	}
 

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.ssh;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -16,15 +15,12 @@ import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
-	protected int frameWidth = 900;
-	protected int frameHeight = 600;
 
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
@@ -34,13 +30,10 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	protected ConfigedMain configedMain;
 
 	public SSHPackageManagerParameterDialog(String title) {
-		super(null, title);
+		super(ConfigedMain.getMainFrame(), title);
 
 		super.setTitle(title);
 		super.setIconImage(Utils.getMainIcon());
-
-		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
