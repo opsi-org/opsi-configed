@@ -14,7 +14,6 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
@@ -28,7 +27,7 @@ public class FDepotselectionList extends FGeneralDialog {
 				500, 300);
 		depotsList = new DepotsList();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		init();
+		scrollpane.getViewport().add(depotsList);
 		this.masterWindow = masterWindow;
 		masterWindow.setVisible(true);
 	}
@@ -36,12 +35,6 @@ public class FDepotselectionList extends FGeneralDialog {
 	@Override
 	protected boolean wantToBeRegisteredWithRunningInstances() {
 		return false;
-	}
-
-	private void init() {
-		jButton1.setIcon(Utils.createImageIcon("images/cancel16.png", ""));
-		jButton2.setIcon(Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""));
-		scrollpane.getViewport().add(depotsList);
 	}
 
 	public void setListData(List<String> v) {

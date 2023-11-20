@@ -2047,7 +2047,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
 			column.setCellRenderer(
 					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/checked_withoutbox.png", ""), null));
 		}
