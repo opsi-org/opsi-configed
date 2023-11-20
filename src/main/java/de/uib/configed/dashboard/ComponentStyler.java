@@ -66,10 +66,8 @@ public final class ComponentStyler {
 										.otherwise("-fx-background-color: "
 												+ getTableRowColorBasedOnTheme(false, isEvenRow.get())))));
 				Set<Node> checkBoxes = view.lookupAll(".check-box");
-				if (!checkBoxes.isEmpty()) {
-					for (Node checkBox : checkBoxes) {
-						styleCheckBoxComponent((CheckBox) checkBox);
-					}
+				for (Node checkBox : checkBoxes) {
+					styleCheckBoxComponent((CheckBox) checkBox);
 				}
 			}
 		});
@@ -87,10 +85,8 @@ public final class ComponentStyler {
 		}
 
 		Set<Node> scrollBars = view.lookupAll(".scroll-bar");
-		if (!scrollBars.isEmpty()) {
-			for (Node scrollBar : scrollBars) {
-				styleScrollBarComponent((ScrollBar) scrollBar);
-			}
+		for (Node scrollBar : scrollBars) {
+			styleScrollBarComponent((ScrollBar) scrollBar);
 		}
 	}
 
@@ -165,10 +161,8 @@ public final class ComponentStyler {
 		});
 
 		Set<Node> scrollBars = view.lookupAll(".scroll-bar");
-		if (!scrollBars.isEmpty()) {
-			for (Node scrollBar : scrollBars) {
-				styleScrollBarComponent((ScrollBar) scrollBar);
-			}
+		for (Node scrollBar : scrollBars) {
+			styleScrollBarComponent((ScrollBar) scrollBar);
 		}
 	}
 

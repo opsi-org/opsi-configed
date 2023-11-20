@@ -787,10 +787,8 @@ public class ProductDataService {
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductPropertiesPD(
 				depotDataService.getDepot());
 		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
-		if (!defaultProperties.isEmpty()) {
-			for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
-				defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
-			}
+		for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
+			defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
 		}
 
 		Set<String> products = defaultPropertiesRetrieved.keySet();

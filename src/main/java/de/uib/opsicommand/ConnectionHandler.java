@@ -162,7 +162,7 @@ public class ConnectionHandler {
 				connection.setRequestMethod(requestMethod);
 			}
 
-			if (requestProperties != null && !requestProperties.isEmpty()) {
+			if (requestProperties != null) {
 				for (Entry<String, String> entry : requestProperties.entrySet()) {
 					connection.setRequestProperty(entry.getKey(), entry.getValue());
 				}

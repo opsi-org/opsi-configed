@@ -436,11 +436,9 @@ public final class Logging {
 
 	public static String getErrorListAsLines() {
 		StringBuilder result = new StringBuilder("");
-		if (!errorList.isEmpty()) {
-			for (String error : errorList) {
-				result.append("\n");
-				result.append(error);
-			}
+		for (String error : errorList) {
+			result.append("\n");
+			result.append(error);
 		}
 
 		return result.toString();

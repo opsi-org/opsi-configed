@@ -104,9 +104,7 @@ public final class CertificateManager {
 	public static void loadCertificatesToKeyStore() {
 		List<File> certificates = CertificateManager.getCertificates();
 
-		if (!certificates.isEmpty()) {
-			certificates.forEach(CertificateManager::loadCertificateToKeyStore);
-		}
+		certificates.forEach(CertificateManager::loadCertificateToKeyStore);
 	}
 
 	public static void loadCertificateToKeyStore(File certificateFile) {

@@ -144,20 +144,18 @@ public final class SSHCommandParameterMethods {
 			Logging.warning(this, "caller has unexpected type in parseParameter " + caller.getClass());
 		}
 		List<String> params = command.getParameterList();
-		if (!params.isEmpty()) {
-			for (String param : params) {
-				if (command.getCommandRaw().contains(param)) {
-					String[] splittedParameter = splitParameter(param);
-					String result = callMethod(splittedParameter[0], splittedParameter[1]);
-					if (result == null) {
-						canceled = true;
-					} else {
-						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
-						Logging.debug(this, "parseParameter param " + param);
-						Logging.debug(this, "parseParameter result " + result);
-						command.setCommand(command.getCommandRaw().replace(param, result));
-						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
-					}
+		for (String param : params) {
+			if (command.getCommandRaw().contains(param)) {
+				String[] splittedParameter = splitParameter(param);
+				String result = callMethod(splittedParameter[0], splittedParameter[1]);
+				if (result == null) {
+					canceled = true;
+				} else {
+					Logging.debug(this, "parseParameter command " + command.getCommandRaw());
+					Logging.debug(this, "parseParameter param " + param);
+					Logging.debug(this, "parseParameter result " + result);
+					command.setCommand(command.getCommandRaw().replace(param, result));
+					Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 				}
 			}
 		}

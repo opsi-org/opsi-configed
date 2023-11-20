@@ -271,19 +271,17 @@ public class HardwareDataService {
 
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
 
-			if (!client2ClassInfos.isEmpty()) {
-				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
-					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
-					// find max lastseen time as last scan time
+			for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
+				Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
+				// find max lastseen time as last scan time
 
-					String lastseen1 = (String) allInfosForAClient.get(LAST_SEEN_VISIBLE_COL_NAME);
-					String lastseen2 = (String) client2ClassInfo.getValue().get(LAST_SEEN_VISIBLE_COL_NAME);
-					if (lastseen1 != null && lastseen2 != null) {
-						client2ClassInfo.getValue().put(LAST_SEEN_VISIBLE_COL_NAME, maxTime(lastseen1, lastseen2));
-					}
-
-					allInfosForAClient.putAll(client2ClassInfo.getValue());
+				String lastseen1 = (String) allInfosForAClient.get(LAST_SEEN_VISIBLE_COL_NAME);
+				String lastseen2 = (String) client2ClassInfo.getValue().get(LAST_SEEN_VISIBLE_COL_NAME);
+				if (lastseen1 != null && lastseen2 != null) {
+					client2ClassInfo.getValue().put(LAST_SEEN_VISIBLE_COL_NAME, maxTime(lastseen1, lastseen2));
 				}
+
+				allInfosForAClient.putAll(client2ClassInfo.getValue());
 			}
 		}
 
