@@ -28,7 +28,6 @@ import org.apache.commons.csv.CSVRecord;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVFormatDetector;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -87,12 +86,7 @@ public class CSVImportDataModifier {
 	}
 
 	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
-		CSVFormatDetector csvFormatDetector = detectFormat();
-		if (csvFormatDetector == null) {
-			return null;
-		}
-		format = format.builder().setDelimiter(csvFormatDetector.getDelimiter()).setQuote(csvFormatDetector.getQuote())
-				.setCommentMarker('#').setHeader().build();
+		format = format.builder().setCommentMarker('#').setHeader().build();
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = new CSVParser(reader, format)) {
@@ -122,23 +116,6 @@ public class CSVImportDataModifier {
 			csvData = null;
 		}
 		return csvData;
-	}
-
-	private CSVFormatDetector detectFormat() {
-		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
-		try {
-			csvFormatDetector.detectFormat(csvFile);
-			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
-						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
-								+ columnNames.toString().replace("[", "").replace("]", ""));
-				csvFormatDetector = null;
-			}
-		} catch (IOException e) {
-			Logging.error(this, "Unable to detect format of CSV file", e);
-			csvFormatDetector = null;
-		}
-		return csvFormatDetector;
 	}
 
 	private static void displayInfoDialog(String title, String message) {

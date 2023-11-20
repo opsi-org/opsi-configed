@@ -11,6 +11,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,9 +36,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 
+import org.apache.commons.csv.CSVFormat;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.csv.CSVFormatDetector;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -782,8 +786,23 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
 
+		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
+		try {
+			csvFormatDetector.detectFormat(csvFile);
+			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
+				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
+								+ columnNames.toString().replace("[", "").replace("]", ""));
+				return null;
+			}
+		} catch (IOException e) {
+			Logging.error("Unable to detect format of CSV file", e);
+		}
+
+		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
-		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(modifier);
+		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
 		JPanel centerPanel = csvImportDataDialog.initPanel();
 
 		if (centerPanel == null) {
@@ -796,6 +815,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		csvImportDataDialog.setVisible(true);
 
 		return csvImportDataDialog;
+	}
+
+	private static void displayInfoDialog(String title, String message) {
+		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
+		fInfo.setMessage(message);
+		fInfo.setAlwaysOnTop(true);
+		fInfo.setVisible(true);
 	}
 
 	private static void createCSVTemplate() {
