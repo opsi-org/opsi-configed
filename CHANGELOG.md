@@ -7,6 +7,7 @@
 
 ### Fixed
 - Nullpointer exception some time after closing Terminal
+- Bug in buttons to add users and user roles
 
 ## [4.3.1.0] - 2023-11-14
 ### Fixed

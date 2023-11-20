@@ -25,7 +25,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -852,16 +851,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
-
-				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Utils.createImageIcon("images/cancel16_small.png", "") },
-				2, 600, 600, true, null) {
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
+				"add user", false,
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
+				600, 600, true) {
 			@Override
-			public void doAction1() {
-				Logging.info(this, "doAction1");
-				super.doAction1();
+			public void doAction2() {
+				Logging.info(this, "doAction2");
+				super.doAction2();
 				Logging.info(this, "addUser action, result Text " + getResultText());
 				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
 
@@ -915,15 +912,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") },
-				new Icon[] { Utils.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Utils.createImageIcon("images/cancel16_small.png", "") },
-				2, 600, 600, true, null) {
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
+				"add role", false,
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
+				600, 600, true) {
 			@Override
-			public void doAction1() {
-				Logging.info(this, "doAction1");
-				super.doAction1();
+			public void doAction2() {
+				Logging.info(this, "doAction2");
+				super.doAction2();
 				Logging.info(this, "addUser action, result Text " + getResultText());
 				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
 

@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,14 +29,10 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 	private JTextField theField;
 	private JLabel labelField;
 	private JLabel labelList;
-	private String selectedListElement;
-	private String resultingText;
 
 	public FDialogTextfieldWithListSelection(JFrame owner, String title, boolean modal, String[] buttonList,
-			Icon[] icons, int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout,
-			JPanel addPane) {
-		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
-				addPane);
+			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout) {
+		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 	}
 
 	public void applyFraming(FramingTextfieldWithListselection defs) {
@@ -158,17 +153,11 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 		return thePanel;
 	}
 
-	@Override
-	protected void preAction1() {
-		resultingText = theField.getText();
-		selectedListElement = theList.getSelectedValue();
-	}
-
 	public String getResultText() {
-		return resultingText;
+		return theField.getText();
 	}
 
 	public String getSelectedListelement() {
-		return selectedListElement;
+		return theList.getSelectedValue();
 	}
 }
