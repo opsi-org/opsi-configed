@@ -29,12 +29,10 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
 
 	private PanelGenEditTable panelStatistics;
-	private ConfigedMain configedMain;
 
 	/** Creates new form panelLicencesStatistics */
-	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller, ConfigedMain configedMain) {
+	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
 		super(controller);
-		this.configedMain = configedMain;
 		initComponents();
 	}
 

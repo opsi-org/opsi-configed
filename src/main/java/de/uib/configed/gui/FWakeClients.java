@@ -61,29 +61,13 @@ public class FWakeClients extends FShowList {
 
 				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
-					if (executionerForDepots.get(depotEntry.getKey()) == null) {
-						AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depotEntry.getKey());
-						// we try to connect when the first client of a depot should be connected
 
-						// may be Executioner.NONE
-						executionerForDepots.put(depotEntry.getKey(), exec1);
+					// Get the executioner for the depot, and create new one if non-existant
+					AbstractExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
+							this::computeExecutionerForDepot);
 
-						if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
-							appendLine("!! giving up connecting to  " + depotEntry.getKey());
-						}
-					}
-
-					if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()) {
-						String host = depotEntry.getValue().get(turn);
-
-						String line = String.format("trying to start up   %s    from depot    %s  ", host,
-								depotEntry.getKey());
-						appendLine(line);
-						Logging.info(this, "act: " + line);
-						hostsToWakeOnThisTurn.add(host);
-						Logging.info(this, "act: hostsToWakeOnThisTurn " + hostsToWakeOnThisTurn);
-						counterByDepots.put(depotEntry.getKey(), counterByDepots.get(depotEntry.getKey()) + 1);
-					}
+					// Add executioner to list and update counter
+					addHostToWake(executioner, depotEntry, turn, hostsToWakeOnThisTurn, counterByDepots);
 				}
 			}
 
@@ -99,6 +83,29 @@ public class FWakeClients extends FShowList {
 		}
 
 		jButton1.setText(Configed.getResourceValue("buttonClose"));
+	}
+
+	private AbstractExecutioner computeExecutionerForDepot(String depot) {
+		AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depot);
+		// we try to connect when the first client of a depot should be connected
+		if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
+			appendLine("!! giving up connecting to  " + depot);
+		}
+		return exec1;
+	}
+
+	private void addHostToWake(AbstractExecutioner executioner, Entry<String, List<String>> depotEntry, int turn,
+			Set<String> hostsToWakeOnThisTurn, Map<String, Integer> counterByDepots) {
+		if (executioner != AbstractExecutioner.getNoneExecutioner()) {
+			String host = depotEntry.getValue().get(turn);
+
+			String line = String.format("trying to start up   %s    from depot    %s  ", host, depotEntry.getKey());
+			appendLine(line);
+			Logging.info(this, "act: " + line);
+			hostsToWakeOnThisTurn.add(host);
+			Logging.info(this, "act: hostsToWakeOnThisTurn " + hostsToWakeOnThisTurn);
+			counterByDepots.put(depotEntry.getKey(), counterByDepots.get(depotEntry.getKey()) + 1);
+		}
 	}
 
 	@Override
