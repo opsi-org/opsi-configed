@@ -91,8 +91,8 @@ public class CSVImportDataModifier {
 		if (csvFormatDetector == null) {
 			return null;
 		}
-		format = format.builder().setDelimiter(csvFormatDetector.getFieldSeparator())
-				.setQuote(csvFormatDetector.getStringSeparator()).setCommentMarker('#').setHeader().build();
+		format = format.builder().setDelimiter(csvFormatDetector.getDelimiter()).setQuote(csvFormatDetector.getQuote())
+				.setCommentMarker('#').setHeader().build();
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = new CSVParser(reader, format)) {

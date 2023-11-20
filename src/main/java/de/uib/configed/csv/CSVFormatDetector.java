@@ -21,37 +21,36 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 public class CSVFormatDetector {
-	private static final Pattern containsDigitsPattern = Pattern.compile(".*\\d.*");
 	private static final Pattern doubleMinusPattern = Pattern.compile("--");
 
 	private static final char DEFAULT_FIELD_SEPARATOR = ',';
 	private static final char DEFAULT_STRING_SEPARATOR = '"';
 	private static final String FORMAT_HINT_INDICATOR = "#";
 
-	private char fieldSeparator = DEFAULT_FIELD_SEPARATOR;
-	private char stringSeparator = DEFAULT_STRING_SEPARATOR;
+	private char delimiter = DEFAULT_FIELD_SEPARATOR;
+	private char quote = DEFAULT_STRING_SEPARATOR;
 	private boolean hasHeader;
 	private boolean hasHint;
 
-	private Map<Character, Integer> possibleFieldSeparators = new HashMap<>();
-	private Map<Character, Long> possibleStringSeparators = new HashMap<>();
+	private Map<Character, Integer> possibleDelimiters = new HashMap<>();
+	private Map<Character, Long> possibleQuotes = new HashMap<>();
 
 	private List<String> headers;
 
-	public char getFieldSeparator() {
-		return this.fieldSeparator;
+	public char getDelimiter() {
+		return this.delimiter;
 	}
 
-	public void setFieldSeparator(char fieldSeparator) {
-		this.fieldSeparator = fieldSeparator;
+	public void setDelimiter(char fieldSeparator) {
+		this.delimiter = fieldSeparator;
 	}
 
-	public char getStringSeparator() {
-		return stringSeparator;
+	public char getQuote() {
+		return quote;
 	}
 
-	public void setStringSeparator(char stringSeparator) {
-		this.stringSeparator = stringSeparator;
+	public void setQuote(char stringSeparator) {
+		this.quote = stringSeparator;
 	}
 
 	public boolean hasHeader() {
@@ -77,8 +76,8 @@ public class CSVFormatDetector {
 			String[] formatOptions = doubleMinusPattern
 					.split(fileAsList.get(0).replace(FORMAT_HINT_INDICATOR, "").trim());
 
-			fieldSeparator = formatOptions[0].charAt(formatOptions[0].indexOf("=") + 1);
-			stringSeparator = formatOptions[1].charAt(formatOptions[1].indexOf("=") + 1);
+			delimiter = formatOptions[0].charAt(formatOptions[0].indexOf("=") + 1);
+			quote = formatOptions[1].charAt(formatOptions[1].indexOf("=") + 1);
 		} else {
 			hasHint = false;
 
@@ -96,22 +95,18 @@ public class CSVFormatDetector {
 			String line = fileAsList.get(i);
 
 			for (char c : line.toCharArray()) {
-				if (c == stringSeparator) {
+				if (c == quote) {
 					inQuotes = !inQuotes;
 					continue;
 				}
 
 				if (!Character.isLetter(c) && !Character.isDigit(c) && !inQuotes) {
-					if (!possibleFieldSeparators.containsKey(c)) {
-						possibleFieldSeparators.put(c, 1);
-					} else {
-						possibleFieldSeparators.put(c, possibleFieldSeparators.get(c) + 1);
-					}
+					possibleDelimiters.put(c, possibleDelimiters.containsKey(c) ? (possibleDelimiters.get(c) + 1) : 1);
 				}
 			}
 		}
 
-		fieldSeparator = Collections.max(possibleFieldSeparators.entrySet(), Entry.comparingByValue()).getKey();
+		delimiter = Collections.max(possibleDelimiters.entrySet(), Entry.comparingByValue()).getKey();
 	}
 
 	private void detectStringSeparator(String fileAsString) {
@@ -121,10 +116,10 @@ public class CSVFormatDetector {
 		long singleQuoteCount = fileAsString.chars().filter(ch -> ch == singleQuote).count();
 		long doubleQuoteCount = fileAsString.chars().filter(ch -> ch == doubleQuote).count();
 
-		possibleStringSeparators.put(singleQuote, singleQuoteCount);
-		possibleStringSeparators.put(doubleQuote, doubleQuoteCount);
+		possibleQuotes.put(singleQuote, singleQuoteCount);
+		possibleQuotes.put(doubleQuote, doubleQuoteCount);
 
-		stringSeparator = Collections.max(possibleStringSeparators.entrySet(), Entry.comparingByValue()).getKey();
+		quote = Collections.max(possibleQuotes.entrySet(), Entry.comparingByValue()).getKey();
 	}
 
 	private void detectHeader(List<String> fileAsList) {
@@ -133,53 +128,11 @@ public class CSVFormatDetector {
 			lineNumber = 1;
 		}
 
-		HeaderDetector detector = new HeaderDetector(fileAsList.get(lineNumber));
-		hasHeader = detector.detect();
-		String header = detector.getHeader();
-		headers = Arrays
-				.asList(header.replace(String.valueOf(stringSeparator), "").split(String.valueOf(getFieldSeparator())));
+		CSVHeaderDetector csvHeaderDetector = new CSVHeaderDetector(fileAsList.get(lineNumber), this);
+		hasHeader = csvHeaderDetector.detect();
+		String header = csvHeaderDetector.getHeader();
+		headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(getDelimiter())));
 		headers.replaceAll(String::trim);
-	}
-
-	private class HeaderDetector {
-		private boolean hasHeader;
-		private String line;
-
-		public HeaderDetector(String line) {
-			this.line = line;
-		}
-
-		private boolean containsDigits() {
-			return containsDigitsPattern.matcher(line).matches();
-		}
-
-		private boolean containsEmptyFields() {
-			String tmp = line.replace(String.valueOf(stringSeparator), "");
-			return Arrays.stream(tmp.split(String.valueOf(fieldSeparator))).anyMatch(String::isEmpty);
-		}
-
-		private boolean containsFieldsWithEmbeddedQuotes() {
-			return line.contains(String.format("%c%c", stringSeparator, stringSeparator));
-		}
-
-		public String getHeader() {
-			if (hasHeader) {
-				return line;
-			} else {
-				return "";
-			}
-		}
-
-		public boolean detect() {
-			hasHeader = true;
-
-			if (containsDigits() || containsEmptyFields() || containsFieldsWithEmbeddedQuotes()) {
-				hasHeader = false;
-				return hasHeader;
-			}
-
-			return hasHeader;
-		}
 	}
 
 	public boolean hasExpectedHeaderNames(Collection<String> expectedHeaderNames) {
