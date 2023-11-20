@@ -63,7 +63,6 @@ public final class Logviewer {
 		logFrame = new LogFrame();
 		// for passing it to message frames everywhere
 		Utils.setMasterFrame(logFrame);
-		logFrame.pack();
 
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Logging.info("screensize " + screenSize);

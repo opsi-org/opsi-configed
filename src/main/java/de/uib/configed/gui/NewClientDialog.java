@@ -95,7 +95,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		this.depots = depots;
 
 		init();
-		pack();
 	}
 
 	/**

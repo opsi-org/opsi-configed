@@ -28,10 +28,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		super.setIconImage(Utils.getMainIcon());
 	}
 
-	public void setup() {
-		pack();
-	}
-
 	public void addPanel(JPanel pane) {
 		getContentPane().add(pane);
 	}

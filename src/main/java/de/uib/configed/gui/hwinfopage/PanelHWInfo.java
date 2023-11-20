@@ -212,7 +212,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
-		externalView.setup();
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 

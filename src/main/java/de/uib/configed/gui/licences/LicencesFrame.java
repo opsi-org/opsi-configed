@@ -20,13 +20,7 @@ public class LicencesFrame extends SecondaryFrame {
 	public LicencesFrame(ConfigedMain configedMain) {
 		super();
 		panel = new TabbedPaneX(configedMain);
-		init();
-	}
-
-	private void init() {
-		add(panel);
-
-		pack();
+		super.add(panel);
 	}
 
 	@Override

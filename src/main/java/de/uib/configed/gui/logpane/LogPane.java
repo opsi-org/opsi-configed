@@ -476,7 +476,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public void externalize(LogPane logPane, String title, Dimension size) {
 		GeneralFrame externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(logPane);
-		externalView.setup();
 		if (size.equals(new Dimension(0, 0))) {
 			externalView.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		} else {

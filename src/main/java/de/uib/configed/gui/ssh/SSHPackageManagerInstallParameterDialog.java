@@ -59,7 +59,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		init();
 		initLayout();
 
-		super.pack();
 		super.setSize(900, 600);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setVisible(true);

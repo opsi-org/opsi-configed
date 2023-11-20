@@ -2397,8 +2397,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
-
-		pack();
 	}
 
 	public void showPopupClients() {

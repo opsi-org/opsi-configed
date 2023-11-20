@@ -110,7 +110,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		getDefaultAuthData();
 
 		init();
-		super.pack();
 		super.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 

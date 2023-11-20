@@ -94,12 +94,12 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		jButtonExecute.setEnabled(false);
 		textFieldSelectedDepots.setText("");
 
-		super.pack();
+		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
+
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setSize(800, 350);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
 
 		super.setVisible(true);
 	}

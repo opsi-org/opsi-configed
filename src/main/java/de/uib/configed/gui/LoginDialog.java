@@ -302,17 +302,14 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
 
-		pack();
-
 		setHost("localhost");
 		fieldHost.requestFocus();
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 
 		// Sets the window on the main screen
-		setLocationRelativeTo(null);
-
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

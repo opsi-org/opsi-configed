@@ -114,7 +114,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
 				Globals.GAP_SIZE * 2, 0);
 		init();
-		pack();
+
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);

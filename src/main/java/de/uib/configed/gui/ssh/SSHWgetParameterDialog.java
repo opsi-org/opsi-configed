@@ -65,8 +65,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
 		initLayout();
-		super.pack();
-		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_HEIGHT, Globals.DIALOG_FRAME_DEFAULT_WIDTH));
+		super.setSize(Globals.DIALOG_FRAME_DEFAULT_HEIGHT, Globals.DIALOG_FRAME_DEFAULT_WIDTH);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);

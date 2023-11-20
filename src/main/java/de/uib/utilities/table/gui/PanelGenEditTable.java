@@ -1491,7 +1491,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		externalView = new GeneralFrame(null, "hallo", false);
 		externalView.addPanel(copyOfMe);
-		externalView.setup();
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
