@@ -141,24 +141,15 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (selectedDepots
 					.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
-				StringBuilder sb = new StringBuilder();
 				int startIndex = possibleDepots
-						.indexOf(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+						.indexOf(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED) + 1;
+				int endIndex = possibleDepots.size();
 
-				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
-					sb.append(possibleDepots.get(i));
-					sb.append(",");
-				}
-				sb.append(possibleDepots.get(possibleDepots.size() - 1));
-				depotParameter = sb.toString();
+				depotParameter = possibleDepots.subList(startIndex, Math.max(startIndex, endIndex)).toString();
+				depotParameter = depotParameter.substring(1, depotParameter.length() - 1);
 			} else {
-				StringBuilder sb = new StringBuilder();
-				for (String s : selectedDepots) {
-					sb.append(s);
-					sb.append(",");
-				}
-				depotParameter = sb.toString();
-				depotParameter = depotParameter.substring(0, depotParameter.length() - 1);
+				depotParameter = selectedDepots.toString();
+				depotParameter = depotParameter.substring(1, depotParameter.length() - 1);
 			}
 		}
 
