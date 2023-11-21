@@ -81,8 +81,6 @@ public class FTextArea extends FGeneralDialog {
 		scrollpane.getViewport().add(jTextPane, null);
 
 		jTextPane.addKeyListener(this);
-
-		pack();
 	}
 
 	// KeyListener

@@ -57,7 +57,7 @@ public class FShowList extends FTextArea {
 	}
 
 	private void initFShowList() {
-		initFShowList(800, 100);
+		initFShowList(800, 300);
 	}
 
 	private void initFShowList(int preferredWidth, int preferredHeight) {

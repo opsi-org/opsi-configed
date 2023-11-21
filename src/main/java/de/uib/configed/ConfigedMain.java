@@ -4183,8 +4183,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(mainFrame,
 				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
 				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
-				new String[] { Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionNO"),
-						Configed.getResourceValue("buttonYES") });
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 
 		fChangeDepotForClients.setLineWrap(false);
 

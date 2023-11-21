@@ -27,8 +27,6 @@ public class FShowListWithComboSelect extends FShowList {
 		combo = new JComboBox<>(choices);
 
 		northPanel.add(combo);
-
-		super.pack();
 	}
 
 	public Object getChoice() {

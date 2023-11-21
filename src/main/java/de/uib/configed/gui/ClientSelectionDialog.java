@@ -143,7 +143,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		manager = new SelectionManager("OpsiData");
 		complexElements = new LinkedList<>();
 		init();
-		super.pack();
 
 		super.addComponentListener(new ComponentAdapter() {
 			@Override

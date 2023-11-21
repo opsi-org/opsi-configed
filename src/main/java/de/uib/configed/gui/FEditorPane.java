@@ -28,8 +28,6 @@ public class FEditorPane extends FGeneralDialog {
 		scrollpane.getViewport().add(editPane, null);
 
 		editPane.addKeyListener(this);
-
-		pack();
 	}
 
 	public boolean setPage(String url) {
