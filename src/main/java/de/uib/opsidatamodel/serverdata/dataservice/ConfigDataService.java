@@ -1339,7 +1339,6 @@ public class ConfigDataService {
 
 	private void sortValues(Map<String, Integer> numberedValues, Set<String> orderedValues, Set<String> unorderedValues,
 			List<Object> domainsGiven) {
-		Logging.devel(domainsGiven.toString());
 		for (Object item : domainsGiven) {
 			String entry = (String) item;
 			int p = entry.indexOf(":");
