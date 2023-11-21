@@ -4,10 +4,9 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.csv;
 
 import java.awt.event.ItemEvent;
-import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
@@ -28,11 +27,13 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.QuoteMode;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVFormat;
-import de.uib.configed.csv.CSVParser;
+import de.uib.configed.gui.FGeneralDialog;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -41,29 +42,27 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private PanelGenEditTable thePanel;
 	private CSVFormat format;
-	private CSVParser parser;
 
 	private JRadioButton tabsOption;
 	private JRadioButton commaOption;
 	private JRadioButton semicolonOption;
 	private JRadioButton spaceOption;
 	private JRadioButton otherOption;
-	private JComboBox<Character> stringSeparatorOptions;
+	private JComboBox<Character> quoteOptions;
 
 	private JFormattedTextField startLineInput;
-	private JFormattedTextField otherSeparatorInput;
+	private JFormattedTextField otherDelimiterInput;
 
 	private CSVImportDataModifier modifier;
 
 	private int startLine = 1;
 
-	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
+	public CSVImportDataDialog(CSVFormat format, CSVImportDataModifier modifier) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 2,
 				1000, 600, true);
 
 		this.format = format;
-		this.parser = new CSVParser(format);
 		this.modifier = modifier;
 	}
 
@@ -115,6 +114,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		formatter.setCommitsOnValidEdit(true);
 
 		startLineInput = new JFormattedTextField(formatter);
+		startLineInput.setText(String.valueOf(startLine));
 
 		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");
@@ -131,12 +131,12 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
-		fieldSeparatorOptions.add(tabsOption);
-		fieldSeparatorOptions.add(commaOption);
-		fieldSeparatorOptions.add(semicolonOption);
-		fieldSeparatorOptions.add(spaceOption);
-		fieldSeparatorOptions.add(otherOption);
+		ButtonGroup delimiterOptions = new ButtonGroup();
+		delimiterOptions.add(tabsOption);
+		delimiterOptions.add(commaOption);
+		delimiterOptions.add(semicolonOption);
+		delimiterOptions.add(spaceOption);
+		delimiterOptions.add(otherOption);
 
 		MaskFormatter maskFormatter = null;
 		try {
@@ -145,44 +145,44 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			Logging.debug(this, "INVALID MASK");
 			return null;
 		}
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
-		otherSeparatorInput = new JFormattedTextField(maskFormatter);
-		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
-		otherSeparatorInput.setEnabled(false);
+		otherDelimiterInput = new JFormattedTextField(maskFormatter);
+		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
+		otherDelimiterInput.setEnabled(false);
 
-		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
-		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
+		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
+		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				format.setStringSeparator(stringSeparatorOptions.getSelectedItem().toString().charAt(0));
-				modifier.updateTable(parser, startLine, thePanel);
+				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
+						.setQuoteMode(QuoteMode.ALL).build();
+				modifier.updateTable(format, startLine, thePanel);
 			}
 		});
 
-		Enumeration<AbstractButton> iter = fieldSeparatorOptions.getElements();
+		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
 
 		while (iter.hasMoreElements()) {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
+				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format.setFieldSeparator(button.getActionCommand().charAt(0));
-					modifier.updateTable(parser, startLine, thePanel);
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
+					modifier.updateTable(format, startLine, thePanel);
 				}
 			});
 		}
 
-		((AbstractDocument) otherSeparatorInput.getDocument()).addDocumentListener(new InputListener() {
+		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
 			@Override
 			public void performAction() {
-				if (!otherSeparatorInput.getText().isEmpty()) {
-					parser.setIgnoreErrors(true);
-					format.setFieldSeparator(otherSeparatorInput.getText().charAt(0));
-					modifier.updateTable(parser, startLine, thePanel);
+				if (!otherDelimiterInput.getText().isEmpty()) {
+					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
+					modifier.updateTable(format, startLine, thePanel);
 				}
 			}
 		});
@@ -191,9 +191,8 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			@Override
 			public void performAction() {
 				if (!startLineInput.getText().isEmpty()) {
-					parser.setIgnoreErrors(true);
 					startLine = Integer.parseInt(startLineInput.getText());
-					modifier.updateTable(parser, startLine, thePanel);
+					modifier.updateTable(format, startLine, thePanel);
 				}
 			}
 		});
@@ -244,15 +243,14 @@ public class CSVImportDataDialog extends FGeneralDialog {
 								.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(otherSeparatorInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
 						.addGroup(northLayout.createSequentialGroup()
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(stringSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL,
-										WIDTH_LEFT_LABEL)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(
-										stringSeparatorOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
+								.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+								.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
@@ -271,12 +269,12 @@ public class CSVImportDataDialog extends FGeneralDialog {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherSeparatorInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
+						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
 
 		return northPanel;
@@ -308,43 +306,34 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	}
 
 	public void setDetectedOptions() {
-		if (format.hasHeader() && format.hasHint()) {
-			startLineInput.setText("3");
-		} else if (format.hasHeader() || format.hasHint()) {
-			startLineInput.setText("2");
-		} else {
-			startLineInput.setText("1");
-		}
-
-		switch (format.getFieldSeparator()) {
-		case '\t':
+		switch (format.getDelimiterString()) {
+		case "\t":
 			tabsOption.setSelected(true);
 			break;
-		case ',':
+		case ",":
 			commaOption.setSelected(true);
 			break;
-		case ';':
+		case ";":
 			semicolonOption.setSelected(true);
 			break;
-		case ' ':
+		case " ":
 			spaceOption.setSelected(true);
 			break;
 		default:
 			otherOption.setSelected(true);
-			otherSeparatorInput.setText(String.valueOf(format.getFieldSeparator()));
+			otherDelimiterInput.setText(String.valueOf(format.getDelimiterString()));
 			break;
 		}
 
-		stringSeparatorOptions.setSelectedItem(format.getStringSeparator());
+		quoteOptions.setSelectedItem(format.getDelimiterString());
 	}
 
-	protected JPanel initPanel() {
+	public JPanel initPanel() {
 		// don't use a definite max table width (-1), with popups
 		thePanel = new PanelGenEditTable("", -1, true, 0, true,
 				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);
 
-		parser.setIgnoreErrors(false);
-		boolean updatedSuccessfull = modifier.updateTable(parser, startLine, thePanel);
+		boolean updatedSuccessfull = modifier.updateTable(format, startLine, thePanel);
 
 		if (updatedSuccessfull) {
 			return thePanel;
@@ -374,18 +363,5 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public CSVImportDataModifier getModifier() {
 		return modifier;
-	}
-
-	// Overriding default mechanism to do nothing when window is closed.
-	// By default, when window is closed it acts as if the first button
-	// was clicked. The default mechanism is defined in FGeneralDialog.
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = 2;
-			leave();
-		} else {
-			super.processWindowEvent(e);
-		}
 	}
 }

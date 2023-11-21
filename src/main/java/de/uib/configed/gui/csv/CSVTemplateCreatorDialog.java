@@ -4,14 +4,15 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.csv;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.awt.event.WindowEvent;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -39,11 +40,15 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.csv.CSVFormat;
-import de.uib.configed.csv.CSVWriter;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
@@ -53,7 +58,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private JCheckBox includeFormatHintOption;
 
-	private JFormattedTextField otherSeparatorInput;
+	private JFormattedTextField otherDelimiterInput;
 
 	private List<String> columnNames;
 	private List<JCheckBox> headerButtons;
@@ -124,8 +129,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		return southPanel;
 	}
 
-	protected JPanel initPanel() {
-		format = new CSVFormat();
+	public JPanel initPanel() {
+		format = CSVFormat.DEFAULT.builder().setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -151,12 +156,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JRadioButton otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
-		fieldSeparatorOptions.add(tabsOption);
-		fieldSeparatorOptions.add(commaOption);
-		fieldSeparatorOptions.add(semicolonOption);
-		fieldSeparatorOptions.add(spaceOption);
-		fieldSeparatorOptions.add(otherOption);
+		ButtonGroup delimiterOptions = new ButtonGroup();
+		delimiterOptions.add(tabsOption);
+		delimiterOptions.add(commaOption);
+		delimiterOptions.add(semicolonOption);
+		delimiterOptions.add(spaceOption);
+		delimiterOptions.add(otherOption);
 
 		MaskFormatter maskFormatter = null;
 		try {
@@ -166,41 +171,42 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			return null;
 		}
 
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
-		otherSeparatorInput = new JFormattedTextField(maskFormatter);
-		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
-		otherSeparatorInput.setEnabled(false);
+		otherDelimiterInput = new JFormattedTextField(maskFormatter);
+		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
+		otherDelimiterInput.setEnabled(false);
 
-		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 
-		JComboBox<Character> stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
-		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
+		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
+		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				format.setStringSeparator(stringSeparatorOptions.getSelectedItem().toString().charAt(0));
+				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
+						.setQuoteMode(QuoteMode.ALL).build();
 			}
 		});
 
-		Enumeration<AbstractButton> iter = fieldSeparatorOptions.getElements();
+		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
 
 		while (iter.hasMoreElements()) {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
+				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format.setFieldSeparator(button.getActionCommand().charAt(0));
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
 				}
 			});
 		}
 
-		((AbstractDocument) otherSeparatorInput.getDocument()).addDocumentListener(new InputListener() {
+		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
 			@Override
 			public void performAction() {
-				if (!otherSeparatorInput.getText().isEmpty()) {
-					format.setFieldSeparator(otherSeparatorInput.getText().charAt(0));
+				if (!otherDelimiterInput.getText().isEmpty()) {
+					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
 				}
 			}
 		});
@@ -267,14 +273,14 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 								.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(otherSeparatorInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(stringSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+						.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(stringSeparatorOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
+						.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(dataLabel)
@@ -293,12 +299,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherSeparatorInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
+						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		return centerPanel;
@@ -368,8 +374,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	private void write(String csvFile) {
-		try {
-			CSVWriter writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
+		format = format.builder().setQuoteMode(QuoteMode.ALL).build();
+		try (BufferedWriter writer = Files.newBufferedWriter(new File(csvFile).toPath(), StandardCharsets.UTF_8);
+				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			List<String> headers = new ArrayList<>();
 
 			headerButtons.forEach((JCheckBox header) -> {
@@ -379,26 +386,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			});
 
 			if (includeFormatHintOption.isSelected()) {
-				writer.insertFormatHint();
+				format = format.builder().setCommentMarker('#').build();
+				printer.printComment("sep=" + format.getDelimiterString() + " -- quote=" + format.getQuoteCharacter());
 			}
 
-			writer.write(headers);
-			writer.close();
+			printer.printRecord(headers);
 		} catch (IOException e) {
 			Logging.error(this, "Unable to write to file", e);
-		}
-	}
-
-	// Overriding default mechanism to do nothing when window is closed.
-	// By default, when window is closed it acts as if the first button
-	// was clicked. The default mechanism is defined in FGeneralDialog.
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = 2;
-			leave();
-		} else {
-			super.processWindowEvent(e);
 		}
 	}
 }
