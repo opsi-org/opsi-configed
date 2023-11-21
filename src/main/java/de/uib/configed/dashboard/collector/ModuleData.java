@@ -33,8 +33,6 @@ public final class ModuleData {
 			return;
 		}
 
-		modules.clear();
-
 		for (Map<String, Object> moduleInfo : persistenceController.getModuleDataService().getModules()) {
 			modules.add(moduleInfo.get("module_id").toString());
 		}

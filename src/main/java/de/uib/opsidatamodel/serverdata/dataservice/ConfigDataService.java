@@ -1315,32 +1315,11 @@ public class ConfigDataService {
 					+ configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
 
 			Map<String, Integer> numberedValues = new HashMap<>();
-			TreeSet<String> orderedValues = new TreeSet<>();
-			TreeSet<String> unorderedValues = new TreeSet<>();
+			Set<String> orderedValues = new TreeSet<>();
+			Set<String> unorderedValues = new TreeSet<>();
 
-			for (Object item : configDefaultValues
-					.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY)) {
-				String entry = (String) item;
-				int p = entry.indexOf(":");
-				if (p == -1 || p == 0) {
-					unorderedValues.add(entry);
-				} else if (p > 0) {
-					// the only regular case
-					try {
-						int orderNumber = Integer.parseInt(entry.substring(0, p));
-						String value = entry.substring(p + 1);
-						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
-							orderedValues.add(entry);
-							numberedValues.put(value, orderNumber);
-						}
-					} catch (NumberFormatException x) {
-						Logging.warning(this, "illegal order format for domain entry: " + entry);
-						unorderedValues.add(entry);
-					}
-				} else {
-					Logging.warning(this, "p has unexpected value " + p);
-				}
-			}
+			sortValues(numberedValues, orderedValues, unorderedValues,
+					configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
 
 			for (String entry : orderedValues) {
 				int p = entry.indexOf(":");
@@ -1356,6 +1335,38 @@ public class ConfigDataService {
 
 		Logging.info(this, "getDomains " + result);
 		return result;
+	}
+
+	private void sortValues(Map<String, Integer> numberedValues, Set<String> orderedValues, Set<String> unorderedValues,
+			List<Object> domainsGiven) {
+		Logging.devel(domainsGiven.toString());
+		for (Object item : domainsGiven) {
+			String entry = (String) item;
+			int p = entry.indexOf(":");
+			if (p == -1 || p == 0) {
+				unorderedValues.add(entry);
+			} else if (p > 0) {
+				// the only regular case
+				sortRegularValue(entry, p, numberedValues, orderedValues, unorderedValues);
+			} else {
+				Logging.warning(this, "p has unexpected value " + p);
+			}
+		}
+	}
+
+	private void sortRegularValue(String entry, int p, Map<String, Integer> numberedValues, Set<String> orderedValues,
+			Set<String> unorderedValues) {
+		try {
+			int orderNumber = Integer.parseInt(entry.substring(0, p));
+			String value = entry.substring(p + 1);
+			if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
+				orderedValues.add(entry);
+				numberedValues.put(value, orderNumber);
+			}
+		} catch (NumberFormatException x) {
+			Logging.warning(this, "illegal order format for domain entry: " + entry);
+			unorderedValues.add(entry);
+		}
 	}
 
 	public void writeDomains(List<Object> domains) {

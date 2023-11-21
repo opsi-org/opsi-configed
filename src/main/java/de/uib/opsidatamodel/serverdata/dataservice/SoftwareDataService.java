@@ -402,7 +402,7 @@ public class SoftwareDataService {
 		}
 
 		List<String> softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
-		NavigableMap<String, Number> software2Number = new TreeMap<>();
+		NavigableMap<String, Integer> software2Number = new TreeMap<>();
 		int n = 0;
 		for (String sw : softwareList) {
 			if (sw.startsWith("NULL")) {

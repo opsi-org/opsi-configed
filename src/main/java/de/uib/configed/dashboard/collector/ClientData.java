@@ -49,8 +49,6 @@ public final class ClientData {
 			return;
 		}
 
-		clients.clear();
-
 		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
 				.getMapOfAllPCInfoMaps();
 

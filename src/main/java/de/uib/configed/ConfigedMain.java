@@ -1560,7 +1560,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		loginDialog = new LoginDialog(this);
 
 		// set list of saved servers
-		if (savedServers != null && !savedServers.isEmpty()) {
+		if (!savedServers.isEmpty()) {
 			loginDialog.setServers(savedServers);
 		}
 

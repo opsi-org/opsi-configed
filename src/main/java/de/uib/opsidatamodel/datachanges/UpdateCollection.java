@@ -166,7 +166,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	@Override
 	public int accumulatedSize() {
-		if (size() == 0) {
+		if (isEmpty()) {
 			return 0;
 		}
 
@@ -197,7 +197,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	public void doCall() {
 		Logging.debug(this, "doCall, element count: " + size());
 
-		if (size() == 0) {
+		if (isEmpty()) {
 			return;
 		}
 
