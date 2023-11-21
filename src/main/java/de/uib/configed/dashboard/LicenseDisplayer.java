@@ -85,7 +85,9 @@ public class LicenseDisplayer {
 	private void showInfo(String info) {
 		final ObservableList<Node> list = controller.textflow.getChildren();
 		list.clear();
-		list.add(new Text(info));
+		Text text = new Text(info);
+		ComponentStyler.styleTextComponent(text);
+		list.add(text);
 	}
 
 	public void initAndShowGUI() throws IOException {
@@ -121,11 +123,6 @@ public class LicenseDisplayer {
 		ComponentStyler.styleButtonComponent(controller.closeButton);
 
 		Set<Node> scrollBars = controller.scrollPane.lookupAll(".scroll-bar");
-
-		if (scrollBars.isEmpty()) {
-			Logging.warning("no scrollbars were found");
-		}
-
 		for (Node scrollBar : scrollBars) {
 			ComponentStyler.styleScrollBarComponent((ScrollBar) scrollBar);
 		}
