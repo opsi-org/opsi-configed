@@ -5051,23 +5051,15 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
 			updateProduct(eventData);
 		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
-			addClientToConnectedList(getHostId(eventData));
+			addClientToConnectedList((String) eventData.get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
-			removeClientFromConnectedList(getHostId(eventData));
+			removeClientFromConnectedList((String) eventData.get("id"));
 		} else if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)) {
-			addClientToTable(getHostId(eventData));
+			addClientToTable((String) eventData.get("id"));
 		} else if (WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {
-			removeClientFromTable(getHostId(eventData));
+			removeClientFromTable((String) eventData.get("id"));
 		} else {
 			// Other events are handled by other listeners.
 		}
-	}
-
-	private static String getHostId(Map<String, Object> eventData) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
-		};
-		Map<String, Object> hostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-		return (String) hostData.get("id");
 	}
 }
