@@ -14,8 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -43,10 +45,12 @@ public class CSVImportDataModifier {
 	private String csvFile;
 	private List<String> columnNames;
 	private List<String> hiddenColumns;
+	private Set<String> tmpHeaderNames;
 
 	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
+		this.tmpHeaderNames = new LinkedHashSet<>(columnNames);
 		this.hiddenColumns = new ArrayList<>();
 	}
 
@@ -69,7 +73,7 @@ public class CSVImportDataModifier {
 		if (csvData == null) {
 			return null;
 		}
-		model = createModel(thePanel, csvData, columnNames, format);
+		model = createModel(thePanel, csvData, new ArrayList<>(tmpHeaderNames), format);
 
 		if (csvData.isEmpty()) {
 			model.deleteRows(new int[model.getRows().size()]);
@@ -91,7 +95,9 @@ public class CSVImportDataModifier {
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = new CSVParser(reader, format)) {
-			columnNames = parser.getHeaderNames();
+			tmpHeaderNames.clear();
+			tmpHeaderNames.addAll(columnNames);
+			tmpHeaderNames.addAll(parser.getHeaderNames());
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
 					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
