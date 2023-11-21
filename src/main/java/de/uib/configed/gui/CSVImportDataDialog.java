@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ItemEvent;
-import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
@@ -363,18 +362,5 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public CSVImportDataModifier getModifier() {
 		return modifier;
-	}
-
-	// Overriding default mechanism to do nothing when window is closed.
-	// By default, when window is closed it acts as if the first button
-	// was clicked. The default mechanism is defined in FGeneralDialog.
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = 2;
-			leave();
-		} else {
-			super.processWindowEvent(e);
-		}
 	}
 }
