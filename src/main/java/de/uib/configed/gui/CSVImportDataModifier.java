@@ -85,6 +85,7 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
+	@SuppressWarnings({ "java:S135" })
 	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
 		format = format.builder().setCommentMarker('#').setHeader().build();
 		List<Map<String, Object>> csvData = new ArrayList<>();
@@ -92,7 +93,6 @@ public class CSVImportDataModifier {
 				CSVParser parser = new CSVParser(reader, format)) {
 			columnNames = parser.getHeaderNames();
 			for (CSVRecord csvRecord : parser.getRecords()) {
-				Map<String, Object> line = new HashMap<>();
 				if (!csvRecord.isConsistent()) {
 					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
 							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
@@ -102,12 +102,7 @@ public class CSVImportDataModifier {
 				if (csvRecord.getRecordNumber() < startLine) {
 					continue;
 				}
-				for (String columnName : columnNames) {
-					if (csvRecord.isMapped(columnName)) {
-						line.put(columnName, csvRecord.get(columnName));
-					}
-				}
-				csvData.add(line);
+				csvData.add(new HashMap<>(csvRecord.toMap()));
 			}
 		} catch (IOException | UncheckedIOException ex) {
 			Logging.warning(this, "Failed to read CSV file", ex);
