@@ -31,6 +31,7 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 @SuppressWarnings("java:S3242")
@@ -251,6 +252,11 @@ public final class ComponentStyler {
 		textFlow.setStyle("-fx-background-color: " + textFlowBackgroundColor);
 		ObservableList<Node> children = textFlow.getChildren();
 		children.forEach(child -> child.setStyle("-fx-fill: " + textFlowForegroundColor));
+	}
+
+	public static void styleTextComponent(Text text) {
+		String textForegroundColor = getHexColor(UIManager.getColor("TextArea.foreground"));
+		text.setStyle("-fx-fill: " + textForegroundColor);
 	}
 
 	public static void styleButtonComponent(Button button) {
