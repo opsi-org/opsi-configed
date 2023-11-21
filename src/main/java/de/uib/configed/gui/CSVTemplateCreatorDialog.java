@@ -373,6 +373,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	private void write(String csvFile) {
+		format = format.builder().setQuoteMode(QuoteMode.ALL).build();
 		try (BufferedWriter writer = Files.newBufferedWriter(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			List<String> headers = new ArrayList<>();
@@ -385,8 +386,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			if (includeFormatHintOption.isSelected()) {
 				format = format.builder().setCommentMarker('#').build();
-				printer.printComment(String.format("//- sep=%s -- quote=%c", format.getDelimiterString(),
-						format.getQuoteCharacter()));
+				printer.printComment("sep=" + format.getDelimiterString() + " -- quote=" + format.getQuoteCharacter());
 			}
 
 			printer.printRecord(headers);
