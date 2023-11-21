@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.csv;
 
 import java.awt.event.ItemEvent;
 import java.text.NumberFormat;
@@ -33,6 +33,7 @@ import org.apache.commons.csv.QuoteMode;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FGeneralDialog;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -327,7 +328,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		quoteOptions.setSelectedItem(format.getDelimiterString());
 	}
 
-	protected JPanel initPanel() {
+	public JPanel initPanel() {
 		// don't use a definite max table width (-1), with popups
 		thePanel = new PanelGenEditTable("", -1, true, 0, true,
 				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);

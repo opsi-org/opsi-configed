@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.csv;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
@@ -47,6 +47,8 @@ import org.apache.commons.csv.QuoteMode;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
@@ -127,7 +129,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		return southPanel;
 	}
 
-	protected JPanel initPanel() {
+	public JPanel initPanel() {
 		format = CSVFormat.DEFAULT.builder().setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
