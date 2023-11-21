@@ -81,14 +81,14 @@ public class CSVFormatDetector {
 		} else {
 			hasHint = false;
 
-			detectStringSeparator(fileAsString);
-			detectFieldSeparator(fileAsList);
+			detectQoute(fileAsString);
+			detectDelimiter(fileAsList);
 		}
 
 		detectHeader(fileAsList);
 	}
 
-	private void detectFieldSeparator(List<String> fileAsList) {
+	private void detectDelimiter(List<String> fileAsList) {
 		boolean inQuotes = false;
 
 		for (int i = 0; i < fileAsList.size(); i++) {
@@ -109,7 +109,7 @@ public class CSVFormatDetector {
 		delimiter = Collections.max(possibleDelimiters.entrySet(), Entry.comparingByValue()).getKey();
 	}
 
-	private void detectStringSeparator(String fileAsString) {
+	private void detectQoute(String fileAsString) {
 		char singleQuote = '\'';
 		char doubleQuote = '"';
 
@@ -131,7 +131,7 @@ public class CSVFormatDetector {
 		CSVHeaderDetector csvHeaderDetector = new CSVHeaderDetector(fileAsList.get(lineNumber), this);
 		hasHeader = csvHeaderDetector.detect();
 		String header = csvHeaderDetector.getHeader();
-		headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(getDelimiter())));
+		headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)));
 		headers.replaceAll(String::trim);
 	}
 

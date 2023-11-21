@@ -48,10 +48,10 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JRadioButton semicolonOption;
 	private JRadioButton spaceOption;
 	private JRadioButton otherOption;
-	private JComboBox<Character> stringSeparatorOptions;
+	private JComboBox<Character> quoteOptions;
 
 	private JFormattedTextField startLineInput;
-	private JFormattedTextField otherSeparatorInput;
+	private JFormattedTextField otherDelimiterInput;
 
 	private CSVImportDataModifier modifier;
 
@@ -131,12 +131,12 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
-		fieldSeparatorOptions.add(tabsOption);
-		fieldSeparatorOptions.add(commaOption);
-		fieldSeparatorOptions.add(semicolonOption);
-		fieldSeparatorOptions.add(spaceOption);
-		fieldSeparatorOptions.add(otherOption);
+		ButtonGroup delimiterOptions = new ButtonGroup();
+		delimiterOptions.add(tabsOption);
+		delimiterOptions.add(commaOption);
+		delimiterOptions.add(semicolonOption);
+		delimiterOptions.add(spaceOption);
+		delimiterOptions.add(otherOption);
 
 		MaskFormatter maskFormatter = null;
 		try {
@@ -145,30 +145,30 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			Logging.debug(this, "INVALID MASK");
 			return null;
 		}
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
-		otherSeparatorInput = new JFormattedTextField(maskFormatter);
-		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
-		otherSeparatorInput.setEnabled(false);
+		otherDelimiterInput = new JFormattedTextField(maskFormatter);
+		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
+		otherDelimiterInput.setEnabled(false);
 
-		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
-		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
+		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
+		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				format = format.builder().setQuote(stringSeparatorOptions.getSelectedItem().toString().charAt(0))
+				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
 						.setQuoteMode(QuoteMode.ALL).build();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		});
 
-		Enumeration<AbstractButton> iter = fieldSeparatorOptions.getElements();
+		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
 
 		while (iter.hasMoreElements()) {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
+				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
 					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
@@ -177,11 +177,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			});
 		}
 
-		((AbstractDocument) otherSeparatorInput.getDocument()).addDocumentListener(new InputListener() {
+		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
 			@Override
 			public void performAction() {
-				if (!otherSeparatorInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherSeparatorInput.getText().charAt(0)).build();
+				if (!otherDelimiterInput.getText().isEmpty()) {
+					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
 					modifier.updateTable(format, startLine, thePanel);
 				}
 			}
@@ -243,15 +243,14 @@ public class CSVImportDataDialog extends FGeneralDialog {
 								.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(otherSeparatorInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
 						.addGroup(northLayout.createSequentialGroup()
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(stringSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL,
-										WIDTH_LEFT_LABEL)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(
-										stringSeparatorOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
+								.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+								.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
@@ -270,12 +269,12 @@ public class CSVImportDataDialog extends FGeneralDialog {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherSeparatorInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
+						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
 
 		return northPanel;
@@ -322,11 +321,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			break;
 		default:
 			otherOption.setSelected(true);
-			otherSeparatorInput.setText(String.valueOf(format.getDelimiterString()));
+			otherDelimiterInput.setText(String.valueOf(format.getDelimiterString()));
 			break;
 		}
 
-		stringSeparatorOptions.setSelectedItem(format.getDelimiterString());
+		quoteOptions.setSelectedItem(format.getDelimiterString());
 	}
 
 	protected JPanel initPanel() {
