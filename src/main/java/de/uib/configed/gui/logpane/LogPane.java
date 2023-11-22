@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -53,7 +52,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import utils.Utils;
 
-public class LogPane extends JPanel implements KeyListener, ActionListener {
+public class LogPane extends JPanel implements KeyListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
 	private static final int DEFAULT_WIDTH = 1212;
@@ -209,25 +208,29 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
 		jComboBoxSearch.setEditable(true);
-		jComboBoxSearch.addActionListener(this);
+		jComboBoxSearch.addActionListener((ActionEvent event) -> {
+			search();
+			jTextPane.requestFocusInWindow();
+		});
 
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
 
-		buttonSearch.addActionListener(this);
+		buttonSearch.addActionListener(event -> search());
 		buttonSearch.addKeyListener(this);
 
 		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
 		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 		jCheckBoxCaseSensitive.setSelected(false);
-		jCheckBoxCaseSensitive.addActionListener(this);
+		jCheckBoxCaseSensitive
+				.addActionListener(event -> searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected()));
 
 		buttonFontPlus = new JButton(Utils.createImageIcon("images/font-plus.png", ""));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
-		buttonFontPlus.addActionListener(this);
+		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
 		buttonFontMinus = new JButton(Utils.createImageIcon("images/font-minus.png", ""));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
-		buttonFontMinus.addActionListener(this);
+		buttonFontMinus.addActionListener(event -> reduceFontSize());
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
@@ -858,26 +861,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				search();
 			}
 			e.consume();
-		}
-	}
-
-	// Interface ActionListener
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == buttonSearch) {
-			search();
-		} else if (e.getSource() == jComboBoxSearch) {
-			search();
-			jTextPane.requestFocusInWindow();
-		} else if (e.getSource() == jCheckBoxCaseSensitive) {
-			searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected());
-		} else if (e.getSource() == buttonFontPlus) {
-			increaseFontSize();
-		} else if (e.getSource() == buttonFontMinus) {
-			reduceFontSize();
-		} else {
-			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
 	}
 

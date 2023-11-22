@@ -9,8 +9,6 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -99,23 +97,12 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	private Color linecolor;
 
-	protected class DialogCloseListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Logging.debug(this, "actionPerformed " + e);
-			cancel();
-		}
-	}
-
-	protected DialogCloseListener closeListener;
-
 	public SSHConnectionOutputDialog(String title) {
 		super(null, title, false);
 		Logging.info(this.getClass(), "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
 		buildFrame = false;
 		linecolor = getAnsiForegroundColor();
 
-		closeListener = new DialogCloseListener();
 		initOutputGui();
 		super.setSize(700, 400);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -205,7 +192,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 		jButtonClose.setPreferredSize(jButtonDimension);
 
-		jButtonClose.addActionListener(closeListener);
+		jButtonClose.addActionListener(event -> cancel());
 	}
 
 	public void setStatusFinish() {

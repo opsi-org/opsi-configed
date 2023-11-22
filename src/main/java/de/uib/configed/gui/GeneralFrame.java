@@ -7,20 +7,14 @@
 package de.uib.configed.gui;
 
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class GeneralFrame extends JDialog implements ActionListener {
-	private JButton jButton1 = new JButton();
+public class GeneralFrame extends JDialog {
 
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
@@ -30,17 +24,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	public void addPanel(JPanel pane) {
 		getContentPane().add(pane);
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		jButton1.requestFocus();
-	}
-
-	private void doAction1() {
-		Logging.debug(this, "doAction1");
-		leave();
 	}
 
 	private void leave() {
@@ -57,13 +40,5 @@ public class GeneralFrame extends JDialog implements ActionListener {
 			leave();
 		}
 		super.processWindowEvent(e);
-	}
-
-	// ActionListener
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == jButton1) {
-			doAction1();
-		}
 	}
 }
