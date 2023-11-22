@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.updates.TableEditItem;
@@ -514,41 +515,19 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	@Override
-	public void setValueAt(Object value, int row, int col) {
-		// wenn row hinzugefügte zeile ist:
+	public void setValueAt(Object newValue, int row, int col) {
+		Object oldValue = rows.get(row).get(col);
 
-		//
-		// insertRow aufrufen
+		Logging.debug(this, " old value at " + row + ", " + col + " : " + oldValue);
+		Logging.debug(this, " new value at " + row + ", " + col + " : " + newValue);
 
-		// sonst:
-
-		String oldValueString = "" + (rows.get(row)).get(col);
-
-		Logging.debug(this, " old value at " + row + ", " + col + " : " + oldValueString);
-		Logging.debug(this, " new value at " + row + ", " + col + " : " + value);
-
-		String newValueString = "" + value;
-
-		boolean valueChanged = false;
-
-		if (((rows.get(row).get(col) == null && value == null) || "".equals(value))
-				|| oldValueString.equals(newValueString)) {
-			valueChanged = false;
-		} else {
-			valueChanged = true;
-		}
-
-		if (valueChanged && markCursorRow && col == colMarkCursorRow) {
-			valueChanged = false;
-		}
-
-		if (valueChanged) {
+		if (hasValueChanged(oldValue, newValue, col)) {
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
 			if (!addedRows.contains(row) && !updatedRows.contains(row)) {
 				List<Object> oldValues = new ArrayList<>(rows.get(row));
 
-				rows.get(row).set(col, value);
+				rows.get(row).set(col, newValue);
 
 				if (itemFactory == null) {
 					Logging.info("update item factory missing");
@@ -564,21 +543,42 @@ public class GenTableModel extends AbstractTableModel {
 			}
 
 			// we cannot edit a key column after it is saved in the data backend
-			if (!addedRows.contains(row) && finalCols.indexOf(col) > -1) {
+			if (!addedRows.contains(row) && finalCols.contains(col)) {
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
 				Logging.warning("key column cannot be edited after saving the data");
 
-				JOptionPane.showMessageDialog(null, "values in this column are fixed after saving the data",
-						"Information", JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+						"values in this column are fixed after saving the data", "Information", JOptionPane.OK_OPTION);
 
 				return;
 			}
 
 			// in case of an updated row we did this already
-			rows.get(row).set(col, value);
+			rows.get(row).set(col, newValue);
 			fireTableCellUpdated(row, col);
 		}
+	}
+
+	private boolean hasValueChanged(Object oldValue, Object newValue, int col) {
+		boolean valueChanged;
+
+		if (oldValue == null && newValue == null) {
+			// Both are null
+			valueChanged = false;
+		} else if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
+			// Both are non null and equal
+			valueChanged = false;
+		} else {
+			// Only one is null or they are unequal
+			valueChanged = true;
+		}
+
+		if (valueChanged && markCursorRow && col == colMarkCursorRow) {
+			valueChanged = false;
+		}
+
+		return valueChanged;
 	}
 
 	// does not set values to null, leaves instead the original value

@@ -10,6 +10,10 @@
 - Bug in buttons to add users and user roles
 - Nullpointer exception in Messagebus when creating/deleting clients
 
+### Changed
+- Make it possible to enter empty values in editable tables
+
+
 ## [4.3.1.0] - 2023-11-14
 ### Fixed
 - Configed was not loading when restricted to productgroups

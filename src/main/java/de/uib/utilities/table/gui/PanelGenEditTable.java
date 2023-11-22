@@ -41,7 +41,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -728,9 +728,9 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		this.sortDescriptor = sortDescriptor;
 	}
 
-	private List<RowSorter.SortKey> buildSortkeysFromColumns() {
+	private List<SortKey> buildSortkeysFromColumns() {
 		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
-		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		List<SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0) {
 			return new ArrayList<>();
@@ -739,7 +739,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			sortDescriptor = new LinkedHashMap<>();
 
 			if (tableModel.getKeyCol() > -1) {
-				sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
+				sortKeys.add(new SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 
 				sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
 			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
@@ -747,7 +747,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 				while (iter.hasNext()) {
 					Integer col = iter.next();
-					sortKeys.add(new RowSorter.SortKey(col, SortOrder.ASCENDING));
+					sortKeys.add(new SortKey(col, SortOrder.ASCENDING));
 
 					sortDescriptor.put(col, SortOrder.ASCENDING);
 				}
@@ -756,7 +756,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			}
 		} else {
 			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
-				sortKeys.add(new RowSorter.SortKey(entry.getKey(), entry.getValue()));
+				sortKeys.add(new SortKey(entry.getKey(), entry.getValue()));
 			}
 		}
 
@@ -772,7 +772,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 
-		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
+		List<SortKey> sortKeys = buildSortkeysFromColumns();
 
 		if (sortKeys != null && !sortKeys.isEmpty()) {
 			sorter.setSortKeys(sortKeys);
