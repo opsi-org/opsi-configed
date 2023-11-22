@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -382,10 +381,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			}
 		} else {
-			Iterator<String> iter = deviceInfo.keySet().iterator();
-			while (iter.hasNext()) {
-				String key = iter.next();
-				String[] row = { key, (String) deviceInfo.get(key) };
+			for (Entry<String, Object> info : deviceInfo.entrySet()) {
+				String[] row = { info.getKey(), (String) info.getValue() };
 				data.add(row);
 				Logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
 			}
