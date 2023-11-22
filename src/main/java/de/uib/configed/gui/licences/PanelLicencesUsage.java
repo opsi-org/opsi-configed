@@ -12,8 +12,6 @@
 package de.uib.configed.gui.licences;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -31,14 +29,13 @@ import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.DynamicCombo;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
+public class PanelLicencesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
 	private PanelGenEditTable panelUsage;
 	private PanelGenEditTable panelLicencePools;
 
-	private JButton buttonGet;
 	private JPanel panelGetAndAssignSL;
 	private DynamicCombo comboClient;
 
@@ -83,8 +80,9 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		comboClient.setPreferredSize(new Dimension(200, 20));
 
-		buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
-		buttonGet.addActionListener(this);
+		JButton buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
+		buttonGet.addActionListener(
+				event -> licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem()));
 
 		panelGetAndAssignSL.setBorder(BorderFactory.createEtchedBorder());
 
@@ -141,14 +139,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	public void setClientsSource(ComboBoxModeller modelsource) {
 		comboClient.setModelSource(modelsource);
-	}
-
-	// ActionListener
-	@Override
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getSource() == buttonGet) {
-			licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem());
-		}
 	}
 
 	public PanelGenEditTable getPanelUsage() {

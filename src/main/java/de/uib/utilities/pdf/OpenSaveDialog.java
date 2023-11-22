@@ -7,8 +7,6 @@
 package de.uib.utilities.pdf;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -17,9 +15,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.utilities.logging.Logging;
 
-public class OpenSaveDialog implements ActionListener {
+public class OpenSaveDialog {
 	private JButton openBtn;
 	private JButton saveBtn;
 	private Boolean saveAction;
@@ -27,12 +24,10 @@ public class OpenSaveDialog implements ActionListener {
 
 	public OpenSaveDialog(String title) {
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
-
-		saveBtn.addActionListener(this);
+		saveBtn.addActionListener(event -> leave(true));
 
 		openBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.open"));
-
-		openBtn.addActionListener(this);
+		openBtn.addActionListener(event -> leave(false));
 
 		JPanel buttonPane = new JPanel();
 		buttonPane.add(saveBtn);
@@ -55,21 +50,10 @@ public class OpenSaveDialog implements ActionListener {
 		dialogView.setVisible(true);
 	}
 
-	private void leave() {
+	private void leave(boolean saveAction) {
+		this.saveAction = saveAction;
+
 		dialogView.setVisible(false);
 		dialogView.dispose();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == openBtn) {
-			saveAction = false;
-			leave();
-		} else if (e.getSource() == saveBtn) {
-			saveAction = true;
-			leave();
-		} else {
-			Logging.warning(this, "unexpected action event on source " + e.getSource());
-		}
 	}
 }

@@ -55,7 +55,7 @@ import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class ProductgroupPanel extends JPanel implements ListSelectionListener, ActionListener, ItemListener {
+public class ProductgroupPanel extends JPanel implements ListSelectionListener, ItemListener {
 	private static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
 	private static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
 	private static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
@@ -77,14 +77,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private IconButton buttonCancel;
 
 	// use the filter icon of the tablesearchpane
-	private IconButton buttonEditDialog;
 	private IconButton buttonDelete;
 
 	private IconButton buttonReloadProductStates;
 
 	private IconButton buttonExecuteNow;
-
-	private IconButton buttonCollectiveAction;
 
 	private JComboBoxToolTip comboAggregatedEditing;
 
@@ -349,17 +346,20 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private void initComponents() {
 		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png", true);
-		buttonCommit.addActionListener(this);
+		buttonCommit.addActionListener(event -> commit());
 		buttonCommit.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonCancel = new IconButton(Configed.getResourceValue("buttonCancel"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
-		buttonCancel.addActionListener(this);
+		buttonCancel.addActionListener(event -> clearChanges());
 		buttonCancel.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonDelete = new IconButton(Configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
 				"images/edit-delete.png", "images/edit-delete_over.png", "images/edit-delete_disabled.png");
-		buttonDelete.addActionListener(this);
+		buttonDelete.addActionListener((ActionEvent event) -> {
+			setDeleted(true);
+			setDataChanged(true);
+		});
 		buttonDelete.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
@@ -374,12 +374,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonExecuteNow.setVisible(true);
 
-		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
+		IconButton buttonCollectiveAction = new IconButton(
+				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
 		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
-		buttonCollectiveAction.addActionListener(this);
+		buttonCollectiveAction.addActionListener(
+				event -> handleCollectiveAction(" ", (IFInstallationStateTableModel) tableProducts.getModel()));
 		buttonCollectiveAction.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonCollectiveAction.setVisible(true);
 
@@ -424,11 +426,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
+		IconButton buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
-		buttonEditDialog.addActionListener(this);
+		buttonEditDialog.addActionListener(event -> setGroupEditing(!panelEdit.isVisible()));
 		buttonEditDialog.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
@@ -700,26 +702,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private void setGroupEditing(boolean b) {
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
-		}
-	}
-
-	// ActionListener interface
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String s = " ";
-		if (e.getSource() == buttonCommit) {
-			commit();
-		} else if (e.getSource() == buttonCancel) {
-			clearChanges();
-		} else if (e.getSource() == buttonDelete) {
-			setDeleted(true);
-			setDataChanged(true);
-		} else if (e.getSource() == buttonEditDialog) {
-			setGroupEditing(!panelEdit.isVisible());
-		} else if (e.getSource() == buttonCollectiveAction) {
-			handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
-		} else {
-			Logging.warning(this, "unexpected action performed on source " + e.getSource());
 		}
 	}
 

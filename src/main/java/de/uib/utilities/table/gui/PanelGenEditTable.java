@@ -75,8 +75,8 @@ import de.uib.utilities.table.updates.UpdateController;
 import utils.PopupMouseListener;
 import utils.Utils;
 
-public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
-		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
+public class PanelGenEditTable extends JPanel implements TableModelListener, ListSelectionListener, KeyListener,
+		MouseListener, ComponentListener, CursorrowObserver {
 	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
 	public static final int POPUP_DELETE_ROW = 1;
 
@@ -406,8 +406,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
-		buttonCommit.addActionListener(this);
-		buttonCancel.addActionListener(this);
+		buttonCommit.addActionListener(action -> commit());
+		buttonCancel.addActionListener(action -> cancel());
 
 		GroupLayout layout = new GroupLayout(controlPanel);
 
@@ -1362,19 +1362,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			if (tableModel != null && oldrowcount != tableModel.getRowCount()) {
 				oldrowcount = tableModel.getRowCount();
 			}
-		}
-	}
-
-	//
-	// ActionListener interface
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == buttonCommit) {
-			commit();
-		} else if (e.getSource() == buttonCancel) {
-			cancel();
-		} else {
-			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 

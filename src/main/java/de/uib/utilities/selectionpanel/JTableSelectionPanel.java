@@ -8,7 +8,6 @@ package de.uib.utilities.selectionpanel;
 
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -63,7 +62,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
-public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
+public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener {
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
@@ -143,7 +142,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		checkmarkSearch.addActionListener(this);
+		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
 
 		fieldSearch = new JTextField("");
@@ -905,12 +904,4 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
-
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == checkmarkSearch) {
-			fieldSearch.setText("");
-		}
-	}
 }
