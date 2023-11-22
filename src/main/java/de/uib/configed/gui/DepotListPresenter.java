@@ -7,8 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,7 @@ import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
-public class DepotListPresenter extends JPanel implements ActionListener {
+public class DepotListPresenter extends JPanel {
 	private DepotsList depotslist;
 	private JScrollPane scrollpaneDepotslist;
 	// this will not be shown in this panel but exported for use in other panels
@@ -101,13 +99,13 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		buttonSelectDepotsWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		Utils.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
-		buttonSelectDepotsWithEqualProperties.addActionListener(this);
+		buttonSelectDepotsWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
 
 		buttonSelectDepotsAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectDepotsAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 		Utils.formatButtonSmallText(buttonSelectDepotsAll);
-		buttonSelectDepotsAll.addActionListener(this);
+		buttonSelectDepotsAll.addActionListener(event -> depotslist.selectAll());
 		buttonSelectDepotsAll.setEnabled(multidepot);
 
 		if (!multidepot) {
@@ -154,24 +152,14 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
 
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == buttonSelectDepotsAll) {
-			Logging.info(this, "action on buttonSelectDepotsAll");
+	private void selectDepotsWithEqualProperties() {
+		Logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
 
-			depotslist.selectAll();
-		} else if (e.getSource() == buttonSelectDepotsWithEqualProperties) {
-			Logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
-
-			if (depotslist.getSelectedIndex() > -1) {
-				String depotSelected = depotslist.getSelectedValue();
-				List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
-						.getAllDepotsWithIdenticalProductStock(depotSelected);
-				depotslist.addToSelection(depotsWithEqualStock);
-			}
-		} else {
-			Logging.warning(this, "action was performed on " + e.getSource() + ", but not expected");
+		if (depotslist.getSelectedIndex() > -1) {
+			String depotSelected = depotslist.getSelectedValue();
+			List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
+					.getAllDepotsWithIdenticalProductStock(depotSelected);
+			depotslist.addToSelection(depotsWithEqualStock);
 		}
 	}
 }

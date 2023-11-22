@@ -76,16 +76,16 @@ public class DependenciesTreeModel {
 		initGraph(depotId);
 	}
 
-	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
+	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean treeInverted) {
 		Logging.debug(this, mainProductId + "-tree wird erstellt");
 
 		if (graphIsInitialized && productMap.containsKey(mainProductId)) {
 			DefaultMutableTreeNode mainNode;
 
-			if (benoetigt) {
-				mainNode = graph.getTreeDerBenoetigtenProdukte(mainProductId, productMap, productList);
+			if (treeInverted) {
+				mainNode = graph.getTreeOfDependentProducts(mainProductId, productMap, productList);
 			} else {
-				mainNode = graph.getTreeDerAbhaengigenProdukte(mainProductId, productMap, productList);
+				mainNode = graph.getTreeOfNeededProducts(mainProductId, productMap, productList);
 			}
 
 			// Return only if taller than null

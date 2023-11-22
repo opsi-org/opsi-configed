@@ -7,8 +7,6 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -31,7 +29,7 @@ import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
-public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
+public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
 
 	private JTextField jLabelProductID;
@@ -113,19 +111,24 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		dependenciesActivateButton.setText("▶");
 		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 
-		dependenciesActivateButton.addActionListener(this);
+		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
 		propertiesActivateButton.setText("▼");
 		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
 
-		propertiesActivateButton.addActionListener(this);
+		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 	}
 
 	private void setupLayout() {
+		setupTopComponent();
+		setupBottomComponent();
+	}
+
+	private void setupTopComponent() {
 		JPanel productDescriptionsPanel = new JPanel();
 
 		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
@@ -175,6 +178,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
 
+		setTopComponent(productDescriptionsPanel);
+	}
+
+	private void setupBottomComponent() {
 		// treat the bottom panel
 		JPanel bottomComponent = new JPanel();
 
@@ -224,28 +231,24 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 						.addComponent(panelEditProperties.getTitlePanel()))
 				.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
 
-		this.setTopComponent(productDescriptionsPanel);
-		this.setBottomComponent(bottomComponent);
+		setBottomComponent(bottomComponent);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == dependenciesActivateButton) {
-			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
+	private void toggleDependenciesActive() {
+		isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
-			setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
+		setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
 
-			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
-		} else if (event.getSource() == propertiesActivateButton) {
-			isPanelEditPropertiesVisible = !isPanelEditPropertiesVisible;
+		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
+	}
 
-			setActivatedButton(propertiesActivateButton, isPanelEditPropertiesVisible);
+	private void togglePropertiesActive() {
+		isPanelEditPropertiesVisible = !isPanelEditPropertiesVisible;
 
-			panelEditProperties.setVisible(isPanelEditPropertiesVisible);
-			panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
-		} else {
-			Logging.warning(this, "unexpected action performed on source " + event.getSource());
-		}
+		setActivatedButton(propertiesActivateButton, isPanelEditPropertiesVisible);
+
+		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
+		panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
 	}
 
 	private static void setActivatedButton(JButton jButton, boolean isPropertiesVisible) {

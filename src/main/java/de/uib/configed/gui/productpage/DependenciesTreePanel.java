@@ -9,8 +9,6 @@ package de.uib.configed.gui.productpage;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -32,15 +30,13 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesTreeModel;
-import de.uib.utilities.logging.Logging;
 
-public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private DependenciesTreeModel dependenciesTreeModel;
 
 	private JRadioButton dependenciesNeedsButton;
 	private JRadioButton dependenciesNeededByButton;
-	private JButton copyListButton;
-	private boolean treeAbhaengigkeiten = true;
+	private boolean treeInverted;
 	private JTree dependenciesTree;
 	private JLabel dependenciesTreePathLabel;
 
@@ -48,7 +44,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 	public DependenciesTreePanel() {
 		dependenciesTreeModel = null;
-		treeAbhaengigkeiten = true;
+		treeInverted = false;
 
 		initTree();
 
@@ -100,19 +96,19 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesNeededByButton = new JRadioButton(
 				Configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
 
-		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
+		JButton copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel
 				.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor"), 1));
 
-		dependenciesNeedsButton.addActionListener(this);
-		dependenciesNeededByButton.addActionListener(this);
+		dependenciesNeedsButton.addActionListener(event -> dependenciesNeededAction(false));
+		dependenciesNeededByButton.addActionListener(event -> dependenciesNeededAction(true));
 
 		// The tree
 		updateSelectedButtons();
 
-		copyListButton.addActionListener(this);
+		copyListButton.addActionListener(event -> copyList());
 
 		GroupLayout dependenciesTreeGroupLayout = new GroupLayout(this);
 		this.setLayout(dependenciesTreeGroupLayout);
@@ -141,33 +137,23 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				.addComponent(dependenciesTreeScrollPanel));
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == dependenciesNeedsButton) {
-			if (isActive) {
-				treeAbhaengigkeiten = true;
+	private void dependenciesNeededAction(boolean treeInverted) {
+		if (isActive) {
+			this.treeInverted = treeInverted;
 
-				updateSelectedButtons();
-				updateTree();
-			}
-		} else if (event.getSource() == dependenciesNeededByButton) {
-			if (isActive) {
-				treeAbhaengigkeiten = false;
+			updateSelectedButtons();
+			updateTree();
+		}
+	}
 
-				updateSelectedButtons();
-				updateTree();
-			}
-		} else if (event.getSource() == copyListButton) {
-			DefaultMutableTreeNode root = (DefaultMutableTreeNode) dependenciesTree.getModel().getRoot();
+	private void copyList() {
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) dependenciesTree.getModel().getRoot();
 
-			if (root != null) {
-				String myString = dependenciesTreeModel.getListOfTreeNodes(root);
-				StringSelection stringSelection = new StringSelection(myString);
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(stringSelection, stringSelection);
-			}
-		} else {
-			Logging.warning(this, "unexpected action on source " + event.getSource());
+		if (root != null) {
+			String myString = dependenciesTreeModel.getListOfTreeNodes(root);
+			StringSelection stringSelection = new StringSelection(myString);
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, stringSelection);
 		}
 	}
 
@@ -176,8 +162,8 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	}
 
 	private void updateSelectedButtons() {
-		dependenciesNeedsButton.setSelected(treeAbhaengigkeiten);
-		dependenciesNeededByButton.setSelected(!treeAbhaengigkeiten);
+		dependenciesNeedsButton.setSelected(!treeInverted);
+		dependenciesNeededByButton.setSelected(treeInverted);
 	}
 
 	public void setDependenciesTreeModel(DependenciesTreeModel dependenciesTreeModel) {
@@ -188,7 +174,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 	public void updateTree() {
 		DefaultMutableTreeNode dependenciesTreeNode = dependenciesTreeModel
-				.getTreeNodeForProductDependencies(treeAbhaengigkeiten);
+				.getTreeNodeForProductDependencies(treeInverted);
 
 		updateTree(dependenciesTreeNode);
 	}

@@ -76,7 +76,7 @@ public class Graph {
 		return false;
 	}
 
-	public DefaultMutableTreeNode getTreeDerAbhaengigenProdukte(String productId, Map<String, Integer> productMap,
+	public DefaultMutableTreeNode getTreeOfDependentProducts(String productId, Map<String, Integer> productMap,
 			List<String> productList) {
 		DefaultMutableTreeNode abhaengigeProdukte = new DefaultMutableTreeNode(productId);
 
@@ -111,7 +111,7 @@ public class Graph {
 		}
 	}
 
-	public DefaultMutableTreeNode getTreeDerBenoetigtenProdukte(String productId, Map<String, Integer> productMap,
+	public DefaultMutableTreeNode getTreeOfNeededProducts(String productId, Map<String, Integer> productMap,
 			List<String> productList) {
 		DefaultMutableTreeNode benoetigteProdukte = new DefaultMutableTreeNode(productId);
 

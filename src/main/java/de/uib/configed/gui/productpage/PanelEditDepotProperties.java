@@ -7,8 +7,6 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -49,13 +47,11 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import utils.Utils;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
-		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
+		implements ListSelectionListener, MouseListener, KeyListener {
 	private JLabel jLabelEditDepotProductProperties;
 
 	private JList<String> listDepots;
 	private List<String> listSelectedDepots;
-	private JButton buttonSelectWithEqualProperties;
-	private JButton buttonSelectAll;
 
 	private JPanel titlePanel;
 
@@ -89,17 +85,17 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
-		buttonSelectWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
+		JButton buttonSelectWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
 
 		buttonSelectWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
 		Utils.formatButtonSmallText(buttonSelectWithEqualProperties);
-		buttonSelectWithEqualProperties.addActionListener(this);
+		buttonSelectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 
-		buttonSelectAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
+		JButton buttonSelectAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
 		Utils.formatButtonSmallText(buttonSelectAll);
-		buttonSelectAll.addActionListener(this);
+		buttonSelectAll.addActionListener(event -> selectAllDepots());
 
 		GroupLayout layoutPanelDepots = new GroupLayout(panelDepots);
 		panelDepots.setLayout(layoutPanelDepots);
@@ -389,22 +385,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		// Do nothing because MouseListener demands implementation
 	}
 
-	// ActionListener
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Logging.debug(this, "actionPerformed " + e);
-
-		if (e.getSource() == buttonSelectWithEqualProperties) {
-			selectDepotsWithEqualProperties();
-			saveSelectedDepots();
-		} else if (e.getSource() == buttonSelectAll) {
-			listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
-			saveSelectedDepots();
-		} else {
-			Logging.warning(this, "unexpected action event on source " + e.getSource());
-		}
-	}
-
 	private void selectDepotsWithEqualProperties() {
 		String selectedDepot0 = listDepots.getSelectedValue();
 
@@ -433,5 +413,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				listDepots.addSelectionInterval(i, i);
 			}
 		}
+
+		saveSelectedDepots();
+	}
+
+	private void selectAllDepots() {
+		listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
+		saveSelectedDepots();
 	}
 }
