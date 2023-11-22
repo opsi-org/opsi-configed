@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
@@ -114,7 +113,7 @@ public class FDialogRemoteControl extends FEditStringList {
 	protected void createComponents() {
 		super.createComponents();
 		extraField.setVisible(true);
-		extraField.addActionListener(this);
+		extraField.addActionListener(event -> commit());
 	}
 
 	@Override
@@ -175,15 +174,5 @@ public class FDialogRemoteControl extends FEditStringList {
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		saveEditedText();
-	}
-
-	// interface ActionListener
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		super.actionPerformed(e);
-
-		if (e.getSource() == extraField) {
-			commit();
-		}
 	}
 }

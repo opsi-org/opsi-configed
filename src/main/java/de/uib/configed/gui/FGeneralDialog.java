@@ -11,8 +11,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -35,7 +33,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 import utils.Utils;
 
-public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
+public class FGeneralDialog extends JDialog implements KeyListener, MouseListener {
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
@@ -374,9 +372,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jButton2.addKeyListener(this);
 		jButton3.addKeyListener(this);
 
-		jButton1.addActionListener(this);
-		jButton2.addActionListener(this);
-		jButton3.addActionListener(this);
+		jButton1.addActionListener(event -> doAction1());
+		jButton2.addActionListener(event -> doAction2());
+		jButton3.addActionListener(event -> doAction3());
 
 		allpane.add(southPanel, BorderLayout.SOUTH);
 
@@ -489,64 +487,10 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	@Override
 	public void mousePressed(MouseEvent e) {
 		Logging.debug(this, "mousePressed");
-
-		preAction1();
-		preAction2();
-		preAction3();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		Logging.debug(this, "mouseReleased");
-	}
-
-	// activated by mouse and key listener events
-	protected void preAction1() {
-		Logging.info(this, "preAction1");
-	}
-
-	// executed at the end of action listener event
-	private void postAction1() {
-		Logging.info(this, "postAction1");
-	}
-
-	// activated by mouse and key listener events
-	protected void preAction2() {
-		Logging.info(this, "preAction2");
-	}
-
-	// executed at the end of action listener event
-	protected void postAction2() {
-		Logging.info(this, "postAction2");
-	}
-
-	// activated by mouse and key listener events
-	private void preAction3() {
-		Logging.info(this, "preAction3");
-	}
-
-	// executed at the end of action listener event
-	private void postAction3() {
-		Logging.info(this, "postAction3");
-	}
-
-	// ActionListener
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == jButton1) {
-			preAction1();
-			doAction1();
-			postAction1();
-		} else if (e.getSource() == jButton2) {
-			preAction2();
-			doAction2();
-			postAction2();
-		} else if (e.getSource() == jButton3) {
-			preAction3();
-			doAction3();
-			postAction3();
-		} else {
-			Logging.warning(this, "unexpected action source " + e.getSource());
-		}
 	}
 }
