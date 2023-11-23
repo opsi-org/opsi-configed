@@ -468,40 +468,39 @@ public class PanelEnterLicence extends MultiTablePanel {
 		GroupLayout layoutTask = new GroupLayout(panelTask);
 		panelTask.setLayout(layoutTask);
 
-		layoutTask.setHorizontalGroup(layoutTask
-				.createSequentialGroup().addGap(5, 5, 5).addGroup(layoutTask.createParallelGroup(Alignment.LEADING)
-						.addGroup(layoutTask.createParallelGroup(Alignment.LEADING).addComponent(panelLicencecontracts,
-								50, 300, MAX_WIDTH))
+		layoutTask.setHorizontalGroup(layoutTask.createSequentialGroup().addGroup(layoutTask
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(layoutTask.createParallelGroup(Alignment.LEADING).addComponent(panelLicencecontracts, 50, 300,
+						MAX_WIDTH))
 
-						.addGroup(layoutTask.createSequentialGroup()
-								.addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(1587, Short.MAX_VALUE))
-						.addGroup(
-								layoutTask.createSequentialGroup()
-										.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(18, 18, 18)
-										.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(18, 18, 18)
-										.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(18, 18, 18)
-										.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(1226, Short.MAX_VALUE))
-						.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
-								.addContainerGap(1515, Short.MAX_VALUE))
-						.addGroup(layoutTask.createSequentialGroup().addGap(10, 10, 10).addComponent(jLabelConfigure)
-								.addContainerGap(1515, Short.MAX_VALUE))
-						.addGroup(layoutTask.createSequentialGroup()
-								.addGroup(layoutTask.createParallelGroup(Alignment.TRAILING, true)
-										.addComponent(panelEnterKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
-										.addComponent(panelLicenceModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, MAX_WIDTH))
-								.addGap(10, 10, 10))));
+				.addGroup(layoutTask.createSequentialGroup()
+						.addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(1587, Short.MAX_VALUE))
+				.addGroup(layoutTask.createSequentialGroup()
+						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(18, 18, 18)
+						.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(18, 18, 18)
+						.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(18, 18, 18)
+						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(1226, Short.MAX_VALUE))
+				.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
+						.addContainerGap(1515, Short.MAX_VALUE))
+				.addGroup(layoutTask.createSequentialGroup().addGap(10, 10, 10).addComponent(jLabelConfigure)
+						.addContainerGap(1515, Short.MAX_VALUE))
+				.addGroup(layoutTask.createSequentialGroup()
+						.addGroup(layoutTask.createParallelGroup(Alignment.TRAILING, true)
+								.addComponent(panelEnterKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
+								.addComponent(panelLicenceModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, MAX_WIDTH))
+						.addGap(10, 10, 10))));
 
 		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
 				.addGap(5, 5, 5)

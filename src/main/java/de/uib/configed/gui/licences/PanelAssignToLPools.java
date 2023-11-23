@@ -448,8 +448,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, 5 * Globals.GAP_SIZE)
 						.addComponent(panelInfoConfigWindowsSoftware, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addComponent(panelRegisteredSoftware).addComponent(panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+				.addGroup(layoutBottomPane.createSequentialGroup().addContainerGap().addComponent(
+						panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
 				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)

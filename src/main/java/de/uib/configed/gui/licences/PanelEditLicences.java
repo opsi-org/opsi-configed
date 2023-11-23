@@ -81,7 +81,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addContainerGap()
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
 				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.TRAILING)
 						.addComponent(panelKeys, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -95,11 +95,9 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
-				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						panelLicencecontracts, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGap(10, 10, 10));
+		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addComponent(panelLicencecontracts,
+				GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGap(10, 10, 10));
+
 		layoutBottomPane.setVerticalGroup(
 				layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -107,8 +105,8 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap().addComponent(splitPane, 0,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
