@@ -36,7 +36,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-	private static final int SPLIT_PANE_H_MARGIN = 1;
 	public static final int TABLES_MAX_WIDTH = 1000;
 
 	private static final int MIN_V_SIZE = 80;
@@ -430,15 +429,14 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addContainerGap());
 
-		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
-
-						.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
-						.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
-						.addContainerGap())
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutTopPane
+				.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(layoutTopPane.createSequentialGroup()
+								.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addContainerGap())
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -466,11 +464,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addContainerGap().addGap(SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN));
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

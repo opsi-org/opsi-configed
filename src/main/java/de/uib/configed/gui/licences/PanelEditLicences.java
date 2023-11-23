@@ -28,8 +28,6 @@ public class PanelEditLicences extends MultiTablePanel {
 	private PanelGenEditTable panelSoftwarelicences;
 	private PanelGenEditTable panelLicencecontracts;
 
-	private int splitPaneHMargin = 1;
-
 	private int minVSize = 100;
 
 	/** Creates new form PanelEditLicences */
@@ -83,22 +81,17 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addContainerGap()
 				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.TRAILING)
-						// for testing purposes:
-
-						// Short.MAX_VALUE)
 						.addComponent(panelKeys, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(panelSoftwarelicences, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGap(10, 10, 10));
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-
-						.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
+				.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -115,10 +108,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+				layout.createSequentialGroup().addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

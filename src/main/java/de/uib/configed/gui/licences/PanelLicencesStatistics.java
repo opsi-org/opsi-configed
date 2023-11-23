@@ -55,7 +55,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 						Short.MAX_VALUE))
 				.addContainerGap());
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
+		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(panelStatistics, MIN_VSIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 	}

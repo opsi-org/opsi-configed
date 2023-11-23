@@ -57,7 +57,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected JPanel editingArea;
 	protected JPanel loggingPanel;
 	private JSplitPane splitPane;
-	private int splitPaneHMargin = 1;
 
 	protected IconButton buttonCommit;
 	protected IconButton buttonCancel;
@@ -195,11 +194,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 			GroupLayout layout = new GroupLayout(getContentPane());
 			this.setLayout(layout);
-			layout.setHorizontalGroup(
-					layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
-									GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-							.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+			layout.setHorizontalGroup(layout
+					.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+					.addContainerGap());
 
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

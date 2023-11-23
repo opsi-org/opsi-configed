@@ -57,7 +57,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 	private PanelGenEditTable panelKeys;
 	private PanelGenEditTable panelLicencepools;
 	private PanelGenEditTable panelLicencecontracts;
-	private int splitPaneHMargin = 1;
 
 	private String selectedLicencePool = "";
 	private ListSelectionListener licencePoolSelectionListener;
@@ -531,33 +530,22 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
 				.addComponent(panelLicencepools, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
 				.addGap(10, 10, 10));
-		layoutTopPane
-				.setVerticalGroup(layoutTopPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(layoutTopPane
-								.createSequentialGroup().addGap(5, 5, 5).addComponent(panelLicencepools,
-										MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-								.addGap(5, 5, 5)));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
+				.addComponent(panelLicencepools, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
+				.addGap(5, 5, 5));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(
-				layoutBottomPane
-						.createSequentialGroup().addGap(10, 10,
-								10)
-						.addGroup(
-								layoutBottomPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
-												.addComponent(panelTask, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH)
-												.addGap(10, 10, 10))
-										.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
-												.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH)
-												.addGap(10, 10, 10)))
-						.addGap(10, 10, 10));
+		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup()
+				.addGroup(layoutBottomPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(panelTask, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH)
+						.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH))
+				.addGap(10, 10, 10));
 
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(5, 5, 5)
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(10, 10, 10).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
 						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
@@ -565,11 +553,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap().addComponent(splitPane, 0,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

@@ -28,7 +28,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelLicencesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
 
-	private int minVSize = 50;
 	private int tablesMaxWidth = 1000;
 
 	/** Creates new form panelLicencesReconciliation */
@@ -56,8 +55,8 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 						Short.MAX_VALUE))
 				.addContainerGap());
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
-				.addComponent(panelReconciliation, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(panelReconciliation, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 	}
 

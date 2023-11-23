@@ -31,7 +31,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class PanelLicencesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
-	private int splitPaneHMargin = 1;
 
 	private PanelGenEditTable panelUsage;
 	private PanelGenEditTable panelLicencePools;
@@ -125,10 +124,8 @@ public class PanelLicencesUsage extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
-						.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap())
-				.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
