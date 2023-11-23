@@ -42,8 +42,6 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -89,7 +87,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import utils.PopupMouseListener;
 import utils.Utils;
 
-public class PanelProductSettings extends JSplitPane implements RowSorterListener {
+public class PanelProductSettings extends JSplitPane {
 	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
@@ -763,7 +761,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		};
 
 		tableProducts.setRowSorter(sorter);
-		sorter.addRowSorterListener(this);
+		sorter.addRowSorterListener(event -> currentSortKeys = tableProducts.getRowSorter().getSortKeys());
 
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
@@ -929,14 +927,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public void clearEditing() {
 		initEditing("", "", "", "", "", null, null, null, null);
 		infoPane.clearEditing();
-	}
-
-	// RowSorterListener for table row sorter
-	@Override
-	public void sorterChanged(RowSorterEvent e) {
-		Logging.info(this, "RowSorterEvent " + e);
-		currentSortKeys = tableProducts.getRowSorter().getSortKeys();
-		Logging.info(this, "sorterChanged, sortKeys: " + infoSortKeys(currentSortKeys));
 	}
 
 	public List<String> getSelectedProducts() {

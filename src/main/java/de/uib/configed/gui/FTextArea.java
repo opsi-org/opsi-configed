@@ -87,15 +87,12 @@ public class FTextArea extends FGeneralDialog {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = false;
-		}
 
-		if (!shiftPressed && e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_TAB) {
+		if (!e.isShiftDown() && e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jButton1.requestFocus();
 		}
 
-		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB) {
+		if (e.isShiftDown() && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextPane.requestFocus();
 		}
 	}

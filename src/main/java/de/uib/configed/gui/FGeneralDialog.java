@@ -37,8 +37,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
-	protected boolean shiftPressed = true;
-
 	protected JPanel allpane = new JPanel();
 
 	protected JScrollPane scrollpane = new JScrollPane();
@@ -439,30 +437,23 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "key event " + e);
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = true;
-		} else {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
-				if (e.getSource() == jButton1) {
-					// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
-					// since otherwise doAction1 is called twice on Enter
-				} else if (e.getSource() == jButton2) {
-					doAction2();
-				} else if (e.getSource() == jButton3) {
-					doAction3();
-				} else {
-					Logging.warning(this, "unexpected action on source " + e.getSource());
-				}
+		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (e.getSource() == jButton1) {
+				// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
+				// since otherwise doAction1 is called twice on Enter
+			} else if (e.getSource() == jButton2) {
+				doAction2();
+			} else if (e.getSource() == jButton3) {
+				doAction3();
+			} else {
+				Logging.warning(this, "unexpected action on source " + e.getSource());
 			}
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = false;
-		}
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {

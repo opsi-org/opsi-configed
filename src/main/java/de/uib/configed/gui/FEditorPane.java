@@ -88,15 +88,11 @@ public class FEditorPane extends FGeneralDialog {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = false;
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == editPane) {
+		if (e.getKeyCode() == KeyEvent.VK_TAB && !e.isShiftDown() && e.getSource() == editPane) {
 			jButton1.requestFocus();
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
+		if (e.getKeyCode() == KeyEvent.VK_TAB && e.isShiftDown() && e.getSource() == jButton1) {
 			editPane.requestFocus();
 		}
 	}
