@@ -34,6 +34,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 		this.logPane = logPane;
 
 		super.addChangeListener(this);
+		addMouseWheelListener(this);
 
 		produceLabels();
 
