@@ -623,10 +623,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemSessionInfoColumn
 				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> {
-			Logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
-			configedMain.toggleColumnSessionInfo();
-		});
+		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSessionInfo());
 
 		jCheckBoxMenuItemShowInventoryNumberColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
@@ -714,11 +711,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuWakeOnLan.add(jMenuDirectWOL);
 
 		jMenuNewScheduledWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		final MainFrame f = this;
 		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
 			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
 					configedMain);
-			fStartWakeOnLan.setLocationRelativeTo(f);
+			fStartWakeOnLan.setLocationRelativeTo(this);
 
 			fStartWakeOnLan.setVisible(true);
 			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
@@ -732,10 +728,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuShowScheduledWOL.setEnabled(false);
 		jMenuShowScheduledWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "actionPerformed");
-			executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-		});
+		jMenuShowScheduledWOL.addActionListener(
+				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
 
 		jMenuWakeOnLan.add(jMenuShowScheduledWOL);
 
@@ -1412,12 +1406,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupWakeOnLanDirect.addActionListener((ActionEvent e) -> wakeOnLanAction());
 		popupWakeOnLan.add(popupWakeOnLanDirect);
 
-		final MainFrame f = this;
 		popupWakeOnLanScheduler.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
 			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
 					configedMain);
-			fStartWakeOnLan.setLocationRelativeTo(f);
+			fStartWakeOnLan.setLocationRelativeTo(this);
 
 			fStartWakeOnLan.setVisible(true);
 			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
@@ -2692,7 +2685,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
 			jMenuItem.setEnabled(false);
 		}
-
 		// sometimes
 		// before the menu is built completely
 	}
@@ -2750,10 +2742,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		checkMenuItemsDisabling();
 	}
-
-	// ------------------- set visual toggle items
-
-	// -------------------
 
 	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
