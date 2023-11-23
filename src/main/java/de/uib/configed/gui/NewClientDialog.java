@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -887,9 +886,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == jTextNotes
-				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-				&& e.getKeyCode() == KeyEvent.VK_TAB) {
+		if (e.getSource() == jTextNotes && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextInventoryNumber.requestFocusInWindow();
 		} else {
 			Logging.info(this, "keyPressed source " + e.getSource());

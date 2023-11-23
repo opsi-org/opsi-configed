@@ -6,7 +6,6 @@
 
 package de.uib.configed.terminal;
 
-import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -72,11 +71,10 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+				if (e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
 					increaseFontSize();
 					ignoreKeyEvent = true;
-				} else if (e.getKeyCode() == KeyEvent.VK_MINUS
-						&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+				} else if (e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
 					decreaseFontSize();
 					ignoreKeyEvent = true;
 				} else {

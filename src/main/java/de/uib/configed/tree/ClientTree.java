@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -281,8 +280,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK)
-				|| ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)) {
+		if (e.isShiftDown() || e.isControlDown()) {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				TreePath selectedPath = this.getLeadSelectionPath();
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();

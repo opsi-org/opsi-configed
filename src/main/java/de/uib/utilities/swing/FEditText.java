@@ -7,7 +7,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -79,8 +78,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textarea) {
-			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-					&& e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER && singleLine) {
 				commit();

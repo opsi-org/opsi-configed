@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -828,12 +827,10 @@ public class LogPane extends JPanel implements KeyListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
 				Logging.info(this, "Ctrl-Plus");
 				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
 			} else {

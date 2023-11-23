@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -2369,7 +2368,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void treeClientMouseAction(MouseEvent mouseEvent, DefaultMutableTreeNode mouseNode, TreePath mousePath) {
-		if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+		if (mouseEvent.isShiftDown()) {
 			clearTree();
 
 			for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
@@ -2381,7 +2380,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			}
 
 			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+		} else if (mouseEvent.isControlDown()) {
 			toggleClientSelection(mouseNode, mousePath);
 		} else {
 			clearTree();

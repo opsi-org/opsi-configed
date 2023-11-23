@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -114,8 +113,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-					&& e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER && singleLine) {
 				commit();
