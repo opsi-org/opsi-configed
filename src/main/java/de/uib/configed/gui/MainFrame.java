@@ -972,7 +972,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 				firstParentGroup = false;
 			}
-			menuOpsi.addSeparator();
+			if (menuOpsi.getSubElements().length != 0) {
+				menuOpsi.addSeparator();
+			}
 		} else {
 			jMenuServer.add(menuOpsi);
 		}
