@@ -716,8 +716,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuNewScheduledWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		final MainFrame f = this;
 		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
-					Globals.APPNAME + ": " + Configed.getResourceValue("FStartWakeOnLan.title"), configedMain);
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
+					configedMain);
 			fStartWakeOnLan.setLocationRelativeTo(f);
 
 			fStartWakeOnLan.setVisible(true);
@@ -1413,8 +1413,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final MainFrame f = this;
 		popupWakeOnLanScheduler.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
-					Globals.APPNAME + ": " + Configed.getResourceValue("FStartWakeOnLan.title"), configedMain);
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
+					configedMain);
 			fStartWakeOnLan.setLocationRelativeTo(f);
 
 			fStartWakeOnLan.setVisible(true);
@@ -2565,7 +2565,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private List<String> getProduct(List<String> completeList) {
 		FEditStringList fList = new FEditStringList();
 		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray(new String[0])));
-		fList.setTitle(Globals.APPNAME + ": " + Configed.getResourceValue("MainFrame.productSelection"));
+		fList.setTitle(Configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
 		fList.setSize(F_WIDTH / 2, this.getHeight() - 100);

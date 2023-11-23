@@ -13,9 +13,8 @@ import de.uib.configed.gui.FShowList;
 public abstract class AbstractErrorListProducer extends Thread {
 	String title;
 
-	AbstractErrorListProducer(String specificPartOfTitle) {
-		String part = specificPartOfTitle;
-		title = Globals.APPNAME + ":  " + part;
+	AbstractErrorListProducer(String title) {
+		this.title = title;
 	}
 
 	protected abstract List<String> getErrors();

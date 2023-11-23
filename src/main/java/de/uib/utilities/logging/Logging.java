@@ -23,7 +23,6 @@ import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 
 public final class Logging {
@@ -425,7 +424,7 @@ public final class Logging {
 		}
 
 		if (fErrors == null) {
-			fErrors = new FShowList(f, Globals.APPNAME + ": " + Configed.getResourceValue("problemsOccured"), false,
+			fErrors = new FShowList(f, Configed.getResourceValue("problemsOccured"), false,
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 		}
 

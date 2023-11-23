@@ -120,8 +120,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public ClientSelectionDialog(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
-				false,
+		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
@@ -1318,8 +1317,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		String text = saveNameField.getText();
 		if (text.isEmpty()) {
 			JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
-					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
-					JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle"), JOptionPane.OK_OPTION);
 			toFront();
 		} else if (searchNamePattern.matcher(text).matches()) {
 			collectData();

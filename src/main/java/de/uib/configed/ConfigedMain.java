@@ -4364,7 +4364,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		final FWakeClients result = new FWakeClients(mainFrame,
-				Globals.APPNAME + ": " + Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
+				Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
 
 		new Thread() {
 			@Override

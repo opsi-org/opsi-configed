@@ -341,8 +341,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		LogFrame.fileName = fn;
 	}
 
-	private static void showDialog(String errorMsg) {
-		JOptionPane.showMessageDialog(null, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
+	private void showDialog(String errorMsg) {
+		JOptionPane.showMessageDialog(this, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static String openFile() {
@@ -447,7 +447,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		return result;
 	}
 
-	private static String readInputStream(InputStream fis) {
+	private String readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;

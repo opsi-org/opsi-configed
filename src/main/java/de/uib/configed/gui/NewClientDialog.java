@@ -84,8 +84,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			.getPersistenceController();
 
 	public NewClientDialog(ConfigedMain configedMain, List<String> depots) {
-		super(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				730, 670 + (ServerFacade.isOpsi43() ? 0 : 30));
@@ -563,10 +562,9 @@ public final class NewClientDialog extends FGeneralDialog {
 
 			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
 					|| !isBoolean((String) client.get(13))) {
-				FTextArea fInfo = new FTextArea(
-						ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.nonBooleanValue.title")
-								+ " (" + Globals.APPNAME + ") ",
-						false, new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
+				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
+						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
+						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 				StringBuilder message = new StringBuilder("");
 				message.append(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
 				fInfo.setMessage(message.toString());
@@ -660,16 +658,12 @@ public final class NewClientDialog extends FGeneralDialog {
 			if (depots.contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
 						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
-						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
-								+ ")",
-						JOptionPane.WARNING_MESSAGE);
+						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.WARNING_MESSAGE);
 				return false;
 			}
 
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
-							+ ") ",
-					true,
+					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
@@ -693,9 +687,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private boolean checkHostname(String hostname) {
 		if (hostname.length() > 15) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
-							+ Globals.APPNAME + ") ",
-					true,
+					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 			StringBuilder message = new StringBuilder("");
 			message.append(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
@@ -720,9 +712,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		if (onlyNumbers) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
-							+ Globals.APPNAME + ") ",
-					true,
+					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
 					100);
 			StringBuilder message = new StringBuilder("");
@@ -817,7 +807,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
+		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 		fInfo.setMessage(message);
 		fInfo.setAlwaysOnTop(true);
