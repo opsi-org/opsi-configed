@@ -56,6 +56,8 @@ public class NavigationPanel extends JPanel {
 		Logging.info(this, "initComponents");
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
+
+		// TODO Translation tooltip text
 		nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
 		nextButton.setToolTipText("nächste Datenzeile");
 		nextButton.setPreferredSize(navButtonDimension);
@@ -67,13 +69,11 @@ public class NavigationPanel extends JPanel {
 		previousButton.addActionListener(event -> previous());
 
 		firstButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
-		// TODO
 		firstButton.setToolTipText("erste Datenzeile");
 		firstButton.setPreferredSize(navButtonDimension);
 		firstButton.addActionListener(event -> first());
 
 		lastButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
-		// TODO
 		lastButton.setToolTipText("letzte Datenzeile");
 		lastButton.setPreferredSize(navButtonDimension);
 		lastButton.addActionListener(event -> last());

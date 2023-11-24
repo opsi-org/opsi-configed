@@ -79,7 +79,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
-		dependenciesTextLabel = new JLabel();
+		dependenciesTextLabel = new JLabel(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		depotForDependenciesLabel = new JLabel();
 		panelProductDependencies = new PanelProductDependencies(depotForDependenciesLabel);
 
@@ -102,8 +102,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 
 		dependenciesActivateButton = new JButton("▶");
 		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);

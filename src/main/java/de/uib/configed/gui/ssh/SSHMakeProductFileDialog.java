@@ -145,28 +145,29 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			doSetActionGetVersions();
 		});
 
-		JLabel jLabelPackageVersion = new JLabel();
-		jLabelPackageVersion.setText(
+		JLabel jLabelPackageVersion = new JLabel(
 				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
-		JLabel jLabelProductVersion = new JLabel();
-		jLabelProductVersion.setText(
+
+		JLabel jLabelProductVersion = new JLabel(
 				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
-		JLabel jLabelVersionsControlFile = new JLabel();
-		JLabel jLabelVersions = new JLabel();
-		jLabelVersionsControlFile.setText(
+
+		JLabel jLabelVersionsControlFile = new JLabel(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
-		jLabelVersions.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
-		JLabel jLabelSetRights = new JLabel();
-		jLabelSetRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
-		JLabel jLabelSetRightsNow = new JLabel();
-		jLabelSetRightsNow
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
-		JLabel jLabelRemoveExistingPackage = new JLabel();
-		jLabelRemoveExistingPackage
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
-		JLabel jLabelRemoveExistingPackage2 = new JLabel();
-		jLabelRemoveExistingPackage2
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
+
+		JLabel jLabelVersions = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
+
+		JLabel jLabelSetRights = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
+
+		JLabel jLabelSetRightsNow = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
+
+		JLabel jLabelRemoveExistingPackage = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
+
+		JLabel jLabelRemoveExistingPackage2 = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -176,13 +177,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 		enableTfVersions(false);
 
-		JLabel jLabelmd5sum = new JLabel();
-		jLabelmd5sum
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+		JLabel jLabelmd5sum = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+
 		jCheckBoxmd5sum = new JCheckBox();
 		jCheckBoxmd5sum.setSelected(true);
-		JLabel jLabelzsync = new JLabel();
-		jLabelzsync.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+		JLabel jLabelzsync = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+
 		jCheckBoxzsync = new JCheckBox();
 		jCheckBoxzsync.setSelected(true);
 		jCheckBoxOverwrite = new JCheckBox();

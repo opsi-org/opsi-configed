@@ -143,41 +143,39 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		JLabel jLabelHostname = new JLabel();
-		jLabelHostname.setText(Configed.getResourceValue("NewClientDialog.hostname"));
+		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
 		jTextHostname = new JTextField(new CheckedDocument(/* allowedChars */ new char[] { '-', '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
 				'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
 
-		JLabel jLabelDomainname = new JLabel();
-		jLabelDomainname.setText(Configed.getResourceValue("NewClientDialog.domain"));
+		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
 
 		initComboDomain();
 
-		JLabel jLabelDescription = new JLabel();
-		jLabelDescription.setText(Configed.getResourceValue("NewClientDialog.description"));
+		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("NewClientDialog.description"));
+
 		jTextDescription = new JTextField();
 
-		JLabel jLabelInventoryNumber = new JLabel();
-		jLabelInventoryNumber.setText(Configed.getResourceValue("NewClientDialog.inventorynumber"));
+		JLabel jLabelInventoryNumber = new JLabel(Configed.getResourceValue("NewClientDialog.inventorynumber"));
+
 		jTextInventoryNumber = new JTextField();
 
-		JLabel jLabelDepot = new JLabel();
-		jLabelDepot.setText(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
+		JLabel jLabelDepot = new JLabel(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
+
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
 		jComboPrimaryGroup.setMaximumRowCount(10);
 
-		JLabel jLabelNetboot = new JLabel();
-		jLabelNetboot.setText(Configed.getResourceValue("NewClientDialog.netbootProduct"));
+		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
+
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
 
-		JLabel jLabelNotes = new JLabel();
-		jLabelNotes.setText(Configed.getResourceValue("NewClientDialog.notes"));
+		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
+
 		jTextNotes = new JTextArea();
 		jTextNotes.addFocusListener(new FocusListener() {
 			@Override
@@ -222,8 +220,8 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 
-		JLabel jLabelSystemUUID = new JLabel();
-		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));
+		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
+
 		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
@@ -231,13 +229,13 @@ public final class NewClientDialog extends FGeneralDialog {
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
 
-		JLabel jLabelMacAddress = new JLabel();
-		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
+		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
+
 		macAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
 
-		JLabel jLabelIpAddress = new JLabel();
-		jLabelIpAddress.setText(Configed.getResourceValue("NewClientDialog.IpAddress"));
+		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("NewClientDialog.IpAddress"));
+
 		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
 				"", 24);

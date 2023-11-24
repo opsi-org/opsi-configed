@@ -460,8 +460,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		groupsCombo.setPreferredSize(Globals.BUTTON_DIMENSION);
 		saveNameEditor.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		labelSave = new JLabel();
-		labelSave.setText(TEXT_SAVE);
+		labelSave = new JLabel(TEXT_SAVE);
 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.BUTTON_DIMENSION);
