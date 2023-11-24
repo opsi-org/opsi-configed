@@ -70,7 +70,6 @@ public class SSHCompletionComboButton {
 		}
 
 		initCombobox();
-		initButton();
 	}
 
 	private final void enableComponents(boolean value) {
@@ -128,7 +127,10 @@ public class SSHCompletionComboButton {
 	}
 
 	private void createInstances() {
-		button = new JButton();
+		button = new JButton(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button"));
+		button.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button.tooltip"));
+		button.addActionListener(actionEvent -> doButtonAction());
+
 		combobox = new SSHCompletionComboBox<>(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
 	}
 
@@ -157,12 +159,6 @@ public class SSHCompletionComboButton {
 		}
 
 		combobox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
-	}
-
-	private void initButton() {
-		button.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button"));
-		button.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button.tooltip"));
-		button.addActionListener(actionEvent -> doButtonAction());
 	}
 
 	public void doButtonAction() {

@@ -146,27 +146,25 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	private void initLayout() {
-		JButton buttonRemoveAllAssignments = new JButton();
-		buttonRemoveAllAssignments.setIcon(Utils.createImageIcon("images/list-remove-14.png", ""));
+		JButton buttonRemoveAllAssignments = new JButton(Utils.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(VALUE_NO_LICENCE_POOL)));
 
-		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
+		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(
+				Utils.createImageIcon("images/list-add-14.png", ""));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
 		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
-		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Utils.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool"));
 		buttonSetAllAssignmentsToGloballySelectedPool
 				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(globalLicencePool)));
 
-		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
+		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Utils.createImageIcon("images/list-add-14.png", ""));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
-		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Utils.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 

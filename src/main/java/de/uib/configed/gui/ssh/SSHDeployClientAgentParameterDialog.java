@@ -311,16 +311,14 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);

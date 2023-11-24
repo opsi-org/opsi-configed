@@ -79,12 +79,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
-		dependenciesActivateButton = new JButton();
 		dependenciesTextLabel = new JLabel();
 		depotForDependenciesLabel = new JLabel();
 		panelProductDependencies = new PanelProductDependencies(depotForDependenciesLabel);
-
-		propertiesActivateButton = new JButton();
 
 		// do this so that you can mark and copy content of the label
 		jLabelProductID.setFont(jLabelProductID.getFont().deriveFont(Font.BOLD));
@@ -108,16 +105,14 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 
-		dependenciesActivateButton.setText("▶");
+		dependenciesActivateButton = new JButton("▶");
 		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
-
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
-		propertiesActivateButton.setText("▼");
+		propertiesActivateButton = new JButton("▼");
 		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
-
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);

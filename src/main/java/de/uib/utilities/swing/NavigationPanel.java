@@ -56,15 +56,12 @@ public class NavigationPanel extends JPanel {
 		Logging.info(this, "initComponents");
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
-		nextButton = new JButton();
-		nextButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
-
+		nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
 		nextButton.setToolTipText("nächste Datenzeile");
 		nextButton.setPreferredSize(navButtonDimension);
 		nextButton.addActionListener(event -> next());
 
-		previousButton = new JButton();
-		previousButton.setIcon(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
+		previousButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
 		previousButton.setToolTipText("vorherige Datenzeile");
 		previousButton.setPreferredSize(navButtonDimension);
 		previousButton.addActionListener(event -> previous());

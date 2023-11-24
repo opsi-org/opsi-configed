@@ -190,8 +190,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jCheckBoxSetRights = new JCheckBox();
 		jCheckBoxSetRights.setSelected(true);
 
-		JButton jButtonAdvancedSettings = new JButton();
-		jButtonAdvancedSettings.setText(
+		JButton jButtonAdvancedSettings = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -203,9 +202,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 		jTextFieldPckageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 
-		JButton jButtonSetRights = new JButton();
-		jButtonSetRights
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
+		JButton jButtonSetRights = new JButton(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 		jButtonSetRights.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -213,10 +211,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
 		}
 
-		jButtonToPackageManager = new JButton();
-		jButtonToPackageManager.setEnabled(false);
-		jButtonToPackageManager.setText(
+		jButtonToPackageManager = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
+		jButtonToPackageManager.setEnabled(false);
 		jButtonToPackageManager.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
@@ -229,8 +226,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			});
 		}
 
-		jButtonExec = new JButton();
-		jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExec = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		jButtonExec.setEnabled(false);
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -238,10 +234,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jButtonExec.addActionListener(actionEvent -> doAction2());
 		}
 
-		JButton jButtonCancel = new JButton();
-		jButtonCancel.setText(Configed.getResourceValue("buttonClose"));
-
+		JButton jButtonCancel = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonCancel.addActionListener(actionEvent -> cancel());
+
 		buttonPanel.add(jButtonCancel);
 		buttonPanel.add(jButtonToPackageManager);
 		buttonPanel.add(jButtonExec);

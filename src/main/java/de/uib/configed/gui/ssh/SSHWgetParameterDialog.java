@@ -180,8 +180,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
-		jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 			if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -190,8 +189,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
