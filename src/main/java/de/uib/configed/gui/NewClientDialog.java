@@ -244,8 +244,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelShutdownDefault.setText(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		jCheckShutdownInstall = new JCheckBox();
-		jCheckShutdownInstall.setText(Configed.getResourceValue("NewClientDialog.installByShutdown"));
+		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
 		labelUefiDefault = new LabelChecked();
 		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
@@ -256,11 +255,9 @@ public final class NewClientDialog extends FGeneralDialog {
 			labelUefiDefault.setEnabled(false);
 		}
 
-		jCheckShutdownInstall = new JCheckBox();
-		jCheckShutdownInstall.setText(Configed.getResourceValue("NewClientDialog.installByShutdown"));
+		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
-		jCheckUefi = new JCheckBox();
-		jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
+		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 
 		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
@@ -276,8 +273,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 
-		jCheckWan = new JCheckBox();
-		jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
+		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));

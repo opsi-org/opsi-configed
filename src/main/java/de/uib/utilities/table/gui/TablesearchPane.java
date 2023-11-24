@@ -325,12 +325,38 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		fieldSearch.addKeyListener(this);
 
-		popupSearch = new JMenuItem();
-		popupSearchNext = new JMenuItem();
-		JMenuItem popupNewSearch = new JMenuItem();
-		popupMarkHits = new JMenuItem();
-		popupMarkAndFilter = new JMenuItem();
-		popupEmptySearchfield = new JMenuItem();
+		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
+		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
+
+		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
+		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
+
+		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
+		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
+			targetModel.setFiltered(false);
+			if (resetFilterModeOnNewSearch) {
+				setFilteredMode(false);
+			}
+
+			searchTheRow(0, selectMode);
+		});
+
+		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.addActionListener((ActionEvent actionEvent) -> {
+			if (!fieldSearch.getText().isEmpty()) {
+				markAll();
+			}
+		});
+
+		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
+			switchFilterOff();
+			markAllAndFilter();
+			switchFilterOn();
+		});
+
+		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		searchMenuEntries = new LinkedHashMap<>();
 		searchMenuEntries.put(popupSearch, true);
@@ -341,42 +367,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		searchMenuEntries.put(popupEmptySearchfield, true);
 		buildMenuSearchfield();
-
-		popupSearch.setText(Configed.getResourceValue("SearchPane.popup.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
-
-		popupSearchNext.setText(Configed.getResourceValue("SearchPane.popup.searchnext"));
-		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
-
-		popupNewSearch.setText(Configed.getResourceValue("SearchPane.popup.searchnew"));
-		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			targetModel.setFiltered(false);
-			if (resetFilterModeOnNewSearch) {
-				setFilteredMode(false);
-			}
-
-			searchTheRow(0, selectMode);
-		});
-
-		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
-
-		popupMarkHits.addActionListener((ActionEvent actionEvent) -> {
-			if (!fieldSearch.getText().isEmpty()) {
-				markAll();
-			}
-		});
-
-		popupMarkAndFilter.setText(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
-
-		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
-			switchFilterOff();
-			markAllAndFilter();
-			switchFilterOn();
-		});
-
-		popupEmptySearchfield.setText(Configed.getResourceValue("SearchPane.popup.empty"));
-
-		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		fieldSearch.addActionListener((ActionEvent actionEvent) -> {
 			if (searchInputType == SearchInputType.PROGRESSIVE) {

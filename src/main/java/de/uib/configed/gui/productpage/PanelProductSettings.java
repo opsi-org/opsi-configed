@@ -435,8 +435,6 @@ public class PanelProductSettings extends JSplitPane {
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItem();
-
-		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
 		reload.addActionListener((ActionEvent e) -> {

@@ -115,7 +115,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setAutoCreateRowSorter(true);
 
 		primaryOrderingKeys = new ArrayList<>();
-		primaryOrderingKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		primaryOrderingKeys.add(new SortKey(0, SortOrder.ASCENDING));
 
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -153,47 +153,39 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch.addKeyListener(this);
 
+		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.search"));
+		popupSearch.addActionListener(actionEvent -> searchTheRow());
+
+		JMenuItem popupSearchNext = new JMenuItem(
+				Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
+		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
+
+		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
+		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
+
+		JMenuItem popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.addActionListener(actionEvent -> markAll());
+
+		JMenuItem popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
+
 		JPopupMenu searchMenu = new JPopupMenu();
-		JMenuItem popupSearch = new JMenuItem();
-		JMenuItem popupSearchNext = new JMenuItem();
-		JMenuItem popupNewSearch = new JMenuItem();
-		JMenuItem popupMarkHits = new JMenuItem();
-		JMenuItem popupEmptySearchfield = new JMenuItem();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
 		searchMenu.add(popupNewSearch);
 		searchMenu.add(popupMarkHits);
 		searchMenu.add(popupEmptySearchfield);
 
-		popupSearch.setText(Configed.getResourceValue("JTableSelectionPanel.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow());
-
-		popupSearchNext.setText(Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
-		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
-
-		popupNewSearch.setText(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
-		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
-
-		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
-
-		popupMarkHits.addActionListener(actionEvent -> markAll());
-
-		popupEmptySearchfield.setText(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
-		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
-
 		fieldSearch.setComponentPopupMenu(searchMenu);
 
 		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
 
-		Icon markAllIcon = Utils.createImageIcon("images/selection-all.png", "");
-		Icon invertSelectionIcon = Utils.createImageIcon("images/selection-invert.png", "");
-		buttonMarkAll = new JButton("", markAllIcon);
+		buttonMarkAll = new JButton(Utils.createImageIcon("images/selection-all.png", ""));
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		buttonInvertSelection = new JButton("", invertSelectionIcon);
-		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
-
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
+		buttonInvertSelection = new JButton(Utils.createImageIcon("images/selection-invert.png", ""));
+		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 		buttonInvertSelection.addActionListener((ActionEvent e) -> configedMain.invertClientselection());
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
