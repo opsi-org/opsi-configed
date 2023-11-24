@@ -38,7 +38,6 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	private JPanel panelGetAndAssignSL;
 	private DynamicCombo comboClient;
 
-	private int tablesMaxWidth = 1000;
 	private int lPoolHeight = 100;
 
 	private ControlPanelLicencesUsage licencesUsageController;
@@ -66,8 +65,8 @@ public class PanelLicencesUsage extends MultiTablePanel {
 
 	private void initSubPanel() {
 		panelLicencePools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
-				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), 1000, false, 0, false,
+				new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
 		JLabel labelGetAndAssignSL = new JLabel(
@@ -103,10 +102,9 @@ public class PanelLicencesUsage extends MultiTablePanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(buttonGet, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(buttonGet,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap());
 	}
 
 	private void initComponents() {

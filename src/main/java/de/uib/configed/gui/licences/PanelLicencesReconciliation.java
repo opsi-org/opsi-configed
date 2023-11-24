@@ -28,8 +28,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelLicencesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
 
-	private int tablesMaxWidth = 1000;
-
 	/** Creates new form panelLicencesReconciliation */
 	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
 		super(licencesReconciliationController);
@@ -38,8 +36,8 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, 0,
-				true, null, true);
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), 1000, false, 0, true,
+				null, true);
 		panelReconciliation.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

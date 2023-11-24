@@ -101,7 +101,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		layoutBottomPane.setVerticalGroup(
 				layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+						.addContainerGap());
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

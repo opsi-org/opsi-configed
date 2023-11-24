@@ -535,7 +535,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(10, 10, 10).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
 						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
-				.addGap(5, 5, 5));
+				.addContainerGap());
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

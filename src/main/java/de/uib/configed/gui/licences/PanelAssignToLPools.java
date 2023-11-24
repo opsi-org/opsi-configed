@@ -429,14 +429,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addContainerGap());
 
-		layoutTopPane
-				.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTopPane.createSequentialGroup()
-								.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addContainerGap())
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTopPane.createSequentialGroup()
+						.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addContainerGap()));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
