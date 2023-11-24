@@ -58,7 +58,7 @@ public class FGroupActions extends SecondaryFrame {
 		reload();
 
 		super.setIconImage(Utils.getMainIcon());
-		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
+		super.setTitle(Configed.getResourceValue("FGroupAction.title"));
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);

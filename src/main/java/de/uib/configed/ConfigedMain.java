@@ -1500,8 +1500,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		licencesFrame = new LicencesFrame(this);
 		Utils.setMasterFrame(licencesFrame);
 		licencesFrame.setIconImage(Utils.getMainIcon());
-		licencesFrame.setTitle(
-				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
+		licencesFrame.setTitle(myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,

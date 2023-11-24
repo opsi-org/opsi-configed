@@ -26,7 +26,7 @@ public class FProductActions extends SecondaryFrame {
 		define();
 
 		super.setIconImage(Utils.getMainIcon());
-		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FProductAction.title"));
+		super.setTitle(Configed.getResourceValue("FProductAction.title"));
 	}
 
 	private void define() {
