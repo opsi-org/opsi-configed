@@ -455,8 +455,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 
-		add(splitPane);
-
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createSequentialGroup()

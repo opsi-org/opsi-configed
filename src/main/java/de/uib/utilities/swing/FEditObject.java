@@ -190,9 +190,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			splitPane.setTopComponent(framingPanel);
 			splitPane.setBottomComponent(loggingPanel);
 
-			add(splitPane);
-
-			GroupLayout layout = new GroupLayout(getContentPane());
+			GroupLayout layout = new GroupLayout(this);
 			this.setLayout(layout);
 			layout.setHorizontalGroup(layout
 					.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
