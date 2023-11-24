@@ -54,8 +54,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				.addContainerGap());
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(panelReconciliation, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+				.addComponent(panelReconciliation, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 	}
 
 	public PanelGenEditTable getPanelReconciliation() {
