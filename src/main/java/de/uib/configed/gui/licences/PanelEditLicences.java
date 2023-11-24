@@ -38,7 +38,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -49,7 +49,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelKeys.setFiltering(true);
 
 		panelSoftwarelicences = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -59,7 +59,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelSoftwarelicences.showFilterIcon(true);
 
 		panelLicencecontracts = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);

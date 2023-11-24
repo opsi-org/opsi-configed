@@ -36,7 +36,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), 0, false, 0, true, null,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), false, 0, true, null,
 				true);
 		panelReconciliation.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

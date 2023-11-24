@@ -142,7 +142,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private PanelGenEditTable initMainPanel() {
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("", -1, false, 0, true,
+		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0, true,
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
 						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
@@ -170,7 +170,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		buildModel();
 
-		thePanel.setTitle("opsi Modules Validation");
 		thePanel.setSize(500, 200);
 
 		thePanel.setUpdateController(null);

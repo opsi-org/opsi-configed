@@ -146,9 +146,7 @@ public class PanelSWInfo extends JPanel {
 	private void initTableComponents() {
 		labelSuperTitle = new JLabel();
 
-		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true);
-
-		panelTable.setTitle("");
+		panelTable = new PanelGenEditTable("", false, 0, true, new int[] {}, true);
 
 		panelTable.setColumnSelectionAllowed(false);
 

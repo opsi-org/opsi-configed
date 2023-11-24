@@ -257,19 +257,19 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
 
 		panelKeys.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelLicencepools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), 0, false, 0, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), false, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
 		panelLicencepools.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelLicencecontracts = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
