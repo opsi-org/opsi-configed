@@ -82,14 +82,12 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		jComboBoxVerbosity.setSelectedItem(1);
 
-		jCheckBoxProperties = new JCheckBox();
-		jCheckBoxProperties.setSelected(true);
-		jLabelUpdateInstalled.setText(
+		jCheckBoxProperties = new JCheckBox(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
-		jCheckBoxUpdateInstalled = new JCheckBox();
-
-		jLabelSetupInstalled.setText(
+		jCheckBoxProperties.setSelected(true);
+		jCheckBoxUpdateInstalled = new JCheckBox(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
+
 		jCheckBoxSetupInstalled = new JCheckBox();
 	}
 

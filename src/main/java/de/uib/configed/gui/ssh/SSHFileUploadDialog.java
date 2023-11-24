@@ -143,7 +143,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
 
-		jComboBoxSetRights = new JCheckBox();
+		jComboBoxSetRights = new JCheckBox("", true);
 		jComboBoxSetRights.setSelected(true);
 		jCheckBoxOverwriteExisting = new JCheckBox();
 		jCheckBoxOverwriteExisting.setSelected(true);

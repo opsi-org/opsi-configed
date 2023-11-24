@@ -147,8 +147,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// menu system
 	private Map<String, List<JMenuItem>> menuItemsHost;
 
-	private JMenuBar jMenuBar1 = new JMenuBar();
-
 	private JMenu jMenuFile;
 	private JMenuItem jMenuFileSaveConfigurations;
 
@@ -861,8 +859,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		SSHConnectionInfo connectionInfo = SSHConnectionInfo.getInstance();
 
-		JMenu menuOpsi = new JMenu();
-		menuOpsi.setText(SSHCommandFactory.PARENT_OPSI);
+		JMenu menuOpsi = new JMenu(SSHCommandFactory.PARENT_OPSI);
 
 		jMenuServer.removeAll();
 		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
@@ -871,8 +868,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		Logging.info(this, "setupMenuServer add configpage");
-		JMenuItem jMenuSSHConfig = new JMenuItem();
-		jMenuSSHConfig.setText(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
+		JMenuItem jMenuSSHConfig = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
@@ -1659,15 +1655,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		setupMenuFrames();
 		setupMenuHelp();
 
-		jMenuBar1.add(jMenuFile);
+		JMenuBar jMenuBar = new JMenuBar();
+		jMenuBar.add(jMenuFile);
+		jMenuBar.add(jMenuClientselection);
+		jMenuBar.add(jMenuClients);
+		jMenuBar.add(jMenuServer);
+		jMenuBar.add(jMenuFrames);
+		jMenuBar.add(jMenuHelp);
 
-		jMenuBar1.add(jMenuClientselection);
-		jMenuBar1.add(jMenuClients);
-		jMenuBar1.add(jMenuServer);
-		jMenuBar1.add(jMenuFrames);
-		jMenuBar1.add(jMenuHelp);
-
-		this.setJMenuBar(jMenuBar1);
+		this.setJMenuBar(jMenuBar);
 
 		setupPopupMenuClientsTab();
 

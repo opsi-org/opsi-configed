@@ -393,7 +393,7 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
-		popup = new JPopupMenu("");
+		popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -434,8 +434,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		showPopupOpsiclientdEvent(true);
 
-		JMenuItem reload = new JMenuItem();
-		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
@@ -443,8 +442,7 @@ public class PanelProductSettings extends JSplitPane {
 		});
 		popup.add(reload);
 
-		JMenuItem createReport = new JMenuItem();
-		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
+		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Utils.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
