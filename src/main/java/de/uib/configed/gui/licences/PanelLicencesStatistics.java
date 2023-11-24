@@ -38,7 +38,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 	private void initComponents() {
 		panelStatistics = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, 0, true, null,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 0, false, 0, true, null,
 				true);
 		panelStatistics.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

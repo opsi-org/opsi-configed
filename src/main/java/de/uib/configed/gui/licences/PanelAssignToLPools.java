@@ -36,8 +36,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-	public static final int TABLES_MAX_WIDTH = 1000;
-
 	private static final int MIN_V_SIZE = 80;
 
 	private JLabel fieldSelectedLicencePoolId;
@@ -399,16 +397,16 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addContainerGap());
 
 		panelLicencepools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), TABLES_MAX_WIDTH, true, 1,
-				false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), 0, true, 1, false,
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 		panelLicencepools.setResetFilterModeOnNewSearch(false);
 		panelLicencepools.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelProductId2LPool = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
-				1, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), 0, true, 1, false,
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 

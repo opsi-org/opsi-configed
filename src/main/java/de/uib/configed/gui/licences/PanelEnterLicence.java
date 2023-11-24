@@ -49,7 +49,6 @@ import utils.Utils;
 public class PanelEnterLicence extends MultiTablePanel {
 	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
-	private static final int MAX_WIDTH = 1000;
 
 	private static final int MIN_FIELD_WIDTH = 40;
 	private static final int MIN_FIELD_HEIGHT = 6;
@@ -264,8 +263,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 		panelKeys.setMasterFrame(ConfigedMain.getLicencesFrame());
 
 		panelLicencepools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), MAX_WIDTH, false, 0,
-				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), 0, false, 0, false,
+				new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
 		panelLicencepools.setMasterFrame(ConfigedMain.getLicencesFrame());
 
@@ -453,7 +452,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 		layoutTask.setHorizontalGroup(layoutTask.createSequentialGroup().addGroup(layoutTask
 				.createParallelGroup(Alignment.LEADING)
 				.addGroup(layoutTask.createParallelGroup(Alignment.LEADING).addComponent(panelLicencecontracts, 50, 300,
-						MAX_WIDTH))
+						Short.MAX_VALUE))
 
 				.addGroup(layoutTask.createSequentialGroup()
 						.addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -478,10 +477,10 @@ public class PanelEnterLicence extends MultiTablePanel {
 						.addContainerGap(1515, Short.MAX_VALUE))
 				.addGroup(layoutTask.createSequentialGroup()
 						.addGroup(layoutTask.createParallelGroup(Alignment.TRAILING, true)
-								.addComponent(panelEnterKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
-								.addComponent(panelLicenceModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE, MAX_WIDTH))
+								.addComponent(panelEnterKey, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(panelLicenceModel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(10, 10, 10))));
 
 		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
@@ -516,9 +515,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
-				.addComponent(panelLicencepools, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
-				.addGap(10, 10, 10));
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addComponent(panelLicencepools,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(10, 10, 10));
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addComponent(panelLicencepools, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
 				.addGap(5, 5, 5));
@@ -527,8 +525,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 		bottomPane.setLayout(layoutBottomPane);
 		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup()
 				.addGroup(layoutBottomPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelTask, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH)
-						.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, MAX_WIDTH, MAX_WIDTH))
+						.addComponent(panelTask, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGap(10, 10, 10));
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()

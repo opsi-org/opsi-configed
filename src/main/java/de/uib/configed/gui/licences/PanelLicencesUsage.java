@@ -65,7 +65,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 
 	private void initSubPanel() {
 		panelLicencePools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), 1000, false, 0, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), 0, false, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
