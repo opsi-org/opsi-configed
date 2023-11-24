@@ -51,7 +51,7 @@ public class PanelLinedComponents extends JPanel {
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		vGroup.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2);
+		vGroup.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE);
 
 		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(Alignment.CENTER);
 
@@ -63,7 +63,7 @@ public class PanelLinedComponents extends JPanel {
 
 		vGroup.addGroup(vGroup1);
 
-		vGroup.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2);
+		vGroup.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE);
 		layout.setVerticalGroup(vGroup);
 	}
 }

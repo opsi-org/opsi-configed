@@ -382,12 +382,12 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(fieldClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelDepotCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE))
 

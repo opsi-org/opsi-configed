@@ -578,7 +578,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 										Globals.BUTTON_HEIGHT)
 								.addComponent(panelFinalAction))
 
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)

@@ -236,7 +236,7 @@ public final class TerminalFrame {
 				.addGap(Globals.GAP_SIZE));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(southLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(uploadingFileLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

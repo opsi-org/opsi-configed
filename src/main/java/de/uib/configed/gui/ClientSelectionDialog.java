@@ -246,13 +246,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
 				.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.GAP_SIZE / 2)
+				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(buttonRestart, 20, 20, 20).addGap(Globals.GAP_SIZE));
 
 		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
