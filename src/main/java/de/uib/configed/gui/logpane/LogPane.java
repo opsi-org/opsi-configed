@@ -14,11 +14,8 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.IntStream;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -89,14 +86,10 @@ public class LogPane extends JPanel implements KeyListener {
 	private final Style[] logLevelStyles;
 
 	private Integer minLevel = MIN_LEVEL;
-	private Integer maxExistingLevel = minLevel;
 	private Integer showLevel = minLevel;
 
 	private boolean showTypeRestricted;
-	private List<String> typesList;
 	private int typesListMaxShowCount = 25;
-
-	private int[] lineTypes;
 
 	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
 	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
@@ -112,13 +105,13 @@ public class LogPane extends JPanel implements KeyListener {
 	private ImmutableDefaultStyledDocument document;
 
 	protected String[] lines;
-	private int[] lineLevels;
-	private Style[] lineStyles;
 
 	private boolean scrolling;
 	private int currentLinePosition;
 	private int linesToShow;
 	private boolean rebuilding;
+
+	private LogFileParser parser;
 
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
@@ -137,6 +130,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 		logLevelStyles = new Style[10];
 		setLoglevelStyles();
+		parser = new LogFileParser(lines, logLevelStyles);
 
 		initComponents(defaultText);
 
@@ -331,7 +325,7 @@ public class LogPane extends JPanel implements KeyListener {
 			selTypeIndex = -1;
 		} else {
 			showTypeRestricted = true;
-			selTypeIndex = typesList.indexOf(selType);
+			selTypeIndex = parser.getTypesList().indexOf(selType);
 		}
 
 		if (selTypeIndex != oldSelTypeIndex) {
@@ -391,7 +385,7 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	public Integer getMaxExistingLevel() {
-		return maxExistingLevel;
+		return parser.getMaxExistingLevel();
 	}
 
 	public void removeAllHighlights() {
@@ -481,8 +475,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 		LogPane copyOfMe = new LogPane("", false);
 		copyOfMe.setLevelWithoutAction(showLevel);
-		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
-				maxExistingLevel);
+		copyOfMe.setParsedText(lines, showTypeRestricted, selTypeIndex, parser);
 		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
 		externalize(copyOfMe, title);
@@ -592,23 +585,13 @@ public class LogPane extends JPanel implements KeyListener {
 				int i = currentLinePosition;
 				int linesRead = 0;
 				while (linesRead <= linesToRead) {
-					boolean show = false;
-
-					if (lineLevels[i] <= sliderLevel.getValue()) {
-						show = true;
-					}
-
-					if (show && showTypeRestricted && lineTypes[i] != selTypeIndex) {
-						show = false;
-					}
-
-					if (show) {
+					if (showLine(i)) {
 						docLinestartPosition2lineCount.put(document.getLength(), i);
 						lineCount2docLinestartPosition.put(i, document.getLength());
 
 						String no = "(" + i + ")";
 						document.insertStringTruely(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
-								lineStyles[i]);
+								parser.getParsedLogLine(i).getStyle());
 						linesRead++;
 					}
 
@@ -619,6 +602,17 @@ public class LogPane extends JPanel implements KeyListener {
 				Logging.warning(this, "BadLocationException thrown in logging: " + e);
 			}
 			return null;
+		}
+
+		private boolean showLine(int index) {
+			boolean show = false;
+			if (parser.getParsedLogLine(index).getLevel() <= sliderLevel.getValue()) {
+				show = true;
+			}
+			if (show && showTypeRestricted && parser.getParsedLogLine(index).getTypeIndex() != selTypeIndex) {
+				show = false;
+			}
+			return show;
 		}
 
 		@Override
@@ -644,8 +638,8 @@ public class LogPane extends JPanel implements KeyListener {
 
 	public void activateShowLevel() {
 		Integer level = sliderLevel.getValue();
-		if (level > maxExistingLevel) {
-			level = maxExistingLevel;
+		if (level > parser.getMaxExistingLevel()) {
+			level = parser.getMaxExistingLevel();
 			sliderLevel.setValue(level);
 			return;
 		}
@@ -657,9 +651,10 @@ public class LogPane extends JPanel implements KeyListener {
 		Integer oldLevel = showLevel;
 		showLevel = level;
 		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
-				+ maxExistingLevel);
+				+ parser.getMaxExistingLevel());
 
-		if (!oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+		if (!oldLevel.equals(level)
+				&& (level < parser.getMaxExistingLevel() || oldLevel < parser.getMaxExistingLevel())) {
 			rebuildDocumentWithNewLevel();
 		}
 	}
@@ -715,82 +710,6 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.getCaret().setVisible(true);
 	}
 
-	private void parse() {
-		lineLevels = new int[lines.length];
-		lineStyles = new Style[lines.length];
-
-		lineTypes = new int[lines.length];
-		typesList = new ArrayList<>();
-
-		for (int i = 0; i < lines.length; i++) {
-			int levelForLine = getLoglevelForLine(lines[i]);
-			lineLevels[i] = levelForLine;
-			lineStyles[i] = getStyleByLevelNo(levelForLine);
-			lineTypes[i] = getTypeIndexForLine(lines[i]);
-		}
-
-		maxExistingLevel = IntStream.range(0, lineLevels.length).map(i -> lineLevels[i]).max().getAsInt();
-		adaptComboType();
-	}
-
-	private static int getLoglevelForLine(String line) {
-		int lineLevel = 0;
-		if (line.length() >= 3 && line.charAt(0) == '[' && line.charAt(2) == ']') {
-			lineLevel = Character.getNumericValue(line.charAt(1));
-		}
-		return Math.max(0, lineLevel);
-	}
-
-	private Style getStyleByLevelNo(int lev) {
-		return lev < logLevelStyles.length ? logLevelStyles[lev] : logLevelStyles[logLevelStyles.length - 1];
-	}
-
-	private int getTypeIndexForLine(String line) {
-		String type = "";
-		int typeIndex = 0;
-		int nextStartI = 0;
-		StringBlock nextBlock = new StringBlock();
-		nextBlock.setString(line);
-		nextBlock.forward(nextStartI, '[', ']');
-		if (nextBlock.hasFound()) {
-			nextStartI = nextBlock.getIEnd() + 1;
-			nextBlock.forward(nextStartI, '[', ']');
-		}
-		if (nextBlock.hasFound()) {
-			nextStartI = nextBlock.getIEnd() + 1;
-			nextBlock.forward(nextStartI, '[', ']');
-		}
-		if (nextBlock.hasFound()) {
-			type = nextBlock.getContent();
-			typeIndex = typesList.indexOf(type);
-			if (typeIndex == -1) {
-				typeIndex = typesList.size();
-				typesList.add(type);
-			}
-		}
-		return typeIndex;
-	}
-
-	private void adaptComboType() {
-		comboType.setEnabled(false);
-		comboModelTypes.removeAllElements();
-
-		if (!typesList.isEmpty()) {
-			comboModelTypes.addElement(DEFAULT_TYPE);
-			for (String type : typesList) {
-				comboModelTypes.addElement(type);
-			}
-			comboType.setEnabled(true);
-
-			int maxRowCount = typesList.size() + 1;
-			if (maxRowCount > typesListMaxShowCount) {
-				maxRowCount = typesListMaxShowCount;
-			}
-
-			comboType.setMaximumRowCount(maxRowCount);
-		}
-	}
-
 	private void adaptSlider() {
 		sliderLevel.produceLabels();
 	}
@@ -804,11 +723,14 @@ public class LogPane extends JPanel implements KeyListener {
 		Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
-		parse();
+		parser = new LogFileParser(lines, logLevelStyles);
+		parser.parse();
+		adaptComboType();
+
 		if (lines.length > 1) {
 			showLevel = produceInitialMaxShowLevel();
-			if (maxExistingLevel < showLevel) {
-				showLevel = maxExistingLevel;
+			if (parser.getMaxExistingLevel() < showLevel) {
+				showLevel = parser.getMaxExistingLevel();
 			}
 			adaptSlider();
 		} else {
@@ -822,20 +744,35 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.getCaret().setVisible(true);
 	}
 
-	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
-			final int[] lineTypes, final List<String> typesList, boolean showTypeRestricted, int selTypeIndex,
-			int maxExistingLevel) {
+	private void setParsedText(final String[] lines, boolean showTypeRestricted, int selTypeIndex,
+			LogFileParser parser) {
 		Logging.debug(this, "setParsedText");
 		this.lines = lines;
-		this.lineLevels = lineLevels;
-		this.maxExistingLevel = maxExistingLevel;
-		this.lineStyles = lineStyles;
-		this.lineTypes = lineTypes;
-		this.typesList = typesList;
+		this.parser = parser;
 		adaptComboType();
 		this.showTypeRestricted = showTypeRestricted;
 		this.selTypeIndex = selTypeIndex;
 		initDocument();
+	}
+
+	private void adaptComboType() {
+		comboType.setEnabled(false);
+		comboModelTypes.removeAllElements();
+
+		if (!parser.getTypesList().isEmpty()) {
+			comboModelTypes.addElement(DEFAULT_TYPE);
+			for (String type : parser.getTypesList()) {
+				comboModelTypes.addElement(type);
+			}
+			comboType.setEnabled(true);
+
+			int maxRowCount = parser.getTypesList().size() + 1;
+			if (maxRowCount > typesListMaxShowCount) {
+				maxRowCount = typesListMaxShowCount;
+			}
+
+			comboType.setMaximumRowCount(maxRowCount);
+		}
 	}
 
 	private void editSearchString() {
@@ -887,10 +824,8 @@ public class LogPane extends JPanel implements KeyListener {
 			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
 			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
-				Logging.info(this, "Ctrl-Plus");
 				increaseFontSize();
 			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
-				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
 			} else {
 				// Do nothing on other keys on jComboBoxSearch and jTextPane
@@ -907,12 +842,10 @@ public class LogPane extends JPanel implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if (e.getSource() == jTextPane) {
-			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006' /* ctrl-f */ ) {
+			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') {
 				editSearchString();
 			}
 
-			// f g h i j k l
-			// 6 7 8 9 10 11 12
 			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) {
 				search();
 			}
