@@ -4980,6 +4980,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
+	public static void requestLicencesFrameReload() {
+		licencesFrame = null;
+	}
+
 	public static LicencesFrame getLicencesFrame() {
 		return licencesFrame;
 	}
