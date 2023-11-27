@@ -89,7 +89,7 @@ public final class ConnectionErrorReporter {
 				new String[] { Configed.getResourceValue("buttonCancel"),
 						Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"),
 						Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce") },
-				500, 260);
+				530, 260);
 
 		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"),
 				Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
