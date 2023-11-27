@@ -93,7 +93,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JTextField priority instance **/
 	private JTextField jTextFieldPriority = new JTextField();
 	/** JCheckBox need Sudo instance **/
-	private JCheckBox jComboBoxNeedSudo = new JCheckBox("");
+	private JCheckBox jComboBoxNeedSudo = new JCheckBox();
 	/** JTextPane commands instance **/
 	private JTextPane jTextPaneCommands = new JTextPane();
 

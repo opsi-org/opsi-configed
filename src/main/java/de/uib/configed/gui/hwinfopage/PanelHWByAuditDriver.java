@@ -63,7 +63,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
 		JRadioButton selectionComputerSystem = new JRadioButton("", true);
-		selectionBaseBoard = new JRadioButton("");
+		selectionBaseBoard = new JRadioButton();
 		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
