@@ -7,49 +7,24 @@
 package de.uib.utilities.swing;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class NavigationPanel extends JPanel {
-	private JButton nextButton;
-	private JButton previousButton;
-	private JButton firstButton;
-	private JButton lastButton;
-
-	private List<JButton> buttons;
-
 	private PanelGenEditTable associatedPanel;
 
 	public NavigationPanel(PanelGenEditTable associatedPanel) {
 		this.associatedPanel = associatedPanel;
 
 		initComponents();
-
-		buttons = new ArrayList<>();
-		buttons.add(nextButton);
-		buttons.add(previousButton);
-		buttons.add(firstButton);
-		buttons.add(lastButton);
-	}
-
-	@Override
-	public void setEnabled(boolean b) {
-		if (buttons == null) {
-			return;
-		}
-
-		for (JButton button : buttons) {
-			button.setEnabled(b);
-		}
 	}
 
 	private void initComponents() {
@@ -57,26 +32,25 @@ public class NavigationPanel extends JPanel {
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 
-		// TODO Translation tooltip text
-		nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
-		nextButton.setToolTipText("nächste Datenzeile");
+		JButton nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
+		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
 		nextButton.setPreferredSize(navButtonDimension);
-		nextButton.addActionListener(event -> next());
+		nextButton.addActionListener(event -> associatedPanel.advanceCursor(+1));
 
-		previousButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
-		previousButton.setToolTipText("vorherige Datenzeile");
+		JButton previousButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
+		previousButton.setToolTipText(Configed.getResourceValue("NavigationPanel.previousEntryTooltip"));
 		previousButton.setPreferredSize(navButtonDimension);
-		previousButton.addActionListener(event -> previous());
+		previousButton.addActionListener(event -> associatedPanel.advanceCursor(-1));
 
-		firstButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
-		firstButton.setToolTipText("erste Datenzeile");
+		JButton firstButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
+		firstButton.setToolTipText(Configed.getResourceValue("NavigationPanel.firstEntryTooltip"));
 		firstButton.setPreferredSize(navButtonDimension);
-		firstButton.addActionListener(event -> first());
+		firstButton.addActionListener(event -> associatedPanel.setCursorToFirstRow());
 
-		lastButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
-		lastButton.setToolTipText("letzte Datenzeile");
+		JButton lastButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
+		lastButton.setToolTipText(Configed.getResourceValue("NavigationPanel.lastEntryTooltip"));
 		lastButton.setPreferredSize(navButtonDimension);
-		lastButton.addActionListener(event -> last());
+		lastButton.addActionListener(event -> associatedPanel.setCursorToLastRow());
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
@@ -100,21 +74,5 @@ public class NavigationPanel extends JPanel {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(lastButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
-	}
-
-	public void next() {
-		associatedPanel.advanceCursor(+1);
-	}
-
-	public void previous() {
-		associatedPanel.advanceCursor(-1);
-	}
-
-	public void first() {
-		associatedPanel.setCursorToFirstRow();
-	}
-
-	public void last() {
-		associatedPanel.setCursorToLastRow();
 	}
 }
