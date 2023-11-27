@@ -519,7 +519,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		if (thiscommand != null) {
 			Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
 					+ thiscommand.getParentMenuText());
-			StringBuilder combuf = new StringBuilder("");
+			StringBuilder combuf = new StringBuilder();
 			for (SSHCommand c : thiscommand.getCommands()) {
 				String rawCommand = c.getCommandRaw();
 				if (rawCommand != null && !rawCommand.isEmpty()) {

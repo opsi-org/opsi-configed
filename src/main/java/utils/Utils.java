@@ -179,7 +179,7 @@ public final class Utils {
 	}
 
 	public static String pseudokey(String[] partialvalues) {
-		StringBuilder resultBuilder = new StringBuilder("");
+		StringBuilder resultBuilder = new StringBuilder();
 
 		if (partialvalues.length > 0) {
 			resultBuilder.append(partialvalues[0]);

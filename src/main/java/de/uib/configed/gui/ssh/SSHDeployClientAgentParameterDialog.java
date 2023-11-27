@@ -400,7 +400,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("buttonCancel"), Configed
 							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
-			StringBuilder message = new StringBuilder("");
+			StringBuilder message = new StringBuilder();
 			message.append(
 					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message1"));
 			message.append("\n\n");

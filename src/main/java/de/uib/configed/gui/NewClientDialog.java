@@ -546,9 +546,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
 						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-				StringBuilder message = new StringBuilder("");
-				message.append(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
-				fInfo.setMessage(message.toString());
+				fInfo.setMessage(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
 				fInfo.setAlwaysOnTop(true);
 				fInfo.setVisible(true);
 				return;
@@ -646,7 +644,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-			StringBuilder message = new StringBuilder("");
+			StringBuilder message = new StringBuilder();
 			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
 			message.append(opsiHostKey);
@@ -670,9 +668,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
-			fQuestion.setMessage(message.toString());
+			fQuestion.setMessage(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
@@ -696,9 +692,7 @@ public final class NewClientDialog extends FGeneralDialog {
 					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"), true,
 					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
 					100);
-			StringBuilder message = new StringBuilder("");
-			message.append(Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
-			fQuestion.setMessage(message.toString());
+			fQuestion.setMessage(Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);

@@ -45,7 +45,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	}
 
 	public String dottedString(int j, int i) {
-		StringBuilder buf = new StringBuilder("");
+		StringBuilder buf = new StringBuilder();
 
 		for (int k = j; k < i - 1; k++) {
 			buf.append(get(k));

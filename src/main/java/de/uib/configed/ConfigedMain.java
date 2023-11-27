@@ -1197,7 +1197,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			depotsOfSelectedClients = null;
 			depotsOfSelectedClients = getDepotsOfSelectedClients();
 			Iterator<String> selectedDepotsIterator = depotsOfSelectedClients.iterator();
-			StringBuilder depotsAdded = new StringBuilder("");
+			StringBuilder depotsAdded = new StringBuilder();
 
 			String singleDepot = "";
 
@@ -4655,7 +4655,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, null,
 				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
-		StringBuilder message = new StringBuilder("");
+		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
 		message.append("\n\n");
 		message.append(selectedClient.get().getName());

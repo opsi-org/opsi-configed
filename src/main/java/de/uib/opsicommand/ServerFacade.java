@@ -344,7 +344,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private String retrieveErrorFromResponse(HttpsURLConnection connection) {
-		StringBuilder errorInfo = new StringBuilder("");
+		StringBuilder errorInfo = new StringBuilder();
 
 		if (connection.getErrorStream() != null) {
 			try (BufferedReader in = new BufferedReader(
