@@ -293,10 +293,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupElements = layout.createParallelGroup();
 		hGroupOperations = layout.createParallelGroup();
 		hGroupData = layout.createParallelGroup();
-		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(3)
-				.addGroup(hGroupNegate).addGap(5).addGroup(hGroupElements).addGap(5).addGroup(hGroupOperations)
-				.addGap(5).addGroup(hGroupData).addGap(3).addGroup(hGroupParenthesisClose).addGap(5)
-				.addGroup(hGroupConnections).addGap(5).addGroup(hGroupRemoveBtn));
+		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupNegate).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupElements)
+				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupOperations).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupData).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupParenthesisClose)
+				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupConnections).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupRemoveBtn));
 		layout.setHorizontalGroup(hMainGroup);
 
 		// columns headline

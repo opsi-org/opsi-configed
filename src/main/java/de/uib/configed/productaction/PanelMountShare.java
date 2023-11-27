@@ -108,7 +108,8 @@ public class PanelMountShare extends JPanel {
 							.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
 							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
 									Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-							.addGap(5, 5, 5).addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE));
+							.addGap(Globals.MIN_GAP_SIZE)
+							.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE));
 		}
 	}
 

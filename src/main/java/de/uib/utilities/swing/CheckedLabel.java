@@ -184,7 +184,7 @@ public class CheckedLabel extends JPanel {
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(textLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(5, 5, 5)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(selectedLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(unselectedLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

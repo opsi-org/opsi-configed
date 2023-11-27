@@ -380,7 +380,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 						.addGroup(panelLicenceModelLayout.createSequentialGroup()
 								.addComponent(jTextFieldMaxInstallations, MIN_FIELD_WIDTH, 112,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(5, 5, 5)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(jLabelSLid3info, MIN_FIELD_WIDTH, 112, GroupLayout.PREFERRED_SIZE))
 						.addComponent(jTextFieldLicenceID, MIN_FIELD_WIDTH, 208, Short.MAX_VALUE)
 						.addComponent(jTextFieldLicenceType, MIN_FIELD_WIDTH, 239, GroupLayout.PREFERRED_SIZE))
@@ -436,7 +436,8 @@ public class PanelEnterLicence extends MultiTablePanel {
 		GroupLayout panelEnterKeyLayout = new GroupLayout(panelEnterKey);
 		panelEnterKey.setLayout(panelEnterKeyLayout);
 		panelEnterKeyLayout.setHorizontalGroup(panelEnterKeyLayout.createSequentialGroup().addContainerGap()
-				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE).addGap(5, 5, 5)
+				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(jTextFieldLKey, MIN_FIELD_WIDTH, 326, GroupLayout.PREFERRED_SIZE)
 				.addContainerGap(10, Short.MAX_VALUE));
 
@@ -445,7 +446,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 				.addComponent(jTextFieldLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE));
 
 		JPanel panelTask = new JPanel();
-
 		GroupLayout layoutTask = new GroupLayout(panelTask);
 		panelTask.setLayout(layoutTask);
 
@@ -471,9 +471,9 @@ public class PanelEnterLicence extends MultiTablePanel {
 						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(1226, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
+				.addGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTask)
 						.addContainerGap(1515, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup().addGap(10, 10, 10).addComponent(jLabelConfigure)
+				.addGroup(layoutTask.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelConfigure)
 						.addContainerGap(1515, Short.MAX_VALUE))
 				.addGroup(layoutTask.createSequentialGroup()
 						.addGroup(layoutTask.createParallelGroup(Alignment.TRAILING, true)
@@ -481,12 +481,12 @@ public class PanelEnterLicence extends MultiTablePanel {
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(panelLicenceModel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(10, 10, 10))));
+						.addGap(Globals.GAP_SIZE))));
 
-		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
-				.addGap(5, 5, 5)
+		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jLabelTask).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicencecontracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(5, 5, 5).addComponent(jLabelConfigure).addGap(2, 2, 2)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2, 2, 2)
 				.addGroup(layoutTask.createParallelGroup(Alignment.BASELINE)
 						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -496,14 +496,14 @@ public class PanelEnterLicence extends MultiTablePanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(5, 5, 5)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicenceModel, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 2, 2)
 				.addComponent(panelEnterKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 2, 2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(5, 5, 5));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3);
@@ -519,7 +519,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addComponent(panelLicencepools, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(5, 5, 5));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -530,7 +530,7 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(10, 10, 10).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
+				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
 						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE));
 
 		GroupLayout layout = new GroupLayout(this);

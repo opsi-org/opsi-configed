@@ -302,8 +302,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		int hFirstGap = Globals.HFIRST_GAP;
-
 		layout.setVerticalGroup(
 				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 4)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -345,22 +343,20 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 2, Short.MAX_VALUE))
 				.addGroup(
-						layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+						layout.createSequentialGroup().addGap(Globals.HFIRST_GAP)
 								.addComponent(infoLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 										Globals.FIRST_LABEL_WIDTH)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 								.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addGap(Globals.HFIRST_GAP)
 								.addComponent(fieldOpsiPackageName, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.HFIRST_GAP)
 						.addComponent(serverLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
+						.addGap(80)
 						.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 
@@ -370,24 +366,21 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 				.addGroup(
-						layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+						layout.createSequentialGroup().addGap(Globals.HFIRST_GAP)
 								.addComponent(serverPathLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 										Globals.FIRST_LABEL_WIDTH)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 								.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addGap(Globals.HFIRST_GAP)
 								.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
-								.addGap(5, 5, 5).addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
-						.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addGap(0, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup().addGap(0, 600, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)));
+						.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Short.MAX_VALUE)));
 	}
 }

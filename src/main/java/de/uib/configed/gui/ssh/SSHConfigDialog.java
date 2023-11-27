@@ -539,7 +539,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		settingsPanelLayout.setVerticalGroup(settingsPanelLayout.createSequentialGroup()
 				.addComponent(jCheckBoxUseOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(10).addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.GAP_SIZE).addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
