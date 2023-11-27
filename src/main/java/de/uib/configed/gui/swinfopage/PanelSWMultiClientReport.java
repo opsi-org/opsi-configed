@@ -203,7 +203,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		subpanelPreConfig.setLayout(glPreConfig);
 		glPreConfig.setVerticalGroup(glPreConfig.createSequentialGroup()
 
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
@@ -212,23 +212,23 @@ public class PanelSWMultiClientReport extends JPanel {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(fieldExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 
 				.addComponent(panelSelectExportType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelFilenamePrefix, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(fieldFilenamePrefix, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						labelFilenameInformation, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWithMsUpdates, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -238,14 +238,14 @@ public class PanelSWMultiClientReport extends JPanel {
 								Globals.LINE_HEIGHT)
 						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelAskForOverwrite, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		glPreConfig.setHorizontalGroup(glPreConfig.createParallelGroup()
 
@@ -254,11 +254,11 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addComponent(labelExportDirectory, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 
 						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(fieldExportDirectory, 40, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 
@@ -272,10 +272,10 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addComponent(labelFilenamePrefix, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 
 						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(fieldFilenamePrefix, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Short.MAX_VALUE / 2)
 						.addGap(20, Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
@@ -284,43 +284,40 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(labelFilenameInformation, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(
-						glPreConfig.createSequentialGroup()
-								.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(
-						glPreConfig.createSequentialGroup()
-								.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-								.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+				.addGroup(glPreConfig.createSequentialGroup()
+						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+				.addGroup(glPreConfig.createSequentialGroup()
+						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(labelAskForOverwrite,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+						.addGap(Globals.GAP_SIZE).addComponent(labelAskForOverwrite, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						labelSwauditMultiClientReport1, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						labelSwauditMultiClientReport2, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 
 				.addComponent(subpanelPreConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
 						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)));
@@ -338,10 +335,8 @@ public class PanelSWMultiClientReport extends JPanel {
 								.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-						.addGroup(glGlobal.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(subpanelPreConfig, 40, 40, Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
+						.addGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(subpanelPreConfig, 40, 40, Short.MAX_VALUE).addGap(Globals.GAP_SIZE))
 
 						.addGroup(glGlobal.createSequentialGroup()
 								.addGap(2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)

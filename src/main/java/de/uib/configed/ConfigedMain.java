@@ -4641,9 +4641,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
 		jTextHostname.setText(copySuffixAddition.add());
 
-		additionalPaneLayout.setHorizontalGroup(additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(jLabelHostname)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setHorizontalGroup(
+				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
 		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
 				.addComponent(jLabelHostname)

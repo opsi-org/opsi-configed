@@ -116,16 +116,13 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Grouplayout
 		dependenciesTreeGroupLayout.setHorizontalGroup(dependenciesTreeGroupLayout.createSequentialGroup()
 				.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 								.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 								.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 								.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)))
 				.addComponent(dependenciesTreeScrollPanel));

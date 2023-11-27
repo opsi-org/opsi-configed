@@ -87,37 +87,37 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		JLabel labelSelectedLicencePoolId = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
-		fieldSelectedLicencePoolId = new JLabel("");
+		fieldSelectedLicencePoolId = new JLabel();
 		fieldSelectedLicencePoolId.setPreferredSize(new Dimension(250, Globals.LINE_HEIGHT));
 
 		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
-		fieldCountAllWindowsSoftware = new JLabel("");
+		fieldCountAllWindowsSoftware = new JLabel();
 		fieldCountAllWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
 
-		fieldCountDisplayedWindowsSoftware = new JLabel("");
+		fieldCountDisplayedWindowsSoftware = new JLabel();
 		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
 
-		fieldCountNotAssignedSoftware = new JLabel("");
+		fieldCountNotAssignedSoftware = new JLabel();
 		fieldCountNotAssignedSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
-		fieldCountAssignedStatus = new JLabel("");
+		fieldCountAssignedStatus = new JLabel();
 		fieldCountAssignedStatus.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
-		fieldCountAssignedInEditing = new JLabel("");
+		fieldCountAssignedInEditing = new JLabel();
 		fieldCountAssignedInEditing.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		buttonShowAssignedNotExisting = new JButton(
@@ -190,11 +190,10 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		layoutNamebased
 				.setHorizontalGroup(layoutNamebased.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutNamebased.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGroup(layoutNamebased.createSequentialGroup().addGap(Globals.GAP_SIZE)
 								.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(buttonSupplementSimilar, Globals.BUTTON_WIDTH / 2,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
@@ -240,32 +239,25 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		GroupLayout layoutPanelInfo = new GroupLayout(panelInfoWindowsSoftware);
 		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
 
-		layoutPanelInfo.setHorizontalGroup(layoutPanelInfo.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutPanelInfo.setHorizontalGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutPanelInfo.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(titleWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGroup(layoutPanelInfo.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(panelWorkNamebased, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGroup(layoutPanelInfo.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+								titleWindowsSoftware, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+								panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(labelSelectedLicencePoolId, 0, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.DEFAULT_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldSelectedLicencePoolId, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutPanelInfo.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(titleWindowsSoftware2, 50, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedLicencePoolId,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutPanelInfo.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(panelRadiobuttonsDirectionOfAssignmentX, 20, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
+						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+								titleWindowsSoftware2, 50, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+								panelRadiobuttonsDirectionOfAssignmentX, 20, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
 
 				));
 
@@ -315,42 +307,46 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		}
 
 		layoutPanelInfoConfig.setHorizontalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
-								.addComponent(labelCountAssignedStatus, col0width, col0width, col0width)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAssignedStatus, Globals.BUTTON_WIDTH / 3,
-										Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountAssignedInEditing, 5, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAssignedInEditing, Globals.BUTTON_WIDTH / 3,
-										Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(buttonShowAssignedNotExisting, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutPanelInfoConfig
+						.createParallelGroup(
+								GroupLayout.Alignment.LEADING)
+						.addGroup(
+								layoutPanelInfoConfig.createSequentialGroup()
+										.addComponent(labelCountAssignedStatus, col0width, col0width, col0width)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(fieldCountAssignedStatus, Globals.BUTTON_WIDTH / 3,
+												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(labelCountAssignedInEditing, 5, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(fieldCountAssignedInEditing, Globals.BUTTON_WIDTH / 3,
+												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(buttonShowAssignedNotExisting, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 
-						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
-								.addComponent(labelCountAllWindowsSoftware, col0width, col0width, col0width)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAllWindowsSoftware, Globals.BUTTON_WIDTH / 3,
-										Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountDisplayedWindowsSoftware, 5, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountDisplayedWindowsSoftware, Globals.BUTTON_WIDTH / 3,
-										Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountNotAssignedSoftware, 5, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountNotAssignedSoftware, Globals.BUTTON_WIDTH / 3,
-										Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
+						.addGroup(
+								layoutPanelInfoConfig.createSequentialGroup()
+										.addComponent(labelCountAllWindowsSoftware, col0width, col0width, col0width)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(fieldCountAllWindowsSoftware, Globals.BUTTON_WIDTH / 3,
+												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(labelCountDisplayedWindowsSoftware, 5, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(fieldCountDisplayedWindowsSoftware, Globals.BUTTON_WIDTH / 3,
+												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(labelCountNotAssignedSoftware, 5, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(fieldCountNotAssignedSoftware, Globals.BUTTON_WIDTH / 3,
+												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
+										.addGap(Globals.MIN_GAP_SIZE))
 
 						.addComponent(panelRadiobuttonsSoftwareselectionX, 20, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -359,7 +355,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup().addContainerGap()
 
 				// title height
-				.addGap(Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addGap(Globals.BUTTON_HEIGHT)
 				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelCountAllWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)

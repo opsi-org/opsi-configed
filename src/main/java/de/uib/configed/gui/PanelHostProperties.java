@@ -46,12 +46,9 @@ public class PanelHostProperties extends JPanel {
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
-		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(planeLayout.createParallelGroup().addComponent(editMapPanel))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(planeLayout.createParallelGroup().addComponent(editMapPanel)).addGap(Globals.MIN_GAP_SIZE));
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(editMapPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 

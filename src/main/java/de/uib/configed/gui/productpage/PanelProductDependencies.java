@@ -50,28 +50,25 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelInfoProductDependenciesTable))
 
 				.addComponent(dependenciesPanel, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelInfoProductDependenciesTree))
 
 				.addComponent(dependenciesTreePanel, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.MIN_HSIZE,
 						Globals.PREF_HSIZE, Short.MAX_VALUE));
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(labelInfoProductDependenciesTable)
-						.addComponent(dependenciesPanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(labelInfoProductDependenciesTree)
-						.addComponent(dependenciesTreePanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 2 * Globals.MIN_VSIZE,
-								2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelInfoProductDependenciesTable)
+				.addComponent(dependenciesPanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(labelInfoProductDependenciesTree)
+				.addComponent(dependenciesTreePanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(),
+						2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
 	}
 
 	public void clearEditing() {

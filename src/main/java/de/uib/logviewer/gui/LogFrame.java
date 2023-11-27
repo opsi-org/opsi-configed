@@ -184,23 +184,22 @@ public class LogFrame extends JFrame implements WindowListener {
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
 		iconPane.setLayout(layoutIconPane1);
 
-		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+		layoutIconPane1
+				.setHorizontalGroup(
+						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE));
 
-		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE)
@@ -210,7 +209,7 @@ public class LogFrame extends JFrame implements WindowListener {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());

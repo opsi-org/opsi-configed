@@ -76,26 +76,25 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();
 
 		for (String key : data.keySet()) {
-			hGroup.addGroup(baseLayout.createSequentialGroup()
-					.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+			hGroup.addGroup(baseLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 					.addComponent(labelfields.get(key), MIN_LABEL_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_LABEL_WIDTH)
-					.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE)
 					.addComponent(datafields.get(key), MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_FIELD_WIDTH)
-					.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+					.addGap(Globals.MIN_GAP_SIZE));
 		}
 
 		baseLayout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = baseLayout.createSequentialGroup();
 
-		vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
+		vGroup.addGap(Globals.GAP_SIZE);
 		for (String key : data.keySet()) {
-			vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
+			vGroup.addGap(Globals.GAP_SIZE);
 			vGroup.addGroup(baseLayout.createParallelGroup()
 					.addComponent(labelfields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT)
 					.addComponent(datafields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT));
 		}
-		vGroup.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE);
+		vGroup.addGap(Globals.GAP_SIZE);
 
 		baseLayout.setVerticalGroup(vGroup);
 	}

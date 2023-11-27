@@ -54,10 +54,8 @@ public class FSelectionList extends FGeneralDialog {
 				.addComponent(centerPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
 						2 * Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup().addComponent(northPanel, 100, 300, Short.MAX_VALUE)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(centerPanel, 100, 300, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
+				.addGroup(allLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(centerPanel, 100, 300, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE))
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 	}
 
@@ -81,12 +79,12 @@ public class FSelectionList extends FGeneralDialog {
 		searchPane.setNarrow(true);
 
 		additionalLayout.setHorizontalGroup(additionalLayout.createParallelGroup()
-				.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(scrollpane));
+				.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
+				.addComponent(scrollpane));
 
 		additionalLayout.setVerticalGroup(additionalLayout.createSequentialGroup()
 				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(scrollpane));
+				.addGap(Globals.GAP_SIZE).addComponent(scrollpane));
 		return additionalPanel;
 	}
 
@@ -105,13 +103,12 @@ public class FSelectionList extends FGeneralDialog {
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		return southPanel;
 	}
