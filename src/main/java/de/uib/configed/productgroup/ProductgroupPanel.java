@@ -156,10 +156,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		searchPane.setFilteredMode(b);
 	}
 
-	public boolean isGuiFiltered() {
-		return searchPane.isFilteredMode();
-	}
-
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
 	}
@@ -173,7 +169,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		saveNameEditorShallFollow();
 
-		if (isGuiFiltered()) {
+		if (searchPane.isFilteredMode()) {
 			Logging.info(this, "enterExistingGroup, was filtered");
 			setGuiIsFiltered(false);
 			associate.noSelection();

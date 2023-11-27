@@ -347,11 +347,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		});
 
 		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener((ActionEvent actionEvent) -> {
-			if (!fieldSearch.getText().isEmpty()) {
-				markAll();
-			}
-		});
+		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
 
 		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
@@ -516,6 +512,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Logging.info(this, "buildMenuSearchfield " + searchMenu);
 	}
 
+	private boolean allowSearchAction() {
+		return !disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty();
+	}
+
 	public void setSearchFields(Integer[] cols) {
 		for (int col : cols) {
 			comboSearchFields.addItem(targetModel.getColumnName(col));
@@ -636,11 +636,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean stringStartsWith(final String s, final String part) {
-		if (s == null || part == null) {
-			return false;
-		}
-
-		if (part.length() > s.length()) {
+		if (s == null || part == null || part.length() > s.length()) {
 			return false;
 		}
 
@@ -712,12 +708,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 				String compareVal = buffRow.toString();
 
-				if (compareVal.isEmpty()) {
-					if (val.isEmpty()) {
-						found = true;
-					}
-				} else {
+				if (!compareVal.isEmpty()) {
 					found = stringContainsParts(compareVal, valParts).success;
+				} else if (val.isEmpty()) {
+					found = true;
+				} else {
+					// Do nothing when 'val' is not empty and 'compareValue' is empty
 				}
 			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
@@ -735,7 +731,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							found = true;
 						}
 					} else {
-						String compareVal = ("" + compareValue).toLowerCase(Locale.ROOT);
+						String compareVal = compareValue.toString().toLowerCase(Locale.ROOT);
 
 						if (regex) {
 							if (pattern.matcher(compareVal).matches()) {
@@ -776,6 +772,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value from searchfield
 	 */
 	private void markAll() {
+		if (!allowSearchAction()) {
+			return;
+		}
+
 		Logging.info(this, "markAll");
 		targetModel.setValueIsAdjusting(true);
 		targetModel.clearSelection();
@@ -796,15 +796,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value form searchfield, checks the filter
 	 */
 	private void markAllAndFilter() {
-		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering + ", "
-				+ disabledSinceWeAreInFilteredMode());
+		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering);
 		if (!filtering) {
 			return;
 		}
 
-		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
-			markAll();
-		}
+		markAll();
 	}
 
 	/**
@@ -1045,15 +1042,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
-				markAll();
-			}
+			markAll();
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
 			switchFilterOff();
 			markAllAndFilter();
 			switchFilterOn();
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
+			if (allowSearchAction()) {
 				searchNextRow(selectMode);
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {

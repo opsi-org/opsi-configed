@@ -701,7 +701,6 @@ public class PanelProductSettings extends JSplitPane {
 		tModel.setFilterFrom(filter);
 
 		Logging.info(this, "reduceToSet  " + filter);
-		Logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.isGuiFiltered());
 
 		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
 
