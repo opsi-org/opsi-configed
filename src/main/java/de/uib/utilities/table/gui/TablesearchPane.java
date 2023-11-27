@@ -116,16 +116,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 *                          tagged with the parameter
 	 */
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
-		comparator = getCollator();
-		this.withRegEx = withRegEx;
-
-		filtering = true;
-
-		this.savedStatesObjectTag = savedStatesObjectTag;
-		initSavedStates();
-		init();
-
-		this.targetModel = targetModel;
+		this(null, targetModel, withRegEx, savedStatesObjectTag);
 	}
 
 	/**
@@ -138,8 +129,21 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 *                the parameter
 	 */
 	public TablesearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
-		this(new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
+		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
+	}
+
+	public TablesearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx,
+			String savedStatesObjectTag) {
 		associatedPanel = thePanel;
+		this.targetModel = targetModel;
+		this.withRegEx = withRegEx;
+		filtering = true;
+		this.savedStatesObjectTag = savedStatesObjectTag;
+
+		comparator = getCollator();
+
+		initSavedStates();
+		init();
 	}
 
 	/**
@@ -155,9 +159,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void init() {
-		setSearchFieldsAll();
 		initComponents();
 		setupLayout();
+
+		setSearchFieldsAll();
 		setNarrow(false);
 	}
 
