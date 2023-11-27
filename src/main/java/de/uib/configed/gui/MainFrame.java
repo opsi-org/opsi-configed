@@ -514,6 +514,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		CacheManager.getInstance().clearAllCachedData();
 		SSHCommandFactory.destroyInstance();
 		Configed.getSavedStates().removeAll();
+		ConfigedMain.requestLicencesFrameReload();
 		restartConfiged();
 	}
 
