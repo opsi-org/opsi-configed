@@ -401,15 +401,13 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		jCheckBoxUseKeyFile = new JCheckBox();
-		jCheckBoxUseKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.useKeyfile"));
+		jCheckBoxUseKeyFile = new JCheckBox(Configed.getResourceValue("SSHConnection.Config.useKeyfile"));
 		jCheckBoxUseKeyFile.setSelected(false);
 		jTextFieldPassword.setEnabled(false);
 		jTextFieldKeyFile.setEnabled(false);
 		jCheckBoxUseKeyFile.addItemListener(this::applyUseKeyFile);
 
-		jCheckBoxDefault = new JCheckBox();
-		jCheckBoxDefault.setText(Configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
+		jCheckBoxDefault = new JCheckBox(Configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
 		jCheckBoxDefault.setSelected(true);
 
 		setComponentsEditable(false);
@@ -419,15 +417,14 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			jCheckBoxUseKeyFile.setSelected(true);
 		}
 
-		jCheckBoxUseOutputColor = new JCheckBox();
-		jCheckBoxUseOutputColor.setText(Configed.getResourceValue("SSHConnection.Config.coloredOutput"));
+		jCheckBoxUseOutputColor = new JCheckBox(Configed.getResourceValue("SSHConnection.Config.coloredOutput"));
 		jCheckBoxUseOutputColor.setToolTipText(Configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
 		jCheckBoxUseOutputColor.setSelected(true);
 		SSHCommandFactory.setColoredOutput(true);
 		jCheckBoxUseOutputColor.addItemListener(itemEvent -> checkComponentStates());
 
-		jCheckBoxExecInBackground = new JCheckBox();
-		jCheckBoxExecInBackground.setText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
+		jCheckBoxExecInBackground = new JCheckBox(
+				Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
 		jCheckBoxExecInBackground
 				.setToolTipText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
 		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.alwaysExecInBackground());
@@ -542,7 +539,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		settingsPanelLayout.setVerticalGroup(settingsPanelLayout.createSequentialGroup()
 				.addComponent(jCheckBoxUseOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(10).addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.GAP_SIZE).addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 

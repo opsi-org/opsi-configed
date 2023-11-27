@@ -93,21 +93,20 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		southPanel.setLayout(southLayout);
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE)
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.GAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.GAP_SIZE / 2)));
+				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -120,14 +119,14 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
 	}
 
 	private void retrieveData() {
@@ -142,7 +141,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private PanelGenEditTable initMainPanel() {
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("", -1, false, 0, true,
+		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0, true,
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
 						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
@@ -170,7 +169,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		buildModel();
 
-		thePanel.setTitle("opsi Modules Validation");
 		thePanel.setSize(500, 200);
 
 		thePanel.setUpdateController(null);

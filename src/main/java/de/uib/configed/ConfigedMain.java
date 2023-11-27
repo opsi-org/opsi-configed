@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -1198,7 +1197,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			depotsOfSelectedClients = null;
 			depotsOfSelectedClients = getDepotsOfSelectedClients();
 			Iterator<String> selectedDepotsIterator = depotsOfSelectedClients.iterator();
-			StringBuilder depotsAdded = new StringBuilder("");
+			StringBuilder depotsAdded = new StringBuilder();
 
 			String singleDepot = "";
 
@@ -1501,8 +1500,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		licencesFrame = new LicencesFrame(this);
 		Utils.setMasterFrame(licencesFrame);
 		licencesFrame.setIconImage(Utils.getMainIcon());
-		licencesFrame.setTitle(
-				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
+		licencesFrame.setTitle(myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
@@ -2369,7 +2367,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void treeClientMouseAction(MouseEvent mouseEvent, DefaultMutableTreeNode mouseNode, TreePath mousePath) {
-		if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+		if (mouseEvent.isShiftDown()) {
 			clearTree();
 
 			for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
@@ -2381,7 +2379,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			}
 
 			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		} else if ((mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
+		} else if (mouseEvent.isControlDown()) {
 			toggleClientSelection(mouseNode, mousePath);
 		} else {
 			clearTree();
@@ -4365,7 +4363,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		final FWakeClients result = new FWakeClients(mainFrame,
-				Globals.APPNAME + ": " + Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
+				Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
 
 		new Thread() {
 			@Override
@@ -4643,9 +4641,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
 		jTextHostname.setText(copySuffixAddition.add());
 
-		additionalPaneLayout.setHorizontalGroup(additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(jLabelHostname)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setHorizontalGroup(
+				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
 		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
 				.addComponent(jLabelHostname)
@@ -4657,7 +4655,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, null,
 				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
-		StringBuilder message = new StringBuilder("");
+		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
 		message.append("\n\n");
 		message.append(selectedClient.get().getName());

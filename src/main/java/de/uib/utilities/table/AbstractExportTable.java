@@ -112,8 +112,7 @@ public abstract class AbstractExportTable {
 		if (onlySelectedRows) {
 			Logging.debug("selectedRows: " + theTable.getSelectedRows().length);
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
-				FTextArea fChoice = new FTextArea(null,
-						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
+				FTextArea fChoice = new FTextArea(null, Configed.getResourceValue("ExportTable.title"), true,
 						new String[] { Configed.getResourceValue("buttonCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
 								Configed.getResourceValue(
@@ -154,7 +153,7 @@ public abstract class AbstractExportTable {
 			chooser.addChoosableFileFilter(exFilter);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
+			chooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
 
 			chooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
 			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));
@@ -217,7 +216,7 @@ public abstract class AbstractExportTable {
 
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
+		chooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
 
 		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
 		if (returnVal == JFileChooser.APPROVE_OPTION) {

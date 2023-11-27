@@ -8,7 +8,6 @@ package de.uib.configed.gui.productpage;
 
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -17,9 +16,9 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
+public class TextMarkdownPane extends JTextPane {
 	public TextMarkdownPane() {
-		super.addHyperlinkListener(this);
+		super.addHyperlinkListener(this::hyperlinkUpdate);
 		super.setEditable(false);
 
 		setContentType("text/html");
@@ -39,8 +38,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 		super.setText(html);
 	}
 
-	@Override
-	public void hyperlinkUpdate(HyperlinkEvent event) {
+	private void hyperlinkUpdate(HyperlinkEvent event) {
 		Logging.info(this, "Hyperlinkevent in Markdown, inputevent: " + event.getInputEvent());
 
 		String link = event.getURL().toString();

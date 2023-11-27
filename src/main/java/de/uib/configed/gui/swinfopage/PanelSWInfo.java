@@ -146,9 +146,7 @@ public class PanelSWInfo extends JPanel {
 	private void initTableComponents() {
 		labelSuperTitle = new JLabel();
 
-		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {}, true);
-
-		panelTable.setTitle("");
+		panelTable = new PanelGenEditTable("", false, 0, true, new int[] {}, true);
 
 		panelTable.setColumnSelectionAllowed(false);
 
@@ -236,25 +234,23 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
-		layoutSubPanelTitle.setHorizontalGroup(
-				layoutSubPanelTitle.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(0, 50, 50)
+				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(0, 50, 50)
-						.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 
-						.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
-		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 
 				.addGroup(layoutSubPanelTitle.createParallelGroup()
 						.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -264,7 +260,7 @@ public class PanelSWInfo extends JPanel {
 						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 
 				.addGroup(layoutSubPanelTitle.createParallelGroup()
 						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -312,10 +308,9 @@ public class PanelSWInfo extends JPanel {
 								Short.MAX_VALUE)
 						.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE));
 
-		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 

@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -48,7 +47,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
@@ -281,8 +279,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK)
-				|| ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)) {
+		if (e.isShiftDown() || e.isControlDown()) {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				TreePath selectedPath = this.getLeadSelectionPath();
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
@@ -476,8 +473,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// found a group
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"),
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+					Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"), JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.OK_OPTION) {
 				groupNodes.remove(nodeID);
@@ -772,7 +769,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
 		fEdit.setRecord(groupData, labels, null, editable, null);
-		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode") + " (" + Globals.APPNAME + ")");
+		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode"));
 		fEdit.init();
 		fEdit.setSize(450, 250);
 		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -821,7 +818,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			FEditRecord fEdit = new FEditRecord(inscription);
 			fEdit.setRecord(groupData, labels, null, editable, null);
-			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title") + " (" + Globals.APPNAME + ")");
+			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title"));
 			fEdit.init();
 			fEdit.setSize(450, 250);
 			fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -1084,7 +1081,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (groupSet.size() > 1 && ConfigedMain.getMainFrame() != null) {
 			FEditList<GroupNode> fList = new FEditList<>();
 			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray(new GroupNode[0])));
-			fList.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("ClientTree.DIRECTORYname") + " "
+			fList.setTitle(Configed.getResourceValue("ClientTree.DIRECTORYname") + " "
 					+ Configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID
 					+ " <<, " + Configed.getResourceValue("ClientTree.selectCorrectLocation"));
@@ -1103,8 +1100,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			if (fList.getSelectedList().isEmpty()) {
 				int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("ClientTree.abandonUniqueLocation"),
-						Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.requestInformation"), -1,
-						JOptionPane.WARNING_MESSAGE, null,
+						Configed.getResourceValue("ClientTree.requestInformation"), -1, JOptionPane.WARNING_MESSAGE,
+						null,
 						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
 						Configed.getResourceValue("buttonNO"));
 

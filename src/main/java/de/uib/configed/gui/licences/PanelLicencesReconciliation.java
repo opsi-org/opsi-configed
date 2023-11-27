@@ -28,9 +28,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelLicencesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
 
-	private int minVSize = 50;
-	private int tablesMaxWidth = 1000;
-
 	/** Creates new form panelLicencesReconciliation */
 	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
 		super(licencesReconciliationController);
@@ -39,8 +36,8 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, 0,
-				true, null, true);
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), false, 0, true, null,
+				true);
 		panelReconciliation.setMasterFrame(ConfigedMain.getLicencesFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -56,9 +53,8 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 						Short.MAX_VALUE))
 				.addContainerGap());
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
-				.addComponent(panelReconciliation, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(panelReconciliation, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 	}
 
 	public PanelGenEditTable getPanelReconciliation() {

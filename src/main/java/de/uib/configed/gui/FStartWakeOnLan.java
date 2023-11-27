@@ -286,8 +286,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		lPanelTimeSelection.setHorizontalGroup(lPanelTimeSelection.createSequentialGroup()
 				.addComponent(spinnerHour, Globals.TIME_SPINNER_WIDTH, Globals.TIME_SPINNER_WIDTH,
 						Globals.TIME_SPINNER_WIDTH)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(labelColon, Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(labelColon, Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(spinnerMinute, Globals.TIME_SPINNER_WIDTH, Globals.TIME_SPINNER_WIDTH,
 						Globals.TIME_SPINNER_WIDTH));
 
@@ -355,39 +354,37 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 						.addComponent(buttonRefreshTime, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH / 2,
 								Globals.BUTTON_WIDTH / 2)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(
-						lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(panelSpinnerDelay, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(labelDelay, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
-										3 * Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(panelSpinnerDelay, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelDelay, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+								3 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(panelTimeSelection, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(labelStartdelay,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(
-						lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addGap(Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(labelStartAt, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(labelStarttime, 1 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
-										2 * Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE).addComponent(labelStartdelay, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGap(Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelStartAt, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelStarttime, 1 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+								2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE).addGap(Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(fieldClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelDepotCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE))
 

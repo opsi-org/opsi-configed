@@ -98,18 +98,18 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
 	}
 
 	private JPanel createNorthPanel() {
@@ -344,7 +344,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
 						jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup()
-				.addGap(0, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jButtonExpandAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -382,20 +382,19 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.GAP_SIZE / 2)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.GAP_SIZE / 2)));
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		return southPanel;
 	}

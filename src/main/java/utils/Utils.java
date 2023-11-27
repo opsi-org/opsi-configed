@@ -64,7 +64,7 @@ public final class Utils {
 	}
 
 	public static void showAboutAction(JFrame parent) {
-		FTextArea info = new FTextArea(parent, Globals.APPNAME + " Copyright Information", true,
+		FTextArea info = new FTextArea(parent, "Copyright Information", true,
 				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
 
 		StringBuilder message = new StringBuilder();
@@ -179,7 +179,7 @@ public final class Utils {
 	}
 
 	public static String pseudokey(String[] partialvalues) {
-		StringBuilder resultBuilder = new StringBuilder("");
+		StringBuilder resultBuilder = new StringBuilder();
 
 		if (partialvalues.length > 0) {
 			resultBuilder.append(partialvalues[0]);

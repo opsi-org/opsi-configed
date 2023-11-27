@@ -25,11 +25,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	public static final String CBNEEDAUTH = "cb_needAuthentication";
 
 	private JCheckBox jCheckBoxNeedAuthentication;
-	private JLabel jLabeluser = new JLabel();
-	private JLabel jLabelNeedAuthentication = new JLabel();
-	private JTextField jTextFieldUser = new JTextField();
-	private JTextField jTextFieldPassword = new JPasswordField();
-	private JLabel jLabelPassword = new JLabel();
+	private JLabel jLabeluser;
+	private JLabel jLabelNeedAuthentication;
+	private JTextField jTextFieldUser;
+	private JTextField jTextFieldPassword;
+	private JLabel jLabelPassword;
 	private SSHWgetAuthenticationPanel instance;
 
 	public SSHWgetAuthenticationPanel() {
@@ -53,11 +53,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 				instance.close();
 			}
 		});
-		jLabeluser.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
-		jLabelPassword.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
+		jLabeluser = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
+		jLabelPassword = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
+		jTextFieldUser = new JTextField();
+		jTextFieldPassword = new JPasswordField();
 		((JPasswordField) jTextFieldPassword).setEchoChar('*');
-		jTextFieldUser.setText("");
-		jTextFieldPassword.setText("");
 	}
 
 	public void setLabelSizes(int width, int height) {

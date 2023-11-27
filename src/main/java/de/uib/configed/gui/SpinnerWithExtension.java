@@ -29,12 +29,9 @@ public class SpinnerWithExtension extends JPanel {
 		box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 		box.setMinimumSize(new Dimension(50, 0));
 		GroupLayout spinnerLayout = new GroupLayout(this);
+		super.setLayout(spinnerLayout);
 		spinnerLayout.setVerticalGroup(spinnerLayout.createParallelGroup().addComponent(spinner).addComponent(box));
 		spinnerLayout.setHorizontalGroup(spinnerLayout.createSequentialGroup().addComponent(spinner).addComponent(box));
-
-		super.setLayout(spinnerLayout);
-		super.add(spinner);
-		super.add(box);
 	}
 
 	public long getValue() {

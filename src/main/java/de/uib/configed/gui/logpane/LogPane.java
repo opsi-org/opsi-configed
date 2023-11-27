@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
@@ -278,36 +277,33 @@ public class LogPane extends JPanel implements KeyListener {
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(
-				layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
+				.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
+				.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
+				.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
+				.addGap(Globals.GAP_SIZE));
 
-		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -322,7 +318,7 @@ public class LogPane extends JPanel implements KeyListener {
 						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
 
-				).addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				).addGap(Globals.MIN_GAP_SIZE));
 
 		super.add(commandpane, BorderLayout.SOUTH);
 	}
@@ -890,12 +886,10 @@ public class LogPane extends JPanel implements KeyListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
 				Logging.info(this, "Ctrl-Plus");
 				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
 			} else {

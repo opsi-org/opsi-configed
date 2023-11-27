@@ -42,8 +42,6 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -89,7 +87,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import utils.PopupMouseListener;
 import utils.Utils;
 
-public class PanelProductSettings extends JSplitPane implements RowSorterListener {
+public class PanelProductSettings extends JSplitPane {
 	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
@@ -283,9 +281,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(layoutLeftPane.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(paneProducts,
+						HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -395,7 +392,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
-		popup = new JPopupMenu("");
+		popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -436,10 +433,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		showPopupOpsiclientdEvent(true);
 
-		JMenuItem reload = new JMenuItem();
-
-		// find itscontext
-		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
@@ -447,8 +441,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		});
 		popup.add(reload);
 
-		JMenuItem createReport = new JMenuItem();
-		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
+		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Utils.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
@@ -763,7 +756,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		};
 
 		tableProducts.setRowSorter(sorter);
-		sorter.addRowSorterListener(this);
+		sorter.addRowSorterListener(event -> currentSortKeys = tableProducts.getRowSorter().getSortKeys());
 
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
@@ -929,14 +922,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public void clearEditing() {
 		initEditing("", "", "", "", "", null, null, null, null);
 		infoPane.clearEditing();
-	}
-
-	// RowSorterListener for table row sorter
-	@Override
-	public void sorterChanged(RowSorterEvent e) {
-		Logging.info(this, "RowSorterEvent " + e);
-		currentSortKeys = tableProducts.getRowSorter().getSortKeys();
-		Logging.info(this, "sorterChanged, sortKeys: " + infoSortKeys(currentSortKeys));
 	}
 
 	public List<String> getSelectedProducts() {

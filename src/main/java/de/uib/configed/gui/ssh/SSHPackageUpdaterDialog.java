@@ -86,8 +86,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		jLabelRepos = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.repos"));
 		inputPanel.add(jLabelInfo);
 		inputPanel.add(jLabelRepos);
-		jButtonDoAction = new JButton();
-		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -97,8 +96,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);

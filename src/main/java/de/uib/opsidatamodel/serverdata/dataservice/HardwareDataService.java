@@ -300,7 +300,7 @@ public class HardwareDataService {
 		specificColumns.add("HOST.hostId");
 
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
-		StringBuilder cols = new StringBuilder("");
+		StringBuilder cols = new StringBuilder();
 
 		String configTable = HW_INFO_CONFIG + hwClass;
 

@@ -115,7 +115,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		table.setAutoCreateRowSorter(true);
 
 		primaryOrderingKeys = new ArrayList<>();
-		primaryOrderingKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		primaryOrderingKeys.add(new SortKey(0, SortOrder.ASCENDING));
 
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -145,7 +145,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
 
-		fieldSearch = new JTextField("");
+		fieldSearch = new JTextField();
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		fieldSearch.getCaret().setBlinkRate(0);
@@ -153,47 +153,39 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		fieldSearch.addKeyListener(this);
 
+		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.search"));
+		popupSearch.addActionListener(actionEvent -> searchTheRow());
+
+		JMenuItem popupSearchNext = new JMenuItem(
+				Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
+		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
+
+		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
+		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
+
+		JMenuItem popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.addActionListener(actionEvent -> markAll());
+
+		JMenuItem popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
+
 		JPopupMenu searchMenu = new JPopupMenu();
-		JMenuItem popupSearch = new JMenuItem();
-		JMenuItem popupSearchNext = new JMenuItem();
-		JMenuItem popupNewSearch = new JMenuItem();
-		JMenuItem popupMarkHits = new JMenuItem();
-		JMenuItem popupEmptySearchfield = new JMenuItem();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
 		searchMenu.add(popupNewSearch);
 		searchMenu.add(popupMarkHits);
 		searchMenu.add(popupEmptySearchfield);
 
-		popupSearch.setText(Configed.getResourceValue("JTableSelectionPanel.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow());
-
-		popupSearchNext.setText(Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
-		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
-
-		popupNewSearch.setText(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
-		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
-
-		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
-
-		popupMarkHits.addActionListener(actionEvent -> markAll());
-
-		popupEmptySearchfield.setText(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
-		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
-
 		fieldSearch.setComponentPopupMenu(searchMenu);
 
 		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
 
-		Icon markAllIcon = Utils.createImageIcon("images/selection-all.png", "");
-		Icon invertSelectionIcon = Utils.createImageIcon("images/selection-invert.png", "");
-		buttonMarkAll = new JButton("", markAllIcon);
+		buttonMarkAll = new JButton(Utils.createImageIcon("images/selection-all.png", ""));
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		buttonInvertSelection = new JButton("", invertSelectionIcon);
-		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
-
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
+		buttonInvertSelection = new JButton(Utils.createImageIcon("images/selection-invert.png", ""));
+		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 		buttonInvertSelection.addActionListener((ActionEvent e) -> configedMain.invertClientselection());
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
@@ -234,32 +226,29 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
 
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(comboSearchMode, 100, 200, 300)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchMode, 100, 200, 300).addGap(Globals.GAP_SIZE));
 
-		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTopPane.createParallelGroup(Alignment.CENTER)
 
 						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -271,7 +260,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		JPanel leftPane = this;
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
@@ -280,9 +269,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(layoutLeftPane.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(scrollpane,
+						MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

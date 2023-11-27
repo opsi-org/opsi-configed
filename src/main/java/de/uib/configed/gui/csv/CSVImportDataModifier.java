@@ -29,7 +29,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -121,7 +120,7 @@ public class CSVImportDataModifier {
 	}
 
 	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
+		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 		fInfo.setMessage(message);
 		fInfo.setAlwaysOnTop(true);

@@ -32,7 +32,7 @@ public class FPanel extends SecondaryFrame {
 		super();
 		this.checkLeave = checkLeave;
 		super.setIconImage(Utils.getMainIcon());
-		super.setTitle(Globals.APPNAME + " " + title);
+		super.setTitle(title);
 
 		super.setSize(new Dimension(300, 300));
 		innerPanel = panel;

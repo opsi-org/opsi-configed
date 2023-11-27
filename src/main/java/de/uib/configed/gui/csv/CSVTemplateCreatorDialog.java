@@ -94,14 +94,14 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
 	}
 
 	private JPanel createSouthPanel() {
@@ -111,20 +111,19 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		southPanel.setLayout(southLayout);
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE)
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.GAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.GAP_SIZE / 2)));
+				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		return southPanel;
 	}
@@ -232,66 +231,54 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		HeaderOptionsPanel headerOptionsPanel = new HeaderOptionsPanel(model);
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(dataLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(dataSelectionLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(headerOptionsPanel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(headerOptionsPanel)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(csvFormatLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(includeFormatHintOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(fieldSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(
-						centerLayout.createSequentialGroup()
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(tabsOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(commaOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(semicolonOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(spaceOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(fieldSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL).addGap(
+								Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(tabsOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(commaOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(semicolonOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(spaceOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(dataLabel)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(dataSelectionLabel)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(headerOptionsPanel)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(csvFormatLabel)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(dataLabel).addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
+				.addGap(Globals.GAP_SIZE).addComponent(headerOptionsPanel).addGap(Globals.GAP_SIZE)
+				.addComponent(csvFormatLabel).addGap(Globals.GAP_SIZE)
 				.addComponent(includeFormatHintOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(fieldSeparatorLabel)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addGap(Globals.GAP_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(tabsOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(commaOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
@@ -301,11 +288,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
 						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		return centerPanel;
 	}

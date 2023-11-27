@@ -145,7 +145,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
 				result = list.get(0);
 			} else {
-				StringBuilder buf = new StringBuilder("");
+				StringBuilder buf = new StringBuilder();
 
 				for (int i = 0; i < list.size() - 1; i++) {
 					buf.append("" + list.get(i) + ",");

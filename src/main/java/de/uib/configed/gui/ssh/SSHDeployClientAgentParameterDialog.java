@@ -311,16 +311,14 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
@@ -402,7 +400,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("buttonCancel"), Configed
 							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
-			StringBuilder message = new StringBuilder("");
+			StringBuilder message = new StringBuilder();
 			message.append(
 					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message1"));
 			message.append("\n\n");
@@ -580,7 +578,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 										Globals.BUTTON_HEIGHT)
 								.addComponent(panelFinalAction))
 
-						.addGap(Globals.GAP_SIZE / 2)
+						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)

@@ -80,8 +80,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private long timeOutMillis = TIMEOUT_MS;
 
-	private JButton jButtonCancel = new JButton();
-	private JButton jButtonCommit = new JButton();
+	private JButton jButtonCancel;
+	private JButton jButtonCommit;
 
 	private KeyListener newKeyListener = new KeyAdapter() {
 		@Override
@@ -202,10 +202,10 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
-		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
+		jButtonCancel = new JButton(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
-		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
+		jButtonCommit = new JButton(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
 	}
 

@@ -138,7 +138,7 @@ public class PanelProductProperties extends JSplitPane {
 		private List<String> columnNames;
 
 		public PaneProducts(List<String> columnNames) {
-			super("", 0, false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true);
+			super("", false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true);
 
 			this.columnNames = columnNames;
 		}

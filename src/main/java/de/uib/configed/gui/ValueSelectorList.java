@@ -105,18 +105,20 @@ public class ValueSelectorList extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelValue, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(5, 5, 10)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(5, 5, 10));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup().addGap(10)
-						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(10, 10, 10))
-				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
-						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE)));
 	}
 
 	public String getSelectedValue() {

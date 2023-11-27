@@ -13,7 +13,6 @@ package de.uib.configed.gui.licences;
 
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -25,13 +24,13 @@ import javax.swing.ListSelectionModel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicencesUsage;
+import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.swing.DynamicCombo;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class PanelLicencesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
-	private int splitPaneHMargin = 1;
 
 	private PanelGenEditTable panelUsage;
 	private PanelGenEditTable panelLicencePools;
@@ -39,9 +38,6 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	private JPanel panelGetAndAssignSL;
 	private DynamicCombo comboClient;
 
-	private int tablesMaxWidth = 1000;
-	private int buttonHeight = 15;
-	private int buttonWidth = 140;
 	private int lPoolHeight = 100;
 
 	private ControlPanelLicencesUsage licencesUsageController;
@@ -55,10 +51,6 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		initComponents();
 	}
 
-	private void setupSplit() {
-		splitPane.setResizeWeight(0.5);
-	}
-
 	public void setDivider() {
 		if (initialSplit < 1) {
 			splitPane.setDividerLocation(0.7);
@@ -69,8 +61,8 @@ public class PanelLicencesUsage extends MultiTablePanel {
 
 	private void initSubPanel() {
 		panelLicencePools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
-				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), false, 0, false,
+				new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
 		JLabel labelGetAndAssignSL = new JLabel(
@@ -84,34 +76,31 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		buttonGet.addActionListener(
 				event -> licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem()));
 
-		panelGetAndAssignSL.setBorder(BorderFactory.createEtchedBorder());
-
 		GroupLayout panelGetAndAssignSLLayout = new GroupLayout(panelGetAndAssignSL);
 		panelGetAndAssignSL.setLayout(panelGetAndAssignSLLayout);
-		panelGetAndAssignSLLayout.setHorizontalGroup(panelGetAndAssignSLLayout.createSequentialGroup()
-				.addGap(20, 20, 20)
-				.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addComponent(labelGetAndAssignSL)
-								.addGap(20, 20, 20)
-								.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(buttonGet, buttonWidth, buttonWidth, buttonWidth))
-				.addGap(20, 20, 20));
+		panelGetAndAssignSLLayout.setHorizontalGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addComponent(labelGetAndAssignSL)
+						.addGap(20, 20, 20)
+						.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
+				.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addContainerGap().addComponent(buttonGet,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-		panelGetAndAssignSLLayout.setVerticalGroup(panelGetAndAssignSLLayout.createSequentialGroup().addGap(5, 5, 5)
+		panelGetAndAssignSLLayout.setVerticalGroup(panelGetAndAssignSLLayout.createSequentialGroup()
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(panelGetAndAssignSLLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelGetAndAssignSL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(5, 5, 5).addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
-				.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight).addGap(5, 5, 5));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonGet, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
 	private void initComponents() {
-		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
-				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), true,
+				0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
@@ -125,16 +114,14 @@ public class PanelLicencesUsage extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
-						.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap())
-				.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 		splitPane.setTopComponent(panelUsage);
 		splitPane.setBottomComponent(panelGetAndAssignSL);
-		setupSplit();
+		splitPane.setResizeWeight(0.5);
 	}
 
 	public void setClientsSource(ComboBoxModeller modelsource) {

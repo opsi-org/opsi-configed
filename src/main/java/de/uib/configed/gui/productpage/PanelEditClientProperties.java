@@ -58,8 +58,8 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
 				.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutEditProperties.setVerticalGroup(layoutEditProperties.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(
+		layoutEditProperties.setVerticalGroup(
+				layoutEditProperties.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 						productPropertiesPanel, Globals.MIN_TABLE_V_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
@@ -73,10 +73,9 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(buttonRemoveSpecificValues, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonRemoveSpecificValues, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGroup(titleLayout
 				.createParallelGroup(GroupLayout.Alignment.CENTER)

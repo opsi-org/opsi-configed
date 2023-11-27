@@ -37,8 +37,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
-	protected boolean shiftPressed = true;
-
 	protected JPanel allpane = new JPanel();
 
 	protected JScrollPane scrollpane = new JScrollPane();
@@ -293,20 +291,19 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.GAP_SIZE / 2)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.GAP_SIZE / 2)));
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -316,10 +313,8 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
 						2 * Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup().addComponent(northPanel, 100, 300, Short.MAX_VALUE)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-						.addComponent(scrollpane, 100, 300, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2))
+				.addGroup(allLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(scrollpane, 100, 300, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE))
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 
 		getContentPane().add(allpane);
@@ -439,30 +434,23 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "key event " + e);
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = true;
-		} else {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
-				if (e.getSource() == jButton1) {
-					// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
-					// since otherwise doAction1 is called twice on Enter
-				} else if (e.getSource() == jButton2) {
-					doAction2();
-				} else if (e.getSource() == jButton3) {
-					doAction3();
-				} else {
-					Logging.warning(this, "unexpected action on source " + e.getSource());
-				}
+		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (e.getSource() == jButton1) {
+				// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
+				// since otherwise doAction1 is called twice on Enter
+			} else if (e.getSource() == jButton2) {
+				doAction2();
+			} else if (e.getSource() == jButton3) {
+				doAction3();
+			} else {
+				Logging.warning(this, "unexpected action on source " + e.getSource());
 			}
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = false;
-		}
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {

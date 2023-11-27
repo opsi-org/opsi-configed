@@ -181,7 +181,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-		JLabel labelTitle = new JLabel("");
+		JLabel labelTitle = new JLabel();
 		if (title != null) {
 			labelTitle.setText(title);
 		}

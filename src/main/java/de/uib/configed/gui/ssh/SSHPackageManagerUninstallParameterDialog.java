@@ -389,7 +389,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
 										.addComponent(jComboBoxOpsiProducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												2 * Globals.BUTTON_WIDTH)
-										.addGap(5, 5, 5)
+										.addGap(Globals.MIN_GAP_SIZE)
 
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()

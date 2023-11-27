@@ -63,7 +63,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
 		JRadioButton selectionComputerSystem = new JRadioButton("", true);
-		selectionBaseBoard = new JRadioButton("");
+		selectionBaseBoard = new JRadioButton();
 		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
@@ -92,15 +92,15 @@ public class PanelHWByAuditDriver extends JPanel {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addGroup(
-										layoutByAuditInfo.createParallelGroup()
-												.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addGroup(layoutByAuditInfo.createParallelGroup()
+										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(
+												labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(layoutByAuditInfo.createParallelGroup()
 										.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -115,8 +115,7 @@ public class PanelHWByAuditDriver extends JPanel {
 										.addComponent(fieldBaseBoardLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -127,7 +126,7 @@ public class PanelHWByAuditDriver extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addComponent(labelComputerSystemVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
@@ -137,10 +136,10 @@ public class PanelHWByAuditDriver extends JPanel {
 								Globals.BUTTON_WIDTH * 2)
 						.addComponent(fieldBaseBoardVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelSeparator)
-						.addComponent(labelSeparator2))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutByAuditInfo
+						.createParallelGroup().addComponent(labelSeparator).addComponent(labelSeparator2))
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addComponent(labelProductOrModel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)

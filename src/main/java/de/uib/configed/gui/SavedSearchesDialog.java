@@ -111,10 +111,7 @@ public class SavedSearchesDialog extends FEditStringList {
 			addElement();
 		});
 
-		JMenuItem reload = new JMenuItem();
-
-		// find itscontext
-		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
@@ -122,19 +119,14 @@ public class SavedSearchesDialog extends FEditStringList {
 		});
 		popup.add(reload);
 
-		JMenuItem remove = new JMenuItem();
-
-		// find itscontext
-		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
-
+		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
 		popup.add(remove);
 
-		JMenuItem edit = new JMenuItem();
-		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
 	}

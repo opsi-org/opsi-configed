@@ -137,8 +137,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private UpdateController myController;
 
-	private int maxTableWidth = Short.MAX_VALUE;
-
 	private boolean editing = true;
 
 	private boolean deleteAllowed = true;
@@ -168,8 +166,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private AbstractExportTable exportTable;
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
-			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
+			int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
 		this.generalPopupPosition = generalPopupPosition;
@@ -192,10 +190,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		Logging.info(this.getClass(), "internalpopups supplemented " + giveMenuitemNames(internalpopups));
 
-		if (maxTableWidth > 0) {
-			this.maxTableWidth = maxTableWidth;
-		}
-
 		if (title != null) {
 			this.title = title;
 		}
@@ -211,22 +205,21 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		initComponents();
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
-			boolean switchLineColors, int[] popupsWanted) {
-		this(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
+			int[] popupsWanted) {
+		this(title, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
-			boolean switchLineColors) {
-		this(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, null);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors) {
+		this(title, editing, generalPopupPosition, switchLineColors, null);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing) {
-		this(title, maxTableWidth, editing, 0, false);
+	public PanelGenEditTable(String title, boolean editing) {
+		this(title, editing, 0, false);
 	}
 
 	public PanelGenEditTable() {
-		this("", 0, true);
+		this("", true);
 	}
 
 	private static boolean isServerFullPermission() {
@@ -349,21 +342,17 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-										.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-										.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
-										.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE))
-								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										maxTableWidth)
-								.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
-								.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)));
+						.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)
@@ -371,11 +360,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 
 				.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
@@ -414,17 +402,16 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(buttonCommit,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(buttonCommit,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		setDataChanged(false);
 
@@ -1472,7 +1459,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		PanelGenEditTable copyOfMe;
 		GeneralFrame externalView;
 
-		copyOfMe = new PanelGenEditTable(title, maxTableWidth, false);
+		copyOfMe = new PanelGenEditTable(title, false);
 
 		copyOfMe.setTableModel(tableModel);
 

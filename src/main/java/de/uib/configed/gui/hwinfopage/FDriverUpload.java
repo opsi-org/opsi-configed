@@ -36,10 +36,9 @@ public class FDriverUpload extends SecondaryFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(panelDriverUpload, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(panelDriverUpload, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

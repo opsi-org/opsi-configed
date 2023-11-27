@@ -39,8 +39,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	 */
 	@Override
 	protected void initAdditional() {
-		jLabelCopyToModulesD = new JLabel();
-		jLabelCopyToModulesD.setText(
+		jLabelCopyToModulesD = new JLabel(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.lbl_copy_to_modules_d"));
 
 		jComboBoxCopyToModulesD = new JCheckBox();

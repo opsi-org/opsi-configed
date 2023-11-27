@@ -120,8 +120,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public ClientSelectionDialog(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup") + " (" + Globals.APPNAME + ")",
-				false,
+		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
@@ -247,13 +246,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
 				.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE / 2).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.GAP_SIZE / 2)
+				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(buttonRestart, 20, 20, 20).addGap(Globals.GAP_SIZE));
 
 		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -294,10 +293,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupElements = layout.createParallelGroup();
 		hGroupOperations = layout.createParallelGroup();
 		hGroupData = layout.createParallelGroup();
-		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(3)
-				.addGroup(hGroupNegate).addGap(5).addGroup(hGroupElements).addGap(5).addGroup(hGroupOperations)
-				.addGap(5).addGroup(hGroupData).addGap(3).addGroup(hGroupParenthesisClose).addGap(5)
-				.addGroup(hGroupConnections).addGap(5).addGroup(hGroupRemoveBtn));
+		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupNegate).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupElements)
+				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupOperations).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupData).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupParenthesisClose)
+				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupConnections).addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(hGroupRemoveBtn));
 		layout.setHorizontalGroup(hMainGroup);
 
 		// columns headline
@@ -1318,8 +1319,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		String text = saveNameField.getText();
 		if (text.isEmpty()) {
 			JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
-					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
-					JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle"), JOptionPane.OK_OPTION);
 			toFront();
 		} else if (searchNamePattern.matcher(text).matches()) {
 			collectData();

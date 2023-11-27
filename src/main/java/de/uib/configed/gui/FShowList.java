@@ -88,11 +88,9 @@ public class FShowList extends FTextArea {
 	// KeyListener
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			shiftPressed = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == jTextArea1) {
+		if (e.getKeyCode() == KeyEvent.VK_TAB && !e.isShiftDown() && e.getSource() == jTextArea1) {
 			jButton1.requestFocus();
-		} else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
+		} else if (e.getKeyCode() == KeyEvent.VK_TAB && e.isShiftDown() && e.getSource() == jButton1) {
 			jTextArea1.requestFocus();
 		} else {
 			// Do nothing on other key events

@@ -180,8 +180,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
-		jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 			if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -190,8 +189,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
@@ -271,43 +269,42 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout
-				.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addGroup(inputPanelLayout
-								.createParallelGroup().addGroup(inputPanelLayout
-										.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
-												.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addGroup(inputPanelLayout.createSequentialGroup()
+								.addGroup(inputPanelLayout.createParallelGroup()
+										.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(
+												wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(inputPanelLayout.createParallelGroup()
+										.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE))
+										.addGroup(inputPanelLayout.createSequentialGroup()
+												.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+														Short.MAX_VALUE)
+												.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(inputPanelLayout.createParallelGroup()
-												.addGroup(inputPanelLayout.createSequentialGroup().addComponent(
-														jTextFieldURL, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-												.addGroup(inputPanelLayout.createSequentialGroup()
-														.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH,
-																Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-														.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-												.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-														GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH,
-														Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
-								.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE));
+										.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
+												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)))
+						.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

@@ -28,8 +28,6 @@ public class PanelEditLicences extends MultiTablePanel {
 	private PanelGenEditTable panelSoftwarelicences;
 	private PanelGenEditTable panelLicencecontracts;
 
-	private int splitPaneHMargin = 1;
-
 	private int minVSize = 100;
 
 	/** Creates new form PanelEditLicences */
@@ -40,7 +38,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -51,7 +49,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelKeys.setFiltering(true);
 
 		panelSoftwarelicences = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -61,7 +59,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelSoftwarelicences.showFilterIcon(true);
 
 		panelLicencecontracts = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -83,42 +81,31 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
 				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.TRAILING)
-						// for testing purposes:
-
-						// Short.MAX_VALUE)
 						.addComponent(panelKeys, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(panelSoftwarelicences, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGap(10, 10, 10));
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-						.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
+				.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
-				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						panelLicencecontracts, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGap(10, 10, 10));
-		layoutBottomPane.setVerticalGroup(
-				layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addComponent(panelLicencecontracts,
+				GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addContainerGap());
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

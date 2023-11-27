@@ -79,28 +79,23 @@ public class LogFrame extends JFrame implements WindowListener {
 	//menus
 
 	private JMenu setupMenuFile() {
-		JMenuItem jMenuFileOpen = new JMenuItem();
-		jMenuFileOpen.setText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		JMenuItem jMenuFileClose = new JMenuItem();
-		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
+		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileClose"));
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
 
-		JMenuItem jMenuFileSave = new JMenuItem();
-		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
+		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.save());
 
-		JMenuItem jMenuFileReload = new JMenuItem();
-		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		JMenuItem jMenuFileExit = new JMenuItem();
-		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
 
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -189,23 +184,22 @@ public class LogFrame extends JFrame implements WindowListener {
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
 		iconPane.setLayout(layoutIconPane1);
 
-		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-				.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-						Globals.GRAPHIC_BUTTON_SIZE)
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+		layoutIconPane1
+				.setHorizontalGroup(
+						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE));
 
-		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE)
@@ -215,7 +209,7 @@ public class LogFrame extends JFrame implements WindowListener {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2));
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
@@ -341,8 +335,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		LogFrame.fileName = fn;
 	}
 
-	private static void showDialog(String errorMsg) {
-		JOptionPane.showMessageDialog(null, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
+	private void showDialog(String errorMsg) {
+		JOptionPane.showMessageDialog(this, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static String openFile() {
@@ -447,7 +441,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		return result;
 	}
 
-	private static String readInputStream(InputStream fis) {
+	private String readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;

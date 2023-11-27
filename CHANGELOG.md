@@ -12,6 +12,7 @@
 
 ### Changed
 - Make it possible to enter empty values in editable tables
+- Rework element and gap sizes in licensing management
 
 
 ## [4.3.1.0] - 2023-11-14

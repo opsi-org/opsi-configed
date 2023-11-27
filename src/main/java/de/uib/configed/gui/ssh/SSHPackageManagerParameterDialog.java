@@ -64,8 +64,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonReload = new JButton();
-		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
+		JButton jButtonReload = new JButton(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -77,8 +76,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 

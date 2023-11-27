@@ -60,8 +60,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		jLabelInfo = new JLabel(Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
 		inputPanel.add(jLabelInfo);
-		jButtonDoAction = new JButton();
-		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 
@@ -72,8 +71,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 

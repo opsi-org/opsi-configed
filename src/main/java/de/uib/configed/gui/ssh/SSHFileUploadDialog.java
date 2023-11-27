@@ -143,7 +143,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
 
-		jComboBoxSetRights = new JCheckBox();
+		jComboBoxSetRights = new JCheckBox("", true);
 		jComboBoxSetRights.setSelected(true);
 		jCheckBoxOverwriteExisting = new JCheckBox();
 		jCheckBoxOverwriteExisting.setSelected(true);
@@ -162,16 +162,15 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener(actionEvent -> chooseFileDialog());
-		JButton jButtonExecute = new JButton();
-		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
+
+		JButton jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
-		JButton jButtonClose = new JButton();
-		jButtonClose.setText(Configed.getResourceValue("buttonClose"));
+		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 

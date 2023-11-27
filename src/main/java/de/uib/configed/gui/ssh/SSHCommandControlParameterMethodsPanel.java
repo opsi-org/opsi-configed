@@ -40,25 +40,13 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JButton jButtonAddParam;
 	private JButton jButtonTestParam;
 
-	private int lGap = Globals.GAP_SIZE;
-	private int rGap = Globals.GAP_SIZE;
-	private int uGap = Globals.GAP_SIZE;
-	private int oGap = Globals.GAP_SIZE;
-
-	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
-		super();
-		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
-		main = owner;
-		init();
-		setGapSize(lg, rg, ug, og);
-		initLayout();
-	}
-
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
 		super();
 		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
+
+		initLayout();
 	}
 
 	/** Init components **/
@@ -124,40 +112,36 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		return jButtonTestParam;
 	}
 
-	public void setGapSize(int lgap, int rgap, int ugap, int ogap) {
-		Logging.info(this, "setGapSize lgap  " + lgap + " rgap " + rgap + " ugap " + ugap + " ogap " + ogap);
-		this.lGap = lgap;
-		this.rGap = rgap;
-		this.uGap = ugap;
-		this.oGap = ogap;
-	}
-
-	public void initLayout() {
+	private void initLayout() {
 		Logging.debug(this, "initLayout ");
 
 		GroupLayout thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
-		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
-				.createParallelGroup()
-				.addGroup(thisLayout.createSequentialGroup().addGroup(thisLayout.createParallelGroup()
-						.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.MIN_GAP_SIZE * 2)
-						.addGroup(thisLayout.createParallelGroup()
-								.addComponent(jComboBoxParameterMethods, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										3 * Globals.BUTTON_WIDTH)
-								.addComponent(jComboBoxParameterFormats, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										3 * Globals.BUTTON_WIDTH))
-						.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
+		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
+				.addGap(Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3)
+				.addGroup(thisLayout.createParallelGroup()
+						.addGroup(thisLayout.createSequentialGroup()
+								.addGroup(thisLayout.createParallelGroup()
+										.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE * 2)
+								.addGroup(thisLayout.createParallelGroup()
+										.addComponent(jComboBoxParameterMethods, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH)
+										.addComponent(jComboBoxParameterFormats, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH))
+								.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
 
-				.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelEmpty, 10, 10, Short.MAX_VALUE)
-						.addComponent(jButtonTestParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-						.addComponent(jButtonAddParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH))
+						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelEmpty, 10, 10, Short.MAX_VALUE)
+								.addComponent(jButtonTestParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH)
+								.addComponent(jButtonAddParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH))
 
-		).addGap(rGap));
-		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup().addGap(oGap * 2)
+				).addGap(Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3));
+		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -176,7 +160,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 						.addComponent(jButtonTestParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(jLabelEmpty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(uGap * 2));
+				.addGap(Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4));
 
 		repaint();
 		revalidate();

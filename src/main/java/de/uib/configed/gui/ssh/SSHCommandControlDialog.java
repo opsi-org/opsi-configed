@@ -69,17 +69,17 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	private JButton buttonSave;
 
 	/** JLabel menu text instance **/
-	private JLabel labelMenuText = new JLabel();
+	private JLabel labelMenuText;
 	/** JLabel parent menu text instance **/
-	private JLabel labelParentMenuText = new JLabel();
+	private JLabel labelParentMenuText;
 	/** JLabel tolbl_parentMenuTextoltip text instance **/
-	private JLabel labelTooltipText = new JLabel();
+	private JLabel labelTooltipText;
 	/** JLabel priority instance **/
-	private JLabel labelPriority = new JLabel();
+	private JLabel labelPriority;
 	/** JLabel need sudo instance **/
-	private JLabel labelNeedSudo = new JLabel();
+	private JLabel labelNeedSudo;
 	/** JLabel commands instance **/
-	private JLabel labelCommands = new JLabel();
+	private JLabel labelCommands;
 
 	/** JComboBox menu text instance **/
 	private JComboBox<String> jComboBoxMenuText;
@@ -93,7 +93,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JTextField priority instance **/
 	private JTextField jTextFieldPriority = new JTextField();
 	/** JCheckBox need Sudo instance **/
-	private JCheckBox jComboBoxNeedSudo = new JCheckBox("");
+	private JCheckBox jComboBoxNeedSudo = new JCheckBox();
 	/** JTextPane commands instance **/
 	private JTextPane jTextPaneCommands = new JTextPane();
 
@@ -111,8 +111,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	public SSHCommandControlDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		this.configedMain = configedMain;
-		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
-				Globals.GAP_SIZE * 2, 0);
+		parameterPanel = new SSHCommandControlParameterMethodsPanel(this);
 		init();
 
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -159,18 +158,13 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
 		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_SIZE, Globals.BUTTON_HEIGHT);
 
-		labelParentMenuText = new JLabel();
 		jComboBoxParentMenuText = new JComboBox<>();
-		labelMenuText = new JLabel();
 		jComboBoxMenuText = new JComboBox<>();
-		labelTooltipText = new JLabel();
-		labelPriority = new JLabel();
 
 		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 				String.valueOf(SSHCommandFactory.POSITION_DEFAULT), 1);
-		labelNeedSudo = new JLabel();
-		labelCommands = new JLabel();
+
 		jTextPaneCommands = new JTextPane();
 
 		buttonTestCommand = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
@@ -181,14 +175,14 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
 		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
-		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
-		labelParentMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
-		labelTooltipText.setText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
-		labelPriority.setText(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
-		labelNeedSudo.setText(Configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
-		labelCommands.setText(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
+		labelMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
+		labelParentMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
+		labelTooltipText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
+		labelPriority = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
+		labelNeedSudo = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
+		labelCommands = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
-		jComboBoxParentMenuText.addItem(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS); // parentNull
+		jComboBoxParentMenuText.addItem(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		jComboBoxMenuText.addItem(SSHCommandFactory.MENU_NEW);
 
 		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
@@ -525,7 +519,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		if (thiscommand != null) {
 			Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
 					+ thiscommand.getParentMenuText());
-			StringBuilder combuf = new StringBuilder("");
+			StringBuilder combuf = new StringBuilder();
 			for (SSHCommand c : thiscommand.getCommands()) {
 				String rawCommand = c.getCommandRaw();
 				if (rawCommand != null && !rawCommand.isEmpty()) {

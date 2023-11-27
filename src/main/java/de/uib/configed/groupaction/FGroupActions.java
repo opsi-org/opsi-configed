@@ -58,7 +58,7 @@ public class FGroupActions extends SecondaryFrame {
 		reload();
 
 		super.setIconImage(Utils.getMainIcon());
-		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
+		super.setTitle(Configed.getResourceValue("FGroupAction.title"));
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);
@@ -140,9 +140,9 @@ public class FGroupActions extends SecondaryFrame {
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(topPanel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -192,7 +192,7 @@ public class FGroupActions extends SecondaryFrame {
 				.addGroup(layout.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
 						.addComponent(labelCombo, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4)
@@ -213,7 +213,7 @@ public class FGroupActions extends SecondaryFrame {
 		fieldGroupname.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupname.setEditable(false);
 
-		fieldInvolvedClientsCount = new JTextField("");
+		fieldInvolvedClientsCount = new JTextField();
 		fieldInvolvedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedClientsCount.setEditable(false);
 
@@ -233,7 +233,7 @@ public class FGroupActions extends SecondaryFrame {
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
 						.addComponent(groupNameLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(fieldGroupname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
 						.addComponent(clientsCountLabel, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
