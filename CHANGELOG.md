@@ -9,6 +9,7 @@
 - Nullpointer exception some time after closing Terminal
 - Bug in buttons to add users and user roles
 - Nullpointer exception in Messagebus when creating/deleting clients
+- Delete data from licensing managment when deconnecting from server
 
 ### Changed
 - Make it possible to enter empty values in editable tables
