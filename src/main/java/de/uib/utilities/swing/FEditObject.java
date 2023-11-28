@@ -104,7 +104,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		loggingPanel = new JPanel(new BorderLayout());
 		loggingPanel.setVisible(false);
 
-		loggingArea = new JTextArea("");
+		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
 
 		JScrollPane scrollpaneL = new JScrollPane();

@@ -44,8 +44,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	private String title;
 	private Map<Enum<E>, JRadioButton> groupedButtons;
 	private Consumer<Enum<E>> enumSetter;
-	private int vGap;
-	private int hGap;
 
 	private List<ChangeListener> changeListeners;
 
@@ -56,17 +54,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter) {
-		this(title, startValue, values, labels, myenum, enumSetter, 0, 0);
-	}
-
-	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
-			Consumer<Enum<E>> enumSetter, int hGap, int vGap) {
 		Logging.info(this.getClass(), " my enum " + myenum);
 
 		this.title = title;
-
-		this.hGap = hGap;
-		this.vGap = vGap;
 
 		changeListeners = new ArrayList<>();
 
@@ -148,9 +138,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 				Logging.debug(this, "actionEvent with result " + val);
 				notifyChangeListeners(new ChangeEvent(this));
-			})
-
-			;
+			});
 
 			// hack to get the icons behaving as expected
 			button.addMouseListener(new MouseAdapter() {
@@ -192,8 +180,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);
 
-		vGroup.addGap(vGap);
-
 		if (title != null) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
 					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
@@ -204,20 +190,15 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 		}
 
-		vGroup.addGap(vGap);
-
 		GroupLayout.ParallelGroup hGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		layout.setHorizontalGroup(hGroup);
 
 		if (title != null) {
-			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
-					.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(hGap));
+			hGroup.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		}
 
 		for (Enum<E> val : values) {
-			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
-					.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(hGap));
+			hGroup.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		}
 	}
 

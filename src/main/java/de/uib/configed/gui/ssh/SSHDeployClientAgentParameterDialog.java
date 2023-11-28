@@ -297,7 +297,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				CommandDeployClientAgent.FinalActionType.class, ((Enum<FinalActionType> val) -> {
 					Logging.info(this, "change to " + val);
 					finalAction = (CommandDeployClientAgent.FinalActionType) val;
-				}), 2, 2);
+				}));
 
 		jLabelOperatingSystem
 				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
