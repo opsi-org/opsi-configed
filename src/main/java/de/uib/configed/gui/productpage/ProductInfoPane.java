@@ -135,23 +135,16 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
 
 				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
 
 				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelLabelProductVersion, Globals.MIN_HSIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
 
-				.addGroup(
-						layoutDescriptionsPanel.createSequentialGroup()
-								.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-						.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE)));
+				.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+
+				.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
 
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -193,17 +186,15 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 										.addComponent(depotForDependenciesLabel, 0, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE))
+										.addGap(Globals.MIN_GAP_SIZE))
 
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addComponent(panelProductDependencies).addGap(Globals.MIN_GAP_SIZE))
+								.addComponent(panelProductDependencies)
 
 								.addGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.GAP_SIZE)
 										.addComponent(propertiesActivateButton).addGap(Globals.GAP_SIZE)
-										.addComponent(panelEditProperties.getTitlePanel()).addGap(Globals.MIN_GAP_SIZE))
+										.addComponent(panelEditProperties.getTitlePanel()))
 
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addComponent(panelEditProperties).addGap(Globals.MIN_GAP_SIZE)));
+								.addComponent(panelEditProperties));
 
 		layoutBottomComponent
 				.setVerticalGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)

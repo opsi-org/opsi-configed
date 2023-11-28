@@ -64,6 +64,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -332,7 +333,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			popupShowDepotColumn);
 
 	private BorderLayout borderLayout1 = new BorderLayout();
-	private JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
+	private JTabbedPane jTabbedPaneConfigPanes;
 	private JSplitPane panelClientSelection;
 
 	private HostsStatusPanel statusPane;
@@ -1669,11 +1670,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		setupPopupMenuClientsTab();
 
 		// clientPane
-		clientPane = new JPanel();
-
-		GroupLayout layoutClientPane = new GroupLayout(clientPane);
-		clientPane.setLayout(layoutClientPane);
-
 		labelHostID = new JLabel();
 
 		labelHostID.setFont(labelHostID.getFont().deriveFont(Font.BOLD));
@@ -1769,110 +1765,90 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTextFieldHostKey = new JTextHideField();
 
+		clientPane = new JPanel();
+
+		GroupLayout layoutClientPane = new GroupLayout(clientPane);
+		clientPane.setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
+
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// INVENTORY NUMBER
-				.addGroup(
-						layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// SYSTEM UUID
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+						Globals.FIRST_LABEL_WIDTH)
+
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+						Globals.FIRST_LABEL_WIDTH)
 
 				/////// IP ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+						Globals.FIRST_LABEL_WIDTH)
 
 				/////// INSTALL BY SHUTDOWN
-
-				.addGroup(
-						layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(cbInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(cbInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// UEFI BOOT
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(cbUefiBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(cbUefiBoot,
+						0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
 				/////// WAN CONFIG
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(cbWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(cbWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				////// opsiHostKey
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(jTextFieldHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(jTextFieldHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// NOTES
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+
 				/////// DESCRIPTION
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+
 				/////// INVENTORY NUMBER
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+
 				/////// SYSTEM UUID
 				.addGap(ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0,
 						ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0,
@@ -1880,11 +1856,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+
 				/////// MAC ADDRESS
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+
 				/////// IP ADDRESS
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -1897,7 +1875,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// UEFI BOOT & WAN Config
-
 				.addComponent(cbUefiBoot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
@@ -1955,21 +1932,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		layoutPanelTreeClientSelection
 				.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
-
 								.addComponent(depotListPresenter, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-
 								.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
-		layoutPanelTreeClientSelection.setVerticalGroup(layoutPanelTreeClientSelection
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-
-				.addGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		layoutPanelTreeClientSelection
+				.setVerticalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)));
+								Short.MAX_VALUE));
 
 		jButtonServerConfiguration = new JButton("", Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
 		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
@@ -2229,6 +2202,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		c.gridx = 2;
 		c.gridy = 0;
 		iconBarPane.add(iconsTopRight, c);
+
+		jTabbedPaneConfigPanes = new JTabbedPane();
+		jTabbedPaneConfigPanes.setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);

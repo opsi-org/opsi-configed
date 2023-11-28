@@ -235,7 +235,7 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
-		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()//.addGap(Globals.GAP_SIZE)
+		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()
 				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(0, 50, 50)
@@ -303,18 +303,13 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup()
-				.addGroup(layoutEmbed.createParallelGroup()
-						.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createParallelGroup()
+				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-
 				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {

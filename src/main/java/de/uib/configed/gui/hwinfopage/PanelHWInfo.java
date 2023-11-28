@@ -135,11 +135,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
 
-		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup().addGroup(layoutBase.createParallelGroup()
+		layoutBase.setHorizontalGroup(layoutBase.createParallelGroup()
 				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

@@ -19,7 +19,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
-import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
@@ -54,8 +53,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		for (int i = 0; i < idents.length; i++) {
 			initLogFrame(i, defaultText);
 		}
-
-		super.setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 	}
 
 	private void initLogFrame(int i, String defaultText) {
