@@ -80,7 +80,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private JComboBox<String> comboType;
 	private DefaultComboBoxModel<String> comboModelTypes;
 
-	private WordSearcher searcher;
+	private DocumentSearcher searcher;
 	private Highlighter highlighter;
 	private final StyleContext styleContext;
 	private final Style[] logLevelStyles;
@@ -187,7 +187,7 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 
-		searcher = new WordSearcher(jTextPane);
+		searcher = new DocumentSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
 		highlighter = new DefaultHighlighter();
 		jTextPane.setHighlighter(highlighter);
@@ -789,11 +789,17 @@ public class LogPane extends JPanel implements KeyListener {
 
 		jTextPane.requestFocus();
 		jTextPane.setCaretPosition(jTextPane.getCaretPosition());
-		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
+		searcher.setFullContent(String.join(",", lines));
 		searcher.setLastReturnedOffset(jTextPane.getCaretPosition());
+		if (searcher.isLastShownElement() && searcher.getCurrentMatch() != searcher.getTotalMatches()
+				&& currentLinePosition != lines.length) {
+			scrollpane.getVerticalScrollBar().setUnitIncrement(0);
+			buildDocument();
+		}
+
+		searcher.setHasReachedEnd(currentLinePosition == lines.length);
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
 
-		// does not exist
 		if (jComboBoxSearch.getSelectedIndex() <= -1) {
 			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
 			jComboBoxSearch.repaint();
@@ -802,7 +808,6 @@ public class LogPane extends JPanel implements KeyListener {
 			try {
 				jTextPane.scrollRectToVisible(jTextPane
 						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-
 				jTextPane.setCaretPosition(offset);
 				jTextPane.getCaret().setVisible(true);
 				jTextPane.setCaretPosition(offset);
