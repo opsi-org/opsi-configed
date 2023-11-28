@@ -55,8 +55,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			initLogFrame(i, defaultText);
 		}
 
-		super.setBorder(new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-				Globals.MIN_GAP_SIZE));
+		super.setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 	}
 
 	private void initLogFrame(int i, String defaultText) {

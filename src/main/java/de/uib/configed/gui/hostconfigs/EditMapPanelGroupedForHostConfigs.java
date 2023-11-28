@@ -398,11 +398,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(splitPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE));
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(splitPane, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(splitPane, 50,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	/**

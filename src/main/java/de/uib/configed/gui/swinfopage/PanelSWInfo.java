@@ -224,17 +224,18 @@ public class PanelSWInfo extends JPanel {
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
 
-		subPanelTitle = new JPanel();
-
 		labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 	}
 
 	private void setupTableLayout() {
+
+		subPanelTitle = new JPanel();
+
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
-		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(Globals.GAP_SIZE)
+		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()//.addGap(Globals.GAP_SIZE)
 				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(0, 50, 50)

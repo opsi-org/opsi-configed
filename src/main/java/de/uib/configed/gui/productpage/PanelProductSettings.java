@@ -280,9 +280,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(paneProducts,
-						HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

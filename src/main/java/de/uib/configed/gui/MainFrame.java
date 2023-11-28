@@ -1960,9 +1960,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 										Short.MAX_VALUE)
 
 								.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-
-						.addGap(Globals.MIN_GAP_SIZE));
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		layoutPanelTreeClientSelection.setVerticalGroup(layoutPanelTreeClientSelection
 				.createParallelGroup(GroupLayout.Alignment.LEADING)

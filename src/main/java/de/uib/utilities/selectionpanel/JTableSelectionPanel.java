@@ -224,9 +224,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
-
-				.addGap(Globals.GAP_SIZE)
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -268,9 +266,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(scrollpane,
-						MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
