@@ -506,7 +506,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
-		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
+		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
 				BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor"))));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
