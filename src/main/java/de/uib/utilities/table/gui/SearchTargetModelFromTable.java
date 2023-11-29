@@ -18,14 +18,14 @@ import de.uib.utilities.table.RowNoTableModelFilterCondition;
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
-	private JTable table;
+	protected JTable table;
 
 	// in case that we are working in our standard context
 	private PanelGenEditTable thePanel;
 
-	private int[] viewRowfilter = new int[0];
+	protected int[] viewRowfilter = new int[0];
 
-	private boolean filtered;
+	protected boolean filtered;
 
 	public SearchTargetModelFromTable() {
 		this((JTable) null);
@@ -218,8 +218,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	@Override
 	public boolean isFiltered() {
 		return filtered;
-
-		// not work since we don't always have got a GenTableModel
 	}
 
 	@Override
