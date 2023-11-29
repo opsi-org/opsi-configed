@@ -23,7 +23,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -184,8 +183,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(
-					Globals.APPNAME + " " + Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
+			chooser.setDialogTitle(Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 		}
 	}
 

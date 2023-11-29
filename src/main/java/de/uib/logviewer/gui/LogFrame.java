@@ -345,7 +345,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
 				"log", "zip", "gz", "7z"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		chooser.setDialogTitle(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 
 		int returnVal = chooser.showOpenDialog(Main.getMainFrame());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {

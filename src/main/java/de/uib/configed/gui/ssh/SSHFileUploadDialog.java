@@ -153,8 +153,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jFileChooserLocal.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 
 		jFileChooserLocal.setDialogType(JFileChooser.OPEN_DIALOG);
-		jFileChooserLocal.setDialogTitle(Globals.APPNAME + " "
-				+ Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
+		jFileChooserLocal.setDialogTitle(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
 
 		jButtonFileChooser = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));

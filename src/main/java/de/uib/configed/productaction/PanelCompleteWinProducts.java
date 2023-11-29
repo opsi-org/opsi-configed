@@ -140,7 +140,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserFolder.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("CompleteWinProducts.chooser"));
+		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
 
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);

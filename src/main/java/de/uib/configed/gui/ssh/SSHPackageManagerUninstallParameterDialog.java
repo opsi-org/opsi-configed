@@ -64,8 +64,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
 	public SSHPackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		super(Globals.APPNAME + "  "
-				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
+		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
 
 		this.configedMain = configedMain;
 
@@ -318,9 +317,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	/* This method is called when button 1 is pressed */
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
-				Globals.APPNAME + " "
-						+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
-				true,
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"), true,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonClose") },
 				400, 200);
 

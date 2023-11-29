@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -37,8 +36,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
-					Globals.APPNAME + "  "
-							+ Configed.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
+					Configed.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
 					JOptionPane.OK_OPTION);
 
 			return false;

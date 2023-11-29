@@ -396,9 +396,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		Set<String> nonExistingHostNames = getNonExistingHostNames(clients);
 		if (!nonExistingHostNames.isEmpty()) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.title") + " ("
-							+ Globals.APPNAME + ") ",
-					true, new String[] { Configed.getResourceValue("buttonCancel"), Configed
+					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.title"), true,
+					new String[] { Configed.getResourceValue("buttonCancel"), Configed
 							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
 			StringBuilder message = new StringBuilder();
 			message.append(

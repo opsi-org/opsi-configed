@@ -102,8 +102,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 							Configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
 									+ opsiWorkBenchDirectoryS + " "
 									+ Configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
-							Globals.APPNAME + " "
-									+ Configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
+							Configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 					return returnedOption == JOptionPane.YES_OPTION;
@@ -224,7 +223,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		SwingUtilities.updateComponentTreeUI(chooserPackage);
 
 		chooserPackage.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserPackage.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooser"));
+		chooserPackage.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserServerpath = new JFileChooser();
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -232,8 +231,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserServerpath.setDialogTitle(
-				Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
+		chooserServerpath.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 	}
 
 	// implements NameProducer

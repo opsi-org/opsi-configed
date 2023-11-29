@@ -384,13 +384,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					Logging.info(
 							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
 
-					FTextArea dialog = new FTextArea(ConfigedMain.getLicencesFrame(), Globals.APPNAME + " " + title,
-							true,
-							new String[] {
-									Configed.getResourceValue(
-											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
-									Configed.getResourceValue(
-											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
+					FTextArea dialog = new FTextArea(ConfigedMain.getLicencesFrame(), title, true, new String[] {
+							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
+							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
 							400, 200);
 					dialog.setMessage(info + "\n\n" + option);
 					dialog.setVisible(true);

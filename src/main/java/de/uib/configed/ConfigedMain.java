@@ -973,6 +973,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (persistenceController.getModuleDataService().isWithLocalImagingPD()) {
 			startGroupActionFrame();
 		} else {
+			// TODO Translate
 			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "not activated", true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
@@ -985,6 +986,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ " active " + activatedGroupModel.isActive());
 
 		if (!activatedGroupModel.isActive()) {
+			// TODO translate
 			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "no group selected", true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
 
@@ -4147,7 +4149,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		};
 
 		fEdit.init();
-		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID") + " (" + Globals.APPNAME + ")");
+		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
 		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fEdit.setSingleLine(true);
@@ -4158,7 +4160,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private static void showInformationHostExistsAlready(String clientId) {
 		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
-				Configed.getResourceValue("FGeneralDialog.title.information") + " (" + Globals.APPNAME + ") ", true,
+				Configed.getResourceValue("FGeneralDialog.title.information"), true,
 				new String[] { Configed.getResourceValue("buttonClose") });
 
 		StringBuilder message = new StringBuilder();
@@ -4179,9 +4181,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(mainFrame,
-				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
+				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
 				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") });
 
 		fChangeDepotForClients.setLineWrap(false);
 
@@ -4494,8 +4496,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
 
-			dialogRemoteControl
-					.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 			dialogRemoteControl.setModal(false);
 			dialogRemoteControl.init();
 		}
@@ -4650,10 +4651,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
 				.addComponent(jTextHostname));
 
-		FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
-				Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, null,
-				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+		FTextArea fAskCopyClient = new FTextArea(getMainFrame(), Configed.getResourceValue("MainFrame.jMenuCopyClient"),
+				true, new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
+				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
@@ -4698,9 +4698,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private static boolean ask2OverwriteExistingHost(String host) {
 		FTextArea fAskOverwriteExsitingHost = new FTextArea(getMainFrame(),
-				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
-						+ ") ",
-				true, new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
+				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));

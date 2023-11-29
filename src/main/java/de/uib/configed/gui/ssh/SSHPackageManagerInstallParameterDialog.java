@@ -44,8 +44,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	public SSHPackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
-		super(Globals.APPNAME + "  "
-				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
+		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
 
 		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;

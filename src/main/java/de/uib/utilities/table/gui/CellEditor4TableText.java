@@ -21,7 +21,6 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
 import de.uib.utilities.swing.FEditText;
@@ -144,7 +143,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 		fEdit.setLocation((int) (loc.getX() + rec.getX() + 30), (int) (loc.getY() + rec.getY() + 20));
 
-		fEdit.setTitle(" (" + Globals.APPNAME + ")  '" + table.getColumnName(column) + "'");
+		fEdit.setTitle(table.getColumnName(column));
 
 		currentValue = oldValue;
 		return editorContent;
