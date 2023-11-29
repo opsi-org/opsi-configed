@@ -828,11 +828,6 @@ public class ConfigDataService {
 			if (value != oldValue) {
 				configStateCollection.add(state);
 
-				if (value != null && !((List<Object>) value).contains(null)) {
-					getHostConfigsPD().get(objectId).put(key, value);
-				} else {
-					getHostConfigsPD().get(objectId).remove(key);
-				}
 				// we hope that the update works and directly update the retrievedConfig
 				if (retrievedConfig != null) {
 					retrievedConfig.put(key, value);
