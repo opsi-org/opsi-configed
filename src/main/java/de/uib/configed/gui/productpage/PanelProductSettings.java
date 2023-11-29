@@ -47,7 +47,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -76,7 +75,6 @@ import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
@@ -103,9 +101,8 @@ public class PanelProductSettings extends JSplitPane {
 	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
-	protected JTable tableProducts;
-	private AbstractExportTable exportTable;
-	protected JPanel topPane;
+	private JTable tableProducts;
+	private ProductgroupPanel groupPanel;
 
 	// right pane
 	private ProductInfoPane infoPane;
@@ -144,9 +141,7 @@ public class PanelProductSettings extends JSplitPane {
 	// State reducedTo1stSelection
 	// List reductionList
 
-	private ProductgroupPanel groupPanel;
-
-	protected ConfigedMain configedMain;
+	private ConfigedMain configedMain;
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
@@ -158,26 +153,7 @@ public class PanelProductSettings extends JSplitPane {
 		super.setResizeWeight(1);
 	}
 
-	protected void initTopPane() {
-		if (tableProducts == null) {
-			Logging.error(this, " tableProducts == null ");
-			Main.endApp(Main.NO_ERROR);
-		}
-		topPane = new ProductgroupPanel(this, configedMain, tableProducts);
-		topPane.setVisible(true);
-		groupPanel = (ProductgroupPanel) topPane;
-		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event reloadAction " + ae);
-			reloadAction();
-		});
-
-		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
-			saveAndExecuteAction();
-		});
-	}
-
-	private void init() {
+	private void initTopPane() {
 		tableProducts = new JTable() {
 			@Override
 			public void setValueAt(Object value, int row, int column) {
@@ -188,9 +164,24 @@ public class PanelProductSettings extends JSplitPane {
 				setSelection(new HashSet<>(saveSelectedProducts));
 			}
 		};
+
 		tableProducts.setDragEnabled(true);
 
-		exportTable = new ExporterToCSV(tableProducts);
+		groupPanel = new ProductgroupPanel(this, configedMain, tableProducts);
+		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
+			Logging.info(this, " in top pane we got event reloadAction " + ae);
+			reloadAction();
+		});
+
+		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
+			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			saveAndExecuteAction();
+		});
+
+		groupPanel.setVisible(true);
+	}
+
+	private void init() {
 
 		initTopPane();
 
@@ -279,11 +270,11 @@ public class PanelProductSettings extends JSplitPane {
 		leftPane.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(topPane, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(groupPanel, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
-				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(groupPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
@@ -444,6 +435,7 @@ public class PanelProductSettings extends JSplitPane {
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
 
+		ExporterToCSV exportTable = new ExporterToCSV(tableProducts);
 		exportTable.addMenuItemsTo(popup);
 
 		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
