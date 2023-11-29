@@ -194,7 +194,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			layout.setHorizontalGroup(layout
 					.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 							.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-					.addContainerGap());
+					.addGap(Globals.MIN_GAP_SIZE));
 
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
@@ -202,12 +202,12 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			GroupLayout layout = new GroupLayout(getContentPane());
 			getContentPane().setLayout(layout);
 			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-					.addGroup(layout.createSequentialGroup().addContainerGap()
+					.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 							.addComponent(framingPanel, 100, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addContainerGap())
-					.addGroup(layout.createSequentialGroup().addContainerGap()
+							.addGap(Globals.MIN_GAP_SIZE))
+					.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 							.addComponent(loggingPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-							.addContainerGap()));
+							.addGap(Globals.MIN_GAP_SIZE)));
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 					.addGroup(layout.createSequentialGroup().addContainerGap(20, 20)
 							.addComponent(framingPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

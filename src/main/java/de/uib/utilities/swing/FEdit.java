@@ -145,12 +145,12 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout
-						.createSequentialGroup().addContainerGap().addComponent(framingPanel,
+						.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(framingPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addContainerGap()));
+						.addGap(Globals.MIN_GAP_SIZE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout
-						.createSequentialGroup().addContainerGap().addComponent(framingPanel,
+						.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(framingPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addContainerGap(20, 20)));
 

@@ -261,7 +261,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 				));
 
-		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup().addContainerGap()
+		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
 						titleWindowsSoftware, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT))
 
@@ -352,7 +352,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.PREFERRED_SIZE)
 
 				));
-		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup().addContainerGap()
+		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup()
+				.addGap(Globals.MIN_GAP_SIZE)
 
 				// title height
 				.addGap(Globals.BUTTON_HEIGHT)
@@ -387,7 +388,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-				.addContainerGap());
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		panelLicencepools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), true, 1, false,
@@ -420,7 +421,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addContainerGap());
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -434,19 +435,19 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addComponent(panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						Short.MAX_VALUE));
 
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addComponent(panelInfoWindowsSoftware).addComponent(panelInfoConfigWindowsSoftware))
 				.addComponent(panelRegisteredSoftware, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addContainerGap());
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addContainerGap());
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

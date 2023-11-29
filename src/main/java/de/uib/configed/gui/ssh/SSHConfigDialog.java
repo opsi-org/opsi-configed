@@ -478,7 +478,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 								.addGap(Globals.GAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(jLabelConnectionState,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
-				.addContainerGap());
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

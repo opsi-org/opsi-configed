@@ -353,7 +353,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addContainerGap()
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

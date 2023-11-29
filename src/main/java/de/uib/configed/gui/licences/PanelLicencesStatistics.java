@@ -48,14 +48,15 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addContainerGap()
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(panelStatistics,
 						GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						Short.MAX_VALUE))
-				.addContainerGap());
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(panelStatistics, MIN_VSIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addContainerGap());
+				.addComponent(panelStatistics, MIN_VSIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	public PanelGenEditTable getPanelStatistics() {
