@@ -54,6 +54,7 @@ import javax.swing.table.TableModel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
@@ -264,14 +265,16 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
 		leftPane.setLayout(layoutLeftPane);
 
+		topPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
+
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
+		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public JTable getTable() {

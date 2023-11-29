@@ -598,6 +598,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
+			// TODO why is there this depot?
 			Set<String> extendedSelection = persistenceController.getProductDataService()
 					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
 			Set<String> addedElements = new TreeSet<>(extendedSelection);
