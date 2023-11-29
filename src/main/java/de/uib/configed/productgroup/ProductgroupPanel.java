@@ -478,8 +478,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		panelEdit.setLayout(layoutPanelEdit);
 
 		layoutPanelEdit.setVerticalGroup(layoutPanelEdit.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(labelSave,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(
+						labelSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(1, 1, 2)
 				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
