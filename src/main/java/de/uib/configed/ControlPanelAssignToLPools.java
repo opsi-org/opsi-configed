@@ -374,34 +374,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 					Logging.info(this, "validateWindowsSoftwareKeys, assigned to valNoLicencepool");
 				} else {
-					String info = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned")
-							+ "\n\n" + otherPool;
-					String option = Configed
-							.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.options");
-					String title = Configed
-							.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.title");
-
-					Logging.info(
-							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
-
-					FTextArea dialog = new FTextArea(ConfigedMain.getLicencesFrame(), title, true, new String[] {
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
-							Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
-							400, 200);
-					dialog.setMessage(info + "\n\n" + option);
-					dialog.setVisible(true);
-
-					Logging.info(this, "validateWindowsSoftwareKeys result " + dialog.getResult());
-
-					if (dialog.getResult() == 1) {
-						// we cancel the new selection
-						cancelSelectionKeys.add(key);
-					} else {
-						// or delete the assignment to the licence pool
-						List<String> removeKeys = removeKeysFromOtherLicencePool.computeIfAbsent(otherPool,
-								s -> new ArrayList<>());
-						removeKeys.add(key);
-					}
+					askForAddingKey(key, otherPool, cancelSelectionKeys);
 				}
 			}
 		}
@@ -415,6 +388,33 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		thePanel.getFieldCountAssignedInEditing().setText("" + selKeys.size());
+	}
+
+	private void askForAddingKey(String key, String otherPool, List<String> cancelSelectionKeys) {
+		String info = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned") + "\n\n"
+				+ otherPool;
+		String option = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.options");
+		String title = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.title");
+
+		Logging.info(" software with ident \"" + key + "\" already associated to license pool " + otherPool);
+
+		FTextArea dialog = new FTextArea(ConfigedMain.getLicencesFrame(), title, true,
+				new String[] { Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
+						Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
+				400, 200);
+		dialog.setMessage(info + "\n\n" + option);
+		dialog.setVisible(true);
+
+		Logging.info(this, "validateWindowsSoftwareKeys result " + dialog.getResult());
+
+		if (dialog.getResult() == 1) {
+			// we cancel the new selection
+			cancelSelectionKeys.add(key);
+		} else {
+			// or delete the assignment to the licence pool
+			List<String> removeKeys = removeKeysFromOtherLicencePool.computeIfAbsent(otherPool, s -> new ArrayList<>());
+			removeKeys.add(key);
+		}
 	}
 
 	@Override
