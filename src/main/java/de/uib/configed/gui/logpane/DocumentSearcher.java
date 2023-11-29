@@ -20,7 +20,7 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * A simple class that searches for an expression in a document and highlights
- * occurrences of that word.
+ * occurrences of that expression.
  */
 public class DocumentSearcher {
 	private JTextComponent comp;
@@ -81,7 +81,7 @@ public class DocumentSearcher {
 
 		String content = getShownContent();
 		if (content == null) {
-			Logging.info(this, "No content is displayed. Unable to search for specified string: " + expression);
+			Logging.info(this, "No content is displayed. Unable to search for specified expression: " + expression);
 			return -1;
 		}
 

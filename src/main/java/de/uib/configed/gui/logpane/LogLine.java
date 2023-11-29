@@ -9,18 +9,26 @@ package de.uib.configed.gui.logpane;
 import javax.swing.text.Style;
 
 public class LogLine {
-	private int level;
+	private int lineNumber;
+	private int logLevel;
 	private int typeIndex;
 	private Style style;
+	private String text;
 
-	public LogLine(int level, int typeIndex, Style style) {
-		this.level = level;
+	public LogLine(int lineNumber, int logLevel, int typeIndex, Style style, String text) {
+		this.lineNumber = lineNumber;
+		this.logLevel = logLevel;
 		this.typeIndex = typeIndex;
 		this.style = style;
+		this.text = text;
 	}
 
-	public int getLevel() {
-		return level;
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	public int getLogLevel() {
+		return logLevel;
 	}
 
 	public int getTypeIndex() {
@@ -29,5 +37,9 @@ public class LogLine {
 
 	public Style getStyle() {
 		return style;
+	}
+
+	public String getText() {
+		return text;
 	}
 }

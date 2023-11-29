@@ -559,10 +559,12 @@ public class LogPane extends JPanel implements KeyListener {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> {
 				setCursor(Globals.WAIT_CURSOR);
+				scrollpane.setCursor(Globals.WAIT_CURSOR);
 				jTextPane.setCursor(Globals.WAIT_CURSOR);
 			});
 		} else {
 			setCursor(Globals.WAIT_CURSOR);
+			scrollpane.setCursor(Globals.WAIT_CURSOR);
 			jTextPane.setCursor(Globals.WAIT_CURSOR);
 		}
 		linesToShow += (int) scrollpane.getViewport().getVisibleRect().getHeight();
@@ -585,13 +587,14 @@ public class LogPane extends JPanel implements KeyListener {
 				int i = currentLinePosition;
 				int linesRead = 0;
 				while (linesRead <= linesToRead) {
-					if (showLine(i)) {
+					LogLine line = parser.getParsedLogLine(i);
+					if (showLine(line)) {
 						docLinestartPosition2lineCount.put(document.getLength(), i);
 						lineCount2docLinestartPosition.put(i, document.getLength());
 
-						String no = "(" + i + ")";
-						document.insertStringTruely(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
-								parser.getParsedLogLine(i).getStyle());
+						String lineNumber = "(" + line.getLineNumber() + ")";
+						document.insertStringTruely(document.getLength(),
+								String.format("%-10s", lineNumber) + line.getText() + '\n', line.getStyle());
 						linesRead++;
 					}
 
@@ -604,12 +607,12 @@ public class LogPane extends JPanel implements KeyListener {
 			return null;
 		}
 
-		private boolean showLine(int index) {
+		private boolean showLine(LogLine line) {
 			boolean show = false;
-			if (parser.getParsedLogLine(index).getLevel() <= sliderLevel.getValue()) {
+			if (line.getLogLevel() <= sliderLevel.getValue()) {
 				show = true;
 			}
-			if (show && showTypeRestricted && parser.getParsedLogLine(index).getTypeIndex() != selTypeIndex) {
+			if (show && showTypeRestricted && line.getTypeIndex() != selTypeIndex) {
 				show = false;
 			}
 			return show;
@@ -621,6 +624,7 @@ public class LogPane extends JPanel implements KeyListener {
 			scrollpane.getVerticalScrollBar().setUnitIncrement(20);
 			setCursor(null);
 			jTextPane.setCursor(null);
+			scrollpane.setCursor(null);
 			rebuilding = false;
 		}
 	}

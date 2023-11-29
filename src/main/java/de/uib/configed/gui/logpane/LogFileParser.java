@@ -43,11 +43,11 @@ public class LogFileParser {
 
 		for (int i = 0; i < lines.length; i++) {
 			int levelForLine = getLoglevelForLine(lines[i]);
-			parsedLogLines
-					.add(new LogLine(levelForLine, getTypeIndexForLine(lines[i]), getStyleByLevelNo(levelForLine)));
+			parsedLogLines.add(new LogLine(i, levelForLine, getTypeIndexForLine(lines[i]),
+					getStyleByLevelNo(levelForLine), lines[i]));
 		}
 
-		maxExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLevel()).max()
+		maxExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel()).max()
 				.getAsInt();
 	}
 
