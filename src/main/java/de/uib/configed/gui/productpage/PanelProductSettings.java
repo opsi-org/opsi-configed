@@ -336,8 +336,8 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	public void setSearchFields(List<String> fieldList) {
-		groupPanel.setSearchFields(fieldList);
+	public void updateSearchFields() {
+		groupPanel.updateSearchFields();
 	}
 
 	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {

@@ -14,14 +14,12 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -514,31 +512,23 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchFields(Integer[] cols) {
+		// TODO remove all but first
 		for (int col : cols) {
 			comboSearchFields.addItem(targetModel.getColumnName(col));
 		}
 	}
 
 	public void setSearchFieldsAll() {
+		// TODO remove all but first
 		Logging.debug(this, "setSearchFieldsAll " + targetModel);
-		if (targetModel != null) {
-			Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
+		Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
 
-			for (int i = 0; i < targetModel.getColumnCount(); i++) {
-				String colname = targetModel.getColumnName(i);
-				comboSearchFields.addItem(colname);
-			}
-
-			comboSearchFields.setSelectedIndex(0);
+		for (int i = 0; i < targetModel.getColumnCount(); i++) {
+			String colname = targetModel.getColumnName(i);
+			comboSearchFields.addItem(colname);
 		}
-	}
 
-	public void setSearchFields(List<String> fieldList) {
-		for (String fieldName : fieldList) {
-			if (((DefaultComboBoxModel<String>) comboSearchFields.getModel()).getIndexOf(fieldName) == -1) {
-				comboSearchFields.addItem(fieldName);
-			}
-		}
+		comboSearchFields.setSelectedIndex(0);
 	}
 
 	public void setSearchMode(int a) {

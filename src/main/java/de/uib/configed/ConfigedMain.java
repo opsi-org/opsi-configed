@@ -2826,8 +2826,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
 		mainFrame.getPanelLocalbootProductSettings().setSelection(oldProductSelection);
-		mainFrame.getPanelLocalbootProductSettings()
-				.setSearchFields(InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+		mainFrame.getPanelLocalbootProductSettings().updateSearchFields();
 		setTableColumnWidths(mainFrame.getPanelLocalbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
