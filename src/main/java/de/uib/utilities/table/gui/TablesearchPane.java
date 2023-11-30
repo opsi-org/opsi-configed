@@ -240,9 +240,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * serve graphical filtermark
 	 */
 	public void setFilterMark(boolean b) {
-		if (filtermark.isSelected() == null || filtermark.isSelected() != b) {
-			filtermark.setSelected(b);
-		}
+		filtermark.setSelected(b);
 	}
 
 	/**
@@ -402,9 +400,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
 		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
-		Icon nullIconFilter = Utils.createImageIcon("images/filter_14x14_inwork.png", "");
 
-		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
+		filtermark = new CheckedLabel(selectedIconFilter, unselectedIconFilter, false);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 
