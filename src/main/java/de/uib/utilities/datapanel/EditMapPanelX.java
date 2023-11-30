@@ -69,6 +69,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	private ToolTipManager ttm;
 
+	private Map<String, Object> originalMap;
+
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
@@ -78,6 +80,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			// set for this session to default, without storing the value separately)
 			mapTableModel.addEntry(key, defaultsMap.get(key), false);
+			originalMap.remove(key);
 		}
 
 		@Override
@@ -96,6 +99,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			// set for this session to default, without storing the value separately)
 			mapTableModel.addEntry(key, defaultsMap.get(key), true);
+			originalMap.put(key, defaultsMap.get(key));
 		}
 
 		@Override
@@ -200,6 +204,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
+	}
+
+	public void setOriginalMap(Map<String, Object> originalMap) {
+		this.originalMap = originalMap;
 	}
 
 	private void deleteEntry() {
