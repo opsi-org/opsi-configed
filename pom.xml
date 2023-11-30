@@ -241,16 +241,18 @@
             <version>0.9.3</version>
         </dependency>
 
+        <!-- https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-core/ -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-core</artifactId>
-            <version>3.31</version>
+            <version>3.34</version>
         </dependency>
 
+        <!-- https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-ui/ -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-ui</artifactId>
-            <version>3.31</version>
+            <version>3.34</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
