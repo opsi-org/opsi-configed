@@ -70,6 +70,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private JScrollPane scrollpane;
 
+	private JPanel topPane;
+
 	// we put a JTable on a standard JScrollPane
 	private JTable table;
 
@@ -221,7 +223,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void setupLayout() {
-		JPanel topPane = new JPanel();
+		topPane = new JPanel();
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
@@ -279,6 +281,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	public void setFilterMark(boolean b) {
+		((TablesearchPane) topPane).setFilterMark(b);
 	}
 
 	public JTable getTable() {

@@ -27,11 +27,7 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 	@Override
 	public void setFiltered(boolean b) {
-		if (!filtered) {
-			viewRowfilter = table.getSelectedRows();
-		}
-
-		ConfigedMain.getMainFrame().toggleClientFilterAction();
+		ConfigedMain.getMainFrame().setClientFilterAction(b);
 
 		filtered = b;
 	}

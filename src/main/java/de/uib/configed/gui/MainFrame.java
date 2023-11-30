@@ -2476,6 +2476,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.startSSHControlDialog();
 	}
 
+	public void setClientFilterAction(boolean b) {
+		if (configedMain.isFilterClientList() != b) {
+			toggleClientFilterAction();
+		}
+	}
+
 	public void toggleClientFilterAction() {
 		toggleClientFilterAction(true);
 	}
@@ -2490,6 +2496,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
 		}
+
+		panelClientlist.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void exitAction() {
