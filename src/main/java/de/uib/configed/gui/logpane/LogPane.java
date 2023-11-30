@@ -435,17 +435,17 @@ public class LogPane extends JPanel implements KeyListener {
 
 		@Override
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
+			// Should be empty, because we don't want it to be able to be editable.
 		}
 
 		@Override
 		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
+			// Should be empty, because we don't want it to be able to be editable.
 		}
 
 		@Override
 		public void remove(int offs, int len) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
+			// Should be empty, because we don't want it to be able to be editable.
 		}
 	}
 
@@ -583,7 +583,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private class PartialDocumentBuilder extends SwingWorker<Void, Void> {
 		private int linesToRead;
 		private int lineNumberToSearch;
-		private int previousPosition;
+		private int lineStartPosition;
 		private boolean lineFound;
 
 		public PartialDocumentBuilder(int linesToRead, int lineNumberToSearch) {
@@ -600,7 +600,7 @@ public class LogPane extends JPanel implements KeyListener {
 			} else {
 				while (!lineFound) {
 					readChunkOfFile();
-					findCaretPreviousPosition();
+					findLineStartPosition();
 					linesToRead += (int) scrollpane.getViewport().getVisibleRect().getHeight();
 				}
 			}
@@ -632,9 +632,9 @@ public class LogPane extends JPanel implements KeyListener {
 			}
 		}
 
-		private void findCaretPreviousPosition() {
+		private void findLineStartPosition() {
 			if (lineCount2docLinestartPosition.containsKey(lineNumberToSearch)) {
-				previousPosition = lineCount2docLinestartPosition.get(lineNumberToSearch);
+				lineStartPosition = lineCount2docLinestartPosition.get(lineNumberToSearch);
 				lineFound = true;
 			} else if (!lineCount2docLinestartPosition.isEmpty() && currentLineNumber == lines.length) {
 				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
@@ -644,7 +644,7 @@ public class LogPane extends JPanel implements KeyListener {
 					nextLineNo = linesIterator.next();
 				}
 
-				previousPosition = lineCount2docLinestartPosition.get(nextLineNo);
+				lineStartPosition = lineCount2docLinestartPosition.get(nextLineNo);
 				lineFound = true;
 			} else {
 				Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
@@ -667,7 +667,7 @@ public class LogPane extends JPanel implements KeyListener {
 		public void done() {
 			jTextPane.setDocument(document);
 			if (lineNumberToSearch != 0) {
-				jTextPane.setCaretPosition(previousPosition + 1);
+				jTextPane.setCaretPosition(lineStartPosition + 1);
 				jTextPane.getCaret().setVisible(true);
 				highlighter.removeAllHighlights();
 			}
@@ -828,11 +828,6 @@ public class LogPane extends JPanel implements KeyListener {
 
 		searcher.setHasReachedEnd(currentLineNumber == lines.length);
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
-
-		if (jComboBoxSearch.getSelectedIndex() <= -1) {
-			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
-			jComboBoxSearch.repaint();
-		}
 		if (offset != -1) {
 			try {
 				jTextPane.scrollRectToVisible(jTextPane
@@ -843,6 +838,11 @@ public class LogPane extends JPanel implements KeyListener {
 			} catch (BadLocationException e) {
 				Logging.warning(this, "error with setting the caret in LogPane: " + e);
 			}
+		}
+
+		if (jComboBoxSearch.getSelectedIndex() <= -1) {
+			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
+			jComboBoxSearch.repaint();
 		}
 	}
 
