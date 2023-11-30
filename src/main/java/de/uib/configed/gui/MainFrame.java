@@ -2488,15 +2488,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
 		configedMain.toggleFilterClientList(rebuildClientListTableModel);
+
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
-
-		if (!configedMain.isFilterClientList()) {
-			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter_disabled-32.png", ""));
-		} else {
-			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
-		}
-
+		iconButtonToggleClientFilter.setSelected(configedMain.isFilterClientList());
 		panelClientlist.setFilterMark(configedMain.isFilterClientList());
 	}
 
