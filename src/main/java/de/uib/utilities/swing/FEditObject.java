@@ -194,9 +194,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 			GroupLayout layout = new GroupLayout(getContentPane());
 			this.setLayout(layout);
-			layout.setHorizontalGroup(
-					layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
+					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

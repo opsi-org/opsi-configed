@@ -2126,8 +2126,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		layoutIconPane1
 				.setHorizontalGroup(
-						layoutIconPane1.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
