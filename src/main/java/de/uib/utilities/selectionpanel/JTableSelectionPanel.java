@@ -266,6 +266,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		leftPane.setLayout(layoutLeftPane);
 
 		topPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
+		((TablesearchPane) topPane).setFiltering(true);
+
+		// filter icon inside searchpane
+		((TablesearchPane) topPane).showFilterIcon(true);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
