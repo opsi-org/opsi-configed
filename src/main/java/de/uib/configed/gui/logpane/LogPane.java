@@ -16,6 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -107,7 +108,7 @@ public class LogPane extends JPanel implements KeyListener {
 	protected String[] lines;
 
 	private boolean scrolling;
-	private int currentLinePosition;
+	private int currentLineNumber;
 	private int linesToShow;
 	private boolean rebuilding;
 
@@ -116,7 +117,6 @@ public class LogPane extends JPanel implements KeyListener {
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
 
-		// Set variables
 		Logging.info(this.getClass(), "initializing");
 		title = "";
 		info = "";
@@ -535,13 +535,17 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void initDocument() {
+		initDocument(0);
+	}
+
+	private void initDocument(int lineNo) {
 		document = new ImmutableDefaultStyledDocument(styleContext);
 		jTextPane.setDocument(document);
 		scrollpane.getVerticalScrollBar().setValue(0);
-		currentLinePosition = 0;
+		currentLineNumber = 0;
 		linesToShow = 0;
 		resetViewportSize();
-		buildDocument();
+		buildDocument(lineNo);
 	}
 
 	private void resetViewportSize() {
@@ -551,6 +555,10 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void buildDocument() {
+		buildDocument(0);
+	}
+
+	private void buildDocument(int lineNo) {
 		if (rebuilding) {
 			return;
 		}
@@ -568,43 +576,80 @@ public class LogPane extends JPanel implements KeyListener {
 			jTextPane.setCursor(Globals.WAIT_CURSOR);
 		}
 		linesToShow += (int) scrollpane.getViewport().getVisibleRect().getHeight();
-		PartialDocumentBuilder builder = new PartialDocumentBuilder(linesToShow);
+		PartialDocumentBuilder builder = new PartialDocumentBuilder(linesToShow, lineNo);
 		builder.execute();
 	}
 
 	private class PartialDocumentBuilder extends SwingWorker<Void, Void> {
 		private int linesToRead;
+		private int lineNumberToSearch;
+		private int previousPosition;
+		private boolean lineFound;
 
-		public PartialDocumentBuilder(int linesToRead) {
+		public PartialDocumentBuilder(int linesToRead, int lineNumberToSearch) {
 			this.linesToRead = linesToRead;
+			this.lineNumberToSearch = lineNumberToSearch;
 		}
 
 		@Override
 		protected Void doInBackground() throws Exception {
 			docLinestartPosition2lineCount = new TreeMap<>();
 			lineCount2docLinestartPosition = new TreeMap<>();
-			try {
-				int i = currentLinePosition;
-				int linesRead = 0;
-				while (linesRead <= linesToRead) {
-					LogLine line = parser.getParsedLogLine(i);
-					if (showLine(line)) {
-						docLinestartPosition2lineCount.put(document.getLength(), i);
-						lineCount2docLinestartPosition.put(i, document.getLength());
+			if (lineNumberToSearch == 0) {
+				readChunkOfFile();
+			} else {
+				while (!lineFound) {
+					readChunkOfFile();
+					findCaretPreviousPosition();
+					linesToRead += (int) scrollpane.getViewport().getVisibleRect().getHeight();
+				}
+			}
+			return null;
+		}
 
-						String lineNumber = "(" + line.getLineNumber() + ")";
+		private void readChunkOfFile() {
+			try {
+				int lineNumber = currentLineNumber;
+				int linesRead = 0;
+				while (lineNumber < lines.length && linesRead <= linesToRead) {
+					LogLine line = parser.getParsedLogLine(lineNumber);
+					if (showLine(line)) {
+						docLinestartPosition2lineCount.put(document.getLength(), lineNumber);
+						lineCount2docLinestartPosition.put(lineNumber, document.getLength());
+
+						String lineNumberRepresentation = "(" + line.getLineNumber() + ")";
 						document.insertStringTruely(document.getLength(),
-								String.format("%-10s", lineNumber) + line.getText() + '\n', line.getStyle());
+								String.format("%-10s", lineNumberRepresentation) + line.getText() + '\n',
+								line.getStyle());
 						linesRead++;
 					}
 
-					i++;
-					currentLinePosition = i;
+					lineNumber++;
+					currentLineNumber = lineNumber;
 				}
 			} catch (BadLocationException e) {
 				Logging.warning(this, "BadLocationException thrown in logging: " + e);
 			}
-			return null;
+		}
+
+		private void findCaretPreviousPosition() {
+			if (lineCount2docLinestartPosition.containsKey(lineNumberToSearch)) {
+				previousPosition = lineCount2docLinestartPosition.get(lineNumberToSearch);
+				lineFound = true;
+			} else if (!lineCount2docLinestartPosition.isEmpty() && currentLineNumber == lines.length) {
+				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
+				int nextLineNo = linesIterator.next();
+
+				while (linesIterator.hasNext() && nextLineNo < lineNumberToSearch) {
+					nextLineNo = linesIterator.next();
+				}
+
+				previousPosition = lineCount2docLinestartPosition.get(nextLineNo);
+				lineFound = true;
+			} else {
+				Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
+				lineFound = false;
+			}
 		}
 
 		private boolean showLine(LogLine line) {
@@ -621,11 +666,23 @@ public class LogPane extends JPanel implements KeyListener {
 		@Override
 		public void done() {
 			jTextPane.setDocument(document);
+			if (lineNumberToSearch != 0) {
+				jTextPane.setCaretPosition(previousPosition + 1);
+				jTextPane.getCaret().setVisible(true);
+				highlighter.removeAllHighlights();
+			}
 			scrollpane.getVerticalScrollBar().setUnitIncrement(20);
 			setCursor(null);
 			jTextPane.setCursor(null);
 			scrollpane.setCursor(null);
 			rebuilding = false;
+			try {
+				get();
+			} catch (ExecutionException e) {
+				Logging.warning(this, "Exception encountered while building document: " + e);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -665,14 +722,11 @@ public class LogPane extends JPanel implements KeyListener {
 
 	private void rebuildDocumentWithNewLevel() {
 		int caretPosition = jTextPane.getCaretPosition();
-
 		int startPosition = 0;
 		int oldStartPosition = 0;
-		int offset = 0;
 		Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
 
 		while (startPosition < caretPosition && linestartIterator.hasNext()) {
-			offset = caretPosition - startPosition;
 			oldStartPosition = startPosition;
 			startPosition = linestartIterator.next();
 		}
@@ -682,36 +736,7 @@ public class LogPane extends JPanel implements KeyListener {
 			lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
 		}
 
-		initDocument();
-
-		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
-			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-		} else if (!lineCount2docLinestartPosition.isEmpty()) {
-			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-			int nextLineNo = linesIterator.next();
-
-			while (linesIterator.hasNext() && nextLineNo < lineNo) {
-				nextLineNo = linesIterator.next();
-			}
-
-			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-		} else {
-			Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
-		}
-
-		jTextPane.setCaretPosition(startPosition);
-
-		if (jComboBoxSearch.getSelectedIndex() != -1) {
-			try {
-				jTextPane.scrollRectToVisible(jTextPane
-						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
-				highlighter.removeAllHighlights();
-			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
-			}
-		}
-
-		jTextPane.getCaret().setVisible(true);
+		initDocument(lineNo);
 	}
 
 	private void adaptSlider() {
@@ -796,12 +821,12 @@ public class LogPane extends JPanel implements KeyListener {
 		searcher.setFullContent(String.join(",", lines));
 		searcher.setLastReturnedOffset(jTextPane.getCaretPosition());
 		if (searcher.isLastShownElement() && searcher.getCurrentMatch() != searcher.getTotalMatches()
-				&& currentLinePosition != lines.length) {
+				&& currentLineNumber != lines.length) {
 			scrollpane.getVerticalScrollBar().setUnitIncrement(0);
 			buildDocument();
 		}
 
-		searcher.setHasReachedEnd(currentLinePosition == lines.length);
+		searcher.setHasReachedEnd(currentLineNumber == lines.length);
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
 
 		if (jComboBoxSearch.getSelectedIndex() <= -1) {
@@ -846,7 +871,8 @@ public class LogPane extends JPanel implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
+		/* Not needed */
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
