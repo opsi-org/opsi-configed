@@ -807,45 +807,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
 	}
 
-	public void toggleColumnIPAddress() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-	}
-
-	public void toggleColumnSystemUUID() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-	}
-
-	public void toggleColumnHardwareAddress() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-	}
-
 	public void setColumnSessionInfo(boolean b) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
@@ -874,66 +835,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.getCombinedMenuItemSessionInfoColumn().show(!visible);
 	}
 
-	public void toggleColumnInventoryNumber() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-
-		mainFrame.getCombinedMenuItemInventoryNumberColumn().show(!visible);
-	}
-
-	public void toggleColumnCreated() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL,
-				!visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-
-		mainFrame.getCombinedMenuItemCreatedColumn().show(!visible);
-	}
-
-	public void toggleColumnWANactive() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-
-		mainFrame.getCombinedMenuItemWANactiveColumn().show(!visible);
-	}
-
-	public void toggleColumnUEFIactive() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
-
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-
-		mainFrame.getCombinedMenuItemUefiBootColumn().show(!visible);
-	}
-
 	public void toggleColumnInstallByShutdownActive() {
 		Boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
@@ -954,11 +855,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public void toggleColumnDepot() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
+	public void toggleColumn(String column) {
+		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
+		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
