@@ -26,7 +26,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.terminal.TerminalFrame;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -86,7 +85,7 @@ public class Messagebus implements MessagebusListener {
 				waitForInitialChannelSubscritionEvent(10000)) {
 			connected = true;
 			Logging.notice(this, "Connected to messagebus");
-			makeStandardChannelSubscriptions();
+			sendStandardChannelSubscriptions();
 		}
 		return connected;
 	}
@@ -161,7 +160,7 @@ public class Messagebus implements MessagebusListener {
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 
-	private void makeStandardChannelSubscriptions() {
+	private void sendStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
 		channels.add(WebSocketEvent.HOST_CONNECTED.asChannelEvent());
@@ -173,10 +172,10 @@ public class Messagebus implements MessagebusListener {
 		channels.add(WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.asChannelEvent());
 		channels.add(WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.asChannelEvent());
 
-		makeChannelSubscriptionRequest(channels);
+		sendChannelSubscriptionRequest(channels);
 	}
 
-	private void makeChannelSubscriptionRequest(List<String> channels) {
+	private void sendChannelSubscriptionRequest(List<String> channels) {
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.CHANNEL_SUBSCRIPTION_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
@@ -186,24 +185,14 @@ public class Messagebus implements MessagebusListener {
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("operation", "add");
 		message.put("channels", channels);
-
 		Logging.debug(this, "Sending channel subscription request: " + message.toString());
 		sendMessage(message);
 	}
 
-	public void connectTerminal(TerminalFrame terminal) {
-		connectTerminal(terminal, null);
-	}
-
-	public void connectTerminal(TerminalFrame terminal, String channel) {
+	public void sendTerminalOpenRequest(String channel, int rows, int cols) {
 		String terminalId = UUID.randomUUID().toString();
 
-		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
-
-		terminal.getTerminalWidget().setMessagebus(this);
-		if (!messagebusWebSocket.isListenerRegistered(terminal.getTerminalWidget())) {
-			messagebusWebSocket.registerListener(terminal.getTerminalWidget());
-		}
+		sendChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
@@ -214,17 +203,14 @@ public class Messagebus implements MessagebusListener {
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("terminal_id", terminalId);
-		message.put("cols", terminal.getTerminalWidget().getColumnCount());
-		message.put("rows", terminal.getTerminalWidget().getRowCount());
+		message.put("cols", cols);
+		message.put("rows", rows);
 
 		Logging.debug(this, "Sending terminal open request: " + message.toString());
 		sendMessage(message);
-
-		terminal.getTerminalWidget().lock();
-		terminal.getTerminalWidget().connectWebSocketTty();
 	}
 
-	public void send(ByteBuffer message) {
+	public void sendMessage(ByteBuffer message) {
 		if (isConnected()) {
 			messagebusWebSocket.send(message);
 		} else {
@@ -237,7 +223,7 @@ public class Messagebus implements MessagebusListener {
 			try {
 				ObjectMapper mapper = new MessagePackMapper();
 				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
-				send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
+				sendMessage(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
 			} catch (JsonProcessingException ex) {
 				Logging.warning(this, "Error occurred while processing msgpack: ", ex);
 			}

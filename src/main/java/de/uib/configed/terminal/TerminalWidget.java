@@ -58,32 +58,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		this.terminal = terminal;
 	}
 
-	public void init() {
-		if (settingsProvider == null) {
-			settingsProvider = new TerminalSettingsProvider();
-		}
-
-		setDropTarget(new FileUpload(terminal, this));
-
-		scrollBar = new JScrollBar();
-		getTerminalPanel().init(scrollBar);
-
-		getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
-					increaseFontSize();
-					ignoreKeyEvent = true;
-				} else if (e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
-					decreaseFontSize();
-					ignoreKeyEvent = true;
-				} else {
-					ignoreKeyEvent = false;
-				}
-			}
-		});
-	}
-
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
 	}
@@ -114,6 +88,32 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 	public boolean ignoreKeyEvent() {
 		return ignoreKeyEvent;
+	}
+
+	public void init() {
+		if (settingsProvider == null) {
+			settingsProvider = new TerminalSettingsProvider();
+		}
+
+		setDropTarget(new FileUpload(terminal, this));
+
+		scrollBar = new JScrollBar();
+		getTerminalPanel().init(scrollBar);
+
+		getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
+					increaseFontSize();
+					ignoreKeyEvent = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
+					decreaseFontSize();
+					ignoreKeyEvent = true;
+				} else {
+					ignoreKeyEvent = false;
+				}
+			}
+		});
 	}
 
 	public void lock() {
@@ -181,9 +181,18 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		terminalChannel = null;
 		stop();
 		getTerminal().reset(true);
-		this.sessionChannel = produceSessionChannel(session);
-		messagebus.connectTerminal(terminal, sessionChannel);
+		openSession(session);
 		getTerminal().setCursorVisible(true);
+	}
+
+	public void openSession(String session) {
+		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
+			messagebus.getWebSocket().registerListener(this);
+		}
+		this.sessionChannel = produceSessionChannel(session);
+		messagebus.sendTerminalOpenRequest(sessionChannel, getRowCount(), getColumnCount());
+		lock();
+		connectWebSocketTty();
 	}
 
 	private static String produceSessionChannel(String session) {

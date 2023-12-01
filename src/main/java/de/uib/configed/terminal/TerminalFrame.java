@@ -38,6 +38,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -56,6 +57,11 @@ public final class TerminalFrame {
 	private JPanel southPanel;
 
 	private TerminalSettingsProvider settingsProvider;
+	private Messagebus messagebus;
+
+	public void setMessagebus(Messagebus messagebus) {
+		this.messagebus = messagebus;
+	}
 
 	public TerminalWidget getTerminalWidget() {
 		return widget;
@@ -66,8 +72,8 @@ public final class TerminalFrame {
 			settingsProvider = new TerminalSettingsProvider();
 		}
 		widget = new TerminalWidget(this, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
+		widget.setMessagebus(messagebus);
 		widget.init();
-
 		return widget;
 	}
 
@@ -130,7 +136,6 @@ public final class TerminalFrame {
 		jMenuItemNewWindow.addActionListener((ActionEvent e) -> {
 			TerminalFrame terminal = new TerminalFrame();
 			terminal.display();
-			widget.getMessagebus().connectTerminal(terminal);
 		});
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
@@ -286,6 +291,7 @@ public final class TerminalFrame {
 	public void display() {
 		if (frame == null) {
 			createAndShowGUI();
+			widget.openSession("Configserver");
 		} else {
 			frame.setVisible(true);
 		}

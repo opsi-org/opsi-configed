@@ -1124,8 +1124,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
+			terminal.setMessagebus(configedMain.getMessagebus());
 			terminal.display();
-			configedMain.connectTerminal(terminal);
 		});
 
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
