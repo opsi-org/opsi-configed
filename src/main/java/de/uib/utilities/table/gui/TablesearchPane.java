@@ -511,17 +511,24 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return !disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty();
 	}
 
+	private void retainOnlyAllFieldsItem() {
+		comboSearchFields.removeAllItems();
+		comboSearchFields.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
+	}
+
 	public void setSearchFields(Integer[] cols) {
-		// TODO remove all but first
+		retainOnlyAllFieldsItem();
+
 		for (int col : cols) {
 			comboSearchFields.addItem(targetModel.getColumnName(col));
 		}
 	}
 
 	public void setSearchFieldsAll() {
-		// TODO remove all but first
 		Logging.debug(this, "setSearchFieldsAll " + targetModel);
 		Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
+
+		retainOnlyAllFieldsItem();
 
 		for (int i = 0; i < targetModel.getColumnCount(); i++) {
 			String colname = targetModel.getColumnName(i);

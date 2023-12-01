@@ -399,6 +399,9 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		if (oldSelected != null) {
 			comboSearch.setSelectedItem(oldSelected);
 		}
+
+		// New code
+		((TablesearchPane) topPane).setSearchFieldsAll();
 	}
 
 	public List<String> getSelectedValues() {
