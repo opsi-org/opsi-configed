@@ -161,7 +161,7 @@ public class ControllerHWinfoMultiClients {
 
 		buttonConfigureColumns.addActionListener(this::configureColumns);
 
-		JButton buttonCopySelection = new JButton("", Utils.createImageIcon("images/memorize_selection.png", ""));
+		JButton buttonCopySelection = new JButton(Utils.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCopySelection.setEnabled(false);
 

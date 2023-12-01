@@ -29,7 +29,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -43,8 +42,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -56,21 +53,20 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
-public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener {
+public class JTableSelectionPanel extends JPanel implements KeyListener {
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
 
 	private JScrollPane scrollpane;
 
-	private JPanel topPane;
+	private TablesearchPane searchPane;
 
 	// we put a JTable on a standard JScrollPane
 	private JTable table;
@@ -79,9 +75,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	private ConfigedMain configedMain;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	private CheckedLabel checkmarkSearch;
-
-	private JLabel labelSearch;
 	private JTextField fieldSearch;
 
 	private JButton buttonMarkAll;
@@ -138,22 +131,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 		scrollpane.getViewport().add(table);
 
-		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-
-		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
-
-		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
-		checkmarkSearch.setChangeStateAutonomously(false);
-
-		fieldSearch = new JTextField();
-		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
-		fieldSearch.getCaret().setBlinkRate(0);
-		fieldSearch.getDocument().addDocumentListener(this);
-
 		fieldSearch.addKeyListener(this);
 
 		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.search"));
@@ -182,10 +159,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		fieldSearch.setComponentPopupMenu(searchMenu);
 
 		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
-
-		buttonMarkAll = new JButton(Utils.createImageIcon("images/selection-all.png", ""));
-		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
 		buttonInvertSelection = new JButton(Utils.createImageIcon("images/selection-invert.png", ""));
 		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
@@ -223,68 +196,65 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 	}
 
 	private void setupLayout() {
-		topPane = new JPanel();
-		GroupLayout layoutTopPane = new GroupLayout(topPane);
-		topPane.setLayout(layoutTopPane);
 
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE)
-				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchMode, 100, 200, 300).addGap(Globals.GAP_SIZE));
-
-		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(layoutTopPane.createParallelGroup(Alignment.CENTER)
-
-						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonMarkAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonInvertSelection, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		/*	layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+					.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+					.addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE)
+					.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+							GroupLayout.PREFERRED_SIZE)
+					.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchMode, 100, 200, 300).addGap(Globals.GAP_SIZE));
+		
+			layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+					.addGroup(layoutTopPane.createParallelGroup(Alignment.CENTER)
+		
+							.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(buttonMarkAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(buttonInvertSelection, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(Globals.MIN_GAP_SIZE));*/
 
 		JPanel leftPane = this;
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
 		leftPane.setLayout(layoutLeftPane);
 
-		topPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
-		((TablesearchPane) topPane).setFiltering(true);
+		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
+		searchPane.setFiltering(true);
 
 		// filter icon inside searchpane
-		((TablesearchPane) topPane).showFilterIcon(true);
+		searchPane.showFilterIcon(true);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(searchPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void setFilterMark(boolean b) {
-		((TablesearchPane) topPane).setFilterMark(b);
+		searchPane.setFilterMark(b);
 	}
 
 	public JTable getTable() {
@@ -401,7 +371,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		// New code
-		((TablesearchPane) topPane).setSearchFieldsAll();
+		((TablesearchPane) searchPane).setSearchFieldsAll();
 	}
 
 	public List<String> getSelectedValues() {
@@ -841,34 +811,6 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 				setSelectedRow(0);
 			}
 
-			searchTheRow();
-		}
-	}
-
-	// DocumentListener interface
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			searchOnDocumentChange();
-		}
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			searchOnDocumentChange();
-		}
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-			searchOnDocumentChange();
 		}
 	}
 
