@@ -410,7 +410,7 @@ public class HostInfo {
 	}
 
 	private static int findRow(JTableSelectionPanel selectionPanel, String client) {
-		return selectionPanel.findModelRowFromValue(client, 0);
+		return selectionPanel.findModelRowFromValue(client);
 	}
 
 	public void resetGui() {

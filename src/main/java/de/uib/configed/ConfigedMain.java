@@ -816,7 +816,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 	}
 
@@ -829,7 +829,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 	}
 
@@ -842,7 +842,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 	}
 
@@ -861,7 +861,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 	}
 
@@ -883,7 +883,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 
 		mainFrame.getCombinedMenuItemInventoryNumberColumn().show(!visible);
@@ -898,7 +898,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 
 		mainFrame.getCombinedMenuItemCreatedColumn().show(!visible);
@@ -913,7 +913,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 
 		mainFrame.getCombinedMenuItemWANactiveColumn().show(!visible);
@@ -928,7 +928,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 
 		mainFrame.getCombinedMenuItemUefiBootColumn().show(!visible);
@@ -947,7 +947,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			setRebuiltClientListTableModel(false);
 			selectionPanel.initSortKeys();
 			if (getSelectedClients().length > 0) {
-				selectionPanel.moveToValue(getSelectedClients()[0], 0);
+				selectionPanel.moveToValue(getSelectedClients()[0]);
 			}
 
 			mainFrame.getCombinedMenuItemInstallByShutdownColumn().show(!visible);
@@ -963,7 +963,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
 
 		mainFrame.getCombinedMenuItemDepotColumn().show(!visible);

@@ -292,7 +292,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 
 		if (!valuesSet.isEmpty()) {
 			Object valueToFind = valuesSet.iterator().next();
-			moveToValue(valueToFind, 0);
+			moveToValue(valueToFind);
 		}
 
 		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
@@ -383,7 +383,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		}
 	}
 
-	public int findModelRowFromValue(Object value, int col) {
+	public int findModelRowFromValue(Object value) {
 		int result = -1;
 
 		if (value == null) {
@@ -394,7 +394,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		int row = 0;
 
 		while (!found && row < getTableModel().getRowCount()) {
-			Object compareValue = getTableModel().getValueAt(row, col);
+			Object compareValue = getTableModel().getValueAt(row, 0);
 
 			String compareVal = compareValue.toString();
 			String val = value.toString();
@@ -423,20 +423,16 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		return result;
 	}
 
-	private int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
-			TablesearchPane.SearchMode searchMode) {
-		Logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "
-				+ startviewrow + ", " + value + ", " + colIndices + ", " + searchMode);
+	// TODO Should be refactored, since second argument always has same value
+	private int findViewRowFromValue(Object value, TablesearchPane.SearchMode searchMode) {
+		Logging.info(this,
+				"findViewRowFromValue(int startviewrow, Object value, searchMode: " + value + ", " + ", " + searchMode);
 
 		if (value == null) {
 			return -1;
 		}
 
 		int viewrow = 0;
-
-		if (startviewrow > 0) {
-			viewrow = startviewrow;
-		}
 
 		// describe search parameters
 
@@ -462,11 +458,8 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
-			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
+			for (int j = 1; j < getTableModel().getColumnCount(); j++) {
 				// we dont compare all values (comparing all values is default)
-				if (colIndices != null && !colIndices.contains(j)) {
-					continue;
-				}
 
 				Object compareValue = getTableModel().getValueAt(table.convertRowIndexToModel(viewrow),
 						table.convertColumnIndexToModel(j));
@@ -526,12 +519,8 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		return false;
 	}
 
-	public boolean moveToValue(Object value, int col) {
-		Set<Integer> cols = new HashSet<>();
-		cols.add(col);
-
-		// TODO remove unused parameters
-		int viewrow = findViewRowFromValue(0, value, cols, searchMode);
+	public boolean moveToValue(Object value) {
+		int viewrow = findViewRowFromValue(value, searchMode);
 
 		scrollRowToVisible(viewrow);
 
