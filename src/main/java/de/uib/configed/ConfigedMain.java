@@ -2900,6 +2900,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.getPanelNetbootProductSettings().setGroupsData(productGroups, productGroupMembers);
 		mainFrame.getPanelNetbootProductSettings().reduceToSet(savedFilter);
 		mainFrame.getPanelNetbootProductSettings().setSelection(oldProductSelection);
+		mainFrame.getPanelNetbootProductSettings().updateSearchFields();
 		setTableColumnWidths(mainFrame.getPanelNetbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
