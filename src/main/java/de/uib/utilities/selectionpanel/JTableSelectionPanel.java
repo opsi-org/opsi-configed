@@ -7,7 +7,6 @@
 package de.uib.utilities.selectionpanel;
 
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -16,28 +15,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
@@ -53,7 +44,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
@@ -75,20 +65,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 	private ConfigedMain configedMain;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	private JTextField fieldSearch;
-
-	private JButton buttonMarkAll;
-	private JButton buttonInvertSelection;
-	private JComboBox<String> comboSearch;
-
-	private JLabel labelSearchMode;
-	private JComboBoxToolTip comboSearchMode;
-
 	private TablesearchPane.SearchMode searchMode;
-
-	private int foundrow = -1;
-
-	private int lastCountOfSearchWords;
 
 	public JTableSelectionPanel(ConfigedMain configedMain) {
 		super();
@@ -127,121 +104,20 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 
 		addListSelectionListener(configedMain);
 
-		table.addKeyListener(this);
-
-		scrollpane.getViewport().add(table);
-
-		fieldSearch.addKeyListener(this);
-
-		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow());
-
-		JMenuItem popupSearchNext = new JMenuItem(
-				Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
-		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
-
-		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
-		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
-
-		JMenuItem popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener(actionEvent -> markAll());
-
-		JMenuItem popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
-		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
-
-		JPopupMenu searchMenu = new JPopupMenu();
-		searchMenu.add(popupSearch);
-		searchMenu.add(popupSearchNext);
-		searchMenu.add(popupNewSearch);
-		searchMenu.add(popupMarkHits);
-		searchMenu.add(popupEmptySearchfield);
-
-		fieldSearch.setComponentPopupMenu(searchMenu);
-
-		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
-
-		buttonInvertSelection = new JButton(Utils.createImageIcon("images/selection-invert.png", ""));
-		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
-		buttonInvertSelection.addActionListener((ActionEvent e) -> configedMain.invertClientselection());
-
-		labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
-
-		comboSearchMode = new JComboBoxToolTip();
-
-		Map<String, String> tooltipsMap = new LinkedHashMap<>();
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
-				Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
-
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string"),
-				Configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string.tooltip"));
-
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.starttext"),
-				Configed.getResourceValue("SearchPane.SearchMode.starttext.tooltip"));
-
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.regex"),
-				Configed.getResourceValue("SearchPane.SearchMode.regex.tooltip"));
-
-		Logging.info(this, " comboSearchMode tooltipsMap " + tooltipsMap);
-
-		comboSearchMode.setValues(tooltipsMap);
-		comboSearchMode.setSelectedIndex(searchMode.ordinal());
-
-		Logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
-
-		comboSearchMode.setPreferredSize(Globals.BUTTON_DIMENSION);
-
-		comboSearch = new JComboBox<>(
-				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
-		comboSearch.setPreferredSize(Globals.BUTTON_DIMENSION);
-	}
-
-	private void setupLayout() {
-
-		/*	layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-					.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE)
-					.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchMode, 100, 200, 300).addGap(Globals.GAP_SIZE));
-		
-			layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-					.addGroup(layoutTopPane.createParallelGroup(Alignment.CENTER)
-		
-							.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(buttonMarkAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(buttonInvertSelection, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.MIN_GAP_SIZE));*/
-
-		JPanel leftPane = this;
-		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
-		leftPane.setLayout(layoutLeftPane);
-
 		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
 		searchPane.setFiltering(true);
 
 		// filter icon inside searchpane
 		searchPane.showFilterIcon(true);
+		table.addKeyListener(searchPane);
+		table.addKeyListener(this);
+
+		scrollpane.getViewport().add(table);
+	}
+
+	private void setupLayout() {
+		GroupLayout layoutLeftPane = new GroupLayout(this);
+		this.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(searchPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -339,39 +215,9 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		return result;
 	}
 
-	public NavigableSet<String> getInvertedSet() {
-		TreeSet<String> result = new TreeSet<>();
-
-		for (int i = 0; i < table.getRowCount(); i++) {
-			if (!selectionmodel.isSelectedIndex(i)) {
-				result.add((String) table.getValueAt(i, 0));
-			}
-		}
-
-		return result;
-	}
-
 	public void initColumnNames() {
-		String oldSelected = (String) comboSearch.getSelectedItem();
-		List<String> comboSearchItems = new ArrayList<>();
-		comboSearchItems.add(Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
-
-		Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
-
-		for (int j = 0; j < table.getColumnCount(); j++) {
-			Logging.info(this, "initColumnName col " + j);
-			Logging.info(this, "initColumnName name  " + table.getColumnName(j));
-			comboSearchItems.add(table.getColumnName(j));
-		}
-
-		comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
-
-		if (oldSelected != null) {
-			comboSearch.setSelectedItem(oldSelected);
-		}
-
 		// New code
-		((TablesearchPane) searchPane).setSearchFieldsAll();
+		searchPane.setSearchFieldsAll();
 	}
 
 	public List<String> getSelectedValues() {
@@ -566,10 +412,6 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		return result;
 	}
 
-	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
-		return findViewRowFromValue(startviewrow, value, colIndices, searchMode);
-	}
-
 	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
 		String[] splitted = sPlusPattern.split(line);
@@ -617,7 +459,6 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		String valLower = val.toLowerCase(Locale.ROOT);
 
 		List<String> alternativeWords = getWords(valLower);
-		lastCountOfSearchWords = alternativeWords.size();
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
@@ -688,7 +529,9 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 	public boolean moveToValue(Object value, int col) {
 		Set<Integer> cols = new HashSet<>();
 		cols.add(col);
-		int viewrow = findViewRowFromValue(0, value, cols);
+
+		// TODO remove unused parameters
+		int viewrow = findViewRowFromValue(0, value, cols, searchMode);
 
 		scrollRowToVisible(viewrow);
 
@@ -700,143 +543,13 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		table.scrollRectToVisible(scrollTo);
 	}
 
-	public void addSelectedRow(int row) {
-		if (table.getRowCount() == 0) {
-			return;
-		}
-
-		table.addRowSelectionInterval(row, row);
-
-		scrollRowToVisible(row);
-	}
-
-	public void setSelectedRow(int row) {
-		if (table.getRowCount() == 0) {
-			return;
-		}
-
-		if (row == -1) {
-			table.clearSelection();
-			return;
-		}
-
-		table.setRowSelectionInterval(row, row);
-
-		scrollRowToVisible(row);
-	}
-
-	private void searchTheNextRow() {
-		searchTheNextRow(false);
-	}
-
-	private void markAll() {
-		table.clearSelection();
-		searchTheRow(0);
-		int startFoundrow = foundrow;
-
-		foundrow = foundrow + 1;
-		while (foundrow > startFoundrow) {
-			// adding the next row to selection
-			searchTheNextRow(true);
-		}
-	}
-
-	private void searchTheNextRow(boolean addSelection) {
-		int startrow = 0;
-		if (table.getSelectedRow() >= 0) {
-			startrow = table.getSelectedRows()[table.getSelectedRows().length - 1] + 1;
-		}
-
-		if (startrow >= table.getRowCount()) {
-			startrow = 0;
-		}
-
-		searchTheRow(startrow, addSelection);
-
-		if (foundrow == -1) {
-			searchTheRow(0, addSelection);
-		}
-	}
-
-	private void searchTheRow() {
-		searchTheRow(table.getSelectedRow());
-	}
-
-	private void searchTheRow(int startrow) {
-		searchTheRow(startrow, false);
-	}
-
-	private void searchTheRow(int startrow, boolean addSelection) {
-		Set<Integer> selectedCols = null;
-
-		if (comboSearch.getSelectedIndex() > 0) {
-			selectedCols = new HashSet<>();
-			selectedCols.add(getTableModel().findColumn((String) comboSearch.getSelectedItem()));
-		}
-
-		switch (comboSearchMode.getSelectedIndex()) {
-		case 1:
-			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
-			break;
-		case 2:
-			searchMode = TablesearchPane.SearchMode.START_TEXT_SEARCHING;
-			break;
-		case 3:
-			searchMode = TablesearchPane.SearchMode.REGEX_SEARCHING;
-			break;
-		default:
-			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
-			break;
-		}
-
-		foundrow = findViewRowFromValue(startrow, fieldSearch.getText(), selectedCols, searchMode);
-
-		if (foundrow > -1) {
-			if (addSelection) {
-				addSelectedRow(foundrow);
-			} else {
-				setSelectedRow(foundrow);
-			}
-		}
-	}
-
-	private void searchOnDocumentChange() {
-		if (fieldSearch.getText().isEmpty()) {
-			setSelectedRow(0);
-			lastCountOfSearchWords = 0;
-		} else {
-			if (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-					&& getWords(fieldSearch.getText()).size() > lastCountOfSearchWords) {
-				// when a new search word is added instead of extending one
-				setSelectedRow(0);
-			}
-
-		}
-	}
-
 	protected void keyPressedOnTable(KeyEvent e) {
 		/* for overwriting in subclass */}
 
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!(e.getSource() instanceof JTextField)) {
-			keyPressedOnTable(e);
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!fieldSearch.getText().isEmpty()) {
-				markAll();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!fieldSearch.getText().isEmpty()) {
-				searchTheNextRow();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
-			configedMain.invertClientselection();
-		} else {
-			// Do nothing on other keyPress events
-		}
+		keyPressedOnTable(e);
 	}
 
 	@Override

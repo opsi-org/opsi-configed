@@ -1948,30 +1948,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setFilterClientList(!filterClientList, rebuildClientListTableModel);
 	}
 
-	public void invertClientselection() {
-		selectionPanel.removeListSelectionListener(this);
-		boolean oldFilterClientList = filterClientList;
-		if (filterClientList) {
-			toggleFilterClientList();
-		}
-
-		Logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
-		List<String> selectedValues = new ArrayList<>(selectionPanel.getInvertedSet());
-
-		String[] selected = selectedValues.toArray(new String[0]);
-
-		Logging.info(this, "new selection " + Arrays.toString(selected));
-
-		selectionPanel.setSelectedValues(selected);
-		setSelectedClientsArray(selected);
-
-		if (oldFilterClientList) {
-			toggleFilterClientList();
-		}
-
-		selectionPanel.addListSelectionListener(this);
-	}
-
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 

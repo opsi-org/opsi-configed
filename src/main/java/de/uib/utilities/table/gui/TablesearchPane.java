@@ -84,7 +84,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private JMenuItem popupEmptySearchfield;
 
 	public enum SearchMode {
-		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
+		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, REGEX_SEARCHING
 	}
 
 	private boolean withRegEx = true;
@@ -1035,6 +1035,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
+		Logging.devel("TablesearchPane " + e);
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			markAll();
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
