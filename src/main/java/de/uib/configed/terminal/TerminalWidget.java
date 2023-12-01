@@ -116,7 +116,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		});
 	}
 
-	public void lock() {
+	private void lock() {
 		try {
 			locker = new CountDownLatch(1);
 			if (locker.await(DEFAULT_TIME_TO_BLOCK_IN_MS, TimeUnit.MILLISECONDS)) {
@@ -130,7 +130,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		}
 	}
 
-	public void unlock() {
+	private void unlock() {
 		locker.countDown();
 	}
 
@@ -152,7 +152,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		setFontSize((int) (((double) settingsProvider.getTerminalFontSize() + 1) / 1.1));
 	}
 
-	public void resizeTerminal() {
+	private void resizeTerminal() {
 		if (wasTerminalScreenCleared()) {
 			resetCursorAfterClearingTerminalScreen();
 		}
@@ -204,7 +204,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		return depotNames.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 
-	public void connectWebSocketTty() {
+	private void connectWebSocketTty() {
 		TtyConnector connector = new WebSocketTtyConnector(this, new WebSocketOutputStream(messagebus.getWebSocket()),
 				webSocketInputStream);
 		setTtyConnector(connector);

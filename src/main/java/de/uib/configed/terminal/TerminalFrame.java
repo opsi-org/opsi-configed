@@ -63,10 +63,6 @@ public final class TerminalFrame {
 		this.messagebus = messagebus;
 	}
 
-	public TerminalWidget getTerminalWidget() {
-		return widget;
-	}
-
 	private JediTermWidget createTerminalWidget() {
 		if (settingsProvider == null) {
 			settingsProvider = new TerminalSettingsProvider();
