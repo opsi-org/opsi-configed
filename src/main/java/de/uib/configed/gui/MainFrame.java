@@ -1944,25 +1944,25 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE));
 
-		jButtonServerConfiguration = new JButton("", Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
+		jButtonServerConfiguration = new JButton(Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
 		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
 		jButtonServerConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
-		jButtonDepotsConfiguration = new JButton("", Utils.createImageIcon("images/opsidepots_deselected.png", ""));
+		jButtonDepotsConfiguration = new JButton(Utils.createImageIcon("images/opsidepots_deselected.png", ""));
 		jButtonDepotsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsidepots.png", ""));
 		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
-		jButtonClientsConfiguration = new JButton("", Utils.createImageIcon("images/opsiclients_deselected.png", ""));
+		jButtonClientsConfiguration = new JButton(Utils.createImageIcon("images/opsiclients_deselected.png", ""));
 		jButtonClientsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiclients.png", ""));
 		jButtonClientsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
 
-		jButtonLicences = new JButton("", Utils.createImageIcon("images/licences_deselected.png", ""));
+		jButtonLicences = new JButton(Utils.createImageIcon("images/licences_deselected.png", ""));
 		jButtonLicences.setEnabled(false);
 		jButtonLicences.setSelectedIcon(Utils.createImageIcon("images/licences.png", ""));
 		jButtonLicences.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
@@ -1974,7 +1974,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 		jButtonLicences.addActionListener(event -> configedMain.handleLicencesManagementRequest());
 
-		JButton jButtonWorkOnGroups = new JButton("", Utils.createImageIcon("images/group_all_unselected_40.png", ""));
+		JButton jButtonWorkOnGroups = new JButton(Utils.createImageIcon("images/group_all_unselected_40.png", ""));
 		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
@@ -1983,7 +1983,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jButtonWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
-		JButton jButtonWorkOnProducts = new JButton("", Utils.createImageIcon("images/packagebutton.png", ""));
+		JButton jButtonWorkOnProducts = new JButton(Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setSelectedIcon(Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
@@ -1991,7 +1991,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jButtonWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
 
-		JButton jButtonDashboard = new JButton("", Utils.createImageIcon("images/dash_unselected.png", ""));
+		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_unselected.png", ""));
 		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
@@ -2010,16 +2010,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
-				jButtonOpsiLicenses = new JButton("",
-						Utils.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses-error-small.png", ""));
 				break;
 			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				jButtonOpsiLicenses = new JButton("",
-						Utils.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses-warning-small.png", ""));
 				break;
 
 			case LicensingInfoMap.STATE_OKAY:
-				jButtonOpsiLicenses = new JButton("", Utils.createImageIcon("images/opsi-licenses.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses.png", ""));
 				break;
 
 			default:
@@ -2027,7 +2025,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				break;
 			}
 		} else {
-			jButtonOpsiLicenses = new JButton("", Utils.createImageIcon("images/opsi-licenses.png", ""));
+			jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses.png", ""));
 		}
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);

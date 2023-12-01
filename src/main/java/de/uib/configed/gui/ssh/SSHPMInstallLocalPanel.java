@@ -61,7 +61,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		jFileChooser.setFileFilter(filter);
 
-		jButtonFileChooser = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		jButtonFileChooser.setToolTipText(
