@@ -254,7 +254,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		fieldOpsiPackageName.setEditable(true);
 		fieldOpsiPackageName.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserPackage = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserPackage = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserPackage.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
@@ -264,14 +264,17 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
 		fieldServerPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserServerpath = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
-
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		buttonCallExecute = new JButton("", Utils.createImageIcon("images/installpackage.png", ""));
+		if (isWindows) {
+			buttonCallChooserServerpath.setEnabled(false);
+		}
+
+		buttonCallExecute = new JButton(Utils.createImageIcon("images/installpackage.png", ""));
 
 		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/installpackage.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
@@ -292,13 +295,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		JLabel serverPathLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.serverpath"));
 
-		if (isWindows) {
-			buttonCallChooserServerpath.setEnabled(false);
-		}
-
-		JPanel panel = this;
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		GroupLayout layout = new GroupLayout(this);
+		this.setLayout(layout);
 
 		layout.setVerticalGroup(
 				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 4)
@@ -316,11 +314,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(serverLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
 								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-
-						).addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
-								Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+										Globals.LINE_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(panelMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(serverPathLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
@@ -331,8 +327,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										Globals.LINE_HEIGHT))
 
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-								buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2));
 
 		layout.setHorizontalGroup(
@@ -361,8 +356,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
-						.addGroup(layout.createSequentialGroup().addComponent(panelMountShare,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 
 						.addGroup(
 								layout.createSequentialGroup().addGap(Globals.HFIRST_GAP)

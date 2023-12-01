@@ -95,14 +95,14 @@ public class DepotListPresenter extends JPanel {
 			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
 		}
 
-		buttonSelectDepotsWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
+		buttonSelectDepotsWithEqualProperties = new JButton(Utils.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		Utils.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
 		buttonSelectDepotsWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectDepotsAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
+		buttonSelectDepotsAll = new JButton(Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectDepotsAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 		Utils.formatButtonSmallText(buttonSelectDepotsAll);
 		buttonSelectDepotsAll.addActionListener(event -> depotslist.selectAll());

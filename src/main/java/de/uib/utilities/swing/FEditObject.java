@@ -30,6 +30,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -102,6 +103,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
 		loggingPanel = new JPanel(new BorderLayout());
+		loggingPanel.setBorder(new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+				Globals.MIN_GAP_SIZE));
 		loggingPanel.setVisible(false);
 
 		loggingArea = new JTextArea();
@@ -189,12 +192,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			splitPane.setTopComponent(framingPanel);
 			splitPane.setBottomComponent(loggingPanel);
 
-			GroupLayout layout = new GroupLayout(this);
+			GroupLayout layout = new GroupLayout(getContentPane());
 			this.setLayout(layout);
-			layout.setHorizontalGroup(layout
-					.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-					.addGap(Globals.MIN_GAP_SIZE));
+			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
+					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
 					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
