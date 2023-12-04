@@ -153,8 +153,9 @@ public final class TerminalFrame implements MessagebusListener {
 
 	@SuppressWarnings({ "java:S2325" })
 	public void openNewWindow() {
-		TerminalFrame terminal = new TerminalFrame();
-		terminal.display();
+		TerminalFrame terminalFrame = new TerminalFrame();
+		terminalFrame.setMessagebus(messagebus);
+		terminalFrame.display();
 	}
 
 	public void openNewTab() {
