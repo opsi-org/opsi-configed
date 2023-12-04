@@ -127,6 +127,9 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				} else if (e.getKeyCode() == KeyEvent.VK_T && e.isControlDown() && e.isShiftDown()) {
 					ignoreKeyEvent = true;
 					terminal.openNewTab();
+				} else if (e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && e.isShiftDown()) {
+					ignoreKeyEvent = true;
+					terminal.displaySessionsDialog();
 				} else {
 					ignoreKeyEvent = false;
 				}

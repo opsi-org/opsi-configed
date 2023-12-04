@@ -129,6 +129,8 @@ public final class TerminalFrame implements MessagebusListener {
 		jMenuItemNewTab.addActionListener((ActionEvent e) -> openNewTab());
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
+		jMenuItemSession.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
@@ -163,7 +165,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.openSessionOnSelectedTab("Configserver");
 	}
 
-	private void displaySessionsDialog() {
+	public void displaySessionsDialog() {
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
 				500, 300);
