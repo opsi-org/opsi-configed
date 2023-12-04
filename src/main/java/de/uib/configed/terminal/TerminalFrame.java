@@ -48,8 +48,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public final class TerminalFrame implements MessagebusListener {
-	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
-
 	private JFrame frame;
 	private JProgressBar fileUploadProgressBar;
 	private JLabel uploadedFilesLabel;
@@ -101,7 +99,7 @@ public final class TerminalFrame implements MessagebusListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				tabbedPane.removeAllTerminalTabs();
-				frame.setVisible(false);
+				close();
 			}
 
 			@Override
@@ -314,7 +312,7 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	private static String getTitleFromSessionChannel(String sessionChannel) {
-		return sessionChannel == null || CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
+		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
 				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
 				: sessionChannel;
 	}
