@@ -65,8 +65,6 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 	private ConfigedMain configedMain;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	private TablesearchPane.SearchMode searchMode;
-
 	protected AbstractJTableSelectionPanel(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
@@ -75,8 +73,6 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 	}
 
 	private void initComponents() {
-		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
-
 		scrollpane = new JScrollPane();
 
 		table = new JTable();
@@ -423,10 +419,8 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 		return result;
 	}
 
-	// TODO Should be refactored, since second argument always has same value
-	private int findViewRowFromValue(Object value, TablesearchPane.SearchMode searchMode) {
-		Logging.info(this,
-				"findViewRowFromValue(int startviewrow, Object value, searchMode: " + value + ", " + ", " + searchMode);
+	private int findViewRowFromValue(Object value) {
+		Logging.info(this, "findViewRowFromValue, value " + value);
 
 		if (value == null) {
 			return -1;
@@ -434,23 +428,7 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 
 		int viewrow = 0;
 
-		// describe search parameters
-
-		boolean fulltext = searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
-		// with another data configuration, it could be combined with regex
-
 		String val = value.toString();
-
-		// get pattern for regex search mode if needed
-		Pattern pattern = null;
-		if (searchMode == TablesearchPane.SearchMode.REGEX_SEARCHING) {
-			if (fulltext) {
-				val = ".*" + val + ".*";
-			}
-
-			pattern = Pattern.compile(val);
-		}
 
 		String valLower = val.toLowerCase(Locale.ROOT);
 
@@ -458,43 +436,19 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
-			for (int j = 1; j < getTableModel().getColumnCount(); j++) {
+			for (int j = 1; j < getTableModel().getColumnCount() && !found; j++) {
 				// we dont compare all values (comparing all values is default)
 
 				Object compareValue = getTableModel().getValueAt(table.convertRowIndexToModel(viewrow),
 						table.convertColumnIndexToModel(j));
 
 				if (compareValue == null) {
-					found = val == null || val.isEmpty();
+					found = val.isEmpty();
+				} else if (fullTextSearchingWithAlternatives(alternativeWords,
+						compareValue.toString().toLowerCase(Locale.ROOT))) {
+					found = true;
 				} else {
-					String compareVal = compareValue.toString().toLowerCase(Locale.ROOT);
-
-					switch (searchMode) {
-					case REGEX_SEARCHING:
-
-						if (pattern != null) {
-							found = pattern.matcher(compareVal).matches();
-						}
-
-						break;
-
-					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
-						if (fullTextSearchingWithAlternatives(alternativeWords, compareVal)) {
-							found = true;
-						}
-						break;
-
-					case FULL_TEXT_SEARCHING_ONE_STRING:
-						found = compareVal.indexOf(valLower) >= 0;
-						break;
-
-					default:
-						found = compareVal.startsWith(valLower);
-					}
-				}
-
-				if (found) {
-					break;
+					// leave found false, value not found
 				}
 			}
 
@@ -519,8 +473,9 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 		return false;
 	}
 
+	// TODO refactor, since always called with clientId
 	public boolean moveToValue(Object value) {
-		int viewrow = findViewRowFromValue(value, searchMode);
+		int viewrow = findViewRowFromValue(value);
 
 		scrollRowToVisible(viewrow);
 
