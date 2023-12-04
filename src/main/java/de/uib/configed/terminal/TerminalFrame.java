@@ -126,9 +126,7 @@ public final class TerminalFrame implements MessagebusListener {
 			terminal.display();
 		});
 		JMenuItem jMenuItemNewTab = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewTab"));
-		jMenuItemNewTab.addActionListener((ActionEvent e) -> {
-			tabbedPane.addTerminalTab("Configserver");
-		});
+		jMenuItemNewTab.addActionListener((ActionEvent e) -> tabbedPane.addTerminalTab("Configserver"));
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
@@ -321,6 +319,11 @@ public final class TerminalFrame implements MessagebusListener {
 				: sessionChannel;
 	}
 
+	public void close() {
+		frame.dispose();
+		messagebus.getWebSocket().unregisterListener(this);
+	}
+
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
 		// Not required to implement.
@@ -328,8 +331,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		frame.dispose();
-		messagebus.getWebSocket().unregisterListener(this);
+		close();
 	}
 
 	@Override
@@ -340,7 +342,7 @@ public final class TerminalFrame implements MessagebusListener {
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
 		if (tabbedPane.getTabCount() == 0) {
-			frame.dispose();
+			close();
 		}
 
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
@@ -350,8 +352,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 		String type = (String) message.get("type");
 		if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type) && tabbedPane.getTabCount() == 1) {
-			frame.dispose();
-			messagebus.getWebSocket().unregisterListener(this);
+			close();
 		}
 	}
 }

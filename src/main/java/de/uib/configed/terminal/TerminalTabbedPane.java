@@ -20,6 +20,7 @@ import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.AbstractClosableTabComponent;
 
 public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
@@ -52,7 +53,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 			if (isClosingEvent) {
 				return;
 			}
-			TerminalWidget widget = (TerminalWidget) jTabbedPane.getSelectedComponent();
+			TerminalWidget widget = getSelectedTerminalWidget();
 			terminalFrame.changeTitle();
 			if (widget != null) {
 				jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
@@ -71,10 +72,23 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	public void addTerminalTab(String title) {
 		TerminalWidget widget = createTerminalWidget();
 		jTabbedPane.addTab("", widget);
-		jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0);
+		jTabbedPane.setSelectedIndex(getTabIndex());
 		widget.openSession(title);
-		jTabbedPane.setTitleAt(jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0,
-				getTitleFromSessionChannel(widget.getSessionChannel()));
+		AbstractClosableTabComponent closableTabComponent = new AbstractClosableTabComponent(jTabbedPane) {
+			@Override
+			public void close() {
+				removeSelectedTerminalTab();
+				if (getTabCount() == 0) {
+					terminalFrame.close();
+				}
+			}
+		};
+		jTabbedPane.setTabComponentAt(getTabIndex(), closableTabComponent);
+		jTabbedPane.setTitleAt(getTabIndex(), getTitleFromSessionChannel(widget.getSessionChannel()));
+	}
+
+	private int getTabIndex() {
+		return jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0;
 	}
 
 	public void removeSelectedTerminalTab() {
