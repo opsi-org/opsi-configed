@@ -23,10 +23,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.AbstractClosableTabComponent;
 
 public class TerminalTabbedPane extends JPanel implements MessagebusListener {
-	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
-	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
-	private static final int DEFAULT_TERMINAL_ROWS = 24;
-
 	private JTabbedPane jTabbedPane;
 	private TerminalFrame terminalFrame;
 	private Messagebus messagebus;
@@ -77,7 +73,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		AbstractClosableTabComponent closableTabComponent = new AbstractClosableTabComponent(jTabbedPane) {
 			@Override
 			public void close() {
-				removeSelectedTerminalTab();
+				removeTerminalTab(jTabbedPane.indexOfTabComponent(this));
 				if (getTabCount() == 0) {
 					terminalFrame.close();
 				}
@@ -112,15 +108,15 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	}
 
 	private TerminalWidget createTerminalWidget() {
-		TerminalWidget widget = new TerminalWidget(terminalFrame, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS,
-				new TerminalSettingsProvider());
+		TerminalWidget widget = new TerminalWidget(terminalFrame, TerminalWidget.DEFAULT_TERMINAL_COLUMNS,
+				TerminalWidget.DEFAULT_TERMINAL_ROWS, new TerminalSettingsProvider());
 		widget.setMessagebus(messagebus);
 		widget.init();
 		return widget;
 	}
 
 	private static String getTitleFromSessionChannel(String sessionChannel) {
-		return sessionChannel == null || CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
+		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
 				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
 				: sessionChannel;
 	}

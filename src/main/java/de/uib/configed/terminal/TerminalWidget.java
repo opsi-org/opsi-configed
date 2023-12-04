@@ -36,7 +36,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	public static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	public static final int DEFAULT_TERMINAL_ROWS = 24;
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
-	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
+	public static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
 
 	private JScrollBar scrollBar;
 
