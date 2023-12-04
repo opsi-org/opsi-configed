@@ -123,6 +123,10 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 				: sessionChannel;
 	}
 
+	public void changeSelectedTerminalTabTitle(String title) {
+		jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(), title);
+	}
+
 	public TerminalWidget getSelectedTerminalWidget() {
 		return getTerminalWidget(jTabbedPane.getSelectedIndex());
 	}

@@ -164,6 +164,7 @@ public final class TerminalFrame implements MessagebusListener {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 			if (widget != null) {
 				widget.changeSession(sessionsDialog.getSelectedValue());
+				tabbedPane.changeSelectedTerminalTabTitle(getTitleFromSessionChannel(widget.getSessionChannel()));
 			}
 		}
 	}
