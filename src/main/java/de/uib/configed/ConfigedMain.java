@@ -821,13 +821,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
+		Logging.devel("toggleColumn " + column);
+		Logging.devel("visible " + visible + "\n");
+
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
 			selectionPanel.moveToValue(getSelectedClients()[0]);
 		}
-
-		mainFrame.getCombinedMenuItemDepotColumn().show(!visible);
 	}
 
 	public void handleGroupActionRequest() {

@@ -1035,7 +1035,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.devel("TablesearchPane " + e);
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			markAll();
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
