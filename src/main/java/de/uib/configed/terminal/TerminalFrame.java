@@ -166,7 +166,9 @@ public final class TerminalFrame implements MessagebusListener {
 
 		if (sessionsDialog.getResult() == 2) {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-			widget.changeSession(sessionsDialog.getSelectedValue());
+			if (widget != null) {
+				widget.changeSession(sessionsDialog.getSelectedValue());
+			}
 		}
 	}
 
@@ -175,14 +177,18 @@ public final class TerminalFrame implements MessagebusListener {
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-			widget.increaseFontSize();
+			if (widget != null) {
+				widget.increaseFontSize();
+			}
 		});
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-			widget.decreaseFontSize();
+			if (widget != null) {
+				widget.decreaseFontSize();
+			}
 		});
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
@@ -297,7 +303,7 @@ public final class TerminalFrame implements MessagebusListener {
 			frame.setVisible(true);
 		}
 
-		if (messagebus.getWebSocket().isListenerRegistered(this)) {
+		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);
 		}
 	}
@@ -333,8 +339,12 @@ public final class TerminalFrame implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
+		if (tabbedPane.getTabCount() == 0) {
+			frame.dispose();
+		}
+
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-		if (!widget.isMessageForThisChannel(message)) {
+		if (widget == null || !widget.isMessageForThisChannel(message)) {
 			return;
 		}
 

@@ -19,6 +19,7 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utilities.logging.Logging;
 
 public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
@@ -53,9 +54,9 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 			}
 			TerminalWidget widget = (TerminalWidget) jTabbedPane.getSelectedComponent();
 			terminalFrame.changeTitle();
-			jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
-					getTitleFromSessionChannel(widget.getSessionChannel()));
 			if (widget != null) {
+				jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
+						getTitleFromSessionChannel(widget.getSessionChannel()));
 				widget.requestFocus();
 			}
 		});
@@ -83,13 +84,13 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	public void removeAllTerminalTabs() {
 		int tabCount = getTabCount();
 		for (int i = 0; i < tabCount; i++) {
-			removeTerminalTab(i);
+			removeTerminalTab(0);
 		}
 	}
 
 	private void removeTerminalTab(int index) {
-		TerminalWidget widget = ((TerminalWidget) jTabbedPane.getComponentAt(index));
-		if (!isClosingEvent) {
+		TerminalWidget widget = getTerminalWidget(index);
+		if (widget != null && !isClosingEvent) {
 			isClosingEvent = false;
 			widget.close();
 		}
@@ -111,7 +112,21 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	}
 
 	public TerminalWidget getSelectedTerminalWidget() {
-		return (TerminalWidget) jTabbedPane.getSelectedComponent();
+		return getTerminalWidget(jTabbedPane.getSelectedIndex());
+	}
+
+	private TerminalWidget getTerminalWidget(int index) {
+		TerminalWidget widget = null;
+		if (index == -1) {
+			return widget;
+		}
+
+		try {
+			widget = (TerminalWidget) jTabbedPane.getComponentAt(index);
+		} catch (IndexOutOfBoundsException e) {
+			Logging.warning(this, "Requested component does not exist " + index, e);
+		}
+		return widget;
 	}
 
 	public int getTabCount() {
@@ -137,7 +152,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
 		TerminalWidget widget = getSelectedTerminalWidget();
-		if (!widget.isMessageForThisChannel(message)) {
+		if (widget == null || !widget.isMessageForThisChannel(message)) {
 			return;
 		}
 
