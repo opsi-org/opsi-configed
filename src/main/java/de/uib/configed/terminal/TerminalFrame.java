@@ -119,15 +119,14 @@ public final class TerminalFrame implements MessagebusListener {
 	private JMenu createFileMenu() {
 		JMenuItem jMenuItemNewWindow = new JMenuItem(
 				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
-		jMenuItemNewWindow.addActionListener((ActionEvent e) -> {
-			TerminalFrame terminal = new TerminalFrame();
-			terminal.display();
-		});
+		jMenuItemNewWindow.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		jMenuItemNewWindow.addActionListener((ActionEvent e) -> openNewWindow());
+
 		JMenuItem jMenuItemNewTab = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewTab"));
-		jMenuItemNewTab.addActionListener((ActionEvent e) -> {
-			tabbedPane.addTerminalTab();
-			tabbedPane.openSessionOnSelectedTab("Configserver");
-		});
+		jMenuItemNewTab.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		jMenuItemNewTab.addActionListener((ActionEvent e) -> openNewTab());
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
@@ -150,6 +149,17 @@ public final class TerminalFrame implements MessagebusListener {
 		menuFile.add(jMenuItemSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
+	}
+
+	@SuppressWarnings({ "java:S2325" })
+	public void openNewWindow() {
+		TerminalFrame terminal = new TerminalFrame();
+		terminal.display();
+	}
+
+	public void openNewTab() {
+		tabbedPane.addTerminalTab();
+		tabbedPane.openSessionOnSelectedTab("Configserver");
 	}
 
 	private void displaySessionsDialog() {
@@ -208,6 +218,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
 		tabbedPane.openSessionOnSelectedTab("Configserver");
+		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
 				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE));

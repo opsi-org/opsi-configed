@@ -96,6 +96,11 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		return ignoreKeyEvent;
 	}
 
+	public void setIgnoreKeyEvent(boolean ignoreKeyEvent) {
+		this.ignoreKeyEvent = ignoreKeyEvent;
+	}
+
+	@SuppressWarnings({ "java:S1188" })
 	public void init() {
 		if (settingsProvider == null) {
 			settingsProvider = new TerminalSettingsProvider();
@@ -107,6 +112,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		getTerminalPanel().init(scrollBar);
 
 		getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
+			@SuppressWarnings({ "java:S1541" })
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
@@ -115,6 +121,12 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				} else if (e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
 					decreaseFontSize();
 					ignoreKeyEvent = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_N && e.isControlDown() && e.isShiftDown()) {
+					ignoreKeyEvent = true;
+					terminal.openNewWindow();
+				} else if (e.getKeyCode() == KeyEvent.VK_T && e.isControlDown() && e.isShiftDown()) {
+					ignoreKeyEvent = true;
+					terminal.openNewTab();
 				} else {
 					ignoreKeyEvent = false;
 				}
