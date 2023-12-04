@@ -46,6 +46,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 
 		jTabbedPane = new JTabbedPane();
 		jTabbedPane.addChangeListener((ChangeEvent event) -> onTabChange());
+		jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		groupLayout
 				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTabbedPane, 0, 0, Short.MAX_VALUE));
