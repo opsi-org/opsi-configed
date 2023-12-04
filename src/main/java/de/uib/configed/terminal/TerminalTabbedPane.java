@@ -45,24 +45,26 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		this.setLayout(groupLayout);
 
 		jTabbedPane = new JTabbedPane();
-		jTabbedPane.addChangeListener((ChangeEvent event) -> {
-			if (isClosingEvent) {
-				return;
-			}
-			TerminalWidget widget = getSelectedTerminalWidget();
-			terminalFrame.changeTitle();
-			if (widget != null) {
-				jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
-						getTitleFromSessionChannel(widget.getSessionChannel()));
-				widget.requestFocus();
-			}
-		});
+		jTabbedPane.addChangeListener((ChangeEvent event) -> onTabChange());
 
 		groupLayout
 				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTabbedPane, 0, 0, Short.MAX_VALUE));
 
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addComponent(jTabbedPane, 0, 0, Short.MAX_VALUE)));
+	}
+
+	private void onTabChange() {
+		if (isClosingEvent) {
+			return;
+		}
+		TerminalWidget widget = getSelectedTerminalWidget();
+		terminalFrame.changeTitle();
+		if (widget != null) {
+			jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
+					getTitleFromSessionChannel(widget.getSessionChannel()));
+			widget.requestFocus();
+		}
 	}
 
 	public void addTerminalTab(String title) {
