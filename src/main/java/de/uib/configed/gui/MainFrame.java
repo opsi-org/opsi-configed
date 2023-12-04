@@ -12,7 +12,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
@@ -105,7 +104,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
+import de.uib.utilities.selectionpanel.AbstractJTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
@@ -331,7 +330,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JTableSelectionPanel panelClientlist;
+	private AbstractJTableSelectionPanel panelClientlist;
 
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
@@ -362,7 +361,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
+	public MainFrame(ConfigedMain main, AbstractJTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -2355,8 +2354,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void showPopupClients() {
-		Rectangle rect = panelClientlist.getCellRect(panelClientlist.getSelectedRow(), 0, false);
-		popupClients.show(panelClientlist, rect.x + (rect.width / 2), rect.y + (rect.height / 2));
+		popupClients.show(panelClientlist, -1, -1);
 	}
 
 	public void setConfigPanesEnabled(boolean b) {

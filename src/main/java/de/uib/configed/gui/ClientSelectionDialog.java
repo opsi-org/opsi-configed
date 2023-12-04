@@ -77,7 +77,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.swing.AbstractValueChangeListener;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
+import de.uib.utilities.selectionpanel.AbstractJTableSelectionPanel;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
 
@@ -111,14 +111,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
-	private JTableSelectionPanel selectionPanel;
+	private AbstractJTableSelectionPanel selectionPanel;
 	private SavedSearchesDialog savedSearchesDialog;
 
 	private final boolean withMySQL;
 
 	private ConfigedMain configedMain;
 
-	public ClientSelectionDialog(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
+	public ClientSelectionDialog(ConfigedMain configedMain, AbstractJTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),

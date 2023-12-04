@@ -49,7 +49,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
-public class JTableSelectionPanel extends JPanel implements KeyListener {
+public abstract class AbstractJTableSelectionPanel extends JPanel implements KeyListener {
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
@@ -67,7 +67,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 
 	private TablesearchPane.SearchMode searchMode;
 
-	public JTableSelectionPanel(ConfigedMain configedMain) {
+	protected AbstractJTableSelectionPanel(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
 		initComponents();
@@ -532,15 +532,7 @@ public class JTableSelectionPanel extends JPanel implements KeyListener {
 		table.scrollRectToVisible(scrollTo);
 	}
 
-	protected void keyPressedOnTable(KeyEvent e) {
-		/* for overwriting in subclass */}
-
 	// KeyListener interface
-	@Override
-	public void keyPressed(KeyEvent e) {
-		keyPressedOnTable(e);
-	}
-
 	@Override
 	public void keyReleased(KeyEvent e) {
 		/* Not needed */}

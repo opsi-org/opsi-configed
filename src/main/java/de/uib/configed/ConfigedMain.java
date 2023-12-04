@@ -125,7 +125,7 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
+import de.uib.utilities.selectionpanel.AbstractJTableSelectionPanel;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
@@ -262,7 +262,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private String myServer;
 
-	private JTableSelectionPanel selectionPanel;
+	private AbstractJTableSelectionPanel selectionPanel;
 
 	private ClientTree treeClients;
 
@@ -821,9 +821,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
-		Logging.devel("toggleColumn " + column);
-		Logging.devel("visible " + visible + "\n");
-
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
 		if (getSelectedClients().length > 0) {
@@ -1124,9 +1121,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		initDepots();
 
 		// create client selection panel
-		selectionPanel = new JTableSelectionPanel(this) {
+		selectionPanel = new AbstractJTableSelectionPanel(this) {
 			@Override
-			protected void keyPressedOnTable(KeyEvent e) {
+			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					startRemoteControlForSelectedClients();
 				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
@@ -1206,7 +1203,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	private static void startMainFrame(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
+	private static void startMainFrame(ConfigedMain configedMain, AbstractJTableSelectionPanel selectionPanel,
 			DepotsList depotsList, ClientTree treeClients) {
 		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients);
 
@@ -3865,7 +3862,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		infoRetriever.execute();
 	}
 
-	public JTableSelectionPanel getClientTable() {
+	public AbstractJTableSelectionPanel getClientTable() {
 		return selectionPanel;
 	}
 
