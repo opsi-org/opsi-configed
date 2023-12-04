@@ -67,7 +67,7 @@ public final class Globals {
 
 	// Colors for tables etc.
 
-	public static final Color OPSI_MAGENTA_2 = new Color(135, 20, 58);
+	public static final Color OPSI_DARK_MAGENTA = new Color(135, 20, 58);
 	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
 	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
 	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);

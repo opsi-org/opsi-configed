@@ -108,7 +108,7 @@ public final class ComponentStyler {
 			if (isRowEven) {
 				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA_2);
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_MAGENTA_2);
+				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA);
 			}
 		}
 		return tableRowColor;
