@@ -259,7 +259,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			return;
 		}
 
-		Logging.trace(this, "Messagebus message received: " + message.toString());
 		String type = (String) message.get("type");
 		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
 			webSocketInputStream = new WebSocketInputStream();

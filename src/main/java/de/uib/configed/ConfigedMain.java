@@ -5038,8 +5038,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return;
 		}
 
-		Logging.trace(this, "Messagebus message received: " + message.toString());
-
 		String eventType = (String) message.get("event");
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
