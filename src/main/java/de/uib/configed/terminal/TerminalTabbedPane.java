@@ -67,11 +67,10 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		}
 	}
 
-	public void addTerminalTab(String title) {
+	public void addTerminalTab() {
 		TerminalWidget widget = createTerminalWidget();
 		jTabbedPane.addTab("", widget);
 		jTabbedPane.setSelectedIndex(getTabIndex());
-		widget.openSession(title);
 		AbstractClosableTabComponent closableTabComponent = new AbstractClosableTabComponent(jTabbedPane) {
 			@Override
 			public void close() {
@@ -82,6 +81,11 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 			}
 		};
 		jTabbedPane.setTabComponentAt(getTabIndex(), closableTabComponent);
+	}
+
+	public void openSessionOnSelectedTab(String session) {
+		TerminalWidget widget = getSelectedTerminalWidget();
+		widget.openSession(session);
 		jTabbedPane.setTitleAt(getTabIndex(), getTitleFromSessionChannel(widget.getSessionChannel()));
 	}
 

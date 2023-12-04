@@ -124,7 +124,10 @@ public final class TerminalFrame implements MessagebusListener {
 			terminal.display();
 		});
 		JMenuItem jMenuItemNewTab = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewTab"));
-		jMenuItemNewTab.addActionListener((ActionEvent e) -> tabbedPane.addTerminalTab("Configserver"));
+		jMenuItemNewTab.addActionListener((ActionEvent e) -> {
+			tabbedPane.addTerminalTab();
+			tabbedPane.openSessionOnSelectedTab("Configserver");
+		});
 
 		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
 		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
@@ -203,7 +206,8 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
-		tabbedPane.addTerminalTab("Configserver");
+		tabbedPane.addTerminalTab();
+		tabbedPane.openSessionOnSelectedTab("Configserver");
 
 		northLayout
 				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE));
