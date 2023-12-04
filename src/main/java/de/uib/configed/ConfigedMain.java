@@ -810,49 +810,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void setColumnSessionInfo(boolean b) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-		if (visible == b) {
-			return;
+		if (visible != b) {
+			toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		}
 
 		Logging.info(this, "setColumnSessionInfo " + b);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
-
-		mainFrame.getCombinedMenuItemSessionInfoColumn().show(b);
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0]);
-		}
-	}
-
-	public void toggleColumnSessionInfo() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-
-		setColumnSessionInfo(!visible);
-
-		mainFrame.getCombinedMenuItemSessionInfoColumn().show(!visible);
-	}
-
-	public void toggleColumnInstallByShutdownActive() {
-		Boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-		if (visible == null) {
-			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
-					JOptionPane.OK_OPTION);
-		} else {
-			persistenceController.getHostDataService().getHostDisplayFields()
-					.put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
-
-			setRebuiltClientListTableModel(false);
-			selectionPanel.initSortKeys();
-			if (getSelectedClients().length > 0) {
-				selectionPanel.moveToValue(getSelectedClients()[0]);
-			}
-
-			mainFrame.getCombinedMenuItemInstallByShutdownColumn().show(!visible);
-		}
 	}
 
 	public void toggleColumn(String column) {

@@ -627,7 +627,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemSessionInfoColumn
 				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSessionInfo());
+		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener(
+				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItemShowInventoryNumberColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
@@ -649,8 +650,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemUefiBootColumn
 				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItemShowInstallByShutdown
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumnInstallByShutdownActive());
+		jCheckBoxMenuItemShowInstallByShutdown.addItemListener(
+				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItemShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
 		combinedMenuItemDepotColumn
@@ -1333,7 +1334,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemSessionInfoColumn
 				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
-		popupShowSessionInfoColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSessionInfo());
+		popupShowSessionInfoColumn.addItemListener(
+				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
 		popupShowInventoryNumberColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
 		combinedMenuItemInventoryNumberColumn
@@ -1353,8 +1355,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemInstallByShutdownColumn
 				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-		popupShowInstallByShutdownColumn
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumnInstallByShutdownActive());
+		popupShowInstallByShutdownColumn.addItemListener(
+				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 		popupShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
 		combinedMenuItemDepotColumn
