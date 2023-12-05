@@ -104,7 +104,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.selectionpanel.AbstractJTableSelectionPanel;
+import de.uib.utilities.selectionpanel.ClientTable;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
@@ -330,7 +330,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private AbstractJTableSelectionPanel panelClientlist;
+	private ClientTable panelClientlist;
 
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
@@ -361,16 +361,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, AbstractJTableSelectionPanel selectionPanel, DepotsList depotsList,
-			ClientTree treeClients) {
+	public MainFrame(ConfigedMain main, ClientTable panelClientlist, DepotsList depotsList, ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
-		panelClientlist = selectionPanel;
+		this.panelClientlist = panelClientlist;
 
-		exportTable = new ExporterToCSV(selectionPanel.getTable());
+		exportTable = new ExporterToCSV(panelClientlist.getTable());
 
 		this.treeClients = treeClients;
 
@@ -763,7 +762,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 
 		// produces a global reaction when pressing space
-		jMenuRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
+		jMenuRemoteControl.addActionListener((ActionEvent e) -> panelClientlist.startRemoteControlForSelectedClients());
 
 		jMenuClients.add(jMenuWakeOnLan);
 		jMenuClients.add(jMenuOpsiClientdEvent);
@@ -1458,7 +1457,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 
 		popupRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-		popupRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
+		popupRemoteControl.addActionListener((ActionEvent e) -> panelClientlist.startRemoteControlForSelectedClients());
 
 		popupSelectionGetGroup.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		popupSelectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
@@ -2444,11 +2443,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void freeLicencesAction() {
 		Logging.info(this, "freeLicencesAction ");
 		configedMain.freeAllPossibleLicencesForSelectedClients();
-	}
-
-	private void remoteControlAction() {
-		Logging.debug(this, "jMenuRemoteControl");
-		configedMain.startRemoteControlForSelectedClients();
 	}
 
 	/**

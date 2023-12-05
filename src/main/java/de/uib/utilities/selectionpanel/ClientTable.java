@@ -13,15 +13,19 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -42,14 +46,20 @@ import javax.swing.table.TableModel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FDialogRemoteControl;
+import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.SearchTargetModelFromClientTable;
+import de.uib.configed.type.RemoteControl;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
-public abstract class AbstractJTableSelectionPanel extends JPanel implements KeyListener {
+public class ClientTable extends JPanel implements KeyListener {
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
@@ -58,6 +68,12 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 
 	private TablesearchPane searchPane;
 
+	private FDialogRemoteControl dialogRemoteControl;
+	private Map<String, RemoteControl> remoteControls;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	// we put a JTable on a standard JScrollPane
 	private JTable table;
 
@@ -65,7 +81,7 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 	private ConfigedMain configedMain;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	protected AbstractJTableSelectionPanel(ConfigedMain configedMain) {
+	public ClientTable(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
 		initComponents();
@@ -482,9 +498,75 @@ public abstract class AbstractJTableSelectionPanel extends JPanel implements Key
 		return viewrow != -1;
 	}
 
+	public void startRemoteControlForSelectedClients() {
+		if (dialogRemoteControl == null) {
+			dialogRemoteControl = new FDialogRemoteControl(configedMain);
+		}
+
+		if (remoteControls == null
+				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
+			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
+
+			Logging.debug(this, "remoteControls " + remoteControls);
+
+			Map<String, String> entries = new LinkedHashMap<>();
+			Map<String, String> tooltips = new LinkedHashMap<>();
+			Map<String, String> rcCommands = new HashMap<>();
+			Map<String, Boolean> commandsEditable = new HashMap<>();
+
+			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
+				entries.put(entry.getKey(), entry.getKey());
+				RemoteControl rc = entry.getValue();
+				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
+					tooltips.put(entry.getKey(), rc.getDescription());
+				} else {
+					tooltips.put(entry.getKey(), rc.getCommand());
+				}
+				rcCommands.put(entry.getKey(), rc.getCommand());
+				Boolean editable = Boolean.valueOf(rc.getEditable());
+
+				commandsEditable.put(entry.getKey(), editable);
+			}
+
+			dialogRemoteControl.setMeanings(rcCommands);
+			dialogRemoteControl.setEditableFields(commandsEditable);
+
+			// we want to present a sorted list of the keys
+			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
+			sortedKeys.sort(Comparator.comparing(String::toString));
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
+
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
+
+			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+			dialogRemoteControl.setModal(false);
+			dialogRemoteControl.init();
+		}
+
+		dialogRemoteControl.resetValue();
+
+		dialogRemoteControl.setSize(MainFrame.F_WIDTH, ConfigedMain.getMainFrame().getHeight() / 2);
+		dialogRemoteControl.setLocationRelativeTo(ConfigedMain.getMainFrame());
+
+		dialogRemoteControl.setVisible(true);
+		dialogRemoteControl.setDividerLocation(0.8);
+	}
+
 	public void scrollRowToVisible(int row) {
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			startRemoteControlForSelectedClients();
+		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
+			Logging.debug(this, "keypressed: f10");
+			ConfigedMain.getMainFrame().showPopupClients();
+		} else {
+			// Nothing to do for all the other keys
+		}
 	}
 
 	// KeyListener interface
