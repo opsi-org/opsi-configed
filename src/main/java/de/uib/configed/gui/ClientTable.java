@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utilities.selectionpanel;
+package de.uib.configed.gui;
 
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -46,8 +46,6 @@ import javax.swing.table.TableModel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDialogRemoteControl;
-import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;

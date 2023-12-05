@@ -28,7 +28,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.selectionpanel.ClientTable;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import utils.Utils;
