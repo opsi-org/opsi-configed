@@ -84,6 +84,12 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		return sessionChannel;
 	}
 
+	public String getTitle() {
+		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
+				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
+				: sessionChannel;
+	}
+
 	public int getColumnCount() {
 		return getTerminalPanel().getTerminalSizeFromComponent().getColumns();
 	}

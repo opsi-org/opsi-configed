@@ -180,7 +180,7 @@ public final class TerminalFrame implements MessagebusListener {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 			if (widget != null) {
 				widget.changeSession(sessionsDialog.getSelectedValue());
-				tabbedPane.changeSelectedTerminalTabTitle(getTitleFromSessionChannel(widget.getSessionChannel()));
+				tabbedPane.changeSelectedTerminalTabTitle(widget.getTitle());
 			}
 		}
 	}
@@ -326,14 +326,8 @@ public final class TerminalFrame implements MessagebusListener {
 	public void changeTitle() {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (frame != null && widget != null) {
-			frame.setTitle(getTitleFromSessionChannel(widget.getSessionChannel()));
+			frame.setTitle(widget.getTitle());
 		}
-	}
-
-	private static String getTitleFromSessionChannel(String sessionChannel) {
-		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
-				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
-				: sessionChannel;
 	}
 
 	public void close() {

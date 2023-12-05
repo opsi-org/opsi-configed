@@ -18,7 +18,6 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.AbstractClosableTabComponent;
 
@@ -63,7 +62,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		terminalFrame.changeTitle();
 		if (widget != null) {
 			jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
-					getTitleFromSessionChannel(widget.getSessionChannel()));
+					widget.getTitle());
 			widget.requestFocus();
 		}
 	}
@@ -87,7 +86,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	public void openSessionOnSelectedTab(String session) {
 		TerminalWidget widget = getSelectedTerminalWidget();
 		widget.openSession(session);
-		jTabbedPane.setTitleAt(getTabIndex(), getTitleFromSessionChannel(widget.getSessionChannel()));
+		jTabbedPane.setTitleAt(getTabIndex(), widget.getTitle());
 	}
 
 	private int getTabIndex() {
@@ -120,12 +119,6 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		widget.setMessagebus(messagebus);
 		widget.init();
 		return widget;
-	}
-
-	private static String getTitleFromSessionChannel(String sessionChannel) {
-		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
-				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
-				: sessionChannel;
 	}
 
 	public void changeSelectedTerminalTabTitle(String title) {
