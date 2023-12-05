@@ -61,8 +61,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		TerminalWidget widget = getSelectedTerminalWidget();
 		terminalFrame.changeTitle();
 		if (widget != null) {
-			jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(),
-					widget.getTitle());
+			jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(), widget.getTitle());
 			widget.requestFocus();
 		}
 	}
@@ -70,7 +69,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	public void addTerminalTab() {
 		TerminalWidget widget = createTerminalWidget();
 		jTabbedPane.addTab("", widget);
-		jTabbedPane.setSelectedIndex(getTabIndex());
+		jTabbedPane.setSelectedIndex(getLastTabIndex());
 		AbstractClosableTabComponent closableTabComponent = new AbstractClosableTabComponent(jTabbedPane) {
 			@Override
 			public void close() {
@@ -80,16 +79,16 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 				}
 			}
 		};
-		jTabbedPane.setTabComponentAt(getTabIndex(), closableTabComponent);
+		jTabbedPane.setTabComponentAt(getLastTabIndex(), closableTabComponent);
 	}
 
 	public void openSessionOnSelectedTab(String session) {
 		TerminalWidget widget = getSelectedTerminalWidget();
 		widget.openSession(session);
-		jTabbedPane.setTitleAt(getTabIndex(), widget.getTitle());
+		jTabbedPane.setTitleAt(getLastTabIndex(), widget.getTitle());
 	}
 
-	private int getTabIndex() {
+	private int getLastTabIndex() {
 		return jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0;
 	}
 
