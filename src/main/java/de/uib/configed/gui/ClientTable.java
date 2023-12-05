@@ -189,11 +189,9 @@ public class ClientTable extends JPanel implements KeyListener {
 		Map<Integer, Integer> selectionMap = new HashMap<>();
 		int selectedKeysCount = 0;
 
-		for (int i = 0; i < table.getRowCount(); i++) {
-			if (selectionmodel.isSelectedIndex(i)) {
-				selectionMap.put(selectedKeysCount, i);
-				selectedKeysCount++;
-			}
+		for (int i : table.getSelectedRows()) {
+			selectionMap.put(selectedKeysCount, i);
+			selectedKeysCount++;
 		}
 
 		return selectionMap;
@@ -217,18 +215,15 @@ public class ClientTable extends JPanel implements KeyListener {
 	public List<String> getSelectedValues() {
 		List<String> valuesList = new ArrayList<>(table.getSelectedRowCount());
 
-		for (int i = 0; i < table.getRowCount(); i++) {
-			if (selectionmodel.isSelectedIndex(i)) {
-				valuesList.add((String) table.getValueAt(i, 0));
-			}
+		for (int i : table.getSelectedRows()) {
+			valuesList.add((String) table.getValueAt(i, 0));
 		}
 
 		return valuesList;
 	}
 
 	public void clearSelection() {
-		ListSelectionModel lsm = table.getSelectionModel();
-		lsm.clearSelection();
+		table.clearSelection();
 	}
 
 	public void setSelectedValues(Collection<String> valuesList) {
@@ -312,12 +307,12 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public Set<String> getColumnValues(int col) {
 		Set<String> result = new HashSet<>();
-		if (table.getModel() == null || table.getModel().getColumnCount() <= col) {
+		if (table.getModel() == null || table.getColumnCount() <= col) {
 			return result;
 		}
 
-		for (int i = 0; i < table.getModel().getRowCount(); i++) {
-			result.add("" + table.getModel().getValueAt(i, col));
+		for (int i = 0; i < table.getRowCount(); i++) {
+			result.add("" + table.getValueAt(i, col));
 		}
 
 		return result;
@@ -439,7 +434,7 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
-			for (int j = 1; j < getTableModel().getColumnCount() && !found; j++) {
+			for (int j = 0; j < getTableModel().getColumnCount() && !found; j++) {
 				// we dont compare all values (comparing all values is default)
 
 				Object compareValue = getTableModel().getValueAt(table.convertRowIndexToModel(viewrow),
@@ -463,8 +458,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		if (!found) {
 			return false;
 		}
-
-		Logging.devel(viewrow + "");
 
 		scrollRowToVisible(viewrow);
 		return true;
