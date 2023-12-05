@@ -2345,7 +2345,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setGroupByTree(node, pathToNode);
 
 		// intended for reload, we cancel activating group
-		if (preferringOldSelection && clientTable.getSelectedSet() != null && !clientTable.getSelectedSet().isEmpty()) {
+		if (preferringOldSelection && !clientTable.getSelectedSet().isEmpty()) {
 			return;
 		}
 

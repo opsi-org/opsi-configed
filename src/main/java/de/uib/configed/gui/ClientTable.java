@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
@@ -60,8 +59,6 @@ import utils.Utils;
 public class ClientTable extends JPanel implements KeyListener {
 	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
-	private static final int MIN_HEIGHT = 200;
-
 	private JScrollPane scrollpane;
 
 	private TablesearchPane searchPane;
@@ -77,13 +74,12 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	private DefaultListSelectionModel selectionmodel;
 	private ConfigedMain configedMain;
-	private List<RowSorter.SortKey> primaryOrderingKeys;
+	private List<SortKey> primaryOrderingKeys;
 
 	public ClientTable(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
 		initComponents();
-		setupLayout();
 	}
 
 	private void initComponents() {
@@ -123,15 +119,13 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.addKeyListener(this);
 
 		scrollpane.getViewport().add(table);
-	}
 
-	private void setupLayout() {
 		GroupLayout layoutLeftPane = new GroupLayout(this);
 		this.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(searchPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -153,22 +147,22 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public void setMissingDataPanel() {
 		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
-
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
-
 		JPanel mdPanel = new JPanel();
 
 		GroupLayout mdLayout = new GroupLayout(mdPanel);
 		mdPanel.setLayout(mdLayout);
 
-		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40).addComponent(missingData2, 10, 40, 80)
-				.addGap(10, 10, Short.MAX_VALUE));
-		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+				.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(missingData2, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
+		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
 				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -176,7 +170,7 @@ public class ClientTable extends JPanel implements KeyListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(10, 10, Short.MAX_VALUE));
+				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
 
 		scrollpane.getViewport().setView(mdPanel);
 	}
@@ -189,14 +183,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
-	}
-
-	public int getSelectedRow() {
-		return table.getSelectedRow();
-	}
-
-	public Rectangle getCellRect(int row, int col, boolean includeSpacing) {
-		return table.getCellRect(row, col, includeSpacing);
 	}
 
 	private Map<Integer, Integer> getSelectionMap() {
@@ -216,10 +202,8 @@ public class ClientTable extends JPanel implements KeyListener {
 	public Set<String> getSelectedSet() {
 		TreeSet<String> result = new TreeSet<>();
 
-		for (int i = 0; i < table.getRowCount(); i++) {
-			if (selectionmodel.isSelectedIndex(i)) {
-				result.add((String) table.getValueAt(i, 0));
-			}
+		for (int i : table.getSelectedRows()) {
+			result.add((String) table.getValueAt(i, 0));
 		}
 
 		return result;
@@ -301,8 +285,7 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.repaint();
 
 		if (!valuesSet.isEmpty()) {
-			Object valueToFind = valuesSet.iterator().next();
-			moveToValue(valueToFind);
+			moveToValue(valuesSet.iterator().next());
 		}
 
 		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
@@ -433,20 +416,26 @@ public class ClientTable extends JPanel implements KeyListener {
 		return result;
 	}
 
-	private int findViewRowFromValue(Object value) {
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean moveToValue(String value) {
 		Logging.info(this, "findViewRowFromValue, value " + value);
 
 		if (value == null) {
-			return -1;
+			return false;
 		}
 
 		int viewrow = 0;
+		String valueLowerCase = value.toLowerCase(Locale.ROOT);
 
-		String val = value.toString();
-
-		String valLower = val.toLowerCase(Locale.ROOT);
-
-		List<String> alternativeWords = getWords(valLower);
+		List<String> alternativeWords = getWords(valueLowerCase);
 
 		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
@@ -457,7 +446,7 @@ public class ClientTable extends JPanel implements KeyListener {
 						table.convertColumnIndexToModel(j));
 
 				if (compareValue == null) {
-					found = val.isEmpty();
+					found = value.isEmpty();
 				} else if (fullTextSearchingWithAlternatives(alternativeWords,
 						compareValue.toString().toLowerCase(Locale.ROOT))) {
 					found = true;
@@ -471,29 +460,14 @@ public class ClientTable extends JPanel implements KeyListener {
 			}
 		}
 
-		if (found) {
-			return viewrow;
+		if (!found) {
+			return false;
 		}
 
-		return -1;
-	}
-
-	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
-		for (String word : alternativeWords) {
-			if (compareVal.indexOf(word) >= 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// TODO refactor, since always called with clientId
-	public boolean moveToValue(Object value) {
-		int viewrow = findViewRowFromValue(value);
+		Logging.devel(viewrow + "");
 
 		scrollRowToVisible(viewrow);
-
-		return viewrow != -1;
+		return true;
 	}
 
 	public void startRemoteControlForSelectedClients() {
