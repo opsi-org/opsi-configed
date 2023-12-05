@@ -814,9 +814,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		setRebuiltClientListTableModel(false);
 		clientTable.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			clientTable.moveToValue(getSelectedClients()[0]);
-		}
+
+		// Todo this is called before in "setRebuiltClientListTableModel". Maybe make it unnecessary
+		clientTable.moveToFirstSelected();
 	}
 
 	public void handleGroupActionRequest() {

@@ -18,12 +18,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
@@ -57,7 +55,6 @@ import de.uib.utilities.table.gui.TablesearchPane;
 import utils.Utils;
 
 public class ClientTable extends JPanel implements KeyListener {
-	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private JScrollPane scrollpane;
 
@@ -279,11 +276,16 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		table.repaint();
 
-		if (!valuesSet.isEmpty()) {
-			moveToValue(valuesSet.iterator().next());
-		}
+		moveToFirstSelected();
 
 		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
+	}
+
+	public void moveToFirstSelected() {
+		if (table.getSelectedRow() != -1) {
+			Rectangle selectedRectangle = table.getCellRect(table.getSelectedRow(), 0, true);
+			table.scrollRectToVisible(selectedRectangle);
+		}
 	}
 
 	public void setSelectedValues(String[] values) {
@@ -400,69 +402,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		return result;
 	}
 
-	private static List<String> getWords(String line) {
-		List<String> result = new ArrayList<>();
-		String[] splitted = sPlusPattern.split(line);
-		for (String s : splitted) {
-			if (!" ".equals(s)) {
-				result.add(s);
-			}
-		}
-		return result;
-	}
-
-	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
-		for (String word : alternativeWords) {
-			if (compareVal.indexOf(word) >= 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean moveToValue(String value) {
-		Logging.info(this, "findViewRowFromValue, value " + value);
-
-		if (value == null) {
-			return false;
-		}
-
-		int viewrow = 0;
-		String valueLowerCase = value.toLowerCase(Locale.ROOT);
-
-		List<String> alternativeWords = getWords(valueLowerCase);
-
-		boolean found = false;
-		while (!found && viewrow < getTableModel().getRowCount()) {
-			for (int j = 0; j < getTableModel().getColumnCount() && !found; j++) {
-				// we dont compare all values (comparing all values is default)
-
-				Object compareValue = getTableModel().getValueAt(table.convertRowIndexToModel(viewrow),
-						table.convertColumnIndexToModel(j));
-
-				if (compareValue == null) {
-					found = value.isEmpty();
-				} else if (fullTextSearchingWithAlternatives(alternativeWords,
-						compareValue.toString().toLowerCase(Locale.ROOT))) {
-					found = true;
-				} else {
-					// leave found false, value not found
-				}
-			}
-
-			if (!found) {
-				viewrow++;
-			}
-		}
-
-		if (!found) {
-			return false;
-		}
-
-		scrollRowToVisible(viewrow);
-		return true;
-	}
-
 	public void startRemoteControlForSelectedClients() {
 		if (dialogRemoteControl == null) {
 			dialogRemoteControl = new FDialogRemoteControl(configedMain);
@@ -515,11 +454,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		dialogRemoteControl.setVisible(true);
 		dialogRemoteControl.setDividerLocation(0.8);
-	}
-
-	public void scrollRowToVisible(int row) {
-		Rectangle scrollTo = table.getCellRect(row, 0, false);
-		table.scrollRectToVisible(scrollTo);
 	}
 
 	@Override
