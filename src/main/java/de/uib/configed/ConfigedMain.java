@@ -823,11 +823,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (persistenceController.getModuleDataService().isWithLocalImagingPD()) {
 			startGroupActionFrame();
 		} else {
-			// TODO Translate
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "not activated", true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-
-			f.setVisible(true);
+			Logging.error(this,
+					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
 		}
 	}
 
@@ -836,9 +833,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ " active " + activatedGroupModel.isActive());
 
 		if (!activatedGroupModel.isActive()) {
-			// TODO translate
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", "no group selected", true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
+			FTextArea f = new FTextArea(mainFrame, Configed.getResourceValue("information"),
+					Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
+					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 
 			f.setVisible(true);
 

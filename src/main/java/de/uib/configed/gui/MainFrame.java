@@ -1081,7 +1081,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(persistenceController.getModuleDataService().isWithLocalImagingPD());
+		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
@@ -1089,7 +1089,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
-		jMenuFrameDashboard.setVisible(ServerFacade.isOpsi43());
 
 		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
 		jMenuFrameLicences.setEnabled(false);
@@ -1103,7 +1102,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		});
 
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
-		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -1111,7 +1109,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			configedMain.connectTerminal(terminal);
 		});
 
-		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		if (ServerFacade.isOpsi43()) {
