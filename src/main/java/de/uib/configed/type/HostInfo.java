@@ -197,62 +197,65 @@ public class HostInfo {
 
 	public void put(String key, Object value) {
 		switch (key) {
-		case DEPOT_OF_CLIENT_KEY: {
+		case DEPOT_OF_CLIENT_KEY:
 			depotOfClient = "" + value;
 			break;
-		}
-		case CLIENT_DESCRIPTION_KEY: {
+
+		case CLIENT_DESCRIPTION_KEY:
 			clientDescription = "" + value;
 			break;
-		}
-		case CLIENT_INVENTORY_NUMBER_KEY: {
+
+		case CLIENT_INVENTORY_NUMBER_KEY:
 			clientInventoryNumber = "" + value;
 			break;
-		}
-		case CLIENT_NOTES_KEY: {
+
+		case CLIENT_NOTES_KEY:
 			clientNotes = "" + value;
 			break;
-		}
-		case CLIENT_ONE_TIME_PASSWORD_KEY: {
+
+		case CLIENT_ONE_TIME_PASSWORD_KEY:
 			clientOneTimePassword = "" + value;
 			break;
-		}
-		case CLIENT_SYSTEM_UUID_KEY: {
+
+		case CLIENT_SYSTEM_UUID_KEY:
 			clientSystemUUID = "" + value;
 			break;
-		}
-		case CLIENT_MAC_ADRESS_KEY: {
+
+		case CLIENT_MAC_ADRESS_KEY:
 			clientMacAddress = "" + value;
 			break;
-		}
-		case HOST_KEY_KEY: {
+
+		case CLIENT_IP_ADDRESS_KEY:
+			clientIpAddress = "" + value;
+			break;
+
+		case HOST_KEY_KEY:
 			hostKey = "" + value;
 			break;
-		}
-		case CREATED_KEY: {
+
+		case CREATED_KEY:
 			created = "" + value;
 			break;
-		}
-		case LAST_SEEN_KEY: {
+
+		case LAST_SEEN_KEY:
 			lastSeen = "" + value;
 			break;
-		}
-		case CLIENT_UEFI_BOOT_KEY: {
+
+		case CLIENT_UEFI_BOOT_KEY:
 			clientUefiBoot = (Boolean) value;
 			break;
-		}
-		case CLIENT_WAN_CONFIG_KEY: {
+
+		case CLIENT_WAN_CONFIG_KEY:
 			clientWanConfig = (Boolean) value;
 			break;
-		}
-		case CLIENT_SHUTDOWN_INSTALL_KEY: {
+
+		case CLIENT_SHUTDOWN_INSTALL_KEY:
 			clientShutdownInstall = (Boolean) value;
 			break;
-		}
-		default: {
+
+		default:
 			Logging.warning(this, "key " + key + " not expected");
 			break;
-		}
 		}
 	}
 
