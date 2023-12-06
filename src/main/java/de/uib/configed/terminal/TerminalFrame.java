@@ -104,7 +104,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				setSelectedTheme(TerminalSettingsProvider.getTerminalThemeInUse());
+				setSelectedTheme(TerminalSettingsProvider.getTerminalTheme());
 			}
 		});
 	}
@@ -138,8 +138,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 		for (final String theme : Messages.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
-			Logging.debug("selected theme in Terminal " + theme);
-			themeItem.setSelected(TerminalSettingsProvider.getTerminalThemeInUse().equals(theme));
+			themeItem.setSelected(TerminalSettingsProvider.getTerminalTheme().equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
 			themeItem.addActionListener((ActionEvent e) -> setSelectedTheme(theme));
@@ -236,6 +235,7 @@ public final class TerminalFrame implements MessagebusListener {
 		TerminalSettingsProvider.setTerminalTheme(selectedTheme);
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
+			widget.changeTheme();
 			widget.repaint();
 		}
 	}

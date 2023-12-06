@@ -23,8 +23,8 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final TerminalColor BACKGROUND_COLOR_LIGHT = new TerminalColor(249, 249, 249);
 	public static final TerminalColor FOREGROUND_COLOR_LIGHT = new TerminalColor(96, 96, 96);
 
-	private static int fontSize = 12;
-	private static String themeInUse = Messages.getSelectedTheme();
+	private static String theme = Messages.getSelectedTheme();
+	private int fontSize = 12;
 
 	@Override
 	public Font getTerminalFont() {
@@ -44,7 +44,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	@Override
 	public TextStyle getDefaultStyle() {
 		TextStyle defaultStyle = new TextStyle(FOREGROUND_COLOR_DARK, BACKGROUND_COLOR_DARK);
-		if ("Light".equals(themeInUse)) {
+		if ("Light".equals(theme)) {
 			defaultStyle = new TextStyle(FOREGROUND_COLOR_LIGHT, BACKGROUND_COLOR_LIGHT);
 		}
 		return defaultStyle;
@@ -70,15 +70,15 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		return true;
 	}
 
-	public static void setTerminalFontSize(int size) {
+	public void setTerminalFontSize(int size) {
 		fontSize = size;
 	}
 
 	public static void setTerminalTheme(String theme) {
-		themeInUse = theme;
+		TerminalSettingsProvider.theme = theme;
 	}
 
-	public static String getTerminalThemeInUse() {
-		return themeInUse;
+	public static String getTerminalTheme() {
+		return theme;
 	}
 }

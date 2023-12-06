@@ -167,7 +167,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			return;
 		}
 
-		TerminalSettingsProvider.setTerminalFontSize(fontSize);
+		((TerminalSettingsProvider) settingsProvider).setTerminalFontSize(fontSize);
 		resizeTerminal();
 	}
 
@@ -196,6 +196,10 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		int additionalSpaces = 2;
 		getTerminal().cursorPosition(getTerminalTextBuffer().getScreenLines().trim().length() + additionalSpaces,
 				getTerminalTextBuffer().getScreenLines().trim().split("\n").length);
+	}
+
+	public void changeTheme() {
+		getTerminal().getStyleState().setDefaultStyle(settingsProvider.getDefaultStyle());
 	}
 
 	@SuppressWarnings({ "deprecation", "java:S1874" })
