@@ -127,7 +127,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	public boolean checkCommand() {
-		if (opsiproduct == null || opsiproduct.trim().isEmpty()) {
+		if (opsiproduct == null || opsiproduct.isBlank()) {
 			Logging.info(this, "no product given");
 			return false;
 		}

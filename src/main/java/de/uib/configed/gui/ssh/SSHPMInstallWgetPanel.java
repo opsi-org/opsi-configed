@@ -115,7 +115,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	public SSHCommandTemplate getCommand(SSHCommandTemplate commands) {
-		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().trim().isEmpty()
+		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().isBlank()
 				|| jTextFieldURL.getText().trim().equals(urlDefText)) {
 			return null;
 		}

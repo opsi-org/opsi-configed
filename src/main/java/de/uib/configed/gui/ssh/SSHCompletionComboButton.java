@@ -110,7 +110,7 @@ public class SSHCompletionComboButton {
 		// Is element in defaultValues?
 		if (defvalues != null) {
 			for (String elem : defvalues) {
-				if (elem != null && !elem.trim().isEmpty()) {
+				if (elem != null && !elem.isBlank()) {
 					defaultvalues.add(elem);
 				}
 			}

@@ -365,7 +365,7 @@ public final class SSHCommandFactory {
 
 		for (SSHCommandTemplate com : sshCommandList) {
 			String parent = com.getParentMenuText();
-			if (parent == null || parent.trim().isEmpty()) {
+			if (parent == null || parent.isBlank()) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
 			List<SSHCommandTemplate> parentList = new LinkedList<>();
@@ -542,7 +542,7 @@ public final class SSHCommandFactory {
 		if (connection.connect(command)) {
 			String result = connection.exec(command, false);
 			Logging.info(this, "connection.exec produces " + result);
-			if (result == null || result.trim().isEmpty()) {
+			if (result == null || result.isBlank()) {
 				Logging.info(this, "testConnection not allowed");
 				connectionState = CONNECTION_NOT_ALLOWED;
 				Logging.warning(this, "cannot connect to " + user + "@" + host);

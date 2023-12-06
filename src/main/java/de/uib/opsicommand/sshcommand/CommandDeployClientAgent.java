@@ -44,7 +44,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getSecuredCommand() {
-		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();

@@ -126,7 +126,7 @@ public class LicenseDataService {
 				licenceContracts.put(entry.getId(), entry);
 
 				String notiDate = entry.get(TableLicenceContracts.NOTIFICATION_DATE_KEY);
-				if (notiDate != null && notiDate.trim().length() > 0 && notiDate.compareTo(today) <= 0) {
+				if (notiDate != null && !notiDate.isBlank() && notiDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsToNotify.computeIfAbsent(notiDate,
 							s -> new TreeSet<>());
 
