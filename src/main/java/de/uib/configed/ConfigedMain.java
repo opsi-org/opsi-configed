@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -37,7 +35,6 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -70,8 +67,8 @@ import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
+import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.FDialogRemoteControl;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.gui.FStartWakeOnLan;
@@ -98,7 +95,6 @@ import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
@@ -125,10 +121,8 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
@@ -262,7 +256,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private String myServer;
 
-	private JTableSelectionPanel selectionPanel;
+	private ClientTable clientTable;
 
 	private ClientTree treeClients;
 
@@ -285,9 +279,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
 	private Dashboard dashboard;
-
-	private FDialogRemoteControl dialogRemoteControl;
-	private Map<String, RemoteControl> remoteControls;
 
 	private int clientCount;
 	private boolean firstDepotListChange = true;
@@ -627,8 +618,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
-			List<String> selectedValues = selectionPanel.getSelectedValues();
-			selectionPanel.clearSelection();
+			List<String> selectedValues = clientTable.getSelectedValues();
+			clientTable.clearSelection();
 			refreshClientListKeepingGroup();
 			setClients(selectedValues.toArray(new String[0]));
 		});
@@ -810,49 +801,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void setColumnSessionInfo(boolean b) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-		if (visible == b) {
-			return;
+		if (visible != b) {
+			toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		}
 
 		Logging.info(this, "setColumnSessionInfo " + b);
-		persistenceController.getHostDataService().getHostDisplayFields()
-				.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
-
-		mainFrame.getCombinedMenuItemSessionInfoColumn().show(b);
-		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
-	}
-
-	public void toggleColumnSessionInfo() {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-
-		setColumnSessionInfo(!visible);
-
-		mainFrame.getCombinedMenuItemSessionInfoColumn().show(!visible);
-	}
-
-	public void toggleColumnInstallByShutdownActive() {
-		Boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-		if (visible == null) {
-			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
-					JOptionPane.OK_OPTION);
-		} else {
-			persistenceController.getHostDataService().getHostDisplayFields()
-					.put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
-
-			setRebuiltClientListTableModel(false);
-			selectionPanel.initSortKeys();
-			if (getSelectedClients().length > 0) {
-				selectionPanel.moveToValue(getSelectedClients()[0], 0);
-			}
-
-			mainFrame.getCombinedMenuItemInstallByShutdownColumn().show(!visible);
-		}
 	}
 
 	public void toggleColumn(String column) {
@@ -860,12 +813,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
 		setRebuiltClientListTableModel(false);
-		selectionPanel.initSortKeys();
-		if (getSelectedClients().length > 0) {
-			selectionPanel.moveToValue(getSelectedClients()[0], 0);
-		}
+		clientTable.initSortKeys();
 
-		mainFrame.getCombinedMenuItemDepotColumn().show(!visible);
+		// Todo this is called before in "setRebuiltClientListTableModel". Maybe make it unnecessary
+		clientTable.moveToFirstSelected();
 	}
 
 	public void handleGroupActionRequest() {
@@ -1055,18 +1006,18 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		checkSaveAll(true);
 		checkErrorList();
 
-		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
+		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + clientTable.getSelectedValues().size());
 
 		// when initializing the program the frame may not exist
 		if (mainFrame != null) {
 			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
-					+ selectionPanel.isSelectionEmpty());
+					+ clientTable.isSelectionEmpty());
 
-			if (selectionPanel.isSelectionEmpty()) {
+			if (clientTable.isSelectionEmpty()) {
 				setSelectedClients((List<String>) null);
 				setSelectedClientsArray(new String[0]);
 			} else {
-				setSelectedClients(selectionPanel.getSelectedValues());
+				setSelectedClients(clientTable.getSelectedValues());
 			}
 
 			clientInDepot = "";
@@ -1126,7 +1077,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 
 			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
-					+ " as well as " + selectionPanel.getSelectedValues().size());
+					+ " as well as " + clientTable.getSelectedValues().size());
 
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
 					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
@@ -1146,7 +1097,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return;
 		}
 
-		String[] currentSelectedClients = selectionPanel.getSelectedValues().toArray(String[]::new);
+		String[] currentSelectedClients = clientTable.getSelectedValues().toArray(String[]::new);
 		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))
 				|| currentSelectedClients.length == 0) {
 			return;
@@ -1161,26 +1112,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		initDepots();
 
 		// create client selection panel
-		selectionPanel = new JTableSelectionPanel(this) {
-			@Override
-			protected void keyPressedOnTable(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					startRemoteControlForSelectedClients();
-				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
-					Logging.debug(this, "keypressed: f10");
-					mainFrame.showPopupClients();
-				} else {
-					// Nothing to do for all the other keys
-				}
-			}
-		};
+		clientTable = new ClientTable(this);
 
-		selectionPanel.setModel(buildClientListTableModel(true));
+		clientTable.setModel(buildClientListTableModel(true));
 		setSelectionPanelCols();
 
-		selectionPanel.initSortKeys();
+		clientTable.initSortKeys();
 
-		startMainFrame(this, selectionPanel, depotsList, treeClients);
+		startMainFrame(this, clientTable, depotsList, treeClients);
 	}
 
 	private void initDepots() {
@@ -1243,8 +1182,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	private static void startMainFrame(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
-			DepotsList depotsList, ClientTree treeClients) {
+	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
+			ClientTree treeClients) {
 		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients);
 
 		// setting the similar global values as well
@@ -1520,9 +1459,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
 
 			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
-				selectionPanel.setMissingDataPanel();
+				clientTable.setMissingDataPanel();
 			} else {
-				selectionPanel.setDataPanel();
+				clientTable.setDataPanel();
 			}
 		}
 
@@ -1780,11 +1719,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	 * transports the selected values of the selection panel to the outer world
 	 */
 	public List<String> getSelectedClientsInTable() {
-		if (selectionPanel == null) {
+		if (clientTable == null) {
 			return new ArrayList<>();
 		}
 
-		return selectionPanel.getSelectedValues();
+		return clientTable.getSelectedValues();
 	}
 
 	private void setSelectedClients(List<String> clientNames) {
@@ -1847,39 +1786,15 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setFilterClientList(!filterClientList, rebuildClientListTableModel);
 	}
 
-	public void invertClientselection() {
-		selectionPanel.removeListSelectionListener(this);
-		boolean oldFilterClientList = filterClientList;
-		if (filterClientList) {
-			toggleFilterClientList();
-		}
-
-		Logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
-		List<String> selectedValues = new ArrayList<>(selectionPanel.getInvertedSet());
-
-		String[] selected = selectedValues.toArray(new String[0]);
-
-		Logging.info(this, "new selection " + Arrays.toString(selected));
-
-		selectionPanel.setSelectedValues(selected);
-		setSelectedClientsArray(selected);
-
-		if (oldFilterClientList) {
-			toggleFilterClientList();
-		}
-
-		selectionPanel.addListSelectionListener(this);
-	}
-
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
-			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
+			int col = clientTable.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
-			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			TableColumn column = clientTable.getColumnModel().getColumn(col);
 
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
@@ -1889,13 +1804,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
 			List<String> columns = new ArrayList<>();
-			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
-				columns.add(selectionPanel.getTableModel().getColumnName(i));
+			for (int i = 0; i < clientTable.getTableModel().getColumnCount(); i++) {
+				columns.add(clientTable.getTableModel().getColumnName(i));
 			}
 			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
+			int col = clientTable.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
@@ -1908,13 +1823,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
 			List<String> columns = new ArrayList<>();
-			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
-				columns.add(selectionPanel.getTableModel().getColumnName(i));
+			for (int i = 0; i < clientTable.getTableModel().getColumnCount(); i++) {
+				columns.add(clientTable.getTableModel().getColumnName(i));
 			}
 			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
+			int col = clientTable.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
@@ -1926,13 +1841,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL))) {
 			List<String> columns = new ArrayList<>();
 
-			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
-				columns.add(selectionPanel.getTableModel().getColumnName(i));
+			for (int i = 0; i < clientTable.getTableModel().getColumnCount(); i++) {
+				columns.add(clientTable.getTableModel().getColumnName(i));
 			}
 			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
+			int col = clientTable.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
@@ -1943,7 +1858,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void initSelectionPanelColumn(int col) {
 		if (col > -1) {
-			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			TableColumn column = clientTable.getColumnModel().getColumn(col);
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 			column.setCellRenderer(
@@ -1952,9 +1867,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys) {
-		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : " + selectionPanel.getSelectedSet());
+		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : " + clientTable.getSelectedSet());
 
-		setRebuiltClientListTableModel(restoreSortKeys, true, selectionPanel.getSelectedSet());
+		setRebuiltClientListTableModel(restoreSortKeys, true, clientTable.getSelectedSet());
 	}
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
@@ -1972,35 +1887,35 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			valuesToSelect = new ArrayList<>(selectValues);
 		}
 
-		List<? extends SortKey> saveSortKeys = selectionPanel.getSortKeys();
+		List<? extends SortKey> saveSortKeys = clientTable.getSortKeys();
 
-		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected "
-				+ selectionPanel.getSelectedValues().size());
+		Logging.info(this,
+				" setRebuiltClientListTableModel--- set model new, selected " + clientTable.getSelectedValues().size());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this,
-				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
+				"setRebuiltClientListTableModel --- got model selected " + clientTable.getSelectedValues().size());
 
-		selectionPanel.removeListSelectionListener(this);
-		int[] columnWidths = getTableColumnWidths(selectionPanel.getTable());
+		clientTable.removeListSelectionListener(this);
+		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
-		selectionPanel.setModel(tm);
+		clientTable.setModel(tm);
 
-		setTableColumnWidths(selectionPanel.getTable(), columnWidths);
-		selectionPanel.addListSelectionListener(this);
+		setTableColumnWidths(clientTable.getTable(), columnWidths);
+		clientTable.addListSelectionListener(this);
 
-		selectionPanel.initColumnNames();
+		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
-			selectionPanel.setSortKeys(saveSortKeys);
+			clientTable.setSortKeys(saveSortKeys);
 		}
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() "
 				+ Logging.getSize(valuesToSelect));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
-				+ Logging.getSize(selectionPanel.getSelectedValues()));
+				+ Logging.getSize(clientTable.getSelectedValues()));
 
 		setSelectionPanelCols();
 
@@ -2008,7 +1923,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setSelectedClientsCollectionOnPanel(valuesToSelect);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
-				+ Logging.getSize(selectionPanel.getSelectedValues()));
+				+ Logging.getSize(clientTable.getSelectedValues()));
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
@@ -2430,8 +2345,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setGroupByTree(node, pathToNode);
 
 		// intended for reload, we cancel activating group
-		if (preferringOldSelection && selectionPanel.getSelectedSet() != null
-				&& !selectionPanel.getSelectedSet().isEmpty()) {
+		if (preferringOldSelection && !clientTable.getSelectedSet().isEmpty()) {
 			return;
 		}
 
@@ -2523,12 +2437,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
-		if (selectionPanel != null) {
+		if (clientTable != null) {
 			initialTreeActivation();
 		}
 
-		if (selectionPanel != null) {
-			selectionPanel.clearSelection();
+		if (clientTable != null) {
+			clientTable.clearSelection();
 		}
 
 		setViewIndex(getViewIndex());
@@ -2682,7 +2596,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.getProductDataService().retrieveProductPropertiesPD(selectionPanel.getSelectedValues());
+		persistenceController.getProductDataService().retrieveProductPropertiesPD(clientTable.getSelectedValues());
 
 		Set<String> oldProductSelection = mainFrame.getPanelLocalbootProductSettings().getSelectedIDs();
 		List<? extends SortKey> currentSortKeysLocalbootProducts = mainFrame.getPanelLocalbootProductSettings()
@@ -2725,8 +2639,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
 		mainFrame.getPanelLocalbootProductSettings().setSelection(oldProductSelection);
-		mainFrame.getPanelLocalbootProductSettings()
-				.setSearchFields(InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+		mainFrame.getPanelLocalbootProductSettings().updateSearchFields();
 		setTableColumnWidths(mainFrame.getPanelLocalbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
@@ -2766,7 +2679,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		// we retrieve the properties for all clients and products
 
-		persistenceController.getProductDataService().retrieveProductPropertiesPD(selectionPanel.getSelectedValues());
+		persistenceController.getProductDataService().retrieveProductPropertiesPD(clientTable.getSelectedValues());
 		String netbootProductsSavedStateObjTag = "netbootProducts";
 
 		if (istmForSelectedClientsNetboot == null) {
@@ -2800,6 +2713,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.getPanelNetbootProductSettings().setGroupsData(productGroups, productGroupMembers);
 		mainFrame.getPanelNetbootProductSettings().reduceToSet(savedFilter);
 		mainFrame.getPanelNetbootProductSettings().setSelection(oldProductSelection);
+		mainFrame.getPanelNetbootProductSettings().updateSearchFields();
 		setTableColumnWidths(mainFrame.getPanelNetbootProductSettings().getTableProducts(), columnWidths);
 
 		return true;
@@ -3381,10 +3295,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		int saveViewIndex = getViewIndex();
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
-		List<String> selValuesList = selectionPanel.getSelectedValues();
+		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
-		selectionPanel.removeListSelectionListener(this);
+		clientTable.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
 		if (initialDataLoader.isDataLoaded()) {
@@ -3431,13 +3345,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			// reactivate selection listener
 			Logging.debug(this, " reset the values, particularly in list ");
-			selectionPanel.removeListSelectionListener(this);
-			selectionPanel.addListSelectionListener(this);
+			clientTable.removeListSelectionListener(this);
+			clientTable.addListSelectionListener(this);
 			setSelectedClientsCollectionOnPanel(clientsLeft);
 
 			// no list select item is provided
 			if (clientsLeft.isEmpty()) {
-				selectionPanel.fireListSelectionEmpty(this);
+				clientTable.fireListSelectionEmpty(this);
 			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
@@ -3451,7 +3365,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public TableModel getSelectedClientsTableModel() {
-		return selectionPanel.getSelectedRowsModel();
+		return clientTable.getSelectedRowsModel();
 	}
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {
@@ -3689,7 +3603,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
-					hostInfo.showAndSaveInternally(selectionPanel, client, (Map<?, ?>) source.get(client));
+					hostInfo.showAndSaveInternally(clientTable, client, (Map<?, ?>) source.get(client));
 				}
 				persistenceController.getHostDataService().updateHosts();
 
@@ -3880,7 +3794,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
-		AbstractTableModel model = selectionPanel.getTableModel();
+		AbstractTableModel model = clientTable.getTableModel();
 
 		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
@@ -3902,7 +3816,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		// update column
 		if (Boolean.TRUE
 				.equals(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
-			AbstractTableModel model = selectionPanel.getTableModel();
+			AbstractTableModel model = clientTable.getTableModel();
 
 			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
@@ -3926,8 +3840,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		infoRetriever.execute();
 	}
 
-	public JTableSelectionPanel getClientTable() {
-		return selectionPanel;
+	public ClientTable getClientTable() {
+		return clientTable;
 	}
 
 	public void setSessionInfo(Map<String, String> sessionInfo) {
@@ -3937,10 +3851,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	@SuppressWarnings({ "java:S1874" })
 	public String getBackendInfos() {
 		return persistenceController.getConfigDataService().getBackendInfos();
-	}
-
-	public Map<String, RemoteControl> getRemoteControls() {
-		return persistenceController.getConfigDataService().getRemoteControlsPD();
 	}
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
@@ -4342,7 +4252,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void initSavedSearchesDialog() {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog(selectionPanel, this);
+			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
 			savedSearchesDialog.init(new Dimension(300, 400));
 		}
 		savedSearchesDialog.start();
@@ -4354,59 +4264,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		savedSearchesDialog.setLocationRelativeTo(mainFrame);
 		savedSearchesDialog.setVisible(true);
-	}
-
-	public void startRemoteControlForSelectedClients() {
-		if (dialogRemoteControl == null) {
-			dialogRemoteControl = new FDialogRemoteControl(this);
-		}
-
-		if (remoteControls == null || !remoteControls.equals(getRemoteControls())) {
-			remoteControls = getRemoteControls();
-
-			Logging.debug(this, "remoteControls " + remoteControls);
-
-			Map<String, String> entries = new LinkedHashMap<>();
-			Map<String, String> tooltips = new LinkedHashMap<>();
-			Map<String, String> rcCommands = new HashMap<>();
-			Map<String, Boolean> commandsEditable = new HashMap<>();
-
-			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
-				entries.put(entry.getKey(), entry.getKey());
-				RemoteControl rc = entry.getValue();
-				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
-					tooltips.put(entry.getKey(), rc.getDescription());
-				} else {
-					tooltips.put(entry.getKey(), rc.getCommand());
-				}
-				rcCommands.put(entry.getKey(), rc.getCommand());
-				Boolean editable = Boolean.valueOf(rc.getEditable());
-
-				commandsEditable.put(entry.getKey(), editable);
-			}
-
-			dialogRemoteControl.setMeanings(rcCommands);
-			dialogRemoteControl.setEditableFields(commandsEditable);
-
-			// we want to present a sorted list of the keys
-			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
-			sortedKeys.sort(Comparator.comparing(String::toString));
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
-
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
-
-			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-			dialogRemoteControl.setModal(false);
-			dialogRemoteControl.init();
-		}
-
-		dialogRemoteControl.resetValue();
-
-		dialogRemoteControl.setSize(MainFrame.F_WIDTH, mainFrame.getHeight() / 2);
-		dialogRemoteControl.setLocationRelativeTo(mainFrame);
-
-		dialogRemoteControl.setVisible(true);
-		dialogRemoteControl.setDividerLocation(0.8);
 	}
 
 	public void reloadServerMenu() {
@@ -4513,7 +4370,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		refreshClientListKeepingGroup();
-		selectionPanel.clearSelection();
+		clientTable.clearSelection();
 	}
 
 	public void copySelectedClient() {
@@ -4627,7 +4484,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		initSavedSearchesDialog();
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(this, selectionPanel, savedSearchesDialog);
+			clientSelectionDialog = new ClientSelectionDialog(this, clientTable, savedSearchesDialog);
 		}
 
 		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -4639,7 +4496,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void clearSelectionOnPanel() {
-		selectionPanel.clearSelection();
+		clientTable.clearSelection();
 	}
 
 	public void setSelectedClientsOnPanel(String[] selected) {
@@ -4649,10 +4506,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			Logging.info(this, " setSelectedClientsOnPanel selected null");
 		}
 
-		selectionPanel.removeListSelectionListener(this);
-		selectionPanel.setSelectedValues(selected);
+		clientTable.removeListSelectionListener(this);
+		clientTable.setSelectedValues(selected);
 		setSelectedClientsArray(selected);
-		selectionPanel.addListSelectionListener(this);
+		clientTable.addListSelectionListener(this);
 	}
 
 	private void setSelectedClientsCollectionOnPanel(Collection<String> selected) {
@@ -4660,10 +4517,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			Logging.info(this, "setSelectedClientsCollectionOnPanel clients count " + selected.size());
 		}
 
-		selectionPanel.setSelectedValues(selected);
+		clientTable.setSelectedValues(selected);
 
 		Logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
-				+ selectionPanel.getSelectedValues().size());
+				+ clientTable.getSelectedValues().size());
 
 		if (selected == null) {
 			setSelectedClientsArray(new String[0]);
@@ -4726,7 +4583,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally " + clientsToSelect.size());
 
-		clientsToSelect.retainAll(selectionPanel.getColumnValues(0));
+		clientsToSelect.retainAll(clientTable.getColumnValues(0));
 
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list "
 				+ clientsToSelect.size());

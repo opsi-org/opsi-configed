@@ -147,8 +147,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		initComponents();
 	}
 
-	public void setSearchFields(List<String> fieldList) {
-		searchPane.setSearchFields(fieldList);
+	public void updateSearchFields() {
+		searchPane.setSearchFieldsAll();
 	}
 
 	public void setGuiIsFiltered(boolean b) {
@@ -478,8 +478,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		panelEdit.setLayout(layoutPanelEdit);
 
 		layoutPanelEdit.setVerticalGroup(layoutPanelEdit.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(labelSave,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(
+						labelSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(1, 1, 2)
 				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -598,6 +598,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
+			// TODO why is there this depot?
 			Set<String> extendedSelection = persistenceController.getProductDataService()
 					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
 			Set<String> addedElements = new TreeSet<>(extendedSelection);

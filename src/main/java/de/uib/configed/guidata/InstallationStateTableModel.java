@@ -210,19 +210,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return columnDict.get(column);
 	}
 
-	public static List<String> localizeColumns(Iterable<String> cols) {
-		List<String> result = new ArrayList<>();
-
-		if (columnDict != null) {
-			for (String col : cols) {
-				if (columnDict.get(col) != null) {
-					result.add(columnDict.get(col));
-				}
-			}
-		}
-		return result;
-	}
-
 	@Override
 	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
 		// Don't update if client not selected / part of this table

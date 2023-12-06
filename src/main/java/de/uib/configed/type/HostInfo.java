@@ -14,11 +14,11 @@ import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
 	// ---
@@ -405,12 +405,12 @@ public class HostInfo {
 		return this;
 	}
 
-	private static int findCol(JTableSelectionPanel selectionPanel, String colName) {
+	private static int findCol(ClientTable selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName);
 	}
 
-	private static int findRow(JTableSelectionPanel selectionPanel, String client) {
-		return selectionPanel.findModelRowFromValue(client, 0);
+	private static int findRow(ClientTable selectionPanel, String client) {
+		return selectionPanel.findModelRowFromValue(client);
 	}
 
 	public void resetGui() {
@@ -431,7 +431,7 @@ public class HostInfo {
 		mainFrame.setOpsiHostKey(hostKey);
 	}
 
-	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, String client, Map<?, ?> sourceOfChanges) {
+	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;

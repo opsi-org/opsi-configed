@@ -12,13 +12,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -106,7 +104,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditStringList;
@@ -302,36 +299,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private IconButton iconButtonReachableInfo;
 	private IconButton iconButtonSessionInfo;
 
-	private CombinedMenuItem combinedMenuItemCreatedColumn = new CombinedMenuItem(jCheckBoxMenuItemShowCreatedColumn,
-			popupShowCreatedColumn);
-
-	private CombinedMenuItem combinedMenuItemWANactiveColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowWANactiveColumn, popupShowWANactiveColumn);
-
-	private CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowIPAddressColumn, popupShowIPAddressColumn);
-
-	private CombinedMenuItem combinedMenuItemSystemUUIDColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowSystemUUIDColumn, popupShowSystemUUIDColumn);
-
-	private CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowHardwareAddressColumn, popupShowHardwareAddressColumn);
-
-	private CombinedMenuItem combinedMenuItemSessionInfoColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowSessionInfoColumn, popupShowSessionInfoColumn);
-
-	private CombinedMenuItem combinedMenuItemInventoryNumberColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowInventoryNumberColumn, popupShowInventoryNumberColumn);
-
-	private CombinedMenuItem combinedMenuItemUefiBootColumn = new CombinedMenuItem(jCheckBoxMenuItemShowUefiBoot,
-			popupShowUefiBoot);
-
-	private CombinedMenuItem combinedMenuItemInstallByShutdownColumn = new CombinedMenuItem(
-			jCheckBoxMenuItemShowInstallByShutdown, popupShowInstallByShutdownColumn);
-
-	private CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
-			popupShowDepotColumn);
-
 	private BorderLayout borderLayout1 = new BorderLayout();
 	private JTabbedPane jTabbedPaneConfigPanes;
 	private JSplitPane panelClientSelection;
@@ -362,7 +329,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JTableSelectionPanel panelClientlist;
+	private ClientTable panelClientlist;
 
 	private JLabel labelHostID;
 	private CheckedLabel cbInstallByShutdown;
@@ -393,16 +360,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
-			ClientTree treeClients) {
+	public MainFrame(ConfigedMain main, ClientTable panelClientlist, DepotsList depotsList, ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
-		panelClientlist = selectionPanel;
+		this.panelClientlist = panelClientlist;
 
-		exportTable = new ExporterToCSV(selectionPanel.getTable());
+		exportTable = new ExporterToCSV(panelClientlist.getTable());
 
 		this.treeClients = treeClients;
 
@@ -587,77 +553,88 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		});
 
 		jCheckBoxMenuItemShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		combinedMenuItemCreatedColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-
 		jCheckBoxMenuItemShowCreatedColumn
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowCreatedColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+			popupShowCreatedColumn.setSelected(jCheckBoxMenuItemShowCreatedColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowWANactiveColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		combinedMenuItemWANactiveColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowWANactiveColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowWANactiveColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowWANactiveColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+			popupShowWANactiveColumn.setSelected(jCheckBoxMenuItemShowWANactiveColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowIPAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		combinedMenuItemIPAddressColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowIPAddressColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowIPAddressColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowIPAddressColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+			popupShowIPAddressColumn.setSelected(jCheckBoxMenuItemShowIPAddressColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		combinedMenuItemSystemUUIDColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowSystemUUIDColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowSystemUUIDColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowSystemUUIDColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
+			popupShowSystemUUIDColumn.setSelected(jCheckBoxMenuItemShowSystemUUIDColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowHardwareAddressColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		combinedMenuItemHardwareAddressColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowHardwareAddressColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowHardwareAddressColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowHardwareAddressColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+			popupShowHardwareAddressColumn.setSelected(jCheckBoxMenuItemShowHardwareAddressColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowSessionInfoColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
-		combinedMenuItemSessionInfoColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSessionInfo());
+		jCheckBoxMenuItemShowSessionInfoColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+			popupShowSessionInfoColumn.setSelected(jCheckBoxMenuItemShowSessionInfoColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowInventoryNumberColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		combinedMenuItemInventoryNumberColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowInventoryNumberColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowInventoryNumberColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+			popupShowInventoryNumberColumn.setSelected(jCheckBoxMenuItemShowInventoryNumberColumn.isSelected());
+		});
 
 		jCheckBoxMenuItemShowUefiBoot.setText(Configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		combinedMenuItemUefiBootColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowUefiBoot.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowUefiBoot
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowUefiBoot.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+			popupShowUefiBoot.setSelected(jCheckBoxMenuItemShowUefiBoot.isSelected());
+		});
 
 		jCheckBoxMenuItemShowInstallByShutdown
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		combinedMenuItemUefiBootColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowInstallByShutdown
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumnInstallByShutdownActive());
+		jCheckBoxMenuItemShowInstallByShutdown.setSelected(
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowInstallByShutdown.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+			popupShowInstallByShutdownColumn.setSelected(jCheckBoxMenuItemShowInstallByShutdown.isSelected());
+		});
 
 		jCheckBoxMenuItemShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		combinedMenuItemDepotColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-
-		jCheckBoxMenuItemShowDepotColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowDepotColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowDepotColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+			popupShowDepotColumn.setSelected(jCheckBoxMenuItemShowDepotColumn.isSelected());
+		});
 
 		jMenuChangeDepot.setText(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 
@@ -784,7 +761,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 
 		// produces a global reaction when pressing space
-		jMenuRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
+		jMenuRemoteControl.addActionListener((ActionEvent e) -> panelClientlist.startRemoteControlForSelectedClients());
 
 		jMenuClients.add(jMenuWakeOnLan);
 		jMenuClients.add(jMenuOpsiClientdEvent);
@@ -1295,73 +1272,85 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void setupPopupMenuClientsTab() {
 		popupShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		combinedMenuItemCreatedColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-
 		popupShowCreatedColumn
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
+		popupShowCreatedColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowCreatedColumn.setSelected(popupShowCreatedColumn.isSelected());
+		});
 
 		popupShowWANactiveColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		combinedMenuItemWANactiveColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
+		popupShowWANactiveColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-		popupShowWANactiveColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
+		popupShowWANactiveColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowWANactiveColumn.setSelected(popupShowWANactiveColumn.isSelected());
+		});
 
 		popupShowIPAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		combinedMenuItemIPAddressColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		popupShowIPAddressColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
+		popupShowIPAddressColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
+		popupShowIPAddressColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowIPAddressColumn.setSelected(popupShowIPAddressColumn.isSelected());
+		});
 
 		popupShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		combinedMenuItemSystemUUIDColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-
-		popupShowSystemUUIDColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+		popupShowSystemUUIDColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+		popupShowSystemUUIDColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowSystemUUIDColumn.setSelected(popupShowSystemUUIDColumn.isSelected());
+		});
 
 		popupShowHardwareAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		combinedMenuItemHardwareAddressColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		popupShowHardwareAddressColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
+		popupShowHardwareAddressColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
+		popupShowHardwareAddressColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowHardwareAddressColumn.setSelected(popupShowHardwareAddressColumn.isSelected());
+		});
 
 		popupShowSessionInfoColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
-		combinedMenuItemSessionInfoColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-
-		popupShowSessionInfoColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSessionInfo());
+		popupShowSessionInfoColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+		popupShowSessionInfoColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowSessionInfoColumn.setSelected(popupShowSessionInfoColumn.isSelected());
+		});
 
 		popupShowInventoryNumberColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		combinedMenuItemInventoryNumberColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-
-		popupShowInventoryNumberColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
+		popupShowInventoryNumberColumn.setSelected(
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
+		popupShowInventoryNumberColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(popupShowInventoryNumberColumn.isSelected());
+		});
 
 		popupShowUefiBoot.setText(Configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		combinedMenuItemUefiBootColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-
-		popupShowUefiBoot.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
+		popupShowUefiBoot
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
+		popupShowUefiBoot.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowUefiBoot.setSelected(popupShowUefiBoot.isSelected());
+		});
 
 		popupShowInstallByShutdownColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		combinedMenuItemInstallByShutdownColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-
-		popupShowInstallByShutdownColumn
-				.addItemListener((ItemEvent e) -> configedMain.toggleColumnInstallByShutdownActive());
+		popupShowInstallByShutdownColumn.setSelected(
+				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
+		popupShowInstallByShutdownColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowInstallByShutdown.setSelected(popupShowInstallByShutdownColumn.isSelected());
+		});
 
 		popupShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		combinedMenuItemDepotColumn
-				.show(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-
-		popupShowDepotColumn.addItemListener(
-				(ItemEvent e) -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
+		popupShowDepotColumn
+				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
+		popupShowDepotColumn.addActionListener((ActionEvent e) -> {
+			configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+			jCheckBoxMenuItemShowDepotColumn.setSelected(popupShowDepotColumn.isSelected());
+		});
 
 		popupChangeDepot.setText(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 
@@ -1467,7 +1456,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 
 		popupRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-		popupRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
+		popupRemoteControl.addActionListener((ActionEvent e) -> panelClientlist.startRemoteControlForSelectedClients());
 
 		popupSelectionGetGroup.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		popupSelectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
@@ -2363,8 +2352,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void showPopupClients() {
-		Rectangle rect = panelClientlist.getCellRect(panelClientlist.getSelectedRow(), 0, false);
-		popupClients.show(panelClientlist, rect.x + (rect.width / 2), rect.y + (rect.height / 2));
+		popupClients.show(panelClientlist, -1, -1);
 	}
 
 	public void setConfigPanesEnabled(boolean b) {
@@ -2456,11 +2444,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.freeAllPossibleLicencesForSelectedClients();
 	}
 
-	private void remoteControlAction() {
-		Logging.debug(this, "jMenuRemoteControl");
-		configedMain.startRemoteControlForSelectedClients();
-	}
-
 	/**
 	 * Calls method from configedMain to start the execution of given command
 	 *
@@ -2487,6 +2470,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.startSSHControlDialog();
 	}
 
+	public void setClientFilterAction(boolean b) {
+		if (configedMain.isFilterClientList() != b) {
+			toggleClientFilterAction();
+		}
+	}
+
 	public void toggleClientFilterAction() {
 		toggleClientFilterAction(true);
 	}
@@ -2495,12 +2484,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.toggleFilterClientList(rebuildClientListTableModel);
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
-
-		if (!configedMain.isFilterClientList()) {
-			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter_disabled-32.png", ""));
-		} else {
-			iconButtonToggleClientFilter.setIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
-		}
+		iconButtonToggleClientFilter.setSelected(configedMain.isFilterClientList());
+		panelClientlist.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void exitAction() {
@@ -3378,34 +3363,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public IconButton getIconButtonSessionInfo() {
 		return iconButtonSessionInfo;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemCreatedColumn() {
-		return combinedMenuItemCreatedColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemWANactiveColumn() {
-		return combinedMenuItemWANactiveColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemSessionInfoColumn() {
-		return combinedMenuItemSessionInfoColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemInventoryNumberColumn() {
-		return combinedMenuItemInventoryNumberColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemUefiBootColumn() {
-		return combinedMenuItemUefiBootColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemInstallByShutdownColumn() {
-		return combinedMenuItemInstallByShutdownColumn;
-	}
-
-	public CombinedMenuItem getCombinedMenuItemDepotColumn() {
-		return combinedMenuItemDepotColumn;
 	}
 
 	public PanelProductSettings getPanelLocalbootProductSettings() {
