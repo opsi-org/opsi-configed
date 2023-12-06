@@ -21,6 +21,7 @@ import javax.swing.JScrollBar;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
@@ -183,7 +184,9 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		if (wasTerminalScreenCleared()) {
 			resetCursorAfterClearingTerminalScreen();
 		}
-		getTerminal().resize(getTerminalPanel().getTerminalSizeFromComponent(), RequestOrigin.User);
+		TermSize size = getTerminalPanel().getTerminalSizeFromComponent();
+		getTtyConnector().resize(size);
+		getTerminal().resize(size, RequestOrigin.User);
 		getTypeAheadManager().onResize();
 		getTerminalPanel().init(scrollBar);
 	}
