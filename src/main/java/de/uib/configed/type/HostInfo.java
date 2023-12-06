@@ -504,8 +504,7 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
 
-		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
-				&& !((String) (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY))).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null) {
 			clientSystemUUID = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -522,8 +521,7 @@ public class HostInfo {
 					clientSystemUUID);
 		}
 
-		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null
-				&& !((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
 			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -540,8 +538,7 @@ public class HostInfo {
 					clientMacAddress);
 		}
 
-		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null
-				&& !((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
 			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
