@@ -119,7 +119,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		IconButton buttonSetValuesFromPackage = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
-				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
+				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", "", true);
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 

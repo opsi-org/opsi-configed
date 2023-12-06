@@ -1209,24 +1209,24 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// icon pane
 	private void setupIcons1() {
 		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.jMenuFileReload"), "images/reload.gif",
-				"images/reload_over.gif", " ");
+				"images/reload_over.gif", "");
 		iconButtonReload.setFocusable(false);
 
 		iconButtonReloadLicenses = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
-				"images/reload_licenses.png", "images/reload_licenses_over.png", " ", false);
+				"images/reload_licenses.png", "images/reload_licenses_over.png", "", true);
 		iconButtonReloadLicenses.setFocusable(false);
 		iconButtonReloadLicenses.setVisible(false);
 
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
-				"images/newClient.gif", "images/newClient_over.gif", " ");
+				"images/newClient.gif", "images/newClient_over.gif", "");
 		iconButtonNewClient.setFocusable(false);
 
 		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
-				"images/setGroup.gif", "images/setGroup_over.gif", " ");
+				"images/setGroup.gif", "images/setGroup_over.gif", "");
 		iconButtonSetGroup.setFocusable(false);
 
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-				"images/apply.png", " ", "images/apply_disabled.png", false);
+				"images/apply.png", "", "images/apply_disabled.png", false);
 		iconButtonSaveConfiguration.setFocusable(false);
 
 		iconButtonToggleClientFilter = new IconButton(

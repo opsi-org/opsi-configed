@@ -110,7 +110,7 @@ public class IconButton extends JButton {
 		setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		setEnabled(enabled);
 		setSelectedIcon(Utils.createImageIcon(imageURLOver, ""));
-		if (imageURLDisabled.length() > 3) {
+		if (!imageURLDisabled.isBlank()) {
 			setDisabledIcon(Utils.createImageIcon(imageURLDisabled, ""));
 		}
 	}

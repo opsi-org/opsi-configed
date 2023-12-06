@@ -359,20 +359,20 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonDelete.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
-				"images/reload16.png", "images/reload16.png", " ", true);
+				"images/reload16.png", "images/reload16.png", "", true);
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonReloadProductStates.setVisible(true);
 
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", " ", true);
+				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonExecuteNow.setVisible(true);
 
 		IconButton buttonCollectiveAction = new IconButton(
 				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
-				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
+				"images/execute16_lightblue.png", "images/execute16_lightblue.png", "", true);
 
 		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
