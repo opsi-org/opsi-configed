@@ -7,10 +7,8 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -37,7 +35,6 @@ public class HostInfo {
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
 	public static final String CLIENT_UEFI_BOOT_KEY = "uefiBoot";
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
-	public static final String CLIENT_SESSION_INFO_KEY = "sessionInfo";
 	public static final String CLIENT_CONNECTED_KEY = "clientConnected";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
@@ -46,17 +43,13 @@ public class HostInfo {
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
 	public static final String CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL = "clientInventoryNumber";
-	public static final String CLIENT_ONE_TIME_PASSWORD_DISPLAY_FIELD_LABEL = "clientOneTimePassword";
-	public static final String CLIENT_NOTES_DISPLAY_FIELD_LABEL = "notes";
 
 	public static final String CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL = "clientSystemUUID";
 	public static final String CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL = "clientHardwareAddress";
 	public static final String LAST_SEEN_DISPLAY_FIELD_LABEL = "clientLastSeen";
 	public static final String CREATED_DISPLAY_FIELD_LABEL = "clientCreated";
 	public static final String HOST_NAME_DISPLAY_FIELD_LABEL = "clientName";
-	public static final String HOST_KEY_DISPLAY_FIELD_LABEL = "opsiHostKey";
 
-	public static final String HOST_TYPE_DISPLAY_FIELD_LABEL = "hostType";
 	public static final String CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL = "clientIPAddress";
 	public static final String CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL = "UEFIboot";
 	public static final String CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL = "WANmode";
@@ -82,16 +75,6 @@ public class HostInfo {
 	public static final String HOST_TYPE_VALUE_OPSI_DEPOT_SERVER = "OpsiDepotserver";
 	public static final String HOST_TYPE_VALUE_OPSI_CLIENT = "OpsiClient";
 
-	public static final String HOST_SUB_CLASS_TAG_OPSI_CLIENT_PROTOTYPE = "OpsiPrototype";
-
-	private static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
-	private static final Set<Character> notLegalChars = new HashSet<>();
-	static {
-		for (char notLegalChar : NOT_LEGAL_CHARS_0.toCharArray()) {
-			notLegalChars.add(notLegalChar);
-		}
-	}
-
 	// an AtomicInteger would be threadsafe
 	private static int numberOfInstances;
 
@@ -112,7 +95,6 @@ public class HostInfo {
 	private String clientIpAddress;
 	private Boolean clientUefiBoot;
 	private Boolean clientWanConfig;
-	private String clientSessionInfo;
 
 	private Boolean clientConnected;
 	private Boolean clientShutdownInstall;
@@ -156,7 +138,6 @@ public class HostInfo {
 		unordered.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
 
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
-		unordered.put(CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, clientSessionInfo);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 
@@ -185,7 +166,6 @@ public class HostInfo {
 		unordered.put(CLIENT_IP_ADDRESS_KEY, clientIpAddress);
 		unordered.put(CLIENT_UEFI_BOOT_KEY, clientUefiBoot);
 		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
-		unordered.put(CLIENT_SESSION_INFO_KEY, clientSessionInfo);
 
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
@@ -273,14 +253,6 @@ public class HostInfo {
 
 	public String getInventoryNumber() {
 		return clientInventoryNumber;
-	}
-
-	public String getNotes() {
-		return clientNotes;
-	}
-
-	public String getSystemUUID() {
-		return clientSystemUUID;
 	}
 
 	public String getMacAddress() {
@@ -649,7 +621,6 @@ public class HostInfo {
 		clientIpAddress = "";
 		clientUefiBoot = false;
 		clientWanConfig = false;
-		clientSessionInfo = "";
 
 		clientConnected = false;
 
