@@ -441,11 +441,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		if (s != null && !s.isEmpty()) {
 			ok = true;
 
-			if (names.indexOf(s) > -1) {
-				// TODO translate
+			if (names.contains(s)) {
 				ok = JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
-						Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION);
+						Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"), Globals.APPNAME,
+						JOptionPane.OK_CANCEL_OPTION);
 			}
 		}
 
