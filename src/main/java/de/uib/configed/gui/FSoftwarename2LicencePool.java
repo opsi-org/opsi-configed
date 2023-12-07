@@ -40,10 +40,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
 import utils.Utils;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
@@ -62,7 +62,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
 
-	private List<TableEditItem> updateCollection;
+	private List<MapBasedTableEditItem> updateCollection;
 
 	private int keyCol;
 

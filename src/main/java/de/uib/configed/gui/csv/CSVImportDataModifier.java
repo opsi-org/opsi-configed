@@ -36,9 +36,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
 
 public class CSVImportDataModifier {
 	private GenTableModel model;
@@ -135,7 +135,7 @@ public class CSVImportDataModifier {
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 
-		List<TableEditItem> updateCollection = new ArrayList<>();
+		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 

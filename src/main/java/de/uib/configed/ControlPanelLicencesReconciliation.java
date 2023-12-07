@@ -28,10 +28,10 @@ import de.uib.utilities.table.gui.CheckBoxTableCellRenderer;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
 	private PanelLicencesReconciliation thePanel;
@@ -59,7 +59,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 	@Override
 	public final void init() {
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<MapBasedTableEditItem>();
 
 		initPanels();
 

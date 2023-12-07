@@ -31,7 +31,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
 	private PanelGenEditTable paneProducts;
@@ -109,7 +109,7 @@ public class PanelProductProperties extends JSplitPane {
 			classNames.add("java.lang.String");
 		}
 
-		List<TableEditItem> updateCollection = new ArrayList<>();
+		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
 				new DefaultTableProvider(
 						new ExternalSource(columnNames, classNames, Set.of(configedMain.getSelectedDepots()))),

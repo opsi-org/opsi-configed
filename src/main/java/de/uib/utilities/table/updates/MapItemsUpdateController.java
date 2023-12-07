@@ -18,10 +18,10 @@ public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
 	private PanelGenEditTable panel;
 	private MapBasedUpdater updater;
-	private List<TableEditItem> updateCollection;
+	private List<MapBasedTableEditItem> updateCollection;
 
 	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
-			List<TableEditItem> updateCollection) {
+			List<MapBasedTableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
 		this.updater = updater;
@@ -37,12 +37,12 @@ public class MapItemsUpdateController implements UpdateController {
 
 		List<MapBasedTableEditItem> successfullInsertsWithNewKeys = new ArrayList<>();
 
-		Iterator<TableEditItem> iter = updateCollection.iterator();
+		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 
 		String lastKeyValue = "";
 
 		while (iter.hasNext() && success) {
-			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
+			MapBasedTableEditItem updateItem = iter.next();
 
 			Logging.debug(this, " handling updateItem " + updateItem);
 
@@ -109,7 +109,7 @@ public class MapItemsUpdateController implements UpdateController {
 
 	@Override
 	public boolean cancelChanges() {
-		Iterator<TableEditItem> iter = updateCollection.iterator();
+		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 			if (updateItem.getSource() == tablemodel) {

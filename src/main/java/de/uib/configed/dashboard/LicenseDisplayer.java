@@ -33,7 +33,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -182,7 +182,7 @@ public class LicenseDisplayer {
 		List<String> columnNames;
 		List<String> classNames;
 
-		List<TableEditItem> updateCollection;
+		List<MapBasedTableEditItem> updateCollection;
 
 		columnNames = new ArrayList<>();
 		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {

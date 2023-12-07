@@ -10,9 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapBasedTableEditItem extends TableEditItem {
+public class MapBasedTableEditItem {
 	private List<String> columnNames;
 	private List<Object> rowV;
+	protected Object source;
+
+	protected int keyCol = -1;
 
 	public MapBasedTableEditItem(Object source, List<String> columnNames, List<Object> rowV) {
 		this.columnNames = columnNames;
@@ -29,6 +32,14 @@ public class MapBasedTableEditItem extends TableEditItem {
 		}
 
 		return result;
+	}
+
+	public Object getSource() {
+		return source;
+	}
+
+	public boolean keyChanged() {
+		return true;
 	}
 
 	@Override

@@ -41,7 +41,7 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
 import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
 public class LicensingInfoDialog extends FGeneralDialog {
@@ -351,7 +351,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private void buildModel() {
-		List<TableEditItem> updateCollection = new ArrayList<>();
+		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
 				thePanel, updateCollection);

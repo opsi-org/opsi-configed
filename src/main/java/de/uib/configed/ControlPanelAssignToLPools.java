@@ -48,7 +48,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
@@ -416,7 +416,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<MapBasedTableEditItem>();
 
 		List<String> columnNames;
 

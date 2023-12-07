@@ -9,10 +9,10 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public interface TableUpdateItemInterface {
-	TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV);
+	MapBasedTableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV);
 
 	// TODO remove, every implementation is same as produceUpdateItem
-	TableEditItem produceInsertItem(List<Object> rowV);
+	MapBasedTableEditItem produceInsertItem(List<Object> rowV);
 
-	TableEditItem produceDeleteItem(List<Object> rowV);
+	MapBasedTableEditItem produceDeleteItem(List<Object> rowV);
 }

@@ -34,7 +34,7 @@ import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
@@ -64,7 +64,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<MapBasedTableEditItem>();
 
 		initPanelKeys();
 
@@ -336,9 +336,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void pickSoftwareLicence() {
 		boolean keyNew = false;
-		Iterator<TableEditItem> iter = updateCollection.iterator();
+		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext() && !keyNew) {
-			TableEditItem update = iter.next();
+			MapBasedTableEditItem update = iter.next();
 			if (update.getSource() == modelSoftwarelicences && update.keyChanged()) {
 				keyNew = true;
 			}
@@ -386,9 +386,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	private void pickLicenceContract() {
 		boolean keyNew = false;
-		Iterator<TableEditItem> iter = updateCollection.iterator();
+		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext() && !keyNew) {
-			TableEditItem update = iter.next();
+			MapBasedTableEditItem update = iter.next();
 			if (update.getSource() == modelLicencecontracts && update.keyChanged()) {
 				keyNew = true;
 			}

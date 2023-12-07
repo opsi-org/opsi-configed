@@ -22,7 +22,7 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel {
@@ -49,7 +49,7 @@ public class GenTableModel extends AbstractTableModel {
 	// columns which are editable in principle (but they may be final)
 
 	private int keyCol = -1;
-	private List<TableEditItem> updates;
+	private List<MapBasedTableEditItem> updates;
 	private boolean modelDataValid;
 	private boolean modelStructureValid;
 
@@ -68,7 +68,8 @@ public class GenTableModel extends AbstractTableModel {
 	private CursorrowObserved cursorrowObservable;
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
-			int[] finalColumns, TableModelListener l, List<TableEditItem> updates, boolean cancelRequestReload) {
+			int[] finalColumns, TableModelListener l, List<MapBasedTableEditItem> updates,
+			boolean cancelRequestReload) {
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
@@ -116,12 +117,12 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
-			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
+			int[] finalColumns, TableModelListener l, List<MapBasedTableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, finalColumns, l, updates, false);
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
-			TableModelListener l, List<TableEditItem> updates) {
+			TableModelListener l, List<MapBasedTableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates, false);
 	}
 

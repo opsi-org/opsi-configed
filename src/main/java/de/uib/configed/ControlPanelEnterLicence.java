@@ -27,7 +27,7 @@ import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableEditItem;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
 // tab new licence
@@ -83,7 +83,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<MapBasedTableEditItem>();
 
 		initPanels();
 		initPopupMenu();

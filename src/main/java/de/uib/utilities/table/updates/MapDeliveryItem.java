@@ -8,6 +8,7 @@ package de.uib.utilities.table.updates;
 
 import java.util.List;
 
+// TODO can we remove this, this implementation does nothing?
 public class MapDeliveryItem extends MapBasedTableEditItem {
 	private List<Object> oldValues;
 	private List<Object> rowV;
