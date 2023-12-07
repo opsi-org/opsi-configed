@@ -318,15 +318,14 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"), true,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonClose") },
-				400, 200);
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
+				200);
 
 		fConfirmAction.setMessage(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
 						+ textFieldProduct.getText() + "\n\n"
 						+ Configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
-
 						+ "\n\n" + textFieldSelectedDepots.getText());
 
 		fConfirmAction.setLocationRelativeTo(this);
