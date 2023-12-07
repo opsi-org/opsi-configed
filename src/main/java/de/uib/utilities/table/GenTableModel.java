@@ -526,8 +526,6 @@ public class GenTableModel extends AbstractTableModel {
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
 			if (!addedRows.contains(row) && !updatedRows.contains(row)) {
-				List<Object> oldValues = new ArrayList<>(rows.get(row));
-
 				rows.get(row).set(col, newValue);
 
 				if (itemFactory == null) {
@@ -535,7 +533,7 @@ public class GenTableModel extends AbstractTableModel {
 				} else if (updates == null) {
 					Logging.info("updates not initialized");
 				} else {
-					updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
+					updates.add(itemFactory.produceUpdateItem(rows.get(row)));
 				}
 
 				Logging.debug(this, "updated rows add " + row);
@@ -600,7 +598,7 @@ public class GenTableModel extends AbstractTableModel {
 		rows.add(rowV);
 		addedRows.add(rowsLength);
 
-		updates.add(itemFactory.produceInsertItem(rowV));
+		updates.add(itemFactory.produceUpdateItem(rowV));
 
 		// we shall have to reload the data if keys are newly generated
 		requestReload();
