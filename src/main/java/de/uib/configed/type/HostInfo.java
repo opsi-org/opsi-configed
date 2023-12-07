@@ -35,7 +35,6 @@ public class HostInfo {
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
 	public static final String CLIENT_UEFI_BOOT_KEY = "uefiBoot";
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
-	public static final String CLIENT_CONNECTED_KEY = "clientConnected";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 
@@ -96,7 +95,6 @@ public class HostInfo {
 	private Boolean clientUefiBoot;
 	private Boolean clientWanConfig;
 
-	private Boolean clientConnected;
 	private Boolean clientShutdownInstall;
 
 	public HostInfo() {
@@ -127,7 +125,6 @@ public class HostInfo {
 		unordered.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
 		unordered.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
 		unordered.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
-		unordered.put(CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, clientConnected);
 		unordered.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
 
 		unordered.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
@@ -139,7 +136,6 @@ public class HostInfo {
 
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
-		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 
 		Logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
@@ -167,7 +163,6 @@ public class HostInfo {
 		unordered.put(CLIENT_UEFI_BOOT_KEY, clientUefiBoot);
 		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
 
-		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
 		Logging.debug(this, "getMap clientName " + clientName);
@@ -621,9 +616,6 @@ public class HostInfo {
 		clientIpAddress = "";
 		clientUefiBoot = false;
 		clientWanConfig = false;
-
-		clientConnected = false;
-
 		clientShutdownInstall = false;
 	}
 }
