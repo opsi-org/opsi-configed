@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -32,43 +33,33 @@ import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.WindowConstants;
 
-import com.jediterm.terminal.ui.JediTermWidget;
+import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
+import de.uib.messagebus.Messagebus;
+import de.uib.messagebus.MessagebusListener;
+import de.uib.messagebus.WebSocketEvent;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public final class TerminalFrame {
-	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
-	private static final int DEFAULT_TERMINAL_ROWS = 24;
-	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
-
-	private TerminalWidget widget;
+public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;
 	private JProgressBar fileUploadProgressBar;
 	private JLabel uploadedFilesLabel;
 	private JLabel fileNameLabel;
 	private JPanel southPanel;
 
-	private TerminalSettingsProvider settingsProvider;
+	private Messagebus messagebus;
 
-	public TerminalWidget getTerminalWidget() {
-		return widget;
-	}
+	private TerminalTabbedPane tabbedPane;
 
-	private JediTermWidget createTerminalWidget() {
-		if (settingsProvider == null) {
-			settingsProvider = new TerminalSettingsProvider();
-		}
-		widget = new TerminalWidget(this, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
-		widget.init();
-
-		return widget;
+	public void setMessagebus(Messagebus messagebus) {
+		this.messagebus = messagebus;
 	}
 
 	private void createAndShowGUI() {
@@ -107,12 +98,13 @@ public final class TerminalFrame {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				widget.close();
+				tabbedPane.removeAllTerminalTabs();
+				close();
 			}
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				setSelectedTheme(TerminalSettingsProvider.getTerminalThemeInUse());
+				setSelectedTheme(TerminalSettingsProvider.getTerminalTheme());
 			}
 		});
 	}
@@ -127,36 +119,53 @@ public final class TerminalFrame {
 	private JMenu createFileMenu() {
 		JMenuItem jMenuItemNewWindow = new JMenuItem(
 				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"));
-		jMenuItemNewWindow.addActionListener((ActionEvent e) -> {
-			TerminalFrame terminal = new TerminalFrame();
-			terminal.display();
-			widget.getMessagebus().connectTerminal(terminal);
-		});
+		jMenuItemNewWindow.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		jMenuItemNewWindow.addActionListener((ActionEvent e) -> openNewWindow());
 
-		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
-		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
+		JMenuItem jMenuItemNewSession = new JMenuItem(
+				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewSession"));
+		jMenuItemNewSession.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		jMenuItemNewSession.addActionListener((ActionEvent e) -> openNewSession());
+
+		JMenuItem jMenuItemChangeSession = new JMenuItem(
+				Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"));
+		jMenuItemChangeSession.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		jMenuItemChangeSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
 
 		for (final String theme : Messages.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
-			Logging.debug("selectedTheme in Terminal " + theme);
-			themeItem.setSelected(TerminalSettingsProvider.getTerminalThemeInUse().equals(theme));
+			themeItem.setSelected(TerminalSettingsProvider.getTerminalTheme().equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
-
 			themeItem.addActionListener((ActionEvent e) -> setSelectedTheme(theme));
 		}
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		menuFile.add(jMenuItemNewWindow);
-		menuFile.add(jMenuItemSession);
+		menuFile.add(jMenuItemNewSession);
+		menuFile.add(jMenuItemChangeSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
 	}
 
-	private void displaySessionsDialog() {
+	public void openNewWindow() {
+		TerminalFrame terminalFrame = new TerminalFrame();
+		terminalFrame.setMessagebus(messagebus);
+		terminalFrame.display();
+	}
+
+	public void openNewSession() {
+		tabbedPane.addTerminalTab();
+		displaySessionsDialog();
+	}
+
+	public void displaySessionsDialog() {
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
 				500, 300);
@@ -168,18 +177,33 @@ public final class TerminalFrame {
 		sessionsDialog.setVisible(true);
 
 		if (sessionsDialog.getResult() == 2) {
-			widget.changeSession(sessionsDialog.getSelectedValue());
+			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+			if (widget != null) {
+				tabbedPane.getSelectedTerminalWidget().close();
+				tabbedPane.resetTerminalWidgetOnSelectedTab();
+				tabbedPane.openSessionOnSelectedTab(sessionsDialog.getSelectedValue());
+			}
 		}
 	}
 
 	private JMenu createViewMenu() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> widget.increaseFontSize());
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
+			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+			if (widget != null) {
+				widget.increaseFontSize();
+			}
+		});
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> widget.decreaseFontSize());
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
+			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+			if (widget != null) {
+				widget.decreaseFontSize();
+			}
+		});
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -193,21 +217,27 @@ public final class TerminalFrame {
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 
-		JediTermWidget termWidget = createTerminalWidget();
+		tabbedPane = new TerminalTabbedPane(this);
+		tabbedPane.setMessagebus(messagebus);
+		tabbedPane.init();
+		tabbedPane.addTerminalTab();
+		tabbedPane.openSessionOnSelectedTab("Configserver");
+		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
-				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(termWidget, 0, 0, Short.MAX_VALUE));
+				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
-				.addGroup(northLayout.createSequentialGroup().addComponent(termWidget, 0, 0, Short.MAX_VALUE)));
+				.addGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE)));
 
 		return northPanel;
 	}
 
 	private void setSelectedTheme(String selectedTheme) {
 		TerminalSettingsProvider.setTerminalTheme(selectedTheme);
-
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
+			widget.changeTheme();
 			widget.repaint();
 		}
 	}
@@ -290,21 +320,52 @@ public final class TerminalFrame {
 			frame.setVisible(true);
 		}
 
-		widget.requestFocus();
+		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
+			messagebus.getWebSocket().registerListener(this);
+		}
 	}
 
 	public void changeTitle() {
-		if (frame != null) {
-			String sessionChannel = widget.getSessionChannel() == null
-					|| CONFIG_SERVER_SESSION_CHANNEL.equals(widget.getSessionChannel())
-							? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-									.getConfigServer()
-							: widget.getSessionChannel();
-			frame.setTitle(sessionChannel);
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		if (frame != null && widget != null) {
+			frame.setTitle(widget.getTitle());
 		}
 	}
 
 	public void close() {
 		frame.dispose();
+		messagebus.getWebSocket().unregisterListener(this);
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		close();
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		if (tabbedPane.getTabCount() == 0) {
+			close();
+		}
+
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		if (widget == null || !widget.isMessageForThisChannel(message)) {
+			return;
+		}
+
+		String type = (String) message.get("type");
+		if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type) && tabbedPane.getTabCount() == 1) {
+			close();
+		}
 	}
 }

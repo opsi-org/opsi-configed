@@ -55,7 +55,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public String getName() {
-		return "";
+		return terminalWidget.getTitle();
 	}
 
 	@Override

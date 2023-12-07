@@ -67,7 +67,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 			if (isRowEven) {
 				component.setBackground(Globals.OPSI_DARK_MAGENTA_2);
 			} else {
-				component.setBackground(Globals.OPSI_MAGENTA_2);
+				component.setBackground(Globals.OPSI_DARK_MAGENTA);
 			}
 		}
 	}

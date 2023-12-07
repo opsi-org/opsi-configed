@@ -129,7 +129,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			terminalWidget.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			terminalWidget.getMessagebus().sendMessage(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 
 			buff.clear();
 
@@ -186,7 +186,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			terminalWidget.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			terminalWidget.getMessagebus().sendMessage(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 		} catch (JsonProcessingException ex) {
 			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		} catch (IOException ex) {

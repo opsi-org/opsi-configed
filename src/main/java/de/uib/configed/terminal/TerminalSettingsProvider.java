@@ -7,98 +7,123 @@
 package de.uib.configed.terminal;
 
 import java.awt.Font;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Collections;
 
-import com.jediterm.core.Color;
+import javax.swing.KeyStroke;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.jediterm.core.Platform;
+import com.jediterm.terminal.TerminalColor;
+import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.emulator.ColorPalette;
+import com.jediterm.terminal.ui.TerminalActionPresentation;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
+import de.uib.configed.Configed;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.Logging;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final int FONT_SIZE_MIN_LIMIT = 8;
 	public static final int FONT_SIZE_MAX_LIMIT = 62;
+	public static final TerminalColor BACKGROUND_COLOR_DARK = new TerminalColor(0, 0, 0);
+	public static final TerminalColor FOREGROUND_COLOR_DARK = new TerminalColor(208, 208, 208);
+	public static final TerminalColor BACKGROUND_COLOR_LIGHT = new TerminalColor(249, 249, 249);
+	public static final TerminalColor FOREGROUND_COLOR_LIGHT = new TerminalColor(96, 96, 96);
 
-	private static int fontSize = 12;
-	private static final Color[] DARK_COLORS = new Color[16];
-	static {
-		// Black
-		DARK_COLORS[0] = new Color(255, 255, 255);
-		// Red
-		DARK_COLORS[1] = new Color(255, 0, 0);
-		// Green
-		DARK_COLORS[2] = new Color(51, 255, 0);
-		// Yellow
-		DARK_COLORS[3] = new Color(255, 0, 153);
-		// Blue
-		DARK_COLORS[4] = new Color(0, 102, 255);
-		// Magenta
-		DARK_COLORS[5] = new Color(204, 0, 255);
-		// Cyan
-		DARK_COLORS[6] = new Color(0, 255, 255);
-		// White
-		DARK_COLORS[7] = new Color(208, 208, 208);
+	private static String theme = Messages.getSelectedTheme();
+	private int fontSize = 12;
 
-		// Bright versions of the ISO colors
-
-		// Black
-		DARK_COLORS[8] = new Color(128, 128, 128);
-		// Red
-		DARK_COLORS[9] = new Color(255, 0, 0);
-		// Green
-		DARK_COLORS[10] = new Color(51, 255, 0);
-		// Yellow
-		DARK_COLORS[11] = new Color(255, 0, 153);
-		// Blue
-		DARK_COLORS[12] = new Color(0, 102, 255);
-		// Magenta
-		DARK_COLORS[13] = new Color(204, 0, 255);
-		// Cyan
-		DARK_COLORS[14] = new Color(0, 255, 255);
-		// White
-		DARK_COLORS[15] = new Color(0, 0, 0);
-	}
-	private static final Color[] LIGHT_COLORS = new Color[16];
-	static {
-		// Black
-		LIGHT_COLORS[0] = new Color(0, 0, 0);
-		// Red
-		LIGHT_COLORS[1] = new Color(255, 0, 0);
-		// Green
-		LIGHT_COLORS[2] = new Color(51, 255, 0);
-		// Yellow
-		LIGHT_COLORS[3] = new Color(255, 0, 153);
-		// Blue
-		LIGHT_COLORS[4] = new Color(0, 102, 255);
-		// Magenta
-		LIGHT_COLORS[5] = new Color(204, 0, 255);
-		// Cyan
-		LIGHT_COLORS[6] = new Color(0, 255, 255);
-		// White
-		LIGHT_COLORS[7] = new Color(208, 208, 208);
-
-		// Bright versions of the ISO colors
-
-		// Black
-		LIGHT_COLORS[8] = new Color(128, 128, 128);
-		// Red
-		LIGHT_COLORS[9] = new Color(255, 0, 0);
-		// Green
-		LIGHT_COLORS[10] = new Color(51, 255, 0);
-		// Yellow
-		LIGHT_COLORS[11] = new Color(255, 0, 153);
-		// Blue
-		LIGHT_COLORS[12] = new Color(0, 102, 255);
-		// Magenta
-		LIGHT_COLORS[13] = new Color(204, 0, 255);
-		// Cyan
-		LIGHT_COLORS[14] = new Color(0, 255, 255);
-		// White
-		LIGHT_COLORS[15] = new Color(255, 255, 255);
+	@Override
+	public @NotNull TerminalActionPresentation getOpenUrlActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.openAsUrl"),
+				Collections.emptyList());
 	}
 
-	private static String themeInUse = Messages.getSelectedTheme();
-	private static MyColorPalette colorPalette = getColorPalette(themeInUse);
+	@Override
+	public @NotNull TerminalActionPresentation getCopyActionPresentation() {
+		KeyStroke keyStroke = Platform.current() == Platform.Mac
+				? KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK)
+				: KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.copy"), keyStroke);
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPasteActionPresentation() {
+		KeyStroke keyStroke = Platform.current() == Platform.Mac
+				? KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.META_DOWN_MASK)
+				: KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.paste"), keyStroke);
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getClearBufferActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.clearBuffer"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPageUpActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.pageUp"),
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPageDownActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.pageDown"),
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getLineUpActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineUp"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getLineDownActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineDown"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getFindActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.find"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getSelectAllActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.selectAll"),
+				Collections.emptyList());
+	}
+
+	public @NotNull TerminalActionPresentation getNewWindowActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_N,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	public @NotNull TerminalActionPresentation getNewSessionActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewSession"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_T,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	public @NotNull TerminalActionPresentation getChangeSessionActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_S,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
 
 	@Override
 	public Font getTerminalFont() {
@@ -116,8 +141,17 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	}
 
 	@Override
+	public TextStyle getDefaultStyle() {
+		TextStyle defaultStyle = new TextStyle(FOREGROUND_COLOR_DARK, BACKGROUND_COLOR_DARK);
+		if ("Light".equals(theme)) {
+			defaultStyle = new TextStyle(FOREGROUND_COLOR_LIGHT, BACKGROUND_COLOR_LIGHT);
+		}
+		return defaultStyle;
+	}
+
+	@Override
 	public ColorPalette getTerminalColorPalette() {
-		return colorPalette;
+		return ColorPaletteImpl.DEFAULT_COLOR_PALETTE;
 	}
 
 	@Override
@@ -135,48 +169,15 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		return true;
 	}
 
-	public static void setTerminalFontSize(int size) {
+	public void setTerminalFontSize(int size) {
 		fontSize = size;
 	}
 
-	private static MyColorPalette getColorPalette(String theme) {
-		switch (theme) {
-		case Messages.THEME_LIGHT:
-			return new MyColorPalette(LIGHT_COLORS);
-
-		case Messages.THEME_DARK:
-			return new MyColorPalette(DARK_COLORS);
-
-		default:
-			Logging.warning("Could not find MyColorPalette for theme " + theme);
-			return new MyColorPalette(DARK_COLORS);
-		}
-	}
-
 	public static void setTerminalTheme(String theme) {
-		themeInUse = theme;
-		colorPalette = getColorPalette(themeInUse);
+		TerminalSettingsProvider.theme = theme;
 	}
 
-	public static String getTerminalThemeInUse() {
-		return themeInUse;
-	}
-
-	private static class MyColorPalette extends ColorPalette {
-		private Color[] colors;
-
-		public MyColorPalette(Color[] colors) {
-			this.colors = colors;
-		}
-
-		@Override
-		public Color getForegroundByColorIndex(int colorIndex) {
-			return colors[colorIndex];
-		}
-
-		@Override
-		public Color getBackgroundByColorIndex(int colorIndex) {
-			return colors[colorIndex];
-		}
+	public static String getTerminalTheme() {
+		return theme;
 	}
 }
