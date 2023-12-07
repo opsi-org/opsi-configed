@@ -104,6 +104,27 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 				Collections.emptyList());
 	}
 
+	public @NotNull TerminalActionPresentation getNewWindowActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_N,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	public @NotNull TerminalActionPresentation getNewSessionActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewSession"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_T,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	public @NotNull TerminalActionPresentation getChangeSessionActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_S,
+								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+	}
+
 	@Override
 	public Font getTerminalFont() {
 		return new Font(Font.MONOSPACED, Font.PLAIN, fontSize);

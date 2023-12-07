@@ -25,6 +25,7 @@ import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
+import com.jediterm.terminal.ui.TerminalAction;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
 
 import de.uib.messagebus.Messagebus;
@@ -49,7 +50,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	private String sessionChannel;
 
 	private SettingsProvider settingsProvider;
-	private TerminalFrame terminal;
+	private TerminalFrame terminalFrame;
 
 	private WebSocketInputStream webSocketInputStream;
 
@@ -62,7 +63,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	public TerminalWidget(TerminalFrame terminal, int columns, int lines, SettingsProvider settingsProvider) {
 		super(columns, lines, settingsProvider);
 		this.settingsProvider = settingsProvider;
-		this.terminal = terminal;
+		this.terminalFrame = terminal;
 	}
 
 	public void setMessagebus(Messagebus messagebus) {
@@ -107,19 +108,17 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		this.ignoreKeyEvent = ignoreKeyEvent;
 	}
 
-	@SuppressWarnings({ "java:S1188" })
 	public void init() {
 		if (settingsProvider == null) {
 			settingsProvider = new TerminalSettingsProvider();
 		}
 
-		setDropTarget(new FileUpload(terminal, this));
+		setDropTarget(new FileUpload(terminalFrame, this));
 
 		scrollBar = new JScrollBar();
 		getTerminalPanel().init(scrollBar);
 
 		getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
-			@SuppressWarnings({ "java:S1541" })
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_PLUS && e.isControlDown()) {
@@ -128,15 +127,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				} else if (e.getKeyCode() == KeyEvent.VK_MINUS && e.isControlDown()) {
 					decreaseFontSize();
 					ignoreKeyEvent = true;
-				} else if (e.getKeyCode() == KeyEvent.VK_N && e.isControlDown() && e.isShiftDown()) {
-					ignoreKeyEvent = true;
-					terminal.openNewWindow();
-				} else if (e.getKeyCode() == KeyEvent.VK_T && e.isControlDown() && e.isShiftDown()) {
-					ignoreKeyEvent = true;
-					terminal.openNewSession();
-				} else if (e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && e.isShiftDown()) {
-					ignoreKeyEvent = true;
-					terminal.displaySessionsDialog();
 				} else {
 					ignoreKeyEvent = false;
 				}
@@ -232,6 +222,28 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	}
 
 	@Override
+	public List<TerminalAction> getActions() {
+		return List
+				.of(new TerminalAction(((TerminalSettingsProvider) settingsProvider).getNewWindowActionPresentation(),
+						(KeyEvent input) -> {
+							terminalFrame.openNewWindow();
+							return true;
+						}).withMnemonicKey(KeyEvent.VK_N),
+						new TerminalAction(
+								((TerminalSettingsProvider) settingsProvider).getNewSessionActionPresentation(),
+								(KeyEvent input) -> {
+									terminalFrame.openNewSession();
+									return true;
+								}).withMnemonicKey(KeyEvent.VK_T),
+						new TerminalAction(
+								((TerminalSettingsProvider) settingsProvider).getChangeSessionActionPresentation(),
+								(KeyEvent input) -> {
+									terminalFrame.displaySessionsDialog();
+									return true;
+								}).withMnemonicKey(KeyEvent.VK_S));
+	}
+
+	@Override
 	public void close() {
 		super.close();
 		messagebus.getWebSocket().unregisterListener(this);
@@ -263,7 +275,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			webSocketInputStream = new WebSocketInputStream();
 			terminalId = (String) message.get("terminal_id");
 			terminalChannel = (String) message.get("back_channel");
-			terminal.changeTitle();
+			terminalFrame.changeTitle();
 			unlock();
 		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
 			close();
