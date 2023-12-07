@@ -501,10 +501,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					displayName = hwClass + "_" + j;
 				}
 
-				if (!displayNames.containsKey(displayName)) {
-					displayNames.put(displayName, new ArrayList<>());
-				}
-				displayNames.get(displayName).add(devices.get(j));
+				List<Map<String, Object>> displayList = displayNames.computeIfAbsent(displayName,
+						s -> new ArrayList<>());
+
+				displayList.add(devices.get(j));
 			}
 
 			String[] names = createNamesArray(devices, displayNames);
