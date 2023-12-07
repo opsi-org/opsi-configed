@@ -120,7 +120,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames.add("java.lang.Boolean");
 		classNames.add("java.lang.Boolean");
 		MapTableUpdateItemFactory updateItemFactoryLicencesReconciliation = new MapTableUpdateItemFactory(
-				modelLicencesReconciliation, columnNames, 0);
+				modelLicencesReconciliation, columnNames);
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override

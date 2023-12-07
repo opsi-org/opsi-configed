@@ -10,17 +10,15 @@ import java.util.List;
 
 public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 	private List<String> columnNames;
-	private int keyCol;
 	private Object source;
 
-	public MapTableUpdateItemFactory(Object source, List<String> columnNames, int keyCol) {
+	public MapTableUpdateItemFactory(Object source, List<String> columnNames) {
 		this.columnNames = columnNames;
-		this.keyCol = keyCol;
 		this.source = source;
 	}
 
-	public MapTableUpdateItemFactory(List<String> columnNames, int keyCol) {
-		this(null, columnNames, keyCol);
+	public MapTableUpdateItemFactory(List<String> columnNames) {
+		this(null, columnNames);
 	}
 
 	public void setSource(Object source) {
@@ -29,16 +27,16 @@ public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 
 	@Override
 	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
-		return new MapDeliveryItem(source, keyCol, columnNames, rowV);
+		return new MapDeliveryItem(source, 0, columnNames, rowV);
 	}
 
 	@Override
 	public TableEditItem produceInsertItem(List<Object> rowV) {
-		return new MapDeliveryItem(source, keyCol, columnNames, rowV);
+		return new MapDeliveryItem(source, 0, columnNames, rowV);
 	}
 
 	@Override
 	public TableEditItem produceDeleteItem(List<Object> rowV) {
-		return new MapDeleteItem(source, keyCol, columnNames, rowV);
+		return new MapDeleteItem(source, 0, columnNames, rowV);
 	}
 }

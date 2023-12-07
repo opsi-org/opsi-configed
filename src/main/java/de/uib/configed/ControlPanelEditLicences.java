@@ -80,7 +80,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
-				columnNames, 0);
+				columnNames);
 		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
 				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection, true);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
@@ -154,7 +154,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		columnNames.add(LicenceEntry.BOUND_TO_HOST_KEY);
 		columnNames.add(LicenceEntry.EXPIRATION_DATE_KEY);
 		MapTableUpdateItemFactory updateItemFactorySoftwarelicences = new MapTableUpdateItemFactory(
-				modelSoftwarelicences, columnNames, 0);
+				modelSoftwarelicences, columnNames);
 		modelSoftwarelicences = new GenTableModel(updateItemFactorySoftwarelicences,
 				configedMain.softwarelicencesTableProvider, 0, thePanel.getPanelSoftwarelicences(), updateCollection);
 		updateItemFactorySoftwarelicences.setSource(modelSoftwarelicences);
@@ -231,7 +231,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames, 0);
+		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames);
 		modelLicencecontracts = new GenTableModel(updateItemFactoryLicencecontracts,
 				configedMain.licenceContractsTableProvider, 0, thePanel.getPanelLicencecontracts(), updateCollection);
 		updateItemFactoryLicencecontracts.setSource(modelLicencecontracts);

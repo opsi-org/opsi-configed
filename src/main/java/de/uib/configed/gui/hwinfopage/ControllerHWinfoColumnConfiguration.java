@@ -133,7 +133,7 @@ public class ControllerHWinfoColumnConfiguration {
 			classNames.add("java.lang.String");
 		}
 
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, KEY_COL);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
 		model = new GenTableModel(updateItemFactory,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {

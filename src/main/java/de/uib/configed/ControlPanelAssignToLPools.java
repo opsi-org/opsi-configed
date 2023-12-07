@@ -9,6 +9,7 @@ package de.uib.configed;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -171,7 +172,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicencePoolPD(poolID).isEmpty()) {
 			thePanel.getFMissingSoftwareInfo()
 					.setTableModel(new GenTableModel(
-							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames(), 0),
+							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
 							new DefaultTableProvider(
 									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
 											thePanel.getFMissingSoftwareInfo().getClassNames(), new MapRetriever() {
@@ -235,14 +236,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		} else {
 			// selectKeys old keys
 			Set<Object> existingKeys = modelWindowsSoftwareIds.getExistingKeys();
-			int count = 0;
-			for (String key : selectKeys) {
-				if (existingKeys.contains(key)) {
-					count++;
-				}
-			}
+			Set<Object> intersectionSet = new HashSet<>(existingKeys);
+			intersectionSet.retainAll(selectKeys);
 
-			thePanel.getFieldCountAssignedInEditing().setText(produceCount(count));
+			thePanel.getFieldCountAssignedInEditing().setText(produceCount(intersectionSet.size()));
 		}
 
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
@@ -428,7 +425,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
-				columnNames, 0);
+				columnNames);
 		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, configedMain.licencePoolTableProvider, 0,
 				thePanel.getPanelLicencepools(), updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
@@ -478,7 +475,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
-				columnNames, 0);
+				columnNames);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override

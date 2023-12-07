@@ -468,7 +468,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				+ " and classes " + classNamesSWxLicencepool);
 
 		MapTableUpdateItemFactory updateItemFactoySWxLicencepool = new MapTableUpdateItemFactory(
-				columnNamesSWxLicencepool, 0);
+				columnNamesSWxLicencepool);
 
 		if (modelSWxLicencepool == null) {
 			modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(

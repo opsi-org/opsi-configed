@@ -137,7 +137,7 @@ public class CSVImportDataModifier {
 
 		List<TableEditItem> updateCollection = new ArrayList<>();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, 0);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
 		GenTableModel createdModel = new GenTableModel(updateItemFactory, new DefaultTableProvider(source), 0,
 				new int[] {}, thePanel, updateCollection);
