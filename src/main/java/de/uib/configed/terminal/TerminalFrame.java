@@ -123,15 +123,17 @@ public final class TerminalFrame implements MessagebusListener {
 				KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		jMenuItemNewWindow.addActionListener((ActionEvent e) -> openNewWindow());
 
-		JMenuItem jMenuItemNewTab = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewTab"));
-		jMenuItemNewTab.setAccelerator(
+		JMenuItem jMenuItemNewSession = new JMenuItem(
+				Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewSession"));
+		jMenuItemNewSession.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		jMenuItemNewTab.addActionListener((ActionEvent e) -> openNewTab());
+		jMenuItemNewSession.addActionListener((ActionEvent e) -> openNewSession());
 
-		JMenuItem jMenuItemSession = new JMenuItem(Configed.getResourceValue("Terminal.menuBar.fileMenu.session"));
-		jMenuItemSession.setAccelerator(
+		JMenuItem jMenuItemChangeSession = new JMenuItem(
+				Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"));
+		jMenuItemChangeSession.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		jMenuItemSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
+		jMenuItemChangeSession.addActionListener((ActionEvent e) -> displaySessionsDialog());
 
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
@@ -146,8 +148,8 @@ public final class TerminalFrame implements MessagebusListener {
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		menuFile.add(jMenuItemNewWindow);
-		menuFile.add(jMenuItemNewTab);
-		menuFile.add(jMenuItemSession);
+		menuFile.add(jMenuItemNewSession);
+		menuFile.add(jMenuItemChangeSession);
 		menuFile.add(jMenuTheme);
 		return menuFile;
 	}
@@ -158,9 +160,9 @@ public final class TerminalFrame implements MessagebusListener {
 		terminalFrame.display();
 	}
 
-	public void openNewTab() {
+	public void openNewSession() {
 		tabbedPane.addTerminalTab();
-		tabbedPane.openSessionOnSelectedTab("Configserver");
+		displaySessionsDialog();
 	}
 
 	public void displaySessionsDialog() {
