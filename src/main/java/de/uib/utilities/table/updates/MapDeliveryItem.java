@@ -12,16 +12,12 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 	private List<Object> oldValues;
 	private List<Object> rowV;
 
-	public MapDeliveryItem(Object source, int keyCol, List<String> columnNames, List<Object> rowV) {
-		super(source, keyCol, columnNames, rowV);
+	public MapDeliveryItem(Object source, List<String> columnNames, List<Object> rowV) {
+		super(source, columnNames, rowV);
 	}
 
 	@Override
 	public boolean keyChanged() {
-		if (keyCol < 0) {
-			return false;
-		}
-
 		if (oldValues == null) {
 			return true;
 		}

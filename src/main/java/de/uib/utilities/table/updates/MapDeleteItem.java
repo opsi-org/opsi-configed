@@ -9,8 +9,8 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public class MapDeleteItem extends MapBasedTableEditItem {
-	public MapDeleteItem(Object source, int keyCol, List<String> columnNames, List<Object> rowV) {
-		super(source, keyCol, columnNames, rowV);
+	public MapDeleteItem(Object source, List<String> columnNames, List<Object> rowV) {
+		super(source, columnNames, rowV);
 	}
 
 	@Override

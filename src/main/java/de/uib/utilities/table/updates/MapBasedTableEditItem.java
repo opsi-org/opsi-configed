@@ -14,11 +14,11 @@ public class MapBasedTableEditItem extends TableEditItem {
 	private List<String> columnNames;
 	private List<Object> rowV;
 
-	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<Object> rowV) {
+	public MapBasedTableEditItem(Object source, List<String> columnNames, List<Object> rowV) {
 		this.columnNames = columnNames;
 		this.rowV = rowV;
 		this.source = source;
-		this.keyCol = keyCol;
+		this.keyCol = 0;
 	}
 
 	public Map<String, Object> getRowAsMap() {

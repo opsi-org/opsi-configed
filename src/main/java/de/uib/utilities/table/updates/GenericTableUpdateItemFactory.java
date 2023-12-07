@@ -10,12 +10,7 @@ import java.util.List;
 
 public class GenericTableUpdateItemFactory implements TableUpdateItemInterface {
 	private List<String> columnNames;
-	private int keyCol;
 	private Object source;
-
-	public GenericTableUpdateItemFactory(int keyCol) {
-		this.keyCol = keyCol;
-	}
 
 	public void setSource(Object source) {
 		this.source = source;
@@ -27,16 +22,16 @@ public class GenericTableUpdateItemFactory implements TableUpdateItemInterface {
 
 	@Override
 	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
-		return new MapBasedTableEditItem(source, keyCol, columnNames, rowV);
+		return new MapBasedTableEditItem(source, columnNames, rowV);
 	}
 
 	@Override
 	public TableEditItem produceInsertItem(List<Object> rowV) {
-		return new MapBasedTableEditItem(source, keyCol, columnNames, rowV);
+		return new MapBasedTableEditItem(source, columnNames, rowV);
 	}
 
 	@Override
 	public TableEditItem produceDeleteItem(List<Object> rowV) {
-		return new MapBasedTableEditItem(source, keyCol, columnNames, rowV);
+		return new MapBasedTableEditItem(source, columnNames, rowV);
 	}
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public interface TableUpdateItemInterface {
 	TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV);
 
+	// TODO remove, every implementation is same as produceUpdateItem
 	TableEditItem produceInsertItem(List<Object> rowV);
 
 	TableEditItem produceDeleteItem(List<Object> rowV);

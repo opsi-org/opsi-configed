@@ -356,7 +356,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
 				thePanel, updateCollection);
 
-		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory(0);
+		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory();
 
 		updateItemFactory.setSource(theModel);
 
