@@ -68,14 +68,7 @@ public class MapItemsUpdateController implements UpdateController {
 		if (success) {
 			// we remove the update items
 			// (either all or no one)
-			iter = updateCollection.iterator();
-			while (iter.hasNext()) {
-				MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
-				if (updateItem.getSource() == tablemodel) {
-					iter.remove();
-					// this can be safely done according to an Iterator guarantee
-				}
-			}
+			removeItemsWithSource(updateCollection.iterator(), tablemodel);
 
 			Logging.info(this, " we start with the new data set, reload request  " + tablemodel.isReloadRequested());
 			tablemodel.startWithCurrentData();
@@ -83,35 +76,36 @@ public class MapItemsUpdateController implements UpdateController {
 
 			Logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
 			panel.moveToKeyValue(lastKeyValue);
+		} else if (!successfullInsertsWithNewKeys.isEmpty()) {
+			// we have to remove all update items ...
+			removeItemsWithSource(iter, tablemodel);
+
+			// ... and look what we have in the database
+			tablemodel.requestReload();
+			tablemodel.reset();
+			// we have valid data again, even if not the expected ones
+			success = true;
 		} else {
-			if (!successfullInsertsWithNewKeys.isEmpty()) {
-				// we have to remove all update items ...
-				while (iter.hasNext()) {
-					MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
-					if (updateItem.getSource() == tablemodel) {
-						iter.remove();
-						// this can be safely done according to an Iterator guarantee
-					}
-				}
-
-				// ... and look what we have in the database
-				tablemodel.requestReload();
-				tablemodel.reset();
-				// we have valid data again, even if not the expected ones
-				success = true;
-			}
-
 			Logging.checkErrorList(null);
 		}
 
 		return success;
 	}
 
+	private static void removeItemsWithSource(Iterator<MapBasedTableEditItem> iter, GenTableModel source) {
+		while (iter.hasNext()) {
+			if (iter.next().getSource() == source) {
+				iter.remove();
+				// this can be safely done according to an Iterator guarantee
+			}
+		}
+	}
+
 	@Override
 	public boolean cancelChanges() {
 		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
-			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
+			MapBasedTableEditItem updateItem = iter.next();
 			if (updateItem.getSource() == tablemodel) {
 				iter.remove();
 				// this can be safely done according to an Iterator guarantee

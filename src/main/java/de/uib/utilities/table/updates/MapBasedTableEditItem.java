@@ -15,13 +15,10 @@ public class MapBasedTableEditItem {
 	private List<Object> rowV;
 	protected Object source;
 
-	protected int keyCol = -1;
-
 	public MapBasedTableEditItem(Object source, List<String> columnNames, List<Object> rowV) {
 		this.columnNames = columnNames;
 		this.rowV = rowV;
 		this.source = source;
-		this.keyCol = 0;
 	}
 
 	public Map<String, Object> getRowAsMap() {
@@ -44,6 +41,6 @@ public class MapBasedTableEditItem {
 
 	@Override
 	public String toString() {
-		return getRowAsMap().toString() + " keyCol " + keyCol + " source " + source;
+		return getRowAsMap().toString() + " source " + source;
 	}
 }
