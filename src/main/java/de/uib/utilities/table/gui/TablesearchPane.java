@@ -14,14 +14,12 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -84,10 +82,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private JMenuItem popupMarkHits;
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
-
-	public enum SearchMode {
-		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
-	}
 
 	private boolean withRegEx = true;
 	private boolean selectMode = true;
@@ -240,9 +234,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * serve graphical filtermark
 	 */
 	public void setFilterMark(boolean b) {
-		if (filtermark.isSelected() == null || filtermark.isSelected() != b) {
-			filtermark.setSelected(b);
-		}
+		filtermark.setSelected(b);
 	}
 
 	/**
@@ -402,9 +394,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
 		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
-		Icon nullIconFilter = Utils.createImageIcon("images/filter_14x14_inwork.png", "");
 
-		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
+		filtermark = new CheckedLabel(selectedIconFilter, unselectedIconFilter, false);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 
@@ -516,7 +507,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return !disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty();
 	}
 
+	private void retainOnlyAllFieldsItem() {
+		comboSearchFields.removeAllItems();
+		comboSearchFields.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
+	}
+
 	public void setSearchFields(Integer[] cols) {
+		retainOnlyAllFieldsItem();
+
 		for (int col : cols) {
 			comboSearchFields.addItem(targetModel.getColumnName(col));
 		}
@@ -524,24 +522,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setSearchFieldsAll() {
 		Logging.debug(this, "setSearchFieldsAll " + targetModel);
-		if (targetModel != null) {
-			Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
+		Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
 
-			for (int i = 0; i < targetModel.getColumnCount(); i++) {
-				String colname = targetModel.getColumnName(i);
-				comboSearchFields.addItem(colname);
-			}
+		retainOnlyAllFieldsItem();
 
-			comboSearchFields.setSelectedIndex(0);
+		for (int i = 0; i < targetModel.getColumnCount(); i++) {
+			String colname = targetModel.getColumnName(i);
+			comboSearchFields.addItem(colname);
 		}
-	}
 
-	public void setSearchFields(List<String> fieldList) {
-		for (String fieldName : fieldList) {
-			if (((DefaultComboBoxModel<String>) comboSearchFields.getModel()).getIndexOf(fieldName) == -1) {
-				comboSearchFields.addItem(fieldName);
-			}
-		}
+		comboSearchFields.setSelectedIndex(0);
 	}
 
 	public void setSearchMode(int a) {

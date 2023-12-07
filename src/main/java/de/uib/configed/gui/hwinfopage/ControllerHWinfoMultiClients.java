@@ -145,11 +145,11 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	private void buildSurrounding() {
-		JButton buttonConfigureColumns = new JButton("", Utils.createImageIcon("images/configure16.png", ""));
+		JButton buttonConfigureColumns = new JButton(Utils.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
-		JButton buttonReload = new JButton("", Utils.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
 		buttonReload.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
@@ -161,7 +161,7 @@ public class ControllerHWinfoMultiClients {
 
 		buttonConfigureColumns.addActionListener(this::configureColumns);
 
-		JButton buttonCopySelection = new JButton("", Utils.createImageIcon("images/memorize_selection.png", ""));
+		JButton buttonCopySelection = new JButton(Utils.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCopySelection.setEnabled(false);
 

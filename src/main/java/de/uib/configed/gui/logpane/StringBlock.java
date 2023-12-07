@@ -73,7 +73,7 @@ public class StringBlock {
 			return;
 		}
 
-		if (s.substring(iStart, contentStart).trim().length() > 0) {
+		if (!s.substring(iStart, contentStart).isBlank()) {
 			// other chars than white space before contentStart
 			return;
 		}

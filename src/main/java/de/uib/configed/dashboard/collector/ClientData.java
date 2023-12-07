@@ -151,7 +151,7 @@ public final class ClientData {
 		final LocalDate currentDate = LocalDate.now();
 
 		for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
-			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().trim().isEmpty()) {
+			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().isBlank()) {
 				continue;
 			}
 

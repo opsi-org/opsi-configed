@@ -13,6 +13,7 @@
 
 ### Changed
 - Make it possible to enter empty values in editable tables
+- Make it possible to enter empty values in client information
 - Rework element and gap sizes in licensing management
 
 

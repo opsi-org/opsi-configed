@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -132,7 +133,13 @@ public final class Messages {
 
 		Logging.notice("Locale set to: " + myLocale);
 
-		messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+		try {
+			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+		} catch (MissingResourceException e) {
+			Logging.warning("Could not load messagesBundle for locale " + myLocale, e);
+			produceLocaleEnUS();
+			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+		}
 	}
 
 	public static Set<String> getLocaleNames() {

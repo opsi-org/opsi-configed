@@ -7,18 +7,16 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
 	// ---
@@ -37,7 +35,6 @@ public class HostInfo {
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
 	public static final String CLIENT_UEFI_BOOT_KEY = "uefiBoot";
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
-	public static final String CLIENT_SESSION_INFO_KEY = "sessionInfo";
 	public static final String CLIENT_CONNECTED_KEY = "clientConnected";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
@@ -46,17 +43,13 @@ public class HostInfo {
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
 	public static final String CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL = "clientInventoryNumber";
-	public static final String CLIENT_ONE_TIME_PASSWORD_DISPLAY_FIELD_LABEL = "clientOneTimePassword";
-	public static final String CLIENT_NOTES_DISPLAY_FIELD_LABEL = "notes";
 
 	public static final String CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL = "clientSystemUUID";
 	public static final String CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL = "clientHardwareAddress";
 	public static final String LAST_SEEN_DISPLAY_FIELD_LABEL = "clientLastSeen";
 	public static final String CREATED_DISPLAY_FIELD_LABEL = "clientCreated";
 	public static final String HOST_NAME_DISPLAY_FIELD_LABEL = "clientName";
-	public static final String HOST_KEY_DISPLAY_FIELD_LABEL = "opsiHostKey";
 
-	public static final String HOST_TYPE_DISPLAY_FIELD_LABEL = "hostType";
 	public static final String CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL = "clientIPAddress";
 	public static final String CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL = "UEFIboot";
 	public static final String CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL = "WANmode";
@@ -82,16 +75,6 @@ public class HostInfo {
 	public static final String HOST_TYPE_VALUE_OPSI_DEPOT_SERVER = "OpsiDepotserver";
 	public static final String HOST_TYPE_VALUE_OPSI_CLIENT = "OpsiClient";
 
-	public static final String HOST_SUB_CLASS_TAG_OPSI_CLIENT_PROTOTYPE = "OpsiPrototype";
-
-	private static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
-	private static final Set<Character> notLegalChars = new HashSet<>();
-	static {
-		for (char notLegalChar : NOT_LEGAL_CHARS_0.toCharArray()) {
-			notLegalChars.add(notLegalChar);
-		}
-	}
-
 	// an AtomicInteger would be threadsafe
 	private static int numberOfInstances;
 
@@ -112,7 +95,6 @@ public class HostInfo {
 	private String clientIpAddress;
 	private Boolean clientUefiBoot;
 	private Boolean clientWanConfig;
-	private String clientSessionInfo;
 
 	private Boolean clientConnected;
 	private Boolean clientShutdownInstall;
@@ -156,7 +138,6 @@ public class HostInfo {
 		unordered.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
 
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
-		unordered.put(CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, clientSessionInfo);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 
@@ -185,7 +166,6 @@ public class HostInfo {
 		unordered.put(CLIENT_IP_ADDRESS_KEY, clientIpAddress);
 		unordered.put(CLIENT_UEFI_BOOT_KEY, clientUefiBoot);
 		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
-		unordered.put(CLIENT_SESSION_INFO_KEY, clientSessionInfo);
 
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
@@ -197,62 +177,65 @@ public class HostInfo {
 
 	public void put(String key, Object value) {
 		switch (key) {
-		case DEPOT_OF_CLIENT_KEY: {
+		case DEPOT_OF_CLIENT_KEY:
 			depotOfClient = "" + value;
 			break;
-		}
-		case CLIENT_DESCRIPTION_KEY: {
+
+		case CLIENT_DESCRIPTION_KEY:
 			clientDescription = "" + value;
 			break;
-		}
-		case CLIENT_INVENTORY_NUMBER_KEY: {
+
+		case CLIENT_INVENTORY_NUMBER_KEY:
 			clientInventoryNumber = "" + value;
 			break;
-		}
-		case CLIENT_NOTES_KEY: {
+
+		case CLIENT_NOTES_KEY:
 			clientNotes = "" + value;
 			break;
-		}
-		case CLIENT_ONE_TIME_PASSWORD_KEY: {
+
+		case CLIENT_ONE_TIME_PASSWORD_KEY:
 			clientOneTimePassword = "" + value;
 			break;
-		}
-		case CLIENT_SYSTEM_UUID_KEY: {
+
+		case CLIENT_SYSTEM_UUID_KEY:
 			clientSystemUUID = "" + value;
 			break;
-		}
-		case CLIENT_MAC_ADRESS_KEY: {
+
+		case CLIENT_MAC_ADRESS_KEY:
 			clientMacAddress = "" + value;
 			break;
-		}
-		case HOST_KEY_KEY: {
+
+		case CLIENT_IP_ADDRESS_KEY:
+			clientIpAddress = "" + value;
+			break;
+
+		case HOST_KEY_KEY:
 			hostKey = "" + value;
 			break;
-		}
-		case CREATED_KEY: {
+
+		case CREATED_KEY:
 			created = "" + value;
 			break;
-		}
-		case LAST_SEEN_KEY: {
+
+		case LAST_SEEN_KEY:
 			lastSeen = "" + value;
 			break;
-		}
-		case CLIENT_UEFI_BOOT_KEY: {
+
+		case CLIENT_UEFI_BOOT_KEY:
 			clientUefiBoot = (Boolean) value;
 			break;
-		}
-		case CLIENT_WAN_CONFIG_KEY: {
+
+		case CLIENT_WAN_CONFIG_KEY:
 			clientWanConfig = (Boolean) value;
 			break;
-		}
-		case CLIENT_SHUTDOWN_INSTALL_KEY: {
+
+		case CLIENT_SHUTDOWN_INSTALL_KEY:
 			clientShutdownInstall = (Boolean) value;
 			break;
-		}
-		default: {
+
+		default:
 			Logging.warning(this, "key " + key + " not expected");
 			break;
-		}
 		}
 	}
 
@@ -270,14 +253,6 @@ public class HostInfo {
 
 	public String getInventoryNumber() {
 		return clientInventoryNumber;
-	}
-
-	public String getNotes() {
-		return clientNotes;
-	}
-
-	public String getSystemUUID() {
-		return clientSystemUUID;
 	}
 
 	public String getMacAddress() {
@@ -405,12 +380,12 @@ public class HostInfo {
 		return this;
 	}
 
-	private static int findCol(JTableSelectionPanel selectionPanel, String colName) {
+	private static int findCol(ClientTable selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName);
 	}
 
-	private static int findRow(JTableSelectionPanel selectionPanel, String client) {
-		return selectionPanel.findModelRowFromValue(client, 0);
+	private static int findRow(ClientTable selectionPanel, String client) {
+		return selectionPanel.findModelRowFromValue(client);
 	}
 
 	public void resetGui() {
@@ -431,7 +406,7 @@ public class HostInfo {
 		mainFrame.setOpsiHostKey(hostKey);
 	}
 
-	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, String client, Map<?, ?> sourceOfChanges) {
+	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
@@ -504,8 +479,7 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
 
-		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
-				&& !((String) (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY))).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null) {
 			clientSystemUUID = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -522,8 +496,7 @@ public class HostInfo {
 					clientSystemUUID);
 		}
 
-		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null
-				&& !((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
 			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -540,8 +513,7 @@ public class HostInfo {
 					clientMacAddress);
 		}
 
-		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null
-				&& !((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim().isEmpty()) {
+		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
 			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -649,7 +621,6 @@ public class HostInfo {
 		clientIpAddress = "";
 		clientUefiBoot = false;
 		clientWanConfig = false;
-		clientSessionInfo = "";
 
 		clientConnected = false;
 

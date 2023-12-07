@@ -85,14 +85,14 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
-		JButton buttonSelectWithEqualProperties = new JButton("", Utils.createImageIcon("images/equalplus.png", ""));
+		JButton buttonSelectWithEqualProperties = new JButton(Utils.createImageIcon("images/equalplus.png", ""));
 
 		buttonSelectWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
 		Utils.formatButtonSmallText(buttonSelectWithEqualProperties);
 		buttonSelectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 
-		JButton buttonSelectAll = new JButton("", Utils.createImageIcon("images/plusplus.png", ""));
+		JButton buttonSelectAll = new JButton(Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
 		Utils.formatButtonSmallText(buttonSelectAll);
 		buttonSelectAll.addActionListener(event -> selectAllDepots());
@@ -119,7 +119,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		IconButton buttonSetValuesFromPackage = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
-				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
+				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", "", true);
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 

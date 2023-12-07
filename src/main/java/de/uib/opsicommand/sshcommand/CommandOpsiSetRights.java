@@ -95,7 +95,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	@Override
 	public String getSecuredCommand() {
-		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -125,7 +125,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		List<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!(comstr == null || comstr.trim().isEmpty())) {
+			if (!(comstr == null || comstr.isBlank())) {
 				commandsStringList.add(c.getCommandRaw());
 			}
 		}

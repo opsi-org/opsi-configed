@@ -111,21 +111,19 @@ public class IconAsButton extends JPanel implements MouseListener {
 			} else {
 				label.setEnabled(false);
 			}
-		} else {
-			if (mouseOver) {
-				if (iconOver != null) {
-					label.setIcon(iconOver);
-				} else if (!activated && iconActive != null) {
-					label.setIcon(iconActive);
-				} else {
-					label.setIcon(iconInactive);
-				}
+		} else if (mouseOver) {
+			if (iconOver != null) {
+				label.setIcon(iconOver);
+			} else if (!activated && iconActive != null) {
+				label.setIcon(iconActive);
 			} else {
-				if (activated && iconActive != null) {
-					label.setIcon(iconActive);
-				} else {
-					label.setIcon(iconInactive);
-				}
+				label.setIcon(iconInactive);
+			}
+		} else {
+			if (activated && iconActive != null) {
+				label.setIcon(iconActive);
+			} else {
+				label.setIcon(iconInactive);
 			}
 		}
 		repaint();

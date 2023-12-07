@@ -229,7 +229,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		fieldProductKey = new JTextField();
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallSelectFolderWinPE = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderWinPE = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
@@ -246,7 +246,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			}
 		});
 
-		buttonCallSelectFolderInstallFiles = new JButton("", Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderInstallFiles = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderInstallFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
@@ -266,7 +266,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			}
 		});
 
-		buttonCallExecute = new JButton("", Utils.createImageIcon("images/upload2product.png", ""));
+		buttonCallExecute = new JButton(Utils.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));

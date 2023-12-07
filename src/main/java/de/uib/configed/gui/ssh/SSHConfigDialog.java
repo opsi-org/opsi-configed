@@ -333,7 +333,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		}
 
 		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
-				"images/folder_16.png", " ", "images/folder_16.png", true);
+				"images/folder_16.png", "", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
