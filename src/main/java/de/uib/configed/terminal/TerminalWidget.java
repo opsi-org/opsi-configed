@@ -205,20 +205,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		getTerminal().getStyleState().setDefaultStyle(settingsProvider.getDefaultStyle());
 	}
 
-	@SuppressWarnings({ "deprecation", "java:S1874" })
-	public void changeSession(String session) {
-		if (!isSessionRunning()) {
-			return;
-		}
-
-		terminalId = null;
-		terminalChannel = null;
-		stop();
-		getTerminal().reset(true);
-		openSession(session);
-		getTerminal().setCursorVisible(true);
-	}
-
 	public void openSession(String session) {
 		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);

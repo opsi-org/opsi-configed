@@ -82,14 +82,20 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		jTabbedPane.setTabComponentAt(getLastTabIndex(), closableTabComponent);
 	}
 
+	private int getLastTabIndex() {
+		return jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0;
+	}
+
+	public void resetTerminalWidgetOnSelectedTab() {
+		int selectedIndex = jTabbedPane.getSelectedIndex();
+		jTabbedPane.setComponentAt(selectedIndex, createTerminalWidget());
+		jTabbedPane.setSelectedIndex(selectedIndex);
+	}
+
 	public void openSessionOnSelectedTab(String session) {
 		TerminalWidget widget = getSelectedTerminalWidget();
 		widget.openSession(session);
-		jTabbedPane.setTitleAt(getLastTabIndex(), widget.getTitle());
-	}
-
-	private int getLastTabIndex() {
-		return jTabbedPane.getTabCount() != 0 ? (jTabbedPane.getTabCount() - 1) : 0;
+		jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(), widget.getTitle());
 	}
 
 	public void removeSelectedTerminalTab() {
