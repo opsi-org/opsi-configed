@@ -7,12 +7,22 @@
 package de.uib.configed.terminal;
 
 import java.awt.Font;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Collections;
 
+import javax.swing.KeyStroke;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.jediterm.core.Platform;
 import com.jediterm.terminal.TerminalColor;
 import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.emulator.ColorPalette;
+import com.jediterm.terminal.ui.TerminalActionPresentation;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
+import de.uib.configed.Configed;
 import de.uib.messages.Messages;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
@@ -25,6 +35,74 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	private static String theme = Messages.getSelectedTheme();
 	private int fontSize = 12;
+
+	@Override
+	public @NotNull TerminalActionPresentation getOpenUrlActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.openAsUrl"),
+				Collections.emptyList());
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getCopyActionPresentation() {
+		KeyStroke keyStroke = Platform.current() == Platform.Mac
+				? KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK)
+				: KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.copy"), keyStroke);
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPasteActionPresentation() {
+		KeyStroke keyStroke = Platform.current() == Platform.Mac
+				? KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.META_DOWN_MASK)
+				: KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.paste"), keyStroke);
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getClearBufferActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.clearBuffer"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPageUpActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.pageUp"),
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getPageDownActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.pageDown"),
+				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.SHIFT_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getLineUpActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineUp"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getLineDownActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineDown"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getFindActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.find"),
+				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.META_DOWN_MASK)
+						: KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
+	}
+
+	@Override
+	public @NotNull TerminalActionPresentation getSelectAllActionPresentation() {
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.selectAll"),
+				Collections.emptyList());
+	}
 
 	@Override
 	public Font getTerminalFont() {
