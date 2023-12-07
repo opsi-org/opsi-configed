@@ -152,7 +152,6 @@ public final class TerminalFrame implements MessagebusListener {
 		return menuFile;
 	}
 
-	@SuppressWarnings({ "java:S2325" })
 	public void openNewWindow() {
 		TerminalFrame terminalFrame = new TerminalFrame();
 		terminalFrame.setMessagebus(messagebus);
