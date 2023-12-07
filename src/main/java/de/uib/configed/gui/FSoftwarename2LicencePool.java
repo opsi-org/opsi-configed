@@ -64,8 +64,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private List<MapBasedTableEditItem> updateCollection;
 
-	private int keyCol;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -485,7 +483,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						public Map<String, Map<String, Object>> retrieveMap() {
 							return (Map) produceModelSWxLicencepool(swName);
 						}
-					})), keyCol, new int[] {}, panelSWnames, updateCollection);
+					})), 0, new int[] {}, panelSWnames, updateCollection);
 		}
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		Logging.info(this, "setTableModelSWxLicencepool, we reset the model");
