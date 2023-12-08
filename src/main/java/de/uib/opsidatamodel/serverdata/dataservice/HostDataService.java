@@ -514,7 +514,7 @@ public class HostDataService {
 
 			if (resultEntry.getValue() instanceof String) {
 				String errorStr = (String) resultEntry.getValue();
-				value = new StringBuilder("no response");
+				value.append("no response");
 				if (errorStr.indexOf("Opsi timeout") > -1) {
 					int i = errorStr.indexOf("(");
 					if (i > -1) {
