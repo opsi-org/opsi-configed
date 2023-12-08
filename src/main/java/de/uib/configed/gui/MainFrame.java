@@ -180,7 +180,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenu jMenuServer = new JMenu();
 
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
-	private JMenuItem jMenuSSHCommandControl = new JMenuItem();
 
 	private Map<String, Integer> labelledDelays;
 
@@ -415,22 +414,16 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void setupMenuFile() {
-		jMenuFile = new JMenu();
-		JMenuItem jMenuFileExit = new JMenuItem();
-		jMenuFileSaveConfigurations = new JMenuItem();
-		JMenuItem jMenuFileReload = new JMenuItem();
-		JMenuItem jMenuFileLogout = new JMenuItem();
+		jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
-		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
-
-		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
 
-		jMenuFileSaveConfigurations.setText(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
+		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> saveAction());
 
-		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			reloadAction();
@@ -439,7 +432,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 		});
 
-		jMenuFileLogout.setText(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
+		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
@@ -868,8 +861,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		updateSSHConnectedInfoMenu(connectionState);
 
 		Logging.info(this, "setupMenuServer add commandcontrol");
-		jMenuSSHCommandControl = new JMenuItem();
-		jMenuSSHCommandControl.setText(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
+		JMenuItem jMenuSSHCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> startSSHControlAction());
 		// SSHCommandControlDialog
 
@@ -896,15 +888,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			String parentMenuName = entry.getKey();
 			List<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
 			Collections.sort(listCom);
-			JMenu parentMenu = new JMenu();
-			parentMenu.setText(parentMenuName);
+			JMenu parentMenu = new JMenu(parentMenuName);
+
 			Logging.info(this, "ssh parent menu text " + parentMenuName);
 			if (parentMenuName.equals(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parentMenu.setText("");
 				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
-			}
-
-			if (!(parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
+			} else if ((parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
+				// Do nothing in that case
+			} else {
 				firstParentGroup = false;
 			}
 
