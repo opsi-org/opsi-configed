@@ -103,14 +103,7 @@ public class MapItemsUpdateController implements UpdateController {
 
 	@Override
 	public boolean cancelChanges() {
-		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
-		while (iter.hasNext()) {
-			MapBasedTableEditItem updateItem = iter.next();
-			if (updateItem.getSource() == tablemodel) {
-				iter.remove();
-				// this can be safely done according to an Iterator guarantee
-			}
-		}
+		removeItemsWithSource(updateCollection.iterator(), tablemodel);
 
 		tablemodel.invalidate();
 		tablemodel.reset();
