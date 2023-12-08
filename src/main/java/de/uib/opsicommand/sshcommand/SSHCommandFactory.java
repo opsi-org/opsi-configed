@@ -30,7 +30,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -215,16 +214,6 @@ public final class SSHCommandFactory {
 			pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
 			return pmethodHandler;
 		}
-	}
-
-	/**
-	 * Testing the confd-method 'SSHCommand_getObjects'
-	 * 
-	 * @return True if method exists
-	 **/
-	public boolean checkSSHCommandMethod() {
-		return persistenceController.getSSHCommandDataService()
-				.checkSSHCommandMethod(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
 	}
 
 	/**

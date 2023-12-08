@@ -260,7 +260,6 @@ public class OpsiServiceNOMPersistenceController {
 		softwareDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		softwareDataService.setHostInfoCollections(hostInfoCollections);
 
-		sshCommandDataService.setModuleDataService(moduleDataService);
 		sshCommandDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		rpcMethodExecutor.setHostDataService(hostDataService);

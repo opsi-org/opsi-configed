@@ -11,7 +11,6 @@ import java.util.Map;
 
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utilities.logging.Logging;
 
@@ -30,15 +29,10 @@ import de.uib.utilities.logging.Logging;
  */
 public class SSHCommandDataService {
 	private AbstractExecutioner exec;
-	private ModuleDataService moduleDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
 
 	public SSHCommandDataService(AbstractExecutioner exec) {
 		this.exec = exec;
-	}
-
-	public void setModuleDataService(ModuleDataService moduleDataService) {
-		this.moduleDataService = moduleDataService;
 	}
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
@@ -56,22 +50,6 @@ public class SSHCommandDataService {
 				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
 		Logging.debug(this, "retrieveCommandList commands " + sshCommands);
 		return sshCommands;
-	}
-
-	/**
-	 * Test if sshcommand methods exists
-	 *
-	 * @param method name
-	 * @return True if exists
-	 */
-	public boolean checkSSHCommandMethod(RPCMethodName method) {
-		// method does not exist before opsi 3.4
-		if (moduleDataService.getMethodSignaturePD(method) != OpsiServiceNOMPersistenceController.NONE_LIST) {
-			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
-			return true;
-		}
-		Logging.info(this, "checkSSHCommandMethod " + method + " does not exists");
-		return false;
 	}
 
 	/**
