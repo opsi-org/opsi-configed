@@ -3293,7 +3293,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTextAreaNotes.setEnabled(singleClient);
 		jTextAreaNotes.setEditable(b1);
 		systemUUIDField.setEnabled(singleClient);
-		systemUUIDField.setEnabled(b1);
+		systemUUIDField.setEditable(b1);
 		macAddressField.setEnabled(singleClient);
 		macAddressField.setEditable(b1);
 		ipAddressField.setEnabled(singleClient);
