@@ -812,8 +812,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			String newGroupKey = "";
 
-			boolean gotName = !("".equals(newGroupKey)) && !(groups.keySet().contains(newGroupKey));
-
 			String inscription = "";
 
 			FEditRecord fEdit = new FEditRecord(inscription);
@@ -825,26 +823,22 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			fEdit.setModal(true);
 
-			while (!gotName) {
+			while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey)) {
 				if ("".equals(newGroupKey)) {
 					inscription = Configed.getResourceValue("ClientTree.requestGroup");
-				} else if (groups.keySet().contains(newGroupKey)) {
+				} else {
 					inscription = "'" + newGroupKey + "' "
 							+ Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
-				} else {
-					gotName = true;
 				}
 
 				fEdit.setHint(inscription);
 
-				if (!gotName) {
-					fEdit.setVisible(true);
+				fEdit.setVisible(true);
 
-					newGroupKey = fEdit.getData().get("groupname").toLowerCase(Locale.ROOT);
+				newGroupKey = fEdit.getData().get("groupname").toLowerCase(Locale.ROOT);
 
-					if (fEdit.isCancelled()) {
-						return null;
-					}
+				if (fEdit.isCancelled()) {
+					return null;
 				}
 			}
 			// Now variable gotName equals true
@@ -995,9 +989,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public void clientCopyOrMoveTo(String importID, TreePath sourcePath, String sourceParentID,
 			GroupNode sourceParentNode, DefaultMutableTreeNode newParentNode, TreePath newParentPath,
-			String newParentID, Boolean moving) {
+			String newParentID, boolean moving) {
 		Logging.debug(this, "clientCopyOrMoveTo moving " + moving);
-		if (moving != null && moving) {
+		if (moving) {
 			moveClientTo(importID, sourcePath, sourceParentID, sourceParentNode, newParentNode, newParentPath,
 					newParentID);
 		} else {
