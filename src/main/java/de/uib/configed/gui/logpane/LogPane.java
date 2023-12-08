@@ -16,7 +16,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.util.Iterator;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -31,7 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -48,6 +46,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
+import de.uib.configed.gui.logpane.PartialDocumentBuilder.DocumentBuilderResult;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import utils.Utils;
@@ -93,7 +92,6 @@ public class LogPane extends JPanel implements KeyListener {
 	private int typesListMaxShowCount = 25;
 
 	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
-	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
 
 	private int selTypeIndex = -1;
 
@@ -424,7 +422,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
-	private static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+	public static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
 		ImmutableDefaultStyledDocument(StyleContext styles) {
 			super(styles);
 		}
@@ -576,114 +574,27 @@ public class LogPane extends JPanel implements KeyListener {
 			jTextPane.setCursor(Globals.WAIT_CURSOR);
 		}
 		linesToShow += (int) scrollpane.getViewport().getVisibleRect().getHeight();
-		PartialDocumentBuilder builder = new PartialDocumentBuilder(linesToShow, lineNo);
+		PartialDocumentBuilder builder = new PartialDocumentBuilder(document, showTypeRestricted, selTypeIndex,
+				sliderLevel.getValue(), parser, linesToShow, lineNo, currentLineNumber);
+		builder.setOnDocumentBuilt(this::onDocumentBuilt);
 		builder.execute();
 	}
 
-	private class PartialDocumentBuilder extends SwingWorker<Void, Void> {
-		private int linesToRead;
-		private int lineNumberToSearch;
-		private int lineStartPosition;
-		private boolean lineFound;
-
-		public PartialDocumentBuilder(int linesToRead, int lineNumberToSearch) {
-			this.linesToRead = linesToRead;
-			this.lineNumberToSearch = lineNumberToSearch;
+	private void onDocumentBuilt(DocumentBuilderResult result) {
+		currentLineNumber = result.getLineIndex();
+		jTextPane.setDocument(result.getDocument());
+		this.document = result.getDocument();
+		if (result.getLineStartPosition() > 0) {
+			jTextPane.setCaretPosition(result.getLineStartPosition() + 1);
+			jTextPane.getCaret().setVisible(true);
+			highlighter.removeAllHighlights();
 		}
-
-		@Override
-		protected Void doInBackground() throws Exception {
-			docLinestartPosition2lineCount = new TreeMap<>();
-			lineCount2docLinestartPosition = new TreeMap<>();
-			if (lineNumberToSearch == 0) {
-				readChunkOfFile();
-			} else {
-				while (!lineFound) {
-					readChunkOfFile();
-					findLineStartPosition();
-					linesToRead += (int) scrollpane.getViewport().getVisibleRect().getHeight();
-				}
-			}
-			return null;
-		}
-
-		private void readChunkOfFile() {
-			try {
-				int lineNumber = currentLineNumber;
-				int linesRead = 0;
-				while (lineNumber < lines.length && linesRead <= linesToRead) {
-					LogLine line = parser.getParsedLogLine(lineNumber);
-					if (showLine(line)) {
-						docLinestartPosition2lineCount.put(document.getLength(), lineNumber);
-						lineCount2docLinestartPosition.put(lineNumber, document.getLength());
-
-						String lineNumberRepresentation = "(" + line.getLineNumber() + ")";
-						document.insertStringTruely(document.getLength(),
-								String.format("%-10s", lineNumberRepresentation) + line.getText() + '\n',
-								line.getStyle());
-						linesRead++;
-					}
-
-					lineNumber++;
-					currentLineNumber = lineNumber;
-				}
-			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException thrown in logging: " + e);
-			}
-		}
-
-		private void findLineStartPosition() {
-			if (lineCount2docLinestartPosition.containsKey(lineNumberToSearch)) {
-				lineStartPosition = lineCount2docLinestartPosition.get(lineNumberToSearch);
-				lineFound = true;
-			} else if (!lineCount2docLinestartPosition.isEmpty() && currentLineNumber == lines.length) {
-				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-				int nextLineNo = linesIterator.next();
-
-				while (linesIterator.hasNext() && nextLineNo < lineNumberToSearch) {
-					nextLineNo = linesIterator.next();
-				}
-
-				lineStartPosition = lineCount2docLinestartPosition.get(nextLineNo);
-				lineFound = true;
-			} else {
-				Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
-				lineFound = false;
-			}
-		}
-
-		private boolean showLine(LogLine line) {
-			boolean show = false;
-			if (line.getLogLevel() <= sliderLevel.getValue()) {
-				show = true;
-			}
-			if (show && showTypeRestricted && line.getTypeIndex() != selTypeIndex) {
-				show = false;
-			}
-			return show;
-		}
-
-		@Override
-		public void done() {
-			jTextPane.setDocument(document);
-			if (lineNumberToSearch != 0) {
-				jTextPane.setCaretPosition(lineStartPosition + 1);
-				jTextPane.getCaret().setVisible(true);
-				highlighter.removeAllHighlights();
-			}
-			scrollpane.getVerticalScrollBar().setUnitIncrement(20);
-			setCursor(null);
-			jTextPane.setCursor(null);
-			scrollpane.setCursor(null);
-			rebuilding = false;
-			try {
-				get();
-			} catch (ExecutionException e) {
-				Logging.warning(this, "Exception encountered while building document: " + e);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
+		scrollpane.getVerticalScrollBar().setUnitIncrement(20);
+		setCursor(null);
+		jTextPane.setCursor(null);
+		scrollpane.setCursor(null);
+		rebuilding = false;
+		docLinestartPosition2lineCount = new TreeMap<>(result.getDocLinestartPosition2lineCount());
 	}
 
 	private void setLevelWithoutAction(Object l) {

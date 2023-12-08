@@ -29,6 +29,10 @@ public class LogFileParser {
 		return parsedLogLines.get(index);
 	}
 
+	public List<LogLine> getParsedLogLines() {
+		return Collections.unmodifiableList(parsedLogLines);
+	}
+
 	public List<String> getTypesList() {
 		return Collections.unmodifiableList(typesList);
 	}
