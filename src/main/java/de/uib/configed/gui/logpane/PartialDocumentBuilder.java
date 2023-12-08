@@ -24,7 +24,7 @@ public class PartialDocumentBuilder extends SwingWorker<DocumentBuilderResult, V
 	private int lineNumberToSearch;
 	private int lineStartPosition;
 	private boolean lineFound;
-	private ImmutableDefaultStyledDocument document2;
+	private ImmutableDefaultStyledDocument document;
 	private boolean showTypeRestricted;
 	private int selTypeIndex;
 	private int initialLines;
@@ -38,7 +38,7 @@ public class PartialDocumentBuilder extends SwingWorker<DocumentBuilderResult, V
 	@SuppressWarnings({ "java:S107" })
 	public PartialDocumentBuilder(ImmutableDefaultStyledDocument document, boolean showTypeRestricted, int selTyepIndex,
 			int logLevel, LogFileParser parser, int linesToRead, int lineNumberToSearch, int lineIndex) {
-		this.document2 = document;
+		this.document = document;
 		this.showTypeRestricted = showTypeRestricted;
 		this.selTypeIndex = selTyepIndex;
 		this.linesToRead = linesToRead;
@@ -66,7 +66,7 @@ public class PartialDocumentBuilder extends SwingWorker<DocumentBuilderResult, V
 				linesToRead += initialLines;
 			}
 		}
-		return new DocumentBuilderResult(document2, lineStartPosition, lineIndex, docLinestartPosition2lineCount);
+		return new DocumentBuilderResult(document, lineStartPosition, lineIndex, docLinestartPosition2lineCount);
 	}
 
 	private void readChunkOfFile() {
@@ -76,11 +76,11 @@ public class PartialDocumentBuilder extends SwingWorker<DocumentBuilderResult, V
 			while (lineNumber < parser.getParsedLogLines().size() && linesRead <= linesToRead) {
 				LogLine line = parser.getParsedLogLine(lineNumber);
 				if (showLine(line)) {
-					docLinestartPosition2lineCount.put(document2.getLength(), lineNumber);
-					lineCount2docLinestartPosition.put(lineNumber, document2.getLength());
+					docLinestartPosition2lineCount.put(document.getLength(), lineNumber);
+					lineCount2docLinestartPosition.put(lineNumber, document.getLength());
 
 					String lineNumberRepresentation = "(" + line.getLineNumber() + ")";
-					document2.insertStringTruely(document2.getLength(),
+					document.insertStringTruely(document.getLength(),
 							String.format("%-10s", lineNumberRepresentation) + line.getText() + '\n', line.getStyle());
 					linesRead++;
 				}
