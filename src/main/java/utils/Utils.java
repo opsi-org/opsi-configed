@@ -6,7 +6,6 @@
 
 package utils;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.Console;
@@ -18,7 +17,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +24,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -55,12 +52,6 @@ public final class Utils {
 	private static boolean isMultiFactorAuthenticationEnabled;
 
 	private Utils() {
-	}
-
-	public static void formatButtonSmallText(AbstractButton button) {
-		button.setPreferredSize(new Dimension(45, 20));
-
-		button.setBorderPainted(false);
 	}
 
 	public static void showAboutAction(JFrame parent) {
@@ -191,19 +182,6 @@ public final class Utils {
 		}
 
 		return resultBuilder.toString();
-	}
-
-	public static boolean checkCollection(Object source, String cName, Object c) {
-		boolean result = c != null;
-		if (result) {
-			if (!(c instanceof Collection) && !(c instanceof Map)) {
-				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
-				result = false;
-			}
-		} else {
-			Logging.debug(source.getClass().getName() + " " + cName + " is null");
-		}
-		return result;
 	}
 
 	public static String usedMemory() {

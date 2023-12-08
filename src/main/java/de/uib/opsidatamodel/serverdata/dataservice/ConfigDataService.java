@@ -842,8 +842,7 @@ public class ConfigDataService {
 			return;
 		}
 
-		if (Utils.checkCollection(this, "configStateCollection", configStateCollection)
-				&& !configStateCollection.isEmpty()) {
+		if (configStateCollection != null && !configStateCollection.isEmpty()) {
 			boolean configsChanged = false;
 
 			if (deleteConfigStateItems == null) {

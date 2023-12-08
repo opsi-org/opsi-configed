@@ -86,15 +86,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.setComponentPopupMenu(popupDepot);
 
 		JButton buttonSelectWithEqualProperties = new JButton(Utils.createImageIcon("images/equalplus.png", ""));
-
 		buttonSelectWithEqualProperties
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
-		Utils.formatButtonSmallText(buttonSelectWithEqualProperties);
 		buttonSelectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 
 		JButton buttonSelectAll = new JButton(Utils.createImageIcon("images/plusplus.png", ""));
 		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
-		Utils.formatButtonSmallText(buttonSelectAll);
 		buttonSelectAll.addActionListener(event -> selectAllDepots());
 
 		GroupLayout layoutPanelDepots = new GroupLayout(panelDepots);

@@ -895,9 +895,6 @@ public class PanelProductSettings extends JSplitPane {
 
 		infoPane.setProductAdvice(productHint);
 
-		Utils.checkCollection(this, "editableProductProperties ", editableProductProperties);
-		Utils.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
-
 		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
 
 		propertiesPanel.setStoreData(storableProductProperties);
