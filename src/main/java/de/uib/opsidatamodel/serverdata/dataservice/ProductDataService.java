@@ -379,13 +379,8 @@ public class ProductDataService {
 
 		while (iter.hasNext()) {
 			Map<String, Object> retrievedMap = iter.next();
+			// TODO do we need a copy here?
 			Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
-			// rebuild JSON objects
-			Iterator<String> iterInner = retrievedMap.keySet().iterator();
-			while (iterInner.hasNext()) {
-				String key = iterInner.next();
-				adaptedMap.put(key, retrievedMap.get(key));
-			}
 
 			ConfigOption productPropertyMap = new ConfigOption(adaptedMap);
 

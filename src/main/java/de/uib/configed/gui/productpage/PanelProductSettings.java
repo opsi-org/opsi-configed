@@ -18,9 +18,9 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
@@ -442,22 +442,18 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 		popup.add(sub);
 
-		Iterator<String> iter = checkColumns.keySet().iterator();
-
-		while (iter.hasNext()) {
-			final String columnName = iter.next();
-
-			if ("productId".equals(columnName)) {
+		for (Entry<String, Boolean> checkColumn : checkColumns.entrySet()) {
+			if ("productId".equals(checkColumn.getKey())) {
 				// fixed column
 				continue;
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(columnName));
-			item.setState(checkColumns.get(columnName));
+			item.setText(InstallationStateTableModel.getColumnTitle(checkColumn.getKey()));
+			item.setState(checkColumn.getValue());
 			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = checkColumns.get(columnName);
-				checkColumns.put(columnName, !oldstate);
+				boolean oldstate = checkColumn.getValue();
+				checkColumns.put(checkColumn.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
 				configedMain.resetView(configedMain.getViewIndex());
 			});
