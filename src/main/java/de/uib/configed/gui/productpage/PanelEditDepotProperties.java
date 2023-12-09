@@ -244,19 +244,16 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private Map<String, Object> mergeProperties(
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
-		Map<String, Object> result = new HashMap<>();
 
-		if (depots == null || depots.isEmpty()) {
-			return result;
-		}
-
-		Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
-
-		if (depots.size() == 1) {
+		if (depots.isEmpty()) {
+			// Do nothing
+		} else if (depots.size() == 1) {
+			Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
 			if (propertiesDepot0 != null && propertiesDepot0.get(productId) != null) {
-				result = propertiesDepot0.get(productId);
+				return propertiesDepot0.get(productId);
 			}
 		} else {
+			// depots has at least 2 elements
 			int n = 0;
 
 			while (n < depots.size() && (depot2product2properties.get(depots.get(n)) == null
@@ -265,38 +262,47 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			}
 
 			if (n != depots.size()) {
-				// create start mergers
-				ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
+				return mergeProperties(depot2product2properties, depots, productId, n);
+			}
+		}
 
-				for (Entry<String, Object> entry : properties.entrySet()) {
-					List<?> value = (List<?>) entry.getValue();
-					result.put(entry.getKey(), new ListMerger(value));
-				}
+		return new HashMap<>();
+	}
 
-				// merge the other depots
-				for (int i = 1; i < depots.size(); i++) {
-					properties = depot2product2properties.get(depots.get(i)).get(productId);
+	private Map<String, Object> mergeProperties(
+			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
+			String productId, int n) {
+		Map<String, Object> result = new HashMap<>();
 
-					if (properties == null) {
-						Logging.info(this, "mergeProperties, product on depot has not properties " + productId + " on "
-								+ depots.get(i));
-						continue;
-					}
+		// create start mergers
+		ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
 
-					for (Entry<String, Object> entry : properties.entrySet()) {
-						List<?> value = (List<?>) entry.getValue();
-						if (result.get(entry.getKey()) == null) {
-							// we need a new property. it is not common
+		for (Entry<String, Object> entry : properties.entrySet()) {
+			List<?> value = (List<?>) entry.getValue();
+			result.put(entry.getKey(), new ListMerger(value));
+		}
 
-							ListMerger merger = new ListMerger(value);
+		// merge the other depots
+		for (int i = 1; i < depots.size(); i++) {
+			properties = depot2product2properties.get(depots.get(i)).get(productId);
+			if (properties == null) {
+				Logging.info(this,
+						"mergeProperties, product on depot has not properties " + productId + " on " + depots.get(i));
+				continue;
+			}
 
-							merger.setHavingNoCommonValue();
-							result.put(entry.getKey(), merger);
-						} else {
-							ListMerger merger = (ListMerger) result.get(entry.getKey());
-							result.put(entry.getKey(), merger.merge(value));
-						}
-					}
+			for (Entry<String, Object> entry : properties.entrySet()) {
+				List<?> value = (List<?>) entry.getValue();
+				if (result.get(entry.getKey()) == null) {
+					// we need a new property. it is not common
+
+					ListMerger merger = new ListMerger(value);
+
+					merger.setHavingNoCommonValue();
+					result.put(entry.getKey(), merger);
+				} else {
+					ListMerger merger = (ListMerger) result.get(entry.getKey());
+					result.put(entry.getKey(), merger.merge(value));
 				}
 			}
 		}
