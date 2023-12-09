@@ -9,7 +9,6 @@ package de.uib.utilities.datapanel;
 import java.awt.BorderLayout;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -175,10 +174,8 @@ public class DefaultEditMapPanel extends JPanel {
 			return;
 		}
 
-		Iterator<String> iter = data.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			mapTableModel.setValue(key, data.get(key));
+		for (Entry<String, Object> dataEntry : data.entrySet()) {
+			mapTableModel.setValue(dataEntry.getKey(), dataEntry.getValue());
 		}
 	}
 
