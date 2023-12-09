@@ -1020,24 +1020,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			hostInfo.initialize();
 
-			Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
-
-			Logging.info(this,
-					"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
-
-			if (getSelectedClients().length > 0) {
-				hostInfo.setBy(pcinfos.get(getSelectedClients()[0]).getMap());
-
-				Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients()[0]);
-				Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
-
-				HostInfo secondInfo = new HostInfo();
-
-				for (int i = 1; i < getSelectedClients().length; i++) {
-					secondInfo.setBy(pcinfos.get(getSelectedClients()[i]).getMap());
-					hostInfo.combineWith(secondInfo);
-				}
-			}
+			updateHostInfo();
 
 			mainFrame.setClientInfoediting(getSelectedClients().length == 1);
 
@@ -1083,6 +1066,27 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			// request reloading of client list depending data
 
 			requestRefreshDataForClientSelection();
+		}
+	}
+
+	private void updateHostInfo() {
+		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
+
+		Logging.info(this,
+				"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
+
+		if (getSelectedClients().length > 0) {
+			hostInfo.setBy(pcinfos.get(getSelectedClients()[0]).getMap());
+
+			Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients()[0]);
+			Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
+
+			HostInfo secondInfo = new HostInfo();
+
+			for (int i = 1; i < getSelectedClients().length; i++) {
+				secondInfo.setBy(pcinfos.get(getSelectedClients()[i]).getMap());
+				hostInfo.combineWith(secondInfo);
+			}
 		}
 	}
 
@@ -3352,6 +3356,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerMenu();
+			updateHostInfo();
+			hostInfo.resetGui();
 		}
 		mainFrame.disactivateLoadingPane();
 	}
@@ -4074,6 +4080,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.activateLoadingCursor();
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
+		updateHostInfo();
+		hostInfo.resetGui();
 
 		mainFrame.disactivateLoadingCursor();
 	}
