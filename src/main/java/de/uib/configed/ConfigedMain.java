@@ -2012,16 +2012,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			if (productPropertiesFor1Client != null) {
 				productProperties.add(productPropertiesFor1Client);
 
-				Iterator<String> iter = productPropertiesFor1Client.keySet().iterator();
-				while (iter.hasNext()) {
-					// get next key - value - pair
-					String key = iter.next();
+				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
+					// create a merger for product property
+					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
 
-					List<?> value = (List<?>) productPropertiesFor1Client.get(key);
-
-					// create a merger for it
-					ListMerger merger = new ListMerger(value);
-					mergedProductProperties.put(key, merger);
+					mergedProductProperties.put(productProperty.getKey(), merger);
 				}
 
 				// merge the other clients
@@ -3450,80 +3445,46 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		private void updateProductStates() {
-			updateLocalbootProductStates();
-			updateNetbootProductStates();
-		}
-
-		private void updateLocalbootProductStates() {
-			// localboot products
-			Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
-
-			if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
-					&& !collectChangedLocalbootStates.keySet().isEmpty()) {
-				Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
-
-				while (it0.hasNext()) {
-					String client = it0.next();
-					Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
-
-					Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client
-							+ " values " + clientValues);
-
-					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
-						continue;
-					}
-
-					Iterator<String> it1 = clientValues.keySet().iterator();
-					while (it1.hasNext()) {
-						String product = it1.next();
-
-						Map<String, String> productValues = clientValues.get(product);
-
-						persistenceController.getProductDataService().updateProductOnClient(client, product,
-								OpsiPackage.TYPE_LOCALBOOT, productValues);
-					}
-				}
-
-				// send the collected items
-				persistenceController.getProductDataService().updateProductOnClients();
-			}
-		}
-
-		private void updateNetbootProductStates() {
-			// netboot products
-			Logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
-			if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
-					&& !collectChangedNetbootStates.keySet().isEmpty()) {
-				Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
-
-				while (it0.hasNext()) {
-					String client = it0.next();
-					Map<String, Map<String, String>> clientValues = collectChangedNetbootStates.get(client);
-
-					if (clientValues.keySet() == null || clientValues.keySet().isEmpty()) {
-						continue;
-					}
-
-					Iterator<String> it1 = clientValues.keySet().iterator();
-					while (it1.hasNext()) {
-						String product = it1.next();
-						Map<String, String> productValues = clientValues.get(product);
-
-						persistenceController.getProductDataService().updateProductOnClient(client, product,
-								OpsiPackage.TYPE_NETBOOT, productValues);
-					}
-				}
-
-				// send the collected items
-				persistenceController.getProductDataService().updateProductOnClients();
+			updateProductStates(collectChangedLocalbootStates, OpsiPackage.TYPE_LOCALBOOT);
+			if (istmForSelectedClientsLocalboot != null) {
+				istmForSelectedClientsLocalboot.clearCollectChangedStates();
 			}
 
+			updateProductStates(collectChangedNetbootStates, OpsiPackage.TYPE_NETBOOT);
 			if (istmForSelectedClientsNetboot != null) {
 				istmForSelectedClientsNetboot.clearCollectChangedStates();
 			}
+		}
 
-			if (istmForSelectedClientsLocalboot != null) {
-				istmForSelectedClientsLocalboot.clearCollectChangedStates();
+		private void updateProductStates(Map<String, Map<String, Map<String, String>>> collectChangedProductStates,
+				int productType) {
+			// localboot products
+			Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedProductStates);
+
+			if (collectChangedProductStates != null && collectChangedProductStates.keySet() != null
+					&& !collectChangedProductStates.isEmpty()) {
+				for (Entry<String, Map<String, Map<String, String>>> changedClientState : collectChangedProductStates
+						.entrySet()) {
+
+					Map<String, Map<String, String>> clientValues = changedClientState.getValue();
+
+					Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client "
+							+ changedClientState.getKey() + " values " + clientValues);
+
+					if (clientValues.keySet() == null || clientValues.isEmpty()) {
+						continue;
+					}
+
+					for (Entry<String, Map<String, String>> productState : clientValues.entrySet()) {
+						Map<String, String> productValues = productState.getValue();
+
+						persistenceController.getProductDataService().updateProductOnClient(changedClientState.getKey(),
+								productState.getKey(), productType, productValues);
+					}
+				}
+
+				// send the collected items
+				persistenceController.getProductDataService().updateProductOnClients();
 			}
 		}
 	}
