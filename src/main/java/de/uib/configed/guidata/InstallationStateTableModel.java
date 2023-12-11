@@ -50,6 +50,7 @@ import de.uib.utilities.logging.Logging;
  * getting cell editors.
  */
 public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
+	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
@@ -89,6 +90,17 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// for each product, we shall collect the clients that have a changed action
 	// request
 
+	protected String savedStateObjTag;
+
+	protected int[] filter;
+	// filter is a function
+	// row --> somerow (from super.table)
+
+	// it holds
+	// product(row) = product(somerow)
+
+	protected int[] filterInverse;
+
 	// for each product, we remember the visual action that is set
 	private NavigableSet<String> missingImplementationForAR;
 
@@ -118,7 +130,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
 		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
 			Logging.info(this.getClass(), " statesAndActions null ");
@@ -133,6 +145,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;
+		this.savedStateObjTag = savedStateObjTag;
 
 		initColumnNames(displayColumns);
 		initChangedStates();
@@ -963,7 +976,12 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	protected int getRowFromProductID(String id) {
-		return productsV.indexOf(id);
+		int superRow = productsV.indexOf(id);
+		if (filterInverse == null) {
+			return superRow;
+		}
+
+		return filterInverse[superRow];
 	}
 
 	@Override
@@ -974,6 +992,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// interface ComboBoxModeller
 	@Override
 	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
+		row = originRow(row);
 		actualProduct = productsV.get(row);
 
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) {
@@ -1049,8 +1068,82 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	// table model
+	private void saveFilterSet(Set<String> filterSet) {
+		if (filterSet != null) {
+			Configed.getSavedStates().setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
+					filterSet.toString());
+			Logging.info(this, "saveFilterSet " + filterSet);
+		} else {
+			Configed.getSavedStates().remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
+		}
+	}
 
+	public void setFilterFrom(Set<String> ids) {
+		saveFilterSet(ids);
+
+		Set<String> reducedIds = null;
+		if (ids != null) {
+			Logging.info(this, "setFilterFrom, save set " + ids.size());
+			reducedIds = new HashSet<>(productsV);
+			if (!ids.isEmpty()) {
+				reducedIds.retainAll(ids);
+			}
+
+			filter = new int[reducedIds.size()];
+			int i = 0;
+
+			String[] products = new String[reducedIds.size()];
+			for (String id : reducedIds) {
+				products[i] = id;
+				i++;
+			}
+
+			for (i = 0; i < reducedIds.size(); i++) {
+				filter[i] = productsV.indexOf(products[i]);
+			}
+
+			setFilter(filter);
+		} else {
+			setFilter((int[]) null);
+		}
+	}
+
+	private void setFilter(int[] filter) {
+		Logging.info(this, "setFilter " + Arrays.toString(filter));
+		this.filter = filter;
+
+		if (filter == null) {
+			filterInverse = null;
+		} else {
+			filterInverse = new int[getRowCount()];
+			for (int j = 0; j < getRowCount(); j++) {
+				filterInverse[j] = -1;
+			}
+			for (int i = 0; i < filter.length; i++) {
+				filterInverse[filter[i]] = i;
+			}
+
+			Logging.info(this, "setFilter: filter, filterInverse " + Arrays.toString(filter) + ", "
+					+ Arrays.toString(filterInverse));
+		}
+
+		fireTableDataChanged();
+	}
+
+	private int originRow(int i) {
+		if (filter == null) {
+			return i;
+		}
+
+		if (i >= filter.length) {
+			Logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
+			return i;
+		}
+
+		return filter[i];
+	}
+
+	// table model
 	@Override
 	public int getColumnCount() {
 		return numberOfColumns;
@@ -1058,7 +1151,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public int getRowCount() {
-		return productsV.size();
+		if (filter == null) {
+			return productsV.size();
+		} else {
+			return filter.length;
+		}
 	}
 
 	@Override
@@ -1081,7 +1178,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// continues to work
 	@Override
 	public Object getValueAt(int row, int displayCol) {
-		Object value = retrieveValueAt(row, displayCol);
+		Object value = retrieveValueAt(originRow(row), displayCol);
 		return value == null ? "" : value;
 	}
 
@@ -1194,7 +1291,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		Logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
-		changeValueAt(value, row, col);
+		changeValueAt(value, originRow(row), col);
+		fireTableCellUpdated(originRow(row), col);
 		fireTableCellUpdated(row, col);
 	}
 

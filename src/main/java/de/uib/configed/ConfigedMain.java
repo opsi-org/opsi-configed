@@ -85,7 +85,6 @@ import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
 import de.uib.configed.tree.ClientTree;
@@ -2604,7 +2603,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		String localbootProductsSavedStateObjTag = "localbootProducts";
 
 		if (istmForSelectedClientsLocalboot == null) {
-			istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+			istmForSelectedClientsLocalboot = new InstallationStateTableModel(getSelectedClients(), this,
 					collectChangedLocalbootStates,
 					persistenceController.getProductDataService().getAllLocalbootProductNames(depotRepresentative),
 					localbootStatesAndActions, possibleActions,
@@ -2616,17 +2615,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.getPanelLocalbootProductSettings().setTableModel(istmForSelectedClientsLocalboot);
 		mainFrame.getPanelLocalbootProductSettings().setSortKeys(currentSortKeysLocalbootProducts);
 
-		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(localbootProductsSavedStateObjTag
-				+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(
+				localbootProductsSavedStateObjTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY));
 
 		Set<String> savedFilter = null;
 
 		if (Configed.getSavedStates().getProperty(localbootProductsSavedStateObjTag + "."
-				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+				+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY) != null) {
 			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
 					.matcher(Configed.getSavedStates()
 							.getProperty(localbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
+									+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY))
 					.replaceAll("").split(",")));
 		}
 		mainFrame.getPanelLocalbootProductSettings().setGroupsData(productGroups, productGroupMembers);
@@ -2679,7 +2678,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (istmForSelectedClientsNetboot == null) {
 			// we rebuild only if we reloaded
-			istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+			istmForSelectedClientsNetboot = new InstallationStateTableModel(getSelectedClients(), this,
 					collectChangedNetbootStates,
 					persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative),
 					netbootStatesAndActions, possibleActions,
@@ -2691,17 +2690,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.getPanelNetbootProductSettings().setTableModel(istmForSelectedClientsNetboot);
 		mainFrame.getPanelNetbootProductSettings().setSortKeys(currentSortKeysNetbootProducts);
 
-		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(netbootProductsSavedStateObjTag + "."
-				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+		Logging.info(this, "resetFilter " + Configed.getSavedStates().getProperty(
+				netbootProductsSavedStateObjTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY));
 
 		Set<String> savedFilter = null;
 
 		if (Configed.getSavedStates().getProperty(netbootProductsSavedStateObjTag + "."
-				+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+				+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY) != null) {
 			savedFilter = new HashSet<>(Arrays.asList(backslashPattern
 					.matcher(Configed.getSavedStates()
 							.getProperty(netbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
+									+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY, ""))
 					.replaceAll("").split(",")));
 		}
 

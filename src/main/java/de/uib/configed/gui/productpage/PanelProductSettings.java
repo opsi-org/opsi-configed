@@ -55,7 +55,6 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.guidata.ProductVersionCellRenderer;
 import de.uib.configed.productgroup.ProductgroupPanel;
 import de.uib.opsicommand.ServerFacade;
@@ -683,7 +682,7 @@ public class PanelProductSettings extends JSplitPane {
 	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
 
-		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
 		Logging.info(this, "reduceToSet  " + filter);
@@ -702,7 +701,7 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void noSelection() {
-		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
 		tModel.setFilterFrom((Set<String>) null);
