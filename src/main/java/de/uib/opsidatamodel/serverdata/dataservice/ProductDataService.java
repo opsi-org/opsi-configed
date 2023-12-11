@@ -1292,12 +1292,10 @@ public class ProductDataService {
 			return;
 		}
 
-		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
+		for (Entry<?, ?> propertyEntry : properties.entrySet()) {
+			String propertyId = (String) propertyEntry.getKey();
 
-		while (propertiesKeyIterator.hasNext()) {
-			String propertyId = (String) propertiesKeyIterator.next();
-
-			List<?> newValue = (List<?>) properties.get(propertyId);
+			List<?> newValue = (List<?>) propertyEntry.getValue();
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
 			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
@@ -1310,14 +1308,14 @@ public class ProductDataService {
 				state.put("propertyId", propertyId);
 
 				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(propertyId));
+					Logging.debug(this, "setProductProperties,  requested deletion " + newValue);
 					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
-					Logging.debug(this, "setProductProperties,  requested update " + properties.get(propertyId)
-							+ " for oldValue " + oldValue);
+					Logging.debug(this,
+							"setProductProperties,  requested update " + newValue + " for oldValue " + oldValue);
 
 					state.put("values", newValue);
-					updateState(state, updateCollection, retrievedConfig, propertyId, properties.get(propertyId));
+					updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
 				}
 			}
 		}
