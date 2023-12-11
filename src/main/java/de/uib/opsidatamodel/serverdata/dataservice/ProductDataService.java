@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -375,20 +374,14 @@ public class ProductDataService {
 				new Object[] { callAttributes, callFilter });
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
 
-		Iterator<Map<String, Object>> iter = retrieved.iterator();
-
-		while (iter.hasNext()) {
-			Map<String, Object> retrievedMap = iter.next();
-			// TODO do we need a copy here?
-			Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
-
-			ConfigOption productPropertyMap = new ConfigOption(adaptedMap);
+		for (Map<String, Object> retrievedMap : retrieved) {
 
 			String propertyId = (String) retrievedMap.get("propertyId");
 			String productId = (String) retrievedMap.get("productId");
 
 			String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
+
 			String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = cacheManager
@@ -399,6 +392,7 @@ public class ProductDataService {
 						"retrieveAllProductPropertyDefinitions: no depot for " + productId + " version " + versionInfo
 								+ "  product2VersionInfo2Depots.get(productId) "
 								+ product2VersionInfo2Depots.get(productId));
+
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
@@ -407,7 +401,7 @@ public class ProductDataService {
 					Map<String, ListCellOptions> propertyDefinitions = product2PropertyDefinitions
 							.computeIfAbsent(productId, s -> new HashMap<>());
 
-					propertyDefinitions.put(propertyId, productPropertyMap);
+					propertyDefinitions.put(propertyId, new ConfigOption(retrievedMap));
 				}
 			}
 		}
