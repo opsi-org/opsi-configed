@@ -62,11 +62,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			if (!ids.isEmpty()) {
 				reducedIds.retainAll(ids);
 			}
-		}
 
-		if (reducedIds == null) {
-			setFilter((int[]) null);
-		} else {
 			filter = new int[reducedIds.size()];
 			int i = 0;
 
@@ -81,6 +77,8 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			}
 
 			setFilter(filter);
+		} else {
+			setFilter((int[]) null);
 		}
 	}
 

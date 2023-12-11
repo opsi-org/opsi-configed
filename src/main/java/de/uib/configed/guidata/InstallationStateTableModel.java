@@ -8,6 +8,7 @@ package de.uib.configed.guidata;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -781,17 +782,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				if (!started) {
 					started = true;
 					newValUntilNow = getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST);
-				} else {
-					if (newValUntilNow == null) {
-						if (getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST) != null) {
-							newValUntilNow = Globals.CONFLICT_STATE_STRING;
-						}
-					} else {
-						if (!newValUntilNow
-								.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
-							newValUntilNow = Globals.CONFLICT_STATE_STRING;
-						}
+				} else if (newValUntilNow == null) {
+					if (getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST) != null) {
+						newValUntilNow = Globals.CONFLICT_STATE_STRING;
 					}
+				} else if (!newValUntilNow
+						.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
+					newValUntilNow = Globals.CONFLICT_STATE_STRING;
+				} else {
+					// No conflict between old and new values, they are equal
 				}
 			}
 			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(product.getKey(), newValUntilNow);
@@ -897,68 +896,64 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						stateAndAction = new ProductState(null);
 					}
 
-					if (stateAndAction != null) {
-						String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
+					String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
 
-						Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
-								+ actionRequestForRequiredProduct);
+					Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
+							+ actionRequestForRequiredProduct);
 
-						String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
+					String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
 
-						Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
-								+ installationStatusOfRequiredProduct);
+					Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
+							+ installationStatusOfRequiredProduct);
 
-						Logging.debug(this, "requiredAction " + requiredAction);
-						Logging.debug(this,
-								"ActionRequest.getVal(requiredAction) " + ActionRequest.getVal(requiredAction));
-						int requiredAR = ActionRequest.getVal(requiredAction);
+					Logging.debug(this, "requiredAction " + requiredAction);
+					Logging.debug(this, "ActionRequest.getVal(requiredAction) " + ActionRequest.getVal(requiredAction));
+					int requiredAR = ActionRequest.getVal(requiredAction);
 
-						int requiredIS = InstallationStatus.getVal(requiredState);
+					int requiredIS = InstallationStatus.getVal(requiredState);
 
-						Logging.debug(this,
-								" requiredInstallationsStatus " + InstallationStatus.getDisplayLabel(requiredIS));
+					Logging.debug(this,
+							" requiredInstallationsStatus " + InstallationStatus.getDisplayLabel(requiredIS));
 
-						// handle state requests
-						if ((requiredIS == InstallationStatus.INSTALLED
-								|| requiredIS == InstallationStatus.NOT_INSTALLED)
-								// the only relevant states for which we should eventually do something
-								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
-							// we overwrite the required action request
+					// handle state requests
+					if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
+							// the only relevant states for which we should eventually do something
+							&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
+						// we overwrite the required action request
 
-							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
-							Logging.debug(this, " requiredStatusS " + requiredStatusS);
+						String requiredStatusS = InstallationStatus.getLabel(requiredIS);
+						Logging.debug(this, " requiredStatusS " + requiredStatusS);
 
-							String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatusS);
-							Logging.debug(this, " needed action therefore " + neededAction);
+						String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatusS);
+						Logging.debug(this, " needed action therefore " + neededAction);
 
-							requiredAR = ActionRequest.getVal(neededAction);
-						}
+						requiredAR = ActionRequest.getVal(neededAction);
+					}
 
-						// handle resulting action requests
-						if (requiredAR > ActionRequest.NONE) {
-							checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
-									ActionRequest.getLabel(requiredAR));
+					// handle resulting action requests
+					if (requiredAR > ActionRequest.NONE) {
+						checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
+								ActionRequest.getLabel(requiredAR));
 
-							if (
-							// an action is required and already set
-							ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
-								Logging.info(this, "followRequirements:   no change of action request necessary for "
-										+ requirement.getKey());
+						if (
+						// an action is required and already set
+						ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
+							Logging.info(this, "followRequirements:   no change of action request necessary for "
+									+ requirement.getKey());
+						} else {
+							String alreadyExistingNewActionRequest = getChangedState(clientId, requirement.getKey(),
+									ActionRequest.KEY);
+
+							if (alreadyExistingNewActionRequest != null) {
+								Logging.info(this,
+										"required product: '" + requirement.getKey() + "'  has already been treated");
+								Logging.info(this, "new action was " + alreadyExistingNewActionRequest);
+
+								// already set for clientId, product "
 							} else {
-								String alreadyExistingNewActionRequest = getChangedState(clientId, requirement.getKey(),
-										ActionRequest.KEY);
-
-								if (alreadyExistingNewActionRequest != null) {
-									Logging.info(this, "required product: '" + requirement.getKey()
-											+ "'  has already been treated");
-									Logging.info(this, "new action was " + alreadyExistingNewActionRequest);
-
-									// already set for clientId, product "
-								} else {
-									Logging.info(this, "ar:   ===== recursion into " + requirement.getKey());
-									recursivelyChangeActionRequest(clientId, requirement.getKey(),
-											new ActionRequest(requiredAR));
-								}
+								Logging.info(this, "ar:   ===== recursion into " + requirement.getKey());
+								recursivelyChangeActionRequest(clientId, requirement.getKey(),
+										new ActionRequest(requiredAR));
 							}
 						}
 					}
@@ -987,21 +982,14 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, " possible actions  " + possibleActions);
 			List<String> actionsForProduct = new ArrayList<>();
 			if (possibleActions != null) {
-				List<String> actionList = new ArrayList<>();
-				Iterator<String> iter = possibleActions.get(actualProduct).iterator();
-				while (iter.hasNext()) {
-					String label = iter.next();
+				for (String label : possibleActions.get(actualProduct)) {
 					ActionRequest ar = ActionRequest.produceFromLabel(label);
-					actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
+					actionsForProduct.add(ActionRequest.getDisplayLabel(ar.getVal()));
 				}
 
 				// Add in values in correct ordering
 				String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-				for (String displayLabel : displayLabels) {
-					if (actionList.contains(displayLabel)) {
-						actionsForProduct.add(displayLabel);
-					}
-				}
+				actionsForProduct.retainAll(Arrays.asList(displayLabels));
 
 				Logging.debug("Possible actions as array  " + actionsForProduct);
 			}
@@ -1134,7 +1122,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
 
 		case 8:
-
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			return ActionRequest.getDisplayLabel(ar.getVal());
