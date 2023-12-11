@@ -40,7 +40,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
-import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
 import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
@@ -356,16 +355,10 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
 				thePanel, updateCollection);
 
-		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory();
-
-		updateItemFactory.setSource(theModel);
-
 		theModel.reset();
 
 		columnNames = theModel.getColumnNames();
 		classNames = theModel.getClassNames();
-
-		updateItemFactory.setColumnNames(columnNames);
 
 		thePanel.setTableModel(theModel);
 	}
