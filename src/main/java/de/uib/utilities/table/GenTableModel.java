@@ -23,7 +23,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.TableUpdateItemInterface;
+import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 
 public class GenTableModel extends AbstractTableModel {
 	private static final String DEFAULT_FILTER_NAME = "default";
@@ -54,7 +54,7 @@ public class GenTableModel extends AbstractTableModel {
 	private boolean modelStructureValid;
 
 	private DefaultTableProvider tableProvider;
-	private TableUpdateItemInterface itemFactory;
+	private MapTableUpdateItemFactory itemFactory;
 
 	private final ChainedTableModelFilter chainedFilter;
 	private TableModelFilter workingFilter;
@@ -67,7 +67,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	private CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
+	public GenTableModel(MapTableUpdateItemFactory itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			int[] finalColumns, TableModelListener l, List<MapBasedTableEditItem> updates,
 			boolean cancelRequestReload) {
 		this.keyCol = keyCol;
@@ -116,12 +116,12 @@ public class GenTableModel extends AbstractTableModel {
 		setFilter(chainedFilter);
 	}
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
+	public GenTableModel(MapTableUpdateItemFactory itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			int[] finalColumns, TableModelListener l, List<MapBasedTableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, finalColumns, l, updates, false);
 	}
 
-	public GenTableModel(TableUpdateItemInterface itemFactory, DefaultTableProvider dataProvider, int keyCol,
+	public GenTableModel(MapTableUpdateItemFactory itemFactory, DefaultTableProvider dataProvider, int keyCol,
 			TableModelListener l, List<MapBasedTableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates, false);
 	}

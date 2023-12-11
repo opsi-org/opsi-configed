@@ -8,7 +8,7 @@ package de.uib.utilities.table.updates;
 
 import java.util.List;
 
-public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
+public class MapTableUpdateItemFactory {
 	private List<String> columnNames;
 	private Object source;
 
@@ -25,12 +25,10 @@ public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 		this.source = source;
 	}
 
-	@Override
 	public MapBasedTableEditItem produceUpdateItem(List<Object> rowV) {
 		return new MapDeliveryItem(source, columnNames, rowV);
 	}
 
-	@Override
 	public MapBasedTableEditItem produceDeleteItem(List<Object> rowV) {
 		return new MapDeleteItem(source, columnNames, rowV);
 	}
