@@ -14,11 +14,13 @@ public class MapBasedTableEditItem {
 	private List<String> columnNames;
 	private List<Object> rowV;
 	protected Object source;
+	private boolean keyChanged;
 
-	public MapBasedTableEditItem(Object source, List<String> columnNames, List<Object> rowV) {
+	public MapBasedTableEditItem(Object source, List<String> columnNames, List<Object> rowV, boolean keyChanged) {
 		this.columnNames = columnNames;
 		this.rowV = rowV;
 		this.source = source;
+		this.keyChanged = keyChanged;
 	}
 
 	public Map<String, Object> getRowAsMap() {
@@ -36,7 +38,7 @@ public class MapBasedTableEditItem {
 	}
 
 	public boolean keyChanged() {
-		return true;
+		return keyChanged;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class MapItemsUpdateController implements UpdateController {
 			Logging.debug(this, " handling updateItem " + updateItem);
 
 			if (updateItem.getSource() == this.tablemodel) {
-				if (updateItem instanceof MapDeliveryItem) {
+				if (updateItem.keyChanged()) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
 
 					success = result != null;
@@ -56,11 +56,8 @@ public class MapItemsUpdateController implements UpdateController {
 
 						lastKeyValue = result;
 					}
-				} else if (updateItem instanceof MapDeleteItem) {
-					success = updater.sendDelete(updateItem.getRowAsMap());
 				} else {
-					Logging.error("update item type not supported");
-					success = false;
+					success = updater.sendDelete(updateItem.getRowAsMap());
 				}
 			}
 		}

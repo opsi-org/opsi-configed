@@ -24,10 +24,10 @@ import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.CellEditor4TableText;
+import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import utils.Utils;
 
 // tab new licence

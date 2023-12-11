@@ -26,10 +26,10 @@ public class MapTableUpdateItemFactory {
 	}
 
 	public MapBasedTableEditItem produceUpdateItem(List<Object> rowV) {
-		return new MapDeliveryItem(source, columnNames, rowV);
+		return new MapBasedTableEditItem(source, columnNames, rowV, true);
 	}
 
 	public MapBasedTableEditItem produceDeleteItem(List<Object> rowV) {
-		return new MapDeleteItem(source, columnNames, rowV);
+		return new MapBasedTableEditItem(source, columnNames, rowV, false);
 	}
 }

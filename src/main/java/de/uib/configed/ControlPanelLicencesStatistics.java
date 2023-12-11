@@ -23,8 +23,8 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.MapBasedTableEditItem;
+import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 
 public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePanel {
 	private PanelLicencesStatistics thePanel;
