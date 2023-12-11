@@ -61,6 +61,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -119,14 +120,11 @@ import utils.Utils;
 
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ComponentListener {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
-	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
 
+	// todo rework 
 	private static final int F_WIDTH_RIGHTHANDED = 200;
-
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
@@ -1888,34 +1886,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		JSplitPane splitpaneClientSelection = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false,
-				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
+		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+		jTabbedPaneClientSelection.addTab("Depots", depotListPresenter);
+		jTabbedPaneClientSelection.addTab("Clients", scrollpaneTreeClients);
 
-		Logging.info(this, "multidepot " + multidepot);
-		if (multidepot) {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
-		} else {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT);
-		}
-
-		JPanel panelTreeClientSelection = new JPanel();
-		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
-		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
-
-		layoutPanelTreeClientSelection
-				.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(depotListPresenter, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
-
-		layoutPanelTreeClientSelection
-				.setVerticalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE));
+		jTabbedPaneClientSelection.setSelectedIndex(1);
+		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
 		jButtonServerConfiguration = new JButton(Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
 		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
@@ -2176,7 +2152,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes = new JTabbedPane();
 		jTabbedPaneConfigPanes.setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 
-		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
+		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 

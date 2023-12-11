@@ -136,9 +136,11 @@ public class DepotListPresenter extends JPanel {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonSelectDepotsAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(searchPane,
+						Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -151,7 +153,8 @@ public class DepotListPresenter extends JPanel {
 						.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE)));
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void selectDepotsWithEqualProperties() {
