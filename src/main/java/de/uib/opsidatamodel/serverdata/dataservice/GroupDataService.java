@@ -461,7 +461,6 @@ public class GroupDataService {
 	}
 
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
-		Logging.devel("setProductGroup");
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
