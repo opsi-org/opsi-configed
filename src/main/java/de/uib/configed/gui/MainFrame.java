@@ -1889,7 +1889,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		jTabbedPaneClientSelection.addTab("Depots", depotListPresenter);
 		jTabbedPaneClientSelection.addTab("Clients", scrollpaneTreeClients);
-		jTabbedPaneClientSelection.addTab("Produkte", new ProductTree());
+		jTabbedPaneClientSelection.addTab("Produkte", new JScrollPane(new ProductTree()));
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
 		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
