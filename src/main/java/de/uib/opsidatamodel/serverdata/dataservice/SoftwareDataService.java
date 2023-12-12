@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -333,8 +332,7 @@ public class SoftwareDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
 				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> li = exec.getListOfMaps(omc);
-		Iterator<Map<String, Object>> iter = li.iterator();
+		List<Map<String, Object>> list = exec.getListOfMaps(omc);
 
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -345,9 +343,9 @@ public class SoftwareDataService {
 		int i = 0;
 		Logging.info(this, "getInstalledSoftwareInformation build map");
 
-		while (iter.hasNext()) {
+		for (Map<String, Object> map : list) {
 			i++;
-			SWAuditEntry entry = new SWAuditEntry(iter.next());
+			SWAuditEntry entry = new SWAuditEntry(map);
 			String swName = entry.get(SWAuditEntry.NAME);
 			String swIdent = entry.getIdent();
 			installedSoftwareInformation.put(swIdent, entry);
@@ -701,6 +699,7 @@ public class SoftwareDataService {
 			// we work only with real changes
 			softwareToAssignTruely.removeAll(oldEntries);
 			oldEntriesTruely.removeAll(softwareToAssign);
+			oldEntriesTruely.retainAll(instSwI.keySet());
 
 			Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
 			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
@@ -710,15 +709,13 @@ public class SoftwareDataService {
 
 				for (String swIdent : oldEntriesTruely) {
 					// software exists in audit software
-					if (instSwI.get(swIdent) != null) {
-						entriesToRemove.add(swIdent);
-						Map<String, String> item = new HashMap<>();
-						item.put("ident", swIdent + ";" + licensePoolId);
-						item.put("type", "AuditSoftwareToLicensePool");
-						deleteItems.add(item);
+					entriesToRemove.add(swIdent);
+					Map<String, String> item = new HashMap<>();
+					item.put("ident", swIdent + ";" + licensePoolId);
+					item.put("type", "AuditSoftwareToLicensePool");
+					deleteItems.add(item);
 
-						Logging.info(this, "" + instSwI.get(swIdent));
-					}
+					Logging.info(this, "" + instSwI.get(swIdent));
 				}
 				Logging.info(this, "entriesToRemove " + entriesToRemove);
 				Logging.info(this, "deleteItems " + deleteItems);
@@ -774,10 +771,9 @@ public class SoftwareDataService {
 					// give zero length parts as ""
 					String[] parts = ident.split(";", -1);
 					String swName = parts[1];
-					if (getName2SWIdentsPD().get(swName) == null) {
-						getName2SWIdentsPD().put(swName, new TreeSet<>());
-					}
-					getName2SWIdentsPD().get(swName).add(ident);
+
+					Set<String> swIdents = getName2SWIdentsPD().computeIfAbsent(swName, key -> new TreeSet<>());
+					swIdents.add(ident);
 
 					Logging.info(this,
 							"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
