@@ -1474,9 +1474,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return result;
 		}
 
-		Iterator<String> iter = filterset.iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
+		for (String key : filterset) {
 			if (map0.containsKey(key)) {
 				result.put(key, map0.get(key));
 			}

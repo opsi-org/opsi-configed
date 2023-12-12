@@ -8,7 +8,6 @@ package de.uib.opsicommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -191,16 +190,15 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 			return new TreeMap<>();
 		}
 
-		return generateStringMappedObjectsByKeyResult(resultlist.iterator(), key, sourceVars, targetVars,
-				translateValues);
+		return generateStringMappedObjectsByKeyResult(resultlist, key, sourceVars, targetVars, translateValues);
 	}
 
-	public static Map<String, Map<String, String>> generateStringMappedObjectsByKeyResult(Iterator<Object> iter,
+	public static Map<String, Map<String, String>> generateStringMappedObjectsByKeyResult(Iterable<Object> objects,
 			String key, String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
-		while (iter.hasNext()) {
-			Map<String, String> originalMap = POJOReMapper.remap(iter.next(), new TypeReference<Map<String, String>>() {
+		for (Object object : objects) {
+			Map<String, String> originalMap = POJOReMapper.remap(object, new TypeReference<Map<String, String>>() {
 			});
 
 			if (originalMap.get(key) == null) {

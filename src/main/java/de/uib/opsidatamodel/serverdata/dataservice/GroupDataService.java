@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -118,11 +117,7 @@ public class GroupDataService {
 		List<Object> hostGroupsList = new ArrayList<>();
 		List<Object> productGroupsList = new ArrayList<>();
 
-		Iterator<Map<String, Object>> iter = resultlist.iterator();
-
-		while (iter.hasNext()) {
-			Map<String, Object> entry = iter.next();
-
+		for (Map<String, Object> entry : resultlist) {
 			if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
 				hostGroupsList.add(entry);
 			} else if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
@@ -134,7 +129,7 @@ public class GroupDataService {
 
 		// Load data for hostGroups
 		Map<String, Map<String, String>> source = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
-				hostGroupsList.iterator(), "ident", new String[] { "id", "parentGroupId", "description" },
+				hostGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }, null);
 
 		HostGroups hostGroups = new HostGroups(source);
@@ -147,7 +142,7 @@ public class GroupDataService {
 
 		// Load data for productGroups
 		Map<String, Map<String, String>> result = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
-				productGroupsList.iterator(), "ident", new String[] { "id", "parentGroupId", "description" },
+				productGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }, null);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
 	}
@@ -219,11 +214,7 @@ public class GroupDataService {
 		List<Object> hostGroupsList = new ArrayList<>();
 		List<Object> productGroupsList = new ArrayList<>();
 
-		Iterator<Map<String, Object>> iter = resultlist.iterator();
-
-		while (iter.hasNext()) {
-			Map<String, Object> entry = iter.next();
-
+		for (Map<String, Object> entry : resultlist) {
 			if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
 				hostGroupsList.add(entry);
 			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
@@ -236,16 +227,15 @@ public class GroupDataService {
 
 		// Generate data for host groups
 		Map<String, Map<String, String>> mappedRelationsHostGroups = AbstractPOJOExecutioner
-				.generateStringMappedObjectsByKeyResult(hostGroupsList.iterator(), "ident",
-						new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-						ClientTree.getTranslationsFromPersistentNames());
+				.generateStringMappedObjectsByKeyResult(hostGroupsList, "ident", new String[] { "objectId", "groupId" },
+						new String[] { "clientId", "groupId" }, ClientTree.getTranslationsFromPersistentNames());
 
 		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelationsHostGroups, "clientId", "groupId");
 		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
 
 		// generate data for product groups
 		Map<String, Map<String, String>> mappedRelationsProductGroups = AbstractPOJOExecutioner
-				.generateStringMappedObjectsByKeyResult(productGroupsList.iterator(), "ident",
+				.generateStringMappedObjectsByKeyResult(productGroupsList, "ident",
 						new String[] { "objectId", "groupId" }, new String[] { "productId", "groupId" }, null);
 
 		cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS,
@@ -457,7 +447,21 @@ public class GroupDataService {
 		return exec.doCall(omc);
 	}
 
+	private static List<Map<String, String>> createObject2Groups(String groupId, Map<String, String> typingObject,
+			Set<String> products) {
+		List<Map<String, String>> object2Groups = new ArrayList<>();
+		for (String objectId : products) {
+			Map<String, String> m = new HashMap<>(typingObject);
+			m.put("groupId", groupId);
+			m.put("objectId", objectId);
+			object2Groups.add(m);
+		}
+
+		return object2Groups;
+	}
+
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
+		Logging.devel("setProductGroup");
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
@@ -468,8 +472,6 @@ public class GroupDataService {
 		}
 
 		Logging.info(this, "setProductGroup: groupId " + groupId + " should have members " + productSet);
-
-		boolean result = true;
 
 		Map<String, String> map = new HashMap<>();
 
@@ -482,7 +484,7 @@ public class GroupDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_OBJECTS,
 				new Object[] { new Object[] { map } });
-		result = exec.doCall(omc);
+		boolean result = exec.doCall(omc);
 
 		Set<String> inNewSetnotInOriSet = new HashSet<>(productSet);
 		Set<String> inOriSetnotInNewSet = new HashSet<>();
@@ -502,13 +504,7 @@ public class GroupDataService {
 		typingObject.put("groupType", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		typingObject.put("type", Object2GroupEntry.TYPE_NAME);
 
-		List<Map<String, String>> object2Groups = new ArrayList<>();
-		for (String objectId : inOriSetnotInNewSet) {
-			Map<String, String> m = new HashMap<>(typingObject);
-			m.put("groupId", groupId);
-			m.put("objectId", objectId);
-			object2Groups.add(m);
-		}
+		List<Map<String, String>> object2Groups = createObject2Groups(groupId, typingObject, inOriSetnotInNewSet);
 
 		Logging.debug(this, "delete objects " + object2Groups);
 
@@ -517,13 +513,7 @@ public class GroupDataService {
 					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS, new Object[] { object2Groups }));
 		}
 
-		object2Groups.clear();
-		for (String objectId : inNewSetnotInOriSet) {
-			Map<String, String> m = new HashMap<>(typingObject);
-			m.put("groupId", groupId);
-			m.put("objectId", objectId);
-			object2Groups.add(m);
-		}
+		object2Groups = createObject2Groups(groupId, typingObject, inNewSetnotInOriSet);
 
 		Logging.debug(this, "create new objects " + object2Groups);
 
