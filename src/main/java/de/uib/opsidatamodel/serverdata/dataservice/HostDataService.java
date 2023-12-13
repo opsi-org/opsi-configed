@@ -17,6 +17,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
@@ -507,51 +508,45 @@ public class HostDataService {
 		}
 
 		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> result0 = exec.getResponses(exec
+		Map<String, Object> sessionInfos = exec.getResponses(exec
 				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-		for (Entry<String, Object> resultEntry : result0.entrySet()) {
-			StringBuilder value = new StringBuilder();
+		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
+			String value;
 
 			if (resultEntry.getValue() instanceof String) {
 				String errorStr = (String) resultEntry.getValue();
-				value.append("no response");
-				if (errorStr.indexOf("Opsi timeout") > -1) {
-					int i = errorStr.indexOf("(");
-					if (i > -1) {
-						value.append("   " + errorStr.substring(i + 1, errorStr.length() - 1));
-					} else {
-						value.append(" (opsi timeout)");
-					}
-				} else if (errorStr.indexOf(methodname.toString()) > -1) {
-					value.append("  (" + methodname + " not valid)");
-				} else if (errorStr.indexOf("Name or service not known") > -1) {
-					value.append(" (name or service not known)");
-				} else {
-					Logging.notice(this, "unexpected output occured in session Info");
-				}
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorStr;
 			} else if (resultEntry.getValue() instanceof List) {
 				List<?> sessionlist = (List<?>) resultEntry.getValue();
-				for (Object element : sessionlist) {
-					Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
-					});
-
-					String username = "" + session.get("UserName");
-					String logondomain = "" + session.get("LogonDomain");
-
-					if (!value.toString().isEmpty()) {
-						value.append("; ");
-					}
-
-					value.append(username + " (" + logondomain + "\\" + username + ")");
-				}
+				value = createSessionInfoForList(sessionlist);
 			} else {
 				Logging.warning(this, "resultEntry's value is neither a String nor a List");
+				value = "";
 			}
 
-			result.put(resultEntry.getKey(), value.toString());
+			result.put(resultEntry.getKey(), value);
 		}
 
 		return result;
+	}
+
+	private static String createSessionInfoForList(List<?> sessionlist) {
+		StringBuilder value = new StringBuilder();
+		for (Object element : sessionlist) {
+			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
+			});
+
+			String username = "" + session.get("UserName");
+			String logondomain = "" + session.get("LogonDomain");
+
+			if (!value.toString().isEmpty()) {
+				value.append("; ");
+			}
+
+			value.append(username + " (" + logondomain + "\\" + username + ")");
+		}
+
+		return value.toString();
 	}
 
 	/**
