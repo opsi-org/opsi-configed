@@ -44,7 +44,6 @@ public class SSHConnect {
 
 	private SSHConnectionInfo connectionInfo;
 
-	private int retriedTimesJschex = 1;
 	private int retriedTimesAuth = 1;
 
 	/**

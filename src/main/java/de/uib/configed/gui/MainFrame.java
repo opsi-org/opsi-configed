@@ -2618,49 +2618,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		initializeMenuItemsForClientsDependentOnSelectionCount();
 
 		if (countSelectedClients < 0) {
-			checkMenuItemsDisabling();
-			return;
-		}
-
-		if (countSelectedClients == 0) {
+			// Do nothing in that case (-1)
+		} else if (countSelectedClients == 0) {
 			jMenuAddClient.setEnabled(true);
 			popupAddClient.setEnabled(true);
 		} else {
-			if (countSelectedClients >= 1) {
-				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-					jMenuItem.setEnabled(true);
-				}
-
-				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-					jMenuItem.setEnabled(true);
-				}
-
-				jMenuResetProducts.setEnabled(true);
-				popupResetProducts.setEnabled(true);
-			} else {
-				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-					jMenuItem.setEnabled(false);
-				}
-
-				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-					jMenuItem.setEnabled(false);
-				}
-
-				jMenuResetProducts.setEnabled(false);
-				popupResetProducts.setEnabled(false);
+			for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+				jMenuItem.setEnabled(countSelectedClients >= 1);
 			}
 
-			if (countSelectedClients == 1) {
-				jMenuChangeClientID.setEnabled(true);
-				jMenuCopyClient.setEnabled(true);
-				popupChangeClientID.setEnabled(true);
-				popupCopyClient.setEnabled(true);
-			} else {
-				jMenuChangeClientID.setEnabled(false);
-				jMenuCopyClient.setEnabled(false);
-				popupChangeClientID.setEnabled(false);
-				popupCopyClient.setEnabled(false);
+			for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+				jMenuItem.setEnabled(countSelectedClients >= 1);
 			}
+
+			jMenuResetProducts.setEnabled(countSelectedClients >= 1);
+			popupResetProducts.setEnabled(countSelectedClients >= 1);
+
+			jMenuChangeClientID.setEnabled(countSelectedClients == 1);
+			jMenuCopyClient.setEnabled(countSelectedClients == 1);
+			popupChangeClientID.setEnabled(countSelectedClients == 1);
+			popupCopyClient.setEnabled(countSelectedClients == 1);
 		}
 
 		checkMenuItemsDisabling();
