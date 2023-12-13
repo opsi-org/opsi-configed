@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -672,9 +673,7 @@ public class ProductDataService {
 	public Map<String, ConfigName2ConfigValue> getProductPropertiesPD(String pcname) {
 		Logging.debug(this, "getProductsProperties for host " + pcname);
 
-		Set<String> pcs = new TreeSet<>();
-		pcs.add(pcname);
-		retrieveProductPropertiesPD(pcs);
+		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -693,9 +692,7 @@ public class ProductDataService {
 	public Map<String, Object> getProductPropertiesPD(String pcname, String productname) {
 		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
 
-		Set<String> pcs = new TreeSet<>();
-		pcs.add(pcname);
-		retrieveProductPropertiesPD(pcs);
+		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -730,21 +727,10 @@ public class ProductDataService {
 	 * @param clientNames -
 	 */
 	public void retrieveProductPropertiesPD(final Set<String> clientNames) {
-		boolean existing = true;
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
-		if (productProperties == null) {
-			existing = false;
-		} else {
-			for (String client : clientNames) {
-				if (productProperties.get(client) == null) {
-					existing = false;
-					break;
-				}
-			}
-		}
 
-		if (existing) {
+		if (productProperties != null && productProperties.keySet().containsAll(clientNames)) {
 			return;
 		}
 
@@ -775,10 +761,8 @@ public class ProductDataService {
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductPropertiesPD(
 				depotDataService.getDepot());
-		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
-		for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
-			defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
-		}
+
+		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>(defaultProperties);
 
 		Set<String> products = defaultPropertiesRetrieved.keySet();
 
