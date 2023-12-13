@@ -199,8 +199,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
 	private JMenuItem jMenuRemoteControl = new JMenuItem();
 
-	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
-			jMenuCopyClient, jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
+	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
+			jMenuResetProducts, jMenuFreeLicences, jMenuShowPopupMessage, jMenuRequestSessionInfo,
+			jMenuDeletePackageCaches, jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
 	private JMenu jMenuClientselection = new JMenu();
 	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
@@ -254,10 +255,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem popupChangeClientID = new JMenuItem();
 	private JMenuItem popupRemoteControl = new JMenuItem();
 
-	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
-			popupCopyClient, popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
-			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
-			popupRemoteControl };
+	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupDeleteClient,
+			popupResetProducts, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
+			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupRemoteControl };
 
 	private JMenu popupShowColumns = new JMenu();
 	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
@@ -2601,44 +2601,21 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void initializeMenuItemsForClientsDependentOnSelectionCount() {
-		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			jMenuItem.setEnabled(false);
-		}
-		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-			jMenuItem.setEnabled(false);
-		}
-		// sometimes
-		// before the menu is built completely
-	}
-
-	public void enableMenuItemsForClients(int countSelectedClients) {
+	private void enableMenuItemsForClients(int countSelectedClients) {
 		Logging.debug(this, " enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
 
-		initializeMenuItemsForClientsDependentOnSelectionCount();
-
-		if (countSelectedClients < 0) {
-			// Do nothing in that case (-1)
-		} else if (countSelectedClients == 0) {
-			jMenuAddClient.setEnabled(true);
-			popupAddClient.setEnabled(true);
-		} else {
-			for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-				jMenuItem.setEnabled(countSelectedClients >= 1);
-			}
-
-			for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-				jMenuItem.setEnabled(countSelectedClients >= 1);
-			}
-
-			jMenuResetProducts.setEnabled(countSelectedClients >= 1);
-			popupResetProducts.setEnabled(countSelectedClients >= 1);
-
-			jMenuChangeClientID.setEnabled(countSelectedClients == 1);
-			jMenuCopyClient.setEnabled(countSelectedClients == 1);
-			popupChangeClientID.setEnabled(countSelectedClients == 1);
-			popupCopyClient.setEnabled(countSelectedClients == 1);
+		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+			jMenuItem.setEnabled(countSelectedClients >= 1);
 		}
+
+		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+			jMenuItem.setEnabled(countSelectedClients >= 1);
+		}
+
+		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
+		jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		popupChangeClientID.setEnabled(countSelectedClients == 1);
+		popupCopyClient.setEnabled(countSelectedClients == 1);
 
 		checkMenuItemsDisabling();
 	}

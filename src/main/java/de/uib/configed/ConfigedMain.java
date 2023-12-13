@@ -1052,8 +1052,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			hostInfo.resetGui();
 
-			mainFrame.enableMenuItemsForClients(getSelectedClients().length);
-
 			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
 					+ " as well as " + clientTable.getSelectedValues().size());
 
@@ -1184,10 +1182,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
 			ClientTree treeClients) {
 		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients);
-
-		// setting the similar global values as well
-
-		mainFrame.enableMenuItemsForClients(0);
 
 		// rearranging visual components
 		mainFrame.validate();
@@ -3137,12 +3131,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			if (!result) {
 				viewIndex = oldViewIndex;
 				Logging.debug(" tab index could not be changed");
-			}
-
-			if (viewIndex == VIEW_CLIENTS) {
-				mainFrame.enableMenuItemsForClients(getSelectedClients().length);
-			} else {
-				mainFrame.enableMenuItemsForClients(-1);
 			}
 
 			switch (editingTarget) {
