@@ -806,25 +806,29 @@ public class ProductDataService {
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 
 		for (String product : products) {
-			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
-				ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
-
-				for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product)
-						.entrySet()) {
-					if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
-						propertyEntry.getValue().setDefaultValues(new ArrayList<>());
-					} else {
-						propertyEntry.getValue()
-								.setDefaultValues((List<Object>) productPropertyConfig.get(propertyEntry.getKey()));
-					}
-				}
-			}
+			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
 
 			productHavingClientSpecificProperties.put(product, productsHavingSpecificProperties.contains(product));
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
 				productHavingClientSpecificProperties);
+	}
+
+	private static void setDefaultValuesForProduct(Map<String, Map<String, ListCellOptions>> productPropertyDefinitions,
+			Map<String, ConfigName2ConfigValue> depotValues, String product) {
+		if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
+			ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
+
+			for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product).entrySet()) {
+				if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
+					propertyEntry.getValue().setDefaultValues(new ArrayList<>());
+				} else {
+					propertyEntry.getValue()
+							.setDefaultValues((List<Object>) productPropertyConfig.get(propertyEntry.getKey()));
+				}
+			}
+		}
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {
