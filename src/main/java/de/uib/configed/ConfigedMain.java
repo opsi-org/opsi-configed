@@ -193,7 +193,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
-	protected String[] selectedDepots = new String[] {};
+	protected List<String> selectedDepots = new ArrayList<>();
 	protected String[] oldSelectedDepots;
 	protected List<String> selectedDepotsV = new ArrayList<>();
 
@@ -1437,8 +1437,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private Map<String, Boolean> produceClientListForDepots(Set<String> allowedClients) {
-		Logging.info(this, " producePcListForDepots " + Arrays.toString(selectedDepots)
-				+ " running with allowedClients " + allowedClients);
+		Logging.info(this,
+				" producePcListForDepots " + selectedDepots + " running with allowedClients " + allowedClients);
 		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(selectedDepots,
 				allowedClients);
 
@@ -2412,12 +2412,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsOfSelectedClients = null;
 
-		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
+		selectedDepots = depotsList.getSelectedValuesList();
 		selectedDepotsV = new ArrayList<>(depotsList.getSelectedValuesList());
 
 		Logging.debug(this, "selectedDepotsV: " + selectedDepotsV);
 
-		Configed.getSavedStates().setProperty("selectedDepots", Arrays.toString(selectedDepots));
+		Configed.getSavedStates().setProperty("selectedDepots", selectedDepots.toString());
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
@@ -2840,8 +2840,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		addToGlobalUpdateCollection(hostUpdateCollection);
 
 		String depot = "";
-		if (selectedDepots.length > 0) {
-			depot = selectedDepots[0];
+		if (!selectedDepots.isEmpty()) {
+			depot = selectedDepots.get(0);
 		}
 
 		mainFrame.getPanelHostProperties().initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots,
@@ -2902,12 +2902,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			depotsList.setEnabled(true);
 			depotsList.requestFocus();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedDepots()));
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(getSelectedDepots());
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
-					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedDepots())));
+			Map<String, Object> originalMap = mergeMaps(
+					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedDepots()));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
 					additionalconfigurationUpdateCollection, false,
@@ -3160,7 +3160,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "set selected values in initServer()");
 	}
 
-	public String[] getSelectedDepots() {
+	public List<String> getSelectedDepots() {
 		return selectedDepots;
 	}
 
@@ -3195,8 +3195,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsList.setListData(getLinkedDepots());
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
-		String[] depotsListSelectedValues = getSelectedDepots();
-		Logging.debug(this, "selected after fetch " + getSelectedDepots().length);
+		List<String> depotsListSelectedValues = getSelectedDepots();
+		Logging.debug(this, "selected after fetch " + getSelectedDepots().size());
 		for (String depotListSelectedValue : depotsListSelectedValues) {
 			// collect all indices where the value had been selected
 			depotsList.setSelectedValue(depotListSelectedValue, false);

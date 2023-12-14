@@ -440,16 +440,15 @@ public final class SSHCommandParameterMethods {
 
 	private String[] getSelectedDepotNames() {
 		Logging.debug(this, "getSelected_depotnames  " + configedMain.getSelectedDepots());
-		return configedMain.getSelectedDepots();
+		return configedMain.getSelectedDepots().toArray(new String[0]);
 	}
 
 	private String[] getSelectedDepotIPs() {
 		Logging.debug(this, "getSelected_depotIPs " + configedMain.getSelectedDepots());
-		String[] depotnames = new String[configedMain.getSelectedDepots().length];
-		System.arraycopy(configedMain.getSelectedDepots(), 0, depotnames, 0, configedMain.getSelectedDepots().length);
-		String[] depotIPs = new String[depotnames.length];
+
+		String[] depotIPs = new String[configedMain.getSelectedDepots().size()];
 		int counter = 0;
-		for (String name : depotnames) {
+		for (String name : configedMain.getSelectedDepots()) {
 			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);

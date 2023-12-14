@@ -365,7 +365,7 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);
 	}
 
-	public Map<String, Boolean> getClientListForDepots(String[] depots, Collection<String> allowedClients) {
+	public Map<String, Boolean> getClientListForDepots(Iterable<String> depots, Collection<String> allowedClients) {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
