@@ -541,7 +541,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			@Override
 			public void menuSelected(MenuEvent arg0) {
-				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+				enableMenuItemsForClients();
 			}
 		});
 
@@ -1462,7 +1462,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+				enableMenuItemsForClients();
 			}
 		});
 
@@ -2601,7 +2601,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void enableMenuItemsForClients(int countSelectedClients) {
+	private void enableMenuItemsForClients() {
+		int countSelectedClients = configedMain.getSelectedClients().size();
 		Logging.debug(this, " enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
 
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
@@ -2945,7 +2946,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// MouseListener implementation
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Logging.debug(this, "mouse clicked " + Arrays.toString(configedMain.getSelectedClients()));
+		Logging.debug(this, "mouse clicked " + configedMain.getSelectedClients());
 
 		reactToHostDataChange(e);
 	}
@@ -2973,7 +2974,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		Logging.debug(this, "key released " + Arrays.toString(configedMain.getSelectedClients()));
+		Logging.debug(this, "key released " + configedMain.getSelectedClients());
 
 		reactToHostDataChange(e);
 	}
@@ -3072,13 +3073,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showHardwareInfo();
 	}
 
-	public void setHardwareInfoMultiClients(String[] clients) {
+	public void setHardwareInfoMultiClients(List<String> clients) {
 		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
 			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
 			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.getPanel();
 		}
 
-		Logging.info(this, "setHardwareInfoMultiClients " + clients.length);
+		Logging.info(this, "setHardwareInfoMultiClients " + clients.size());
 
 		controllerHWinfoMultiClients.setFilter();
 		showHardwareLog = showHardwareLogMultiClientReport;
@@ -3102,8 +3103,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().length > 1) {
-			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().length);
+		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
+			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().size());
 
 			showSoftwareLog = showSoftwareLogMultiClientReport;
 			showSoftwareInfo();

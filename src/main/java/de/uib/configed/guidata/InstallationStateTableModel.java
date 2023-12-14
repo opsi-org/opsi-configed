@@ -110,7 +110,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
-	private final String[] selectedClients;
+	private final List<String> selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
 	private NavigableSet<String> tsProductNames;
@@ -127,7 +127,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(String[] selectedClients, ConfigedMain configedMain,
+	public InstallationStateTableModel(List<String> selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
@@ -658,7 +658,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	@Override
 	public boolean infoIfNoClientsSelected() {
-		if (selectedClients.length == 0) {
+		if (selectedClients.isEmpty()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
@@ -784,7 +784,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		for (Entry<String, Set<String>> product : product2setOfClientsWithNewAction.entrySet()) {
 			Logging.debug(this, "collectiveChangeActionRequest for product  " + product.getKey()
 					+ " changed product for client number : " + product.getValue().size());
-			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
+			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.size());
 
 			// -- not each client got a new action for this product
 

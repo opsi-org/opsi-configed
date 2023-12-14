@@ -1002,7 +1002,7 @@ public class ConfigDataService {
 	 * @see #isUefiConfigured(String)
 	 */
 	@SuppressWarnings({ "java:S2447" })
-	public Boolean isUEFI43(String[] clients) {
+	public Boolean isUEFI43(Iterable<String> clients) {
 		Boolean isUEFI = null;
 
 		for (String client : clients) {

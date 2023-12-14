@@ -956,9 +956,9 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
-		if (clientIds == null || clientIds.length == 0) {
+	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(List<String> clientIds) {
+		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + clientIds);
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 
@@ -979,11 +979,11 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds,
+	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(List<String> clientIds,
 			String[] attributes) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + clientIds);
 
-		if (clientIds == null || clientIds.length == 0) {
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 
@@ -1128,7 +1128,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
+	public boolean resetLocalbootProducts(List<String> selectedClients, boolean withDependencies) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
@@ -1141,7 +1141,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
+	public boolean resetNetbootProducts(List<String> selectedClients, boolean withDependencies) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
@@ -1154,10 +1154,9 @@ public class ProductDataService {
 		return result;
 	}
 
-	private List<Map<String, Object>> produceDeleteProductItems(String[] selectedClients, String productType) {
+	private List<Map<String, Object>> produceDeleteProductItems(List<String> selectedClients, String productType) {
 		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
-		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(
-				Arrays.asList(selectedClients));
+		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(selectedClients);
 
 		for (final String clientId : selectedClients) {
 			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()

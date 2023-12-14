@@ -9,7 +9,6 @@ package de.uib.opsidatamodel;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -432,7 +431,7 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 	}
 
-	public void setDepotForClients(String[] clients, String depotId) {
+	public void setDepotForClients(Iterable<String> clients, String depotId) {
 		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depotId)) {
 			return;
 		}
@@ -468,12 +467,12 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
 
-	public void addOpsiHostNames(String[] newNames) {
+	public void addOpsiHostNames(List<String> newNames) {
 		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
 		if (opsiHostNames == null) {
 			opsiHostNames = new ArrayList<>();
 		}
-		opsiHostNames.addAll(Arrays.asList(newNames));
+		opsiHostNames.addAll(newNames);
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
 

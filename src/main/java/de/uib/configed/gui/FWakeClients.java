@@ -35,7 +35,7 @@ public class FWakeClients extends FShowList {
 		super.setButtonsEnabled(true);
 	}
 
-	public void act(String[] selectedClients, int delaySecs) {
+	public void act(List<String> selectedClients, int delaySecs) {
 		setVisible(true);
 
 		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
@@ -72,8 +72,7 @@ public class FWakeClients extends FShowList {
 			}
 
 			if (ServerFacade.isOpsi43()) {
-				persistenceController.getRPCMethodExecutor()
-						.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
+				persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(hostsToWakeOnThisTurn);
 			} else {
 				persistenceController.getRPCMethodExecutor().wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots,
 						executionerForDepots);

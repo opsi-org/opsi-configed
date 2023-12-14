@@ -350,7 +350,7 @@ public class HostDataService {
 		return exec.doCall(omc);
 	}
 
-	public void deleteClients(String[] hostIds) {
+	public void deleteClients(List<String> hostIds) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
@@ -362,13 +362,13 @@ public class HostDataService {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
-	public Map<String, Object> reachableInfo(String[] clientIds) {
+	public Map<String, Object> reachableInfo(List<String> clientIds) {
 		Logging.info(this, "reachableInfo ");
 		Object[] callParameters = new Object[] {};
 
 		RPCMethodName methodName = RPCMethodName.HOST_CONTROL_REACHABLE;
 		if (clientIds != null) {
-			Logging.info(this, "reachableInfo for clientIds " + clientIds.length);
+			Logging.info(this, "reachableInfo for clientIds " + clientIds.size());
 			callParameters = new Object[] { clientIds };
 			methodName = RPCMethodName.HOST_CONTROL_SAFE_REACHABLE;
 		}
@@ -443,7 +443,7 @@ public class HostDataService {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
-	public Map<String, List<String>> getHostSeparationByDepots(String[] hostIds) {
+	public Map<String, List<String>> getHostSeparationByDepots(Iterable<String> hostIds) {
 		Map<String, Set<String>> hostSeparationByDepots = new HashMap<>();
 		for (String hostId : hostIds) {
 			String depotId = hostInfoCollections.getMapPcBelongsToDepot().get(hostId);
@@ -499,11 +499,11 @@ public class HostDataService {
 		return result;
 	}
 
-	public Map<String, String> sessionInfo(String[] clientIds) {
+	public Map<String, String> sessionInfo(List<String> clientIds) {
 		Map<String, String> result = new HashMap<>();
 
 		Object[] callParameters = new Object[] {};
-		if (clientIds != null && clientIds.length > 0) {
+		if (clientIds != null && !clientIds.isEmpty()) {
 			callParameters = new Object[] { clientIds };
 		}
 

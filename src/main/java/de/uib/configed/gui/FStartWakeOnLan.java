@@ -67,7 +67,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	private String nullDelayValue;
 
-	private String[] currentlySelectedClients;
+	private List<String> currentlySelectedClients;
 
 	private WaitingWorker waitingTask;
 
@@ -104,7 +104,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 		int clientCount;
 		if (configedMain.getSelectedClients() != null) {
-			clientCount = configedMain.getSelectedClients().length;
+			clientCount = configedMain.getSelectedClients().size();
 		} else {
 			clientCount = 0;
 		}
@@ -495,7 +495,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	public void doAction2() {
 		Logging.info(this, "doAction2");
 
-		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
+		if (currentlySelectedClients == null || currentlySelectedClients.isEmpty()) {
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
 					Configed.getResourceValue("FStartWakeOnLan.noClientsSelected.title"),
 					JOptionPane.INFORMATION_MESSAGE);

@@ -178,7 +178,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private IFInstallationStateTableModel istmForSelectedClientsLocalboot;
 	private IFInstallationStateTableModel istmForSelectedClientsNetboot;
 	private String firstSelectedClient;
-	private String[] selectedClients = new String[] {};
+	private List<String> selectedClients = new ArrayList<>();
 	private List<String> saveSelectedClients;
 	private List<String> preSaveSelectedClients;
 
@@ -620,7 +620,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			List<String> selectedValues = clientTable.getSelectedValues();
 			clientTable.clearSelection();
 			refreshClientListKeepingGroup();
-			setClients(selectedValues.toArray(new String[0]));
+			setClients(selectedValues);
 		});
 	}
 
@@ -656,7 +656,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if (getSelectedClients().length == 1 && clientId.equals(getSelectedClients()[0])) {
+				if (getSelectedClients().size() == 1 && clientId.equals(getSelectedClients().get(0))) {
 					updateProductTableForClient(clientId, productType);
 					productsToUpdate.clear();
 				}
@@ -953,7 +953,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+			setSelectedClientsOnPanel(preSaveSelectedClients);
 		}
 	}
 
@@ -1007,7 +1007,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			if (clientTable.isSelectionEmpty()) {
 				setSelectedClients((List<String>) null);
-				setSelectedClientsArray(new String[0]);
+				setSelectedClientsArray(new ArrayList<>());
 			} else {
 				setSelectedClients(clientTable.getSelectedValues());
 			}
@@ -1018,7 +1018,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.setClientInfoediting(getSelectedClients().length == 1);
+			mainFrame.setClientInfoediting(getSelectedClients().size() == 1);
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
@@ -1041,21 +1041,21 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			clientInDepot = depotsAdded.toString();
 
-			if (getSelectedClients().length == 1) {
-				mainFrame.setClientID(getSelectedClients()[0]);
+			if (getSelectedClients().size() == 1) {
+				mainFrame.setClientID(getSelectedClients().get(0));
 			} else {
 				mainFrame.setClientID("");
 			}
 
 			hostInfo.resetGui();
 
-			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
+			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().size()
 					+ " as well as " + clientTable.getSelectedValues().size());
 
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
 
-			activatedGroupModel.setActive(getSelectedClients().length <= 0);
+			activatedGroupModel.setActive(getSelectedClients().isEmpty());
 
 			// request reloading of client list depending data
 
@@ -1067,18 +1067,18 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		Logging.info(this,
-				"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
+				"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().size());
 
-		if (getSelectedClients().length > 0) {
-			hostInfo.setBy(pcinfos.get(getSelectedClients()[0]).getMap());
+		if (!getSelectedClients().isEmpty()) {
+			hostInfo.setBy(pcinfos.get(getSelectedClients().get(0)).getMap());
 
-			Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients()[0]);
+			Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients().get(0));
 			Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
 
 			HostInfo secondInfo = new HostInfo();
 
-			for (int i = 1; i < getSelectedClients().length; i++) {
-				secondInfo.setBy(pcinfos.get(getSelectedClients()[i]).getMap());
+			for (int i = 1; i < getSelectedClients().size(); i++) {
+				secondInfo.setBy(pcinfos.get(getSelectedClients().get(i)).getMap());
 				hostInfo.combineWith(secondInfo);
 			}
 		}
@@ -1523,10 +1523,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (filterClientList) {
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs "
-					+ getSelectedClients().length);
+					+ getSelectedClients().size());
 
 			// selected clients that are in the pclist0
-			pclist = new HashSet<>(Arrays.asList(getSelectedClients()));
+			pclist = new HashSet<>(getSelectedClients());
 			pclist.retainAll(pclist0.keySet());
 		} else {
 			pclist = pclist0.keySet();
@@ -1609,13 +1609,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void setClient(String clientName) {
-		setClients(new String[] { clientName });
+		setClients(Collections.singletonList(clientName));
 	}
 
-	public void setClients(String[] clientNames) {
-		Logging.info(this, "setClients " + Arrays.toString(clientNames));
+	public void setClients(List<String> clientNames) {
+		Logging.info(this, "setClients " + clientNames);
 		if (clientNames == null) {
-			setSelectedClientsOnPanel(new String[] {});
+			setSelectedClientsOnPanel(new ArrayList<>());
 		} else {
 			setSelectedClientsOnPanel(clientNames);
 			actOnListSelection();
@@ -1678,28 +1678,28 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		netbootStatesAndActionsUpdate = true;
 	}
 
-	public String[] getSelectedClients() {
+	public List<String> getSelectedClients() {
 		return selectedClients;
 	}
 
-	private void setSelectedClientsArray(String[] a) {
+	private void setSelectedClientsArray(Collection<String> a) {
 		if (a == null) {
 			return;
 		}
 
-		Logging.info(this, "setSelectedClientsArray " + a.length);
+		Logging.info(this, "setSelectedClientsArray " + a.size());
 		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
 
-		selectedClients = a.clone();
-		if (selectedClients.length == 0) {
+		selectedClients = new ArrayList<>(a);
+		if (selectedClients.isEmpty()) {
 			firstSelectedClient = "";
 		} else {
-			firstSelectedClient = selectedClients[0];
+			firstSelectedClient = selectedClients.get(0);
 		}
 
 		Logging.info(this, "setSelectedClientsArray produced firstSelectedClient " + firstSelectedClient);
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 				getSelectedClientsString(), clientInDepot);
 	}
 
@@ -1734,10 +1734,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		requestRefreshDataForClientSelection();
 
 		// init
-		setSelectedClientsArray(new String[] {});
+		setSelectedClientsArray(new ArrayList<>());
 
 		if (!clientNames.isEmpty()) {
-			setSelectedClientsArray(clientNames.toArray(new String[0]));
+			setSelectedClientsArray(clientNames);
 		}
 
 		treeClients.produceActiveParents(getSelectedClients());
@@ -1745,8 +1745,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
-			Logging.debug(this, "getSelectedClients  " + Arrays.toString(getSelectedClients())
-					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
+			Logging.debug(this, "getSelectedClients  " + getSelectedClients() + " ,  getViewIndex, viewClients: "
+					+ getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
 		}
@@ -1936,7 +1936,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private String getSelectedClientsStringWithMaxLength(Integer max) {
-		return getListStringRepresentation(Arrays.asList(getSelectedClients()), max);
+		return getListStringRepresentation(getSelectedClients(), max);
 	}
 
 	private String getSelectedDepotsString() {
@@ -1991,11 +1991,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, "collectTheProductProperties for " + productEdited);
 		mergedProductProperties = new HashMap<>();
-		productProperties = new ArrayList<>(getSelectedClients().length);
+		productProperties = new ArrayList<>(getSelectedClients().size());
 
-		if (getSelectedClients().length > 0 && possibleActions.get(productEdited) != null) {
+		if (!getSelectedClients().isEmpty() && possibleActions.get(productEdited) != null) {
 			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(getSelectedClients()[0], productEdited);
+					.getProductPropertiesPD(getSelectedClients().get(0), productEdited);
 
 			if (productPropertiesFor1Client != null) {
 				productProperties.add(productPropertiesFor1Client);
@@ -2014,8 +2014,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void mergeOtherClients(String productEdited) {
-		for (int i = 1; i < getSelectedClients().length; i++) {
-			String selectedClient = getSelectedClients()[i];
+		for (int i = 1; i < getSelectedClients().size(); i++) {
+			String selectedClient = getSelectedClients().get(i);
 
 			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
 					.getProductPropertiesPD(selectedClient, productEdited);
@@ -2187,11 +2187,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
-		Logging.info(this, " treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
+		Logging.info(this, " treeClients_mouseAction getSelectedClients().length " + getSelectedClients().size());
 
 		setGroupNameForNode(mouseNode);
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 				getSelectedClientsString(), clientInDepot);
 	}
 
@@ -2227,7 +2227,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 			mainFrame.getHostsStatusPanel().setGroupName("");
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 					getSelectedClientsString(), clientInDepot);
 			return;
 		}
@@ -2255,12 +2255,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		setGroupNameForNode(selectedNode);
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 				getSelectedClientsString(), clientInDepot);
 	}
 
 	private void setGroupNameForNode(DefaultMutableTreeNode selectedNode) {
-		if (getSelectedClients().length == 1 && selectedNode.getParent() != null) {
+		if (getSelectedClients().size() == 1 && selectedNode.getParent() != null) {
 			mainFrame.getHostsStatusPanel().setGroupName(selectedNode.getParent().toString());
 		} else {
 			mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2283,7 +2283,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		setGroupNameForNode(selectedNode);
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().length,
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
 				getSelectedClientsString(), clientInDepot);
 	}
 
@@ -2445,7 +2445,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			if (depotRepresentative == null) {
 				depotRepresentative = myServer;
 			}
@@ -2540,8 +2540,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	// enables and disables tabs depending if they make sense in other cases
 	private boolean checkOneClientSelected() {
-		Logging.debug(this, "checkOneClientSelected() selectedClients " + Arrays.toString(getSelectedClients()));
-		return getSelectedClients().length == 1;
+		Logging.debug(this, "checkOneClientSelected() selectedClients " + getSelectedClients());
+		return getSelectedClients().size() == 1;
 	}
 
 	private boolean setLocalbootProductsPage() {
@@ -2863,8 +2863,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	@SuppressWarnings({ "unchecked" })
 	public boolean setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
-		Logging.info(this,
-				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
+		Logging.info(this, "setNetworkconfigurationPage  getSelectedClients() " + getSelectedClients());
 
 		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
@@ -2872,7 +2871,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		} else if (editingTarget == EditingTarget.DEPOTS) {
 			objectIds.addAll(depotsList.getSelectedValuesList());
 		} else {
-			objectIds.addAll(Arrays.asList(getSelectedClients()));
+			objectIds.addAll(getSelectedClients());
 		}
 
 		if (additionalconfigurationUpdateCollection != null) {
@@ -2909,16 +2908,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
 		} else {
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(Arrays.asList(getSelectedClients()));
+			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(getSelectedClients());
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
 			removeKeysStartingWith(mergedVisualMap,
 					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-			if (ServerFacade.isOpsi43() && getSelectedClients().length != 0) {
+			if (ServerFacade.isOpsi43() && !getSelectedClients().isEmpty()) {
 				List<String> depotIds = new ArrayList<>();
 				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
-						.get(getSelectedClients()[0]).getInDepot());
+						.get(getSelectedClients().get(0)).getInDepot());
 				Map<String, Object> defaultValues = persistenceController.getConfigDataService()
 						.getHostsConfigsWithDefaults(depotIds).get(0);
 				for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
@@ -2926,8 +2925,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 							.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
 				}
 			}
-			Map<String, Object> originalMap = mergeMaps(persistenceController.getConfigDataService()
-					.getHostsConfigsWithoutDefaults(Arrays.asList(getSelectedClients())));
+			Map<String, Object> originalMap = mergeMaps(
+					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedClients()));
 			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
 					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
@@ -2963,11 +2962,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private boolean setHardwareInfoPage() {
-		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
+		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().size());
 
-		if (firstSelectedClient == null || getSelectedClients().length == 0) {
+		if (firstSelectedClient == null || getSelectedClients().isEmpty()) {
 			mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-		} else if (getSelectedClients().length > 1) {
+		} else if (getSelectedClients().size() > 1) {
 			if (persistenceController.getModuleDataService().canCallMySQLPD()) {
 				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
 			} else {
@@ -3017,7 +3016,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private boolean setLogPage() {
-		Logging.debug(this, "setLogPage(), selected clients: " + Arrays.toString(getSelectedClients()));
+		Logging.debug(this, "setLogPage(), selected clients: " + getSelectedClients());
 		mainFrame.setUpdatedLogfilePanel("instlog");
 		mainFrame.setLogview("instlog");
 		return true;
@@ -3033,7 +3032,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public boolean resetView(int viewIndex) {
-		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
+		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().size());
 		mainFrame.activateLoadingCursor();
 		boolean result = true;
 
@@ -3542,7 +3541,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		public void save() {
 			Logging.info(this, "save , dataChanged " + dataChanged + " source " + source);
 			if (this.dataChanged && source != null && getSelectedClients() != null) {
-				Logging.info(this, "save for clients " + getSelectedClients().length);
+				Logging.info(this, "save for clients " + getSelectedClients().size());
 
 				for (String client : getSelectedClients()) {
 					hostInfo.showAndSaveInternally(clientTable, client, (Map<?, ?>) source.get(client));
@@ -3685,8 +3684,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				reachableInfo = new HashMap<>();
 
-				if (selectedClients != null && selectedClients.length > 0) {
-					Logging.info(this, "we have sel clients " + selectedClients.length);
+				if (selectedClients != null && !selectedClients.isEmpty()) {
+					Logging.info(this, "we have sel clients " + selectedClients.size());
 					reachableInfo
 							.putAll(persistenceController.getHostDataService().reachableInfo(getSelectedClients()));
 				} else {
@@ -3754,7 +3753,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				"could not update connectionStatus for client " + clientName + ": not in list of shown table");
 	}
 
-	private void setReachableInfo(String[] selClients) {
+	// TODO remove parameter
+	private void setReachableInfo(List<String> selClients) {
 		// update column
 		if (Boolean.TRUE
 				.equals(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
@@ -3778,7 +3778,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		mainFrame.getIconButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
-		infoRetriever.setOnlySelectedClients(selectedClients != null && selectedClients.length > 0);
+		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
 	}
 
@@ -3797,7 +3797,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -3834,9 +3834,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
-		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().length);
+		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().size());
 
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return true;
 		}
 
@@ -3876,11 +3876,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void callChangeClientIDDialog() {
-		if (getSelectedClients().length != 1) {
+		if (getSelectedClients().size() != 1) {
 			return;
 		}
 
-		FEditText fEdit = new FEditText(getSelectedClients()[0]) {
+		FEditText fEdit = new FEditText(getSelectedClients().get(0)) {
 			@Override
 			protected void commit() {
 				super.commit();
@@ -3893,7 +3893,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				Logging.debug(this, "new name " + newID);
 
-				persistenceController.getHostDataService().renameClient(getSelectedClients()[0], newID);
+				persistenceController.getHostDataService().renameClient(getSelectedClients().get(0), newID);
 
 				refreshClientList(newID);
 			}
@@ -3927,7 +3927,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void callChangeDepotDialog() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4024,8 +4024,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			Logging.debug(this, "createClients" + clients);
 			checkErrorList();
 
-			String[] createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
-					.collect(Collectors.toList()).toArray(new String[clients.size()]);
+			List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
+					.collect(Collectors.toList());
 
 			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
@@ -4069,13 +4069,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public void wakeUp(final String[] clients, String startInfo) {
+	public void wakeUp(final List<String> clients, String startInfo) {
 		if (clients == null) {
 			return;
 		}
 
-		Logging.info(this, "wakeUp " + clients.length + " clients: " + startInfo);
-		if (clients.length == 0) {
+		Logging.info(this, "wakeUp " + clients.size() + " clients: " + startInfo);
+		if (clients.isEmpty()) {
 			return;
 		}
 
@@ -4099,14 +4099,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		wakeUp(getSelectedClients(), "");
 	}
 
-	public void wakeUpWithDelay(final int delaySecs, final String[] clients, String startInfo) {
+	public void wakeUpWithDelay(final int delaySecs, final List<String> clients, String startInfo) {
 		if (clients == null) {
 			return;
 		}
 
-		Logging.info(this, "wakeUpWithDelay " + clients.length + " clients: " + startInfo + " delay secs " + delaySecs);
+		Logging.info(this, "wakeUpWithDelay " + clients.size() + " clients: " + startInfo + " delay secs " + delaySecs);
 
-		if (clients.length == 0) {
+		if (clients.isEmpty()) {
 			return;
 		}
 
@@ -4122,7 +4122,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void deletePackageCachesOfSelectedClients() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4135,7 +4135,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void fireOpsiclientdEventOnSelectedClients(final String event) {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4157,7 +4157,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void processActionRequests(String[] products) {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4173,7 +4173,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void showPopupOnSelectedClients(final String message, final Float seconds) {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4261,7 +4261,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void shutdownSelectedClients() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4277,7 +4277,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void rebootSelectedClients() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4292,7 +4292,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void deleteSelectedClients() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -4311,12 +4311,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void copySelectedClient() {
-		if (getSelectedClients().length == 0) {
+		if (getSelectedClients().isEmpty()) {
 			return;
 		}
 
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
+				.stream().filter(hostValues -> hostValues.getName().equals(getSelectedClients().get(0))).findFirst();
 
 		if (!selectedClient.isPresent()) {
 			return;
@@ -4436,9 +4436,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientTable.clearSelection();
 	}
 
-	public void setSelectedClientsOnPanel(String[] selected) {
+	public void setSelectedClientsOnPanel(List<String> selected) {
 		if (selected != null) {
-			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.length);
+			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.size());
 		} else {
 			Logging.info(this, " setSelectedClientsOnPanel selected null");
 		}
@@ -4460,9 +4460,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ clientTable.getSelectedValues().size());
 
 		if (selected == null) {
-			setSelectedClientsArray(new String[0]);
+			setSelectedClientsArray(new ArrayList<>());
 		} else {
-			setSelectedClientsArray(selected.toArray(new String[0]));
+			setSelectedClientsArray(selected);
 		}
 	}
 

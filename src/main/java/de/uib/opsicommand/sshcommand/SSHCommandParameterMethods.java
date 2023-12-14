@@ -411,14 +411,11 @@ public final class SSHCommandParameterMethods {
 	}
 
 	private String[] getSelectedClientIPs() {
-		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(configedMain.getSelectedClients()));
-		String[] clientnames = new String[configedMain.getSelectedClients().length];
-		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
-				configedMain.getSelectedClients().length);
+		Logging.debug(this, "getSelected_clientIPs " + configedMain.getSelectedClients());
 
-		String[] clientIPs = new String[clientnames.length];
+		String[] clientIPs = new String[configedMain.getSelectedClients().size()];
 		int counter = 0;
-		for (String name : clientnames) {
+		for (String name : configedMain.getSelectedClients()) {
 			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
 			if (hostInfo != null) {
 				clientIPs[counter] = hostInfo.getIpAddress();
@@ -431,11 +428,8 @@ public final class SSHCommandParameterMethods {
 	}
 
 	private String[] getSelectedClientNames() {
-		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(configedMain.getSelectedClients()));
-		String[] clientnames = new String[configedMain.getSelectedClients().length];
-		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
-				configedMain.getSelectedClients().length);
-		return clientnames;
+		Logging.debug(this, "getSelected_clientnames  " + configedMain.getSelectedClients());
+		return configedMain.getSelectedClients().toArray(new String[0]);
 	}
 
 	private String[] getSelectedDepotNames() {
