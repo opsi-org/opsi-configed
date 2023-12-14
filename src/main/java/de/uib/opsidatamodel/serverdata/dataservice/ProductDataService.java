@@ -932,17 +932,17 @@ public class ProductDataService {
 		return new ArrayList<>(resultSet);
 	}
 
-	public List<Map<String, String>> getProductInfos(String clientId, String[] attributes) {
+	public List<Map<String, String>> getProductInfos(String clientId, List<String> attributes) {
 		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, attributes));
 	}
 
-	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, String[] attributes) {
+	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, List<String> attributes) {
 		Map<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
 				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		OpsiMethodCall omc = new OpsiMethodCall(methodName, new Object[] { attributes, callFilter });

@@ -671,10 +671,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsLocalboot.updateTable(clientId,
-						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING),
-						attributes.toArray(new String[0]));
+						productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING), attributes);
 			} else {
-				istmForSelectedClientsLocalboot.updateTable(clientId, attributes.toArray(new String[0]));
+				istmForSelectedClientsLocalboot.updateTable(clientId, attributes);
 			}
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
 				&& isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
@@ -685,10 +684,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
 			if (productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 				istmForSelectedClientsNetboot.updateTable(clientId,
-						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING),
-						attributes.toArray(new String[0]));
+						productsToUpdate.get(clientId).get(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING), attributes);
 			} else {
-				istmForSelectedClientsNetboot.updateTable(clientId, attributes.toArray(new String[0]));
+				istmForSelectedClientsNetboot.updateTable(clientId, attributes);
 			}
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType

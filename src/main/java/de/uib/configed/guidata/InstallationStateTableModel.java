@@ -226,7 +226,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		return columnDict.get(column);
 	}
 
-	public synchronized void updateTable(String clientId, SortedSet<String> productIds, String[] attributes) {
+	public synchronized void updateTable(String clientId, SortedSet<String> productIds, List<String> attributes) {
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
 			return;
@@ -258,7 +258,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		fireTableRowsUpdated(firstRow, lastRow);
 	}
 
-	public synchronized void updateTable(String clientId, String[] attributes) {
+	public synchronized void updateTable(String clientId, List<String> attributes) {
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
 				attributes);
 		if (!productInfos.isEmpty()) {
