@@ -198,7 +198,7 @@ public class ConfigDataService {
 
 		if (!deleteItems.isEmpty()) {
 			OpsiMethodCall omcDeleteItems = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-					new Object[] { deleteItems.toArray() });
+					new Object[] { deleteItems });
 
 			if (exec.doCall(omcDeleteItems)) {
 				deleteItems.clear();
@@ -492,7 +492,7 @@ public class ConfigDataService {
 
 			if (!createItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
-						new Object[] { createItems.toArray() });
+						new Object[] { createItems });
 				exec.doCall(omc);
 			}
 
@@ -883,7 +883,7 @@ public class ConfigDataService {
 			// not used
 			if (!deleteConfigStateItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
-						new Object[] { deleteConfigStateItems.toArray() });
+						new Object[] { deleteConfigStateItems });
 
 				if (exec.doCall(omc)) {
 					deleteConfigStateItems.clear();
@@ -908,7 +908,7 @@ public class ConfigDataService {
 
 			if (!createItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
-						new Object[] { createItems.toArray() });
+						new Object[] { createItems });
 				exec.doCall(omc);
 				configsChanged = true;
 			}

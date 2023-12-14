@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -350,15 +351,14 @@ public class HostDataService {
 		return exec.doCall(omc);
 	}
 
-	public void deleteClients(List<String> hostIds) {
+	public void deleteClients(Collection<String> hostIds) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 
-		for (String hostId : hostIds) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new String[] { hostId });
-			exec.doCall(omc);
-		}
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		exec.doCall(omc);
+
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
@@ -390,7 +390,7 @@ public class HostDataService {
 		}
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS,
-				new Object[] { hostUpdates.values().toArray() });
+				new Object[] { hostUpdates.values() });
 
 		if (exec.doCall(omc)) {
 			hostUpdates.clear();

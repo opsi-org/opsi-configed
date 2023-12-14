@@ -638,7 +638,7 @@ public class SoftwareDataService {
 			}
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-					new Object[] { deleteItems.toArray() });
+					new Object[] { deleteItems });
 			result = exec.doCall(omc);
 
 			Map<String, String> fSoftware2LicencePool = cacheManager
@@ -722,7 +722,7 @@ public class SoftwareDataService {
 
 				if (!deleteItems.isEmpty()) {
 					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-							new Object[] { deleteItems.toArray() });
+							new Object[] { deleteItems });
 					result = exec.doCall(omc);
 				}
 
@@ -746,7 +746,7 @@ public class SoftwareDataService {
 			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-					new Object[] { createItems.toArray() });
+					new Object[] { createItems });
 
 			result = exec.doCall(omc);
 

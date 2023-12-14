@@ -1194,7 +1194,7 @@ public class ProductDataService {
 
 		if (!productItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_DELETE_OBJECTS,
-					new Object[] { productItems.toArray() });
+					new Object[] { productItems });
 
 			result = exec.doCall(omc);
 

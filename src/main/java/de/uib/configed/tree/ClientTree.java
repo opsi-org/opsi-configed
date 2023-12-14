@@ -1234,7 +1234,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		activeParents.clear();
 	}
 
-	public void produceActiveParents(List<String> clientIds) {
+	public void produceActiveParents(Iterable<String> clientIds) {
 		initActiveParents();
 
 		for (String clientId : clientIds) {

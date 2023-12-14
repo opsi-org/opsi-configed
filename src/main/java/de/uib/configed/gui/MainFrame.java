@@ -3073,13 +3073,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showHardwareInfo();
 	}
 
-	public void setHardwareInfoMultiClients(List<String> clients) {
+	public void setHardwareInfoMultiClients() {
 		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
 			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
 			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.getPanel();
 		}
 
-		Logging.info(this, "setHardwareInfoMultiClients " + clients.size());
+		Logging.info(this, "setHardwareInfoMultiClients ");
 
 		controllerHWinfoMultiClients.setFilter();
 		showHardwareLog = showHardwareLogMultiClientReport;
