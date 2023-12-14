@@ -8,7 +8,7 @@ package de.uib.configed.gui.swinfopage;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,8 +182,7 @@ public class PanelSWInfo extends JPanel {
 
 						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getSoftwareDataService()
-								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+								.getSoftwareDataService().getSoftwareAuditOnClients(Collections.singletonList(hostId));
 
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);

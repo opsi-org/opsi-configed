@@ -12,7 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -194,8 +194,7 @@ public abstract class AbstractSWExporter {
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getSoftwareDataService()
-								.getSoftwareAuditOnClients(new ArrayList<>(Arrays.asList(hostId)));
+								.getSoftwareDataService().getSoftwareAuditOnClients(Collections.singletonList(hostId));
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 

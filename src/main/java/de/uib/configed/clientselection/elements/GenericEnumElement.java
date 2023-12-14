@@ -6,7 +6,6 @@
 
 package de.uib.configed.clientselection.elements;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class GenericEnumElement extends AbstractSelectElement {
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.enumData = new ArrayList<>(Arrays.asList(enumData));
+		this.enumData = Arrays.asList(enumData);
 	}
 
 	@Override

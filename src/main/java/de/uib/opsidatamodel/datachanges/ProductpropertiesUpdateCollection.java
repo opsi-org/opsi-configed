@@ -7,7 +7,6 @@
 package de.uib.opsidatamodel.datachanges;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -24,10 +23,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	private String productname;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-
-	public ProductpropertiesUpdateCollection(String[] clients, String productname) {
-		this(Arrays.asList(clients), productname);
-	}
 
 	public ProductpropertiesUpdateCollection(List<String> clients, String productname) {
 		super(new ArrayList<>(0));

@@ -965,7 +965,7 @@ public class ProductDataService {
 		String[] callAttributes = new String[0];
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
 				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
@@ -990,7 +990,7 @@ public class ProductDataService {
 		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
 		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
@@ -1023,7 +1023,7 @@ public class ProductDataService {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
 				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 
