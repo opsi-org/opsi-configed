@@ -8,7 +8,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -323,14 +322,12 @@ public class ProductDataService {
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_NAME);
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
 
-		String[] callAttributes = attribs.toArray(new String[] {});
-
-		Logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
+		Logging.debug(this, "retrieveProductInfos callAttributes " + attribs);
 
 		Map<String, Object> callFilter = new HashMap<>();
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
+				new Object[] { attribs, callFilter });
 		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
 
 		Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = new HashMap<>();
@@ -980,24 +977,23 @@ public class ProductDataService {
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(List<String> clientIds,
-			String[] attributes) {
+			List<String> attributes) {
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + clientIds);
 
 		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 
-		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
 				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		List<Map<String, Object>> productOnClients = exec
-				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
+				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { attributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 

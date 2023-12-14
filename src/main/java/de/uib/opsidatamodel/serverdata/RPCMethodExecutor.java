@@ -87,7 +87,7 @@ public class RPCMethodExecutor {
 
 			if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
-						new Object[] { hostSeparationEntry.getValue().toArray(new String[0]) });
+						new Object[] { hostSeparationEntry.getValue() });
 
 				Map<String, Object> responses1 = exec1.getMapResult(omc);
 				responses.putAll(responses1);
@@ -111,7 +111,7 @@ public class RPCMethodExecutor {
 						&& !hostsToWake.isEmpty()) {
 					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
-							new Object[] { hostsToWake.toArray(new String[0]) });
+							new Object[] { hostsToWake });
 
 					Map<String, Object> responses1 = execsByDepot.get(hostSeparationEntry.getKey()).getMapResult(omc);
 					responses.putAll(responses1);
@@ -146,7 +146,7 @@ public class RPCMethodExecutor {
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
-	public List<String> processActionRequests(List<String> clientIds, String[] productIds) {
+	public List<String> processActionRequests(List<String> clientIds, Set<String> productIds) {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS,
 				new Object[] { clientIds, productIds });
 		Map<String, Object> responses = exec.getMapResult(omc);

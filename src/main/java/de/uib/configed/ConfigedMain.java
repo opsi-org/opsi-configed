@@ -2557,7 +2557,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			localbootStatesAndActionsUpdate = false;
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			localbootStatesAndActions = persistenceController.getProductDataService()
-					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes.toArray(String[]::new));
+					.getMapOfLocalbootProductStatesAndActions(getSelectedClients(), attributes);
 			istmForSelectedClientsLocalboot = null;
 		}
 
@@ -2874,8 +2874,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (additionalconfigurationUpdateCollection != null) {
 			updateCollection.remove(additionalconfigurationUpdateCollection);
 		}
-		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
-				objectIds.toArray(String[]::new));
+		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
 		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
 
 		depotsList.setEnabled(false);
@@ -3267,7 +3266,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
 		clientTable.removeListSelectionListener(this);
 
 		// dont do anything if we did not finish another thread for this
@@ -3302,7 +3300,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
-			for (String client : savedSelectedValues) {
+			for (String client : selValuesList) {
 				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 						.get(client);
 
@@ -4142,14 +4140,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void processActionRequestsAllProducts() {
-		processActionRequests(new String[0]);
+		processActionRequests(Collections.emptySet());
 	}
 
 	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getPanelLocalbootProductSettings().getSelectedIDs().toArray(String[]::new));
+		processActionRequests(mainFrame.getPanelLocalbootProductSettings().getSelectedIDs());
 	}
 
-	private void processActionRequests(String[] products) {
+	private void processActionRequests(Set<String> products) {
 		if (getSelectedClients().isEmpty()) {
 			return;
 		}
