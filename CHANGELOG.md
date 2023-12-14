@@ -10,6 +10,7 @@
 - Bug in buttons to add users and user roles
 - Nullpointer exception in Messagebus when creating/deleting clients
 - Delete data from licensing managment when deconnecting from server
+- Update clientinfo correctly when reloading data
 
 ### Changed
 - Make it possible to enter empty values in editable tables
