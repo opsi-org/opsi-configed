@@ -315,7 +315,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private Set<String> connectedHostsByMessagebus;
 
-	private String[] previousSelectedClients;
+	private List<String> previousSelectedClients;
 
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
@@ -1088,9 +1088,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return;
 		}
 
-		String[] currentSelectedClients = clientTable.getSelectedValues().toArray(String[]::new);
-		if ((previousSelectedClients != null && Arrays.equals(previousSelectedClients, currentSelectedClients))
-				|| currentSelectedClients.length == 0) {
+		List<String> currentSelectedClients = clientTable.getSelectedValues();
+		if ((previousSelectedClients != null && previousSelectedClients.equals(currentSelectedClients))
+				|| currentSelectedClients.isEmpty()) {
 			return;
 		}
 
