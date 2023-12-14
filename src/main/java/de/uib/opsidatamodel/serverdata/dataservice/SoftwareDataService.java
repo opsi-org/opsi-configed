@@ -7,8 +7,10 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -420,20 +422,19 @@ public class SoftwareDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(List<String> clients) {
+	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
 		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
 		final int STEP_SIZE = 100;
 
-		while (!clients.isEmpty()) {
+		Iterator<String> clientIterator = clients.iterator();
+		while (!clientIterator.hasNext()) {
 			List<String> clientListForCall = new ArrayList<>();
 
-			for (int i = 0; i < STEP_SIZE && i < clients.size(); i++) {
-				clientListForCall.add(clients.get(i));
+			for (int i = 0; i < STEP_SIZE && clientIterator.hasNext(); i++) {
+				clientListForCall.add(clientIterator.next());
 			}
-
-			clients.removeAll(clientListForCall);
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 

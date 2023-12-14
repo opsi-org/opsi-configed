@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -512,12 +513,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return clientPath;
 	}
 
-	private void produceClients(String[] clientIds, DefaultMutableTreeNode parent) {
+	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent) {
 		produceClients(clientIds, parent, false);
 	}
 
 	// expects Strings as Objects
-	private void produceClients(String[] clientIds, DefaultMutableTreeNode parent, boolean register) {
+	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent, boolean register) {
 		for (String clientId : clientIds) {
 			IconNode node = produceClientNode(clientId);
 			if (register) {
@@ -538,11 +539,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		model.nodeStructureChanged(parent);
 	}
 
-	private void produceClients(String[] clientIds) {
+	private void produceClients(Collection<String> clientIds) {
 		produceClients(clientIds, groupNodeAllClients);
 	}
 
-	public void produceTreeForALL(String[] x) {
+	public void produceTreeForALL(Collection<String> x) {
 		clientNodesInDIRECTORY.clear();
 		produceClients(x);
 	}
@@ -639,7 +640,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return model;
 	}
 
-	public Set<String> associateClientsToGroups(String[] clientIds, Map<String, Set<String>> fObject2Groups,
+	public Set<String> associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> fObject2Groups,
 			Set<String> permittedHostGroups) {
 		locationsInDIRECTORY.clear();
 
@@ -672,7 +673,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				Logging.warning("group for groupId " + entry.getKey() + " not found");
 			} else {
 				boolean register = isInDIRECTORY(groupNode);
-				produceClients(entry.getValue().toArray(new String[0]), groupNode, register);
+				produceClients(entry.getValue(), groupNode, register);
 			}
 		}
 
@@ -866,7 +867,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
 		// child with this objectID not existing
 		if (getChildWithUserObjectString(objectID, newGroupNode) == null) {
-			produceClients(new String[] { objectID }, newGroupNode);
+			produceClients(Collections.singleton(objectID), newGroupNode);
 			makeVisible(pathByAddingChild(newPath, objectID));
 			return true;
 		}

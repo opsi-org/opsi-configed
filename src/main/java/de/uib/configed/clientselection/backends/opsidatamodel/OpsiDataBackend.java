@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -437,7 +436,7 @@ public final class OpsiDataBackend {
 			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
 		}
 
-		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
+		Set<String> clientNames = clientMaps.keySet();
 
 		if (hasSoftware) {
 			softwareMap = persistenceController.getProductDataService().getMapOfProductStatesAndActions(clientNames);
@@ -588,7 +587,7 @@ public final class OpsiDataBackend {
 		return "";
 	}
 
-	private void getHardwareOnClient(String[] clientNames) {
+	private void getHardwareOnClient(Set<String> clientNames) {
 		hardwareOnClient = persistenceController.getHardwareDataService().getHardwareOnClientPD();
 		clientToHardware = new HashMap<>();
 		for (String clientName : clientNames) {
@@ -604,14 +603,13 @@ public final class OpsiDataBackend {
 		}
 	}
 
-	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(String[] clientNames) {
+	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(Set<String> clientNames) {
 		Map<String, List<SWAuditClientEntry>> result = new HashMap<>();
 		if (!hasSwAudit) {
 			return result;
 		}
 
-		result = persistenceController.getSoftwareDataService()
-				.getSoftwareAuditOnClients(Arrays.stream(clientNames).collect(Collectors.toList()));
+		result = persistenceController.getSoftwareDataService().getSoftwareAuditOnClients(clientNames);
 
 		return result;
 	}

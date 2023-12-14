@@ -6,6 +6,7 @@
 
 package de.uib.configed;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -111,7 +112,7 @@ public class CopyClient {
 
 	private void copyProducts() {
 		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persistenceController
-				.getProductDataService().getMapOfProductStatesAndActions(new String[] { clientToCopy.getName() });
+				.getProductDataService().getMapOfProductStatesAndActions(Collections.singleton(clientToCopy.getName()));
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
 			return;

@@ -1011,15 +1011,15 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
-		if (clientIds == null || clientIds.length == 0) {
+	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(Collection<String> clientIds) {
+		Logging.debug(this, "getMapOfProductStatesAndActions for : " + clientIds);
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 		return getProductStatesNOM(clientIds);
 	}
 
-	public Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
+	public Map<String, List<Map<String, String>>> getProductStatesNOM(Collection<String> clientIds) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");

@@ -1490,7 +1490,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 			}
 
-			rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}), permittedHostGroups);
+			rebuildTree(new TreeMap<>(unfilteredList).keySet(), permittedHostGroups);
 		}
 
 		// changes the produced unfilteredList
@@ -1508,7 +1508,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeMap<>(unfilteredList).keySet().toArray(new String[] {}), null);
+				rebuildTree(new TreeMap<>(unfilteredList).keySet(), null);
 			}
 		}
 
@@ -1585,8 +1585,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return model;
 	}
 
-	private void rebuildTree(String[] allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
+	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
+		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + allPCs);
 
 		treeClients.clear();
 		treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
@@ -1596,7 +1596,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		treeClients.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
 
 		Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
-		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.length);
+		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.size());
 		allowedClients = treeClients.associateClientsToGroups(allPCs,
 				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
 
