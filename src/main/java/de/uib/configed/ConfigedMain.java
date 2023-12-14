@@ -194,8 +194,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private ActivatedGroupModel activatedGroupModel;
 
 	protected List<String> selectedDepots = new ArrayList<>();
-	protected String[] oldSelectedDepots;
-	protected List<String> selectedDepotsV = new ArrayList<>();
+	protected List<String> oldSelectedDepots;
 
 	private boolean anyDataChanged;
 
@@ -724,8 +723,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "call initData");
 		initData();
 
-		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
-				.replaceAll("").split(",");
+		oldSelectedDepots = Arrays.asList(backslashPattern
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
@@ -1142,7 +1141,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsList.setInfo(depots);
 
-		if (oldSelectedDepots.length == 0) {
+		if (oldSelectedDepots.isEmpty()) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
 			selectOldSelectedDepots();
@@ -2413,9 +2412,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		depotsOfSelectedClients = null;
 
 		selectedDepots = depotsList.getSelectedValuesList();
-		selectedDepotsV = new ArrayList<>(depotsList.getSelectedValuesList());
-
-		Logging.debug(this, "selectedDepotsV: " + selectedDepotsV);
 
 		Configed.getSavedStates().setProperty("selectedDepots", selectedDepots.toString());
 
@@ -3314,7 +3310,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 						.get(client);
 
-				if (depotForClient != null && selectedDepotsV.contains(depotForClient)) {
+				if (depotForClient != null && selectedDepots.contains(depotForClient)) {
 					clientsLeft.add(client);
 				}
 			}
