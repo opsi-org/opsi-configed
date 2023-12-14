@@ -425,7 +425,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
-		setReachableInfo(selectedClients);
+		setReachableInfo();
 
 		mainFrame.updateHostCheckboxenText();
 		mainFrame.enableAfterLoading();
@@ -3656,7 +3656,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 						persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
 					reachableInfo = persistenceController.getHostDataService().reachableInfo(null);
 
-					setReachableInfo(selectedClients);
+					setReachableInfo();
 				}
 
 				try {
@@ -3681,12 +3681,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				fShowReachableInfo.setVisible(true);
 				fShowReachableInfo.toFront();
 
-				reachableInfo = new HashMap<>();
-
 				if (selectedClients != null && !selectedClients.isEmpty()) {
 					Logging.info(this, "we have sel clients " + selectedClients.size());
-					reachableInfo
-							.putAll(persistenceController.getHostDataService().reachableInfo(getSelectedClients()));
+					reachableInfo = persistenceController.getHostDataService().reachableInfo(getSelectedClients());
 				} else {
 					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
 					reachableInfo = persistenceController.getHostDataService().reachableInfo(null);
@@ -3696,7 +3693,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				mainFrame.getIconButtonReachableInfo().setEnabled(true);
 
-				setReachableInfo(selectedClients);
+				setReachableInfo();
 			}
 		}.start();
 	}
@@ -3752,8 +3749,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				"could not update connectionStatus for client " + clientName + ": not in list of shown table");
 	}
 
-	// TODO remove parameter
-	private void setReachableInfo(List<String> selClients) {
+	private void setReachableInfo() {
 		// update column
 		if (Boolean.TRUE
 				.equals(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
@@ -3769,7 +3765,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			model.fireTableDataChanged();
 
-			setSelectedClientsOnPanel(selClients);
+			setSelectedClientsOnPanel(selectedClients);
 		}
 	}
 

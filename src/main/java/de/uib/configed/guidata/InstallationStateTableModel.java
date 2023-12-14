@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.ComboBoxModel;
@@ -225,7 +226,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		return columnDict.get(column);
 	}
 
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
+	public synchronized void updateTable(String clientId, SortedSet<String> productIds, String[] attributes) {
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
 			return;
