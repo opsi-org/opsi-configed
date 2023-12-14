@@ -149,7 +149,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
-	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
+	private static final Dimension LICENCES_DIMENSION = new Dimension(1200, 900);
 
 	private static LicencesFrame licencesFrame;
 	private static MainFrame mainFrame;
@@ -280,8 +280,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private int clientCount;
 	private boolean firstDepotListChange = true;
-
-	private final Dimension licencesInitDimension = new Dimension(1200, 900);
 
 	private int viewIndex = VIEW_CLIENTS;
 	private int saveClientsViewIndex = VIEW_CLIENTS;
@@ -842,7 +840,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
-			groupActionFrame.setSize(licencesInitDimension);
+			groupActionFrame.setSize(LICENCES_DIMENSION);
 			groupActionFrame.centerOnParent();
 
 			allFrames.add(groupActionFrame);
@@ -860,7 +858,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (productActionFrame == null) {
 			productActionFrame = new FProductActions(this);
-			productActionFrame.setSize(licencesInitDimension);
+			productActionFrame.setSize(LICENCES_DIMENSION);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
 		}
@@ -1382,7 +1380,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Logging.info(this, "set size and location of licencesFrame");
 
-		licencesFrame.setSize(licencesInitDimension);
+		licencesFrame.setSize(LICENCES_DIMENSION);
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -1438,10 +1436,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return dependenciesModel;
 	}
 
-	private Map<String, Boolean> produceClientListForDepots(String[] depots, Set<String> allowedClients) {
-		Logging.info(this, " producePcListForDepots " + Arrays.toString(depots) + " running with allowedClients "
-				+ allowedClients);
-		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(depots,
+	private Map<String, Boolean> produceClientListForDepots(Set<String> allowedClients) {
+		Logging.info(this, " producePcListForDepots " + Arrays.toString(selectedDepots)
+				+ " running with allowedClients " + allowedClients);
+		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(selectedDepots,
 				allowedClients);
 
 		if (m != null) {
@@ -1480,7 +1478,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, "buildPclistTableModel rebuildTree " + rebuildTree);
 
-		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
+		Map<String, Boolean> unfilteredList = produceClientListForDepots(null);
 
 		Logging.debug(this, " unfilteredList ");
 
@@ -1501,7 +1499,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		// changes the produced unfilteredList
 		if (allowedClients != null) {
-			unfilteredList = produceClientListForDepots(getSelectedDepots(), allowedClients);
+			unfilteredList = produceClientListForDepots(allowedClients);
 
 			if (unfilteredList == null) {
 				Logging.error(this, "unfilteredList is null in buildClientlistTableModel");
@@ -3979,24 +3977,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		refreshClientListKeepingGroup();
 	}
 
-	private void initialTreeActivation(final String groupName) {
+	private void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 		treeClients.expandPath(treeClients.getPathToALL());
 
-		String oldGroupSelection = groupName;
-		if (oldGroupSelection == null) {
-			oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
-		}
+		String oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
 
 		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
 			Logging.info(this, "old group reset " + oldGroupSelection);
 		} else {
 			activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 		}
-	}
-
-	private void initialTreeActivation() {
-		initialTreeActivation(null);
 	}
 
 	private void refreshClientListActivateALL() {
@@ -4007,7 +3998,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void refreshClientList() {
 		Logging.info(this, "refreshClientList");
-		produceClientListForDepots(getSelectedDepots(), allowedClients);
+		produceClientListForDepots(allowedClients);
 
 		setRebuiltClientListTableModel(true);
 	}
