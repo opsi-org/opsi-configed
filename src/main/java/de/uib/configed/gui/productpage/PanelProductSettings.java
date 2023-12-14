@@ -53,7 +53,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
-import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.ProductVersionCellRenderer;
 import de.uib.configed.productgroup.ProductgroupPanel;
@@ -357,7 +356,7 @@ public class PanelProductSettings extends JSplitPane {
 
 			JComponent jc = (JComponent) c;
 
-			String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
+			String stateChange = ((InstallationStateTableModel) table.getModel())
 					.getLastStateChange(convertRowIndexToModel(row));
 
 			if (stateChange == null) {
@@ -715,7 +714,7 @@ public class PanelProductSettings extends JSplitPane {
 		setSelection(selection);
 	}
 
-	public void setTableModel(IFInstallationStateTableModel istm) {
+	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
 		tableProducts.setRowSorter(null);
 

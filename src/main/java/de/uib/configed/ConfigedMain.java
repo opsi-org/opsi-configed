@@ -83,7 +83,6 @@ import de.uib.configed.gui.licences.LicencesFrame;
 import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
@@ -175,8 +174,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private DependenciesModel dependenciesModel;
 
-	private IFInstallationStateTableModel istmForSelectedClientsLocalboot;
-	private IFInstallationStateTableModel istmForSelectedClientsNetboot;
+	private InstallationStateTableModel istmForSelectedClientsLocalboot;
+	private InstallationStateTableModel istmForSelectedClientsNetboot;
 	private String firstSelectedClient;
 	private List<String> selectedClients = new ArrayList<>();
 	private List<String> saveSelectedClients;
