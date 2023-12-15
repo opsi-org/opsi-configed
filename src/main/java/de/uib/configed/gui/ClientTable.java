@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -286,12 +285,6 @@ public class ClientTable extends JPanel implements KeyListener {
 			Rectangle selectedRectangle = table.getCellRect(table.getSelectedRow(), 0, true);
 			table.scrollRectToVisible(selectedRectangle);
 		}
-	}
-
-	public void setSelectedValues(String[] values) {
-		Set<String> valueSet = new TreeSet<>(Arrays.asList(values));
-
-		setSelectedValues(valueSet);
 	}
 
 	public void initSortKeys() {
