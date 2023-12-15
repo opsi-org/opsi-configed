@@ -3891,7 +3891,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 		treeClients.expandPath(treeClients.getPathToALL());
-
+		// TODO only select path and let listener in clientTree do the rest
 		String oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
 
 		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
