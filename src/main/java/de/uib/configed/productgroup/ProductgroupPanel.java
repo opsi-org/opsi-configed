@@ -44,7 +44,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.configed.guidata.IFInstallationStateTableModel;
+import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -377,7 +377,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
 		buttonCollectiveAction.addActionListener(
-				event -> handleCollectiveAction(" ", (IFInstallationStateTableModel) tableProducts.getModel()));
+				event -> handleCollectiveAction(" ", (InstallationStateTableModel) tableProducts.getModel()));
 		buttonCollectiveAction.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonCollectiveAction.setVisible(true);
 
@@ -413,7 +413,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() > 1) {
 					String s = listChooseAction.getSelectedValue();
-					handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
+					handleCollectiveAction(s, (InstallationStateTableModel) tableProducts.getModel());
 				}
 			}
 		});
@@ -694,7 +694,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	private void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
+	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
 		Logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
 
 		List<String> saveSelectedProducts = associate.getSelectedProducts();

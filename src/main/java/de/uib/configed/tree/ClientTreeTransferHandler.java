@@ -13,6 +13,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -300,19 +301,19 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "importData, getActivePaths(): " + tree.getActivePaths());
 
-		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
+		List<String> selectedClients = tree.getSelectedClientsInTable();
 
 		// possibly transfer of a group node
-		if (values.length == 0) {
+		if (selectedClients.isEmpty()) {
 			List<TreePath> activePaths = tree.getActivePaths();
 			if (activePaths != null && activePaths.size() == 1) {
 				String importID = (String) (((DefaultMutableTreeNode) (activePaths.get(0)).getLastPathComponent())
 						.getUserObject());
-				values = new String[] { importID };
+				selectedClients = Collections.singletonList(importID);
 			}
 		}
 
-		Logging.debug(this, "importData, values: " + Arrays.toString(values));
+		Logging.debug(this, "importData, values: " + selectedClients);
 
 		TreePath groupPathActivatedByTree = tree.getGroupPathActivatedByTree();
 		Logging.debug(this, "importData, groupPathActivatedByTree: " + groupPathActivatedByTree);
@@ -322,18 +323,18 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		// lines
 
 		// Perform the actual import.
-		for (String value : values) {
+		for (String selectedClient : selectedClients) {
 			String importID = null;
 			String sourceParentID = null;
 
 			// if values not got from transferable, the following reduces
-			if (value.split("\t").length > 1) {
+			if (selectedClient.split("\t").length > 1) {
 				// probably an import from the JTable
 
 				// we assume a table source with first fieldvalue being a clientID
-				importID = value.split("\t")[0];
+				importID = selectedClient.split("\t")[0];
 			} else {
-				String[] parts = value.split(",");
+				String[] parts = selectedClient.split(",");
 
 				importID = parts[parts.length - 1];
 			}

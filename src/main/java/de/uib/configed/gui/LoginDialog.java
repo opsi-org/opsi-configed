@@ -62,23 +62,21 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private WaitingWorker waitingWorker;
 
-	private JLabel jLabelTitle = new JLabel();
-	private JLabel jLabelVersion = new JLabel();
-	private JLabel jLabelLogo = new JLabel();
+	private JLabel jLabelTitle;
+	private JLabel jLabelVersion;
+	private JLabel jLabelLogo;
 
-	private JLabel jLabelUser = new JLabel();
+	private JLabel jLabelUser;
 	private JTextField fieldUser = new JTextField();
 
 	private JPasswordField passwordField = new JPasswordField();
-	private JLabel jLabelPassword = new JLabel();
+	private JLabel jLabelPassword;
 
-	private JLabel jLabelHost = new JLabel();
+	private JLabel jLabelHost;
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
 	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
-
-	private long timeOutMillis = TIMEOUT_MS;
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
@@ -175,22 +173,22 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 
-		jLabelTitle.setText(Globals.APPNAME);
-		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+		jLabelTitle = new JLabel(Globals.APPNAME);
+		jLabelVersion = new JLabel(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
-		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
+		jLabelHost = new JLabel(Configed.getResourceValue("DPassword.jLabelHost"));
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		jLabelUser.setText(Configed.getResourceValue("DPassword.jLabelUser"));
+		jLabelUser = new JLabel(Configed.getResourceValue("DPassword.jLabelUser"));
 
 		fieldUser.addKeyListener(newKeyListener);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelPassword.setText(Configed.getResourceValue("DPassword.jLabelPassword"));
+		jLabelPassword = new JLabel(Configed.getResourceValue("DPassword.jLabelPassword"));
 
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
@@ -377,7 +375,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	@Override
 	public long getWaitingMillis() {
-		return timeOutMillis;
+		return TIMEOUT_MS;
 	}
 
 	@Override

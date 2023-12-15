@@ -10,12 +10,16 @@
 - Bug in buttons to add users and user roles
 - Nullpointer exception in Messagebus when creating/deleting clients
 - Delete data from licensing managment when deconnecting from server
+- Update clientinfo correctly when reloading data
 
 ### Changed
 - Make it possible to enter empty values in editable tables
 - Make it possible to enter empty values in client information
 - Rework element and gap sizes in licensing management
 
+## [4.3.1.1] - 2023-12-15
+### Changed
+- Don't preselect saved depot selection because it causes performance issues
 
 ## [4.3.1.0] - 2023-11-14
 ### Fixed

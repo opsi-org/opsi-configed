@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
@@ -349,25 +351,24 @@ public class HostDataService {
 		return exec.doCall(omc);
 	}
 
-	public void deleteClients(String[] hostIds) {
+	public void deleteClients(Collection<String> hostIds) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 
-		for (String hostId : hostIds) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new String[] { hostId });
-			exec.doCall(omc);
-		}
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		exec.doCall(omc);
+
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
-	public Map<String, Object> reachableInfo(String[] clientIds) {
+	public Map<String, Object> reachableInfo(List<String> clientIds) {
 		Logging.info(this, "reachableInfo ");
 		Object[] callParameters = new Object[] {};
 
 		RPCMethodName methodName = RPCMethodName.HOST_CONTROL_REACHABLE;
 		if (clientIds != null) {
-			Logging.info(this, "reachableInfo for clientIds " + clientIds.length);
+			Logging.info(this, "reachableInfo for clientIds " + clientIds.size());
 			callParameters = new Object[] { clientIds };
 			methodName = RPCMethodName.HOST_CONTROL_SAFE_REACHABLE;
 		}
@@ -389,7 +390,7 @@ public class HostDataService {
 		}
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS,
-				new Object[] { hostUpdates.values().toArray() });
+				new Object[] { hostUpdates.values() });
 
 		if (exec.doCall(omc)) {
 			hostUpdates.clear();
@@ -442,7 +443,7 @@ public class HostDataService {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
-	public Map<String, List<String>> getHostSeparationByDepots(String[] hostIds) {
+	public Map<String, List<String>> getHostSeparationByDepots(Iterable<String> hostIds) {
 		Map<String, Set<String>> hostSeparationByDepots = new HashMap<>();
 		for (String hostId : hostIds) {
 			String depotId = hostInfoCollections.getMapPcBelongsToDepot().get(hostId);
@@ -498,60 +499,54 @@ public class HostDataService {
 		return result;
 	}
 
-	public Map<String, String> sessionInfo(String[] clientIds) {
+	public Map<String, String> sessionInfo(List<String> clientIds) {
 		Map<String, String> result = new HashMap<>();
 
 		Object[] callParameters = new Object[] {};
-		if (clientIds != null && clientIds.length > 0) {
+		if (clientIds != null && !clientIds.isEmpty()) {
 			callParameters = new Object[] { clientIds };
 		}
 
 		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> result0 = exec.getResponses(exec
+		Map<String, Object> sessionInfos = exec.getResponses(exec
 				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-		for (Entry<String, Object> resultEntry : result0.entrySet()) {
-			StringBuilder value = new StringBuilder();
+		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
+			String value;
 
 			if (resultEntry.getValue() instanceof String) {
 				String errorStr = (String) resultEntry.getValue();
-				value.append("no response");
-				if (errorStr.indexOf("Opsi timeout") > -1) {
-					int i = errorStr.indexOf("(");
-					if (i > -1) {
-						value.append("   " + errorStr.substring(i + 1, errorStr.length() - 1));
-					} else {
-						value.append(" (opsi timeout)");
-					}
-				} else if (errorStr.indexOf(methodname.toString()) > -1) {
-					value.append("  (" + methodname + " not valid)");
-				} else if (errorStr.indexOf("Name or service not known") > -1) {
-					value.append(" (name or service not known)");
-				} else {
-					Logging.notice(this, "unexpected output occured in session Info");
-				}
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorStr;
 			} else if (resultEntry.getValue() instanceof List) {
 				List<?> sessionlist = (List<?>) resultEntry.getValue();
-				for (Object element : sessionlist) {
-					Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
-					});
-
-					String username = "" + session.get("UserName");
-					String logondomain = "" + session.get("LogonDomain");
-
-					if (!value.toString().isEmpty()) {
-						value.append("; ");
-					}
-
-					value.append(username + " (" + logondomain + "\\" + username + ")");
-				}
+				value = createSessionInfoForList(sessionlist);
 			} else {
 				Logging.warning(this, "resultEntry's value is neither a String nor a List");
+				value = "";
 			}
 
-			result.put(resultEntry.getKey(), value.toString());
+			result.put(resultEntry.getKey(), value);
 		}
 
 		return result;
+	}
+
+	private static String createSessionInfoForList(List<?> sessionlist) {
+		StringBuilder value = new StringBuilder();
+		for (Object element : sessionlist) {
+			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
+			});
+
+			String username = "" + session.get("UserName");
+			String logondomain = "" + session.get("LogonDomain");
+
+			if (!value.toString().isEmpty()) {
+				value.append("; ");
+			}
+
+			value.append(username + " (" + logondomain + "\\" + username + ")");
+		}
+
+		return value.toString();
 	}
 
 	/**

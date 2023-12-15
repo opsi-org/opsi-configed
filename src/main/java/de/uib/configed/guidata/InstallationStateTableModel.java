@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.ComboBoxModel;
@@ -42,6 +43,7 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -49,7 +51,7 @@ import de.uib.utilities.logging.Logging;
  * here have the required data the class implements the ComboBoxModeler for
  * getting cell editors.
  */
-public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
+public class InstallationStateTableModel extends AbstractTableModel implements ComboBoxModeller {
 	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
@@ -110,7 +112,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
-	private final String[] selectedClients;
+	private final List<String> selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
 	private NavigableSet<String> tsProductNames;
@@ -127,7 +129,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(String[] selectedClients, ConfigedMain configedMain,
+	public InstallationStateTableModel(List<String> selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
@@ -224,8 +226,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return columnDict.get(column);
 	}
 
-	@Override
-	public synchronized void updateTable(String clientId, TreeSet<String> productIds, String[] attributes) {
+	public synchronized void updateTable(String clientId, SortedSet<String> productIds, List<String> attributes) {
 		// Don't update if client not selected / part of this table
 		if (!allClientsProductStates.containsKey(clientId)) {
 			return;
@@ -257,8 +258,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		fireTableRowsUpdated(firstRow, lastRow);
 	}
 
-	@Override
-	public synchronized void updateTable(String clientId, String[] attributes) {
+	public synchronized void updateTable(String clientId, List<String> attributes) {
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
 				attributes);
 		if (!productInfos.isEmpty()) {
@@ -504,7 +504,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		Logging.info(this, " -------- numberOfColumns " + numberOfColumns);
 	}
 
-	@Override
 	public int getColumnIndex(String columnName) {
 		return displayColumns.indexOf(columnName);
 	}
@@ -516,7 +515,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	@Override
 	public void clearCollectChangedStates() {
 		collectChangedStates.clear();
 	}
@@ -656,9 +654,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return changedStatesForProduct.get(stateType);
 	}
 
-	@Override
 	public boolean infoIfNoClientsSelected() {
-		if (selectedClients.length == 0) {
+		if (selectedClients.isEmpty()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
@@ -675,7 +672,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	@Override
 	public void initCollectiveChange() {
 		Logging.debug(this, "initCollectiveChange");
 		setOnGoingCollectiveChangeCount();
@@ -709,7 +705,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	@Override
 	public void finishCollectiveChange() {
 		Logging.info(this, "finishCollectiveChange");
 
@@ -755,7 +750,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return true;
 	}
 
-	@Override
 	public void collectiveChangeActionRequest(String productId, ActionRequest ar) {
 		Logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
 
@@ -784,7 +778,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		for (Entry<String, Set<String>> product : product2setOfClientsWithNewAction.entrySet()) {
 			Logging.debug(this, "collectiveChangeActionRequest for product  " + product.getKey()
 					+ " changed product for client number : " + product.getValue().size());
-			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
+			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.size());
 
 			// -- not each client got a new action for this product
 
@@ -984,7 +978,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return filterInverse[superRow];
 	}
 
-	@Override
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {
 		return globalProductInfos;
 	}
@@ -1163,7 +1156,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return columnTitles.get(col);
 	}
 
-	@Override
 	public String getLastStateChange(int row) {
 		String product = productsV.get(row);
 

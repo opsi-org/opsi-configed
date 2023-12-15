@@ -197,8 +197,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
 	private JMenuItem jMenuRemoteControl = new JMenuItem();
 
-	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
-			jMenuCopyClient, jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
+	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
+			jMenuResetProducts, jMenuFreeLicences, jMenuShowPopupMessage, jMenuRequestSessionInfo,
+			jMenuDeletePackageCaches, jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
 	private JMenu jMenuClientselection = new JMenu();
 	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
@@ -252,10 +253,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem popupChangeClientID = new JMenuItem();
 	private JMenuItem popupRemoteControl = new JMenuItem();
 
-	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
-			popupCopyClient, popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
-			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
-			popupRemoteControl };
+	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupDeleteClient,
+			popupResetProducts, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
+			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupRemoteControl };
 
 	private JMenu popupShowColumns = new JMenu();
 	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
@@ -539,7 +539,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			@Override
 			public void menuSelected(MenuEvent arg0) {
-				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+				enableMenuItemsForClients();
 			}
 		});
 
@@ -1460,7 +1460,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+				enableMenuItemsForClients();
 			}
 		});
 
@@ -2578,67 +2578,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void initializeMenuItemsForClientsDependentOnSelectionCount() {
-		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			jMenuItem.setEnabled(false);
-		}
-		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-			jMenuItem.setEnabled(false);
-		}
-		// sometimes
-		// before the menu is built completely
-	}
-
-	public void enableMenuItemsForClients(int countSelectedClients) {
+	private void enableMenuItemsForClients() {
+		int countSelectedClients = configedMain.getSelectedClients().size();
 		Logging.debug(this, " enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
 
-		initializeMenuItemsForClientsDependentOnSelectionCount();
-
-		if (countSelectedClients < 0) {
-			checkMenuItemsDisabling();
-			return;
+		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
+			jMenuItem.setEnabled(countSelectedClients >= 1);
 		}
 
-		if (countSelectedClients == 0) {
-			jMenuAddClient.setEnabled(true);
-			popupAddClient.setEnabled(true);
-		} else {
-			if (countSelectedClients >= 1) {
-				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-					jMenuItem.setEnabled(true);
-				}
-
-				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-					jMenuItem.setEnabled(true);
-				}
-
-				jMenuResetProducts.setEnabled(true);
-				popupResetProducts.setEnabled(true);
-			} else {
-				for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-					jMenuItem.setEnabled(false);
-				}
-
-				for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-					jMenuItem.setEnabled(false);
-				}
-
-				jMenuResetProducts.setEnabled(false);
-				popupResetProducts.setEnabled(false);
-			}
-
-			if (countSelectedClients == 1) {
-				jMenuChangeClientID.setEnabled(true);
-				jMenuCopyClient.setEnabled(true);
-				popupChangeClientID.setEnabled(true);
-				popupCopyClient.setEnabled(true);
-			} else {
-				jMenuChangeClientID.setEnabled(false);
-				jMenuCopyClient.setEnabled(false);
-				popupChangeClientID.setEnabled(false);
-				popupCopyClient.setEnabled(false);
-			}
+		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
+			jMenuItem.setEnabled(countSelectedClients >= 1);
 		}
+
+		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
+		jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		popupChangeClientID.setEnabled(countSelectedClients == 1);
+		popupCopyClient.setEnabled(countSelectedClients == 1);
 
 		checkMenuItemsDisabling();
 	}
@@ -2968,7 +2923,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// MouseListener implementation
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Logging.debug(this, "mouse clicked " + Arrays.toString(configedMain.getSelectedClients()));
+		Logging.debug(this, "mouse clicked " + configedMain.getSelectedClients());
 
 		reactToHostDataChange(e);
 	}
@@ -2996,7 +2951,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		Logging.debug(this, "key released " + Arrays.toString(configedMain.getSelectedClients()));
+		Logging.debug(this, "key released " + configedMain.getSelectedClients());
 
 		reactToHostDataChange(e);
 	}
@@ -3095,13 +3050,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showHardwareInfo();
 	}
 
-	public void setHardwareInfoMultiClients(String[] clients) {
+	public void setHardwareInfoMultiClients() {
 		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
 			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
 			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.getPanel();
 		}
 
-		Logging.info(this, "setHardwareInfoMultiClients " + clients.length);
+		Logging.info(this, "setHardwareInfoMultiClients ");
 
 		controllerHWinfoMultiClients.setFilter();
 		showHardwareLog = showHardwareLogMultiClientReport;
@@ -3125,8 +3080,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().length > 1) {
-			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().length);
+		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
+			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().size());
 
 			showSoftwareLog = showSoftwareLogMultiClientReport;
 			showSoftwareInfo();

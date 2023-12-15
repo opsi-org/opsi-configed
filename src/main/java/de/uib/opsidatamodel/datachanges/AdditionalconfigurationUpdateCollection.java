@@ -7,8 +7,8 @@
 package de.uib.opsidatamodel.datachanges;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -18,23 +18,23 @@ import de.uib.utilities.logging.Logging;
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
-	private String[] objectIds;
+	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean masterConfig;
 
-	public AdditionalconfigurationUpdateCollection(String[] objectIds) {
+	public AdditionalconfigurationUpdateCollection(List<String> objectIds) {
 		super(new ArrayList<>(0));
 		this.objectIds = objectIds;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
-		if (c.size() != objectIds.length) {
-			Logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
+		if (c.size() != objectIds.size()) {
+			Logging.warning(this, "object ids (not fitting to edited item) " + objectIds);
 			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
-					+ objectIds.length);
+					+ objectIds.size());
 
 			return false;
 		}
@@ -54,7 +54,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 					result = add(new ConfigUpdate(map));
 				} else {
 					Logging.debug(this, "adding AdditionalconfigurationUpdate");
-					result = add(new AdditionalconfigurationUpdate(objectIds[i], map));
+					result = add(new AdditionalconfigurationUpdate(objectIds.get(i), map));
 				}
 				i++;
 			}

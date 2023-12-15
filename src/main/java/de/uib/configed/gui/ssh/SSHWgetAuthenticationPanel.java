@@ -41,8 +41,8 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelNeedAuthentication
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));
+		jLabelNeedAuthentication = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));
 		jLabelNeedAuthentication.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
 		jCheckBoxNeedAuthentication = new JCheckBox();

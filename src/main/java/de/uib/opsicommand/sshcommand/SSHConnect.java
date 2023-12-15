@@ -7,7 +7,9 @@
 package de.uib.opsicommand.sshcommand;
 
 import java.awt.Component;
-import java.util.Properties;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -42,7 +44,6 @@ public class SSHConnect {
 
 	private SSHConnectionInfo connectionInfo;
 
-	private int retriedTimesJschex = 1;
 	private int retriedTimesAuth = 1;
 
 	/**
@@ -170,6 +171,7 @@ public class SSHConnect {
 			Logging.warning(this, "connection forbidden.");
 			return false;
 		}
+
 		if (command != null) {
 			Logging.info(this, "connect command " + command.getMenuText());
 		} else {
@@ -184,32 +186,11 @@ public class SSHConnect {
 			Logging.info(this, "connect to login host " + (ConfigedMain.getHost().equals(connectionInfo.getHost())));
 			Logging.info(this, "connect user " + connectionInfo.getUser());
 
-			if (connectionInfo.usesKeyfile()) {
-				if (!connectionInfo.getKeyfilePassphrase().isEmpty()) {
-					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
-				}
+			setSession(connectionInfo, jsch);
 
-				jsch.addIdentity(connectionInfo.getKeyfilePath());
-				Logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
-				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
-						+ connectionInfo.getKeyfilePath());
-				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
-						Integer.valueOf(connectionInfo.getPort()));
-			} else {
-				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
-						Integer.valueOf(connectionInfo.getPort()));
-				Logging.info(this, "connect this.password "
+			Map<String, String> config = Collections.singletonMap("StrictHostKeyChecking", "no");
 
-						+ SSHCommandFactory.CONFIDENTIAL);
-
-				session.setPassword(connectionInfo.getPassw());
-				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
-			}
-
-			Properties config = new Properties();
-			config.put("StrictHostKeyChecking", "no");
-
-			JSch.setConfig(config);
+			JSch.setConfig(new Hashtable<>(config));
 
 			// will prevent session ending
 			// cf
@@ -235,21 +216,36 @@ public class SSHConnect {
 							+ successfulConnectObservedCount + "\n" + "\n" + "check server authentication configuration"
 							+ "\n" + "\n");
 				}
-
-				return false;
-			} else {
-				connect(command);
-			}
-		} catch (NumberFormatException e) {
-			retriedTimesJschex = retry(retriedTimesJschex, e);
-			if (retriedTimesJschex >= 3) {
-				Logging.warning(this, "connect error: " + e);
-				return false;
 			} else {
 				connect(command);
 			}
 		}
+
 		return false;
+	}
+
+	private static void setSession(SSHConnectionInfo connectionInfo, JSch jsch) throws JSchException {
+		if (connectionInfo.usesKeyfile()) {
+			if (!connectionInfo.getKeyfilePassphrase().isEmpty()) {
+				jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
+			}
+
+			jsch.addIdentity(connectionInfo.getKeyfilePath());
+			Logging.info(SSHConnect.class, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
+			Logging.info(SSHConnect.class, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
+					+ connectionInfo.getKeyfilePath());
+			session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
+					Integer.valueOf(connectionInfo.getPort()));
+		} else {
+			session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
+					Integer.valueOf(connectionInfo.getPort()));
+			Logging.info(SSHConnect.class, "connect this.password "
+
+					+ SSHCommandFactory.CONFIDENTIAL);
+
+			session.setPassword(connectionInfo.getPassw());
+			Logging.info(SSHConnect.class, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
+		}
 	}
 
 	private int retry(int retriedTimes, Exception e) {

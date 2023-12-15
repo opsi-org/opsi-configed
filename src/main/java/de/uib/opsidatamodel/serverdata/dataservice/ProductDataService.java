@@ -8,8 +8,8 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -322,14 +322,12 @@ public class ProductDataService {
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_NAME);
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
 
-		String[] callAttributes = attribs.toArray(new String[] {});
-
-		Logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
+		Logging.debug(this, "retrieveProductInfos callAttributes " + attribs);
 
 		Map<String, Object> callFilter = new HashMap<>();
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
+				new Object[] { attribs, callFilter });
 		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
 
 		Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = new HashMap<>();
@@ -672,9 +670,7 @@ public class ProductDataService {
 	public Map<String, ConfigName2ConfigValue> getProductPropertiesPD(String pcname) {
 		Logging.debug(this, "getProductsProperties for host " + pcname);
 
-		Set<String> pcs = new TreeSet<>();
-		pcs.add(pcname);
-		retrieveProductPropertiesPD(pcs);
+		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -693,9 +689,7 @@ public class ProductDataService {
 	public Map<String, Object> getProductPropertiesPD(String pcname, String productname) {
 		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
 
-		Set<String> pcs = new TreeSet<>();
-		pcs.add(pcname);
-		retrieveProductPropertiesPD(pcs);
+		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -730,21 +724,10 @@ public class ProductDataService {
 	 * @param clientNames -
 	 */
 	public void retrieveProductPropertiesPD(final Set<String> clientNames) {
-		boolean existing = true;
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
-		if (productProperties == null) {
-			existing = false;
-		} else {
-			for (String client : clientNames) {
-				if (productProperties.get(client) == null) {
-					existing = false;
-					break;
-				}
-			}
-		}
 
-		if (existing) {
+		if (productProperties != null && productProperties.keySet().containsAll(clientNames)) {
 			return;
 		}
 
@@ -775,10 +758,8 @@ public class ProductDataService {
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductPropertiesPD(
 				depotDataService.getDepot());
-		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
-		for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
-			defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
-		}
+
+		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>(defaultProperties);
 
 		Set<String> products = defaultPropertiesRetrieved.keySet();
 
@@ -822,25 +803,29 @@ public class ProductDataService {
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 
 		for (String product : products) {
-			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
-				ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
-
-				for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product)
-						.entrySet()) {
-					if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
-						propertyEntry.getValue().setDefaultValues(new ArrayList<>());
-					} else {
-						propertyEntry.getValue()
-								.setDefaultValues((List<Object>) productPropertyConfig.get(propertyEntry.getKey()));
-					}
-				}
-			}
+			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
 
 			productHavingClientSpecificProperties.put(product, productsHavingSpecificProperties.contains(product));
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
 				productHavingClientSpecificProperties);
+	}
+
+	private static void setDefaultValuesForProduct(Map<String, Map<String, ListCellOptions>> productPropertyDefinitions,
+			Map<String, ConfigName2ConfigValue> depotValues, String product) {
+		if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
+			ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
+
+			for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product).entrySet()) {
+				if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
+					propertyEntry.getValue().setDefaultValues(new ArrayList<>());
+				} else {
+					propertyEntry.getValue()
+							.setDefaultValues((List<Object>) productPropertyConfig.get(propertyEntry.getKey()));
+				}
+			}
+		}
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {
@@ -944,17 +929,17 @@ public class ProductDataService {
 		return new ArrayList<>(resultSet);
 	}
 
-	public List<Map<String, String>> getProductInfos(String clientId, String[] attributes) {
+	public List<Map<String, String>> getProductInfos(String clientId, List<String> attributes) {
 		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, attributes));
 	}
 
-	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, String[] attributes) {
+	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, List<String> attributes) {
 		Map<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
 				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		OpsiMethodCall omc = new OpsiMethodCall(methodName, new Object[] { attributes, callFilter });
@@ -968,16 +953,16 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
-		if (clientIds == null || clientIds.length == 0) {
+	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(List<String> clientIds) {
+		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + clientIds);
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 
 		String[] callAttributes = new String[0];
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
 				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
@@ -991,25 +976,24 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds,
-			String[] attributes) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
+	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(List<String> clientIds,
+			List<String> attributes) {
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + clientIds);
 
-		if (clientIds == null || clientIds.length == 0) {
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 
-		String[] callAttributes = attributes;
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		RPCMethodName methodName = ServerFacade.isOpsi43() && attributes.length != 0
+		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
 				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		List<Map<String, Object>> productOnClients = exec
-				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
+				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { attributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -1023,19 +1007,19 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
-		if (clientIds == null || clientIds.length == 0) {
+	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(Collection<String> clientIds) {
+		Logging.debug(this, "getMapOfProductStatesAndActions for : " + clientIds);
+		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
 		return getProductStatesNOM(clientIds);
 	}
 
-	public Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
+	public Map<String, List<Map<String, String>>> getProductStatesNOM(Collection<String> clientIds) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", Arrays.asList(clientIds));
+		callFilter.put("clientId", clientIds);
 		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
 				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 
@@ -1140,7 +1124,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
+	public boolean resetLocalbootProducts(List<String> selectedClients, boolean withDependencies) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
@@ -1153,7 +1137,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
+	public boolean resetNetbootProducts(List<String> selectedClients, boolean withDependencies) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
@@ -1166,10 +1150,9 @@ public class ProductDataService {
 		return result;
 	}
 
-	private List<Map<String, Object>> produceDeleteProductItems(String[] selectedClients, String productType) {
+	private List<Map<String, Object>> produceDeleteProductItems(List<String> selectedClients, String productType) {
 		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
-		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(
-				Arrays.asList(selectedClients));
+		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(selectedClients);
 
 		for (final String clientId : selectedClients) {
 			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
@@ -1207,7 +1190,7 @@ public class ProductDataService {
 
 		if (!productItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_DELETE_OBJECTS,
-					new Object[] { productItems.toArray() });
+					new Object[] { productItems });
 
 			result = exec.doCall(omc);
 

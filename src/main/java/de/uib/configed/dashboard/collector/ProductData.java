@@ -138,9 +138,8 @@ public final class ProductData {
 			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
 					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
 					.collect(Collectors.toList());
-			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
-					.getProductDataService().getMapOfProductStatesAndActions(clientIds);
+					.getProductDataService().getMapOfProductStatesAndActions(clientsMap);
 
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {

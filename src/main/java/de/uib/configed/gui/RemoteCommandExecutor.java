@@ -25,11 +25,11 @@ import de.uib.utilities.script.Interpreter;
 
 public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	private String command;
-	private String[] targetClients;
+	private List<String> targetClients;
 	private FDialogRemoteControl fDialogRemoteControl;
 
 	public RemoteCommandExecutor(FDialogRemoteControl fDialogRemoteControl, String firstSelectedClient,
-			String[] targetClients) {
+			List<String> targetClients) {
 		this.fDialogRemoteControl = fDialogRemoteControl;
 		this.command = firstSelectedClient;
 		this.targetClients = targetClients;

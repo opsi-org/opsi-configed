@@ -27,7 +27,7 @@ public class GenericTextElement extends AbstractSelectElement {
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new ArrayList<>(Arrays.asList(proposedData));
+		this.proposedData = Arrays.asList(proposedData);
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {

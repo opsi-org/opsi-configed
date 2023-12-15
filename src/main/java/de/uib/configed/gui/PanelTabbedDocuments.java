@@ -97,7 +97,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 			@Override
 			protected void saveAllAsZip(boolean loadMissingDocs) {
-				if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().length <= 0) {
+				if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().isEmpty()) {
 					return;
 				}
 
@@ -122,7 +122,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (loadMissingDocs) {
 					for (String ident : idents) {
 						Map<String, String> logfile = PersistenceControllerFactory.getPersistenceController()
-								.getLogDataService().getLogfile(configedMain.getSelectedClients()[0], ident);
+								.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0), ident);
 						if (logfile.get(ident).split("\n").length > 1) {
 							logfiles.put(ident, logfile.get(ident));
 						}
@@ -238,7 +238,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			for (String ident : idents) {
 				if (logfiles.get(ident) != null && logfiles.get(ident).split("\n").length > 1) {
 					ZipEntry entry = new ZipEntry(
-							configedMain.getSelectedClients()[0].replace(".", "_") + "___" + ident + ".log");
+							configedMain.getSelectedClients().get(0).replace(".", "_") + "___" + ident + ".log");
 					out.putNextEntry(entry);
 					writeToOutputStream(logfiles.get(ident).split("\n"), out);
 				}

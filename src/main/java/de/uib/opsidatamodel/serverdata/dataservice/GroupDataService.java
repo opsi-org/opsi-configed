@@ -337,7 +337,7 @@ public class GroupDataService {
 		boolean result = true;
 		if (!deleteItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS,
-					new Object[] { deleteItems.toArray() });
+					new Object[] { deleteItems });
 
 			if (exec.doCall(omc)) {
 				deleteItems.clear();

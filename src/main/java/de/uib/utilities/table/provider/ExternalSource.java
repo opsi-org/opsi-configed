@@ -7,7 +7,6 @@
 package de.uib.utilities.table.provider;
 
 import java.util.List;
-import java.util.Set;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -15,14 +14,14 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 public class ExternalSource implements TableSource {
 	// adapter for external source for table data
 
-	private Set<String> depotIds;
+	private Iterable<String> depotIds;
 	private List<String> columnNames;
 	private List<String> classNames;
 	private boolean reloadRequested;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ExternalSource(List<String> columnNames, List<String> classNames, Set<String> depotIds) {
+	public ExternalSource(List<String> columnNames, List<String> classNames, Iterable<String> depotIds) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.depotIds = depotIds;

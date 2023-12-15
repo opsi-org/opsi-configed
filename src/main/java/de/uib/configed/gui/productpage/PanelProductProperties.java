@@ -11,7 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
@@ -111,8 +110,7 @@ public class PanelProductProperties extends JSplitPane {
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(
-						new ExternalSource(columnNames, classNames, Set.of(configedMain.getSelectedDepots()))),
+				new DefaultTableProvider(new ExternalSource(columnNames, classNames, configedMain.getSelectedDepots())),
 				-1, paneProducts, updateCollection);
 	}
 

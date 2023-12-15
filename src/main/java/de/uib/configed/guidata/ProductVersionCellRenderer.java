@@ -37,7 +37,7 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 				c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 			} else {
 				String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
-				IFInstallationStateTableModel istm = (IFInstallationStateTableModel) (table.getModel());
+				InstallationStateTableModel istm = (InstallationStateTableModel) table.getModel();
 
 				String serverProductVersion = "";
 
@@ -46,7 +46,7 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 							" istm.getGlobalProductInfos()).get(productId) == null for productId " + productId);
 				} else {
 					serverProductVersion = serverProductVersion
-							+ ((istm.getGlobalProductInfos()).get(productId)).get(ProductState.KEY_VERSION_INFO);
+							+ istm.getGlobalProductInfos().get(productId).get(ProductState.KEY_VERSION_INFO);
 				}
 
 				if (!val.equals(serverProductVersion)) {
