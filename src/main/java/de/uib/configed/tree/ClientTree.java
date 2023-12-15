@@ -8,10 +8,6 @@ package de.uib.configed.tree;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +53,7 @@ import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
 import utils.Utils;
 
-public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
+public class ClientTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
@@ -203,10 +199,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		initTreePopup();
 
-		addKeyListener(this);
-
 		addTreeSelectionListener(this);
-		addMouseListener(this);
 
 		locationsInDIRECTORY = new HashMap<>();
 		clientNodesInDIRECTORY = new HashMap<>();
@@ -254,69 +247,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return path;
 	}
 
-	// interface KeyListener
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			TreePath selectedPath = getSelectionPath();
-
-			Logging.info(this, " selected path " + selectedPath);
-			if (selectedPath != null) {
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-
-				if (selectedNode instanceof GroupNode) {
-					configedMain.activateGroupByTree(false, selectedNode, selectedPath);
-					configedMain.setGroup(selectedNode.toString());
-				}
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if ((e.isShiftDown() || e.isControlDown()) && e.getKeyCode() == KeyEvent.VK_SPACE) {
-			TreePath selectedPath = this.getLeadSelectionPath();
-			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-			configedMain.toggleClientSelection(selectedNode, selectedPath);
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
-
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		EventQueue.invokeLater(() -> configedMain.treeClientsSelectAction(getSelectionPaths()));
 	}
-
-	// interface MouseListener
-	@Override
-	public void mousePressed(final MouseEvent e) {
-		Logging.debug(this, "mousePressed event " + e);
-
-		ConfigedMain.getMainFrame().activateLoadingCursor();
-		configedMain.treeClientsMouseAction(e);
-		ConfigedMain.getMainFrame().disactivateLoadingCursor();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		/* Not needed */}
 
 	private IconNode produceClientNode(Object x) {
 		IconNode n = new IconNode(x, false);

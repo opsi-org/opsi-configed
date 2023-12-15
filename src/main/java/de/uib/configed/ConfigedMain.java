@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -2129,93 +2128,15 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return viewIndex;
 	}
 
-	public void treeClientsMouseAction(MouseEvent mouseEvent) {
-		Logging.debug(this, "treeClients_mouseAction");
-
-		if (!treeClients.isEnabled()) {
-			return;
-		}
-
-		if (mouseEvent.getButton() != MouseEvent.BUTTON1) {
-			return;
-		}
-
-		int mouseRow = treeClients.getRowForLocation(mouseEvent.getX(), mouseEvent.getY());
-		TreePath mousePath = treeClients.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
-
-		DefaultMutableTreeNode mouseNode = null;
-
-		if (mouseRow != -1) {
-			mouseNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-
-			if (!mouseNode.getAllowsChildren()) {
-				treeClientMouseAction(mouseEvent, mouseNode, mousePath);
-			} else {
-				activateGroupByTree(false, mouseNode, mousePath);
-			}
-		}
-
-		if (mouseEvent.getClickCount() == 2) {
-			Logging.debug(this, "treeClients: double click on tree row " + mouseRow + " getting path " + mousePath);
-			Logging.debug(this, "treeClients: mouseNode instanceof GroupNode " + mouseNode + " "
-					+ (mouseNode instanceof GroupNode));
-
-			if (mouseNode instanceof GroupNode) {
-				setGroup(mouseNode.toString());
-			}
-		}
-	}
-
-	private void treeClientMouseAction(MouseEvent mouseEvent, DefaultMutableTreeNode mouseNode, TreePath mousePath) {
-		if (mouseEvent.isShiftDown()) {
-			clearTree();
-
-			for (TreePath selectedTreePath : treeClients.getSelectionPaths()) {
-				DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath.getLastPathComponent();
-
-				activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
-				activePaths.add(selectedTreePath);
-				treeClients.collectParentIDsFrom(selNode);
-			}
-
-			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		} else if (mouseEvent.isControlDown()) {
-			toggleClientSelection(mouseNode, mousePath);
-		} else {
-			clearTree();
-			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		}
-
-		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-
-		Logging.info(this, " treeClients_mouseAction getSelectedClients().length " + getSelectedClients().size());
-
-		setGroupNameForNode(mouseNode);
-
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
-				getSelectedClientsString(), clientInDepot);
-	}
-
-	public void toggleClientSelection(DefaultMutableTreeNode mouseNode, TreePath mousePath) {
-		DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-		if (treeClients.isPathSelected(mousePath)) {
-			activeTreeNodes.remove(selNode.getUserObject());
-			activePaths.add(mousePath);
-		} else {
-			activeTreeNodes.put((String) selNode.getUserObject(), mousePath);
-			activePaths.add(mousePath);
-			treeClients.collectParentIDsFrom(selNode);
-			activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-		}
-	}
-
 	private boolean treeClientsSelectAction(TreePath newSelectedPath) {
 		Logging.info(this, "treeClientsSelectAction");
 
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) newSelectedPath.getLastPathComponent();
 		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
 
-		if (!selectedNode.getAllowsChildren()) {
+		if (selectedNode.getAllowsChildren()) {
+			activateGroupByTree(false, selectedNode, newSelectedPath);
+		} else {
 			setClientByTree(selectedNode, newSelectedPath);
 		}
 
@@ -2223,6 +2144,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
+		clearTree();
+
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 			mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2232,7 +2155,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
 			Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
-
 			for (TreePath selectedTreePath : selTreePaths) {
 				DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath.getLastPathComponent();
 
@@ -2277,7 +2199,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void setClientByTree(DefaultMutableTreeNode selectedNode, TreePath pathToNode) {
-		clearTree();
 		activateClientByTree(selectedNode.toString(), pathToNode);
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
@@ -2322,7 +2243,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		treeClients.repaint();
 	}
 
-	public void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
+	private void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
 		Logging.info(this, "activateGroupByTree, node: " + node + ", pathToNode : " + pathToNode);
 
 		setGroupByTree(node, pathToNode);
