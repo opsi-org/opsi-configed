@@ -8,7 +8,6 @@ package de.uib.configed.type;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,20 +69,6 @@ public class SWAuditClientEntry {
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	private static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
-	static {
-		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
-		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
-		DB_COLUMNS.put(SWAuditEntry.VERSION, DB_TABLE_NAME + "." + "version");
-		DB_COLUMNS.put(SWAuditEntry.SUB_VERSION, DB_TABLE_NAME + "." + "subVersion");
-		DB_COLUMNS.put(SWAuditEntry.ARCHITECTURE, DB_TABLE_NAME + "." + "architecture");
-		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
-		DB_COLUMNS.put(LICENCE_KEY, DB_TABLE_NAME + "." + "licenseKey");
-		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
-	}
-
-	public static final List<String> DB_COLUMN_NAMES = List.of(DB_COLUMNS.values().toArray(String[]::new));
-
 	private Integer swId;
 	private String swIdent;
 	private String lastModificationS;
@@ -108,16 +93,6 @@ public class SWAuditClientEntry {
 
 	private static String produceNonNull(Object o) {
 		return o != null ? o.toString() : "";
-	}
-
-	public static String produceSWident(List<String> keys, List<String> values) {
-		// from db columns
-
-		return Utils.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
-				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
-				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
-				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
-				values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 	}
 
 	private void updateSoftware() {
