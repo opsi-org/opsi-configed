@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.1.1] - 2023-12-15
+### Changed
+- Don't preselect saved depot selection because it causes performance issues
+
 ## [4.3.1.0] - 2023-11-14
 ### Fixed
 - Configed was not loading when restricted to productgroups

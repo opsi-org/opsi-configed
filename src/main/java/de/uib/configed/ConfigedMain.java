@@ -733,6 +733,10 @@ public class ConfigedMain implements ListSelectionListener {
 		oldSelectedDepots = backslashPattern.matcher(Configed.getSavedStates().getProperty("selectedDepots", ""))
 				.replaceAll("").split(",");
 
+		// TODO remove this line, is to prevent depot selection on start.
+		// But there is a performance issue which may make the configed start extremely slowly
+		oldSelectedDepots = new String[0];
+
 		// too early, raises a NPE, if the user entry does not exist
 
 		new Thread() {
