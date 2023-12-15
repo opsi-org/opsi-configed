@@ -270,27 +270,15 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					configedMain.setGroup(selectedNode.toString());
 				}
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-			// don't go backwards by this key
-			e.consume();
-		} else {
-			// Do nothing on other key events
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.isShiftDown() || e.isControlDown()) {
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				TreePath selectedPath = this.getLeadSelectionPath();
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-				configedMain.toggleClientSelection(selectedNode, selectedPath);
-				configedMain.treeClientsSelectAction(getSelectionPaths());
-			} else if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)) {
-				configedMain.treeClientsSelectAction(getSelectionPaths());
-			} else {
-				// Do nothing on other keys
-			}
+		if ((e.isShiftDown() || e.isControlDown()) && e.getKeyCode() == KeyEvent.VK_SPACE) {
+			TreePath selectedPath = this.getLeadSelectionPath();
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+			configedMain.toggleClientSelection(selectedNode, selectedPath);
 		}
 	}
 
@@ -301,13 +289,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		EventQueue.invokeLater(() -> {
-			TreePath selectedPath = getSelectionPath();
-
-			if (selectedPath != null && getSelectionRows().length == 1) {
-				configedMain.treeClientsSelectAction(selectedPath);
-			}
-		});
+		EventQueue.invokeLater(() -> configedMain.treeClientsSelectAction(getSelectionPaths()));
 	}
 
 	// interface MouseListener
