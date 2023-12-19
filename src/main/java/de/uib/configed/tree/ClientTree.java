@@ -156,9 +156,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	private void init() {
-		// do not expand tree nodes when clicking the node name, default is 2, meaning
-		// double click expands
-		setToggleClickCount(0);
 		ToolTipManager.sharedInstance().registerComponent(this);
 
 		Logging.debug(this, "UI " + getUI());
