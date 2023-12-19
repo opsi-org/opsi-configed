@@ -191,9 +191,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
-	protected List<String> selectedDepots = new ArrayList<>();
-	protected List<String> oldSelectedDepots;
-
 	private boolean anyDataChanged;
 
 	private String clientInDepot;
@@ -718,9 +715,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "call initData");
 		initData();
 
-		oldSelectedDepots = Arrays.asList(backslashPattern
-				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
-
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
 	}
@@ -1135,15 +1129,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		fetchDepots();
 
 		depotsList.setInfo(depots);
-
+		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
 		if (oldSelectedDepots.isEmpty()) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
-			selectOldSelectedDepots();
+			selectOldSelectedDepots(oldSelectedDepots);
 		}
 	}
 
-	private void selectOldSelectedDepots() {
+	private void selectOldSelectedDepots(List<String> oldSelectedDepots) {
 		List<Integer> savedSelectedDepots = new ArrayList<>();
 		// we collect the indices of the old depots in the current list
 
@@ -1429,10 +1424,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private Map<String, Boolean> produceClientListForDepots(Set<String> allowedClients) {
-		Logging.info(this,
-				" producePcListForDepots " + selectedDepots + " running with allowedClients " + allowedClients);
-		Map<String, Boolean> m = persistenceController.getHostInfoCollections().getClientListForDepots(selectedDepots,
-				allowedClients);
+		Logging.info(this, " producePcListForDepots " + depotsList.getSelectedValuesList()
+				+ " running with allowedClients " + allowedClients);
+		Map<String, Boolean> m = persistenceController.getHostInfoCollections()
+				.getClientListForDepots(depotsList.getSelectedValuesList(), allowedClients);
 
 		if (m != null) {
 			clientCount = m.size();
@@ -2318,12 +2313,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsOfSelectedClients = null;
 
-		// Todo remove this variable, can always be read vom depotsList
-		selectedDepots = depotsList.getSelectedValuesList();
-
 		refreshClientListKeepingGroup();
 
-		Configed.getSavedStates().setProperty("selectedDepots", selectedDepots.toString());
+		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
@@ -2746,8 +2738,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		addToGlobalUpdateCollection(hostUpdateCollection);
 
 		String depot = "";
-		if (!selectedDepots.isEmpty()) {
-			depot = selectedDepots.get(0);
+		if (!depotsList.getSelectedValuesList().isEmpty()) {
+			depot = depotsList.getSelectedValuesList().get(0);
 		}
 
 		mainFrame.getPanelHostProperties().initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots,
@@ -3065,7 +3057,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public List<String> getSelectedDepots() {
-		return selectedDepots;
+		return depotsList.getSelectedValuesList();
 	}
 
 	public Set<String> getAllowedClients() {
@@ -3212,7 +3204,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 						.get(client);
 
-				if (depotForClient != null && selectedDepots.contains(depotForClient)) {
+				if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
 					clientsLeft.add(client);
 				}
 			}
