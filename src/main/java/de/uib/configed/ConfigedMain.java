@@ -722,10 +722,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		oldSelectedDepots = Arrays.asList(backslashPattern
 				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
 
-		// TODO remove this line, is to prevent depot selection on start.
-		// But there is a performance issue which may make the configed start extremely slowly
-		oldSelectedDepots = new ArrayList<>();
-
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
 	}
@@ -1146,8 +1142,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		} else {
 			selectOldSelectedDepots();
 		}
-
-		depotsListValueChanged();
 	}
 
 	private void selectOldSelectedDepots() {
@@ -2315,11 +2309,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void depotsListValueChanged() {
-		if (firstDepotListChange) {
-			firstDepotListChange = false;
-			return;
-		}
-
 		Logging.info(this, "depotsList selection changed");
 
 		if (mainFrame != null) {

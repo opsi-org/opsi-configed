@@ -64,10 +64,19 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		return saveV.indexOf(value);
 	}
 
-	public void selectAll() {
+	/*
+	 * We want to override this method to assure that selecting all these indices
+	 * will fire only one event in ListSelectionListener
+	 */
+	@Override
+	public void setSelectedIndices(int[] indices) {
 		getSelectionModel().setValueIsAdjusting(true);
-		setSelectionInterval(0, getModel().getSize() - 1);
+		super.setSelectedIndices(indices);
 		getSelectionModel().setValueIsAdjusting(false);
+	}
+
+	public void selectAll() {
+		setSelectionInterval(0, getModel().getSize() - 1);
 	}
 
 	public void addToSelection(List<String> depots) {
