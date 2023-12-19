@@ -276,7 +276,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private Dashboard dashboard;
 
 	private int clientCount;
-	private boolean firstDepotListChange = true;
 
 	private int viewIndex = VIEW_CLIENTS;
 	private int saveClientsViewIndex = VIEW_CLIENTS;
@@ -2315,14 +2314,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			mainFrame.activateLoadingCursor();
 		}
 
-		changeDepotSelection();
-
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
 
 		// Todo remove this variable, can always be read vom depotsList
 		selectedDepots = depotsList.getSelectedValuesList();
+
+		refreshClientListKeepingGroup();
 
 		Configed.getSavedStates().setProperty("selectedDepots", selectedDepots.toString());
 
@@ -3161,11 +3160,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			refreshClientList();
 			activateGroup(true, oldGroupSelection);
 		}
-	}
-
-	private void changeDepotSelection() {
-		Logging.info(this, "changeDepotSelection");
-		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
 	public void reload() {

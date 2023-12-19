@@ -246,7 +246,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		EventQueue.invokeLater(() -> configedMain.treeClientsSelectAction(e.getPaths()));
+		EventQueue.invokeLater(() -> configedMain.treeClientsSelectAction(getSelectionPaths()));
 	}
 
 	private IconNode produceClientNode(Object x) {
