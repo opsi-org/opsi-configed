@@ -171,7 +171,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		createTopNodes();
 
 		setRootVisible(false);
-
 		setShowsRootHandles(true);
 
 		IconNodeRendererClientTree nodeRenderer = new IconNodeRendererClientTree(configedMain);

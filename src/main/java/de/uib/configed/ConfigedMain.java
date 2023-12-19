@@ -253,7 +253,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private ClientTable clientTable;
 
-	private ClientTree treeClients;
+	private ClientTree clientTree;
 
 	private Map<String, Map<String, String>> productGroups;
 	private Map<String, Set<String>> productGroupMembers;
@@ -939,7 +939,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void setEditingClients() {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-		treeClients.setEnabled(true);
+		clientTree.setEnabled(true);
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -963,7 +963,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		treeClients.setEnabled(false);
+		clientTree.setEnabled(false);
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -982,7 +982,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private void setEditingServer() {
-		treeClients.setEnabled(false);
+		clientTree.setEnabled(false);
 
 		initServer();
 		mainFrame.setConfigPanesEnabled(false);
@@ -1113,7 +1113,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		clientTable.initSortKeys();
 
-		startMainFrame(this, clientTable, depotsList, treeClients);
+		startMainFrame(this, clientTable, depotsList, clientTree);
 	}
 
 	private void initDepots() {
@@ -1591,16 +1591,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
 		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + allPCs);
 
-		treeClients.clear();
-		treeClients.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
+		clientTree.clear();
+		clientTree.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
-		treeClients.produceTreeForALL(allPCs);
+		clientTree.produceTreeForALL(allPCs);
 
-		treeClients.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
+		clientTree.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
 
 		Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
 		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.size());
-		allowedClients = treeClients.associateClientsToGroups(allPCs,
+		allowedClients = clientTree.associateClientsToGroups(allPCs,
 				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
 
 		if (allowedClients != null) {
@@ -1633,18 +1633,18 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return false;
 		}
 
-		if (!treeClients.groupNodesExists() || treeClients.getGroupNode(groupname) == null) {
+		if (!clientTree.groupNodesExists() || clientTree.getGroupNode(groupname) == null) {
 			Logging.warning("no group " + groupname);
 			return false;
 		}
 
-		GroupNode node = treeClients.getGroupNode(groupname);
-		TreePath path = treeClients.getPathToNode(node);
+		GroupNode node = clientTree.getGroupNode(groupname);
+		TreePath path = clientTree.getPathToNode(node);
 
 		activateGroupByTree(preferringOldSelection, node, path);
 
 		Logging.info(this, "expand activated  path " + path);
-		treeClients.expandPath(path);
+		clientTree.expandPath(path);
 
 		return true;
 	}
@@ -1740,7 +1740,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			setSelectedClientsArray(clientNames);
 		}
 
-		treeClients.produceActiveParents(getSelectedClients());
+		clientTree.produceActiveParents(getSelectedClients());
 
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
@@ -2164,7 +2164,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
 				activePaths.add(selectedTreePath);
-				treeClients.collectParentIDsFrom(selNode);
+				clientTree.collectParentIDsFrom(selNode);
 			}
 
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
@@ -2194,8 +2194,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		activeTreeNodes = new HashMap<>();
 		activePaths = new ArrayList<>();
 
-		treeClients = new ClientTree(this);
-		persistenceController.getHostInfoCollections().setTree(treeClients);
+		clientTree = new ClientTree(this);
+		persistenceController.getHostInfoCollections().setTree(clientTree);
 	}
 
 	private void setClientByTree(DefaultMutableTreeNode selectedNode, TreePath pathToNode) {
@@ -2213,9 +2213,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		activeTreeNodes.put(nodeObject, pathToNode);
 		activePaths.add(pathToNode);
 
-		treeClients.collectParentIDsFrom((DefaultMutableTreeNode) pathToNode.getLastPathComponent());
+		clientTree.collectParentIDsFrom((DefaultMutableTreeNode) pathToNode.getLastPathComponent());
 
-		treeClients.repaint();
+		clientTree.repaint();
 
 		Logging.debug(this, "activateClientByTree, activeTreeNodes " + activeTreeNodes);
 		clientsFilteredByTree = activeTreeNodes.keySet();
@@ -2230,7 +2230,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void clearTree() {
 		activeTreeNodes.clear();
 		activePaths.clear();
-		treeClients.initActiveParents();
+		clientTree.initActiveParents();
 	}
 
 	private void setGroupByTree(DefaultMutableTreeNode node, TreePath pathToNode) {
@@ -2239,8 +2239,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		activeTreeNodes.put((String) node.getUserObject(), pathToNode);
 		activePaths.add(pathToNode);
 
-		clientsFilteredByTree = treeClients.collectLeafs(node);
-		treeClients.repaint();
+		clientsFilteredByTree = clientTree.collectLeafs(node);
+		clientTree.repaint();
 	}
 
 	private void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
@@ -2260,7 +2260,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		groupPathActivatedByTree = pathToNode;
 
 		activatedGroupModel.setNode("" + node);
-		activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
+		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 		activatedGroupModel.setActive(true);
 
@@ -2279,11 +2279,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public Set<String> getActiveParents() {
-		if (treeClients == null) {
+		if (clientTree == null) {
 			return new HashSet<>();
 		}
 
-		return treeClients.getActiveParents();
+		return clientTree.getActiveParents();
 	}
 
 	public boolean addGroup(StringValuedRelationElement newGroup) {
@@ -2332,6 +2332,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsOfSelectedClients = null;
 
+		// Todo remove this variable, can always be read vom depotsList
 		selectedDepots = depotsList.getSelectedValuesList();
 
 		Configed.getSavedStates().setProperty("selectedDepots", selectedDepots.toString());
@@ -3890,14 +3891,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
-		treeClients.expandPath(treeClients.getPathToALL());
 		// TODO only select path and let listener in clientTree do the rest
 		String oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
 
-		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
+		if (oldGroupSelection != null && clientTree.getGroupNode(oldGroupSelection) != null) {
+			clientTree.expandPath(clientTree.getPathToNode(clientTree.getGroupNode(oldGroupSelection)));
+			clientTree.setSelectionPath(clientTree.getPathToNode(clientTree.getGroupNode(oldGroupSelection)));
 			Logging.info(this, "old group reset " + oldGroupSelection);
 		} else {
-			activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
+			clientTree.expandPath(clientTree.getPathToALL());
+			clientTree.setSelectionPath(clientTree.getPathToALL());
 		}
 	}
 
