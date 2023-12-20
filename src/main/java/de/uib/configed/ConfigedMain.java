@@ -1126,6 +1126,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			};
 		}
 
+		depotsList.addListSelectionListener(depotsListSelectionListener);
+
 		fetchDepots();
 
 		depotsList.setInfo(depots);
@@ -1134,33 +1136,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (oldSelectedDepots.isEmpty()) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
-			selectOldSelectedDepots(oldSelectedDepots);
-		}
-	}
-
-	private void selectOldSelectedDepots(List<String> oldSelectedDepots) {
-		List<Integer> savedSelectedDepots = new ArrayList<>();
-		// we collect the indices of the old depots in the current list
-
-		for (String oldSelectedDepot : oldSelectedDepots) {
-			for (int j = 0; j < depotsList.getModel().getSize(); j++) {
-				if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepot)) {
-					savedSelectedDepots.add(j);
-				}
-			}
-		}
-
-		if (!savedSelectedDepots.isEmpty()) {
-			int[] depotsToSelect = new int[savedSelectedDepots.size()];
-			for (int j = 0; j < depotsToSelect.length; j++) {
-				// conversion to int
-				depotsToSelect[j] = savedSelectedDepots.get(j);
-			}
-
-			depotsList.setSelectedIndices(depotsToSelect);
-		} else {
-			// if none of the old selected depots is in the list we select the config server
-			depotsList.setSelectedValue(myServer, true);
+			depotsList.setSelectedValues(oldSelectedDepots);
 		}
 	}
 
@@ -2305,30 +2281,28 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 
-		if (mainFrame != null) {
+		if (initialDataLoader.isDataLoaded()) {
 			mainFrame.activateLoadingCursor();
 		}
 
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
-
-		refreshClientListKeepingGroup();
-
+		if (initialDataLoader.isDataLoaded()) {
+			refreshClientListKeepingGroup();
+		}
 		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
-		if (clientTable != null) {
+		if (initialDataLoader.isDataLoaded()) {
 			initialTreeActivation();
-		}
-
-		if (clientTable != null) {
 			clientTable.clearSelection();
 		}
 
 		setViewIndex(getViewIndex());
-		if (mainFrame != null) {
+
+		if (initialDataLoader.isDataLoaded()) {
 			mainFrame.disactivateLoadingCursor();
 		}
 	}
@@ -3079,37 +3053,21 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void fetchDepots() {
 		Logging.info(this, "fetchDepots");
 
-		if (depotsList.getListSelectionListeners().length > 0) {
-			depotsList.removeListSelectionListener(depotsListSelectionListener);
-		}
-		depotsList.getSelectionModel().setValueIsAdjusting(true);
-
 		depotNamesLinked = persistenceController.getHostInfoCollections().getDepotNamesList();
 		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
 
 		depots = persistenceController.getHostInfoCollections().getDepots();
+		List<String> oldSelection = depotsList.getSelectedValuesList();
 
+		// Setting the list data will remove old selection. To prevent doing events twice
+		// we set the flag that value is adjusting, because we will set the selected values again.
+		// Both actions will then be united into one event only
+		depotsList.setValueIsAdjusting(true);
 		depotsList.setListData(getLinkedDepots());
-		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
-		List<String> depotsListSelectedValues = getSelectedDepots();
+		depotsList.setSelectedValues(oldSelection);
+		depotsList.setValueIsAdjusting(false);
+
 		Logging.debug(this, "selected after fetch " + getSelectedDepots().size());
-		for (String depotListSelectedValue : depotsListSelectedValues) {
-			// collect all indices where the value had been selected
-			depotsList.setSelectedValue(depotListSelectedValue, false);
-			if (depotsList.getSelectedIndex() > -1) {
-				depotsListIsSelected[depotsList.getSelectedIndex()] = true;
-			}
-		}
-
-		for (int i = 0; i < depotsListIsSelected.length; i++) {
-			// combine the selections to a new selection
-			if (depotsListIsSelected[i]) {
-				depotsList.addSelectionInterval(i, i);
-			}
-		}
-
-		depotsList.getSelectionModel().setValueIsAdjusting(false);
-		depotsList.addListSelectionListener(depotsListSelectionListener);
 	}
 
 	public List<String> getLinkedDepots() {
@@ -3145,13 +3103,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		if (initialDataLoader.isDataLoaded()) {
-			String oldGroupSelection = activatedGroupModel.getGroupName();
-			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
+		String oldGroupSelection = activatedGroupModel.getGroupName();
+		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
-			refreshClientList();
-			activateGroup(true, oldGroupSelection);
-		}
+		refreshClientList();
+		activateGroup(true, oldGroupSelection);
 	}
 
 	public void reload() {
@@ -3188,8 +3144,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
-
-			setRebuiltClientListTableModel(true);
 
 			if (mainFrame.getControllerHWinfoMultiClients() != null) {
 				mainFrame.getControllerHWinfoMultiClients().rebuildModel();

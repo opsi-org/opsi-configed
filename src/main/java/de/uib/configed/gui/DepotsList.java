@@ -8,6 +8,7 @@ package de.uib.configed.gui;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +74,27 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		getSelectionModel().setValueIsAdjusting(true);
 		super.setSelectedIndices(indices);
 		getSelectionModel().setValueIsAdjusting(false);
+	}
+
+	public void setSelectedValues(Iterable<String> valuesToSelect) {
+		List<Integer> savedSelectedDepots = new ArrayList<>();
+		// we collect the indices of the old depots in the current list
+
+		for (String selectDepot : valuesToSelect) {
+			for (int j = 0; j < getModel().getSize(); j++) {
+				if (getModel().getElementAt(j).equals(selectDepot)) {
+					savedSelectedDepots.add(j);
+				}
+			}
+		}
+
+		int[] depotsToSelect = new int[savedSelectedDepots.size()];
+		for (int j = 0; j < depotsToSelect.length; j++) {
+			// conversion to int
+			depotsToSelect[j] = savedSelectedDepots.get(j);
+		}
+
+		setSelectedIndices(depotsToSelect);
 	}
 
 	public void selectAll() {

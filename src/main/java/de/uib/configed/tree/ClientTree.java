@@ -7,7 +7,6 @@
 package de.uib.configed.tree;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -246,7 +245,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		EventQueue.invokeLater(() -> configedMain.treeClientsSelectAction(getSelectionPaths()));
+		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
 	private IconNode produceClientNode(Object x) {
