@@ -396,9 +396,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 				deleteGroupWithSubgroups(node);
 				parent.remove(node);
 
-				getActivePaths().remove(path);
-				getActivePaths().add(path.getParentPath());
-
 				getModel().nodeStructureChanged(parent);
 			}
 		} else {
@@ -1129,10 +1126,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	public TreePath getPathToALL() {
 		return pathToALL;
-	}
-
-	public List<TreePath> getActivePaths() {
-		return configedMain.getActivePaths();
 	}
 
 	public TreePath getActiveTreePath(String id) {

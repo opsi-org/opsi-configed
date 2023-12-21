@@ -183,7 +183,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	// we do not work with selection
 
 	private Map<String, TreePath> activeTreeNodes;
-	private List<TreePath> activePaths;
 	// is nearly activeTreeNodes.values() , but there may be multiple paths where
 	// only one entry to activeTreeNode remains ----
 
@@ -1720,10 +1719,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return activeTreeNodes;
 	}
 
-	public List<TreePath> getActivePaths() {
-		return activePaths;
-	}
-
 	public boolean isFilterClientList() {
 		return filterClientList;
 	}
@@ -2127,7 +2122,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				}
 
 				activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
-				activePaths.add(selectedTreePath);
 				clientTree.collectParentIDsFrom(selNode);
 			}
 
@@ -2156,7 +2150,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void initTree() {
 		Logging.debug(this, "initTree");
 		activeTreeNodes = new HashMap<>();
-		activePaths = new ArrayList<>();
 
 		clientTree = new ClientTree(this);
 		persistenceController.getHostInfoCollections().setTree(clientTree);
@@ -2175,7 +2168,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void activateClientByTree(String nodeObject, TreePath pathToNode) {
 		Logging.info(this, "activateClientByTree, nodeObject: " + nodeObject + ", pathToNode: " + pathToNode);
 		activeTreeNodes.put(nodeObject, pathToNode);
-		activePaths.add(pathToNode);
 
 		clientTree.collectParentIDsFrom((DefaultMutableTreeNode) pathToNode.getLastPathComponent());
 
@@ -2193,7 +2185,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void clearTree() {
 		activeTreeNodes.clear();
-		activePaths.clear();
 		clientTree.initActiveParents();
 	}
 
@@ -2201,7 +2192,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setGroupByTree node, pathToNode " + node + ", " + pathToNode);
 		clearTree();
 		activeTreeNodes.put((String) node.getUserObject(), pathToNode);
-		activePaths.add(pathToNode);
 
 		clientsFilteredByTree = clientTree.collectLeafs(node);
 		clientTree.repaint();
