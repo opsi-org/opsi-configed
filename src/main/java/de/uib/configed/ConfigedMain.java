@@ -1394,15 +1394,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return dependenciesModel;
 	}
 
-	private Map<String, Boolean> produceClientListForDepots(Set<String> allowedClients) {
+	private Set<String> produceClientSetForDepots(Set<String> allowedClients) {
 		Logging.info(this, " producePcListForDepots " + depotsList.getSelectedValuesList()
 				+ " running with allowedClients " + allowedClients);
-		Map<String, Boolean> m = persistenceController.getHostInfoCollections()
-				.getClientListForDepots(depotsList.getSelectedValuesList(), allowedClients);
+		Set<String> m = persistenceController.getHostInfoCollections()
+				.getClientsForDepots(depotsList.getSelectedValuesList(), allowedClients);
 
-		if (m != null) {
-			clientCount = m.size();
-		}
+		clientCount = m.size();
 
 		if (mainFrame != null) {
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
@@ -1417,26 +1415,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return m;
 	}
 
-	private static Map<String, Boolean> filterMap(Map<String, Boolean> map0, Set<String> filterset) {
-		Map<String, Boolean> result = new HashMap<>();
-
-		if (filterset == null) {
-			return result;
-		}
-
-		for (String key : filterset) {
-			if (map0.containsKey(key)) {
-				result.put(key, map0.get(key));
-			}
-		}
-
-		return result;
-	}
-
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, "buildPclistTableModel rebuildTree " + rebuildTree);
 
-		Map<String, Boolean> unfilteredList = produceClientListForDepots(null);
+		Set<String> clientsForTableModel = produceClientSetForDepots(null);
 
 		Logging.debug(this, " unfilteredList ");
 
@@ -1452,31 +1434,25 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 			}
 
-			rebuildTree(new TreeMap<>(unfilteredList).keySet(), permittedHostGroups);
+			rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
 		}
 
 		// changes the produced unfilteredList
 		if (allowedClients != null) {
-			unfilteredList = produceClientListForDepots(allowedClients);
+			clientsForTableModel = produceClientSetForDepots(allowedClients);
 
-			if (unfilteredList == null) {
-				Logging.error(this, "unfilteredList is null in buildClientlistTableModel");
-			} else {
-				Logging.info(this, " unfilteredList " + unfilteredList.size());
-			}
+			Logging.info(this, " clientsForTableModel " + clientsForTableModel.size());
 
 			buildPclistTableModelCounter++;
 			Logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeMap<>(unfilteredList).keySet(), null);
+				rebuildTree(new TreeSet<>(clientsForTableModel), null);
 			}
 		}
 
-		Set<String> pclist;
-
-		Map<String, Boolean> pclist0 = filterMap(unfilteredList, clientsFilteredByTree);
+		clientsForTableModel.retainAll(clientsFilteredByTree);
 
 		Logging.info(this, " filterClientList " + filterClientList);
 
@@ -1485,14 +1461,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					+ getSelectedClients().size());
 
 			// selected clients that are in the pclist0
-			pclist = new HashSet<>(getSelectedClients());
-			pclist.retainAll(pclist0.keySet());
-		} else {
-			pclist = pclist0.keySet();
+			clientsForTableModel.retainAll(getSelectedClients());
 		}
 
 		// building table model
-		return buildTableModel(pclist);
+		return buildTableModel(clientsForTableModel);
 	}
 
 	private TableModel buildTableModel(Set<String> clientIds) {

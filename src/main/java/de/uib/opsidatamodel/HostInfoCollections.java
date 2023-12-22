@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -364,12 +365,12 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);
 	}
 
-	public Map<String, Boolean> getClientListForDepots(Iterable<String> depots, Collection<String> allowedClients) {
+	public Set<String> getClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
 		Map<String, String> mapPcBelongsToDepot = new HashMap<>();
-		Map<String, Boolean> mapOfPCs = new HashMap<>();
+		Set<String> mapOfPCs = new HashSet<>();
 		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 
 		List<String> depotList = new ArrayList<>();
@@ -386,7 +387,7 @@ public class HostInfoCollections {
 				HostInfo hostInfo = client.getValue();
 
 				if (allowedClients == null || allowedClients.contains(client.getKey())) {
-					mapOfPCs.put(client.getKey(), false);
+					mapOfPCs.add(client.getKey());
 					mapPCInfomap.put(client.getKey(), hostInfo);
 					mapPcBelongsToDepot.put(client.getKey(), depot);
 				}

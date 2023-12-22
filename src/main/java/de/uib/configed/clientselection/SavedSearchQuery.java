@@ -75,7 +75,8 @@ public class SavedSearchQuery {
 	public List<String> runSearch(boolean printing) {
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
-		controller.getHostInfoCollections().getClientListForDepots(depots.keySet(), null);
+		// TODO remove this?
+		controller.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();
