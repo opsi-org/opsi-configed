@@ -9,6 +9,7 @@ package de.uib.configed.tree;
 import java.awt.Dimension;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -1129,7 +1129,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public TreePath getActiveTreePath(String id) {
-		return configedMain.getActiveTreeNodes().get(id);
+		return Arrays.stream(getSelectionPaths()).filter(
+				treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().equals(id))
+				.findAny().orElse(null);
 	}
 
 	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
@@ -1150,27 +1152,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
 
 		repaint();
-	}
-
-	private static List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
-		List<String> result = new ArrayList<>();
-
-		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
-
-		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode element = (DefaultMutableTreeNode) e.nextElement();
-
-			if (!element.getAllowsChildren()) {
-				String nodeinfo = (String) element.getUserObject();
-				result.add(nodeinfo);
-			}
-		}
-
-		return result;
-	}
-
-	public NavigableSet<String> collectLeafs(DefaultMutableTreeNode node) {
-		return new TreeSet<>(enumerateLeafNodes(node));
 	}
 
 	private Set<String> collectParentIDs(DefaultMutableTreeNode node) {

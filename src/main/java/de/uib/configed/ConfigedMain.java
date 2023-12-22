@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -53,6 +54,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -180,13 +182,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private List<String> saveSelectedClients;
 	private List<String> preSaveSelectedClients;
 
-	// we do not work with selection
-
-	private Map<String, TreePath> activeTreeNodes;
-	// is nearly activeTreeNodes.values() , but there may be multiple paths where
-	// only one entry to activeTreeNode remains ----
-
-	private Set<String> clientsFilteredByTree;
+	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
@@ -1715,10 +1711,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public Map<String, TreePath> getActiveTreeNodes() {
-		return activeTreeNodes;
-	}
-
 	public boolean isFilterClientList() {
 		return filterClientList;
 	}
@@ -1829,11 +1821,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
 						+ Logging.getSize(selectValues));
 
-		List<String> valuesToSelect = null;
-		if (selectValues != null) {
-			valuesToSelect = new ArrayList<>(selectValues);
-		}
-
 		List<? extends SortKey> saveSortKeys = clientTable.getSortKeys();
 
 		Logging.info(this,
@@ -1860,14 +1847,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() "
-				+ Logging.getSize(valuesToSelect));
+				+ Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
 				+ Logging.getSize(clientTable.getSelectedValues()));
 
 		setSelectionPanelCols();
 
 		// did lose the selection since last setting
-		setSelectedClientsCollectionOnPanel(valuesToSelect);
+		setSelectedClientsCollectionOnPanel(selectValues);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
 				+ Logging.getSize(clientTable.getSelectedValues()));
@@ -2105,6 +2092,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
 		clearTree();
 
+		clientsFilteredByTree.clear();
+		if (selTreePaths != null) {
+			for (TreePath selectionPath : selTreePaths) {
+				clientsFilteredByTree.add(selectionPath.getLastPathComponent().toString());
+			}
+		}
+
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 			mainFrame.getHostsStatusPanel().setGroupName("");
@@ -2121,21 +2115,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					continue;
 				}
 
-				activeTreeNodes.put((String) selNode.getUserObject(), selectedTreePath);
 				clientTree.collectParentIDsFrom(selNode);
 			}
 
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
 					.getLastPathComponent();
 
-			activateClientByTree((String) selectedNode.getUserObject(), selTreePaths[selTreePaths.length - 1]);
-
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-
-			setGroupNameForNode(selectedNode);
-
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, getSelectedClients().size(),
-					getSelectedClientsString(), clientInDepot);
+			setClientByTree(selectedNode, selTreePaths[selTreePaths.length - 1]);
 		}
 	}
 
@@ -2149,14 +2135,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void initTree() {
 		Logging.debug(this, "initTree");
-		activeTreeNodes = new HashMap<>();
 
 		clientTree = new ClientTree(this);
 		persistenceController.getHostInfoCollections().setTree(clientTree);
 	}
 
 	private void setClientByTree(DefaultMutableTreeNode selectedNode, TreePath pathToNode) {
-		activateClientByTree(selectedNode.toString(), pathToNode);
+		activateClientByTree(pathToNode);
 		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
 		setGroupNameForNode(selectedNode);
@@ -2165,17 +2150,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				getSelectedClientsString(), clientInDepot);
 	}
 
-	private void activateClientByTree(String nodeObject, TreePath pathToNode) {
-		Logging.info(this, "activateClientByTree, nodeObject: " + nodeObject + ", pathToNode: " + pathToNode);
-		activeTreeNodes.put(nodeObject, pathToNode);
+	private void activateClientByTree(TreePath pathToNode) {
+		Logging.info(this, "activateClientByTree, pathToNode: " + pathToNode);
 
 		clientTree.collectParentIDsFrom((DefaultMutableTreeNode) pathToNode.getLastPathComponent());
 
 		clientTree.repaint();
-
-		Logging.debug(this, "activateClientByTree, activeTreeNodes " + activeTreeNodes);
-		clientsFilteredByTree = activeTreeNodes.keySet();
-		Logging.debug(this, "activateClientByTree, clientsFilteredByTree " + clientsFilteredByTree);
 
 		// since we select based on the tree view we disable the filter
 		if (filterClientList) {
@@ -2184,23 +2164,32 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void clearTree() {
-		activeTreeNodes.clear();
 		clientTree.initActiveParents();
 	}
 
-	private void setGroupByTree(DefaultMutableTreeNode node, TreePath pathToNode) {
-		Logging.info(this, "setGroupByTree node, pathToNode " + node + ", " + pathToNode);
+	private void setGroupByTree(DefaultMutableTreeNode node) {
+		Logging.info(this, "setGroupByTree, node " + node);
 		clearTree();
-		activeTreeNodes.put((String) node.getUserObject(), pathToNode);
 
-		clientsFilteredByTree = clientTree.collectLeafs(node);
+		// Get all leaves from the node which should be a group
+		clientsFilteredByTree.clear();
+		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
+		while (e.hasMoreElements()) {
+			DefaultMutableTreeNode element = (DefaultMutableTreeNode) e.nextElement();
+
+			if (!element.getAllowsChildren()) {
+				String nodeinfo = (String) element.getUserObject();
+				clientsFilteredByTree.add(nodeinfo);
+			}
+		}
+
 		clientTree.repaint();
 	}
 
 	private void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
 		Logging.info(this, "activateGroupByTree, node: " + node + ", pathToNode : " + pathToNode);
 
-		setGroupByTree(node, pathToNode);
+		setGroupByTree(node);
 
 		// intended for reload, we cancel activating group
 		if (preferringOldSelection && !clientTable.getSelectedSet().isEmpty()) {
