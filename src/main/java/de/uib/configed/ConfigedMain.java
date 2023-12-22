@@ -3085,7 +3085,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
-		refreshClientList();
+		setRebuiltClientListTableModel(true);
 		activateGroup(true, oldGroupSelection);
 	}
 
@@ -3719,7 +3719,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				persistenceController.getHostDataService().renameClient(getSelectedClients().get(0), newID);
 
-				refreshClientList(newID);
+				refreshClientListActivateALL();
+				Logging.debug(this, "set client refreshClientList");
+				setClient(newID);
 			}
 		};
 
@@ -3816,25 +3818,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
-		refreshClientList();
-		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
-	}
-
-	private void refreshClientList() {
-		Logging.info(this, "refreshClientList");
-		produceClientListForDepots(allowedClients);
-
 		setRebuiltClientListTableModel(true);
-	}
-
-	private void refreshClientList(String selectClient) {
-		Logging.info(this, "refreshClientList " + selectClient);
-		refreshClientListActivateALL();
-
-		if (selectClient != null) {
-			Logging.debug(this, "set client refreshClientList");
-			setClient(selectClient);
-		}
+		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	public void reloadHosts() {
@@ -3882,7 +3867,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			checkErrorList();
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			refreshClientList();
+			setRebuiltClientListTableModel(true);
 
 			// Activate group of created Client (and the group of all clients if no group
 			// specified)
@@ -4209,7 +4194,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
-				refreshClientList();
+
+				setRebuiltClientListTableModel(true);
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
