@@ -1846,7 +1846,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
 		filterClientList = b;
 		if (rebuildClientListTableModel) {
-			setRebuiltClientListTableModel(true);
+			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}
 	}
 
