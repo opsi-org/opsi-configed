@@ -1108,8 +1108,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		if (filter == null) {
 			filterInverse = null;
 		} else {
-			filterInverse = new int[getRowCount()];
-			for (int j = 0; j < getRowCount(); j++) {
+			filterInverse = new int[productsV.size()];
+			for (int j = 0; j < productsV.size(); j++) {
 				filterInverse[j] = -1;
 			}
 			for (int i = 0; i < filter.length; i++) {
