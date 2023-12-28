@@ -567,7 +567,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 					List<String> memberList = group2Members.computeIfAbsent(groupId, id -> new ArrayList<>());
 
 					memberList.add(clientId);
-					group2Members.put(groupId, memberList);
 				}
 			}
 		}
