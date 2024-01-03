@@ -116,9 +116,10 @@ public class SavedSearchQuery {
 		}
 	}
 
+	@SuppressWarnings("java:S106")
 	private static void printResult(List<String> result) {
 		for (String line : result) {
-			Logging.debug(line);
+			System.out.println(line);
 		}
 	}
 }
