@@ -43,7 +43,5 @@ public interface SearchTargetModel {
 
 	void setFiltered(boolean b);
 
-	boolean isFiltered();
-
 	int getListSelectionMode();
 }

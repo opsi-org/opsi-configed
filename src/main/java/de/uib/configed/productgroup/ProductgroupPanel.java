@@ -151,6 +151,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		searchPane.setSearchFieldsAll();
 	}
 
+	public void setFiltered(boolean filtered) {
+		searchPane.setFiltered(filtered);
+	}
+
 	// TODO can this be removed and replaced with the method "setFiltered" ?
 	public void setFilteredMode(boolean b) {
 		Logging.debug(this, "setGuiIsFiltered " + b);
