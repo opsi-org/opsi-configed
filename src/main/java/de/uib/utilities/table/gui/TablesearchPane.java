@@ -237,6 +237,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark.setSelected(b);
 	}
 
+	public void setFiltered(boolean filtered) {
+		targetModel.setFiltered(filtered);
+		setFilteredMode(filtered);
+	}
+
 	/**
 	 * express filter status in graphical components
 	 */
@@ -907,15 +912,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOff() {
 		if (targetModel.isFiltered()) {
-			targetModel.setFiltered(false);
-			setFilteredMode(false);
+			setFiltered(false);
 		}
 	}
 
 	private void switchFilterOn() {
 		if (!targetModel.isFiltered()) {
-			targetModel.setFiltered(true);
-			setFilteredMode(true);
+			setFiltered(true);
 		}
 	}
 
@@ -960,8 +963,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		if (targetModel.isFiltered()) {
 			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 
-			targetModel.setFiltered(false);
-			setFilteredMode(false);
+			setFiltered(false);
 
 			if (unfilteredSelection.length != 0) {
 				targetModel.setSelection(unfilteredSelection);

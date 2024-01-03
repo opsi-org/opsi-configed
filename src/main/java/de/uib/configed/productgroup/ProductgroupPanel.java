@@ -151,7 +151,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		searchPane.setSearchFieldsAll();
 	}
 
-	public void setGuiIsFiltered(boolean b) {
+	// TODO can this be removed and replaced with the method "setFiltered" ?
+	public void setFilteredMode(boolean b) {
 		Logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);
 	}
@@ -171,7 +172,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		if (searchPane.isFilteredMode()) {
 			Logging.info(this, "enterExistingGroup, was filtered");
-			setGuiIsFiltered(false);
+			setFilteredMode(false);
 			associate.noSelection();
 		}
 
@@ -685,7 +686,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		setInternalGroupsData();
 
-		setGuiIsFiltered(false);
+		setFilteredMode(false);
 	}
 
 	private void setGroupEditing(boolean b) {
