@@ -405,6 +405,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
 				+ fieldUser.getText());
 
+		Configed.setHost((String) fieldHost.getSelectedItem());
+		Configed.initSavedStates();
 		if (waitingWorker != null && !waitingWorker.isReady()) {
 			Logging.info(this, "old waiting task not ready");
 			return;
@@ -420,7 +422,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			@Override
 			public void run() {
 				Logging.info(this, "get persis");
-				configedMain.initSavedStates();
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 						String.valueOf(passwordField.getPassword()));

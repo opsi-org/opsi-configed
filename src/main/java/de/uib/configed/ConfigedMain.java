@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,7 +116,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.tabbedpane.TabClient;
@@ -431,73 +429,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.enableAfterLoading();
 	}
 
-	private static String getSavedStatesDefaultLocation() {
-		String result = "";
-
-		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
-			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"
-					+ File.separator + "configed";
-		} else {
-			result = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + ".configed";
-		}
-
-		return result;
-	}
-
-	private static String getSavedStatesDirectoryName(String locationName) {
-		return locationName + File.separator + host.replace(":", "_");
-	}
-
-	public void initSavedStates() {
-		File savedStatesDir = null;
-
-		if (Configed.getSavedStatesLocationName() != null) {
-			Logging.info(this, "trying to write saved states to " + Configed.getSavedStatesLocationName());
-			String directoryName = getSavedStatesDirectoryName(Configed.getSavedStatesLocationName());
-			savedStatesDir = new File(directoryName);
-			Logging.info(this, "writing saved states, created file " + savedStatesDir);
-
-			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
-				Logging.warning(this, "mkdirs for saved states failed, for File " + savedStatesDir);
-			}
-
-			Logging.info(this, "writing saved states, got dirs");
-
-			if (!savedStatesDir.setWritable(true, true)) {
-				Logging.warning(this, "setting file savedStatesDir writable failed");
-			}
-
-			Logging.info(this, "writing saved states, set writable");
-			Configed.setSavedStates(new SavedStates(
-					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME)));
-		}
-
-		if (Configed.getSavedStatesLocationName() == null || Configed.getSavedStates() == null) {
-			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
-			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
-
-			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
-				Logging.warning(this, "mkdirs for saved states failed, in savedStatesDefaultLocation");
-			}
-
-			if (!savedStatesDir.setWritable(true, true)) {
-				Logging.warning(this, "setting file savedStatesDir writable failed");
-			}
-
-			Configed.setSavedStates(new SavedStates(
-					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME)));
-		}
-
-		try {
-			Configed.getSavedStates().load();
-		} catch (IOException iox) {
-			Logging.warning(this, "saved states file could not be loaded", iox);
-		}
-
-		Integer oldUsageCount = Integer.valueOf(Configed.getSavedStates().getProperty("saveUsageCount", "0"));
-		Configed.getSavedStates().setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
-	}
-
 	private List<String> readLocallySavedServerNames() {
 		List<String> result = new ArrayList<>();
 		TreeMap<Timestamp, String> sortingmap = new TreeMap<>();
@@ -519,9 +450,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		if (Configed.getSavedStatesLocationName() == null || !success) {
-			Logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
-			Configed.setSavedStatesLocationName(getSavedStatesDefaultLocation());
-			savedStatesLocation = new File(getSavedStatesDefaultLocation());
+			Logging.info(this, "searching saved states in " + Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
 			savedStatesLocation.mkdirs();
 		}
 
