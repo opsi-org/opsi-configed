@@ -217,9 +217,4 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		Logging.info(this, "setFilter " + theValues);
 	}
-
-	@Override
-	public boolean isFiltered() {
-		return filtered;
-	}
 }

@@ -686,7 +686,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		Logging.info(this, "reduceToSet  " + filter);
 
-		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
+		groupPanel.setFilteredMode(filter != null && !filter.isEmpty());
 
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
