@@ -641,24 +641,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			Set<String> permittedHostGroups) {
 		locationsInDIRECTORY.clear();
 
-		Map<String, List<String>> group2Members = new HashMap<>();
-
 		// we must rebuild this map since the direct call of persist.getFGroup2Members
-		// would eliminate
-		// the filter by depot etc.
-
-		for (String clientId : clientIds) {
-			if (fObject2Groups.get(clientId) != null) {
-				Set<String> belongingTo = fObject2Groups.get(clientId);
-
-				for (String groupId : belongingTo) {
-					List<String> memberList = group2Members.computeIfAbsent(groupId, id -> new ArrayList<>());
-
-					memberList.add(clientId);
-					group2Members.put(groupId, memberList);
-				}
-			}
-		}
+		// would eliminate the filter by depot etc.
+		Map<String, List<String>> group2Members = produceGroup2Members(clientIds, fObject2Groups);
 
 		List<String> membersOfDirectoryNotAssigned = new ArrayList<>();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, membersOfDirectoryNotAssigned);
@@ -674,17 +659,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		}
 
-		// check produced DIRECTORY
 		for (String clientId : clientIds) {
-			checkDIRECTORY(clientId, null);
-		}
-
-		// build membersOfDIRECTORY_NOT_ASSIGNED
-		for (String clientId : clientIds) {
-			Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
-
-			// client is not in any DIRECTORY group
-			if (hostingGroups.isEmpty()) {
+			if (!isClientInAnyDIRECTORYGroup(clientId)) {
 				membersOfDirectoryNotAssigned.add(clientId);
 
 				IconNode node = produceClientNode(clientId);
@@ -693,14 +669,34 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				clientNodesInDIRECTORY.put(clientId, node);
 
 				addClientNodeInfo(node);
-
-				hostingGroups.add(groupNodeDirectoryNotAssigned);
 			}
 		}
 
 		model.nodeStructureChanged(groupNodeDirectory);
 
 		return getAllowedClients(permittedHostGroups);
+	}
+
+	private boolean isClientInAnyDIRECTORYGroup(String clientId) {
+		checkDIRECTORY(clientId, null);
+		Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
+		return !hostingGroups.isEmpty();
+	}
+
+	private static Map<String, List<String>> produceGroup2Members(Iterable<String> clientIds,
+			Map<String, Set<String>> fObject2Groups) {
+		Map<String, List<String>> group2Members = new HashMap<>();
+		for (String clientId : clientIds) {
+			if (fObject2Groups.get(clientId) != null) {
+				Set<String> belongingTo = fObject2Groups.get(clientId);
+				for (String groupId : belongingTo) {
+					List<String> memberList = group2Members.computeIfAbsent(groupId, id -> new ArrayList<>());
+					memberList.add(clientId);
+					group2Members.put(groupId, memberList);
+				}
+			}
+		}
+		return group2Members;
 	}
 
 	private Set<String> getAllowedClients(Set<String> permittedHostGroups) {
