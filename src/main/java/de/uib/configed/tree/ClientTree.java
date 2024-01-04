@@ -858,7 +858,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			}
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
-
 			insertNodeInOrder(clientNode, dropParentNode);
 			getModel().nodeStructureChanged(sourceParentNode);
 
@@ -881,9 +880,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			Logging.debug(this,
 					"moveClientTo -- remove " + importID + " from " + sourceParentID
 							+ " clientNode, sourceParentNode, sourcePath " + clientNode + ", " + sourceParentNode + ", "
-							+ sourcePath
-
-			);
+							+ sourcePath);
 
 			// persistent removal
 			removeObject2Group(importID, sourceParentID);
