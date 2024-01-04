@@ -586,17 +586,19 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// we produce all partial pathes that are defined by the persistent groups
 	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups) {
 		Logging.debug(this, "produceAndLinkGroups " + importedGroups.keySet());
-		this.groups = new TreeMap<>(importedGroups);
 		// we need a local copy since we add virtual groups
+		this.groups = new TreeMap<>(importedGroups);
 
 		createDirectoryNotAssigned();
-
 		groupNodes = new HashMap<>();
-
 		initTopGroups();
 
-		// produce other nodes
+		produceGroupNodes();
+		linkGroupNodes();
+	}
 
+	private void produceGroupNodes() {
+		groupNodes = new HashMap<>();
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
 				continue;
@@ -605,31 +607,27 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			GroupNode node = produceGroupNode(group.getValue());
 			groupNodes.put(group.getKey(), node);
 		}
+	}
 
-		// now we link them
-
+	private void linkGroupNodes() {
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
 				continue;
 			}
 
-			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
-
 			String parentId = group.getValue().get("parentGroupId");
-
 			if (parentId == null || "null".equalsIgnoreCase(parentId)) {
 				parentId = ALL_GROUPS_NAME;
 			}
 
 			DefaultMutableTreeNode parent = null;
-
 			if (groupNodes.get(parentId) == null) {
-				// group not existing
 				parent = groupNodes.get(ALL_GROUPS_NAME);
 			} else {
 				parent = groupNodes.get(parentId);
 			}
 
+			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 			parent.add(node);
 			model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
 		}
