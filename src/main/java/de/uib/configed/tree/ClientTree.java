@@ -598,7 +598,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private void produceGroupNodes() {
-		groupNodes = new HashMap<>();
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
 				continue;
