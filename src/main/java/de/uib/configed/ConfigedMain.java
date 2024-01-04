@@ -3022,15 +3022,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return true;
 	}
 
-	// extra tasks not done by resetView
-	private boolean setView(int viewIndex) {
-		if (viewIndex == VIEW_CLIENTS) {
-			checkErrorList();
-			depotsList.setEnabled(true);
-		}
-		return true;
-	}
-
 	public boolean resetView(int viewIndex) {
 		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().size());
 		mainFrame.activateLoadingCursor();
@@ -3088,62 +3079,43 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void setViewIndex(int visualViewIndex) {
 		int oldViewIndex = viewIndex;
 
-		Logging.info(this, " visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
-
-		dependenciesModel.setActualProduct("");
-
-		// if we are leaving some tab we check first if we possibly have to save
-		// something
-
+		Logging.info(this, "visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
 		Logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
-
-		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
-			requestReloadStatesAndActions();
-		}
 
 		checkSaveAll(true);
 
 		if (initialDataLoader.isDataLoaded()) {
-			// we have loaded the data
-
 			viewIndex = visualViewIndex;
-
-			if (viewIndex != VIEW_CLIENTS) {
-				depotsList.setEnabled(false);
-			}
+			depotsList.setEnabled(viewIndex == VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex " + viewIndex);
-
-			boolean result = true;
-
-			setView(viewIndex);
-			// tasks only needed when primarily called
-			result = resetView(viewIndex);
-			// task needed also when recalled
+			boolean result = resetView(viewIndex);
 
 			if (!result) {
 				viewIndex = oldViewIndex;
 				Logging.debug(" tab index could not be changed");
 			}
 
-			switch (editingTarget) {
-			case CLIENTS:
-				saveClientsViewIndex = viewIndex;
-				break;
-
-			case DEPOTS:
-				saveDepotsViewIndex = viewIndex;
-				break;
-
-			case SERVER:
-				saveServerViewIndex = viewIndex;
-				break;
-			}
-
+			saveCurrentViewIndex();
 			if (result) {
 				clearListEditors();
 			}
-			// dont keep product editing across views
+		}
+	}
+
+	private void saveCurrentViewIndex() {
+		switch (editingTarget) {
+		case CLIENTS:
+			saveClientsViewIndex = viewIndex;
+			break;
+
+		case DEPOTS:
+			saveDepotsViewIndex = viewIndex;
+			break;
+
+		case SERVER:
+			saveServerViewIndex = viewIndex;
+			break;
 		}
 	}
 
