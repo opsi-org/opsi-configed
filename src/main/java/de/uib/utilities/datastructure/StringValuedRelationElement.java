@@ -6,7 +6,6 @@
 
 package de.uib.utilities.datastructure;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ public class StringValuedRelationElement extends HashMap<String, String> {
 
 	public StringValuedRelationElement() {
 		super();
-		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 	}
 
 	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
