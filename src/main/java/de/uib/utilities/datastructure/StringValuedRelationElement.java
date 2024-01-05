@@ -6,15 +6,22 @@
 
 package de.uib.utilities.datastructure;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.utilities.logging.Logging;
+
 //very similar to TableEntry
-public class StringValuedRelationElement extends RelationElement<String, String> {
+public class StringValuedRelationElement extends HashMap<String, String> {
 	public static final String NULLDATE = "0000-00-00";
+
+	private List<String> allowedAttributes;
 
 	public StringValuedRelationElement() {
 		super();
+		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 	}
 
 	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
@@ -22,6 +29,20 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 
 		this.allowedAttributes = allowedAttributes;
 		produceFrom(map);
+	}
+
+	@Override
+	public String get(Object key) {
+		if (allowedAttributes != null && allowedAttributes.indexOf(key) < 0) {
+			Logging.error(this, "key " + key + " not allowed");
+			return null;
+		} else {
+			return super.get(key);
+		}
+	}
+
+	public void setAllowedAttributes(List<String> allowedAttributes) {
+		this.allowedAttributes = allowedAttributes;
 	}
 
 	protected void produceFrom(Map<String, ? extends Object> map) {

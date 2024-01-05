@@ -13,12 +13,11 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 public class LicenceContractEntry extends StringValuedRelationElement {
 	public LicenceContractEntry() {
 		super();
-		allowedAttributes = TableLicenceContracts.ALLOWED_ATTRIBUTES;
+		super.setAllowedAttributes(TableLicenceContracts.ALLOWED_ATTRIBUTES);
 	}
 
 	public LicenceContractEntry(Map<String, Object> m) {
-		super();
-		super.setAllowedAttributes(TableLicenceContracts.ALLOWED_ATTRIBUTES);
+		this();
 		produceFrom(m);
 	}
 
