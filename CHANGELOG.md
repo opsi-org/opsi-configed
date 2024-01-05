@@ -4,6 +4,7 @@
 ### Added
 - Logviewer options to menubar in opsi-logviewer
 - Connect messagebus-terminal to clients and depot servers
+- Partial loading for logfiles
 
 ### Fixed
 - Nullpointer exception some time after closing Terminal
@@ -11,6 +12,7 @@
 - Nullpointer exception in Messagebus when creating/deleting clients
 - Delete data from licensing managment when deconnecting from server
 - Update clientinfo correctly when reloading data
+- Nullpointerexception on closing Dashboard when selected a specific depot
 
 ### Changed
 - Make it possible to enter empty values in editable tables
