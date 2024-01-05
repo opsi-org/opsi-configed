@@ -38,8 +38,11 @@ public class DepotInfo implements DataChangeListener {
 		String depotDescription = "-";
 		Map<String, Map<String, Object>> depots = DepotData.getDepots();
 
-		if (selectedDepot != null
-				&& !selectedDepot.equals(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
+		if (!depots.containsKey(selectedDepot)) {
+			selectedDepot = Configed.getResourceValue("Dashboard.selection.allDepots");
+		}
+
+		if (!selectedDepot.equals(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
 			if (depots.get(selectedDepot).get("type") != null
 					|| !depots.get(selectedDepot).get("type").toString().isEmpty()) {
 				depotType = depots.get(selectedDepot).get("type").toString();
