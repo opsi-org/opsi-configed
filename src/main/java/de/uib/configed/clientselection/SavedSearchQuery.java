@@ -18,7 +18,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -36,8 +35,6 @@ public class SavedSearchQuery {
 		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
 
 		setArgs(host, user, password, searchName);
-		addMissingArgs();
-
 		initConnection();
 	}
 
@@ -47,18 +44,6 @@ public class SavedSearchQuery {
 		this.user = user;
 		this.password = password;
 		this.searchName = searchName;
-	}
-
-	private void addMissingArgs() {
-		if (host == null) {
-			host = Utils.getCLIParam("Host: ");
-		}
-		if (user == null) {
-			user = Utils.getCLIParam("User: ");
-		}
-		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
-		}
 	}
 
 	private void initConnection() {
@@ -132,9 +117,10 @@ public class SavedSearchQuery {
 		}
 	}
 
+	@SuppressWarnings("java:S106")
 	private static void printResult(List<String> result) {
 		for (String line : result) {
-			Logging.debug(line);
+			System.out.println(line);
 		}
 	}
 }

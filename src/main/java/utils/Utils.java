@@ -392,4 +392,17 @@ public final class Utils {
 	public static boolean toBoolean(Boolean bool) {
 		return bool != null && bool.booleanValue();
 	}
+
+	public static String getSavedStatesDefaultLocation() {
+		String result = "";
+
+		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
+			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"
+					+ File.separator + "configed";
+		} else {
+			result = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + ".configed";
+		}
+
+		return result;
+	}
 }
