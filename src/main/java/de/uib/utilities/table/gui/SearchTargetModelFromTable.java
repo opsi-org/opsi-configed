@@ -183,7 +183,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			wasChanged = thePanel.isDataChanged();
 		}
 
-		GenTableModel model = (GenTableModel) (table.getModel());
+		GenTableModel model = (GenTableModel) table.getModel();
 
 		if (!filtered) {
 			viewRowfilter = table.getSelectedRows();
@@ -213,11 +213,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		filtered = b;
 
 		returnToNotChanged(wasChanged);
-	}
-
-	@Override
-	public boolean isFiltered() {
-		return filtered;
 	}
 
 	@Override
