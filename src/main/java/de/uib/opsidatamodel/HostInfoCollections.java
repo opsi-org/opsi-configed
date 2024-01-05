@@ -365,12 +365,18 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);
 	}
 
+	/**
+	 * This Method loads all clients for given depots As a side effect, all
+	 * hostinfos and the map to which depots these clients belong are loaded
+	 * 
+	 * @return Set of the clients
+	 */
 	public Set<String> getClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
-		Map<String, String> mapPcBelongsToDepot = new HashMap<>();
-		Set<String> mapOfPCs = new HashSet<>();
+		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
+		Set<String> setOfPCs = new HashSet<>();
 		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 
 		List<String> depotList = new ArrayList<>();
@@ -387,17 +393,17 @@ public class HostInfoCollections {
 				HostInfo hostInfo = client.getValue();
 
 				if (allowedClients == null || allowedClients.contains(client.getKey())) {
-					mapOfPCs.add(client.getKey());
+					setOfPCs.add(client.getKey());
 					mapPCInfomap.put(client.getKey(), hostInfo);
-					mapPcBelongsToDepot.put(client.getKey(), depot);
+					mapPCBelongsToDepot.put(client.getKey(), depot);
 				}
 			}
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_INFO_MAP, mapPCInfomap);
-		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPcBelongsToDepot);
+		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPCBelongsToDepot);
 
-		return mapOfPCs;
+		return setOfPCs;
 	}
 
 	private void setDepot(String clientName, String depotId) {
