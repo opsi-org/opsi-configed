@@ -1209,9 +1209,7 @@ public class ConfigDataService {
 	 * 4.2 or lower; Due to the RPC method deprecation in opsi 4.3.
 	 * 
 	 * @return available backends
-	 * @deprecated since opsi 4.3
 	 */
-	@Deprecated
 	public String getBackendInfos() {
 		String titleSize = "14px";
 		String fontSizeBig = "10px";
