@@ -33,8 +33,11 @@ public class SSHConnect {
 	public static final String DEFAULT_PORT = "22";
 	public static final String PORT_SSH = DEFAULT_PORT;
 
-	private static int successfulConnectObservedCount;
+	private static final String INTERRUPT_SIGNAL = "2";
+	private static final String KILL_SIGNAL = "9";
+
 	protected static Session session;
+	private int successfulConnectObservedCount;
 
 	/** Hostname for server to connected with **/
 	protected String commandInfoName;
@@ -270,19 +273,12 @@ public class SSHConnect {
 		return session;
 	}
 
-	public void interruptChannel(Channel channel) {
-		interruptChannel(channel, true);
-	}
-
 	// http://stackoverflow.com/questions/22476506/kill-process-before-disconnecting
-	public void interruptChannel(Channel channel, boolean kill) {
+	public void interruptChannel(Channel channel) {
 		try {
 			Logging.info(this, "interruptChannel _channel " + channel);
-			channel.sendSignal("2");
-			if (kill) {
-				channel.sendSignal("9");
-			}
-
+			channel.sendSignal(INTERRUPT_SIGNAL);
+			channel.sendSignal(KILL_SIGNAL);
 			Logging.info(this, "interrupted");
 		} catch (Exception e) {
 			Logging.error("Failed interrupting channel", e);

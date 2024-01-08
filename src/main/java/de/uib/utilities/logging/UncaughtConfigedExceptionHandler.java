@@ -9,7 +9,7 @@ package de.uib.utilities.logging;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandler {
-	private static String lastException = "";
+	private String lastException = "";
 
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
