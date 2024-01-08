@@ -436,25 +436,18 @@ public class HostInfoCollections {
 			return;
 		}
 
-		List<String> depots = new ArrayList<>();
-
 		ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
+		List<String> depots = new ArrayList<>();
 		depots.add(depotId);
-
 		config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
+
 		for (String client : clients) {
+			setDepot(client, depotId);
 			// collect data
 			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
 		}
 		// send data
 		persistenceController.getConfigDataService().setAdditionalConfiguration();
-
-		// change transitory data
-		for (String client : clients) {
-			setDepot(client, depotId);
-		}
-
-		// we hope to have completely changed the internal data
 	}
 
 	// update derived data (caution!), does not create a HostInfo
