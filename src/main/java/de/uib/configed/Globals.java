@@ -11,6 +11,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.text.DateFormat;
 
+import javax.swing.UIManager;
+
 /**
  * This class contains app constants
  */
@@ -43,6 +45,7 @@ public final class Globals {
 	public static final String HEALTH_CHECK_LOG_FILE_NAME = "healthCheck.log";
 	public static final String DIAGNOSTIC_DATA_JSON_FILE_NAME = "diagnosticData.json";
 
+	// The official opsi colors
 	public static final Color OPSI_DARK_GREY = new Color(63, 63, 62);
 	public static final Color OPSI_GREY = new Color(178, 178, 178);
 	public static final Color OPSI_LIGHT_GREY = new Color(228, 228, 227);
@@ -67,9 +70,11 @@ public final class Globals {
 
 	// Colors for tables etc.
 
-	public static final Color OPSI_DARK_MAGENTA = new Color(135, 20, 58);
-	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
-	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
+	public static final Color OPSI_DARK_MAGENTA_1 = UIManager.getColor("magentaDark1");
+	public static final Color OPSI_DARK_MAGENTA_2 = UIManager.getColor("magentaDark2");
+	public static final Color OPSI_DARK_GREY_1 = UIManager.getColor("greyDark1");
+	public static final Color OPSI_DARK_GREY_2 = UIManager.getColor("greyDark2");
+	public static final Color OPSI_LIGHT_MAGENTA_1 = new Color(244, 205, 218);
 	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
 
 	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
@@ -82,7 +87,6 @@ public final class Globals {
 	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
 
 	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
-	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
 
 	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);

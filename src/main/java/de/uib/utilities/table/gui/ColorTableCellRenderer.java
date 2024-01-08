@@ -59,15 +59,15 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_BACKGROUND_DARK);
+				component.setBackground(Globals.OPSI_DARK_GREY_2);
 			} else {
-				component.setBackground(Globals.OPSI_DARK_GREY);
+				component.setBackground(Globals.OPSI_DARK_GREY_1);
 			}
 		} else {
 			if (isRowEven) {
 				component.setBackground(Globals.OPSI_DARK_MAGENTA_2);
 			} else {
-				component.setBackground(Globals.OPSI_DARK_MAGENTA);
+				component.setBackground(Globals.OPSI_DARK_MAGENTA_1);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 			if (isRowEven) {
 				component.setBackground(Globals.OPSI_LIGHT_MAGENTA_2);
 			} else {
-				component.setBackground(Globals.OPSI_LIGHT_MAGENTA);
+				component.setBackground(Globals.OPSI_LIGHT_MAGENTA_1);
 			}
 		}
 	}

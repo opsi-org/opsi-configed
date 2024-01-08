@@ -100,15 +100,15 @@ public final class ComponentStyler {
 		String tableRowColor = "";
 		if (!isSelected) {
 			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_DARK);
+				tableRowColor = getHexColor(Globals.OPSI_DARK_GREY_2);
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_DARK_GREY);
+				tableRowColor = getHexColor(Globals.OPSI_DARK_GREY_1);
 			}
 		} else {
 			if (isRowEven) {
 				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA_2);
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA);
+				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA_1);
 			}
 		}
 		return tableRowColor;
@@ -126,7 +126,7 @@ public final class ComponentStyler {
 			if (isRowEven) {
 				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA_2);
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA);
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA_1);
 			}
 		}
 		return tableRowColor;
