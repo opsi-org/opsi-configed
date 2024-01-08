@@ -74,8 +74,10 @@ public final class Globals {
 	public static final Color OPSI_DARK_MAGENTA_2 = UIManager.getColor("magentaDark2");
 	public static final Color OPSI_DARK_GREY_1 = UIManager.getColor("greyDark1");
 	public static final Color OPSI_DARK_GREY_2 = UIManager.getColor("greyDark2");
-	public static final Color OPSI_LIGHT_MAGENTA_1 = new Color(244, 205, 218);
-	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
+	public static final Color OPSI_LIGHT_MAGENTA_1 = UIManager.getColor("magentaLight1");
+	public static final Color OPSI_LIGHT_MAGENTA_2 = UIManager.getColor("magentaLight2");
+	public static final Color OPSI_LIGHT_GREY_1 = UIManager.getColor("greyLight1");
+	public static final Color OPSI_LIGHT_GREY_2 = UIManager.getColor("greyLight2");
 
 	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
 	public static final Color OPSI_OK_DARK = new Color(36, 107, 50);

@@ -118,9 +118,9 @@ public final class ComponentStyler {
 		String tableRowColor = "";
 		if (!isSelected) {
 			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_LIGHT_GREY);
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_GREY_2);
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_LIGHT);
+				tableRowColor = getHexColor(Globals.OPSI_LIGHT_GREY_1);
 			}
 		} else {
 			if (isRowEven) {

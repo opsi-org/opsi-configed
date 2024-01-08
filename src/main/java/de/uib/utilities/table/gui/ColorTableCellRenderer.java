@@ -77,9 +77,9 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_LIGHT_GREY);
+				component.setBackground(Globals.OPSI_LIGHT_GREY_2);
 			} else {
-				component.setBackground(Globals.OPSI_BACKGROUND_LIGHT);
+				component.setBackground(Globals.OPSI_LIGHT_GREY_1);
 			}
 		} else {
 			if (isRowEven) {
