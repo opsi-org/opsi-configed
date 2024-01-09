@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -126,6 +127,31 @@ public class FSelectionList extends FGeneralDialog {
 
 	public String getSelectedValue() {
 		return jList.getSelectedValue();
+	}
+
+	public List<String> getSelectedValues() {
+		return jList.getSelectedValuesList();
+	}
+
+	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
+		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
+		jList.setSelectedIndices(indices);
+	}
+
+	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
+		int[] indices = new int[previouslySelectedValues.size()];
+		int n = 0;
+		for (int i = 0; i < jList.getModel().getSize(); i++) {
+			if (previouslySelectedValues.contains(jList.getModel().getElementAt(i))) {
+				indices[n] = i;
+				n++;
+			}
+		}
+		return indices;
+	}
+
+	public void enableMultiSelection() {
+		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	@Override
