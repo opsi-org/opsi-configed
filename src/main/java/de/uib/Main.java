@@ -225,6 +225,8 @@ public class Main {
 			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
 			break;
 		}
+
+		Globals.setTableColors();
 	}
 
 	private static void registerOpenSansFont() {

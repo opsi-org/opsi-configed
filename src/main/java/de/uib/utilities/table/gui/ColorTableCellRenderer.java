@@ -32,10 +32,12 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 
 	public static void colorize(Component cell, boolean isSelected, boolean isRowEven) {
 		if (FlatLaf.isLafDark()) {
-			colorizeTableCellThemeDark(cell, isSelected, isRowEven);
+			cell.setForeground(Globals.OPSI_FOREGROUND_DARK);
 		} else {
-			colorizeTableCellThemeLight(cell, isSelected, isRowEven);
+			cell.setForeground(Globals.OPSI_FOREGROUND_LIGHT);
 		}
+
+		colorizeTableCell(cell, isSelected, isRowEven);
 	}
 
 	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven) {
@@ -54,38 +56,18 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		}
 	}
 
-	private static void colorizeTableCellThemeDark(Component component, boolean isSelected, boolean isRowEven) {
-		component.setForeground(Globals.OPSI_FOREGROUND_DARK);
-
+	private static void colorizeTableCell(Component component, boolean isSelected, boolean isRowEven) {
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_DARK_GREY_2);
+				component.setBackground(Globals.getGreyCell2());
 			} else {
-				component.setBackground(Globals.OPSI_DARK_GREY_1);
+				component.setBackground(Globals.getGreyCell1());
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.OPSI_DARK_MAGENTA_2);
+				component.setBackground(Globals.getMagentaCell2());
 			} else {
-				component.setBackground(Globals.OPSI_DARK_MAGENTA_1);
-			}
-		}
-	}
-
-	private static void colorizeTableCellThemeLight(Component component, boolean isSelected, boolean isRowEven) {
-		component.setForeground(Globals.OPSI_FOREGROUND_LIGHT);
-
-		if (!isSelected) {
-			if (isRowEven) {
-				component.setBackground(Globals.OPSI_LIGHT_GREY_2);
-			} else {
-				component.setBackground(Globals.OPSI_LIGHT_GREY_1);
-			}
-		} else {
-			if (isRowEven) {
-				component.setBackground(Globals.OPSI_LIGHT_MAGENTA_2);
-			} else {
-				component.setBackground(Globals.OPSI_LIGHT_MAGENTA_1);
+				component.setBackground(Globals.getMagentaCell1());
 			}
 		}
 	}

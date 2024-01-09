@@ -89,11 +89,7 @@ public abstract class AbstractClosableTabComponent extends JPanel {
 				g2.setColor(Globals.OPSI_FOREGROUND_LIGHT);
 			}
 			if (getModel().isRollover()) {
-				if (FlatLaf.isLafDark()) {
-					g2.setColor(Globals.OPSI_DARK_MAGENTA_1);
-				} else {
-					g2.setColor(Globals.OPSI_LIGHT_MAGENTA_1);
-				}
+				g2.setColor(Globals.getMagentaCell1());
 			}
 			drawX(g2);
 			g2.dispose();
