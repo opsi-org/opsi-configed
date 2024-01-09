@@ -102,7 +102,7 @@ public class HostDataService {
 			String ipaddress = ((String) client.get(8)).trim();
 			String[] groups = null;
 			if (!((String) client.get(9)).isEmpty()) {
-				groups = ((String) client.get(9)).trim().split(",");
+				groups = ((String) client.get(9)).replace("\\s,\\s", ",").trim().split(",");
 			} else {
 				groups = new String[] {};
 			}
