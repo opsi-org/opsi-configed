@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -213,7 +214,7 @@ public class HostDataService {
 
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot) {
+			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String[] groups, String productNetboot) {
 		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
 			return false;
 		}
@@ -235,10 +236,6 @@ public class HostDataService {
 		if (ipaddress.isEmpty()) {
 			ipaddress = null;
 			// null works, "" does not in the opsi call
-		}
-
-		if (group == null) {
-			group = "";
 		}
 
 		String newClientId = hostname + "." + domainname;
@@ -298,14 +295,16 @@ public class HostDataService {
 			result = exec.doCall(omc);
 		}
 
-		if (result && group != null && !group.isEmpty()) {
-			Logging.info(this, "createClient" + " group " + group);
+		if (result && groups != null && groups.length != 0) {
+			Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-			jsonObjects.add(itemGroup);
+			for (String group : groups) {
+				Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+				jsonObjects.add(itemGroup);
+			}
 			omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}

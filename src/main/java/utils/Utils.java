@@ -405,4 +405,29 @@ public final class Utils {
 
 		return result;
 	}
+
+	public static String getListStringRepresentation(List<String> list, Integer max) {
+		if (list == null || list.isEmpty()) {
+			return "";
+		}
+
+		StringBuilder result = new StringBuilder();
+		int stop = list.size();
+		if (max != null && stop > max) {
+			stop = max;
+		}
+
+		for (int i = 0; i < stop - 1; i++) {
+			result.append(list.get(i));
+			result.append(";\n");
+		}
+
+		result.append(list.get(stop - 1));
+
+		if (max != null && list.size() > max) {
+			result.append(" ... ");
+		}
+
+		return result.toString();
+	}
 }
