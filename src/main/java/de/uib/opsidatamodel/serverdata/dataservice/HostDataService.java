@@ -100,7 +100,12 @@ public class HostDataService {
 			String systemUUID = ((String) client.get(6)).trim();
 			String macaddress = ((String) client.get(7)).trim();
 			String ipaddress = ((String) client.get(8)).trim();
-			String group = ((String) client.get(9)).trim();
+			String[] groups = null;
+			if (!((String) client.get(9)).isEmpty()) {
+				groups = ((String) client.get(9)).trim().split(",");
+			} else {
+				groups = new String[] {};
+			}
 			String productNetboot = ((String) client.get(10)).trim();
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
@@ -155,13 +160,15 @@ public class HostDataService {
 				configStatesJsonObject.add(itemShI);
 			}
 
-			if (group != null && !group.isEmpty()) {
-				Logging.info(this, "createClient" + " group " + group);
-				Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-				groupsJsonObject.add(itemGroup);
+			if (groups != null && groups.length != 0) {
+				Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
+				for (String group : groups) {
+					Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+					itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+					itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+					itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+					groupsJsonObject.add(itemGroup);
+				}
 			}
 
 			if (productNetboot != null && !productNetboot.isEmpty()) {
