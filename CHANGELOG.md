@@ -1,6 +1,6 @@
 # Changelog
 
-## [x.x.x.x] - xxxx-xx-xx
+## [4.3.1.3] - 2024-01-09
 ### Added
 - Logviewer options to menubar in opsi-logviewer
 - Connect messagebus-terminal to clients and depot servers
