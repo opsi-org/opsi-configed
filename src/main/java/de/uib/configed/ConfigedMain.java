@@ -3900,7 +3900,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			refreshClientListActivateALL();
+			refreshClientList();
+			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			setClients(createdClientNames);
 		} else {
 			persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
