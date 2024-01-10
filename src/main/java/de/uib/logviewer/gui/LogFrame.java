@@ -217,7 +217,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuBar.add(setupMenuHelp());
 		this.setJMenuBar(jMenuBar);
 
-		initLogpane();
+		logPane = new StandaloneLogPane();
 
 		JPanel allPane = new JPanel();
 		allPane.setLayout(new BorderLayout());
@@ -228,11 +228,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		baseContainer.add(allPane);
 	}
 
-	private void initLogpane() {
-		logPane = new StandaloneLogPane();
-		logPane.setText("");
-		logPane.setTitle("unknown");
-		setTitle(null);
+	public void initLogPane() {
 		if (fileName != null && !fileName.isEmpty()) {
 			String logText = readFile(fileName);
 			if (!logText.isEmpty()) {
@@ -240,6 +236,10 @@ public class LogFrame extends JFrame implements WindowListener {
 				setTitle(fileName);
 				logPane.setText(logText);
 			}
+		} else {
+			logPane.setText("");
+			logPane.setTitle("unknown");
+			setTitle(null);
 		}
 	}
 
