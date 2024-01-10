@@ -168,8 +168,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int selRow = getRowForLocation(e.getX(), e.getY());
-				TreePath selPath = getPathForLocation(e.getX(), e.getY());
-				if (selRow != -1 && (e.getClickCount() == 2)) {
+				TreePath selPath = getPathForRow(selRow);
+				if (selRow != -1 && e.getClickCount() == 2
+						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
 					expandPath(selPath);
 					configedMain.setGroup(selPath.getLastPathComponent().toString());
 				}
