@@ -4507,7 +4507,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public static JFrame getFrame() {
 		if (mainFrame != null) {
-			Logging.devel(mainFrame.isVisible() + "");
 			return mainFrame;
 		} else if (loginDialog != null) {
 			return loginDialog;
