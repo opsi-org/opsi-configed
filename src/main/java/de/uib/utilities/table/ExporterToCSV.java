@@ -69,7 +69,7 @@ public class ExporterToCSV extends AbstractExportTable {
 		}
 	}
 
-	private void writeHeader(CSVPrinter printer) throws IOException {
+	protected void writeHeader(CSVPrinter printer) throws IOException {
 		List<String> headers = new ArrayList<>();
 		for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 			headers.add(theTable.getColumnName(colI));
@@ -77,7 +77,7 @@ public class ExporterToCSV extends AbstractExportTable {
 		printer.printRecord(headers);
 	}
 
-	private void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
+	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 					+ " selectedOnly " + selectedOnly);
