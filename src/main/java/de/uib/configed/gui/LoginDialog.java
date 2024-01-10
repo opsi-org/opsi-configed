@@ -97,7 +97,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
-
 		initGuiElements();
 		setupLayout();
 		finishAndMakeVisible();

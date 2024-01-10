@@ -225,12 +225,14 @@ public class Main {
 			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
 			break;
 		}
+
+		Globals.setTableColors();
 	}
 
 	private static void registerOpenSansFont() {
 		try (InputStream fontStream = Main.class.getResourceAsStream("/fonts/OpenSans.ttf")) {
 			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-			openSansFont = openSansFont.deriveFont(14F);
+			openSansFont = openSansFont.deriveFont(13F);
 			UIManager.put("defaultFont", openSansFont);
 		} catch (IOException e) {
 			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
