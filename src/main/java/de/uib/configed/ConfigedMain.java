@@ -3891,18 +3891,19 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void createClients(List<List<Object>> clients) {
+		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
+				.collect(Collectors.toList());
+		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients" + clients);
 			checkErrorList();
 
-			List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
-					.collect(Collectors.toList());
-
-			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 			refreshClientListActivateALL();
 			setClients(createdClientNames);
+		} else {
+			persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
 		}
 	}
 
