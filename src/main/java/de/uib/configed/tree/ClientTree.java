@@ -7,6 +7,9 @@
 package de.uib.configed.tree;
 
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,7 +162,23 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		Logging.debug(this, "UI " + getUI());
 
-		// preparing DnD
+		setToggleClickCount(0);
+
+		MouseListener ml = new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int selRow = getRowForLocation(e.getX(), e.getY());
+				TreePath selPath = getPathForLocation(e.getX(), e.getY());
+				if (selRow != -1 && (e.getClickCount() == 2)) {
+					expandPath(selPath);
+					configedMain.setGroup(selPath.getLastPathComponent().toString());
+				}
+			}
+		};
+
+		addMouseListener(ml);
+
+		// preparing Drag and Drop
 		TransferHandler handler = new ClientTreeTransferHandler(this);
 		setTransferHandler(handler);
 		setDragEnabled(true);
