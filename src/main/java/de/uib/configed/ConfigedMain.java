@@ -4507,11 +4507,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public static JFrame getFrame() {
 		if (mainFrame != null) {
+			Logging.devel(mainFrame.isVisible() + "");
 			return mainFrame;
 		} else if (loginDialog != null) {
 			return loginDialog;
 		} else {
-			Logging.critical(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
+			Logging.error(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
 			return null;
 		}
 	}
