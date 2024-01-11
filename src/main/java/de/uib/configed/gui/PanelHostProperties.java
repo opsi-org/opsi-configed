@@ -20,7 +20,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
@@ -29,7 +28,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel {
 	// delegate
-	private DefaultEditMapPanel editMapPanel;
+	private EditMapPanelX editMapPanel;
 	private Map<String, Map<String, Object>> multipleMaps;
 
 	public PanelHostProperties() {
@@ -40,7 +39,7 @@ public class PanelHostProperties extends JPanel {
 		PropertiesTableCellRenderer cellRenderer = new PropertiesTableCellRenderer();
 		Logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
-		((EditMapPanelX) editMapPanel).setCellEditor(new SensitiveCellEditorForDataPanel());
+		editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		editMapPanel.setShowToolTip(false);
 
 		GroupLayout planeLayout = new GroupLayout(this);

@@ -80,7 +80,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			// set for this session to default, without storing the value separately)
 			mapTableModel.addEntry(key, defaultsMap.get(key), false);
-			originalMap.remove(key);
+			if (originalMap != null) {
+				originalMap.remove(key);
+			}
 		}
 
 		@Override
@@ -99,7 +101,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			// set for this session to default, without storing the value separately)
 			mapTableModel.addEntry(key, defaultsMap.get(key), true);
-			originalMap.put(key, defaultsMap.get(key));
+			if (originalMap != null) {
+				originalMap.put(key, defaultsMap.get(key));
+			}
 		}
 
 		@Override
