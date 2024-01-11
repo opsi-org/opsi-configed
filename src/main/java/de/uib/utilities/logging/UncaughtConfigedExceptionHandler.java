@@ -8,21 +8,33 @@ package de.uib.utilities.logging;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
-public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandler {
-	private String lastException = "";
+import de.uib.Main;
+import de.uib.configed.Configed;
 
+public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandler {
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		if (e instanceof Exception) {
-			Exception ex = (Exception) e;
-			Logging.warning("Error in thread " + t, ex);
-			Logging.error("Unhandled error: " + ex.getMessage() + "\nplease check logfile");
-		} else {
-			Logging.warning("Thread " + t + " (RunTime Error)  " + e);
+			Logging.warning("Error in thread " + t, e);
 
-			if (e instanceof OutOfMemoryError && !lastException.equals(e.toString())) {
-				lastException = e.toString();
-				Logging.error("Error: out of memory");
+			String errorText = Configed.getResourceValue("UncaughtExceptionHandler.notForeseenError") + " "
+					+ ((Exception) e).getMessage();
+
+			if (e instanceof java.awt.IllegalComponentStateException) {
+				Logging.warning("exception " + e);
+			} else if (e.getMessage() == null) {
+				// according to some internet info it could occure on ground of some
+				// optimization in the JIT compiler
+
+				Logging.warning("exception with null message " + e);
+			} else {
+				Logging.error(
+						errorText + "\n" + Configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"), e);
+			}
+		} else {
+			Logging.warning("Thread " + t + " - RunTime Error", e);
+			if (e instanceof OutOfMemoryError) {
+				Main.endApp(Main.ERROR_OUT_OF_MEMORY);
 			}
 		}
 	}
