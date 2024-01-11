@@ -4511,7 +4511,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		} else if (loginDialog != null) {
 			return loginDialog;
 		} else {
-			Logging.critical(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
+			Logging.error(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
 			return null;
 		}
 	}

@@ -221,6 +221,7 @@ public final class Logging {
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
+		// TODO activate logging also in Logviewer?
 		if (configedMain != null) {
 			configedMain.logEventOccurred();
 		}

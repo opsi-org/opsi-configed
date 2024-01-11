@@ -11,6 +11,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.text.DateFormat;
 
+import javax.swing.UIManager;
+
 /**
  * This class contains app constants
  */
@@ -43,6 +45,7 @@ public final class Globals {
 	public static final String HEALTH_CHECK_LOG_FILE_NAME = "healthCheck.log";
 	public static final String DIAGNOSTIC_DATA_JSON_FILE_NAME = "diagnosticData.json";
 
+	// The official opsi colors
 	public static final Color OPSI_DARK_GREY = new Color(63, 63, 62);
 	public static final Color OPSI_GREY = new Color(178, 178, 178);
 	public static final Color OPSI_LIGHT_GREY = new Color(228, 228, 227);
@@ -65,13 +68,6 @@ public final class Globals {
 	public static final Color LOG_COLOR_TRACE = new Color(139, 139, 139);
 	public static final Color LOG_COLOR_SECRET = new Color(213, 0, 249);
 
-	// Colors for tables etc.
-
-	public static final Color OPSI_DARK_MAGENTA = new Color(135, 20, 58);
-	public static final Color OPSI_DARK_MAGENTA_2 = new Color(101, 15, 44);
-	public static final Color OPSI_LIGHT_MAGENTA = new Color(244, 205, 218);
-	public static final Color OPSI_LIGHT_MAGENTA_2 = new Color(238, 180, 199);
-
 	public static final Color OPSI_OK = LOG_COLOR_NOTICE;
 	public static final Color OPSI_OK_DARK = new Color(36, 107, 50);
 
@@ -82,9 +78,8 @@ public final class Globals {
 	public static final Color OPSI_ERROR_DARK = new Color(170, 33, 38);
 
 	public static final Color OPSI_BACKGROUND_LIGHT = new Color(255, 255, 255);
-	public static final Color OPSI_BACKGROUND_DARK = new Color(31, 31, 31);
 
-	public static final Color OPSI_FOREGROUND_LIGHT = new Color(0, 0, 0);
+	public static final Color OPSI_FOREGROUND_LIGHT = new Color(30, 30, 30);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
 
 	// End new colors
@@ -195,6 +190,36 @@ public final class Globals {
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
+	// Colors for table cells
+	private static Color magentaCell1;
+	private static Color magentaCell2;
+
+	private static Color greyCell1;
+	private static Color greyCell2;
+
 	private Globals() {
+	}
+
+	public static void setTableColors() {
+		magentaCell1 = UIManager.getColor("magentaCell1");
+		magentaCell2 = UIManager.getColor("magentaCell2");
+		greyCell1 = UIManager.getColor("greyCell1");
+		greyCell2 = UIManager.getColor("greyCell2");
+	}
+
+	public static Color getMagentaCell1() {
+		return magentaCell1;
+	}
+
+	public static Color getMagentaCell2() {
+		return magentaCell2;
+	}
+
+	public static Color getGreyCell1() {
+		return greyCell1;
+	}
+
+	public static Color getGreyCell2() {
+		return greyCell2;
 	}
 }
