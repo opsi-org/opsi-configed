@@ -410,7 +410,7 @@ public class SoftwareDataService {
 		final int STEP_SIZE = 100;
 
 		Iterator<String> clientIterator = clients.iterator();
-		while (!clientIterator.hasNext()) {
+		while (clientIterator.hasNext()) {
 			List<String> clientListForCall = new ArrayList<>();
 
 			for (int i = 0; i < STEP_SIZE && clientIterator.hasNext(); i++) {
