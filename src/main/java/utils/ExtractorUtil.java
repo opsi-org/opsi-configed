@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.StreamingNotSupportedException;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -34,8 +37,48 @@ public final class ExtractorUtil {
 
 	public static Map<String, String> unzip(File file) {
 		Logging.info("ExtractorUtil: starting extract");
-		Map<String, String> files = new HashMap<>();
+		Map<String, String> files = null;
 		String archiveFormat = detectArchiveFormat(file);
+		if (ArchiveStreamFactory.ZIP.equals(archiveFormat)) {
+			files = extractZIP(file);
+		} else {
+			files = extractArchive(file, archiveFormat);
+		}
+		return files;
+	}
+
+	private static String detectArchiveFormat(File file) {
+		String archiveFormat = "";
+		try {
+			archiveFormat = ArchiveStreamFactory.detect(retrieveInputStream(file));
+		} catch (ArchiveException e) {
+			if (file.getName().contains(".tar")) {
+				archiveFormat = ArchiveStreamFactory.TAR;
+			} else {
+				Logging.error("Unable to detect archive format for file " + file.getAbsolutePath(), e);
+			}
+		}
+		return archiveFormat;
+	}
+
+	private static Map<String, String> extractZIP(File file) {
+		Map<String, String> files = new HashMap<>();
+		try (ZipFile zipFile = new ZipFile(file)) {
+			Enumeration<ZipArchiveEntry> zipEntries = zipFile.getEntries();
+			while (zipEntries.hasMoreElements()) {
+				ZipArchiveEntry entry = zipEntries.nextElement();
+				if (!entry.isDirectory()) {
+					files.put(entry.getName(), IOUtil.toString(zipFile.getInputStream(entry)));
+				}
+			}
+		} catch (IOException e) {
+			Logging.error("Unable to read ZIP file " + file.getAbsolutePath(), e);
+		}
+		return files;
+	}
+
+	private static Map<String, String> extractArchive(File file, String archiveFormat) {
+		Map<String, String> files = new HashMap<>();
 		try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
 				retrieveInputStream(file))) {
 			ArchiveEntry entry = null;
@@ -55,22 +98,7 @@ public final class ExtractorUtil {
 		} catch (IOException e) {
 			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
 		}
-
 		return files;
-	}
-
-	private static String detectArchiveFormat(File file) {
-		String archiveFormat = "";
-		try {
-			archiveFormat = ArchiveStreamFactory.detect(retrieveInputStream(file));
-		} catch (ArchiveException e) {
-			if (file.getName().contains(".tar")) {
-				archiveFormat = ArchiveStreamFactory.TAR;
-			} else {
-				Logging.error("Unable to detect archive format for file " + file.getAbsolutePath(), e);
-			}
-		}
-		return archiveFormat;
 	}
 
 	private static InputStream retrieveInputStream(File file) {
