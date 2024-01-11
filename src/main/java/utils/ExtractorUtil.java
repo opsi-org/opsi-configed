@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.DateTimeException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +98,12 @@ public final class ExtractorUtil {
 			Logging.error("Archive format is unknown " + archiveFormat, e);
 		} catch (IOException e) {
 			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
+		} catch (DateTimeException e) {
+			// In version 1.25.0 (and earlier) of Apache Commons Compress lib
+			// the `DateTimeException` might occur indicating that PAX header
+			// of an archive is corrupt. We catch this manually until new lib's
+			// version comes out, which does not require us to do so.
+			Logging.error("Corrupted PAX header", e);
 		}
 		return files;
 	}
