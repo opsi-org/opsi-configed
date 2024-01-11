@@ -79,7 +79,7 @@ public final class ExtractorUtil {
 
 	private static Map<String, String> extractArchive(File file, String archiveFormat) {
 		Map<String, String> files = new HashMap<>();
-		try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
+		try (ArchiveInputStream<ArchiveEntry> ais = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat,
 				retrieveInputStream(file))) {
 			ArchiveEntry entry = null;
 			while ((entry = ais.getNextEntry()) != null) {
