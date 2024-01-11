@@ -35,6 +35,7 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utilities.savedstates.UserPreferences;
 
 public class Main {
@@ -242,6 +243,8 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
+
 		setGlobalValues();
 
 		createOptions();

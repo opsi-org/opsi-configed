@@ -96,9 +96,6 @@ public final class Configed {
 			final String paramClientgroup, final Integer paramTab) {
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
-		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
-		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
-
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
 		Logging.debug("server charset is configured as " + serverCharset);
@@ -396,8 +393,7 @@ public final class Configed {
 			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
 				return loadExtraLocalization(extraLocalizationFile);
 			} else {
-				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
-						+ "_LOCALE.properties");
+				Logging.debug("localization file does not have the expected format opsi-configed_LOCALE.properties");
 			}
 		}
 

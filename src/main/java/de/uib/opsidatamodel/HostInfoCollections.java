@@ -22,6 +22,8 @@ import java.util.TreeSet;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -123,7 +125,7 @@ public class HostInfoCollections {
 		// find opsi configserver and give it the top position
 		retrieveConfigServerPD(opsiHosts);
 
-		String configServer = cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER, String.class);
+		String configServer = getConfigServer();
 		if (configServer == null) {
 			showNoDataDialog(opsiHosts.size());
 			Main.endApp(1);
@@ -182,7 +184,7 @@ public class HostInfoCollections {
 		String message = messbuff.toString();
 		Logging.error(this, message);
 
-		FTextArea f = new FTextArea(null, "opsi configed", true,
+		FTextArea f = new FTextArea(ConfigedMain.getFrame(), Globals.APPNAME, true,
 				new String[] { Configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
 		f.setMessage(message);
 
@@ -323,7 +325,7 @@ public class HostInfoCollections {
 			HostInfo hostInfo = null;
 			String myDepot = null;
 
-			depotId = depotFound ? depotId : cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER, String.class);
+			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 			hostInfo = new HostInfo(host);
 			hostInfo.setInDepot(depotId);

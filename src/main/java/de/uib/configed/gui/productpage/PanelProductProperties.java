@@ -22,7 +22,6 @@ import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
@@ -39,7 +38,7 @@ public class PanelProductProperties extends JSplitPane {
 	// right pane
 	private ProductInfoPane infoPane;
 	private PanelEditDepotProperties panelEditProperties;
-	private DefaultEditMapPanel propertiesPanel;
+	private EditMapPanelX propertiesPanel;
 
 	private ConfigedMain configedMain;
 
@@ -74,7 +73,7 @@ public class PanelProductProperties extends JSplitPane {
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		((EditMapPanelX) propertiesPanel).setCellEditor(new SensitiveCellEditorForDataPanel());
+		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
@@ -169,7 +168,7 @@ public class PanelProductProperties extends JSplitPane {
 			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
 				Logging.info(this, "selected not a unique row ");
 				infoPane.clearEditing();
-				((EditMapPanelX) propertiesPanel).init();
+				propertiesPanel.init();
 				panelEditProperties.clearDepotListData();
 			} else {
 				int row = lsm.getMinSelectionIndex();
