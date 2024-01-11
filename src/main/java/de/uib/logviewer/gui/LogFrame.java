@@ -420,9 +420,9 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 		for (Entry<String, String> entry : files.entrySet()) {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane();
+			externalLogPane.externalize(entry.getKey(), logPane.getSize());
 			externalLogPane.setTitle(entry.getKey());
 			externalLogPane.setText(entry.getValue());
-			externalLogPane.externalize(entry.getKey(), logPane.getSize());
 		}
 	}
 
