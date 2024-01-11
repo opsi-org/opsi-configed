@@ -396,8 +396,7 @@ public final class Configed {
 			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
 				return loadExtraLocalization(extraLocalizationFile);
 			} else {
-				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
-						+ "_LOCALE.properties");
+				Logging.debug("localization file does not have the expected format opsi-configed_LOCALE.properties");
 			}
 		}
 
