@@ -422,7 +422,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private String readCompressedFile(File file) {
-		String result;
+		String result = "";
 		TreeMap<String, String> files = new TreeMap<>(ExtractorUtil.unzip(file));
 		if (!files.isEmpty()) {
 			Entry<String, String> firstFile = files.firstEntry();
@@ -430,9 +430,6 @@ public class LogFrame extends JFrame implements WindowListener {
 			result = firstFile.getValue();
 			files.remove(firstFile.getKey());
 			openRestFilesFromZIP(files);
-		} else {
-			Logging.warning("Tried unzipping file, could not do it, open it as text");
-			result = readNotCompressedFile(file);
 		}
 		return result;
 	}
