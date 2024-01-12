@@ -4,6 +4,9 @@
 ### Fixed
 - `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
 
+### Changed
+- Show output of `SavedSearchQuery` result
+
 ## [4.2.22.23] - 2023-10-31
 ### Changed
 - Warn when encountered non `BoolConfig` in WAN config
