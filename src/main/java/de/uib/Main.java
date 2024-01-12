@@ -88,6 +88,7 @@ public class Main {
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
 				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
 		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
