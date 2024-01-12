@@ -71,6 +71,7 @@ public final class Logviewer {
 
 		Logging.info("mainframe nearly initialized");
 		logFrame.setVisible(true);
+		logFrame.initLogPane();
 	}
 
 	public static LogFrame getLogFrame() {

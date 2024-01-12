@@ -665,12 +665,17 @@ public class LogPane extends JPanel implements KeyListener {
 
 		parser = new LogFileParser(lines, logLevelStyles);
 		parser.parse();
+
 		adaptComboType();
 
 		if (lines.length > 1) {
 			showLevel = produceInitialMaxShowLevel();
 			if (parser.getMaxExistingLevel() < showLevel) {
 				showLevel = parser.getMaxExistingLevel();
+			} else if (parser.getMinExistingLevel() > showLevel) {
+				showLevel = parser.getMinExistingLevel();
+			} else {
+				// Otherwise keep initially produced max level.
 			}
 			adaptSlider();
 		} else {
