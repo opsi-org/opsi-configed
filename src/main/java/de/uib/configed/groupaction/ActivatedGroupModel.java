@@ -70,7 +70,7 @@ public class ActivatedGroupModel {
 	}
 
 	public String getGroupName() {
-		return "" + groupName;
+		return groupName;
 	}
 
 	public String getLabel() {

@@ -134,14 +134,14 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		Logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
+		Logging.debug(this, "getSourceActions,  activePaths " + Arrays.toString(tree.getSelectionPaths()));
 
-		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {
+		if (tree.getSelectionPaths() == null || tree.getSelectionPaths().length == 0) {
 			Logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
 			return TransferHandler.NONE;
 		}
 
-		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getActivePaths().get(0).getLastPathComponent();
+		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getSelectionPaths()[0].getLastPathComponent();
 
 		if (dropThis instanceof GroupNode) {
 			GroupNode dropThisVariant = tree.getGroupNode(dropThis.toString());
@@ -171,11 +171,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// there can only be one group selected, and it can only be moved
 		// (for top groups the NONE handler was already returned)
-
-		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
-
-		while (iterPaths.hasNext()) {
-			TreePath path = iterPaths.next();
+		for (TreePath path : tree.getSelectionPaths()) {
 
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
 				Logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
@@ -197,13 +193,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	protected Transferable createTransferable(JComponent c) {
 		StringBuilder buff = new StringBuilder();
-		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
-		while (iterPaths.hasNext()) {
-			TreePath path = iterPaths.next();
-
-			// String id = ((DefaultMutableTreeNode)
-
+		for (TreePath path : tree.getSelectionPaths()) {
 			int len = path.getPath().length;
 			for (int j = 0; j < len; j++) {
 				buff.append(path.getPath()[j]);
@@ -212,12 +203,11 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				}
 			}
 
-			if (iterPaths.hasNext()) {
-				buff.append("\n");
-			}
+			buff.append("\n");
 		}
 
-		return new StringSelection(buff.toString());
+		// We want to get the string without the last character "\n"
+		return new StringSelection(buff.substring(0, buff.length() - 1));
 	}
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
@@ -299,15 +289,15 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// what is to be moved/copied
 
-		Logging.debug(this, "importData, getActivePaths(): " + tree.getActivePaths());
+		Logging.debug(this, "importData, getActivePaths(): " + Arrays.toString(tree.getSelectionPaths()));
 
 		List<String> selectedClients = tree.getSelectedClientsInTable();
 
 		// possibly transfer of a group node
 		if (selectedClients.isEmpty()) {
-			List<TreePath> activePaths = tree.getActivePaths();
-			if (activePaths != null && activePaths.size() == 1) {
-				String importID = (String) (((DefaultMutableTreeNode) (activePaths.get(0)).getLastPathComponent())
+			TreePath[] activePaths = tree.getSelectionPaths();
+			if (activePaths != null && activePaths.length == 1) {
+				String importID = (String) (((DefaultMutableTreeNode) (activePaths[0]).getLastPathComponent())
 						.getUserObject());
 				selectedClients = Collections.singletonList(importID);
 			}

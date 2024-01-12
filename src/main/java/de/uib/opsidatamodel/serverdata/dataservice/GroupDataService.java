@@ -316,7 +316,12 @@ public class GroupDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
 				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
 
-		return exec.doCall(omc);
+		boolean result = exec.doCall(omc);
+		if (result) {
+			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+		}
+
+		return result;
 	}
 
 	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries) {
@@ -339,10 +344,10 @@ public class GroupDataService {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS,
 					new Object[] { deleteItems });
 
-			if (exec.doCall(omc)) {
-				deleteItems.clear();
-			} else {
-				result = false;
+			result = exec.doCall(omc);
+
+			if (result) {
+				persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 			}
 		}
 
@@ -358,7 +363,13 @@ public class GroupDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE,
 				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
 
-		return exec.doCall(omc);
+		boolean result = exec.doCall(omc);
+
+		if (result) {
+			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+		}
+
+		return result;
 	}
 
 	public boolean addGroup(StringValuedRelationElement newgroup) {
@@ -444,7 +455,13 @@ public class GroupDataService {
 		Logging.debug(this, "updateGroup " + parentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_UPDATE_OBJECT, new Object[] { updateInfo });
-		return exec.doCall(omc);
+		boolean result = exec.doCall(omc);
+
+		if (result) {
+			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+		}
+
+		return result;
 	}
 
 	private static List<Map<String, String>> createObject2Groups(String groupId, Map<String, String> typingObject,
