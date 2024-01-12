@@ -19,7 +19,7 @@ public final class FOpsiLicenseMissingText extends FTextArea {
 	private static List<String> messages = new ArrayList<>();
 
 	private FOpsiLicenseMissingText() {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("Permission.modules.title"), false,
+		super(null, Configed.getResourceValue("Permission.modules.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 450, 250);
 	}
 
@@ -54,7 +54,7 @@ public final class FOpsiLicenseMissingText extends FTextArea {
 		}
 
 		getInstance().setMessage(combined.toString());
-		getInstance().setLocationRelativeTo(ConfigedMain.getMainFrame());
+		getInstance().setLocationRelativeTo(ConfigedMain.getFrame());
 		getInstance().setAlwaysOnTop(true);
 		getInstance().setVisible(true);
 	}

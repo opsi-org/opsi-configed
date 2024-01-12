@@ -35,6 +35,7 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utilities.savedstates.UserPreferences;
 
 public class Main {
@@ -87,6 +88,7 @@ public class Main {
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
 				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
 		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
@@ -225,12 +227,14 @@ public class Main {
 			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
 			break;
 		}
+
+		Globals.setTableColors();
 	}
 
 	private static void registerOpenSansFont() {
 		try (InputStream fontStream = Main.class.getResourceAsStream("/fonts/OpenSans.ttf")) {
 			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-			openSansFont = openSansFont.deriveFont(14F);
+			openSansFont = openSansFont.deriveFont(13F);
 			UIManager.put("defaultFont", openSansFont);
 		} catch (IOException e) {
 			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
@@ -240,6 +244,8 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
+
 		setGlobalValues();
 
 		createOptions();

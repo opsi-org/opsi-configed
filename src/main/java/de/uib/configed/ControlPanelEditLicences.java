@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -176,10 +176,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persistenceController.getHostInfoCollections()
-					.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()))
-							.keySet());
-
+			List<String> choicesAllHosts = new ArrayList<>(new TreeSet<>(persistenceController.getHostInfoCollections()
+					.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients())));
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
