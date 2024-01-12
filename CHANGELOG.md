@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.24] - 2024-01-12
+### Fixed
+- `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
+
 ## [4.2.22.23] - 2023-10-31
 ### Changed
 - Warn when encountered non `BoolConfig` in WAN config
