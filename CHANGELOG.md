@@ -2,7 +2,7 @@
 
 ## [4.3.1.4] - XXXX-XX-XX
 ### Fixed
-- ArrayIndexOutOfBoundsException on calling `-qg` command with two arguments/parameters
+- `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
 
 ## [4.3.1.3] - 2024-01-09
 ### Added
