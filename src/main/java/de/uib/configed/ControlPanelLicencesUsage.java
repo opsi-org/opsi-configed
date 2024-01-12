@@ -7,10 +7,10 @@
 package de.uib.configed;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
@@ -20,7 +20,6 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -99,20 +98,13 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 
 		initPanels();
 
-		// combo clients
-		thePanel.setClientsSource(new ComboBoxModeller() {
-			@Override
-			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
-						.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
-
-				choicesAllHosts.set(0, "");
-
-				Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
-
-				return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
-			}
-		});
+		List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
+				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
+		choicesAllHosts.set(0, "");
+		Collections.sort(choicesAllHosts);
+		Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
+		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
+		thePanel.setClientsSource(comboBoxModel);
 	}
 
 	private void initPanels() {
