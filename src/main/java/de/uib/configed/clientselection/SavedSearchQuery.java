@@ -31,9 +31,6 @@ public class SavedSearchQuery {
 	private OpsiServiceNOMPersistenceController controller;
 
 	public SavedSearchQuery(String host, String user, String password, String searchName) {
-		Logging.setLogLevelFile(Logging.LEVEL_NONE);
-		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
-
 		setArgs(host, user, password, searchName);
 		initConnection();
 	}
@@ -60,7 +57,8 @@ public class SavedSearchQuery {
 	public List<String> runSearch(boolean printing) {
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
-		controller.getHostInfoCollections().getClientListForDepots(depots.keySet(), null);
+		// Load data that we need to find clients for selection
+		controller.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();

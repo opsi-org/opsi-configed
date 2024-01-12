@@ -104,8 +104,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
-						.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients())
-						.keySet());
+						.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
 
 				choicesAllHosts.set(0, "");
 
