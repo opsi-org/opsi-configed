@@ -1,8 +1,19 @@
 # Changelog
 
-## [4.3.1.4] - XXXX-XX-XX
+## [4.3.1.4] - 2024-01-12
+### Added
+- Auto completion and sort clients in license usage
+
 ### Fixed
 - `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
+- Software information not shown
+- Log files opening in context menus by double-click
+
+### Changed
+- Rework Clienttree (performance)
+- Selection inactive colors
+- Colors in tables
+- Setting Product version when setting `installed`
 
 ## [4.3.1.3] - 2024-01-09
 ### Added
