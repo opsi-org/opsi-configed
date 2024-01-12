@@ -3691,7 +3691,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			refreshClientList();
+			setRebuiltClientListTableModel(true);
 			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			setClients(createdClientNames);
 		} else {
