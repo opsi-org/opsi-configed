@@ -96,9 +96,6 @@ public final class Configed {
 			final String paramClientgroup, final Integer paramTab) {
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
-		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
-		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
-
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
 		Logging.debug("server charset is configured as " + serverCharset);
@@ -396,8 +393,7 @@ public final class Configed {
 			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
 				return loadExtraLocalization(extraLocalizationFile);
 			} else {
-				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
-						+ "_LOCALE.properties");
+				Logging.debug("localization file does not have the expected format opsi-configed_LOCALE.properties");
 			}
 		}
 
@@ -426,9 +422,6 @@ public final class Configed {
 		}
 	}
 
-	/**
-	 * main-Methode
-	 */
 	public static void main(CommandLine cmd) {
 		processArgs(cmd);
 
@@ -443,12 +436,16 @@ public final class Configed {
 		Logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
+			addMissingArgs();
+			initSavedStates();
 			Logging.debug("optionCLIQuerySearch");
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
+			addMissingArgs();
+			initSavedStates();
 			Logging.debug("optionCLIDefineGroupBySearch");
 
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
@@ -477,6 +474,7 @@ public final class Configed {
 			Logging.debug("UserConfigProducing");
 
 			addMissingArgs();
+			initSavedStates();
 
 			OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host,
 					user, password);
@@ -499,19 +497,75 @@ public final class Configed {
 		new Configed(host, user, password, client, clientgroup, tab);
 	}
 
+	public static void initSavedStates() {
+		File savedStatesDir = null;
+
+		if (savedStatesLocationName != null) {
+			Logging.info("trying to write saved states to " + savedStatesLocationName);
+			String directoryName = getSavedStatesDirectoryName(savedStatesLocationName);
+			savedStatesDir = new File(directoryName);
+			Logging.info("writing saved states, created file " + savedStatesDir);
+
+			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
+				Logging.warning("mkdirs for saved states failed, for File " + savedStatesDir);
+			}
+
+			Logging.info("writing saved states, got dirs");
+
+			if (!savedStatesDir.setWritable(true, true)) {
+				Logging.warning("setting file savedStatesDir writable failed");
+			}
+
+			Logging.info("writing saved states, set writable");
+			savedStates = new SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
+		}
+
+		if (savedStatesLocationName == null || Configed.getSavedStates() == null) {
+			Logging.info("writing saved states to " + Utils.getSavedStatesDefaultLocation());
+			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation()));
+
+			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
+				Logging.warning("mkdirs for saved states failed, in savedStatesDefaultLocation");
+			}
+
+			if (!savedStatesDir.setWritable(true, true)) {
+				Logging.warning("setting file savedStatesDir writable failed");
+			}
+
+			savedStates = new SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
+		}
+
+		savedStatesLocationName = Utils.getSavedStatesDefaultLocation();
+
+		try {
+			Configed.getSavedStates().load();
+		} catch (IOException iox) {
+			Logging.warning("saved states file could not be loaded", iox);
+		}
+
+		Integer oldUsageCount = Integer.valueOf(Configed.getSavedStates().getProperty("saveUsageCount", "0"));
+		Configed.getSavedStates().setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
+	}
+
+	private static String getSavedStatesDirectoryName(String locationName) {
+		return locationName + File.separator + host.replace(":", "_");
+	}
+
+	public static String getHost() {
+		return host;
+	}
+
+	public static void setHost(String host) {
+		Configed.host = host;
+	}
+
 	public static SavedStates getSavedStates() {
 		return savedStates;
 	}
 
-	public static void setSavedStates(SavedStates savedStates) {
-		Configed.savedStates = savedStates;
-	}
-
 	public static String getSavedStatesLocationName() {
 		return savedStatesLocationName;
-	}
-
-	public static void setSavedStatesLocationName(String savedStatesLocationName) {
-		Configed.savedStatesLocationName = savedStatesLocationName;
 	}
 }

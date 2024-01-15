@@ -27,8 +27,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredD;
 	private int[] unfilteredSelection;
 
-	private boolean filtered;
-
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
 		this.jList = jList;
 		unfilteredV = values;
@@ -218,10 +216,5 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		}
 
 		Logging.info(this, "setFilter " + theValues);
-	}
-
-	@Override
-	public boolean isFiltered() {
-		return filtered;
 	}
 }

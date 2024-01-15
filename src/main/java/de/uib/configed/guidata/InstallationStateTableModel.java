@@ -1108,8 +1108,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		if (filter == null) {
 			filterInverse = null;
 		} else {
-			filterInverse = new int[getRowCount()];
-			for (int j = 0; j < getRowCount(); j++) {
+			filterInverse = new int[productsV.size()];
+			for (int j = 0; j < productsV.size(); j++) {
 				filterInverse[j] = -1;
 			}
 			for (int i = 0; i < filter.length; i++) {
@@ -1318,6 +1318,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
+				if ("installed".equals(value)
+						&& combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct).isEmpty()) {
+					setLatestProductVersion();
+				}
 			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
@@ -1339,6 +1343,23 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			}
 
 			configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		}
+	}
+
+	private void setLatestProductVersion() {
+		for (String clientId : selectedClients) {
+			Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
+					arg -> new HashMap<>());
+
+			Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(actualProduct,
+					arg -> new HashMap<>());
+			String latestVersion = (String) getGlobalProductInfos().get(actualProduct)
+					.get(ProductState.KEY_VERSION_INFO);
+			combinedVisualValues.get(ProductState.KEY_VERSION_INFO).put(actualProduct, latestVersion);
+			changedStatesForProduct.put(ProductState.KEY_PRODUCT_VERSION,
+					(String) getGlobalProductInfos().get(actualProduct).get(ProductState.KEY_PRODUCT_VERSION));
+			changedStatesForProduct.put(ProductState.KEY_PACKAGE_VERSION,
+					(String) getGlobalProductInfos().get(actualProduct).get(ProductState.KEY_PACKAGE_VERSION));
 		}
 	}
 }

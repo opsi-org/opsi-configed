@@ -56,16 +56,15 @@ public final class ComponentStyler {
 				super.updateItem(value, empty);
 				BooleanProperty isEvenRow = new SimpleBooleanProperty((getIndex() & 1) == 0);
 				styleProperty().bind(Bindings.when(selectedProperty().and(view.focusedProperty()))
-						.then("-fx-background-color: " + getTableRowColorBasedOnTheme(true, isEvenRow.get())
+						.then("-fx-background-color: " + getTableRowColor(true, isEvenRow.get())
 								+ "; -fx-text-background-color: " + tableViewForegroundColor)
 						.otherwise(Bindings.when(selectedProperty())
-								.then("-fx-background-color: " + getTableRowColorBasedOnTheme(true, isEvenRow.get())
+								.then("-fx-background-color: " + getTableRowColor(true, isEvenRow.get())
 										+ "; -fx-text-background-color: " + tableViewForegroundColor)
 								.otherwise(Bindings.when(isEvenRow)
-										.then("-fx-background-color: "
-												+ getTableRowColorBasedOnTheme(false, isEvenRow.get()))
-										.otherwise("-fx-background-color: "
-												+ getTableRowColorBasedOnTheme(false, isEvenRow.get())))));
+										.then("-fx-background-color: " + getTableRowColor(false, isEvenRow.get()))
+										.otherwise(
+												"-fx-background-color: " + getTableRowColor(false, isEvenRow.get())))));
 				Set<Node> checkBoxes = view.lookupAll(".check-box");
 				for (Node checkBox : checkBoxes) {
 					styleCheckBoxComponent((CheckBox) checkBox);
@@ -91,42 +90,19 @@ public final class ComponentStyler {
 		}
 	}
 
-	private static String getTableRowColorBasedOnTheme(boolean isSelected, boolean isRowEven) {
-		return FlatLaf.isLafDark() ? getTableRowColorThemeDark(isSelected, isRowEven)
-				: getTableRowColorThemeLight(isSelected, isRowEven);
-	}
-
-	private static String getTableRowColorThemeDark(boolean isSelected, boolean isRowEven) {
-		String tableRowColor = "";
+	private static String getTableRowColor(boolean isSelected, boolean isRowEven) {
+		String tableRowColor;
 		if (!isSelected) {
 			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_DARK);
+				tableRowColor = getHexColor(Globals.getGreyCell2());
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_DARK_GREY);
+				tableRowColor = getHexColor(Globals.getGreyCell1());
 			}
 		} else {
 			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA_2);
+				tableRowColor = getHexColor(Globals.getMagentaCell2());
 			} else {
-				tableRowColor = getHexColor(Globals.OPSI_DARK_MAGENTA);
-			}
-		}
-		return tableRowColor;
-	}
-
-	private static String getTableRowColorThemeLight(boolean isSelected, boolean isRowEven) {
-		String tableRowColor = "";
-		if (!isSelected) {
-			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_LIGHT_GREY);
-			} else {
-				tableRowColor = getHexColor(Globals.OPSI_BACKGROUND_LIGHT);
-			}
-		} else {
-			if (isRowEven) {
-				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA_2);
-			} else {
-				tableRowColor = getHexColor(Globals.OPSI_LIGHT_MAGENTA);
+				tableRowColor = getHexColor(Globals.getMagentaCell1());
 			}
 		}
 		return tableRowColor;

@@ -18,7 +18,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -32,12 +31,7 @@ public class SavedSearchQuery {
 	private OpsiServiceNOMPersistenceController controller;
 
 	public SavedSearchQuery(String host, String user, String password, String searchName) {
-		Logging.setLogLevelFile(Logging.LEVEL_NONE);
-		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
-
 		setArgs(host, user, password, searchName);
-		addMissingArgs();
-
 		initConnection();
 	}
 
@@ -47,18 +41,6 @@ public class SavedSearchQuery {
 		this.user = user;
 		this.password = password;
 		this.searchName = searchName;
-	}
-
-	private void addMissingArgs() {
-		if (host == null) {
-			host = Utils.getCLIParam("Host: ");
-		}
-		if (user == null) {
-			user = Utils.getCLIParam("User: ");
-		}
-		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
-		}
 	}
 
 	private void initConnection() {
@@ -75,7 +57,8 @@ public class SavedSearchQuery {
 	public List<String> runSearch(boolean printing) {
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
-		controller.getHostInfoCollections().getClientListForDepots(depots.keySet(), null);
+		// Load data that we need to find clients for selection
+		controller.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();
@@ -131,9 +114,10 @@ public class SavedSearchQuery {
 		}
 	}
 
+	@SuppressWarnings("java:S106")
 	private static void printResult(List<String> result) {
 		for (String line : result) {
-			Logging.debug(line);
+			System.out.println(line);
 		}
 	}
 }

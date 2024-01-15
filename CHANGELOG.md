@@ -1,16 +1,34 @@
 # Changelog
 
-## [x.x.x.x] - xxxx-xx-xx
+## [4.3.1.4] - 2024-01-12
+### Added
+- Auto completion and sort clients in license usage
+
+### Fixed
+- `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
+- Software information not shown
+- Log files opening in context menus by double-click
+
+### Changed
+- Rework Clienttree (performance)
+- Selection inactive colors
+- Colors in tables
+- Setting Product version when setting `installed`
+
+## [4.3.1.3] - 2024-01-09
 ### Added
 - Logviewer options to menubar in opsi-logviewer
 - Connect messagebus-terminal to clients and depot servers
+- Partial loading for logfiles
 
 ### Fixed
-- Nullpointer exception some time after closing Terminal
+- NullPointerException some time after closing Terminal
 - Bug in buttons to add users and user roles
-- Nullpointer exception in Messagebus when creating/deleting clients
+- NullPointerException in Messagebus when creating/deleting clients
 - Delete data from licensing managment when deconnecting from server
 - Update clientinfo correctly when reloading data
+- NullPointerException on closing Dashboard when selected a specific depot
+- NullPointerException on opening license displayer without license management module
 
 ### Changed
 - Make it possible to enter empty values in editable tables

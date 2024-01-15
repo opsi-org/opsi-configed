@@ -234,7 +234,7 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	}
 
 	private void setButtons() {
-		Logging.info(this, "setButtons and icons " + Arrays.asList(buttonNames));
+		Logging.info(this, "setButtons and icons " + Arrays.toString(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
 		button1Text = buttonNames[0];

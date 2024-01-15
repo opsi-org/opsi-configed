@@ -41,7 +41,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			if (!node.getAllowsChildren()) {
 				// client
-				if (configedMain.getActiveTreeNodes().containsKey(stringValue)) {
+				if (sel) {
 					setIcon(node.getLeafIcon());
 				} else {
 					setIcon(node.getNonSelectedLeafIcon());

@@ -13,6 +13,7 @@ package de.uib.configed.gui.licences;
 
 import java.awt.Dimension;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -25,8 +26,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.configed.Globals;
-import de.uib.utilities.ComboBoxModeller;
-import de.uib.utilities.swing.DynamicCombo;
+import de.uib.utilities.swing.AutoCompletionComboBox;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class PanelLicencesUsage extends MultiTablePanel {
@@ -36,7 +36,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	private PanelGenEditTable panelLicencePools;
 
 	private JPanel panelGetAndAssignSL;
-	private DynamicCombo comboClient;
+	private AutoCompletionComboBox comboClient;
 
 	private int lPoolHeight = 100;
 
@@ -68,9 +68,9 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		JLabel labelGetAndAssignSL = new JLabel(
 				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
-		comboClient = new DynamicCombo();
-
+		comboClient = new AutoCompletionComboBox();
 		comboClient.setPreferredSize(new Dimension(200, 20));
+		comboClient.setEditable(true);
 
 		JButton buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
 		buttonGet.addActionListener(
@@ -125,8 +125,8 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		splitPane.setResizeWeight(0.5);
 	}
 
-	public void setClientsSource(ComboBoxModeller modelsource) {
-		comboClient.setModelSource(modelsource);
+	public void setClientsSource(ComboBoxModel<String> modelsource) {
+		comboClient.setModel(modelsource);
 	}
 
 	public PanelGenEditTable getPanelUsage() {

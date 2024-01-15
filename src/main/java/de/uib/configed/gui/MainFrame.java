@@ -113,6 +113,7 @@ import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
 import de.uib.utilities.table.AbstractExportTable;
+import de.uib.utilities.table.ClientTableExporterToCSV;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
@@ -1522,6 +1523,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupClients.add(popupCreatePdf);
 
 		exportTable.addMenuItemsTo(popupClients);
+
+		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(panelClientlist.getTable());
+		clientTableExporter.addMenuItemsTo(popupClients);
 
 		// ----
 		popupClients.addSeparator();

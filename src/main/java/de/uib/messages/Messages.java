@@ -32,7 +32,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 
 public final class Messages {
-	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 

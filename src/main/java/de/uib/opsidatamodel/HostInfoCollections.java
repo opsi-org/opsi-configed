@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import java.util.TreeSet;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -122,7 +125,7 @@ public class HostInfoCollections {
 		// find opsi configserver and give it the top position
 		retrieveConfigServerPD(opsiHosts);
 
-		String configServer = cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER, String.class);
+		String configServer = getConfigServer();
 		if (configServer == null) {
 			showNoDataDialog(opsiHosts.size());
 			Main.endApp(1);
@@ -181,7 +184,7 @@ public class HostInfoCollections {
 		String message = messbuff.toString();
 		Logging.error(this, message);
 
-		FTextArea f = new FTextArea(null, "opsi configed", true,
+		FTextArea f = new FTextArea(ConfigedMain.getFrame(), Globals.APPNAME, true,
 				new String[] { Configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
 		f.setMessage(message);
 
@@ -322,7 +325,7 @@ public class HostInfoCollections {
 			HostInfo hostInfo = null;
 			String myDepot = null;
 
-			depotId = depotFound ? depotId : cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER, String.class);
+			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 			hostInfo = new HostInfo(host);
 			hostInfo.setInDepot(depotId);
@@ -364,12 +367,18 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);
 	}
 
-	public Map<String, Boolean> getClientListForDepots(Iterable<String> depots, Collection<String> allowedClients) {
+	/**
+	 * This Method loads all clients for given depots As a side effect, all
+	 * hostinfos and the map to which depots these clients belong are loaded
+	 * 
+	 * @return Set of the clients
+	 */
+	public Set<String> getClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
-		Map<String, String> mapPcBelongsToDepot = new HashMap<>();
-		Map<String, Boolean> mapOfPCs = new HashMap<>();
+		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
+		Set<String> setOfPCs = new HashSet<>();
 		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 
 		List<String> depotList = new ArrayList<>();
@@ -386,17 +395,17 @@ public class HostInfoCollections {
 				HostInfo hostInfo = client.getValue();
 
 				if (allowedClients == null || allowedClients.contains(client.getKey())) {
-					mapOfPCs.put(client.getKey(), false);
+					setOfPCs.add(client.getKey());
 					mapPCInfomap.put(client.getKey(), hostInfo);
-					mapPcBelongsToDepot.put(client.getKey(), depot);
+					mapPCBelongsToDepot.put(client.getKey(), depot);
 				}
 			}
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_INFO_MAP, mapPCInfomap);
-		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPcBelongsToDepot);
+		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPCBelongsToDepot);
 
-		return mapOfPCs;
+		return setOfPCs;
 	}
 
 	private void setDepot(String clientName, String depotId) {
@@ -436,25 +445,18 @@ public class HostInfoCollections {
 			return;
 		}
 
-		List<String> depots = new ArrayList<>();
-
 		ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
+		List<String> depots = new ArrayList<>();
 		depots.add(depotId);
-
 		config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
+
 		for (String client : clients) {
+			setDepot(client, depotId);
 			// collect data
 			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
 		}
 		// send data
 		persistenceController.getConfigDataService().setAdditionalConfiguration();
-
-		// change transitory data
-		for (String client : clients) {
-			setDepot(client, depotId);
-		}
-
-		// we hope to have completely changed the internal data
 	}
 
 	// update derived data (caution!), does not create a HostInfo

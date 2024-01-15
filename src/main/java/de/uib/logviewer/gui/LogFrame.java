@@ -39,6 +39,7 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
@@ -217,7 +218,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuBar.add(setupMenuHelp());
 		this.setJMenuBar(jMenuBar);
 
-		initLogpane();
+		logPane = new StandaloneLogPane();
 
 		JPanel allPane = new JPanel();
 		allPane.setLayout(new BorderLayout());
@@ -228,19 +229,25 @@ public class LogFrame extends JFrame implements WindowListener {
 		baseContainer.add(allPane);
 	}
 
-	private void initLogpane() {
-		logPane = new StandaloneLogPane();
-		logPane.setText("");
-		logPane.setTitle("unknown");
-		setTitle(null);
+	public void initLogPane() {
 		if (fileName != null && !fileName.isEmpty()) {
 			String logText = readFile(fileName);
 			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
 				logPane.setText(logText);
+			} else {
+				setEmptyData();
 			}
+		} else {
+			setEmptyData();
 		}
+	}
+
+	private void setEmptyData() {
+		logPane.setText("");
+		logPane.setTitle("unknown");
+		setTitle(null);
 	}
 
 	private class StandaloneLogPane extends LogPane {
@@ -389,21 +396,21 @@ public class LogFrame extends JFrame implements WindowListener {
 			resetFileName();
 			showDialog("This is not a file, it is a directory: \n" + fileName);
 		} else if (file.exists()) {
-			if (fileName.endsWith(".log") || fileName.endsWith(".txt") || !fileName.contains(".")
-					|| fileName.endsWith(".ini")) {
+			String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+			if (!isFileExtensionSupported(fileExtension)) {
+				Logging.error(this, "File with extension " + fileExtension + " is unsupported");
+				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
+						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"),
+						Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
+						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
+				fUnsupportedFileExtensionInfo.setMessage(String
+						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));
+				fUnsupportedFileExtensionInfo.setVisible(true);
+				result = "";
+			} else if (fileName.endsWith(".log")) {
 				result = readNotCompressedFile(file);
 			} else {
-				TreeMap<String, String> files = new TreeMap<>(ExtractorUtil.unzip(file));
-				if (!files.isEmpty()) {
-					Entry<String, String> firstFile = files.firstEntry();
-					setFileName(firstFile.getKey());
-					result = firstFile.getValue();
-					files.remove(firstFile.getKey());
-					openRestFilesFromZIP(files);
-				} else {
-					Logging.warning("Tried unzipping file, could not do it, open it as text");
-					result = readNotCompressedFile(file);
-				}
+				result = readCompressedFile(file);
 			}
 		} else {
 			Logging.error("This file does not exist: " + fileName);
@@ -414,15 +421,35 @@ public class LogFrame extends JFrame implements WindowListener {
 		return result;
 	}
 
+	private String readCompressedFile(File file) {
+		String result = "";
+		TreeMap<String, String> files = new TreeMap<>(ExtractorUtil.unzip(file));
+		if (!files.isEmpty()) {
+			Entry<String, String> firstFile = files.firstEntry();
+			setFileName(firstFile.getKey());
+			result = firstFile.getValue();
+			files.remove(firstFile.getKey());
+			openRestFilesFromZIP(files);
+		}
+		return result;
+	}
+
+	private static boolean isFileExtensionSupported(String fileExtension) {
+		boolean matchesCompressedFileExtension = "zip".equals(fileExtension) || "gz".equals(fileExtension)
+				|| "7z".equals(fileExtension);
+		boolean matchesNotCompressedFileExtension = "log".equals(fileExtension);
+		return matchesCompressedFileExtension || matchesNotCompressedFileExtension;
+	}
+
 	private void openRestFilesFromZIP(Map<String, String> files) {
 		if (files == null || files.isEmpty()) {
 			return;
 		}
 		for (Entry<String, String> entry : files.entrySet()) {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane();
+			externalLogPane.externalize(entry.getKey(), logPane.getSize());
 			externalLogPane.setTitle(entry.getKey());
 			externalLogPane.setText(entry.getValue());
-			externalLogPane.externalize(entry.getKey(), logPane.getSize());
 		}
 	}
 
