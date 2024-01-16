@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -33,7 +31,6 @@ import com.itextpdf.text.Font;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
 
 public class ProductTree extends JTree implements TreeSelectionListener {
 
@@ -137,7 +134,6 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 	}
 
 	private void nodeSelection(DefaultMutableTreeNode node) {
-		Logging.devel("Node: " + node + "; allows children: " + node.getAllowsChildren());
 		if (node.getAllowsChildren()) {
 			setGroup(node);
 		} else {
@@ -154,9 +150,14 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 		} else if (getSelectionCount() == 1) {
 			nodeSelection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
 		} else {
-			setSelection(new HashSet<>(Arrays.asList(getSelectionPaths()).stream().map(
-					treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().toString())
-					.collect(Collectors.toList())));
+			Set<String> productIds = new HashSet<>();
+			for (TreePath path : getSelectionPaths()) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (!node.getAllowsChildren()) {
+					productIds.add(node.getUserObject().toString());
+				}
+				setSelection(productIds);
+			}
 		}
 	}
 
