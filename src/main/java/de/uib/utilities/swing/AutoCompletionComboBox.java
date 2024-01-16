@@ -29,7 +29,6 @@ public class AutoCompletionComboBox<T> extends JComboBox<T> {
 	}
 
 	private void initComponents() {
-		setBorder(null);
 		JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
 		editor.setDocument(new AutoCompletionDocument());
 		editor.addKeyListener(new KeyAdapter() {
