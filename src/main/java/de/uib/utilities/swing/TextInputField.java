@@ -7,12 +7,11 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,8 +19,6 @@ import javax.swing.JTextField;
 import de.uib.utilities.observer.swing.AbstractValueChangeListener;
 
 public class TextInputField extends JPanel {
-	// common wrapper class for JTextField and JCombBox
-
 	private JTextField textfield;
 	private JComboBox<String> combo;
 	private List<String> proposedValues;
@@ -76,80 +73,12 @@ public class TextInputField extends JPanel {
 			}
 		}
 
-		combo = new JComboBox<>(this.proposedValues.toArray(new String[0]));
-
-		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
-		comboField.getCaret().setBlinkRate(0);
-
-		comboField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				String s = comboField.getText();
-
-				if (s.length() == 0) {
-					combo.showPopup();
-
-					if (orderedBeginChars != null) {
-						Character ch = e.getKeyChar();
-
-						int i = 0;
-						boolean stop = false;
-						while (i < orderedBeginChars.length && !stop) {
-							if (orderedBeginChars[i] > ch) {
-								stop = true;
-								if (i > 0) {
-									i--;
-								}
-								ch = orderedBeginChars[i];
-							} else {
-								i++;
-							}
-						}
-
-						if (!stop && i > 0) {
-							ch = orderedBeginChars[i - 1];
-						}
-
-						combo.selectWithKeyChar(ch);
-						// advance to last entry with ch??
-						if (e.getKeyChar() > ch) {
-							int j = 0;
-							boolean located = false;
-							while (j < proposedValues.size() && !located) {
-								String val = proposedValues.get(j);
-								if (val.length() == 0) {
-									j++;
-								} else {
-									if (val.charAt(0) <= ch) {
-										j++;
-									} else {
-										// first occurrence of next char
-
-										if (j > 0) {
-											j--;
-										}
-
-										located = true;
-									}
-								}
-							}
-
-							if (!located) {
-								j--;
-							}
-
-							combo.setSelectedItem(proposedValues.get(j));
-						}
-					}
-
-					comboField.setText("");
-				}
-			}
-		});
-
 		textfield = new JTextField(initValue);
-
 		textfield.getCaret().setBlinkRate(0);
+
+		combo = new AutoCompletionComboBox<>();
+		combo.setModel(new DefaultComboBoxModel<>(this.proposedValues.toArray(new String[0])));
+		((JTextField) combo.getEditor().getEditorComponent()).getCaret().setBlinkRate(0);
 
 		if (inputType == InputType.VALUELIST) {
 			super.add(combo);
@@ -161,14 +90,6 @@ public class TextInputField extends JPanel {
 	public void addValueChangeListener(AbstractValueChangeListener listener) {
 		combo.addActionListener(listener);
 		textfield.getDocument().addDocumentListener(listener);
-	}
-
-	public boolean isEmpty() {
-		if (inputType == InputType.VALUELIST) {
-			return combo.getSelectedItem() == null || combo.getSelectedItem().toString().isEmpty();
-		}
-
-		return textfield.getText().isEmpty();
 	}
 
 	public void setEditable(boolean b) {

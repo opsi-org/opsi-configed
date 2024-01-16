@@ -17,6 +17,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -36,7 +37,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	private PanelGenEditTable panelLicencePools;
 
 	private JPanel panelGetAndAssignSL;
-	private AutoCompletionComboBox comboClient;
+	private JComboBox<String> comboClient;
 
 	private int lPoolHeight = 100;
 
@@ -68,7 +69,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		JLabel labelGetAndAssignSL = new JLabel(
 				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
-		comboClient = new AutoCompletionComboBox();
+		comboClient = new AutoCompletionComboBox<>();
 		comboClient.setPreferredSize(new Dimension(200, 20));
 		comboClient.setEditable(true);
 
