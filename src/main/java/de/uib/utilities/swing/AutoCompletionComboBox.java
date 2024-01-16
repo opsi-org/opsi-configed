@@ -18,8 +18,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -32,23 +30,6 @@ public class AutoCompletionComboBox<T> extends JComboBox<T> {
 
 	private void initComponents() {
 		setBorder(null);
-		addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				/* Not needed */ }
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				setSelectedItem(getSelectedItem());
-				// ensures that we leave the combo box completely when we set the focus
-				// somewhere else
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				/* Not needed */ }
-		});
-
 		JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
 		editor.setDocument(new AutoCompletionDocument());
 		editor.addKeyListener(new KeyAdapter() {
