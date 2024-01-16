@@ -1785,36 +1785,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private String getSelectedClientsStringWithMaxLength(Integer max) {
-		return getListStringRepresentation(getSelectedClients(), max);
+		return Utils.getListStringRepresentation(getSelectedClients(), max);
 	}
 
 	private String getSelectedDepotsString() {
-		return getListStringRepresentation(depotsList.getSelectedValuesList(), null);
-	}
-
-	private static String getListStringRepresentation(List<String> list, Integer max) {
-		if (list == null || list.isEmpty()) {
-			return "";
-		}
-
-		StringBuilder result = new StringBuilder();
-		int stop = list.size();
-		if (max != null && stop > max) {
-			stop = max;
-		}
-
-		for (int i = 0; i < stop - 1; i++) {
-			result.append(list.get(i));
-			result.append(";\n");
-		}
-
-		result.append(list.get(stop - 1));
-
-		if (max != null && list.size() > max) {
-			result.append(" ... ");
-		}
-
-		return result.toString();
+		return Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null);
 	}
 
 	private Set<String> getDepotsOfSelectedClients() {
@@ -3563,7 +3538,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (newClientDialog == null) {
 			newClientDialog = new NewClientDialog(this, getLinkedDepots());
 		}
-		newClientDialog.setGroupList(persistenceController.getGroupDataService().getHostGroupIds());
 		newClientDialog.setProductNetbootList(vNetbootProducts);
 		newClientDialog.useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
@@ -3708,45 +3682,45 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void createClients(List<List<Object>> clients) {
+		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
+				.collect(Collectors.toList());
+		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients" + clients);
 			checkErrorList();
 
-			List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
-					.collect(Collectors.toList());
-
-			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			refreshClientListActivateALL();
+			setRebuiltClientListTableModel(true);
+			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			setClients(createdClientNames);
+		} else {
+			persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
 		}
 	}
 
 	public void createClient(final String hostname, final String domainname, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
-			final boolean wanConfig, final String group, final String productNetboot) {
+			final boolean wanConfig, final String[] groups, final String productNetboot) {
 		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
-						+ group + ", " + productNetboot);
+						+ Arrays.toString(groups) + ", " + productNetboot);
 
 		String newClientID = hostname + "." + domainname;
 
 		persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 
 		if (persistenceController.getHostDataService().createClient(hostname, domainname, depotID, description,
-				inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group,
+				inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, groups,
 				productNetboot)) {
 			checkErrorList();
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 			setRebuiltClientListTableModel(true);
 
-			// Activate group of created Client (and the group of all clients if no group
-			// specified)
-			if (!activateGroup(false, group)) {
+			if (groups.length == 0 || groups.length > 1 || !activateGroup(false, groups[0])) {
 				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			}
 

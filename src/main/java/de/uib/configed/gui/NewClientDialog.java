@@ -10,8 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,6 +54,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
+import utils.Utils;
 
 public final class NewClientDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -59,7 +63,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
-	private JComboBox<String> jComboPrimaryGroup;
+	private JTextField jTextGroupsSelection;
 	private JComboBox<String> jComboNetboot;
 	private JTextField jTextHostname;
 	private JTextField jTextDescription;
@@ -113,10 +117,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		this.existingHostNames = existingHostNames;
 	}
 
-	public void setGroupList(Iterable<String> groupList) {
-		setJComboBoxModel(jComboPrimaryGroup, groupList);
-	}
-
 	public void setProductNetbootList(Iterable<String> productList) {
 		setJComboBoxModel(jComboNetboot, productList);
 	}
@@ -166,8 +166,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
-		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
-		jComboPrimaryGroup.setMaximumRowCount(10);
+		jTextGroupsSelection = new JTextField();
+		jTextGroupsSelection.setEditable(false);
+		jTextGroupsSelection.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				displayGroupSelectionDialog();
+			}
+		});
 
 		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 
@@ -398,7 +404,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelPrimaryGroup, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jComboPrimaryGroup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+						.addComponent(jTextGroupsSelection, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								2 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE))
 				// netboot
@@ -468,7 +474,7 @@ public final class NewClientDialog extends FGeneralDialog {
 						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(labelPrimaryGroup, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
-								.addComponent(jComboPrimaryGroup, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								.addComponent(jTextGroupsSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 				/////// netboot
 				.addGap(Globals.MIN_GAP_SIZE).addGroup(
@@ -481,6 +487,26 @@ public final class NewClientDialog extends FGeneralDialog {
 		createNorthPanel();
 
 		scrollpane.getViewport().add(panel);
+	}
+
+	private void displayGroupSelectionDialog() {
+		FSelectionList groupsSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"), true,
+				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 500,
+				300);
+		groupsSelectionDialog.enableMultiSelection();
+		groupsSelectionDialog.setListData(
+				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
+		groupsSelectionDialog.setPreviousSelectionValues(
+				Arrays.asList(jTextGroupsSelection.getText().replace("; ", ";").split(";")));
+		groupsSelectionDialog.setVisible(true);
+
+		if (groupsSelectionDialog.getResult() == 2) {
+			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues(), 5);
+			jTextGroupsSelection.setText(selectedGroups);
+			jTextGroupsSelection.setToolTipText(
+					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
+		}
 	}
 
 	private void initComboDomain() {
@@ -572,10 +598,10 @@ public final class NewClientDialog extends FGeneralDialog {
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
-			final boolean wanConfig, final String group, final String netbootProduct) {
+			final boolean wanConfig, final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct);
+					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
 
 			treatSelectedDomainForNewClient(selectedDomain);
 		}
@@ -836,7 +862,12 @@ public final class NewClientDialog extends FGeneralDialog {
 		String systemUUID = systemUUIDField.getText();
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
-		String group = (String) jComboPrimaryGroup.getSelectedItem();
+		String[] groups = null;
+		if (!jTextGroupsSelection.getText().isEmpty()) {
+			groups = jTextGroupsSelection.getText().replace("; ", ";").split(";");
+		} else {
+			groups = new String[] {};
+		}
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
 		boolean uefiboot = persistenceController.getModuleDataService().isWithUEFIPD()
@@ -846,7 +877,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
-				macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct);
+				macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
 	}
 
 	@Override
