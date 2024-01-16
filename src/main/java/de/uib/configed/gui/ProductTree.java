@@ -130,7 +130,11 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 	}
 
 	private void setProduct(String productId) {
-		setSelection(Collections.singleton(productId));
+		Set<String> productSet = Collections.singleton(productId);
+
+		setSelection(productSet);
+		localbootPanel.setSelection(productSet);
+		netbootPanel.setSelection(productSet);
 	}
 
 	private void nodeSelection(DefaultMutableTreeNode node) {
