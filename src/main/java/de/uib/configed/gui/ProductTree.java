@@ -7,28 +7,40 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import com.itextpdf.text.Font;
 
+import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
-public class ProductTree extends JTree {
+public class ProductTree extends JTree implements TreeSelectionListener {
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+
+	private PanelProductSettings localbootPanel;
+	private PanelProductSettings netbootPanel;
 
 	private Map<String, DefaultMutableTreeNode> nodeMap;
 
@@ -41,6 +53,8 @@ public class ProductTree extends JTree {
 		}
 
 		setModel();
+
+		super.addTreeSelectionListener(this);
 	}
 
 	private void setModel() {
@@ -82,6 +96,57 @@ public class ProductTree extends JTree {
 		setCellRenderer(new ProductTreeNodeRenderer());
 
 		expandPath(new TreePath(allProducts.getPath()));
+	}
+
+	public void setLocalbootPanel(PanelProductSettings localbootPanel) {
+		this.localbootPanel = localbootPanel;
+	}
+
+	public void setNetbootPanel(PanelProductSettings netbootPanel) {
+		this.netbootPanel = netbootPanel;
+	}
+
+	private void setGroup(DefaultMutableTreeNode groupNode) {
+		Set<String> productIds = new HashSet<>();
+
+		Enumeration<TreeNode> children = groupNode.children();
+		while (children.hasMoreElements()) {
+			productIds.add(((DefaultMutableTreeNode) children.nextElement()).getUserObject().toString());
+		}
+
+		setSelection(productIds);
+	}
+
+	private void setSelection(Set<String> productIds) {
+		localbootPanel.setFilter(productIds);
+		netbootPanel.setFilter(productIds);
+	}
+
+	private void setProduct(String productId) {
+		setSelection(Collections.singleton(productId));
+	}
+
+	private void selection(DefaultMutableTreeNode node) {
+		if (node.getAllowsChildren()) {
+			setGroup(node);
+		} else {
+			setProduct(node.getUserObject().toString());
+		}
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent event) {
+
+		if (getSelectionCount() == 0) {
+			localbootPanel.noSelection();
+			netbootPanel.noSelection();
+		} else if (getSelectionCount() == 1) {
+			selection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
+		} else {
+			setSelection(new HashSet<>(Arrays.asList(getSelectionPaths()).stream().map(
+					treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().toString())
+					.collect(Collectors.toList())));
+		}
 	}
 
 	private static class ProductTreeNodeRenderer extends DefaultTreeCellRenderer {

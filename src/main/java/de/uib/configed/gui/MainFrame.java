@@ -350,6 +350,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private DepotListPresenter depotListPresenter;
 
 	private ClientTree treeClients;
+	private ProductTree treeProducts;
 
 	private JPanel clientPane;
 
@@ -369,6 +370,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		exportTable = new ExporterToCSV(panelClientlist.getTable());
 
 		this.treeClients = treeClients;
+		treeProducts = new ProductTree();
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
@@ -1875,7 +1877,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
-
 		scrollpaneTreeClients.getViewport().add(treeClients);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -1890,10 +1891,16 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
+		JScrollPane scrollpaneTreeProducts = new JScrollPane();
+		scrollpaneTreeProducts.getViewport().add(treeProducts);
+		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setPreferredSize(treeProducts.getMaximumSize());
+
 		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		jTabbedPaneClientSelection.addTab("Depots", depotListPresenter);
 		jTabbedPaneClientSelection.addTab("Clients", scrollpaneTreeClients);
-		jTabbedPaneClientSelection.addTab("Produkte", new JScrollPane(new ProductTree()));
+		jTabbedPaneClientSelection.addTab("Produkte", scrollpaneTreeProducts);
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
 		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
@@ -2204,10 +2211,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelLocalbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsLocalbootProducts());
+		treeProducts.setLocalbootPanel(panelLocalbootProductSettings);
 
 		panelNetbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts());
+		treeProducts.setNetbootPanel(panelNetbootProductSettings);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
 				panelLocalbootProductSettings, Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
