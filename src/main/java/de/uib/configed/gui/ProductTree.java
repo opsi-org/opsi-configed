@@ -33,6 +33,7 @@ import com.itextpdf.text.Font;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utilities.logging.Logging;
 
 public class ProductTree extends JTree implements TreeSelectionListener {
 
@@ -109,12 +110,21 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 	private void setGroup(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = new HashSet<>();
 
-		Enumeration<TreeNode> children = groupNode.children();
-		while (children.hasMoreElements()) {
-			productIds.add(((DefaultMutableTreeNode) children.nextElement()).getUserObject().toString());
-		}
+		addGroupsRecoursively(groupNode.children(), productIds);
 
 		setSelection(productIds);
+	}
+
+	private static void addGroupsRecoursively(Enumeration<TreeNode> children, Set<String> productIds) {
+		while (children.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+
+			if (child.getAllowsChildren()) {
+				addGroupsRecoursively(child.children(), productIds);
+			} else {
+				productIds.add(child.getUserObject().toString());
+			}
+		}
 	}
 
 	private void setSelection(Set<String> productIds) {
@@ -126,7 +136,8 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 		setSelection(Collections.singleton(productId));
 	}
 
-	private void selection(DefaultMutableTreeNode node) {
+	private void nodeSelection(DefaultMutableTreeNode node) {
+		Logging.devel("Node: " + node + "; allows children: " + node.getAllowsChildren());
 		if (node.getAllowsChildren()) {
 			setGroup(node);
 		} else {
@@ -141,7 +152,7 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 			localbootPanel.noSelection();
 			netbootPanel.noSelection();
 		} else if (getSelectionCount() == 1) {
-			selection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
+			nodeSelection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
 		} else {
 			setSelection(new HashSet<>(Arrays.asList(getSelectionPaths()).stream().map(
 					treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().toString())
