@@ -25,7 +25,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
 
-public class AutoCompletionComboBox extends JComboBox<String> {
+public class AutoCompletionComboBox<T> extends JComboBox<T> {
 	public AutoCompletionComboBox() {
 		initComponents();
 	}
@@ -97,7 +97,7 @@ public class AutoCompletionComboBox extends JComboBox<String> {
 		}
 
 		private Object lookupItem(String pattern) {
-			ComboBoxModel<String> model = getModel();
+			ComboBoxModel<T> model = getModel();
 			for (int i = 0, n = model.getSize(); i < n; i++) {
 				Object currentItem = model.getElementAt(i);
 				if (currentItem.toString().startsWith(pattern)) {
