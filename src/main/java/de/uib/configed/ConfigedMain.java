@@ -981,13 +981,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		Logging.info(this,
-				"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().size());
+				"updateHostInfo, produce hostInfo  getSelectedClients().length " + getSelectedClients().size());
 
 		if (!getSelectedClients().isEmpty()) {
 			hostInfo.setBy(pcinfos.get(getSelectedClients().get(0)).getMap());
 
-			Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients().get(0));
-			Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
+			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient " + getSelectedClients().get(0));
+			Logging.debug(this, "updateHostInfo, produce hostInfo  " + hostInfo);
 
 			HostInfo secondInfo = new HostInfo();
 
@@ -1480,7 +1480,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			setSelectedClientsOnPanel(new ArrayList<>());
 		} else {
 			setSelectedClientsOnPanel(clientNames);
-			actOnListSelection();
 		}
 	}
 
@@ -1733,16 +1732,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + clientTable.getSelectedValues().size());
 
-		clientTable.removeListSelectionListener(this);
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
 		clientTable.setModel(tm);
 
 		setTableColumnWidths(clientTable.getTable(), columnWidths);
-		clientTable.addListSelectionListener(this);
 
 		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
+
+		// Todo why is this method called twice?
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
@@ -2951,10 +2950,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-		clientTable.removeListSelectionListener(this);
-
 		// dont do anything if we did not finish another thread for this
 		if (initialDataLoader.isDataLoaded()) {
+			clientTable.disactivateListSelectionListener();
 			allowedClients = null;
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -2994,22 +2992,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			// reactivate selection listener
 			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.removeListSelectionListener(this);
-			clientTable.addListSelectionListener(this);
+			clientTable.activateListSelectionListener();
 			setSelectedClientsCollectionOnPanel(clientsLeft);
-
-			// no list select item is provided
-			if (clientsLeft.isEmpty()) {
-				clientTable.fireListSelectionEmpty(this);
-			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerMenu();
 			updateHostInfo();
 			hostInfo.resetGui();
 		}
+
 		mainFrame.disactivateLoadingPane();
 	}
 
@@ -4106,10 +4098,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			Logging.info(this, " setSelectedClientsOnPanel selected null");
 		}
 
-		clientTable.removeListSelectionListener(this);
 		clientTable.setSelectedValues(selected);
 		setSelectedClientsArray(selected);
-		clientTable.addListSelectionListener(this);
 	}
 
 	private void setSelectedClientsCollectionOnPanel(Collection<String> selected) {

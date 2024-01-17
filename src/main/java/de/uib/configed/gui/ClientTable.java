@@ -33,8 +33,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -68,7 +66,7 @@ public class ClientTable extends JPanel implements KeyListener {
 	// we put a JTable on a standard JScrollPane
 	private JTable table;
 
-	private DefaultListSelectionModel selectionmodel;
+	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
 	private List<SortKey> primaryOrderingKeys;
 
@@ -98,13 +96,13 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
 		// Ask to be notified of selection changes.
-		selectionmodel = (DefaultListSelectionModel) table.getSelectionModel();
+		selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
 		// the default implementation in JTable yields this type
 
 		table.setColumnSelectionAllowed(false);
 		// true destroys setSelectedRow etc
 
-		addListSelectionListener(configedMain);
+		activateListSelectionListener();
 
 		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
 		searchPane.setFiltering(true);
@@ -127,6 +125,14 @@ public class ClientTable extends JPanel implements KeyListener {
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	public void activateListSelectionListener() {
+		selectionModel.addListSelectionListener(configedMain);
+	}
+
+	public void disactivateListSelectionListener() {
+		selectionModel.removeListSelectionListener(configedMain);
 	}
 
 	public void setFilterMark(boolean b) {
@@ -222,6 +228,10 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.clearSelection();
 	}
 
+	public void setValueIsAdjusting(boolean adjusting) {
+		selectionModel.setValueIsAdjusting(adjusting);
+	}
+
 	public void setSelectedValues(Collection<String> valuesList) {
 		String valuesListS = null;
 		if (valuesList != null) {
@@ -229,49 +239,24 @@ public class ClientTable extends JPanel implements KeyListener {
 		}
 
 		Logging.info(this, "setSelectedValues " + valuesListS);
-		ListSelectionModel lsm = table.getSelectionModel();
-		lsm.clearSelection();
+		selectionModel.clearSelection();
 
 		if (valuesList == null || valuesList.isEmpty()) {
 			return;
 		}
 
-		TreeSet<String> valuesSet = new TreeSet<>(valuesList);
 		// because of ordering , we create a TreeSet view of the list
-
-		Logging.info(this, "setSelectedValues, (ordered) set of values, size " + valuesSet.size());
-
-		int lastAddedI = -1;
-
-		ListSelectionListener[] listeners = ((DefaultListSelectionModel) lsm).getListeners(ListSelectionListener.class);
-		// remove all listeners
-		for (ListSelectionListener listener : listeners) {
-			lsm.removeListSelectionListener(listener);
-		}
-
-		Logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
-
+		selectionModel.setValueIsAdjusting(true);
 		for (int i = 0; i < table.getRowCount(); i++) {
 			Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
 
-			if (valuesSet.contains(table.getValueAt(i, 0))) {
-				lsm.addSelectionInterval(i, i);
-				lastAddedI = i;
+			if (valuesList.contains(table.getValueAt(i, 0))) {
+				selectionModel.addSelectionInterval(i, i);
 				Logging.debug(this, "setSelectedValues add interval " + i);
 			}
 		}
 
-		lsm.removeSelectionInterval(lastAddedI, lastAddedI);
-
-		// get again the listeners
-		for (ListSelectionListener listener : listeners) {
-			lsm.addListSelectionListener(listener);
-		}
-
-		// and repeat the last addition
-		if (lastAddedI > -1) {
-			lsm.addSelectionInterval(lastAddedI, lastAddedI);
-		}
+		selectionModel.setValueIsAdjusting(false);
 
 		table.repaint();
 
@@ -350,20 +335,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public TableColumnModel getColumnModel() {
 		return table.getColumnModel();
-	}
-
-	public void addListSelectionListener(ListSelectionListener lisel) {
-		selectionmodel.addListSelectionListener(lisel);
-	}
-
-	public void removeListSelectionListener(ListSelectionListener lisel) {
-		selectionmodel.removeListSelectionListener(lisel);
-	}
-
-	public void fireListSelectionEmpty(Object source) {
-		for (ListSelectionListener listener : selectionmodel.getListSelectionListeners()) {
-			listener.valueChanged(new ListSelectionEvent(source, 0, 0, false));
-		}
 	}
 
 	public int findModelRowFromValue(Object value) {
