@@ -61,7 +61,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				super.reload();
 				ConfigedMain.getMainFrame().activateLoadingCursor();
 				loadDocument(idents[i]);
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 
 			@Override
@@ -76,7 +76,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (pathname != null && !pathname.isEmpty()) {
 					saveToFile(pathname, getLines());
 				}
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 
 			@Override
@@ -92,7 +92,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				if (pathname != null && !pathname.isEmpty()) {
 					saveToZipFile(pathname, filename, getLines());
 				}
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 
 			@Override
@@ -131,7 +131,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					}
 				}
 				saveAllToZipFile(pathname, logfiles);
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 		};
 

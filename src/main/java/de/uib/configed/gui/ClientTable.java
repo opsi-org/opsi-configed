@@ -134,7 +134,7 @@ public class ClientTable extends JPanel implements KeyListener {
 		}
 	}
 
-	public void disactivateListSelectionListener() {
+	public void deactivateListSelectionListener() {
 		selectionModel.removeListSelectionListener(configedMain);
 	}
 

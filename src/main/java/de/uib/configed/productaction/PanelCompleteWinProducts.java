@@ -310,7 +310,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			persistenceController.getRPCMethodExecutor()
 					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
 							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready",
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
@@ -348,14 +348,14 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 
-					rootFrame.disactivateLoadingCursor();
+					rootFrame.deactivateLoadingCursor();
 				}
 			}
 		} catch (IOException ex) {
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
 		} catch (HeadlessException ex) {
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 			Logging.error("Headless exception when invoking showOptionDialog", ex);
 		}
 	}

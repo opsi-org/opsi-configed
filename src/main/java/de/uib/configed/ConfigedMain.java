@@ -805,7 +805,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					Platform.runLater(mainFrame::startLicenceDisplayer);
 				}
 
-				mainFrame.disactivateLoadingPane();
+				mainFrame.deactivateLoadingPane();
 			}
 		}.start();
 	}
@@ -1723,7 +1723,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
-		clientTable.disactivateListSelectionListener();
+		clientTable.deactivateListSelectionListener();
 		clientTable.setModel(tm);
 		clientTable.activateListSelectionListener();
 
@@ -1752,7 +1752,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 		if (mainFrame != null) {
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 
@@ -2147,7 +2147,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setViewIndex(getViewIndex());
 
 		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 
@@ -2727,7 +2727,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		} else {
 			mainFrame.activateLoadingCursor();
 			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 			Logging.debug(this, "log pages set");
 		}
 
@@ -2787,7 +2787,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			break;
 		}
 
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 		return result;
 	}
 
@@ -2940,7 +2940,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
 		// dont do anything if we did not finish another thread for this
 		if (initialDataLoader.isDataLoaded()) {
-			clientTable.disactivateListSelectionListener();
+			clientTable.deactivateListSelectionListener();
 			allowedClients = null;
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -2990,7 +2990,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			hostInfo.resetGui();
 		}
 
-		mainFrame.disactivateLoadingPane();
+		mainFrame.deactivateLoadingPane();
 	}
 
 	public HostsStatusPanel getHostsStatusInfo() {
@@ -3484,7 +3484,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		requestReloadStatesAndActions();
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
@@ -3658,7 +3658,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		updateHostInfo();
 		hostInfo.resetGui();
 
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -4028,7 +4028,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 

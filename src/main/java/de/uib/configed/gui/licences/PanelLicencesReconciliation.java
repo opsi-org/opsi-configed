@@ -70,7 +70,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 			SwingUtilities.invokeLater(() -> {
 				panelReconciliation.reload();
 				ConfigedMain.getLicencesFrame().setCursor(null);
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			});
 		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {
 			panelReconciliation.getTableModel().resetLocally();

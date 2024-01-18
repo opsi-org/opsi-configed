@@ -630,7 +630,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						FileUtils.copyFileToDirectory(driverPath, targetPath);
 					}
 				} catch (IOException iox) {
-					rootFrame.disactivateLoadingCursor();
+					rootFrame.deactivateLoadingCursor();
 					Logging.error("copy error:\n" + iox, iox);
 				}
 			} else {
@@ -644,7 +644,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
 
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 
 			waiter.setReady();
 		}
