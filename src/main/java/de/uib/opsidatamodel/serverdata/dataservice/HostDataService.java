@@ -362,7 +362,19 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		OpsiMethodCall omc = null;
+		if (ServerFacade.isOpsi43()) {
+			omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		} else {
+			List<Map<String, String>> hosts = new ArrayList<>();
+			for (String hostId : hostIds) {
+				Map<String, String> hostsMap = new HashMap<>();
+				hostsMap.put("id", hostId);
+				hostsMap.put("type", HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+				hosts.add(hostsMap);
+			}
+			omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE_OBJECTS, new Object[] { hosts });
+		}
 		exec.doCall(omc);
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
