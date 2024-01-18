@@ -27,7 +27,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	 */
 
 	public static final String ID_SERVICE_KEY = "id";
-	public static final String MAX_INSTALLATIONS_SERVICE_KEY = "maxInstallations";
 	public static final String TYPE_SERVICE_KEY = "type";
 
 	public static final String ID_KEY = "softwareLicenseId";
@@ -59,14 +58,14 @@ public class LicenceEntry extends TreeMap<String, Object> {
 			Logging.warning(this.getClass(), "missing primary key in " + importedEntry);
 		}
 
-		if (importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) == null) {
+		if (importedEntry.get(MAX_INSTALLATIONS_KEY) == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
 		} else {
-			if (!(importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) instanceof Integer)) {
+			if (!(importedEntry.get(MAX_INSTALLATIONS_KEY) instanceof Integer)) {
 				Logging.warning(this.getClass(), " " + importedEntry.get(ID_KEY) + " has not an integer for "
-						+ importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY));
+						+ importedEntry.get(MAX_INSTALLATIONS_KEY));
 			} else {
-				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY);
+				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_KEY);
 				if (val == 0) {
 					super.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.INFINITE);
 				} else {
@@ -80,19 +79,25 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	}
 
 	private String translateTypeFromService(String servicetype) {
+		String result = "";
 		switch (servicetype) {
 		case VOLUME_SERVICE:
-			return VOLUME;
+			result = VOLUME;
+			break;
 		case OEM_SERVICE:
-			return OEM;
+			result = OEM;
+			break;
 		case RETAIL_SERVICE:
-			return RETAIL;
+			result = RETAIL;
+			break;
 		case CONCURRENT_SERVICE:
-			return CONCURRENT;
+			result = CONCURRENT;
+			break;
 		default:
 			Logging.warning(this, "illlegal servicetype " + servicetype);
-			return "";
+			result = "";
 		}
+		return result;
 	}
 
 	public String getId() {
