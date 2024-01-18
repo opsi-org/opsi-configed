@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
@@ -204,7 +203,7 @@ public class ClientTable extends JPanel implements KeyListener {
 	}
 
 	public Set<String> getSelectedSet() {
-		TreeSet<String> result = new TreeSet<>();
+		Set<String> result = new HashSet<>();
 
 		for (int i : table.getSelectedRows()) {
 			result.add((String) table.getValueAt(i, 0));
