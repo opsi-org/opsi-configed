@@ -1723,7 +1723,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
+		clientTable.disactivateListSelectionListener();
 		clientTable.setModel(tm);
+		clientTable.activateListSelectionListener();
 
 		setTableColumnWidths(clientTable.getTable(), columnWidths);
 

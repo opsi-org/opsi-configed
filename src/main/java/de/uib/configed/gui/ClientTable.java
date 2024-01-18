@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -128,7 +129,10 @@ public class ClientTable extends JPanel implements KeyListener {
 	}
 
 	public void activateListSelectionListener() {
-		selectionModel.addListSelectionListener(configedMain);
+		// We want to prevent, that the listSelectionListener is added more than once
+		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(configedMain)) {
+			selectionModel.addListSelectionListener(configedMain);
+		}
 	}
 
 	public void disactivateListSelectionListener() {
