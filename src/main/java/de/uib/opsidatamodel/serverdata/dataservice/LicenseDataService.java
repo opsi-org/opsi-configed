@@ -20,7 +20,6 @@ import de.uib.configed.type.licences.LicencePoolXOpsiProduct;
 import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.configed.type.licences.TableLicenceContracts;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -125,7 +124,7 @@ public class LicenseDataService {
 				LicenceContractEntry entry = new LicenceContractEntry(importedEntry);
 				licenceContracts.put(entry.getId(), entry);
 
-				String notiDate = entry.get(TableLicenceContracts.NOTIFICATION_DATE_KEY);
+				String notiDate = entry.get(LicenceContractEntry.NOTIFICATION_DATE_KEY);
 				if (notiDate != null && !notiDate.isBlank() && notiDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsToNotify.computeIfAbsent(notiDate,
 							s -> new TreeSet<>());
