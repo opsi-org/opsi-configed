@@ -112,8 +112,11 @@ public class ProductDataService {
 
 	public List<String> getAllNetbootProductNames(String depotId) {
 		Object2Product2VersionList netbootProducts = getDepot2NetbootProductsPD();
-		return netbootProducts.get(depotId) != null ? new ArrayList<>(netbootProducts.get(depotId).keySet())
+		List<String> netbootProductNames = netbootProducts.get(depotId) != null
+				? new ArrayList<>(netbootProducts.get(depotId).keySet())
 				: new ArrayList<>();
+		filterPermittedProducts(netbootProductNames);
+		return netbootProductNames;
 	}
 
 	public List<String> getAllLocalbootProductNames() {
@@ -149,12 +152,16 @@ public class ProductDataService {
 			localbootProductNames = sortedProducts;
 			localbootProductNames.addAll(notSortedProducts);
 		}
-		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
-		if (permittedProducts != null) {
-			localbootProductNames.retainAll(permittedProducts);
-		}
+		filterPermittedProducts(localbootProductNames);
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 		return new ArrayList<>(localbootProductNames);
+	}
+
+	private void filterPermittedProducts(List<String> products) {
+		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
+		if (permittedProducts != null) {
+			products.retainAll(permittedProducts);
+		}
 	}
 
 	public Map<String, TreeSet<OpsiPackage>> getDepot2PackagesPD() {
