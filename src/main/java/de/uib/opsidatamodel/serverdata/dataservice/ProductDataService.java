@@ -148,12 +148,10 @@ public class ProductDataService {
 
 			localbootProductNames = sortedProducts;
 			localbootProductNames.addAll(notSortedProducts);
-
-			// we don't have a productsgroupsFullPermission)
-			Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
-			if (permittedProducts != null) {
-				localbootProductNames.retainAll(permittedProducts);
-			}
+		}
+		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
+		if (permittedProducts != null) {
+			localbootProductNames.retainAll(permittedProducts);
 		}
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 		return new ArrayList<>(localbootProductNames);
