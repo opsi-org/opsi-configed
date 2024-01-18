@@ -1732,7 +1732,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
 
-		// Todo why is this method called twice?
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
@@ -1743,8 +1742,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
 				+ Logging.getSize(clientTable.getSelectedValues()));
-
-		setSelectionPanelCols();
 
 		// did lose the selection since last setting
 		setSelectedClientsCollectionOnPanel(selectValues);
