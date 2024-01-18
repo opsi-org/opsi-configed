@@ -303,8 +303,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private Set<String> connectedHostsByMessagebus;
 
-	private List<String> previousSelectedClients;
-
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
 
@@ -1001,18 +999,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting()) {
-			return;
+		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
 		}
-
-		List<String> currentSelectedClients = clientTable.getSelectedValues();
-		if ((previousSelectedClients != null && previousSelectedClients.equals(currentSelectedClients))
-				|| currentSelectedClients.isEmpty()) {
-			return;
-		}
-
-		previousSelectedClients = currentSelectedClients;
-		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
