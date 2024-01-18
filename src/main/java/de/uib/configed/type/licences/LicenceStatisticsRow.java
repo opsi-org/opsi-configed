@@ -11,7 +11,6 @@ import java.util.HashMap;
 import de.uib.utilities.ExtendedInteger;
 
 public class LicenceStatisticsRow extends HashMap<String, String> {
-	// callkeys
 	public static final String ID_KEY = "licensePoolId";
 	public static final String LICENSE_OPTIONS_KEY = "licence_options";
 	public static final String USED_BY_OPSI_KEY = "used_by_opsi";

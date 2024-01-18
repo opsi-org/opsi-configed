@@ -13,15 +13,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
-	/*
-	 * desc SOFTWARE_LICENSE_TO_LICENSE_POOL
-	 * | Field | Type | Null | Key | Default | Extra
-	 * | softwareLicenseId | varchar(100) | NO | PRI | NULL |
-	 * | licensePoolId | varchar(100) | NO | PRI | NULL |
-	 * | licenseKey | varchar(100) | NO |
-	 * 
-	 */
-
 	public static final String ID_KEY = "id";
 	public static final String LICENCE_ID_KEY = "softwareLicenseId";
 	public static final String LICENSE_POOL_ID_KEY = "licensePoolId";

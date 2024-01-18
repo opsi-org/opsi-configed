@@ -30,7 +30,6 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private int minVSize = 100;
 
-	/** Creates new form PanelEditLicences */
 	public PanelEditLicences(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();

@@ -30,7 +30,6 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 	private PanelGenEditTable panelStatistics;
 
-	/** Creates new form panelLicencesStatistics */
 	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();

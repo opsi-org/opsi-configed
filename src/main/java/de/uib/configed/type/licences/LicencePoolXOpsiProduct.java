@@ -14,13 +14,6 @@ import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 
 public class LicencePoolXOpsiProduct extends Relation {
-	/*
-	 * PRODUCT_ID_TO_LICENSE_POOL:
-	 * | licensePoolId | varchar(100) | NO | PRI | NULL | |
-	 * | productId | varchar(255) | NO | PRI | | |
-	 * 
-	 */
-
 	public static final String LICENCE_POOL_KEY = LicencepoolEntry.ID_SERVICE_KEY;
 	public static final String PRODUCT_ID_KEY = "productId";
 	public static final String ID_KEY = "id";

@@ -44,7 +44,6 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	private ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit;
 
-	/** Creates new form panelLicencesUsage */
 	public PanelLicencesUsage(ControlPanelLicencesUsage licencesUsageController) {
 		super(licencesUsageController);
 		this.licencesUsageController = licencesUsageController;

@@ -38,8 +38,6 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import utils.Utils;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
-	// tab edit licence
-
 	private PanelEditLicences thePanel;
 
 	private GenTableModel modelLicencekeys;
@@ -51,7 +49,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	private ConfigedMain configedMain;
 
 	public ControlPanelEditLicences(ConfigedMain configedMain) {
-		// extending TabClientAdapter
 		thePanel = new PanelEditLicences(this);
 		this.configedMain = configedMain;
 		init();
@@ -74,7 +71,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPanelKeys() {
-		// panelKeys
 		List<String> columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
@@ -107,7 +103,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelKeys().addPopupItem(menuItemAddKey);
 
-		// special treatment of columns
 		TableColumn col = thePanel.getPanelKeys().getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
@@ -122,7 +117,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
 		}));
 
-		// updates
 		thePanel.getPanelKeys().setUpdateController(
 				new MapItemsUpdateController(thePanel.getPanelKeys(), modelLicencekeys, new MapBasedUpdater() {
 					@Override
@@ -145,7 +139,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPanelSoftwarelicences() {
-		// panelSoftwarelicences
 		List<String> columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.ID_KEY);
 		columnNames.add(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
@@ -167,8 +160,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		modelSoftwarelicences.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 		thePanel.getPanelSoftwarelicences().setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
 
-		// --- special treatment of columns
-
 		TableColumn col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES.toArray(String[]::new));
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
@@ -185,9 +176,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		col = thePanel.getPanelSoftwarelicences().getColumnModel().getColumn(5);
 		col.setCellEditor(new CellEditor4TableText(new FEditDate("", false), FEditDate.AREA_DIMENSION));
 
-		// expiration date
-
-		// --- PopupMenu
 		JMenuItem menuItemAddLicence = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewSoftwarelicence"));
 		menuItemAddLicence.addActionListener((ActionEvent e) -> addLicence());
@@ -221,7 +209,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPanelLicenceContracts() {
-		// panelLicencecontracts
 		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
@@ -242,7 +229,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		modelLicencecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 		thePanel.getPanelLicencecontracts().setEmphasizedColumns(new int[] { 1, 2, 3, 4, 5 });
 
-		// --- PopupMenu
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
@@ -255,9 +241,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelLicencecontracts().addPopupItem(menuItemPickLicencecontract);
 
-		// special treatment of columns
-
-		// col 2
 		TableColumn col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(2);
 
 		FEditDate fedConclusionDate = new FEditDate("", false);
@@ -268,7 +251,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		fedConclusionDate.setServedCellEditor(cellEditorConclusionDate);
 		col.setCellEditor(cellEditorConclusionDate);
 
-		// col 3
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(3);
 		FEditDate fedNotificationDate = new FEditDate("", false);
 
@@ -278,7 +260,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		fedNotificationDate.setServedCellEditor(cellEditorNotificationDate);
 		col.setCellEditor(cellEditorNotificationDate);
 
-		// col 4
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(4);
 		FEditDate fedExpirationDate = new FEditDate("", false);
 
@@ -288,7 +269,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		fedExpirationDate.setServedCellEditor(cellEditorExpirationDate);
 		col.setCellEditor(cellEditorExpirationDate);
 
-		// col 5
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(5);
 
 		FEditPane fedNotes = new FEditPane("", "Notes");
@@ -297,8 +277,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);
-
-		// updates
 
 		thePanel.getPanelLicencecontracts().setUpdateController(new MapItemsUpdateController(
 				thePanel.getPanelLicencecontracts(), modelLicencecontracts, new MapBasedUpdater() {

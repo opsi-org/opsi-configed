@@ -15,17 +15,6 @@ import de.uib.utilities.logging.Logging;
 
 // software license in opsi data base
 public class LicenceEntry extends TreeMap<String, Object> {
-	/*
-	 * desc SOFTWARE_LICENSE :
-	 * | Field | Type | Null | Key | Default | Extra
-	 * | softwareLicenseId | varchar(100) | NO | PRI | NULL
-	 * | licenseContractId | varchar(100) | NO | MUL | NULL
-	 * | boundToHost | varchar(255) | YES | MUL | NULL
-	 * | maxInstallations | int(11) | YES | | NULL |
-	 * | expirationDate | timestamp | NO | | 0000-00-00 00:00:00
-	 * | type | varchar(30) | NO | MUL | NULL |
-	 */
-
 	public static final String ID_SERVICE_KEY = "id";
 	public static final String TYPE_SERVICE_KEY = "type";
 

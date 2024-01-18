@@ -31,7 +31,6 @@ import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import utils.Utils;
 
-// tab new licence
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	private PanelEnterLicence thePanel;
 
@@ -88,16 +87,13 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 		initPanels();
 		initPopupMenu();
-		// special treatment of columns
 		initTreatmentOfColumns();
-		// updates
 		setPanelLicenceContractsUpdateController();
 	}
 
 	private void initPanels() {
 		List<String> columnNames;
 
-		// getPanelKeys()
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
@@ -118,7 +114,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 		setPanelKeysUpdateController();
 
-		// getPanelLicencepools()
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
@@ -134,7 +129,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		modelLicencepools.reset();
 		thePanel.getPanelLicencepools().setTableModel(modelLicencepools);
 
-		// getPanelLicencecontracts()
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
@@ -157,7 +151,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPopupMenu() {
-		// --- PopupMenu
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
@@ -178,7 +171,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		fedConclusionDate.setServedCellEditor(cellEditorConclusionDate);
 		col.setCellEditor(cellEditorConclusionDate);
 
-		// col 3
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(3);
 		FEditDate fedNotificationDate = new FEditDate("", false);
 
@@ -188,7 +180,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		fedNotificationDate.setServedCellEditor(cellEditorNotificationDate);
 		col.setCellEditor(cellEditorNotificationDate);
 
-		// col 4
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(4);
 		FEditDate fedExpirationDate = new FEditDate("", false);
 
@@ -198,7 +189,6 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		fedExpirationDate.setServedCellEditor(cellEditorExpirationDate);
 		col.setCellEditor(cellEditorExpirationDate);
 
-		// col 5
 		col = thePanel.getPanelLicencecontracts().getColumnModel().getColumn(5);
 
 		FEditPane fedNotes = new FEditPane("", "Notes");

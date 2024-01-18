@@ -28,7 +28,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelLicencesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
 
-	/** Creates new form panelLicencesReconciliation */
 	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
 		super(licencesReconciliationController);
 		initComponents();

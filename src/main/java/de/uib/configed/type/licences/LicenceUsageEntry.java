@@ -16,17 +16,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
-	/*
-	 * describe LICENSE_ON_CLIENT:
-	 * | Field | Type | Null | Key | Default | Extra
-	 * | license_on_client_id | int(11) | NO | PRI | NULL | auto_increment |
-	 * | softwareLicenseId | varchar(100) | NO | MUL | NULL |
-	 * | licensePoolId | varchar(100) | NO | | NULL |
-	 * | clientId | varchar(255) | YES | MUL | NULL |
-	 * | licenseKey | varchar(100) | YES | | NULL |
-	 * | notes | varchar(1024) | YES | | NULL |
-	 */
-
 	public static final String IDENT_KEY = "ident";
 	public static final String ID_KEY = "license_on_client_id";
 	public static final String LICENCE_POOL_ID_KEY = "licensePoolId";

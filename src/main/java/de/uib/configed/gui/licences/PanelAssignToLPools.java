@@ -59,21 +59,18 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private PanelStateSwitch<Softwarename2LicencepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
 	private JLabel labelSimilarEntriesExist;
 
-	/** Creates new form panelAssignToLPools */
 	public PanelAssignToLPools(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}
 
 	private void initComponents() {
-		// splitpane
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.7);
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();
 
-		// construct content panes
 		JPanel panelInfoWindowsSoftware = new JPanel();
 
 		JPanel panelInfoConfigWindowsSoftware = new JPanel();
@@ -273,7 +270,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
 						titleWindowsSoftware2, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT))
 
-				// //corresponding to bottom config height
 				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -300,7 +296,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		GroupLayout layoutPanelInfoConfig = new GroupLayout(panelInfoConfigWindowsSoftware);
 		panelInfoConfigWindowsSoftware.setLayout(layoutPanelInfoConfig);
 
-		// take max width
 		int col0width = labelCountAssignedStatus.getPreferredSize().width;
 		if (labelCountAllWindowsSoftware.getPreferredSize().width > col0width) {
 			col0width = labelCountAllWindowsSoftware.getPreferredSize().width;
@@ -355,7 +350,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
 
-				// title height
 				.addGap(Globals.BUTTON_HEIGHT)
 				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelCountAllWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
@@ -482,7 +476,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		}
 	}
 
-	// implement ChengeListener
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, " stateChanged " + e);

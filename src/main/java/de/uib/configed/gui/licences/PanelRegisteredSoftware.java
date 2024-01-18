@@ -95,7 +95,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		saveRowSelection = theTable.getSelectedRows();
 	}
 
-	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (isAwareOfSelectionListener()) {
@@ -109,7 +108,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
 	}
 
-	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point mousePoint = e.getPoint();
@@ -162,7 +160,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		}
 	}
 
-	// CursorrowObserer
 	@Override
 	public void rowUpdated(int modelrow) {
 		super.rowUpdated(modelrow);

@@ -18,19 +18,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class AuditSoftwareXLicencePool extends Relation {
-	/*
-	 * AUDIT_SOFTWARE_TO_LICENSE_POOL in database
-	 * 
-	 * | Field | Type | Null | Key
-	 * | licensePoolId | varchar(100) | NO | MUL | NULL
-	 * | name | varchar(100) | NO | PRI | NULL
-	 * | version | varchar(100) | NO | PRI | NULL
-	 * | subVersion | varchar(100) | NO | PRI | NULL
-	 * | language | varchar(10) | NO | PRI | NULL
-	 * | architecture | varchar(3) | NO | PRI | NULL
-	 * 
-	 */
-
 	public static final String SW_ID = "swId";
 
 	private static final List<String> SOFTWARE_ATTRIBUTES;

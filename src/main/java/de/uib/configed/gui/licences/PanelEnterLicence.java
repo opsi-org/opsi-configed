@@ -92,7 +92,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
-	/** Creates new form PanelEnterLicence */
 	public PanelEnterLicence(ControlPanelEnterLicence enterLicenceController) {
 		super(enterLicenceController);
 
@@ -111,7 +110,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 	}
 
 	private void selectPanelLicenceContracts(ListSelectionEvent listSelectionEvent) {
-		// Ignore extra messages.
 		if (listSelectionEvent.getValueIsAdjusting()) {
 			return;
 		}
@@ -286,7 +284,6 @@ public class PanelEnterLicence extends MultiTablePanel {
 
 		jTextFieldEndOfLicence = new JTextField();
 
-		// edit only via fEditDate
 		jTextFieldEndOfLicence.setEditable(false);
 		jTextFieldEndOfLicence.addMouseListener(new MouseAdapter() {
 			@Override

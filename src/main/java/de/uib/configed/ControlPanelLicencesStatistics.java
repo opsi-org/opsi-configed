@@ -54,7 +54,6 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 		List<String> columnNames;
 		List<String> classNames;
 
-		// --- getPanelStatistics()
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("licence_options");

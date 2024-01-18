@@ -63,10 +63,8 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 		initPanels();
 
-		// special treatment of columns
 		initTreatmentOfColumns();
 
-		// updates
 		thePanel.getPanelReconciliation().setUpdateController(new MapItemsUpdateController(
 				thePanel.getPanelReconciliation(), modelLicencesReconciliation, new MapBasedUpdater() {
 					@Override
@@ -96,7 +94,6 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
-		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();
 		classNames = new ArrayList<>();
 
