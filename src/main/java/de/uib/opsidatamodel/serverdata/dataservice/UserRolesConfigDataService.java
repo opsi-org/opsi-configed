@@ -119,6 +119,14 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
+	public Set<String> getPermittedProductGroupsPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
+	}
+
+	public boolean hasProductGroupsFullPermissionPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
+	}
+
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -418,10 +426,11 @@ public class UserRolesConfigDataService {
 		configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
-		Set<String> productgroupsPermitted = new HashSet<>();
+		Set<String> productGroupsPermitted = new HashSet<>();
 
-		boolean productgroupsFullPermission = checkFullPermission(productgroupsPermitted, configKeyUseList,
+		boolean productgroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
+		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
 		Set<String> permittedProducts = null;
@@ -429,7 +438,7 @@ public class UserRolesConfigDataService {
 		if (!productgroupsFullPermission) {
 			permittedProducts = new TreeSet<>();
 
-			for (String group : productgroupsPermitted) {
+			for (String group : productGroupsPermitted) {
 				Map<String, Set<String>> fProductGroup2Members = cacheManager
 						.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
 				Set<String> products = fProductGroup2Members.get(group);
