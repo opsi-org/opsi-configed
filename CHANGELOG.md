@@ -4,6 +4,17 @@
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
 
+
+## [4.3.1.5] - 2024-01-19
+### Fixed
+- Parameter `user.{<user>}.privilege.product.groupaccess.productgroups` has no effect on dispalyed products.
+- Keep client selection in product table after full reload
+
+### Changed
+- Show only netboot products, that are available in specified groups in `user.{<user>}.privilege.product.groupaccess.productgroups` parameter.
+- Allow only group selection, that are specified in `user.{<user>}.privilege.product.groupaccess.productgroups` parameter.
+- Better form in free client search
+
 ## [4.3.1.4] - 2024-01-12
 ### Added
 - Auto completion and sort clients in license usage

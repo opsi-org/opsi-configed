@@ -105,11 +105,11 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction2() {
 		Logging.debug(this, "doAction2");
 
-		Logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
+		Logging.info(this, "removeAssociations for " + " licensePool " + myController.getSelectedLicensePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
 
 		boolean success = persistenceController.getSoftwareDataService()
-				.removeAssociations(myController.getSelectedLicencePool(), panelGlobalSoftware.getSelectedKeys());
+				.removeAssociations(myController.getSelectedLicensePool(), panelGlobalSoftware.getSelectedKeys());
 
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {

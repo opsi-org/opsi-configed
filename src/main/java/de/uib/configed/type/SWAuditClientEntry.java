@@ -45,11 +45,11 @@ public class SWAuditClientEntry {
 	 */
 
 	public static final String CLIENT_ID = "clientId";
-	public static final String LICENCE_KEY = "licenseKey";
+	public static final String LICENSE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 	public static final List<String> KEYS = List.of(SWAuditEntry.ID, SWAuditEntry.NAME, SWAuditEntry.VERSION,
-			SWAuditEntry.SUB_VERSION, SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENCE_KEY,
+			SWAuditEntry.SUB_VERSION, SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY,
 			SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
@@ -58,7 +58,7 @@ public class SWAuditClientEntry {
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.LANGUAGE);
-		KEYS_FOR_GUI_TABLES.add(LICENCE_KEY);
+		KEYS_FOR_GUI_TABLES.add(LICENSE_KEY);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
@@ -84,7 +84,7 @@ public class SWAuditClientEntry {
 		this.software = persistenceController.getSoftwareDataService().getSoftwareListPD();
 		this.software2Number = persistenceController.getSoftwareDataService().getSoftware2NumberPD();
 		produceSWid();
-		data.put(LICENCE_KEY, produceNonNull(m.get(LICENCE_KEY)));
+		data.put(LICENSE_KEY, produceNonNull(m.get(LICENSE_KEY)));
 		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
 	}
 

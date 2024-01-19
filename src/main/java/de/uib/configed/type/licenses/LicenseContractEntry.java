@@ -4,28 +4,15 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import de.uib.utilities.datastructure.Relation;
+import de.uib.utilities.datastructure.StringValuedRelationElement;
 
-public final class TableLicenceContracts extends Relation {
-	/*
-	 * describe LICENSE_CONTRACT 
-	 * | Field | Type | Null | Key | Default | Extra
-	 * | licenseContractId | varchar(100) | NO | PRI | NULL |
-	 * | partner | varchar(100) | YES | | NULL |
-	 * | conclusionDate | timestamp | NO | | 0000-00-00 00:00:00 |
-	 * | notificationDate | timestamp | NO | | 0000-00-00 00:00:00 |
-	 * | expirationDate | timestamp | NO | | 0000-00-00 00:00:00 |
-	 * | notes | varchar(1000) | YES | | NULL |
-	 * | type | varchar(30) | NO | MUL | NULL |
-	 * | description | varchar(100) | NO | | NULL | |
-	 * 
-	 */
-
+public class LicenseContractEntry extends StringValuedRelationElement {
 	public static final String ID_KEY = "id";
 	public static final String IDENT_KEY = "ident";
 	public static final String ID_DB_KEY = "licenseContractId";
@@ -39,7 +26,6 @@ public final class TableLicenceContracts extends Relation {
 	public static final String TYPE_KEY = "type";
 
 	private static final List<String> DB_ATTRIBUTES;
-
 	static {
 		DB_ATTRIBUTES = new LinkedList<>();
 		DB_ATTRIBUTES.add(ID_DB_KEY);
@@ -62,8 +48,7 @@ public final class TableLicenceContracts extends Relation {
 		INTERFACED_ATTRIBUTES.add(NOTES_KEY);
 	}
 
-	public static final List<String> ALLOWED_ATTRIBUTES;
-
+	private static final List<String> ALLOWED_ATTRIBUTES;
 	static {
 		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(ID_KEY);
@@ -71,7 +56,42 @@ public final class TableLicenceContracts extends Relation {
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
-	private TableLicenceContracts() {
-		super(INTERFACED_ATTRIBUTES);
+	public LicenseContractEntry() {
+		super();
+		super.setAllowedAttributes(ALLOWED_ATTRIBUTES);
+	}
+
+	public LicenseContractEntry(Map<String, Object> m) {
+		this();
+		produceFrom(m);
+	}
+
+	private static String removeTime(String datetime) {
+		if (datetime != null && datetime.length() > 0) {
+			int idx = datetime.indexOf(" ");
+			if (idx > -1) {
+				return datetime.substring(0, idx);
+			}
+		}
+
+		return datetime;
+	}
+
+	@Override
+	protected final void produceFrom(Map<String, ? extends Object> map) {
+		super.produceFrom(map);
+
+		put(ID_DB_KEY, get(ID_KEY));
+		remove(TYPE_KEY);
+		remove(IDENT_KEY);
+
+		put(CONCLUSION_DATE_KEY, removeTime(get(CONCLUSION_DATE_KEY)));
+
+		put(NOTIFICATION_DATE_KEY, removeTime(get(NOTIFICATION_DATE_KEY)));
+		put(EXPIRATION_DATE_KEY, removeTime(get(EXPIRATION_DATE_KEY)));
+	}
+
+	public String getId() {
+		return get(ID_DB_KEY);
 	}
 }

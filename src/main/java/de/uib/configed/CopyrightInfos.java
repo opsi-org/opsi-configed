@@ -52,14 +52,14 @@ public final class CopyrightInfos {
 		infos.add("Copyright(c) 2002-2022 Atsuhiko Yamanaka, JCraft,Inc");
 		infos.add("");
 		infos.add("SwingX extension of Swing");
-		infos.add("licenced by GNU LESSER GENERAL PUBLIC LICENSE");
+		infos.add("licensed by GNU LESSER GENERAL PUBLIC LICENSE");
 		infos.add("Copyright (c) 2005-2006 Sun Microsystems, Inc.");
 		infos.add("");
 		infos.add("JavaFX");
-		infos.add("licenced by GNU General Public LICENSE v2.0");
+		infos.add("licensed by GNU General Public LICENSE v2.0");
 		infos.add("");
 		infos.add("FontAwesomeFX Icon Package");
-		infos.add("licenced by Apache 2.0 licenses");
+		infos.add("licensed by Apache 2.0 licenses");
 		infos.add("");
 		infos.add("XZ for Java");
 		infos.add("https://github.com/tukaani-project/xz-java/blob/master/COPYING");

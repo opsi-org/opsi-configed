@@ -44,7 +44,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 
 		String keyValue = keysPanel.getValueAt(keysPanel.getSelectedRow(), keyCol).toString();
 
-		boolean success = controlPanelAssignToLPools.updateLicencepool(keyValue, panel.getSelectedKeys());
+		boolean success = controlPanelAssignToLPools.updateLicensepool(keyValue, panel.getSelectedKeys());
 
 		Logging.checkErrorList(null);
 
@@ -53,7 +53,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 
 	@Override
 	public boolean cancelChanges() {
-		controlPanelAssignToLPools.setSoftwareIdsFromLicencePool(null);
+		controlPanelAssignToLPools.setSoftwareIdsFromLicensePool(null);
 		return true;
 	}
 }

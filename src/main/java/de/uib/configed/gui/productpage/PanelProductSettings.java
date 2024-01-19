@@ -580,7 +580,7 @@ public class PanelProductSettings extends JSplitPane {
 		configedMain.resetView(configedMain.getViewIndex());
 		configedMain.setDataChanged(false);
 
-		ConfigedMain.getMainFrame().disactivateLoadingCursor();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	protected void saveAndExecuteAction() {
