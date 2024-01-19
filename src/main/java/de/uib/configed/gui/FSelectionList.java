@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -29,7 +30,12 @@ public class FSelectionList extends FGeneralDialog {
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
-		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
+		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight);
+	}
+
+	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
+			int preferredWidth, int preferredHeight) {
+		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
 		this.owner = owner;
 	}
 
