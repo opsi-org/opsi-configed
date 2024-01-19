@@ -181,22 +181,15 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductsAllDepotsPD() {
-		Logging.debug(this, "retrieveProductsAllDepotsPD");
 		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Map.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, Map.class) != null) {
-			Logging.debug(this, "depot2LocalbootProducts " + cacheManager
-					.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Object2Product2VersionList.class)
-					.size());
-			Logging.debug(this, "depot2NetbootProducts" + cacheManager
-					.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Object2Product2VersionList.class).size());
 			return;
 		}
 
-		retrieveProductInfosPD();
-
 		Logging.info(this, "retrieveProductsAllDepotsPD, reload");
+		retrieveProductInfosPD();
 
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
