@@ -27,6 +27,6 @@ public class HealthCheckDataLoader extends SwingWorker<Void, Void> {
 		HealthCheckDialog dialog = new HealthCheckDialog();
 		dialog.setupLayout();
 		dialog.setVisible(true);
-		ConfigedMain.getMainFrame().disactivateLoadingPane();
+		ConfigedMain.getMainFrame().deactivateLoadingPane();
 	}
 }

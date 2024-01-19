@@ -72,7 +72,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		thePanel.getPanelKeys().setDataChanged(false);
 		thePanel.getPanelKeys().moveToKeyValue(keyValue);
 
-		ConfigedMain.getLicencesFrame().disactivateLoadingCursor();
+		ConfigedMain.getLicencesFrame().deactivateLoadingCursor();
 
 		configedMain.checkErrorList();
 	}
