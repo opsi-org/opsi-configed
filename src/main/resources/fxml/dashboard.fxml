@@ -24,7 +24,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="894.0" prefWidth="1907.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="894.0" prefWidth="1907.0"
+   xmlns="http://javafx.com/javafx/18"
+   xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -125,7 +127,7 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="licenseNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licencesTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="licenseNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licensesTitle" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                      </children>
@@ -250,7 +252,7 @@
                               </VBox>
                               <VBox fx:id="licenseDataDisplayAreaVBox" prefHeight="347.0" prefWidth="269.0" VBox.vgrow="SOMETIMES">
                                  <children>
-                                    <Text fx:id="licenseTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licencesTitle">
+                                    <Text fx:id="licenseTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licensesTitle">
                                        <font>
                                           <Font size="22.0" />
                                        </font>

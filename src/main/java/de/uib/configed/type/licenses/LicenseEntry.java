@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.List;
 import java.util.Map;
@@ -14,24 +14,12 @@ import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
 // software license in opsi data base
-public class LicenceEntry extends TreeMap<String, Object> {
-	/*
-	 * desc SOFTWARE_LICENSE :
-	 * | Field | Type | Null | Key | Default | Extra
-	 * | softwareLicenseId | varchar(100) | NO | PRI | NULL
-	 * | licenseContractId | varchar(100) | NO | MUL | NULL
-	 * | boundToHost | varchar(255) | YES | MUL | NULL
-	 * | maxInstallations | int(11) | YES | | NULL |
-	 * | expirationDate | timestamp | NO | | 0000-00-00 00:00:00
-	 * | type | varchar(30) | NO | MUL | NULL |
-	 */
-
+public class LicenseEntry extends TreeMap<String, Object> {
 	public static final String ID_SERVICE_KEY = "id";
-	public static final String MAX_INSTALLATIONS_SERVICE_KEY = "maxInstallations";
 	public static final String TYPE_SERVICE_KEY = "type";
 
 	public static final String ID_KEY = "softwareLicenseId";
-	public static final String LICENCE_CONTRACT_ID_KEY = "licenseContractId";
+	public static final String LICENSE_CONTRACT_ID_KEY = "licenseContractId";
 	public static final String BOUND_TO_HOST_KEY = "boundToHost";
 	public static final String MAX_INSTALLATIONS_KEY = "maxInstallations";
 	public static final String EXPIRATION_DATE_KEY = "expirationDate";
@@ -47,9 +35,9 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	public static final String RETAIL_SERVICE = "RetailSoftwareLicense";
 	public static final String CONCURRENT_SERVICE = "ConcurrentSoftwareLicense";
 
-	public static final List<String> LICENCE_TYPES = List.of(VOLUME, OEM, RETAIL, CONCURRENT);
+	public static final List<String> LICENSE_TYPES = List.of(VOLUME, OEM, RETAIL, CONCURRENT);
 
-	public LicenceEntry(Map<String, Object> importedEntry) {
+	public LicenseEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);
 		if (importedEntry.get(ID_SERVICE_KEY) != null) {
 			super.put(ID_KEY, importedEntry.get(ID_SERVICE_KEY));
@@ -59,14 +47,14 @@ public class LicenceEntry extends TreeMap<String, Object> {
 			Logging.warning(this.getClass(), "missing primary key in " + importedEntry);
 		}
 
-		if (importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) == null) {
+		if (importedEntry.get(MAX_INSTALLATIONS_KEY) == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
 		} else {
-			if (!(importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) instanceof Integer)) {
+			if (!(importedEntry.get(MAX_INSTALLATIONS_KEY) instanceof Integer)) {
 				Logging.warning(this.getClass(), " " + importedEntry.get(ID_KEY) + " has not an integer for "
-						+ importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY));
+						+ importedEntry.get(MAX_INSTALLATIONS_KEY));
 			} else {
-				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY);
+				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_KEY);
 				if (val == 0) {
 					super.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.INFINITE);
 				} else {
@@ -80,19 +68,25 @@ public class LicenceEntry extends TreeMap<String, Object> {
 	}
 
 	private String translateTypeFromService(String servicetype) {
+		String result = "";
 		switch (servicetype) {
 		case VOLUME_SERVICE:
-			return VOLUME;
+			result = VOLUME;
+			break;
 		case OEM_SERVICE:
-			return OEM;
+			result = OEM;
+			break;
 		case RETAIL_SERVICE:
-			return RETAIL;
+			result = RETAIL;
+			break;
 		case CONCURRENT_SERVICE:
-			return CONCURRENT;
+			result = CONCURRENT;
+			break;
 		default:
 			Logging.warning(this, "illlegal servicetype " + servicetype);
-			return "";
+			result = "";
 		}
+		return result;
 	}
 
 	public String getId() {

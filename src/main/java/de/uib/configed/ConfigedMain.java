@@ -79,7 +79,7 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.licences.LicencesFrame;
+import de.uib.configed.gui.licenses.LicensesFrame;
 import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
@@ -92,8 +92,8 @@ import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.configed.type.licences.LicenceUsageEntry;
+import de.uib.configed.type.licenses.LicenseEntry;
+import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -147,9 +147,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
-	private static final Dimension LICENCES_DIMENSION = new Dimension(1200, 900);
+	private static final Dimension LICENSES_DIMENSION = new Dimension(1200, 900);
 
-	private static LicencesFrame licencesFrame;
+	private static LicensesFrame licensesFrame;
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
@@ -161,11 +161,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	// global table providers for licence management
-	protected DefaultTableProvider licencePoolTableProvider;
-	protected DefaultTableProvider licenceOptionsTableProvider;
-	protected DefaultTableProvider licenceContractsTableProvider;
-	protected DefaultTableProvider softwarelicencesTableProvider;
+	// global table providers for license management
+	protected DefaultTableProvider licensePoolTableProvider;
+	protected DefaultTableProvider licenseOptionsTableProvider;
+	protected DefaultTableProvider licenseContractsTableProvider;
+	protected DefaultTableProvider softwarelicensesTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -279,14 +279,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private Map<String, Boolean> hostDisplayFields;
 
-	public enum LicencesTabStatus {
-		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
+	public enum LicensesTabStatus {
+		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	private Map<LicencesTabStatus, TabClient> licencesPanels = new EnumMap<>(LicencesTabStatus.class);
-	private LicencesTabStatus licencesStatus;
+	private Map<LicensesTabStatus, TabClient> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
+	private LicensesTabStatus licensesStatus;
 
-	private Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
+	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
 	private boolean filterClientList;
 
@@ -346,23 +346,23 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return loginDialog;
 	}
 
-	private void addClient(LicencesTabStatus status, TabClient panel) {
-		licencesPanels.put(status, panel);
-		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
+	private void addClient(LicensesTabStatus status, TabClient panel) {
+		licensesPanels.put(status, panel);
+		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), (JComponent) panel);
 	}
 
-	public LicencesTabStatus reactToStateChangeRequest(LicencesTabStatus newState) {
-		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
-		if (newState != licencesStatus && licencesPanels.get(licencesStatus).mayLeave()) {
-			licencesStatus = newState;
+	public LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
+		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licensesStatus);
+		if (newState != licensesStatus && licensesPanels.get(licensesStatus).mayLeave()) {
+			licensesStatus = newState;
 
-			if (licencesPanels.get(licencesStatus) != null) {
-				licencesPanels.get(licencesStatus).reset();
+			if (licensesPanels.get(licensesStatus) != null) {
+				licensesPanels.get(licensesStatus).reset();
 			}
 			// otherwise we return the old status
 		}
 
-		return licencesStatus;
+		return licensesStatus;
 	}
 
 	public static ConfigedMain.EditingTarget getEditingTarget() {
@@ -751,7 +751,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
-			groupActionFrame.setSize(LICENCES_DIMENSION);
+			groupActionFrame.setSize(LICENSES_DIMENSION);
 			groupActionFrame.centerOnParent();
 
 			allFrames.add(groupActionFrame);
@@ -769,7 +769,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (productActionFrame == null) {
 			productActionFrame = new FProductActions(this);
-			productActionFrame.setSize(LICENCES_DIMENSION);
+			productActionFrame.setSize(LICENSES_DIMENSION);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
 		}
@@ -777,32 +777,32 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		productActionFrame.start();
 	}
 
-	public void handleLicencesManagementRequest() {
+	public void handleLicensesManagementRequest() {
 		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.getModuleDataService().isWithLicenceManagementPD() && licencesFrame == null) {
-			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licences.Loading"));
+		if (persistenceController.getModuleDataService().isWithLicenseManagementPD() && licensesFrame == null) {
+			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 		}
 		new Thread() {
 			@Override
 			public void run() {
-				Logging.info(this, "handleLicencesManagementRequest called");
+				Logging.info(this, "handleLicensesManagementRequest called");
 				persistenceController.getModuleDataService().retrieveOpsiModules();
 
-				if (persistenceController.getModuleDataService().isWithLicenceManagementPD()) {
-					toggleLicencesFrame();
+				if (persistenceController.getModuleDataService().isWithLicenseManagementPD()) {
+					toggleLicensesFrame();
 				} else {
 					FOpsiLicenseMissingText
-							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
 				}
 
 				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
+						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
 					// Starting JavaFX-Thread by creating a new JFXPanel, but not
 					// using it since it is not needed.
 					new JFXPanel();
 
-					Platform.runLater(mainFrame::startLicenceDisplayer);
+					Platform.runLater(mainFrame::startLicenseDisplayer);
 				}
 
 				mainFrame.deactivateLoadingPane();
@@ -810,18 +810,18 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}.start();
 	}
 
-	public void toggleLicencesFrame() {
-		if (licencesFrame == null) {
+	public void toggleLicensesFrame() {
+		if (licensesFrame == null) {
 			isInitialLicenseDataLoading = true;
-			initLicencesFrame();
-			allFrames.add(licencesFrame);
+			initLicensesFrame();
+			allFrames.add(licensesFrame);
 			isInitialLicenseDataLoading = false;
 		}
 
-		Logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
-		licencesFrame.setLocationRelativeTo(mainFrame);
-		licencesFrame.setVisible(true);
-		mainFrame.visualizeLicencesFramesActive(true);
+		Logging.info(this, "toggleLicensesFrame is visible" + licensesFrame.isVisible());
+		licensesFrame.setLocationRelativeTo(mainFrame);
+		licensesFrame.setVisible(true);
+		mainFrame.visualizeLicensesFramesActive(true);
 	}
 
 	public void setEditingTarget(EditingTarget t) {
@@ -1076,17 +1076,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 	}
 
-	private void initLicencesFrame() {
+	private void initLicensesFrame() {
 		long startmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame start ");
+		Logging.info(this, "initLicensesFrame start ");
 		initTableData();
-		startLicencesFrame();
+		startLicensesFrame();
 		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
+		Logging.info(this, "initLicensesFrame  diff " + (endmillis - startmillis));
 	}
 
 	private void initTableData() {
-		licencesStatus = LicencesTabStatus.LICENCEPOOL;
+		licensesStatus = LicensesTabStatus.LICENSEPOOL;
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();
@@ -1096,7 +1096,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licencePoolTableProvider = new DefaultTableProvider(
+		licensePoolTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
@@ -1120,7 +1120,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceOptionsTableProvider = new DefaultTableProvider(
+		licenseOptionsTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
@@ -1151,7 +1151,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		licenceContractsTableProvider = new DefaultTableProvider(
+		licenseContractsTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
@@ -1167,12 +1167,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				}));
 
 		columnNames = new ArrayList<>();
-		columnNames.add(LicenceEntry.ID_KEY);
-		columnNames.add(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
-		columnNames.add(LicenceEntry.TYPE_KEY);
-		columnNames.add(LicenceEntry.MAX_INSTALLATIONS_KEY);
-		columnNames.add(LicenceEntry.BOUND_TO_HOST_KEY);
-		columnNames.add(LicenceEntry.EXPIRATION_DATE_KEY);
+		columnNames.add(LicenseEntry.ID_KEY);
+		columnNames.add(LicenseEntry.LICENSE_CONTRACT_ID_KEY);
+		columnNames.add(LicenseEntry.TYPE_KEY);
+		columnNames.add(LicenseEntry.MAX_INSTALLATIONS_KEY);
+		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
+		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
@@ -1182,7 +1182,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
-		softwarelicencesTableProvider = new DefaultTableProvider(
+		softwarelicensesTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
@@ -1198,60 +1198,60 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				}));
 	}
 
-	private void startLicencesFrame() {
-		licencesFrame = new LicencesFrame(this);
-		Utils.setMasterFrame(licencesFrame);
-		licencesFrame.setIconImage(Utils.getMainIcon());
-		licencesFrame.setTitle(myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
+	private void startLicensesFrame() {
+		licensesFrame = new LicensesFrame(this);
+		Utils.setMasterFrame(licensesFrame);
+		licensesFrame.setIconImage(Utils.getMainIcon());
+		licensesFrame.setTitle(myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licenses"));
 
 		// panelAssignToLPools
-		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
-				Configed.getResourceValue("ConfigedMain.Licences.TabLicencepools"));
+		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabLicensepools"));
 		ControlPanelAssignToLPools controlPanelAssignToLPools = new ControlPanelAssignToLPools(this);
-		addClient(LicencesTabStatus.LICENCEPOOL, controlPanelAssignToLPools.getTabClient());
+		addClient(LicensesTabStatus.LICENSEPOOL, controlPanelAssignToLPools.getTabClient());
 		allControlMultiTablePanels.add(controlPanelAssignToLPools);
 
-		// panelEnterLicence
-		licencesPanelsTabNames.put(LicencesTabStatus.ENTER_LICENCE,
-				Configed.getResourceValue("ConfigedMain.Licences.TabNewLicence"));
-		ControlPanelEnterLicence controlPanelEnterLicence = new ControlPanelEnterLicence(this);
-		addClient(LicencesTabStatus.ENTER_LICENCE, controlPanelEnterLicence.getTabClient());
-		allControlMultiTablePanels.add(controlPanelEnterLicence);
+		// panelEnterLicense
+		licensesPanelsTabNames.put(LicensesTabStatus.ENTER_LICENSE,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabNewLicense"));
+		ControlPanelEnterLicense controlPanelEnterLicense = new ControlPanelEnterLicense(this);
+		addClient(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
+		allControlMultiTablePanels.add(controlPanelEnterLicense);
 
-		// panelEditLicence
-		licencesPanelsTabNames.put(LicencesTabStatus.EDIT_LICENCE,
-				Configed.getResourceValue("ConfigedMain.Licences.TabEditLicence"));
-		ControlPanelEditLicences controlPanelEditLicences = new ControlPanelEditLicences(this);
-		addClient(LicencesTabStatus.EDIT_LICENCE, controlPanelEditLicences.getTabClient());
-		allControlMultiTablePanels.add(controlPanelEditLicences);
+		// panelEditLicense
+		licensesPanelsTabNames.put(LicensesTabStatus.EDIT_LICENSE,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabEditLicense"));
+		ControlPanelEditLicenses controlPanelEditLicenses = new ControlPanelEditLicenses(this);
+		addClient(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
+		allControlMultiTablePanels.add(controlPanelEditLicenses);
 
 		// panelUsage
-		licencesPanelsTabNames.put(LicencesTabStatus.USAGE,
-				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceUsage"));
-		ControlPanelLicencesUsage controlPanelLicencesUsage = new ControlPanelLicencesUsage(this);
-		addClient(LicencesTabStatus.USAGE, controlPanelLicencesUsage.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicencesUsage);
+		licensesPanelsTabNames.put(LicensesTabStatus.USAGE,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseUsage"));
+		ControlPanelLicensesUsage controlPanelLicensesUsage = new ControlPanelLicensesUsage(this);
+		addClient(LicensesTabStatus.USAGE, controlPanelLicensesUsage.getTabClient());
+		allControlMultiTablePanels.add(controlPanelLicensesUsage);
 
 		// panelReconciliation
-		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
-				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(
+		licensesPanelsTabNames.put(LicensesTabStatus.RECONCILIATION,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation"));
+		ControlPanelLicensesReconciliation controlPanelLicensesReconciliation = new ControlPanelLicensesReconciliation(
 				this);
-		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
+		addClient(LicensesTabStatus.RECONCILIATION, controlPanelLicensesReconciliation.getTabClient());
+		allControlMultiTablePanels.add(controlPanelLicensesReconciliation);
 
 		// panelStatistics
-		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
-				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
-		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(this);
-		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
+		licensesPanelsTabNames.put(LicensesTabStatus.STATISTICS,
+				Configed.getResourceValue("ConfigedMain.Licenses.TabStatistics"));
+		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics(this);
+		addClient(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
+		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
 
-		licencesFrame.start();
+		licensesFrame.start();
 
-		Logging.info(this, "set size and location of licencesFrame");
+		Logging.info(this, "set size and location of licensesFrame");
 
-		licencesFrame.setSize(LICENCES_DIMENSION);
+		licensesFrame.setSize(LICENSES_DIMENSION);
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -3476,28 +3476,28 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.deactivateLoadingCursor();
 	}
 
-	public boolean freeAllPossibleLicencesForSelectedClients() {
-		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().size());
+	public boolean freeAllPossibleLicensesForSelectedClients() {
+		Logging.info(this, "freeAllPossibleLicensesForSelectedClients, count " + getSelectedClients().size());
 
 		if (getSelectedClients().isEmpty()) {
 			return true;
 		}
 
-		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.confirmFreeLicences.question"))) {
+		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.confirmFreeLicenses.question"))) {
 			return false;
 		}
 
 		for (String client : getSelectedClients()) {
-			Map<String, List<LicenceUsageEntry>> fClient2LicencesUsageList = persistenceController
+			Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = persistenceController
 					.getLicenseDataService().getFClient2LicensesUsageListPD();
 
-			for (LicenceUsageEntry m : fClient2LicencesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenceId(),
+			for (LicenseUsageEntry m : fClient2LicensesUsageList.get(client)) {
+				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenseId(),
 						m.getLicensePool());
 			}
 		}
 
-		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenceUsage();
+		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
 	}
 
 	public void callNewClientDialog() {
@@ -4205,7 +4205,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.checkErrorList(mainFrame);
 	}
 
-	private boolean checkSavedLicencesFrame() {
+	private boolean checkSavedLicensesFrame() {
 		if (allControlMultiTablePanels == null) {
 			return true;
 		}
@@ -4224,8 +4224,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (change) {
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp"),
-					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
+					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp"),
+					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
@@ -4286,8 +4286,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			loginDialog.dispose();
 		}
 
-		if (!checkSavedLicencesFrame()) {
-			licencesFrame.setVisible(true);
+		if (!checkSavedLicensesFrame()) {
+			licensesFrame.setVisible(true);
 			result = false;
 		}
 
@@ -4302,12 +4302,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public static void requestLicencesFrameReload() {
-		licencesFrame = null;
+	public static void requestLicensesFrameReload() {
+		licensesFrame = null;
 	}
 
-	public static LicencesFrame getLicencesFrame() {
-		return licencesFrame;
+	public static LicensesFrame getLicensesFrame() {
+		return licensesFrame;
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {

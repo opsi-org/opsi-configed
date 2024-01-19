@@ -28,6 +28,6 @@ public class RelationsASWToLPDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
-		softwareDataService.retrieveRelationsAuditSoftwareToLicencePoolsPD();
+		softwareDataService.retrieveRelationsAuditSoftwareToLicensePoolsPD();
 	}
 }

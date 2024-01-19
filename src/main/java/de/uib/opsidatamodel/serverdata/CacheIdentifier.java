@@ -293,7 +293,7 @@ public enum CacheIdentifier {
 	NAME_TO_SW_IDENTS("name_to_sw_idents"),
 
 	/**
-	 * return type {@code AuditSoftwareXLicencePool}
+	 * return type {@code AuditSoftwareXLicensePool}
 	 */
 	AUDIT_SOFTWARE_XL_LICENSE_POOL("audit_software_xl_license_pool"),
 
@@ -303,12 +303,12 @@ public enum CacheIdentifier {
 	HOST_CONFIGS("host_configs"),
 
 	/**
-	 * return type {@code Map<String LicencepoolEntry>}
+	 * return type {@code Map<String LicensepoolEntry>}
 	 */
 	LICENSE_POOLS("license_pools"),
 
 	/**
-	 * return type {@code Map<String, LicenceContractEntry>}
+	 * return type {@code Map<String, LicenseContractEntry>}
 	 */
 	LICENSE_CONTRACTS("license_contracts"),
 
@@ -318,22 +318,22 @@ public enum CacheIdentifier {
 	LICENSE_CONTRACTS_TO_NOTIFY("license_contracts_to_notify"),
 
 	/**
-	 * return type {@code Map<String, LicenceEntry>}
+	 * return type {@code Map<String, LicenseEntry>}
 	 */
 	LICENSES("licenses"),
 
 	/**
-	 * return type {@code List<LicenceUsableForEntry>}
+	 * return type {@code List<LicenseUsableForEntry>}
 	 */
 	LICENSE_USABILITIES("license_usabilites"),
 
 	/**
-	 * return type {@code List<LicenceUsageEntry>}
+	 * return type {@code List<LicenseUsageEntry>}
 	 */
 	LICENSE_USAGE("license_usage"),
 
 	/**
-	 * return type {@code LicencePoolXOpsiProduct}
+	 * return type {@code LicensePoolXOpsiProduct}
 	 */
 	LICENSE_POOL_X_OPSI_PRODUCT("license_pool_x_opsi_product"),
 
@@ -483,12 +483,12 @@ public enum CacheIdentifier {
 	PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS("product_on_client_display_fields_localboot_products"),
 
 	/**
-	 * return type {@code Map<String, LicenceUsageEntry>}
+	 * return type {@code Map<String, LicenseUsageEntry>}
 	 */
 	ROWS_LICENSE_USAGE("rows_license_usage"),
 
 	/**
-	 * return type {@code Map<String, List<LicenceUsageEntry>>}
+	 * return type {@code Map<String, List<LicenseUsageEntry>>}
 	 */
 	FCLIENT_TO_LICENSES_USAGE_LIST("fclient_to_licenses_usage_list"),
 

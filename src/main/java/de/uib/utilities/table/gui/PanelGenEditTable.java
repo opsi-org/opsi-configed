@@ -659,7 +659,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (getSelectedRowCount() == 0) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 		} else if (deleteAllowed) {
 			tableModel.deleteRow(getSelectedRowInModelTerms());
 		} else {

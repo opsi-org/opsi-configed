@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -34,7 +34,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reload() {
 		super.reload();
 		Logging.info(this, "reload");
-		controller.setSoftwareIdsFromLicencePool();
+		controller.setSoftwareIdsFromLicensePool();
 		saveRowSelection = theTable.getSelectedRows();
 	}
 
@@ -52,11 +52,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
 		super.reset();
 
-		if (controller.getTabClient().getFSoftwarename2LicencePool() != null) {
-			Logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
+		if (controller.getTabClient().getFSoftwarename2LicensePool() != null) {
+			Logging.info(this, "Panel.fSoftwarename2LicensePool.panelSWnames.reset");
 
 			// does not solve the task
-			controller.getTabClient().getFSoftwarename2LicencePool().getPanelSWnames().reset();
+			controller.getTabClient().getFSoftwarename2LicensePool().getPanelSWnames().reset();
 		}
 	}
 
@@ -65,7 +65,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		Logging.info(this, "cancel");
 		super.cancel();
 
-		controller.setSoftwareIdsFromLicencePool();
+		controller.setSoftwareIdsFromLicensePool();
 	}
 
 	public void callName2Pool(int modelrow) {
@@ -78,8 +78,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		Logging.info(this, " got name " + nameVal);
 
-		if (controller.getTabClient().getFSoftwarename2LicencePool() != null) {
-			controller.getTabClient().getFSoftwarename2LicencePool().getPanelSWnames().moveToValue(nameVal, 0);
+		if (controller.getTabClient().getFSoftwarename2LicensePool() != null) {
+			controller.getTabClient().getFSoftwarename2LicensePool().getPanelSWnames().moveToValue(nameVal, 0);
 		}
 	}
 
@@ -95,7 +95,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		saveRowSelection = theTable.getSelectedRows();
 	}
 
-	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (isAwareOfSelectionListener()) {
@@ -109,7 +108,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
 	}
 
-	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point mousePoint = e.getPoint();
@@ -123,8 +121,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 				controller.validateWindowsSoftwareKeys();
 
-				if (controller.getTabClient().getFSoftwarename2LicencePool().isVisible()) {
-					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
+				if (controller.getTabClient().getFSoftwarename2LicensePool().isVisible()) {
+					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicensePool.isVisible ");
 
 					// the data is not refreshed
 				}
@@ -162,7 +160,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		}
 	}
 
-	// CursorrowObserer
 	@Override
 	public void rowUpdated(int modelrow) {
 		super.rowUpdated(modelrow);

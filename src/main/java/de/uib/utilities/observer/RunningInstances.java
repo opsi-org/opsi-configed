@@ -62,7 +62,7 @@ public class RunningInstances<T> {
 
 	public boolean askStop() {
 		int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), askForLeave,
-				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
+				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 		return returnedOption == JOptionPane.YES_OPTION;

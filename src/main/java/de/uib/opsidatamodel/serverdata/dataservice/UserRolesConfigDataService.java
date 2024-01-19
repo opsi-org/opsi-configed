@@ -225,13 +225,13 @@ public class UserRolesConfigDataService {
 		if (Boolean.TRUE.equals(keyUserRegisterValue) && !moduleDataService.isWithUserRolesPD()) {
 			keyUserRegisterValue = false;
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
-			SwingUtilities.invokeLater(this::callOpsiLicenceMissingText);
+			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
 		}
 
 		return keyUserRegisterValue;
 	}
 
-	private void callOpsiLicenceMissingText() {
+	private void callOpsiLicenseMissingText() {
 		StringBuilder info = new StringBuilder();
 		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
 		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
@@ -612,7 +612,7 @@ public class UserRolesConfigDataService {
 
 		// extra display fields in licencing
 
-		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION;
+		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION;
 
 		// defaultValues
 
@@ -622,7 +622,7 @@ public class UserRolesConfigDataService {
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			// example for standard configuration other than empty
-			// extra columns for licence management, page licences reconciliation
+			// extra columns for license management, page licenses reconciliation
 			possibleValues = new ArrayList<>();
 			possibleValues.add("description");
 			possibleValues.add("inventoryNumber");
@@ -634,7 +634,7 @@ public class UserRolesConfigDataService {
 			item = Utils.createNOMitem("UnicodeConfig");
 			item.put("ident", key);
 			item.put("description",
-					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
+					Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation.ExtraHostFields"));
 			item.put("defaultValues", defaultValues);
 
 			item.put("possibleValues", possibleValues);
@@ -802,7 +802,7 @@ public class UserRolesConfigDataService {
 			possibleValues = new ArrayList<>();
 			possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
 			possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
-			possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
+			possibleValues.add(MainFrame.ITEM_FREE_LICENSES);
 
 			item = Utils.createNOMitem("UnicodeConfig");
 			item.put("id", key);
@@ -879,7 +879,7 @@ public class UserRolesConfigDataService {
 			readyObjects.add(item);
 		}
 
-		// for warnings for opsi licences
+		// for warnings for opsi licenses
 
 		// percentage number of clients
 		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
