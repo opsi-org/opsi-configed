@@ -527,7 +527,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						tree.scrollRowToVisible(row);
 					}
 
-					ConfigedMain.getMainFrame().disactivateLoadingCursor();
+					ConfigedMain.getMainFrame().deactivateLoadingCursor();
 				}
 
 				@Override
@@ -844,7 +844,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			tree.scrollRowToVisible(row);
 		}
 
-		ConfigedMain.getMainFrame().disactivateLoadingCursor();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	private void addUser() {

@@ -303,8 +303,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private Set<String> connectedHostsByMessagebus;
 
-	private List<String> previousSelectedClients;
-
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
 
@@ -807,7 +805,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					Platform.runLater(mainFrame::startLicenseDisplayer);
 				}
 
-				mainFrame.disactivateLoadingPane();
+				mainFrame.deactivateLoadingPane();
 			}
 		}.start();
 	}
@@ -906,7 +904,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.setVisualViewIndex(saveServerViewIndex);
 	}
 
-	private void actOnListSelection() {
+	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
@@ -918,13 +916,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (mainFrame != null) {
 			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
 					+ clientTable.isSelectionEmpty());
-
-			if (clientTable.isSelectionEmpty()) {
-				setSelectedClients((List<String>) null);
-				setSelectedClientsArray(new ArrayList<>());
-			} else {
-				setSelectedClients(clientTable.getSelectedValues());
-			}
+			setSelectedClients(clientTable.getSelectedValues());
 
 			clientInDepot = "";
 
@@ -981,13 +973,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		Logging.info(this,
-				"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().size());
+				"updateHostInfo, produce hostInfo  getSelectedClients().length " + getSelectedClients().size());
 
 		if (!getSelectedClients().isEmpty()) {
 			hostInfo.setBy(pcinfos.get(getSelectedClients().get(0)).getMap());
 
-			Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + getSelectedClients().get(0));
-			Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
+			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient " + getSelectedClients().get(0));
+			Logging.debug(this, "updateHostInfo, produce hostInfo  " + hostInfo);
 
 			HostInfo secondInfo = new HostInfo();
 
@@ -1001,18 +993,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting()) {
-			return;
+		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
 		}
-
-		List<String> currentSelectedClients = clientTable.getSelectedValues();
-		if ((previousSelectedClients != null && previousSelectedClients.equals(currentSelectedClients))
-				|| currentSelectedClients.isEmpty()) {
-			return;
-		}
-
-		previousSelectedClients = currentSelectedClients;
-		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
@@ -1480,7 +1463,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			setSelectedClientsOnPanel(new ArrayList<>());
 		} else {
 			setSelectedClientsOnPanel(clientNames);
-			actOnListSelection();
 		}
 	}
 
@@ -1595,12 +1577,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		requestRefreshDataForClientSelection();
 
-		// init
-		setSelectedClientsArray(new ArrayList<>());
-
-		if (!clientNames.isEmpty()) {
-			setSelectedClientsArray(clientNames);
-		}
+		setSelectedClientsArray(clientNames);
 
 		clientTree.produceActiveParents(getSelectedClients());
 
@@ -1733,16 +1710,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + clientTable.getSelectedValues().size());
 
-		clientTable.removeListSelectionListener(this);
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
+		clientTable.deactivateListSelectionListener();
 		clientTable.setModel(tm);
+		clientTable.activateListSelectionListener();
 
 		setTableColumnWidths(clientTable.getTable(), columnWidths);
-		clientTable.addListSelectionListener(this);
 
 		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
+
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
@@ -1754,8 +1732,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
 				+ Logging.getSize(clientTable.getSelectedValues()));
 
-		setSelectionPanelCols();
-
 		// did lose the selection since last setting
 		setSelectedClientsCollectionOnPanel(selectValues);
 
@@ -1765,7 +1741,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 		if (mainFrame != null) {
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 
@@ -2160,7 +2136,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setViewIndex(getViewIndex());
 
 		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 
@@ -2740,7 +2716,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		} else {
 			mainFrame.activateLoadingCursor();
 			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 			Logging.debug(this, "log pages set");
 		}
 
@@ -2800,7 +2776,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			break;
 		}
 
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 		return result;
 	}
 
@@ -2951,10 +2927,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
-		clientTable.removeListSelectionListener(this);
-
 		// dont do anything if we did not finish another thread for this
 		if (initialDataLoader.isDataLoaded()) {
+			clientTable.deactivateListSelectionListener();
 			allowedClients = null;
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -2994,23 +2969,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
-			// reactivate selection listener
 			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.removeListSelectionListener(this);
-			clientTable.addListSelectionListener(this);
+			clientTable.activateListSelectionListener();
 			setSelectedClientsCollectionOnPanel(clientsLeft);
-
-			// no list select item is provided
-			if (clientsLeft.isEmpty()) {
-				clientTable.fireListSelectionEmpty(this);
-			}
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerMenu();
 			updateHostInfo();
 			hostInfo.resetGui();
 		}
-		mainFrame.disactivateLoadingPane();
+
+		mainFrame.deactivateLoadingPane();
 	}
 
 	public HostsStatusPanel getHostsStatusInfo() {
@@ -3504,7 +3473,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		requestReloadStatesAndActions();
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 	}
 
 	public boolean freeAllPossibleLicensesForSelectedClients() {
@@ -3678,7 +3647,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		updateHostInfo();
 		hostInfo.resetGui();
 
-		mainFrame.disactivateLoadingCursor();
+		mainFrame.deactivateLoadingCursor();
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -4048,7 +4017,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				activateGroup(false, activatedGroupModel.getGroupName());
 				setClient(newClientNameWithDomain);
 			}
-			mainFrame.disactivateLoadingCursor();
+			mainFrame.deactivateLoadingCursor();
 		}
 	}
 
@@ -4106,10 +4075,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			Logging.info(this, " setSelectedClientsOnPanel selected null");
 		}
 
-		clientTable.removeListSelectionListener(this);
 		clientTable.setSelectedValues(selected);
 		setSelectedClientsArray(selected);
-		clientTable.addListSelectionListener(this);
 	}
 
 	private void setSelectedClientsCollectionOnPanel(Collection<String> selected) {

@@ -70,7 +70,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 			SwingUtilities.invokeLater(() -> {
 				panelStatistics.reload();
 				ConfigedMain.getLicensesFrame().setCursor(null);
-				ConfigedMain.getMainFrame().disactivateLoadingCursor();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			});
 		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {
 			panelStatistics.getTableModel().resetLocally();

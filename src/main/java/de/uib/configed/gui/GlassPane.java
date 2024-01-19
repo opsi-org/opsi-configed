@@ -110,7 +110,7 @@ public class GlassPane extends JPanel implements KeyListener {
 		setCursor(Globals.WAIT_CURSOR);
 	}
 
-	public void disactivateLoadingCursor() {
+	public void deactivateLoadingCursor() {
 		setCursor(null);
 	}
 

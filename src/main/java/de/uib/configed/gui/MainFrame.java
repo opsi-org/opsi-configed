@@ -2540,7 +2540,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void disactivateLoadingPane() {
+	public void deactivateLoadingPane() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> glassPane.activate(false));
 		} else {
@@ -2556,7 +2556,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void disactivateLoadingCursor() {
+	public void deactivateLoadingCursor() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> setCursor(null));
 		} else {
@@ -2571,7 +2571,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			public void run() {
 				configedMain.reloadLicensesData();
 				ConfigedMain.getLicensesFrame().setVisible(true);
-				disactivateLoadingPane();
+				deactivateLoadingPane();
 			}
 		}.start();
 	}
