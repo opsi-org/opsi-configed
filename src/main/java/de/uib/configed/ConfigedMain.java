@@ -2839,9 +2839,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void initServer() {
 		checkSaveAll(true);
 		preSaveSelectedClients = saveSelectedClients;
-		Logging.debug(this, "initServer() preSaveSelectedClients " + preSaveSelectedClients);
-		setSelectedClients((List<String>) null);
-		Logging.debug(this, "set selected values in initServer()");
 	}
 
 	public List<String> getSelectedDepots() {
