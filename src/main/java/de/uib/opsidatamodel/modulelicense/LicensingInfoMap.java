@@ -192,13 +192,13 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
-		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
+		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID),
 				new TypeReference<List<Object>>() {
 				});
 
-		for (Object producedLicence : producedLicences) {
+		for (Object producedLicense : producedLicenses) {
 			Map<String, Object> tmp = new HashMap<>();
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
+			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense,
 					new TypeReference<Map<String, Object>>() {
 					});
 
@@ -214,12 +214,12 @@ public final class LicensingInfoMap {
 	private Set<String> produceCustomerNameSet() {
 		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
-		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
+		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID),
 				new TypeReference<List<Object>>() {
 				});
 
-		for (Object producedLicence : producedLicences) {
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
+		for (Object producedLicense : producedLicenses) {
+			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense,
 					new TypeReference<Map<String, Object>>() {
 					});
 			String customerName = String.valueOf(originalMap.get(CUSTOMER_NAME));

@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 
-public class LicenceContractEntry extends StringValuedRelationElement {
+public class LicenseContractEntry extends StringValuedRelationElement {
 	public static final String ID_KEY = "id";
 	public static final String IDENT_KEY = "ident";
 	public static final String ID_DB_KEY = "licenseContractId";
@@ -56,12 +56,12 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
-	public LicenceContractEntry() {
+	public LicenseContractEntry() {
 		super();
 		super.setAllowedAttributes(ALLOWED_ATTRIBUTES);
 	}
 
-	public LicenceContractEntry(Map<String, Object> m) {
+	public LicenseContractEntry(Map<String, Object> m) {
 		this();
 		produceFrom(m);
 	}

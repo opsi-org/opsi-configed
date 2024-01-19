@@ -23,7 +23,7 @@ import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.gui.FSoftwarename2LicensePool;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -77,8 +77,8 @@ public class LicenseDisplayer {
 
 	public void loadData() {
 		StringBuilder message = new StringBuilder();
-		message.append(showLicenceContractWarnings());
-		message.append(calculateVariantLicencepools());
+		message.append(showLicenseContractWarnings());
+		message.append(calculateVariantLicensepools());
 		Platform.runLater(() -> showInfo(message.toString()));
 	}
 
@@ -140,7 +140,7 @@ public class LicenseDisplayer {
 		stage.show();
 	}
 
-	private String showLicenceContractWarnings() {
+	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
@@ -176,7 +176,7 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private String calculateVariantLicencepools() {
+	private String calculateVariantLicensepools() {
 		GenTableModel modelSWnames;
 
 		List<String> columnNames;
@@ -217,18 +217,18 @@ public class LicenseDisplayer {
 				super.produceRows();
 
 				Logging.info(this, "producing rows for modelSWnames");
-				int foundVariantLicencepools = 0;
+				int foundVariantLicensepools = 0;
 				namesWithVariantPools.clear();
 
 				for (int i = 0; i < getRowCount(); i++) {
 					String swName = (String) getValueAt(i, 0);
-					if (checkExistNamesWithVariantLicencepools(swName)) {
+					if (checkExistNamesWithVariantLicensepools(swName)) {
 						namesWithVariantPools.add(swName);
-						foundVariantLicencepools++;
+						foundVariantLicensepools++;
 					}
 				}
 
-				Logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
+				Logging.info(this, "produced rows, foundVariantLicensepools " + foundVariantLicensepools);
 			}
 		};
 
@@ -242,7 +242,7 @@ public class LicenseDisplayer {
 		StringBuilder result = new StringBuilder();
 		result.append("\n");
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dashboard.similarSWEntriesForLicencePoolExist"));
+		result.append(Configed.getResourceValue("Dashboard.similarSWEntriesForLicensePoolExist"));
 		result.append(":  \n");
 		for (String name : namesWithVariantPools) {
 			result.append(name);
@@ -253,15 +253,15 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private Set<String> getRangeSWxLicencepool(String swName) {
-		// nearly done in produceModelSWxLicencepool, but we collect the range of the
+	private Set<String> getRangeSWxLicensepool(String swName) {
+		// nearly done in produceModelSWxLicensepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
 		for (String swID : persist.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persist.getSoftwareDataService().getFSoftware2LicencePoolPD(swID);
+			String licpool = persist.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
-				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
+				range.add(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL);
 			} else {
 				range.add(licpool);
 			}
@@ -269,10 +269,10 @@ public class LicenseDisplayer {
 		return range;
 	}
 
-	private boolean checkExistNamesWithVariantLicencepools(String name) {
-		Set<String> range = getRangeSWxLicencepool(name);
+	private boolean checkExistNamesWithVariantLicensepools(String name) {
+		Set<String> range = getRangeSWxLicensepool(name);
 		if (range.size() > 1) {
-			Logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
+			Logging.info(this, "checkExistNamesWithVariantLicensepools, found  for " + name + " :  " + range);
 			return true;
 		}
 		return false;

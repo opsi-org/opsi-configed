@@ -5,11 +5,11 @@
  */
 
 /*
- * PanelLicencesReconciliation.java
+ * PanelLicensesReconciliation.java
  *
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import java.util.Map;
 
@@ -19,25 +19,25 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ControlPanelLicencesReconciliation;
+import de.uib.configed.ControlPanelLicensesReconciliation;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class PanelLicencesReconciliation extends MultiTablePanel {
+public class PanelLicensesReconciliation extends MultiTablePanel {
 	private PanelGenEditTable panelReconciliation;
 
-	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {
-		super(licencesReconciliationController);
+	public PanelLicensesReconciliation(ControlPanelLicensesReconciliation licensesReconciliationController) {
+		super(licensesReconciliationController);
 		initComponents();
 	}
 
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), false, 0, true, null,
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, true, null,
 				true);
-		panelReconciliation.setMasterFrame(ConfigedMain.getLicencesFrame());
+		panelReconciliation.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
@@ -65,10 +65,10 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	public void reset() {
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) == null) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			ConfigedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelReconciliation.reload();
-				ConfigedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getLicensesFrame().setCursor(null);
 				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			});
 		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {

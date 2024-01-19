@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,13 +15,13 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class LicenceUsageEntry extends StringValuedRelationElement {
+public class LicenseUsageEntry extends StringValuedRelationElement {
 	public static final String IDENT_KEY = "ident";
 	public static final String ID_KEY = "license_on_client_id";
-	public static final String LICENCE_POOL_ID_KEY = "licensePoolId";
-	public static final String LICENCE_ID_KEY = "softwareLicenseId";
+	public static final String LICENSE_POOL_ID_KEY = "licensePoolId";
+	public static final String LICENSE_ID_KEY = "softwareLicenseId";
 	public static final String CLIENT_ID_KEY = "clientId";
-	public static final String LICENCE_KEY_KEY = "licenseKey";
+	public static final String LICENSE_KEY_KEY = "licenseKey";
 	public static final String NOTES_KEY = "notes";
 
 	public static final String OPSI_NOM_TYPE = "LicenseOnClient";
@@ -29,14 +29,14 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	private static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(ID_KEY);
-		KEYS.add(LICENCE_POOL_ID_KEY);
-		KEYS.add(LICENCE_ID_KEY);
+		KEYS.add(LICENSE_POOL_ID_KEY);
+		KEYS.add(LICENSE_ID_KEY);
 		KEYS.add(CLIENT_ID_KEY);
-		KEYS.add(LICENCE_KEY_KEY);
+		KEYS.add(LICENSE_KEY_KEY);
 		KEYS.add(NOTES_KEY);
 	}
 
-	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
+	public LicenseUsageEntry(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
 			String notes) {
 		super();
 
@@ -48,22 +48,22 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 			super.put(CLIENT_ID_KEY, hostId);
 		}
 
-		if (softwareLicenceId == null) {
-			super.put(LICENCE_ID_KEY, "");
+		if (softwareLicenseId == null) {
+			super.put(LICENSE_ID_KEY, "");
 		} else {
-			super.put(LICENCE_ID_KEY, softwareLicenceId);
+			super.put(LICENSE_ID_KEY, softwareLicenseId);
 		}
 
-		if (licencePoolId == null) {
-			super.put(LICENCE_POOL_ID_KEY, "");
+		if (licensePoolId == null) {
+			super.put(LICENSE_POOL_ID_KEY, "");
 		} else {
-			super.put(LICENCE_POOL_ID_KEY, licencePoolId);
+			super.put(LICENSE_POOL_ID_KEY, licensePoolId);
 		}
 
-		if (licenceKey == null) {
-			super.put(LICENCE_KEY_KEY, "");
+		if (licenseKey == null) {
+			super.put(LICENSE_KEY_KEY, "");
 		} else {
-			super.put(LICENCE_KEY_KEY, licenceKey);
+			super.put(LICENSE_KEY_KEY, licenseKey);
 		}
 
 		if (notes == null) {
@@ -73,7 +73,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		}
 	}
 
-	public LicenceUsageEntry(Map<String, Object> entry) {
+	public LicenseUsageEntry(Map<String, Object> entry) {
 		super();
 		super.setAllowedAttributes(KEYS);
 
@@ -82,7 +82,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 			super.put(mapEntry.getKey(), "" + mapEntry.getValue());
 		}
 
-		if (super.get(LICENCE_ID_KEY) == null || super.get(LICENCE_POOL_ID_KEY) == null) {
+		if (super.get(LICENSE_ID_KEY) == null || super.get(LICENSE_POOL_ID_KEY) == null) {
 			Logging.warning(this.getClass(), "missing values " + entry);
 		}
 	}
@@ -92,27 +92,27 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public String getLicensePool() {
-		return get(LICENCE_POOL_ID_KEY);
+		return get(LICENSE_POOL_ID_KEY);
 	}
 
-	public String getLicenceId() {
-		return get(LICENCE_ID_KEY);
+	public String getLicenseId() {
+		return get(LICENSE_ID_KEY);
 	}
 
 	public Map<String, Object> getNOMobject() {
 		Map<String, Object> m = new HashMap<>();
 		m.put(CLIENT_ID_KEY, getClientId());
-		m.put(LICENCE_ID_KEY, getLicenceId());
-		m.put(LICENCE_POOL_ID_KEY, getLicensePool());
+		m.put(LICENSE_ID_KEY, getLicenseId());
+		m.put(LICENSE_POOL_ID_KEY, getLicensePool());
 		m.put("type", OPSI_NOM_TYPE);
 		return m;
 	}
 
-	public static String produceKey(String hostId, String licencePoolId, String licenceId) {
-		return Utils.pseudokey(new String[] { hostId, licencePoolId, licenceId });
+	public static String produceKey(String hostId, String licensePoolId, String licenseId) {
+		return Utils.pseudokey(new String[] { hostId, licensePoolId, licenseId });
 	}
 
 	public String getPseudoKey() {
-		return produceKey(getClientId(), getLicensePool(), getLicenceId());
+		return produceKey(getClientId(), getLicensePool(), getLicenseId());
 	}
 }

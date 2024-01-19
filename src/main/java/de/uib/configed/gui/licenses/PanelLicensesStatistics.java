@@ -5,11 +5,11 @@
  */
 
 /*
- * PanelLicencesStatistics.java
+ * PanelLicensesStatistics.java
  *
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import java.util.Map;
 
@@ -25,20 +25,20 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class PanelLicencesStatistics extends MultiTablePanel {
+public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
 
 	private PanelGenEditTable panelStatistics;
 
-	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
+	public PanelLicensesStatistics(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}
 
 	private void initComponents() {
 		panelStatistics = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), false, 0, true, null, true);
-		panelStatistics.setMasterFrame(ConfigedMain.getLicencesFrame());
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"), false, 0, true, null, true);
+		panelStatistics.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
@@ -66,10 +66,10 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	public void reset() {
 		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) == null) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			ConfigedMain.getLicencesFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelStatistics.reload();
-				ConfigedMain.getLicencesFrame().setCursor(null);
+				ConfigedMain.getLicensesFrame().setCursor(null);
 				ConfigedMain.getMainFrame().disactivateLoadingCursor();
 			});
 		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {

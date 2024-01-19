@@ -14,7 +14,7 @@ import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
-import de.uib.configed.type.licences.LicenceContractEntry;
+import de.uib.configed.type.licenses.LicenseContractEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
@@ -38,15 +38,15 @@ public final class LicenseData {
 			return;
 		}
 
-		Map<String, LicenceContractEntry> licenceContracts = persistenceController.getLicenseDataService()
+		Map<String, LicenseContractEntry> licenseContracts = persistenceController.getLicenseDataService()
 				.getLicenseContractsPD();
 
-		if (licenceContracts.isEmpty()) {
+		if (licenseContracts.isEmpty()) {
 			return;
 		}
 
 		licenses.clear();
-		licenses = licenceContracts.values().stream().map(v -> v.get("licenseContractId")).collect(Collectors.toList());
+		licenses = licenseContracts.values().stream().map(v -> v.get("licenseContractId")).collect(Collectors.toList());
 	}
 
 	public static List<String> getActiveLicenses() {
@@ -73,18 +73,18 @@ public final class LicenseData {
 
 		expiredLicenses.clear();
 
-		NavigableMap<String, NavigableSet<String>> expiredLicenceContracts = persistenceController
+		NavigableMap<String, NavigableSet<String>> expiredLicenseContracts = persistenceController
 				.getLicenseDataService().getLicenseContractsToNotifyPD();
 
-		if (expiredLicenceContracts.isEmpty()) {
+		if (expiredLicenseContracts.isEmpty()) {
 			return;
 		}
 
-		for (Entry<String, NavigableSet<String>> entry : expiredLicenceContracts.entrySet()) {
-			NavigableSet<String> expiredLicenceContractSet = entry.getValue();
+		for (Entry<String, NavigableSet<String>> entry : expiredLicenseContracts.entrySet()) {
+			NavigableSet<String> expiredLicenseContractSet = entry.getValue();
 
-			for (String expiredLicence : expiredLicenceContractSet) {
-				expiredLicenses.add(expiredLicence);
+			for (String expiredLicense : expiredLicenseContractSet) {
+				expiredLicenses.add(expiredLicense);
 			}
 		}
 	}

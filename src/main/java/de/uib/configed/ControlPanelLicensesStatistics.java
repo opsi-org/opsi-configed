@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.gui.licences.PanelLicencesStatistics;
+import de.uib.configed.gui.licenses.PanelLicensesStatistics;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -26,8 +26,8 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedTableEditItem;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 
-public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePanel {
-	private PanelLicencesStatistics thePanel;
+public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePanel {
+	private PanelLicensesStatistics thePanel;
 	private GenTableModel modelStatistics;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -35,8 +35,8 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 
 	private ConfigedMain configedMain;
 
-	public ControlPanelLicencesStatistics(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesStatistics(this);
+	public ControlPanelLicensesStatistics(ConfigedMain configedMain) {
+		thePanel = new PanelLicensesStatistics(this);
 		this.configedMain = configedMain;
 
 		init();
@@ -56,7 +56,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
-		columnNames.add("licence_options");
+		columnNames.add("license_options");
 		columnNames.add("used_by_opsi");
 		columnNames.add("remaining_opsi");
 		columnNames.add("SWinventory_used");

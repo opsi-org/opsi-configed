@@ -174,7 +174,7 @@ public class ModuleDataService {
 		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isWithUserRolesPD());
 		Logging.info(this, "produceOpsiModulesInfo withUEFI " + isWithUEFIPD());
 		Logging.info(this, "produceOpsiModulesInfo withWAN " + isWithWANPD());
-		Logging.info(this, "produceOpsiModulesInfo withLicenceManagement " + isWithLicenceManagementPD());
+		Logging.info(this, "produceOpsiModulesInfo withLicenseManagement " + isWithLicenseManagementPD());
 		Logging.info(this, "produceOpsiModulesInfo withMySQL " + isWithMySQLPD());
 
 		// sets value to true if we use the mysql backend and informs that we are
@@ -422,7 +422,7 @@ public class ModuleDataService {
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
 		// Will be called only, when info empty
-		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
+		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
 		cacheManager.setCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT,
 				opsiModules.get("license_management") != null && opsiModules.get("license_management"));
@@ -440,7 +440,7 @@ public class ModuleDataService {
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
 	}
 
-	private void callOpsiLicenceMissingModules(List<String> missingModulesPermissionInfo) {
+	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
 		if (!missingModulesPermissionInfo.isEmpty()) {
 			SwingUtilities.invokeLater(() -> {
 				StringBuilder info = new StringBuilder(":\n");
@@ -665,7 +665,7 @@ public class ModuleDataService {
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
 		// Will be called only when info empty
-		callOpsiLicenceMissingModules(missingModulesPermissionInfo);
+		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
 		cacheManager.setCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT,
 				(opsiModules.get("license_management") != null) && opsiModules.get("license_management"));
@@ -867,7 +867,7 @@ public class ModuleDataService {
 		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_WAN, Boolean.class));
 	}
 
-	public boolean isWithLicenceManagementPD() {
+	public boolean isWithLicenseManagementPD() {
 		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT, Boolean.class));
 	}
 

@@ -5,11 +5,11 @@
  */
 
 /*
- * PanelLicencesUsage.java
+ * PanelLicensesUsage.java
  *
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import java.awt.Dimension;
 
@@ -25,28 +25,28 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ControlPanelLicencesUsage;
+import de.uib.configed.ControlPanelLicensesUsage;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.AutoCompletionComboBox;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class PanelLicencesUsage extends MultiTablePanel {
+public class PanelLicensesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
 
 	private PanelGenEditTable panelUsage;
-	private PanelGenEditTable panelLicencePools;
+	private PanelGenEditTable panelLicensePools;
 
 	private JPanel panelGetAndAssignSL;
 	private JComboBox<String> comboClient;
 
 	private int lPoolHeight = 100;
 
-	private ControlPanelLicencesUsage licencesUsageController;
+	private ControlPanelLicensesUsage licensesUsageController;
 	private int initialSplit;
 
-	public PanelLicencesUsage(ControlPanelLicencesUsage licencesUsageController) {
-		super(licencesUsageController);
-		this.licencesUsageController = licencesUsageController;
+	public PanelLicensesUsage(ControlPanelLicensesUsage licensesUsageController) {
+		super(licensesUsageController);
+		this.licensesUsageController = licensesUsageController;
 		initSubPanel();
 		initComponents();
 	}
@@ -60,21 +60,21 @@ public class PanelLicencesUsage extends MultiTablePanel {
 	}
 
 	private void initSubPanel() {
-		panelLicencePools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), false, 0, false,
+		panelLicensePools = new PanelGenEditTable(
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
 		JLabel labelGetAndAssignSL = new JLabel(
-				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
+				Configed.getResourceValue("ConfigedMain.Licenses.Usage.LabelAssignLicense"));
 
 		comboClient = new AutoCompletionComboBox<>();
 		comboClient.setPreferredSize(new Dimension(200, 20));
 		comboClient.setEditable(true);
 
-		JButton buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
+		JButton buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licenses.Usage.AssignLicense"));
 		buttonGet.addActionListener(
-				event -> licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem()));
+				event -> licensesUsageController.getSoftwareLicenseReservation((String) comboClient.getSelectedItem()));
 
 		GroupLayout panelGetAndAssignSLLayout = new GroupLayout(panelGetAndAssignSL);
 		panelGetAndAssignSL.setLayout(panelGetAndAssignSLLayout);
@@ -82,7 +82,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 				.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addComponent(labelGetAndAssignSL)
 						.addGap(20, 20, 20)
 						.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-				.addComponent(panelLicencePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelLicensePools, Alignment.TRAILING, 20, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 						buttonGet, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)));
@@ -94,18 +94,18 @@ public class PanelLicencesUsage extends MultiTablePanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(panelLicencePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(panelLicensePools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonGet, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
 	private void initComponents() {
-		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), true,
+		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true,
 				0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelUsage.setMasterFrame(ConfigedMain.getLicencesFrame());
+		panelUsage.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelUsage.setFiltering(true);
@@ -133,7 +133,7 @@ public class PanelLicencesUsage extends MultiTablePanel {
 		return panelUsage;
 	}
 
-	public PanelGenEditTable getPanelLicencePools() {
-		return panelLicencePools;
+	public PanelGenEditTable getPanelLicensePools() {
+		return panelLicensePools;
 	}
 }

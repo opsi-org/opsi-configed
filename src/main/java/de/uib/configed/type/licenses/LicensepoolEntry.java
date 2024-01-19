@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Map;
 import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.logging.Logging;
 
-public class LicencepoolEntry extends AbstractTableEntry {
+public class LicensepoolEntry extends AbstractTableEntry {
 	public static final String ID_SERVICE_KEY = "licensePoolId";
 	public static final String ID_KEY = "id";
 	public static final String DESCRIPTION_KEY = "description";
@@ -24,7 +24,7 @@ public class LicencepoolEntry extends AbstractTableEntry {
 		KEYS.add(DESCRIPTION_KEY);
 	}
 
-	public LicencepoolEntry(Map<String, Object> entry) {
+	public LicensepoolEntry(Map<String, Object> entry) {
 		super(entry);
 		super.remap(ID_SERVICE_KEY, ID_KEY);
 		super.remap(DESCRIPTION_KEY, DESCRIPTION_KEY);
@@ -40,7 +40,7 @@ public class LicencepoolEntry extends AbstractTableEntry {
 		}
 	}
 
-	public String getLicencepoolId() {
+	public String getLicensepoolId() {
 		if (get(ID_SERVICE_KEY) != null) {
 			return get(ID_SERVICE_KEY);
 		}

@@ -14,7 +14,7 @@ import java.util.Set;
 
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.gui.licences.PanelLicencesReconciliation;
+import de.uib.configed.gui.licenses.PanelLicensesReconciliation;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -33,9 +33,9 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 
-public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
-	private PanelLicencesReconciliation thePanel;
-	private GenTableModel modelLicencesReconciliation;
+public class ControlPanelLicensesReconciliation extends AbstractControlMultiTablePanel {
+	private PanelLicensesReconciliation thePanel;
+	private GenTableModel modelLicensesReconciliation;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -45,8 +45,8 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 	private ConfigedMain configedMain;
 
-	public ControlPanelLicencesReconciliation(ConfigedMain configedMain) {
-		thePanel = new PanelLicencesReconciliation(this);
+	public ControlPanelLicensesReconciliation(ConfigedMain configedMain) {
+		thePanel = new PanelLicensesReconciliation(this);
 		this.configedMain = configedMain;
 
 		init();
@@ -66,7 +66,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		initTreatmentOfColumns();
 
 		thePanel.getPanelReconciliation().setUpdateController(new MapItemsUpdateController(
-				thePanel.getPanelReconciliation(), modelLicencesReconciliation, new MapBasedUpdater() {
+				thePanel.getPanelReconciliation(), modelLicensesReconciliation, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return "";
@@ -74,7 +74,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
-						modelLicencesReconciliation.requestReload();
+						modelLicensesReconciliation.requestReload();
 						return false;
 					}
 				}, updateCollection));
@@ -92,7 +92,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> classNames;
 
 		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
-				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 
 		columnNames = new ArrayList<>();
 		classNames = new ArrayList<>();
@@ -116,9 +116,9 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.Boolean");
 		classNames.add("java.lang.Boolean");
-		MapTableUpdateItemFactory updateItemFactoryLicencesReconciliation = new MapTableUpdateItemFactory(
-				modelLicencesReconciliation, columnNames);
-		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
+		MapTableUpdateItemFactory updateItemFactoryLicensesReconciliation = new MapTableUpdateItemFactory(
+				modelLicensesReconciliation, columnNames);
+		modelLicensesReconciliation = new GenTableModel(updateItemFactoryLicensesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
@@ -141,7 +141,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
 		// filter which guarantees that clients are only shown when they have entries
-		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
+		modelLicensesReconciliation.setFilterCondition(new TableModelFilterCondition() {
 			@Override
 			public void setFilter(Set<Object> filterParam) {
 				// Implementing TableModelFilterCondition
@@ -153,14 +153,14 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 			}
 		});
 
-		updateItemFactoryLicencesReconciliation.setSource(modelLicencesReconciliation);
+		updateItemFactoryLicensesReconciliation.setSource(modelLicensesReconciliation);
 
-		tableModels.add(modelLicencesReconciliation);
+		tableModels.add(modelLicensesReconciliation);
 		tablePanes.add(thePanel.getPanelReconciliation());
 
-		modelLicencesReconciliation.reset();
-		thePanel.getPanelReconciliation().setTableModel(modelLicencesReconciliation);
-		modelLicencesReconciliation.setEditableColumns(new int[] {});
+		modelLicensesReconciliation.reset();
+		thePanel.getPanelReconciliation().setTableModel(modelLicensesReconciliation);
+		modelLicensesReconciliation.setEditableColumns(new int[] {});
 		thePanel.getPanelReconciliation().setEmphasizedColumns(new int[] {});
 	}
 

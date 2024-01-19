@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.type.licences;
+package de.uib.configed.type.licenses;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,13 +17,13 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class AuditSoftwareXLicencePool extends Relation {
+public class AuditSoftwareXLicensePool extends Relation {
 	public static final String SW_ID = "swId";
 
 	private static final List<String> SOFTWARE_ATTRIBUTES;
 	static {
 		SOFTWARE_ATTRIBUTES = new LinkedList<>();
-		SOFTWARE_ATTRIBUTES.add(LicencepoolEntry.ID_SERVICE_KEY);
+		SOFTWARE_ATTRIBUTES.add(LicensepoolEntry.ID_SERVICE_KEY);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.NAME);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.VERSION);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.SUB_VERSION);
@@ -37,10 +37,10 @@ public class AuditSoftwareXLicencePool extends Relation {
 		INTERFACED_ATTRIBUTES.add(SW_ID);
 	}
 
-	public static final List<String> SERVICE_ATTRIBUTES = List.of(LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
+	public static final List<String> SERVICE_ATTRIBUTES = List.of(LicensepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE);
 
-	public AuditSoftwareXLicencePool() {
+	public AuditSoftwareXLicensePool() {
 		super(SOFTWARE_ATTRIBUTES);
 	}
 
@@ -79,7 +79,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		String swIdent = "" + produceSWident(m);
 		rowmap.put(SW_ID, swIdent);
 
-		rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, getStringValue(m.get(LicencepoolEntry.ID_SERVICE_KEY)));
+		rowmap.put(LicensepoolEntry.ID_SERVICE_KEY, getStringValue(m.get(LicensepoolEntry.ID_SERVICE_KEY)));
 		add(rowmap);
 
 		return rowmap;
