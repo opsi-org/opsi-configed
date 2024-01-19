@@ -243,29 +243,31 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		Logging.info(this, "setSelectedValues " + valuesListS);
 		selectionModel.clearSelection();
+		if (valuesList == null) {
+			// Do nothing in that case
+		} else if (valuesList.isEmpty()) {
+			configedMain.actOnListSelection();
+		} else {
 
-		if (valuesList == null || valuesList.isEmpty()) {
-			return;
-		}
+			// because of ordering , we create a TreeSet view of the list
+			selectionModel.setValueIsAdjusting(true);
+			for (int i = 0; i < table.getRowCount(); i++) {
+				Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
 
-		// because of ordering , we create a TreeSet view of the list
-		selectionModel.setValueIsAdjusting(true);
-		for (int i = 0; i < table.getRowCount(); i++) {
-			Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
-
-			if (valuesList.contains(table.getValueAt(i, 0))) {
-				selectionModel.addSelectionInterval(i, i);
-				Logging.debug(this, "setSelectedValues add interval " + i);
+				if (valuesList.contains(table.getValueAt(i, 0))) {
+					selectionModel.addSelectionInterval(i, i);
+					Logging.debug(this, "setSelectedValues add interval " + i);
+				}
 			}
+
+			selectionModel.setValueIsAdjusting(false);
+
+			table.repaint();
+
+			moveToFirstSelected();
+
+			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
 		}
-
-		selectionModel.setValueIsAdjusting(false);
-
-		table.repaint();
-
-		moveToFirstSelected();
-
-		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
 	}
 
 	public void moveToFirstSelected() {

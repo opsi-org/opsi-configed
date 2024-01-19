@@ -904,7 +904,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		mainFrame.setVisualViewIndex(saveServerViewIndex);
 	}
 
-	private void actOnListSelection() {
+	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
@@ -916,12 +916,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (mainFrame != null) {
 			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
 					+ clientTable.isSelectionEmpty());
+			setSelectedClients(clientTable.getSelectedValues());
 
 			if (clientTable.isSelectionEmpty()) {
-				setSelectedClients((List<String>) null);
 				setSelectedClientsArray(new ArrayList<>());
-			} else {
-				setSelectedClients(clientTable.getSelectedValues());
 			}
 
 			clientInDepot = "";
