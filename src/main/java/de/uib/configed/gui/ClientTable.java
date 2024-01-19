@@ -231,10 +231,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.clearSelection();
 	}
 
-	public void setValueIsAdjusting(boolean adjusting) {
-		selectionModel.setValueIsAdjusting(adjusting);
-	}
-
 	public void setSelectedValues(Collection<String> valuesList) {
 		String valuesListS = null;
 		if (valuesList != null) {

@@ -168,7 +168,7 @@ public class ControllerHWinfoMultiClients {
 		buttonCopySelection.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.getSelection"));
 
 		buttonCopySelection.addActionListener(
-				actionEvent -> configedMain.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
+				actionEvent -> configedMain.setSelectedClientsOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(
 				new JComponent[] { buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns },
