@@ -143,7 +143,7 @@ public class UserRolesConfigDataService {
 
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
 
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, checkReadOnlyBySystemuser());
+		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, doesUserBelongToSystemsReadOnlyGroup());
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
@@ -245,19 +245,11 @@ public class UserRolesConfigDataService {
 		FOpsiLicenseMissingText.callInstanceWith(info.toString());
 	}
 
-	private boolean checkReadOnlyBySystemuser() {
-		boolean result = false;
-
-		Logging.info(this, "checkReadOnly");
-		if (exec.getBooleanResult(
-				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}))) {
-			result = true;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, result);
-		Logging.info(this, "checkReadOnly " + isGlobalReadOnly());
-
-		return result;
+	private boolean doesUserBelongToSystemsReadOnlyGroup() {
+		boolean isUserReadOnlyUser = exec.getBooleanResult(
+				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
+		Logging.info(this, "does user belong to system's read-only group? " + isUserReadOnlyUser);
+		return isUserReadOnlyUser;
 	}
 
 	// final in order to avoid deactiviating by override
@@ -346,6 +338,7 @@ public class UserRolesConfigDataService {
 			Logging.info(this, "checkPermissions  configKey " + configKey);
 			globalReadOnly = serverPropertyMap.get(configKey) != null
 					&& (Boolean) serverPropertyMap.get(configKey).get(0);
+			cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
 		}
 
 		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
