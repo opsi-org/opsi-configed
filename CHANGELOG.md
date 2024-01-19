@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.X.X] - XXXX-XX-XX
+## Fixed
+- Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
+
 ## [4.3.1.4] - 2024-01-12
 ### Added
 - Auto completion and sort clients in license usage
