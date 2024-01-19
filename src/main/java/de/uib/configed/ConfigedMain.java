@@ -693,6 +693,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
+		fillterPermittedProductGroups(productGroups.keySet());
 		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 
 		persistenceController.getDepotDataService().retrieveProductsPD();
@@ -703,6 +704,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
 
 		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+	}
+
+	private void fillterPermittedProductGroups(Set<String> productGroups) {
+		if (!persistenceController.getUserRolesConfigDataService().hasProductGroupsFullPermissionPD()) {
+			Set<String> permittedProductGroups = persistenceController.getUserRolesConfigDataService()
+					.getPermittedProductGroupsPD();
+			productGroups.retainAll(permittedProductGroups);
+		}
 	}
 
 	public void setColumnSessionInfo(boolean b) {

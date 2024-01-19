@@ -373,6 +373,11 @@ public enum CacheIdentifier {
 	PRODUCT_GROUPS_FULL_PERMISSION("product_groups_full_permission"),
 
 	/**
+	 * return type {@code Set<String>}
+	 */
+	PERMITTED_PRODUCT_GROUPS("permitted_product_groups"),
+
+	/**
 	 * return type {@code boolean}
 	 */
 	CREATE_CLIENT_PERMISSION("create_client_permission"),
