@@ -918,10 +918,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					+ clientTable.isSelectionEmpty());
 			setSelectedClients(clientTable.getSelectedValues());
 
-			if (clientTable.isSelectionEmpty()) {
-				setSelectedClientsArray(new ArrayList<>());
-			}
-
 			clientInDepot = "";
 
 			hostInfo.initialize();
@@ -1581,12 +1577,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		requestRefreshDataForClientSelection();
 
-		// init
-		setSelectedClientsArray(new ArrayList<>());
-
-		if (!clientNames.isEmpty()) {
-			setSelectedClientsArray(clientNames);
-		}
+		setSelectedClientsArray(clientNames);
 
 		clientTree.produceActiveParents(getSelectedClients());
 
