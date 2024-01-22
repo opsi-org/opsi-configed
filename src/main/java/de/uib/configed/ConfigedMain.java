@@ -4067,10 +4067,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientSelectionDialog.loadSearch(name);
 	}
 
-	public void clearSelectionOnPanel() {
-		clientTable.clearSelection();
-	}
-
 	public void setSelectedClientsOnPanel(Collection<String> selected) {
 		if (selected != null) {
 			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.size());
