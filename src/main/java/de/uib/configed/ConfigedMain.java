@@ -411,8 +411,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
-		setReachableInfo();
-
 		mainFrame.updateHostCheckboxenText();
 		mainFrame.enableAfterLoading();
 	}
