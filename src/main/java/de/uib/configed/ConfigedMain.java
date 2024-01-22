@@ -1604,11 +1604,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return filterClientList;
 	}
 
-	public void toggleFilterClientList() {
-		toggleFilterClientList(true);
-	}
-
-	// Todo refactor because only one method is called?
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
