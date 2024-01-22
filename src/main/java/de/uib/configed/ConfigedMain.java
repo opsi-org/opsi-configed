@@ -4143,7 +4143,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ clientsToSelect.size());
 
 		setSelectedClientsOnPanel(clientsToSelect, true);
-		setRebuiltClientListTableModel(true);
 	}
 
 	public void selectClientsWithFailedProduct(String selectedProduct) {
