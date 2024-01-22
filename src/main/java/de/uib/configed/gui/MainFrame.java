@@ -2501,7 +2501,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
-				F_WIDTH / 2, this.getHeight() - 100);
+				F_WIDTH / 2, 600);
 		fProductSelectionList.setListData(completeList);
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
