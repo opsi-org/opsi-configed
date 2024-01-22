@@ -4082,7 +4082,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		clientTable.setSelectedValues(selected);
-		setSelectedClientsArray(selected);
 	}
 
 	public void setSelectedClientsOnPanel(Collection<String> selected, boolean renewFilter) {
