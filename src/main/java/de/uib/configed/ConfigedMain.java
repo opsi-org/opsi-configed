@@ -4120,22 +4120,21 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setSelectedClientsOnPanel(result, true);
 	}
 
-	public void selectClientsNotCurrentProductInstalled(List<String> selectedProducts,
+	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
 			boolean includeClientsWithBrokenInstallation) {
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products " + selectedProducts);
-		if (selectedProducts == null || selectedProducts.size() != 1) {
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products " + selectedProduct);
+		if (selectedProduct == null || selectedProduct.isEmpty()) {
 			return;
 		}
 
-		String productId = selectedProducts.get(0);
-		String productVersion = persistenceController.getProductDataService().getProductVersion(productId);
-		String packageVersion = persistenceController.getProductDataService().getProductPackageVersion(productId);
+		String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
+		String packageVersion = persistenceController.getProductDataService().getProductPackageVersion(selectedProduct);
 
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled product " + productId + ", " + productVersion
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled product " + selectedProduct + ", " + productVersion
 				+ ", " + packageVersion);
 
 		List<String> clientsToSelect = persistenceController.getHostDataService().getClientsWithOtherProductVersion(
-				productId, productVersion, packageVersion, includeClientsWithBrokenInstallation);
+				selectedProduct, productVersion, packageVersion, includeClientsWithBrokenInstallation);
 
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally " + clientsToSelect.size());
 
@@ -4148,15 +4147,15 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		setRebuiltClientListTableModel(true);
 	}
 
-	public void selectClientsWithFailedProduct(List<String> selectedProducts) {
-		Logging.debug(this, "selectClientsWithFailedProduct, products " + selectedProducts);
-		if (selectedProducts == null || selectedProducts.size() != 1) {
+	public void selectClientsWithFailedProduct(String selectedProduct) {
+		Logging.debug(this, "selectClientsWithFailedProduct, products " + selectedProduct);
+		if (selectedProduct == null || selectedProduct.isEmpty()) {
 			return;
 		}
 
 		SelectionManager manager = new SelectionManager(null);
 
-		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
+		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProduct);
 
 		manager.setSearch(test);
 

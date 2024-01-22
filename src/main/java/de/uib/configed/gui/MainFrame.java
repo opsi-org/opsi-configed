@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -106,7 +105,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FEditObject;
-import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
@@ -2484,44 +2482,29 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.callClientSelectionDialog();
 	}
 
-	private List<String> getProduct(List<String> completeList) {
-		FEditStringList fList = new FEditStringList();
-		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray(new String[0])));
-		fList.setTitle(Configed.getResourceValue("MainFrame.productSelection"));
-		fList.init();
-
-		fList.setSize(F_WIDTH / 2, this.getHeight() - 100);
-		fList.setModal(true);
-		fList.setLocationRelativeTo(this);
-		fList.setVisible(true);
-
-		Logging.debug(this, "fList getSelectedValue " + fList.getSelectedList());
-
-		return fList.getSelectedList();
-	}
-
 	private void groupByNotCurrentProductVersion() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
-
-		if (!products.isEmpty()) {
-			configedMain.selectClientsNotCurrentProductInstalled(products, false);
-		}
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
-
-		if (!products.isEmpty()) {
-			configedMain.selectClientsNotCurrentProductInstalled(products, true);
-		}
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsWithFailedProduct(products);
+	}
 
-		if (!products.isEmpty()) {
-			configedMain.selectClientsWithFailedProduct(products);
-		}
+	private String getProduct(List<String> completeList) {
+		FSelectionList fProductSelectionList = new FSelectionList(this,
+				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
+						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
+				F_WIDTH / 2, 600);
+		fProductSelectionList.setListData(completeList);
+		fProductSelectionList.setVisible(true);
+		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}
 
 	private void reloadAction() {
