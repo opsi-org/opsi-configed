@@ -874,7 +874,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-			setSelectedClientsOnPanel(preSaveSelectedClients);
+			clientTable.setSelectedValues(preSaveSelectedClients);
 		}
 	}
 
@@ -1469,9 +1469,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void setClients(List<String> clientNames) {
 		Logging.info(this, "setClients " + clientNames);
 		if (clientNames == null) {
-			setSelectedClientsOnPanel(new ArrayList<>());
+			clientTable.setSelectedValues(new ArrayList<>());
 		} else {
-			setSelectedClientsOnPanel(clientNames);
+			clientTable.setSelectedValues(clientNames);
 		}
 	}
 
@@ -1513,7 +1513,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return;
 		}
 
-		setSelectedClientsOnPanel(clientsFilteredByTree);
+		clientTable.setSelectedValues(clientsFilteredByTree);
 	}
 
 	private void requestRefreshDataForClientSelection() {
@@ -1738,7 +1738,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ Logging.getSize(clientTable.getSelectedValues()));
 
 		// did lose the selection since last setting
-		setSelectedClientsOnPanel(selectValues);
+		clientTable.setSelectedValues(selectValues);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
 				+ Logging.getSize(clientTable.getSelectedValues()));
@@ -2969,7 +2969,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			Logging.debug(this, " reset the values, particularly in list ");
 			clientTable.activateListSelectionListener();
-			setSelectedClientsOnPanel(clientsLeft);
+			clientTable.setSelectedValues(clientsLeft);
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerMenu();
@@ -3411,7 +3411,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			model.fireTableDataChanged();
 
-			setSelectedClientsOnPanel(selectedClients);
+			clientTable.setSelectedValues(selectedClients);
 		}
 	}
 
@@ -4062,14 +4062,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientSelectionDialog.loadSearch(name);
 	}
 
-	public void setSelectedClientsOnPanel(Collection<String> selected) {
-		if (selected != null) {
-			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.size());
-		} else {
-			Logging.info(this, " setSelectedClientsOnPanel selected null");
-		}
-
-		clientTable.setSelectedValues(selected);
+	public void setSelectedClients(Collection<String> clientsToSelect) {
+		clientTable.setSelectedValues(clientsToSelect);
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
@@ -4087,7 +4081,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		List<String> result = manager.selectClients();
 
-		setSelectedClientsOnPanel(result);
+		clientTable.setSelectedValues(result);
 	}
 
 	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
@@ -4113,7 +4107,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list "
 				+ clientsToSelect.size());
 
-		setSelectedClientsOnPanel(clientsToSelect);
+		clientTable.setSelectedValues(clientsToSelect);
 	}
 
 	public void selectClientsWithFailedProduct(String selectedProduct) {
@@ -4131,7 +4125,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> result = manager.selectClients();
 
 		Logging.info(this, "selected: " + result);
-		setSelectedClientsOnPanel(result);
+		clientTable.setSelectedValues(result);
 	}
 
 	public void logEventOccurred() {
