@@ -15,13 +15,12 @@ import javax.swing.JLabel;
  */
 public class FShowListWithComboSelect extends FShowList {
 	private JComboBox<String> combo;
-	private JLabel labelChoice;
 
 	public FShowListWithComboSelect(JFrame owner, String title, boolean modal, String choiceTitle, String[] choices,
 			String[] buttonList) {
 		super(owner, title, modal, buttonList);
 
-		labelChoice = new JLabel(choiceTitle + ": ");
+		JLabel labelChoice = new JLabel(choiceTitle + ": ");
 
 		northPanel.add(labelChoice);
 		combo = new JComboBox<>(choices);
