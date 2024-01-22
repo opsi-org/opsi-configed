@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.X.X] - XXXX-XX-XX
+## Fixed
+- Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
+
+
 ## [4.3.1.5] - 2024-01-19
 ### Fixed
 - Parameter `user.{<user>}.privilege.product.groupaccess.productgroups` has no effect on dispalyed products.
