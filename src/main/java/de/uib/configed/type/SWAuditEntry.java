@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
+import de.uib.configed.type.licenses.AuditSoftwareXLicensePool;
 import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import utils.Utils;
@@ -79,13 +79,13 @@ public class SWAuditEntry extends AbstractTableEntry {
 	private String ident;
 	private String identReduced;
 
-	public SWAuditEntry(StringValuedRelationElement auditSoftwareXLicencePoolElement) {
-		// called for RelationElements of AuditSoftwareXLicencePool
+	public SWAuditEntry(StringValuedRelationElement auditSoftwareXLicensePoolElement) {
+		// called for RelationElements of AuditSoftwareXLicensePool
 		// the parameter is only requested in order to get a distinction of the
 		// constructors
 
-		super(auditSoftwareXLicencePoolElement);
-		ident = auditSoftwareXLicencePoolElement.get(AuditSoftwareXLicencePool.SW_ID);
+		super(auditSoftwareXLicensePoolElement);
+		ident = auditSoftwareXLicensePoolElement.get(AuditSoftwareXLicensePool.SW_ID);
 	}
 
 	public SWAuditEntry(Map<String, Object> entry) {

@@ -88,15 +88,15 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
 
 	@SuppressWarnings({ "java:S103" })
-	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
+	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
 	public static final String CONFIG_KEY = "configed.meta_config";
 
-	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
+	public static final String KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
 
-	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
+	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT = false;
 
 	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
 

@@ -5,12 +5,12 @@
  */
 
 /*
- * PanelEditLicences.java
+ * PanelEditLicenses.java
  * for backend editing of three tables 
  *
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
@@ -23,53 +23,52 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class PanelEditLicences extends MultiTablePanel {
+public class PanelEditLicenses extends MultiTablePanel {
 	private PanelGenEditTable panelKeys;
-	private PanelGenEditTable panelSoftwarelicences;
-	private PanelGenEditTable panelLicencecontracts;
+	private PanelGenEditTable panelSoftwarelicenses;
+	private PanelGenEditTable panelLicensecontracts;
 
 	private int minVSize = 100;
 
-	/** Creates new form PanelEditLicences */
-	public PanelEditLicences(AbstractControlMultiTablePanel controller) {
+	public PanelEditLicenses(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelKeys.setMasterFrame(ConfigedMain.getLicencesFrame());
+		panelKeys.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelKeys.showFilterIcon(true);
 		panelKeys.setFiltering(true);
 
-		panelSoftwarelicences = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), true, 2, false,
+		panelSoftwarelicenses = new PanelGenEditTable(
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelSoftwarelicences.setMasterFrame(ConfigedMain.getLicencesFrame());
-		panelSoftwarelicences.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelSoftwarelicences.setFiltering(true);
-		panelSoftwarelicences.showFilterIcon(true);
+		panelSoftwarelicenses.setMasterFrame(ConfigedMain.getLicensesFrame());
+		panelSoftwarelicenses.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelSoftwarelicenses.setFiltering(true);
+		panelSoftwarelicenses.showFilterIcon(true);
 
-		panelLicencecontracts = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), true, 2, false,
+		panelLicensecontracts = new PanelGenEditTable(
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelLicencecontracts.setMasterFrame(ConfigedMain.getLicencesFrame());
-		panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelLicensecontracts.setMasterFrame(ConfigedMain.getLicensesFrame());
+		panelLicensecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelLicencecontracts.showFilterIcon(true);
-		panelLicencecontracts.setFiltering(true);
-		panelLicencecontracts.setAwareOfTableChangedListener(true);
+		panelLicensecontracts.showFilterIcon(true);
+		panelLicensecontracts.setFiltering(true);
+		panelLicensecontracts.setAwareOfTableChangedListener(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.5);
@@ -85,21 +84,21 @@ public class PanelEditLicences extends MultiTablePanel {
 				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.TRAILING)
 						.addComponent(panelKeys, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panelSoftwarelicences, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+						.addComponent(panelSoftwarelicenses, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(panelSoftwarelicences, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelSoftwarelicenses, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addComponent(panelLicencecontracts,
+		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addComponent(panelLicensecontracts,
 				GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelLicencecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelLicensecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		GroupLayout layout = new GroupLayout(this);
@@ -115,11 +114,11 @@ public class PanelEditLicences extends MultiTablePanel {
 		return panelKeys;
 	}
 
-	public PanelGenEditTable getPanelSoftwarelicences() {
-		return panelSoftwarelicences;
+	public PanelGenEditTable getPanelSoftwarelicenses() {
+		return panelSoftwarelicenses;
 	}
 
-	public PanelGenEditTable getPanelLicencecontracts() {
-		return panelLicencecontracts;
+	public PanelGenEditTable getPanelLicensecontracts() {
+		return panelLicensecontracts;
 	}
 }

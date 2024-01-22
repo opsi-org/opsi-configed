@@ -25,7 +25,7 @@ public enum RPCMethodName {
 	USER_GET_OBJECTS("user_getObjects"),
 
 	HOST_GET_OBJECTS("host_getObjects"), HOST_CREATE_OBJECTS("host_createObjects"),
-	HOST_UPDATE_OBJECTS("host_updateObjects"), HOST_DELETE("host_delete"),
+	HOST_UPDATE_OBJECTS("host_updateObjects"), HOST_DELETE("host_delete"), HOST_DELETE_OBJECTS("host_deleteObjects"),
 	HOST_RENAME_OPSI_CLIENT("host_renameOpsiClient"),
 	HOST_GET_MESSAGEBUS_CONNECTED_IDS("host_getMessagebusConnectedIds"),
 

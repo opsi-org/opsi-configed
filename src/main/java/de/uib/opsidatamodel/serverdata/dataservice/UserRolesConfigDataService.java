@@ -119,6 +119,14 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
+	public Set<String> getPermittedProductGroupsPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
+	}
+
+	public boolean hasProductGroupsFullPermissionPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
+	}
+
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -143,7 +151,7 @@ public class UserRolesConfigDataService {
 
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
 
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, checkReadOnlyBySystemuser());
+		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, doesUserBelongToSystemsReadOnlyGroup());
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
@@ -225,13 +233,13 @@ public class UserRolesConfigDataService {
 		if (Boolean.TRUE.equals(keyUserRegisterValue) && !moduleDataService.isWithUserRolesPD()) {
 			keyUserRegisterValue = false;
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
-			SwingUtilities.invokeLater(this::callOpsiLicenceMissingText);
+			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
 		}
 
 		return keyUserRegisterValue;
 	}
 
-	private void callOpsiLicenceMissingText() {
+	private void callOpsiLicenseMissingText() {
 		StringBuilder info = new StringBuilder();
 		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
 		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
@@ -245,19 +253,11 @@ public class UserRolesConfigDataService {
 		FOpsiLicenseMissingText.callInstanceWith(info.toString());
 	}
 
-	private boolean checkReadOnlyBySystemuser() {
-		boolean result = false;
-
-		Logging.info(this, "checkReadOnly");
-		if (exec.getBooleanResult(
-				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}))) {
-			result = true;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, result);
-		Logging.info(this, "checkReadOnly " + isGlobalReadOnly());
-
-		return result;
+	private boolean doesUserBelongToSystemsReadOnlyGroup() {
+		boolean isUserReadOnlyUser = exec.getBooleanResult(
+				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
+		Logging.info(this, "does user belong to system's read-only group? " + isUserReadOnlyUser);
+		return isUserReadOnlyUser;
 	}
 
 	// final in order to avoid deactiviating by override
@@ -346,6 +346,7 @@ public class UserRolesConfigDataService {
 			Logging.info(this, "checkPermissions  configKey " + configKey);
 			globalReadOnly = serverPropertyMap.get(configKey) != null
 					&& (Boolean) serverPropertyMap.get(configKey).get(0);
+			cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
 		}
 
 		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
@@ -418,10 +419,11 @@ public class UserRolesConfigDataService {
 		configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
-		Set<String> productgroupsPermitted = new HashSet<>();
+		Set<String> productGroupsPermitted = new HashSet<>();
 
-		boolean productgroupsFullPermission = checkFullPermission(productgroupsPermitted, configKeyUseList,
+		boolean productgroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
+		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
 		Set<String> permittedProducts = null;
@@ -429,7 +431,7 @@ public class UserRolesConfigDataService {
 		if (!productgroupsFullPermission) {
 			permittedProducts = new TreeSet<>();
 
-			for (String group : productgroupsPermitted) {
+			for (String group : productGroupsPermitted) {
 				Map<String, Set<String>> fProductGroup2Members = cacheManager
 						.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
 				Set<String> products = fProductGroup2Members.get(group);
@@ -612,7 +614,7 @@ public class UserRolesConfigDataService {
 
 		// extra display fields in licencing
 
-		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION;
+		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION;
 
 		// defaultValues
 
@@ -622,7 +624,7 @@ public class UserRolesConfigDataService {
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			// example for standard configuration other than empty
-			// extra columns for licence management, page licences reconciliation
+			// extra columns for license management, page licenses reconciliation
 			possibleValues = new ArrayList<>();
 			possibleValues.add("description");
 			possibleValues.add("inventoryNumber");
@@ -634,7 +636,7 @@ public class UserRolesConfigDataService {
 			item = Utils.createNOMitem("UnicodeConfig");
 			item.put("ident", key);
 			item.put("description",
-					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
+					Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation.ExtraHostFields"));
 			item.put("defaultValues", defaultValues);
 
 			item.put("possibleValues", possibleValues);
@@ -802,7 +804,7 @@ public class UserRolesConfigDataService {
 			possibleValues = new ArrayList<>();
 			possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
 			possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
-			possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
+			possibleValues.add(MainFrame.ITEM_FREE_LICENSES);
 
 			item = Utils.createNOMitem("UnicodeConfig");
 			item.put("id", key);
@@ -879,7 +881,7 @@ public class UserRolesConfigDataService {
 			readyObjects.add(item);
 		}
 
-		// for warnings for opsi licences
+		// for warnings for opsi licenses
 
 		// percentage number of clients
 		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;

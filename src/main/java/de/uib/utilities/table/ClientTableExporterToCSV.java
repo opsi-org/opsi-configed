@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
@@ -19,10 +20,14 @@ import org.apache.commons.csv.CSVPrinter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class ClientTableExporterToCSV extends ExporterToCSV {
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	public ClientTableExporterToCSV(JTable table) {
 		super(table);
 	}
@@ -39,6 +44,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		columnNames.add("systemUUID");
 		columnNames.add("macaddress");
 		columnNames.add("ipaddress");
+		columnNames.add("group");
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
@@ -48,8 +54,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	@Override
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
-		Map<String, HostInfo> clientInfos = PersistenceControllerFactory.getPersistenceController()
-				.getHostInfoCollections().getMapOfAllPCInfoMaps();
+		Map<String, HostInfo> clientInfos = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps();
+		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			if (!theTable.isRowSelected(rowI) && selectedOnly) {
 				continue;
@@ -67,6 +73,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 			row.add(clientInfo.getSystemUUID());
 			row.add(clientInfo.getMacAddress());
 			row.add(clientInfo.getIpAddress());
+			row.add(String.join(",", fObject2Groups.get(clientName)));
 			row.add(Boolean.toString(clientInfo.getWanConfig()));
 			row.add(Boolean.toString(clientInfo.getUefiBoot()));
 			row.add(Boolean.toString(clientInfo.getShutdownInstall()));

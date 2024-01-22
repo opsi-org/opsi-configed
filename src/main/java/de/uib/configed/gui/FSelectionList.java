@@ -6,11 +6,14 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -28,7 +31,12 @@ public class FSelectionList extends FGeneralDialog {
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
-		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
+		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight);
+	}
+
+	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
+			int preferredWidth, int preferredHeight) {
+		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
 		this.owner = owner;
 	}
 
@@ -36,6 +44,7 @@ public class FSelectionList extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
+		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
@@ -126,6 +135,31 @@ public class FSelectionList extends FGeneralDialog {
 
 	public String getSelectedValue() {
 		return jList.getSelectedValue();
+	}
+
+	public List<String> getSelectedValues() {
+		return jList.getSelectedValuesList();
+	}
+
+	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
+		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
+		jList.setSelectedIndices(indices);
+	}
+
+	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
+		int[] indices = new int[previouslySelectedValues.size()];
+		int n = 0;
+		for (int i = 0; i < jList.getModel().getSize(); i++) {
+			if (previouslySelectedValues.contains(jList.getModel().getElementAt(i))) {
+				indices[n] = i;
+				n++;
+			}
+		}
+		return indices;
+	}
+
+	public void enableMultiSelection() {
+		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	@Override

@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -107,7 +106,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FEditObject;
-import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
@@ -129,7 +127,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENCES = "free licences for client";
+	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private static JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
@@ -166,7 +164,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private JMenu jMenuResetProducts = new JMenu();
 
-	private JMenuItem jMenuFreeLicences = new JMenuItem();
+	private JMenuItem jMenuFreeLicenses = new JMenuItem();
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem();
 
 	private JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
@@ -199,7 +197,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem jMenuRemoteControl = new JMenuItem();
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
-			jMenuResetProducts, jMenuFreeLicences, jMenuShowPopupMessage, jMenuRequestSessionInfo,
+			jMenuResetProducts, jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo,
 			jMenuDeletePackageCaches, jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
 	private JMenu jMenuClientselection = new JMenu();
@@ -216,7 +214,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem jMenuFrameWorkOnGroups = new JMenuItem();
 	private JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
 	private JMenuItem jMenuFrameDashboard = new JMenuItem();
-	private JMenuItem jMenuFrameLicences = new JMenuItem();
+	private JMenuItem jMenuFrameLicenses = new JMenuItem();
 	private JMenuItem jMenuFrameShowDialogs = new JMenuItem();
 	private JMenuItem jMenuFrameTerminal = new JMenuItem();
 
@@ -240,7 +238,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem popupAddClient = new JMenuItem();
 	private JMenuItem popupCopyClient = new JMenuItem();
 	private JMenuItem popupDeleteClient = new JMenuItem();
-	private JMenuItem popupFreeLicences = new JMenuItem();
+	private JMenuItem popupFreeLicenses = new JMenuItem();
 	private JMenuItem popupDeletePackageCaches = new JMenuItem();
 	private JMenu popupWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 	private JMenuItem popupWakeOnLanDirect = new JMenuItem();
@@ -255,7 +253,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenuItem popupRemoteControl = new JMenuItem();
 
 	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupDeleteClient,
-			popupResetProducts, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
+			popupResetProducts, popupFreeLicenses, popupShowPopupMessage, popupRequestSessionInfo,
 			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupRemoteControl };
 
 	private JMenu popupShowColumns = new JMenu();
@@ -284,7 +282,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JButton jButtonDepotsConfiguration;
 	private JButton jButtonClientsConfiguration;
 
-	private JButton jButtonLicences;
+	private JButton jButtonLicenses;
 	private JButton jButtonOpsiLicenses;
 
 	private IconButton iconButtonReload;
@@ -411,7 +409,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		menuItemsHost = new LinkedHashMap<>();
 		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<>());
 		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<>());
-		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<>());
+		menuItemsHost.put(ITEM_FREE_LICENSES, new ArrayList<>());
 	}
 
 	private void setupMenuFile() {
@@ -475,7 +473,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		CacheManager.getInstance().clearAllCachedData();
 		SSHCommandFactory.destroyInstance();
 		Configed.getSavedStates().removeAll();
-		ConfigedMain.requestLicencesFrameReload();
+		ConfigedMain.requestLicensesFrameReload();
 		restartConfiged();
 	}
 
@@ -746,10 +744,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(jMenuDeleteClient);
 
-		jMenuFreeLicences.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicences"));
-		jMenuFreeLicences.addActionListener((ActionEvent e) -> freeLicencesAction());
+		jMenuFreeLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
+		jMenuFreeLicenses.addActionListener((ActionEvent e) -> freeLicensesAction());
 
-		menuItemsHost.get(ITEM_FREE_LICENCES).add(jMenuFreeLicences);
+		menuItemsHost.get(ITEM_FREE_LICENSES).add(jMenuFreeLicenses);
 
 		jMenuRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
@@ -786,7 +784,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuClients.add(jMenuResetProducts);
 
-		jMenuClients.add(jMenuFreeLicences);
+		jMenuClients.add(jMenuFreeLicenses);
 		jMenuClients.add(jMenuChangeClientID);
 		if (multidepot) {
 			jMenuClients.add(jMenuChangeDepot);
@@ -1064,9 +1062,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
-		jMenuFrameLicences.setEnabled(false);
-		jMenuFrameLicences.addActionListener(event -> configedMain.handleLicencesManagementRequest());
+		jMenuFrameLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
+		jMenuFrameLicenses.setEnabled(false);
+		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
@@ -1088,7 +1086,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameDashboard);
 		}
-		jMenuFrames.add(jMenuFrameLicences);
+		jMenuFrames.add(jMenuFrameLicenses);
 		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameTerminal);
 		}
@@ -1419,10 +1417,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupCopyClient);
 
-		popupFreeLicences.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicences"));
-		popupFreeLicences.addActionListener((ActionEvent e) -> freeLicencesAction());
+		popupFreeLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
+		popupFreeLicenses.addActionListener((ActionEvent e) -> freeLicensesAction());
 
-		menuItemsHost.get(ITEM_FREE_LICENCES).add(popupFreeLicences);
+		menuItemsHost.get(ITEM_FREE_LICENSES).add(popupFreeLicenses);
 
 		popupRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 
@@ -1507,7 +1505,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupResetProducts.add(popupResetProductOnClient);
 		popupClients.add(popupResetProducts);
 
-		popupClients.add(popupFreeLicences);
+		popupClients.add(popupFreeLicenses);
 		popupClients.add(popupChangeClientID);
 		if (multidepot) {
 			popupClients.add(popupChangeDepot);
@@ -1923,17 +1921,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
 
-		jButtonLicences = new JButton(Utils.createImageIcon("images/licences_deselected.png", ""));
-		jButtonLicences.setEnabled(false);
-		jButtonLicences.setSelectedIcon(Utils.createImageIcon("images/licences.png", ""));
-		jButtonLicences.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonLicences.setToolTipText(Configed.getResourceValue("MainFrame.labelLicences"));
-		jButtonLicences.setFocusable(false);
+		jButtonLicenses = new JButton(Utils.createImageIcon("images/licenses_deselected.png", ""));
+		jButtonLicenses.setEnabled(false);
+		jButtonLicenses.setSelectedIcon(Utils.createImageIcon("images/licenses.png", ""));
+		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
+		jButtonLicenses.setFocusable(false);
 
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
-		jButtonLicences.addActionListener(event -> configedMain.handleLicencesManagementRequest());
+		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		JButton jButtonWorkOnGroups = new JButton(Utils.createImageIcon("images/group_all_unselected_40.png", ""));
 		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
@@ -2039,7 +2037,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						ServerFacade.isOpsi43() ? Globals.GAP_SIZE : 0)
 				.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.GAP_SIZE).addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
 
@@ -2054,7 +2052,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE));
 
@@ -2399,9 +2397,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.copySelectedClient();
 	}
 
-	private void freeLicencesAction() {
-		Logging.info(this, "freeLicencesAction ");
-		configedMain.freeAllPossibleLicencesForSelectedClients();
+	private void freeLicensesAction() {
+		Logging.info(this, "freeLicensesAction ");
+		configedMain.freeAllPossibleLicensesForSelectedClients();
 	}
 
 	/**
@@ -2470,44 +2468,29 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		configedMain.callClientSelectionDialog();
 	}
 
-	private List<String> getProduct(List<String> completeList) {
-		FEditStringList fList = new FEditStringList();
-		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray(new String[0])));
-		fList.setTitle(Configed.getResourceValue("MainFrame.productSelection"));
-		fList.init();
-
-		fList.setSize(F_WIDTH / 2, this.getHeight() - 100);
-		fList.setModal(true);
-		fList.setLocationRelativeTo(this);
-		fList.setVisible(true);
-
-		Logging.debug(this, "fList getSelectedValue " + fList.getSelectedList());
-
-		return fList.getSelectedList();
-	}
-
 	private void groupByNotCurrentProductVersion() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
-
-		if (!products.isEmpty()) {
-			configedMain.selectClientsNotCurrentProductInstalled(products, false);
-		}
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
-
-		if (!products.isEmpty()) {
-			configedMain.selectClientsNotCurrentProductInstalled(products, true);
-		}
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		configedMain.selectClientsWithFailedProduct(products);
+	}
 
-		if (!products.isEmpty()) {
-			configedMain.selectClientsWithFailedProduct(products);
-		}
+	private String getProduct(List<String> completeList) {
+		FSelectionList fProductSelectionList = new FSelectionList(this,
+				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
+						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
+				F_WIDTH / 2, 600);
+		fProductSelectionList.setListData(completeList);
+		fProductSelectionList.setVisible(true);
+		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}
 
 	private void reloadAction() {
@@ -2526,7 +2509,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void disactivateLoadingPane() {
+	public void deactivateLoadingPane() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> glassPane.activate(false));
 		} else {
@@ -2542,7 +2525,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void disactivateLoadingCursor() {
+	public void deactivateLoadingCursor() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> setCursor(null));
 		} else {
@@ -2556,8 +2539,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			@Override
 			public void run() {
 				configedMain.reloadLicensesData();
-				ConfigedMain.getLicencesFrame().setVisible(true);
-				disactivateLoadingPane();
+				ConfigedMain.getLicensesFrame().setVisible(true);
+				deactivateLoadingPane();
 			}
 		}.start();
 	}
@@ -2973,7 +2956,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
 
-	public void startLicenceDisplayer() {
+	public void startLicenseDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
@@ -2988,12 +2971,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void enableAfterLoading() {
-		jButtonLicences.setEnabled(true);
-		jMenuFrameLicences.setEnabled(true);
+		jButtonLicenses.setEnabled(true);
+		jMenuFrameLicenses.setEnabled(true);
 	}
 
-	public void visualizeLicencesFramesActive(boolean b) {
-		jButtonLicences.setSelected(b);
+	public void visualizeLicensesFramesActive(boolean b) {
+		jButtonLicenses.setSelected(b);
 		iconButtonReloadLicenses.setVisible(true);
 		iconButtonReloadLicenses.setEnabled(true);
 	}

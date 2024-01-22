@@ -116,7 +116,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		/* Should do nothing in this class */}
+		jList.ensureIndexIsVisible(jList.getSelectedIndex());
+	}
 
 	@Override
 	public void setCursorRow(int row) {

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
@@ -33,8 +33,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -68,7 +66,7 @@ public class ClientTable extends JPanel implements KeyListener {
 	// we put a JTable on a standard JScrollPane
 	private JTable table;
 
-	private DefaultListSelectionModel selectionmodel;
+	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
 	private List<SortKey> primaryOrderingKeys;
 
@@ -98,13 +96,13 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
 		// Ask to be notified of selection changes.
-		selectionmodel = (DefaultListSelectionModel) table.getSelectionModel();
+		selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
 		// the default implementation in JTable yields this type
 
 		table.setColumnSelectionAllowed(false);
 		// true destroys setSelectedRow etc
 
-		addListSelectionListener(configedMain);
+		activateListSelectionListener();
 
 		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
 		searchPane.setFiltering(true);
@@ -127,6 +125,17 @@ public class ClientTable extends JPanel implements KeyListener {
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	public void activateListSelectionListener() {
+		// We want to prevent, that the listSelectionListener is added more than once
+		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(configedMain)) {
+			selectionModel.addListSelectionListener(configedMain);
+		}
+	}
+
+	public void deactivateListSelectionListener() {
+		selectionModel.removeListSelectionListener(configedMain);
 	}
 
 	public void setFilterMark(boolean b) {
@@ -194,7 +203,7 @@ public class ClientTable extends JPanel implements KeyListener {
 	}
 
 	public Set<String> getSelectedSet() {
-		TreeSet<String> result = new TreeSet<>();
+		Set<String> result = new HashSet<>();
 
 		for (int i : table.getSelectedRows()) {
 			result.add((String) table.getValueAt(i, 0));
@@ -222,62 +231,43 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.clearSelection();
 	}
 
-	public void setSelectedValues(Collection<String> valuesList) {
+	public void setSelectedValues(Collection<String> clientsToSelect) {
 		String valuesListS = null;
-		if (valuesList != null) {
-			valuesListS = "" + valuesList.size();
+		if (clientsToSelect != null) {
+			valuesListS = "" + clientsToSelect.size();
 		}
 
 		Logging.info(this, "setSelectedValues " + valuesListS);
-		ListSelectionModel lsm = table.getSelectionModel();
-		lsm.clearSelection();
 
-		if (valuesList == null || valuesList.isEmpty()) {
-			return;
-		}
+		if (clientsToSelect == null) {
+			// Clear selection when empty
+			selectionModel.clearSelection();
+		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
+			// Also act on list selection when there is no client to select.
+			// For example when the last client is unselected in the client list, 
+			// this method is not called automatically by the selection listener,
+			// so we do it manually
+			configedMain.actOnListSelection();
+		} else {
 
-		TreeSet<String> valuesSet = new TreeSet<>(valuesList);
-		// because of ordering , we create a TreeSet view of the list
+			// because of ordering , we create a TreeSet view of the list
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int i = 0; i < table.getRowCount(); i++) {
+				Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
 
-		Logging.info(this, "setSelectedValues, (ordered) set of values, size " + valuesSet.size());
-
-		int lastAddedI = -1;
-
-		ListSelectionListener[] listeners = ((DefaultListSelectionModel) lsm).getListeners(ListSelectionListener.class);
-		// remove all listeners
-		for (ListSelectionListener listener : listeners) {
-			lsm.removeListSelectionListener(listener);
-		}
-
-		Logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
-
-		for (int i = 0; i < table.getRowCount(); i++) {
-			Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
-
-			if (valuesSet.contains(table.getValueAt(i, 0))) {
-				lsm.addSelectionInterval(i, i);
-				lastAddedI = i;
-				Logging.debug(this, "setSelectedValues add interval " + i);
+				if (clientsToSelect.contains(table.getValueAt(i, 0))) {
+					selectionModel.addSelectionInterval(i, i);
+					Logging.debug(this, "setSelectedValues add interval " + i);
+				}
 			}
+
+			selectionModel.setValueIsAdjusting(false);
+
+			moveToFirstSelected();
+
+			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
 		}
-
-		lsm.removeSelectionInterval(lastAddedI, lastAddedI);
-
-		// get again the listeners
-		for (ListSelectionListener listener : listeners) {
-			lsm.addListSelectionListener(listener);
-		}
-
-		// and repeat the last addition
-		if (lastAddedI > -1) {
-			lsm.addSelectionInterval(lastAddedI, lastAddedI);
-		}
-
-		table.repaint();
-
-		moveToFirstSelected();
-
-		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
 	}
 
 	public void moveToFirstSelected() {
@@ -350,20 +340,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public TableColumnModel getColumnModel() {
 		return table.getColumnModel();
-	}
-
-	public void addListSelectionListener(ListSelectionListener lisel) {
-		selectionmodel.addListSelectionListener(lisel);
-	}
-
-	public void removeListSelectionListener(ListSelectionListener lisel) {
-		selectionmodel.removeListSelectionListener(lisel);
-	}
-
-	public void fireListSelectionEmpty(Object source) {
-		for (ListSelectionListener listener : selectionmodel.getListSelectionListeners()) {
-			listener.valueChanged(new ListSelectionEvent(source, 0, 0, false));
-		}
 	}
 
 	public int findModelRowFromValue(Object value) {

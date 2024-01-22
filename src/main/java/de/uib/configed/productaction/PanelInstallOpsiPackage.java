@@ -116,12 +116,12 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
 					FileUtils.copyFileToDirectory(opsiPackagePathToHandle, opsiWorkBenchDirectory);
-					rootFrame.disactivateLoadingCursor();
+					rootFrame.deactivateLoadingCursor();
 					return true;
 				}
 			}
 		} catch (IOException ex) {
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 
 			Logging.error("path problem ", ex);
 		}
@@ -170,7 +170,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			rootFrame.activateLoadingCursor();
 			persistenceController.getRPCMethodExecutor().setRights(opsiPackageServerPathS);
 			boolean result = persistenceController.getRPCMethodExecutor().installPackage(opsiPackageServerPathS);
-			rootFrame.disactivateLoadingCursor();
+			rootFrame.deactivateLoadingCursor();
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);
 

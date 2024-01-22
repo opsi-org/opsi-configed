@@ -487,6 +487,15 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
 	}
 
+	public void removeOpsiHostNames(List<String> names) {
+		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
+		if (opsiHostNames == null) {
+			opsiHostNames = new ArrayList<>();
+		}
+		opsiHostNames.removeAll(names);
+		cacheManager.setCachedData(CacheIdentifier.OPSI_HOST_NAMES, opsiHostNames);
+	}
+
 	// for table
 	public void updateLocalHostInfo(String hostId, String property, Object value) {
 		Map<String, HostInfo> mapPCInfomap = cacheManager.getCachedData(CacheIdentifier.MAP_PC_INFO_MAP, Map.class);

@@ -17,14 +17,14 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.LicencesTabStatus;
+import de.uib.configed.ConfigedMain.LicensesTabStatus;
 
 public class TabbedPaneX extends JPanel {
 	private JTabbedPane jTabbedPaneMain;
 
 	private ConfigedMain configedMain;
 
-	private List<LicencesTabStatus> tabOrder;
+	private List<LicensesTabStatus> tabOrder;
 
 	public TabbedPaneX(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -43,10 +43,10 @@ public class TabbedPaneX extends JPanel {
 		jTabbedPaneMain.addChangeListener((ChangeEvent changeEvent) -> {
 			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
-			LicencesTabStatus newS = tabOrder.get(newVisualIndex);
+			LicensesTabStatus newS = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
-			LicencesTabStatus s = configedMain.reactToStateChangeRequest(newS);
+			LicensesTabStatus s = configedMain.reactToStateChangeRequest(newS);
 
 			// if the controller did not accept the new index set it back
 			// observe that we get a recursion since we initiate another state change
@@ -63,7 +63,7 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
-	public void addTab(LicencesTabStatus s, String title, Component c) {
+	public void addTab(LicensesTabStatus s, String title, Component c) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(title, c);
 	}
@@ -71,7 +71,7 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * removes a tab
 	 */
-	public void removeTab(LicencesTabStatus s) {
+	public void removeTab(LicensesTabStatus s) {
 		int tabIndex = tabOrder.indexOf(s);
 		if (tabIndex > 0) {
 			jTabbedPaneMain.remove(tabIndex);

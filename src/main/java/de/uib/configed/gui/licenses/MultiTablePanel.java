@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.licences;
+package de.uib.configed.gui.licenses;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;

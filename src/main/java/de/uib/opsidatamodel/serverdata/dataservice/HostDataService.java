@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -99,7 +100,12 @@ public class HostDataService {
 			String systemUUID = ((String) client.get(6)).trim();
 			String macaddress = ((String) client.get(7)).trim();
 			String ipaddress = ((String) client.get(8)).trim();
-			String group = ((String) client.get(9)).trim();
+			String[] groups = null;
+			if (!((String) client.get(9)).isEmpty()) {
+				groups = ((String) client.get(9)).replace("\\s,\\s", ",").trim().split(",");
+			} else {
+				groups = new String[] {};
+			}
 			String productNetboot = ((String) client.get(10)).trim();
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
@@ -154,13 +160,15 @@ public class HostDataService {
 				configStatesJsonObject.add(itemShI);
 			}
 
-			if (group != null && !group.isEmpty()) {
-				Logging.info(this, "createClient" + " group " + group);
-				Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-				groupsJsonObject.add(itemGroup);
+			if (groups != null && groups.length != 0) {
+				Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
+				for (String group : groups) {
+					Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+					itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+					itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+					itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+					groupsJsonObject.add(itemGroup);
+				}
 			}
 
 			if (productNetboot != null && !productNetboot.isEmpty()) {
@@ -213,7 +221,7 @@ public class HostDataService {
 
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot) {
+			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String[] groups, String productNetboot) {
 		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
 			return false;
 		}
@@ -235,10 +243,6 @@ public class HostDataService {
 		if (ipaddress.isEmpty()) {
 			ipaddress = null;
 			// null works, "" does not in the opsi call
-		}
-
-		if (group == null) {
-			group = "";
 		}
 
 		String newClientId = hostname + "." + domainname;
@@ -298,14 +302,16 @@ public class HostDataService {
 			result = exec.doCall(omc);
 		}
 
-		if (result && group != null && !group.isEmpty()) {
-			Logging.info(this, "createClient" + " group " + group);
+		if (result && groups != null && groups.length != 0) {
+			Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-			jsonObjects.add(itemGroup);
+			for (String group : groups) {
+				Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+				jsonObjects.add(itemGroup);
+			}
 			omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { jsonObjects });
 			result = exec.doCall(omc);
 		}
@@ -356,7 +362,19 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		OpsiMethodCall omc = null;
+		if (ServerFacade.isOpsi43()) {
+			omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
+		} else {
+			List<Map<String, String>> hosts = new ArrayList<>();
+			for (String hostId : hostIds) {
+				Map<String, String> hostsMap = new HashMap<>();
+				hostsMap.put("id", hostId);
+				hostsMap.put("type", HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+				hosts.add(hostsMap);
+			}
+			omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE_OBJECTS, new Object[] { hosts });
+		}
 		exec.doCall(omc);
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
