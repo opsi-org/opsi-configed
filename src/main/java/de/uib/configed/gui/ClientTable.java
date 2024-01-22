@@ -264,8 +264,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 			selectionModel.setValueIsAdjusting(false);
 
-			table.repaint();
-
 			moveToFirstSelected();
 
 			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
