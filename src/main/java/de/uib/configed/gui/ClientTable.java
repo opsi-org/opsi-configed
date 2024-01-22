@@ -231,26 +231,32 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.clearSelection();
 	}
 
-	public void setSelectedValues(Collection<String> valuesList) {
+	public void setSelectedValues(Collection<String> clientsToSelect) {
 		String valuesListS = null;
-		if (valuesList != null) {
-			valuesListS = "" + valuesList.size();
+		if (clientsToSelect != null) {
+			valuesListS = "" + clientsToSelect.size();
 		}
 
 		Logging.info(this, "setSelectedValues " + valuesListS);
-		selectionModel.clearSelection();
-		if (valuesList == null) {
-			// Do nothing in that case
-		} else if (valuesList.isEmpty()) {
+
+		if (clientsToSelect == null) {
+			// Clear selection when empty
+			selectionModel.clearSelection();
+		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
+			// Also act on list selection when there is no client to select.
+			// For example when the last client is unselected in the client list, 
+			// this method is not called automatically by the selection listener,
+			// so we do it manually
 			configedMain.actOnListSelection();
 		} else {
 
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
 			for (int i = 0; i < table.getRowCount(); i++) {
 				Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
 
-				if (valuesList.contains(table.getValueAt(i, 0))) {
+				if (clientsToSelect.contains(table.getValueAt(i, 0))) {
 					selectionModel.addSelectionInterval(i, i);
 					Logging.debug(this, "setSelectedValues add interval " + i);
 				}
