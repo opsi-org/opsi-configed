@@ -1605,7 +1605,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
-		setFilterClientList(!filterClientList, rebuildClientListTableModel);
+
+		filterClientList = !filterClientList;
+		if (rebuildClientListTableModel) {
+			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
+		}
 	}
 
 	private void setSelectionPanelCols() {
@@ -1745,13 +1749,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 		if (mainFrame != null) {
 			mainFrame.deactivateLoadingCursor();
-		}
-	}
-
-	private void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
-		filterClientList = b;
-		if (rebuildClientListTableModel) {
-			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}
 	}
 
