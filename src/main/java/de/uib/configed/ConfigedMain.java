@@ -1608,6 +1608,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		toggleFilterClientList(true);
 	}
 
+	// Todo refactor because only one method is called?
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
@@ -1752,10 +1753,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (mainFrame != null) {
 			mainFrame.deactivateLoadingCursor();
 		}
-	}
-
-	private void setFilterClientList(boolean b) {
-		setFilterClientList(b, true);
 	}
 
 	private void setFilterClientList(boolean b, boolean rebuildClientListTableModel) {
@@ -4084,23 +4081,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientTable.setSelectedValues(selected);
 	}
 
-	public void setSelectedClientsOnPanel(Collection<String> selected, boolean renewFilter) {
-		boolean saveFilterClientList = false;
-
-		if (renewFilter) {
-			saveFilterClientList = isFilterClientList();
-			if (saveFilterClientList) {
-				setFilterClientList(false);
-			}
-		}
-
-		setSelectedClientsOnPanel(selected);
-
-		if (renewFilter && saveFilterClientList) {
-			setFilterClientList(true);
-		}
-	}
-
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
 		SelectionManager manager = new SelectionManager(null);
 
@@ -4116,7 +4096,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		List<String> result = manager.selectClients();
 
-		setSelectedClientsOnPanel(result, true);
+		setSelectedClientsOnPanel(result);
 	}
 
 	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
@@ -4142,7 +4122,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list "
 				+ clientsToSelect.size());
 
-		setSelectedClientsOnPanel(clientsToSelect, true);
+		setSelectedClientsOnPanel(clientsToSelect);
 	}
 
 	public void selectClientsWithFailedProduct(String selectedProduct) {
@@ -4160,7 +4140,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> result = manager.selectClients();
 
 		Logging.info(this, "selected: " + result);
-		setSelectedClientsOnPanel(result, true);
+		setSelectedClientsOnPanel(result);
 	}
 
 	public void logEventOccurred() {
