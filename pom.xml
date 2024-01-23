@@ -204,6 +204,13 @@
             <version>0.21.0</version>
         </dependency>
 
+       <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark-ext-autolink -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-autolink</artifactId>
+            <version>0.21.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
