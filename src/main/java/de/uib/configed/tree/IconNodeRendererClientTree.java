@@ -39,15 +39,10 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		if (value instanceof IconNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-			setText(stringValue);
-			setToolTipText(((IconNode) value).getToolTipText());
-
-			// Attention: must be a IconNode
 			IconNode node = (IconNode) value;
-			boolean enabled = tree.isEnabled();
-			setEnabled(enabled);
 
-			node.setEnabled(enabled);
+			setText(stringValue);
+			setToolTipText(node.getToolTipText());
 
 			if (!node.getAllowsChildren()) {
 				// client
@@ -66,8 +61,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					setIcon(groupUnselectedIcon);
 				}
 			}
-
-			setComponentOrientation(tree.getComponentOrientation());
 		}
 
 		if (hasFocus) {

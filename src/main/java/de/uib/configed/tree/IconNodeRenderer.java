@@ -48,8 +48,6 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			} else {
 				setIcon(node.getClosedIcon());
 			}
-
-			setComponentOrientation(tree.getComponentOrientation());
 		}
 
 		return this;
