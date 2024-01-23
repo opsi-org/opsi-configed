@@ -31,14 +31,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			setText(stringValue);
 
 			IconNode node = (IconNode) value;
-
-			if (leaf) {
-				setIcon(node.getLeafIcon());
-			} else if (expanded) {
-				setIcon(node.getOpenIcon());
-			} else {
-				setIcon(node.getClosedIcon());
-			}
+			setIcon(node.getIcon());
 		}
 
 		return this;

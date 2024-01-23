@@ -12,11 +12,7 @@ import javax.swing.Icon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class IconNode extends DefaultMutableTreeNode {
-	private Icon closedIcon;
-
-	private Icon leafIcon;
-
-	private Icon openIcon;
+	private Icon icon;
 
 	private String toolTipText;
 
@@ -47,34 +43,12 @@ public class IconNode extends DefaultMutableTreeNode {
 		return deviceInfo;
 	}
 
-	public Icon getClosedIcon() {
-		return closedIcon;
-	}
-
 	// set the icon as default for all types of icons
-	public void setIcon(Icon anIcon) {
-		setClosedIcon(anIcon);
-		setLeafIcon(anIcon);
-		setOpenIcon(anIcon);
+	public void setIcon(Icon icon) {
+		this.icon = icon;
 	}
 
-	public void setClosedIcon(Icon aClosedIcon) {
-		closedIcon = aClosedIcon;
-	}
-
-	public Icon getLeafIcon() {
-		return leafIcon;
-	}
-
-	public void setLeafIcon(Icon aLeafIcon) {
-		leafIcon = aLeafIcon;
-	}
-
-	public Icon getOpenIcon() {
-		return openIcon;
-	}
-
-	public void setOpenIcon(Icon anOpenIcon) {
-		openIcon = anOpenIcon;
+	public Icon getIcon() {
+		return icon;
 	}
 }
