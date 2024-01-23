@@ -468,13 +468,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		model.nodeStructureChanged(parent);
 	}
 
-	private void produceClients(Collection<String> clientIds) {
-		produceClients(clientIds, groupNodeAllClients);
-	}
-
-	public void produceTreeForALL(Collection<String> x) {
+	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDIRECTORY.clear();
-		produceClients(x);
+		produceClients(clientIds, groupNodeAllClients);
 	}
 
 	private void initTopGroups() {
