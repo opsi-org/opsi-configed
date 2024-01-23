@@ -10,12 +10,22 @@ import java.awt.Component;
 import java.awt.font.TextAttribute;
 import java.util.Collections;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
 
 import de.uib.configed.ConfigedMain;
+import utils.Utils;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
 	private ConfigedMain configedMain;
+
+	private ImageIcon iconClient = Utils.createImageIcon("images/client_small.png", "client");
+	private ImageIcon nonSelectedIconClient = Utils.createImageIcon("images/client_small_unselected.png", "client");
+
+	private ImageIcon groupUnselectedIcon = Utils.createImageIcon("images/group_small_unselected.png",
+			"group unselected");
+	private ImageIcon groupSelected = Utils.createImageIcon("images/group_small.png", "client");
+	private ImageIcon group1SelectedIcon = Utils.createImageIcon("images/group_small_1selected.png", "group 1selected");
 
 	public IconNodeRendererClientTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -42,18 +52,18 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			if (!node.getAllowsChildren()) {
 				// client
 				if (sel) {
-					setIcon(node.getLeafIcon());
+					setIcon(iconClient);
 				} else {
-					setIcon(node.getNonSelectedLeafIcon());
+					setIcon(nonSelectedIconClient);
 				}
 			} else {
 				// group
-
-				// default,will be changed, if clients are childs
-				setIcon(node.getClosedIcon());
-
-				if (configedMain.getActiveParents().contains(stringValue)) {
-					setIcon(node.getEmphasizedIcon());
+				if (sel) {
+					setIcon(groupSelected);
+				} else if (configedMain.getActiveParents().contains(stringValue)) {
+					setIcon(group1SelectedIcon);
+				} else {
+					setIcon(groupUnselectedIcon);
 				}
 			}
 

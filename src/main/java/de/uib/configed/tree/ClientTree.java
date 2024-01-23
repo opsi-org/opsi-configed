@@ -53,7 +53,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
-import utils.Utils;
 
 public class ClientTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
@@ -270,7 +269,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	private IconNode produceClientNode(Object x) {
 		IconNode n = new IconNode(x, false);
-		n.setEnabled(false);
+
 		if (host2HostInfo != null && host2HostInfo.get(x) != null
 				&& !"".equals(host2HostInfo.get(x).getDescription())) {
 			n.setToolTipText(host2HostInfo.get(x).getDescription());
@@ -278,22 +277,12 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			n.setToolTipText(x.toString());
 		}
 
-		n.setIcon(Utils.createImageIcon("images/client_small.png", "client"));
-		n.setNonSelectedLeafIcon(Utils.createImageIcon("images/client_small_unselected.png", "client"));
-		n.setDisabledLeafIcon();
-
 		return n;
 	}
 
 	private static GroupNode produceGroupNode(Object x, String description) {
 		GroupNode n = new GroupNode(x);
 		n.setToolTipText(description);
-		n.setEnabled(true);
-		n.setIcon(Utils.createImageIcon("images/group_small.png", "group"));
-		n.setClosedIcon(Utils.createImageIcon("images/group_small_unselected.png", "group unselected"));
-		n.setEmphasizedIcon(Utils.createImageIcon("images/group_small_1selected.png", "group 1selected"));
-		n.setDisabledLeafIcon();
-
 		return n;
 	}
 
@@ -446,7 +435,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		produceClients(clientIds, parent, false);
 	}
 
-	// expects Strings as Objects
 	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent, boolean register) {
 		for (String clientId : clientIds) {
 			IconNode node = produceClientNode(clientId);
