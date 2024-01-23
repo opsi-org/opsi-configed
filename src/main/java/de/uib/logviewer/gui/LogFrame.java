@@ -396,7 +396,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			resetFileName();
 			showDialog("This is not a file, it is a directory: \n" + fileName);
 		} else if (file.exists()) {
-			String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
 				Logging.error(this, "File with extension " + fileExtension + " is unsupported");
 				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
@@ -407,7 +407,7 @@ public class LogFrame extends JFrame implements WindowListener {
 						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));
 				fUnsupportedFileExtensionInfo.setVisible(true);
 				result = "";
-			} else if (fileName.endsWith(".log")) {
+			} else if (fileName.endsWith(".log") || !fileName.contains(".")) {
 				result = readNotCompressedFile(file);
 			} else {
 				result = readCompressedFile(file);
@@ -434,7 +434,18 @@ public class LogFrame extends JFrame implements WindowListener {
 		return result;
 	}
 
+	private static String getFileExtension(String fileName) {
+		String fileExtension = "";
+		if (fileName.lastIndexOf(".") != -1) {
+			fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+		}
+		return fileExtension;
+	}
+
 	private static boolean isFileExtensionSupported(String fileExtension) {
+		if (fileExtension.isEmpty()) {
+			return true;
+		}
 		boolean matchesCompressedFileExtension = "zip".equals(fileExtension) || "gz".equals(fileExtension)
 				|| "7z".equals(fileExtension);
 		boolean matchesNotCompressedFileExtension = "log".equals(fileExtension);
