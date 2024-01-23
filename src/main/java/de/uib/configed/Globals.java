@@ -154,6 +154,9 @@ public final class Globals {
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
 	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
 
+	// Make width long enough so that it will be not too small for the whole text
+	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
+
 	public static final int GRAPHIC_BUTTON_SIZE = 40;
 
 	public static final int COMBOBOX_ROW_COUNT = 20;

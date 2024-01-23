@@ -12,11 +12,13 @@ import java.util.Collections;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import utils.Utils;
 
-public class IconNodeRendererClientTree extends IconNodeRenderer {
+public class IconNodeRendererClientTree extends DefaultTreeCellRenderer {
 	private ConfigedMain configedMain;
 
 	private ImageIcon iconClient = Utils.createImageIcon("images/client_small.png", "client");
@@ -29,6 +31,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	public IconNodeRendererClientTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+
+		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 	}
 
 	@Override
