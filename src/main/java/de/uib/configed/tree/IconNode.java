@@ -23,13 +23,9 @@ public class IconNode extends DefaultMutableTreeNode {
 	private Icon disabledLeafIcon;
 	private Icon enabledLeafIcon;
 
-	private Icon nonSelectedLeafIcon;
-
 	private Icon openIcon;
 	private Icon disabledOpenIcon;
 	private Icon enabledOpenIcon;
-
-	private Icon emphasizedIcon;
 
 	private String toolTipText;
 
@@ -107,8 +103,6 @@ public class IconNode extends DefaultMutableTreeNode {
 		setClosedIcon(anIcon);
 		setLeafIcon(anIcon);
 		setOpenIcon(anIcon);
-		setNonSelectedLeafIcon(anIcon);
-		setEmphasizedIcon(anIcon);
 		setDisabledLeafIcon();
 	}
 
@@ -119,18 +113,6 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	public Icon getLeafIcon() {
 		return leafIcon;
-	}
-
-	public void setNonSelectedLeafIcon(Icon aLeafIcon) {
-		nonSelectedLeafIcon = aLeafIcon;
-	}
-
-	public Icon getNonSelectedLeafIcon() {
-		if (nonSelectedLeafIcon == null && leafIcon != null) {
-			nonSelectedLeafIcon = createDisabledIcon(leafIcon);
-		}
-
-		return nonSelectedLeafIcon;
 	}
 
 	public void setLeafIcon(Icon aLeafIcon) {
@@ -151,15 +133,5 @@ public class IconNode extends DefaultMutableTreeNode {
 		if (leafIcon != null) {
 			disabledLeafIcon = createDisabledIcon(leafIcon);
 		}
-	}
-
-	public void setEmphasizedIcon(Icon anEmphasizedIcon) {
-		if (anEmphasizedIcon != null) {
-			emphasizedIcon = anEmphasizedIcon;
-		}
-	}
-
-	public Icon getEmphasizedIcon() {
-		return emphasizedIcon;
 	}
 }
