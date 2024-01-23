@@ -205,6 +205,7 @@ public final class Utils {
 		return getCLIParam(question, false);
 	}
 
+	@SuppressWarnings({ "java:S106" })
 	private static String getCLIParam(String question, boolean password) {
 		Console con = System.console();
 		if (con == null) {
