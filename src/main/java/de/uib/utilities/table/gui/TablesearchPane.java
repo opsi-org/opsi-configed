@@ -551,7 +551,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void requestFocus() {
-		fieldSearch.requestFocus();
+		fieldSearch.requestFocusInWindow();
 	}
 
 	private static class Finding {
