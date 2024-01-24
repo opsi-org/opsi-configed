@@ -710,18 +710,7 @@ public class ProductDataService {
 	 *
 	 * @param clientNames -
 	 */
-	public void retrieveProductPropertiesPD(List<String> clientNames) {
-		retrieveProductPropertiesPD(new HashSet<>(clientNames));
-	}
-
-	/**
-	 * This method collects properties for all selected clients and all
-	 * products,<br \> as a sideeffect, it produces the depot specific default
-	 * values <br \>
-	 *
-	 * @param clientNames -
-	 */
-	public void retrieveProductPropertiesPD(final Set<String> clientNames) {
+	public void retrieveProductPropertiesPD(final Collection<String> clientNames) {
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
 
