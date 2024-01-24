@@ -701,7 +701,9 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setFilter(Set<String> filter) {
 		groupPanel.setFilteredMode(false);
-		((InstallationStateTableModel) tableProducts.getModel()).setFilterFrom(filter);
+		if (tableProducts.getModel() instanceof InstallationStateTableModel) {
+			((InstallationStateTableModel) tableProducts.getModel()).setFilterFrom(filter);
+		}
 	}
 
 	public void noSelection() {
