@@ -56,21 +56,11 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 
 		String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-
 		setText(stringValue);
 
-		Object userObject = node.getUserObject();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
-		if (value instanceof GroupNode) {
-			// TODO We still need to find a better solution for this...
-			setToolTipText(((GroupNode) value).getToolTipText());
-		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null
-				&& !"".equals(host2HostInfo.get(userObject).getDescription())) {
-			setToolTipText(host2HostInfo.get(userObject).getDescription());
-		} else {
-			setToolTipText(node.getUserObject().toString());
-		}
+		setTooltip(node);
 
 		if (!node.getAllowsChildren()) {
 			// client
@@ -98,5 +88,19 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
+	}
+
+	private void setTooltip(DefaultMutableTreeNode node) {
+		Object userObject = node.getUserObject();
+
+		if (node instanceof GroupNode) {
+			// TODO We still need to find a better solution for this...
+			setToolTipText(((GroupNode) node).getToolTipText());
+		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null
+				&& !"".equals(host2HostInfo.get(userObject).getDescription())) {
+			setToolTipText(host2HostInfo.get(userObject).getDescription());
+		} else {
+			setToolTipText(node.getUserObject().toString());
+		}
 	}
 }
