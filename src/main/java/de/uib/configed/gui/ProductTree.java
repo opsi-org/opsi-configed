@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -169,15 +168,15 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
 				boolean leaf, int row, boolean hasFocus) {
-			Component c = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 			if (((DefaultMutableTreeNode) value).getAllowsChildren()) {
-				((JLabel) c).setFont(getFont().deriveFont(Font.NORMAL));
+				setFont(getFont().deriveFont(Font.NORMAL));
 			} else {
-				((JLabel) c).setFont(getFont().deriveFont(Font.BOLD));
+				setFont(getFont().deriveFont(Font.BOLD));
 			}
 
-			return c;
+			return this;
 		}
 	}
 }
