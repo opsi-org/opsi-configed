@@ -6,9 +6,13 @@
 
 package de.uib.configed.gui.productpage;
 
+import java.util.Arrays;
+
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
+import javax.swing.text.DefaultCaret;
 
+import org.commonmark.ext.autolink.AutolinkExtension;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -21,20 +25,18 @@ public class TextMarkdownPane extends JTextPane {
 		super.addHyperlinkListener(this::hyperlinkUpdate);
 		super.setEditable(false);
 
+		DefaultCaret caret = (DefaultCaret) super.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+
 		setContentType("text/html");
 	}
 
 	@Override
 	public void setText(String s) {
-		Parser parser = Parser.builder().build();
+		Parser parser = Parser.builder().extensions(Arrays.asList(AutolinkExtension.create())).build();
 		Node document = parser.parse(s);
 		HtmlRenderer renderer = HtmlRenderer.builder().build();
 		String html = renderer.render(document);
-
-		html = html.replace("<p>", "");
-		html = html.replace("</p>", "");
-		html = html.replace("\n", "<br \\>");
-
 		super.setText(html);
 	}
 

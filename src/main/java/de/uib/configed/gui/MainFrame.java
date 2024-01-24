@@ -75,6 +75,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
+import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
@@ -223,6 +224,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JMenu jMenuHelp = new JMenu();
 	private JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
 	private JMenuItem jMenuHelpAbout = new JMenuItem();
+	private JMenuItem jMenuHelpCredits = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
 	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
 	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
@@ -1144,9 +1146,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuHelp.addSeparator();
 
+		jMenuHelpCredits.setText(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
+		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(this));
+		jMenuHelp.add(jMenuHelpCredits);
+
 		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
-
 		jMenuHelp.add(jMenuHelpAbout);
 	}
 

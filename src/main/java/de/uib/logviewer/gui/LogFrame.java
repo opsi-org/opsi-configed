@@ -38,6 +38,7 @@ import javax.swing.KeyStroke;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
@@ -135,6 +136,9 @@ public class LogFrame extends JFrame implements WindowListener {
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 
+		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
+		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(this));
+
 		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 		MainFrame.addHelpLinks(jMenuHelp);
 
@@ -144,6 +148,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		jMenuHelp.addSeparator();
 
+		jMenuHelp.add(jMenuHelpCredits);
 		jMenuHelp.add(jMenuHelpAbout);
 		return jMenuHelp;
 	}

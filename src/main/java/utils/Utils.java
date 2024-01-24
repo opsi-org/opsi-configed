@@ -30,7 +30,6 @@ import javax.swing.JFrame;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Configed;
-import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
@@ -39,7 +38,9 @@ import de.uib.utilities.logging.Logging;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+@SuppressWarnings({ "java:S1448" })
 public final class Utils {
+	private static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 	private static final int KIBI_BYTE = 1024;
 	private static final String[] LOG_TYPES = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
@@ -55,15 +56,21 @@ public final class Utils {
 	}
 
 	public static void showAboutAction(JFrame parent) {
-		FTextArea info = new FTextArea(parent, "Copyright Information", true,
+		FTextArea info = new FTextArea(parent,
+				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME, true,
 				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
 
 		StringBuilder message = new StringBuilder();
-
-		for (String line : CopyrightInfos.get()) {
-			message.append("\n");
-			message.append(line);
-		}
+		message.append(Globals.APPNAME + "  " + Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION
+				+ " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		message.append("\n");
+		message.append("The opsi-logviewer is part of the " + Globals.APPNAME + " since version 4.2.22.1\n");
+		message.append("______________________________________________________________________\n");
+		message.append("\n");
+		message.append(Globals.COPYRIGHT1 + "\n");
+		message.append(Globals.COPYRIGHT2 + "\n");
+		message.append("\n");
+		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 
 		info.setMessage(message.toString());
 		info.setVisible(true);
@@ -198,6 +205,7 @@ public final class Utils {
 		return getCLIParam(question, false);
 	}
 
+	@SuppressWarnings({ "java:S106" })
 	private static String getCLIParam(String question, boolean password) {
 		Console con = System.console();
 		if (con == null) {
