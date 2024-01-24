@@ -32,7 +32,6 @@ public final class FCreditsDialog extends FGeneralDialog {
 		message.append("<br>");
 		appendCreditsFromFile(message);
 		jTextPane.setText(message.toString());
-		jTextPane.setEditable(false);
 		scrollpane.getViewport().add(jTextPane, null);
 	}
 

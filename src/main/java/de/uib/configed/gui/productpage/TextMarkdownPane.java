@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
+import javax.swing.text.DefaultCaret;
 
 import org.commonmark.ext.autolink.AutolinkExtension;
 import org.commonmark.node.Node;
@@ -23,6 +24,9 @@ public class TextMarkdownPane extends JTextPane {
 	public TextMarkdownPane() {
 		super.addHyperlinkListener(this::hyperlinkUpdate);
 		super.setEditable(false);
+
+		DefaultCaret caret = (DefaultCaret) super.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
 		setContentType("text/html");
 	}
