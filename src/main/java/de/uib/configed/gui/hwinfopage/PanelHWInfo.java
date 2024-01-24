@@ -487,9 +487,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				classIcon = createImageIcon("hwinfo_images/DEVICE.png");
 			}
 
-			classNode.setClosedIcon(classIcon);
-			classNode.setLeafIcon(classIcon);
-			classNode.setOpenIcon(classIcon);
+			classNode.setIcon(classIcon);
 			root.add(classNode);
 
 			Map<String, List<Map<String, Object>>> displayNames = new HashMap<>();
@@ -550,9 +548,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			for (Map<String, Object> device : devices) {
 				if (name.equals(device.get("displayName"))) {
 					IconNode iconNode = new IconNode(encodeString((String) device.get("displayName")));
-					iconNode.setClosedIcon(classIcon);
-					iconNode.setLeafIcon(classIcon);
-					iconNode.setOpenIcon(classIcon);
+					iconNode.setIcon(classIcon);
 					iconNode.setDeviceInfo(device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);

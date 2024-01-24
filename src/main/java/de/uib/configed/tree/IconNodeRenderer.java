@@ -7,20 +7,17 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.awt.Dimension;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-public class IconNodeRenderer extends DefaultTreeCellRenderer {
-	// Make width long enough so that it will be not too small for the whole text
-	private static final int LABEL_WIDTH = 500;
-	private static final int LABEL_HEIGHT = 20;
+import de.uib.configed.Globals;
 
+public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	public IconNodeRenderer() {
 		super();
 
-		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
+		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 	}
 
 	@Override
@@ -33,23 +30,8 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 			setText(stringValue);
 
-			// adaption to size of bold font??
-
-			// Attention: must be a IconNode
 			IconNode node = (IconNode) value;
-			boolean enabled = tree.isEnabled();
-			setEnabled(enabled);
-			node.setEnabled(enabled);
-
-			if (leaf) {
-				setIcon(node.getLeafIcon());
-			} else if (expanded) {
-				setIcon(node.getOpenIcon());
-			} else {
-				setIcon(node.getClosedIcon());
-			}
-
-			setComponentOrientation(tree.getComponentOrientation());
+			setIcon(node.getIcon());
 		}
 
 		return this;

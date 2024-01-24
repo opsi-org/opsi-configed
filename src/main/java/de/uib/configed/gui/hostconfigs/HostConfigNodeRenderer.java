@@ -68,8 +68,6 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			if (!sel) {
 				setIcon(node.getNonSelectedIcon());
 			}
-
-			setComponentOrientation(tree.getComponentOrientation());
 		}
 
 		return this;

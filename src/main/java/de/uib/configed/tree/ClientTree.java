@@ -53,7 +53,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
-import utils.Utils;
 
 public class ClientTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
@@ -107,7 +106,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	private Set<String> activeParents = new HashSet<>();
 	// groups containing clients (especially the selected ones)
 
-	private Map<String, HostInfo> host2HostInfo;
+	private ClientTreeRenderer renderer;
 
 	private Set<String> directlyAllowedGroups;
 
@@ -192,8 +191,8 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		setRootVisible(false);
 		setShowsRootHandles(true);
 
-		IconNodeRendererClientTree nodeRenderer = new IconNodeRendererClientTree(configedMain);
-		setCellRenderer(nodeRenderer);
+		renderer = new ClientTreeRenderer(configedMain);
+		setCellRenderer(renderer);
 
 		model = new DefaultTreeModel(rootNode);
 		setModel(model);
@@ -229,7 +228,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public void setClientInfo(Map<String, HostInfo> host2HostInfo) {
-		this.host2HostInfo = host2HostInfo;
+		renderer.setHost2HostInfo(host2HostInfo);
 	}
 
 	// publishing the private method
@@ -268,32 +267,13 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
-	private IconNode produceClientNode(Object x) {
-		IconNode n = new IconNode(x, false);
-		n.setEnabled(false);
-		if (host2HostInfo != null && host2HostInfo.get(x) != null
-				&& !"".equals(host2HostInfo.get(x).getDescription())) {
-			n.setToolTipText(host2HostInfo.get(x).getDescription());
-		} else {
-			n.setToolTipText(x.toString());
-		}
-
-		n.setIcon(Utils.createImageIcon("images/client_small.png", "client"));
-		n.setNonSelectedLeafIcon(Utils.createImageIcon("images/client_small_unselected.png", "client"));
-		n.setDisabledLeafIcon();
-
-		return n;
+	private static DefaultMutableTreeNode produceClientNode(Object x) {
+		return new DefaultMutableTreeNode(x, false);
 	}
 
 	private static GroupNode produceGroupNode(Object x, String description) {
 		GroupNode n = new GroupNode(x);
 		n.setToolTipText(description);
-		n.setEnabled(true);
-		n.setIcon(Utils.createImageIcon("images/group_small.png", "group"));
-		n.setClosedIcon(Utils.createImageIcon("images/group_small_unselected.png", "group unselected"));
-		n.setEmphasizedIcon(Utils.createImageIcon("images/group_small_1selected.png", "group 1selected"));
-		n.setDisabledLeafIcon();
-
 		return n;
 	}
 
@@ -308,7 +288,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
-
 				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
 
 		groupNodeDirectoryNotAssigned.setAllowsSubGroups(false);
@@ -326,9 +305,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		pathToROOT = new TreePath(new Object[] { rootNode });
 
 		// GROUPS
-		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,
-
-				Configed.getResourceValue("ClientTree.GROUPSdescription"));
+		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME, Configed.getResourceValue("ClientTree.GROUPSdescription"));
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
@@ -336,7 +313,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		// DIRECTORY
 		groupNodeDirectory = produceGroupNode(DIRECTORY_NAME,
-
 				Configed.getResourceValue("ClientTree.DIRECTORYdescription"));
 
 		groupNodeDirectory.setAllowsOnlyGroupChilds(true);
@@ -346,7 +322,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		// ALL
 		groupNodeAllClients = produceGroupNode(ALL_CLIENTS_NAME,
-
 				Configed.getResourceValue("ClientTree.ALLdescription"));
 
 		rootNode.add(groupNodeAllClients);
@@ -446,10 +421,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		produceClients(clientIds, parent, false);
 	}
 
-	// expects Strings as Objects
 	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent, boolean register) {
 		for (String clientId : clientIds) {
-			IconNode node = produceClientNode(clientId);
+			DefaultMutableTreeNode node = produceClientNode(clientId);
 			if (register) {
 				clientNodesInDIRECTORY.put(clientId, node);
 			}
@@ -468,13 +442,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		model.nodeStructureChanged(parent);
 	}
 
-	private void produceClients(Collection<String> clientIds) {
-		produceClients(clientIds, groupNodeAllClients);
-	}
-
-	public void produceTreeForALL(Collection<String> x) {
+	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDIRECTORY.clear();
-		produceClients(x);
+		produceClients(clientIds, groupNodeAllClients);
 	}
 
 	private void initTopGroups() {
@@ -592,7 +562,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			if (!isClientInAnyDIRECTORYGroup(clientId)) {
 				membersOfDirectoryNotAssigned.add(clientId);
 
-				IconNode node = produceClientNode(clientId);
+				DefaultMutableTreeNode node = produceClientNode(clientId);
 				groupNodeDirectoryNotAssigned.add(node);
 
 				clientNodesInDIRECTORY.put(clientId, node);
