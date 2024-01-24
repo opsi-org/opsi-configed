@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.25] - 2024-01-24
+## Changed
+- Enable depot selection for driver upload
+
 ## [4.2.22.24] - 2024-01-12
 ### Fixed
 - `ArrayIndexOutOfBoundsException` on calling `-qg` or `--definegroupbysearch` command with two arguments/parameters
