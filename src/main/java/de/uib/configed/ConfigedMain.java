@@ -503,7 +503,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public boolean initMessagebus() {
 		if (messagebus == null) {
-			messagebus = new Messagebus();
+			messagebus = new Messagebus(this);
 		}
 
 		if (!messagebus.isConnected()) {
