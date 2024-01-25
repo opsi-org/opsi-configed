@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -434,11 +435,18 @@ public class PanelProductSettings extends JSplitPane {
 
 	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
-		return productSettingsTableModel.getSortKeys();
+		if (tableProducts.getRowSorter() != null) {
+			return tableProducts.getRowSorter().getSortKeys();
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		productSettingsTableModel.setSortKeys(currentSortKeys);
+		Logging.info(this, "setSortKeys : " + currentSortKeys);
+		if (currentSortKeys != null) {
+			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
+		}
 	}
 
 	private void showPopupOpsiclientdEvent(boolean visible) {

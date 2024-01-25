@@ -8,13 +8,11 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Component;
 import java.util.Comparator;
-import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
-import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -35,7 +33,6 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.utilities.IntComparatorForStrings;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
@@ -73,8 +70,6 @@ public class ProductSettingsTableModel {
 	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
 	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
-
-	private List<? extends SortKey> currentSortKeys;
 
 	private JTable tableProducts;
 
@@ -156,19 +151,6 @@ public class ProductSettingsTableModel {
 		};
 	}
 
-	@SuppressWarnings("java:S1452")
-	public List<? extends SortKey> getSortKeys() {
-		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
-		return currentSortKeys;
-	}
-
-	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
-		if (currentSortKeys != null) {
-			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
-		}
-	}
-
 	public void setRenderer(InstallationStateTableModel istm) {
 		final Comparator<String> myComparator = Comparator.comparing(String::toString);
 
@@ -189,7 +171,6 @@ public class ProductSettingsTableModel {
 		};
 
 		tableProducts.setRowSorter(sorter);
-		sorter.addRowSorterListener(event -> currentSortKeys = tableProducts.getRowSorter().getSortKeys());
 
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
@@ -351,19 +332,5 @@ public class ProductSettingsTableModel {
 
 			return jc;
 		}
-	}
-
-	private String infoSortKeys(List<? extends SortKey> sortKeys) {
-		if (sortKeys == null) {
-			return "null";
-		}
-
-		StringBuilder result = new StringBuilder("[");
-		for (SortKey key : sortKeys) {
-			result.append(key.getColumn() + ".." + key);
-		}
-		result.append("]");
-		Logging.info(this, "infoSortkeys " + result);
-		return " (number " + sortKeys.size() + ") ";
 	}
 }
