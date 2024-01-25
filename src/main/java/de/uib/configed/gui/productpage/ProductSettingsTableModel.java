@@ -73,8 +73,12 @@ public class ProductSettingsTableModel {
 
 	private JTable tableProducts;
 
+	private TableRowSorter<TableModel> rowSorter;
+
 	public ProductSettingsTableModel(JTable tableProducts) {
 		this.tableProducts = tableProducts;
+
+		initRowSorter();
 
 		initRenderer();
 	}
@@ -151,10 +155,10 @@ public class ProductSettingsTableModel {
 		};
 	}
 
-	public void setRenderer(InstallationStateTableModel istm) {
+	private void initRowSorter() {
 		final Comparator<String> myComparator = Comparator.comparing(String::toString);
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
+		rowSorter = new TableRowSorter<>(tableProducts.getModel()) {
 			@Override
 			protected boolean useToString(int column) {
 				return true;
@@ -170,11 +174,13 @@ public class ProductSettingsTableModel {
 			}
 		};
 
-		tableProducts.setRowSorter(sorter);
+		tableProducts.setRowSorter(rowSorter);
 
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
+	}
 
+	public void setRenderer(InstallationStateTableModel istm) {
 		int colIndex = -1;
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_ID)) > -1) {
@@ -254,7 +260,7 @@ public class ProductSettingsTableModel {
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			sorter.setComparator(colIndex, new IntComparatorForStrings());
+			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {
@@ -264,7 +270,7 @@ public class ProductSettingsTableModel {
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
-			sorter.setComparator(colIndex, new IntComparatorForStrings());
+			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_VERSION)) > -1) {
