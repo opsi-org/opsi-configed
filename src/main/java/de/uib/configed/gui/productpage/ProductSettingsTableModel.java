@@ -7,11 +7,14 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Component;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -32,8 +35,10 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.utilities.IntComparatorForStrings;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
+import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
@@ -68,6 +73,8 @@ public class ProductSettingsTableModel {
 	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
 	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
+
+	private List<? extends SortKey> currentSortKeys;
 
 	private JTable tableProducts;
 
@@ -149,7 +156,44 @@ public class ProductSettingsTableModel {
 		};
 	}
 
-	public void setRenderer(InstallationStateTableModel istm, TableRowSorter<TableModel> sorter) {
+	@SuppressWarnings("java:S1452")
+	public List<? extends SortKey> getSortKeys() {
+		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
+		return currentSortKeys;
+	}
+
+	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
+		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
+		if (currentSortKeys != null) {
+			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
+		}
+	}
+
+	public void setRenderer(InstallationStateTableModel istm) {
+		final Comparator<String> myComparator = Comparator.comparing(String::toString);
+
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
+			@Override
+			protected boolean useToString(int column) {
+				return true;
+			}
+
+			@Override
+			public Comparator<?> getComparator(int column) {
+				if (column == 0) {
+					return myComparator;
+				} else {
+					return super.getComparator(column);
+				}
+			}
+		};
+
+		tableProducts.setRowSorter(sorter);
+		sorter.addRowSorterListener(event -> currentSortKeys = tableProducts.getRowSorter().getSortKeys());
+
+		tableProducts.getTableHeader()
+				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
+
 		int colIndex = -1;
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_ID)) > -1) {
@@ -307,5 +351,19 @@ public class ProductSettingsTableModel {
 
 			return jc;
 		}
+	}
+
+	private String infoSortKeys(List<? extends SortKey> sortKeys) {
+		if (sortKeys == null) {
+			return "null";
+		}
+
+		StringBuilder result = new StringBuilder("[");
+		for (SortKey key : sortKeys) {
+			result.append(key.getColumn() + ".." + key);
+		}
+		result.append("]");
+		Logging.info(this, "infoSortkeys " + result);
+		return " (number " + sortKeys.size() + ") ";
 	}
 }

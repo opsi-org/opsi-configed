@@ -13,7 +13,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,8 +37,6 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -58,7 +55,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import utils.PopupMouseListener;
 import utils.Utils;
 
@@ -78,8 +74,6 @@ public class PanelProductSettings extends JSplitPane {
 	private EditMapPanelX propertiesPanel;
 
 	private Map<String, Boolean> productDisplayFields;
-
-	private List<? extends SortKey> currentSortKeys;
 
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
@@ -438,31 +432,13 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	private String infoSortKeys(List<? extends SortKey> sortKeys) {
-		if (sortKeys == null) {
-			return "null";
-		}
-
-		StringBuilder result = new StringBuilder("[");
-		for (SortKey key : sortKeys) {
-			result.append(key.getColumn() + ".." + key);
-		}
-		result.append("]");
-		Logging.info(this, "infoSortkeys " + result);
-		return " (number " + sortKeys.size() + ") ";
-	}
-
 	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
-		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
-		return currentSortKeys;
+		return productSettingsTableModel.getSortKeys();
 	}
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
-		if (currentSortKeys != null) {
-			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
-		}
+		productSettingsTableModel.setSortKeys(currentSortKeys);
 	}
 
 	private void showPopupOpsiclientdEvent(boolean visible) {
@@ -558,31 +534,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		tableProducts.setModel(istm);
 
-		final Comparator<String> myComparator = Comparator.comparing(String::toString);
-
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
-			@Override
-			protected boolean useToString(int column) {
-				return true;
-			}
-
-			@Override
-			public Comparator<?> getComparator(int column) {
-				if (column == 0) {
-					return myComparator;
-				} else {
-					return super.getComparator(column);
-				}
-			}
-		};
-
-		tableProducts.setRowSorter(sorter);
-		sorter.addRowSorterListener(event -> currentSortKeys = tableProducts.getRowSorter().getSortKeys());
-
-		tableProducts.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
-
-		productSettingsTableModel.setRenderer(istm, sorter);
+		productSettingsTableModel.setRenderer(istm);
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
