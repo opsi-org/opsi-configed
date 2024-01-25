@@ -3432,12 +3432,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void callNewClientDialog() {
 		Collections.sort(netbootProductnames);
-		List<String> vNetbootProducts = netbootProductnames;
 
 		if (newClientDialog == null) {
 			newClientDialog = new NewClientDialog(this, getLinkedDepots());
 		}
-		newClientDialog.setProductNetbootList(vNetbootProducts);
+
+		newClientDialog.setProductNetbootList(netbootProductnames);
 		newClientDialog.useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
 				persistenceController.getConfigDataService().isUefiConfigured(myServer),
