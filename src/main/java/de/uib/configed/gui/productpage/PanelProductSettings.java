@@ -575,7 +575,7 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.cancelOldCellEditing();
 	}
 
-	public void clearEditing() {
+	private void clearEditing() {
 		initEditing("", "", "", "", "", null, null, null, null);
 		infoPane.clearEditing();
 	}

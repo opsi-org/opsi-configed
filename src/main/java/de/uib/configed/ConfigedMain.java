@@ -1841,11 +1841,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	private static void clearProductEditing() {
-		mainFrame.getPanelLocalbootProductSettings().clearEditing();
-		mainFrame.getPanelNetbootProductSettings().clearEditing();
-	}
-
 	private static void clearListEditors() {
 		mainFrame.getPanelLocalbootProductSettings().clearListEditors();
 		mainFrame.getPanelNetbootProductSettings().clearListEditors();
@@ -2257,8 +2252,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (!setDepotRepresentative()) {
 			return false;
 		}
-
-		clearProductEditing();
 
 		if (statesAndActions == null || updateStatesAndActions) {
 			statesAndActions = persistenceController.getProductDataService()
