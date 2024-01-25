@@ -294,12 +294,6 @@ public class PanelProductSettings extends JSplitPane {
 				super.saveData();
 				Logging.info(this, "we are in PanelProductSettings");
 			}
-
-			@Override
-			public void deleteData() {
-				super.deleteData();
-				Logging.info(this, "we are in PanelProductSettings");
-			}
 		});
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
