@@ -444,7 +444,7 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
 		Logging.info(this, "setSortKeys : " + currentSortKeys);
-		if (currentSortKeys != null) {
+		if (tableProducts.getRowSorter() != null) {
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
 		}
 	}
