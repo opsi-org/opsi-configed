@@ -940,31 +940,8 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(List<String> clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + clientIds);
-		if (clientIds == null || clientIds.isEmpty()) {
-			return new HashMap<>();
-		}
-
-		String[] callAttributes = new String[0];
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("type", "ProductOnClient");
-		callFilter.put("clientId", clientIds);
-		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
-
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-		for (Map<String, Object> m : productOnClients) {
-			String client = (String) m.get("clientId");
-			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
-		}
-		return result;
-	}
-
-	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(List<String> clientIds,
-			List<String> attributes) {
+	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(List<String> clientIds,
+			List<String> attributes, String productServerString) {
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + clientIds);
 
 		if (clientIds == null || clientIds.isEmpty()) {
@@ -974,7 +951,7 @@ public class ProductDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", clientIds);
-		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
+		callFilter.put("productType", productServerString);
 
 		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
 				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
