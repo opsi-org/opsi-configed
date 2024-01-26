@@ -64,7 +64,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		init();
 		initLayout();
-		super.setSize(Globals.DIALOG_FRAME_DEFAULT_HEIGHT, Globals.DIALOG_FRAME_DEFAULT_WIDTH);
+		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, 320);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
