@@ -78,18 +78,13 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			command = new CommandSFTPUpload();
 		}
 
-		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		wgetDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		init();
 		initGUI();
 
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-		wgetAuthPanel.isOpen = true;
-		wgetAuthPanel.close();
 		Logging.info(this.getClass(), "SSHFileUploadDialog build");
 	}
 
@@ -116,7 +111,10 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		addListener(jRadioButtonLocal);
 
 		jLabelURL = new JLabel();
+		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 90, Globals.BUTTON_HEIGHT);
+		wgetAuthPanel.isOpen = true;
+		wgetAuthPanel.close();
 
 		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
 		jLabelOverwriteExisting = new JLabel();

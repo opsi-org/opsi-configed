@@ -38,7 +38,6 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	private JLabel jLabelCompareMD5Sum = new JLabel();
 	private JCheckBox jCheckBoxCompareMD5;
-	private SSHCompletionComboButton autocompletion;
 
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
@@ -48,18 +47,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallWgetPanel() {
 		super();
-		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
-		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		urlDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();
 		initLayout();
-
-		jComboBoxAutoCompletion.setEnabled(true);
-		jButtonAutoCompletion.setEnabled(true);
-
-		jComboBoxAutoCompletion.setSelectedItem(workbench);
-		wgetAuthPanel.isOpen = true;
-		wgetAuthPanel.close();
 	}
 
 	private void initComponents() {
@@ -74,10 +64,13 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		jLabelCompareMD5Sum.setText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetCompareMD5Sum"));
 
+		SSHCompletionComboButton autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.addItem(workbench);
 		jComboBoxAutoCompletion.setSelectedItem(workbench);
+		jComboBoxAutoCompletion.setEnabled(true);
 		jButtonAutoCompletion = autocompletion.getButton();
+		jButtonAutoCompletion.setEnabled(true);
 
 		jTextFieldURL = new JTextField(urlDefText);
 
@@ -92,7 +85,10 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		});
 
 		// perfekt für PMInstall
+		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH * 2, Globals.BUTTON_HEIGHT);
+		wgetAuthPanel.isOpen = true;
+		wgetAuthPanel.close();
 
 		jCheckBoxIncludeZSync = new JCheckBox();
 		jCheckBoxIncludeZSync.setSelected(true);

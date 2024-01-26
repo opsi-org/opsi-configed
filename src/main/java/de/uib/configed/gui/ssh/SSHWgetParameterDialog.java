@@ -62,7 +62,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	public SSHWgetParameterDialog() {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
 
-		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
 		initLayout();
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_HEIGHT, Globals.DIALOG_FRAME_DEFAULT_WIDTH);
@@ -171,6 +170,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			}
 		});
 
+		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
