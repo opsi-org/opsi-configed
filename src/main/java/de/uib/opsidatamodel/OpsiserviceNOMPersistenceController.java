@@ -5395,7 +5395,7 @@ public class OpsiserviceNOMPersistenceController {
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseFromLicensePool_delete",
+			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseToLicensePool_delete",
 					new String[] { softwareLicenseId, licensePoolId });
 
 			return exec.doCall(omc);
