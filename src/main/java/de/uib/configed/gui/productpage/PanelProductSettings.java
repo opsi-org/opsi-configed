@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -44,6 +47,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.configed.type.OpsiPackage;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -81,10 +85,13 @@ public class PanelProductSettings extends JSplitPane {
 
 	private String title;
 
-	// State reducedTo1stSelection
-	// List reductionList
+	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
+	private Timer timer;
 
 	private ConfigedMain configedMain;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
@@ -195,6 +202,93 @@ public class PanelProductSettings extends JSplitPane {
 			final Map<String, Set<String>> productGroupMembers) {
 		groupPanel.setGroupsData(data, productGroupMembers);
 		showAll();
+	}
+
+	public void updateProduct(Map<String, Object> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
+
+		Map<String, TreeSet<String>> clientProducts = productsToUpdate.containsKey(clientId)
+				? productsToUpdate.get(clientId)
+				: new HashMap<>();
+		TreeSet<String> productIds = clientProducts.computeIfAbsent(productType, v -> new TreeSet<>());
+		productIds.add(productId);
+		clientProducts.put(productType, productIds);
+		productsToUpdate.put(clientId, clientProducts);
+
+		if (timer != null) {
+			timer.cancel();
+		}
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (configedMain.getSelectedClients().size() == 1
+						&& clientId.equals(configedMain.getSelectedClients().get(0))) {
+					configedMain.updateProductTableForClient(clientId, productType);
+					productsToUpdate.clear();
+				}
+			}
+		}, 200);
+	}
+
+	public void updateProductTableForClient(String clientId, List<String> attributes) {
+		if (!isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+				|| !(tableProducts.getModel() instanceof InstallationStateTableModel)) {
+			return;
+		}
+
+		InstallationStateTableModel istmForSelectedClients = (InstallationStateTableModel) tableProducts.getModel();
+
+		if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+			istmForSelectedClients.updateTable(clientId,
+					productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING), attributes);
+		} else {
+			istmForSelectedClients.updateTable(clientId, attributes);
+		}
+	}
+
+	private boolean isProductsUpdatedForClient(String clientId, String productType) {
+		return productsToUpdate.get(clientId) != null && productsToUpdate.get(clientId).get(productType) != null
+				&& !productsToUpdate.get(clientId).get(productType).isEmpty();
+	}
+
+	public void updateProductStates(Map<String, Map<String, Map<String, String>>> collectChangedProductStates,
+			int productType) {
+		// localboot products
+		Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedProductStates);
+
+		if (collectChangedProductStates != null && collectChangedProductStates.keySet() != null
+				&& !collectChangedProductStates.isEmpty()) {
+			for (Entry<String, Map<String, Map<String, String>>> changedClientState : collectChangedProductStates
+					.entrySet()) {
+
+				Map<String, Map<String, String>> clientValues = changedClientState.getValue();
+
+				Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client "
+						+ changedClientState.getKey() + " values " + clientValues);
+
+				if (clientValues.keySet() == null || clientValues.isEmpty()) {
+					continue;
+				}
+
+				for (Entry<String, Map<String, String>> productState : clientValues.entrySet()) {
+					Map<String, String> productValues = productState.getValue();
+
+					persistenceController.getProductDataService().updateProductOnClient(changedClientState.getKey(),
+							productState.getKey(), productType, productValues);
+				}
+			}
+
+			// send the collected items
+			persistenceController.getProductDataService().updateProductOnClients();
+		}
+
+		if (tableProducts.getModel() instanceof InstallationStateTableModel) {
+			((InstallationStateTableModel) tableProducts.getModel()).clearCollectChangedStates();
+		}
 	}
 
 	protected void activatePacketSelectionHandling(boolean b) {
