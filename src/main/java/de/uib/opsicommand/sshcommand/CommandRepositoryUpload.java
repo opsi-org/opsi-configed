@@ -9,7 +9,7 @@ package de.uib.opsicommand.sshcommand;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
+import de.uib.configed.gui.ssh.SSHFileUploadDialog;
 
 public class CommandRepositoryUpload extends CommandSFTPUpload {
 	public CommandRepositoryUpload() {
@@ -38,7 +38,16 @@ public class CommandRepositoryUpload extends CommandSFTPUpload {
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new SSHRepositoryUploadDialog();
+		dialog = new SSHFileUploadDialog(Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title"),
+				new CommandRepositoryUpload()) {
+			@Override
+			protected String doAction1AdditionalSetPath() {
+				String modulesServerPath = command.getTargetPath() + command.getTargetFilename();
+				command.setTargetFilename(jFileChooserLocal.getSelectedFile().getName());
+				return modulesServerPath;
+			}
+		};
+		dialog.setVisible(true);
 	}
 
 	@Override
