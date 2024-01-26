@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.2.22.26] - 2024-01-26
+## Changed
+- Disable depot selection for driver upload
+- Rename RPC method `softwareLicenseFromLicensePool_delete` to `softwareLicenseToLicensePool_delete`
+
 ## [4.2.22.25] - 2024-01-24
 ## Changed
 - Enable depot selection for driver upload
