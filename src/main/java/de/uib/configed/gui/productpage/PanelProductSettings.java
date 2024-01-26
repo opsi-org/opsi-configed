@@ -257,8 +257,7 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void updateProductStates(Map<String, Map<String, Map<String, String>>> collectChangedProductStates,
 			int productType) {
-		// localboot products
-		Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedProductStates);
+		Logging.info(this, "updateProductStates: collectChangedProductStates  " + collectChangedProductStates);
 
 		if (collectChangedProductStates != null && collectChangedProductStates.keySet() != null
 				&& !collectChangedProductStates.isEmpty()) {
@@ -267,7 +266,7 @@ public class PanelProductSettings extends JSplitPane {
 
 				Map<String, Map<String, String>> clientValues = changedClientState.getValue();
 
-				Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client "
+				Logging.debug(this, "updateProductStates, collectChangedProductStates , client "
 						+ changedClientState.getKey() + " values " + clientValues);
 
 				if (clientValues.keySet() == null || clientValues.isEmpty()) {
