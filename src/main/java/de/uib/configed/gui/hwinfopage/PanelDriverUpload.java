@@ -226,14 +226,13 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private void defineChoosers() {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(String[]::new)));
+
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
+
+		comboChooseDepot.setEnabled(false);
+
 		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = (String) comboChooseDepot.getSelectedItem();
-			depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot,
-					SmbConnect.PRODUCT_SHARE_RW);
-			smbMounted = new File(depotProductDirectory).exists();
-			panelMountShare.mount(smbMounted);
-			evaluateWinProducts();
 			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 		});
 
@@ -738,7 +737,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	public void setDepot(String s) {
-		comboChooseDepot.setSelectedItem(s);
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(new String[] { s }));
 	}
 
 	private void produceTarget() {
