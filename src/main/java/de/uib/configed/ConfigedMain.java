@@ -83,6 +83,7 @@ import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
+import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
 import de.uib.configed.tree.ClientTree;
@@ -209,6 +210,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
 
 	private HostUpdateCollection hostUpdateCollection;
+
+	private InstallationStateUpdateManager updateManager;
 
 	// Map<client, <product, <propertykey, propertyvalue>>>
 	private Map<String, Map<String, Map<String, String>>> collectChangedLocalbootStates = new HashMap<>();
@@ -375,6 +378,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		allFrames = new ArrayList<>();
 
 		initMainFrame();
+
+		updateManager = new InstallationStateUpdateManager(this,
+				mainFrame.getPanelLocalbootProductSettings().getTableProducts(),
+				mainFrame.getPanelNetbootProductSettings().getTableProducts());
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
@@ -543,18 +550,19 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
+		Logging.devel("updateProductsTableForClient " + clientId + " " + productType);
 		int selectedView = getViewIndex();
 		Logging.devel(productType);
 		if (selectedView == VIEW_LOCALBOOT_PRODUCTS) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
-			mainFrame.getPanelLocalbootProductSettings().updateProductTableForClient(clientId, attributes);
+			updateManager.updateProductTableForClient(clientId, attributes);
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
 
-			mainFrame.getPanelNetbootProductSettings().updateProductTableForClient(clientId, attributes);
+			updateManager.updateProductTableForClient(clientId, attributes);
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
 					+ "not open or configed not yet initialized");
@@ -2937,12 +2945,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		private void updateProductStates() {
+			updateManager.updateProductStates(collectChangedLocalbootStates, OpsiPackage.TYPE_LOCALBOOT);
 
-			mainFrame.getPanelLocalbootProductSettings().updateProductStates(collectChangedLocalbootStates,
-					OpsiPackage.TYPE_LOCALBOOT);
-
-			mainFrame.getPanelNetbootProductSettings().updateProductStates(collectChangedNetbootStates,
-					OpsiPackage.TYPE_NETBOOT);
+			updateManager.updateProductStates(collectChangedNetbootStates, OpsiPackage.TYPE_NETBOOT);
 		}
 	}
 
@@ -4156,8 +4161,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString().equals(eventType)
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
-			mainFrame.getPanelLocalbootProductSettings().updateProduct(eventData);
-			mainFrame.getPanelNetbootProductSettings().updateProduct(eventData);
+			updateManager.updateProduct(eventData);
 		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
 			addClientToConnectedList((String) eventData.get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
