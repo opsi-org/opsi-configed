@@ -535,7 +535,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
-		tableProducts.setRowSorter(null);
 
 		tableProducts.setModel(istm);
 
