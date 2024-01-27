@@ -78,7 +78,7 @@ public class ProductSettingsTableModel {
 	public ProductSettingsTableModel(JTable tableProducts) {
 		this.tableProducts = tableProducts;
 
-		initRowSorter();
+		setRowSorter();
 
 		initRenderer();
 	}
@@ -155,7 +155,7 @@ public class ProductSettingsTableModel {
 		};
 	}
 
-	private void initRowSorter() {
+	public void setRowSorter() {
 		final Comparator<String> myComparator = Comparator.comparing(String::toString);
 
 		rowSorter = new TableRowSorter<>(tableProducts.getModel()) {
