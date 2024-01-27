@@ -78,8 +78,6 @@ public class ProductSettingsTableModel {
 	public ProductSettingsTableModel(JTable tableProducts) {
 		this.tableProducts = tableProducts;
 
-		setRowSorter();
-
 		initRenderer();
 	}
 
