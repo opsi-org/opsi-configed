@@ -83,9 +83,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ConfigedMain configedMain;
 
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
 	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
