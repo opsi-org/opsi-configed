@@ -33,7 +33,11 @@
                 // Dependency analytics
                 "redhat.fabric8-analytics",
                 // Code autorship
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                // Docker
+                "ms-azuretools.vscode-docker",
+                // XML
+                "redhat.vscode-xml"
             ]
         }
     },
