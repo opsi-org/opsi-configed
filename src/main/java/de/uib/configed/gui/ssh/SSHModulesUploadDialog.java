@@ -26,17 +26,10 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	private JCheckBox jComboBoxCopyToModulesD;
 
 	public SSHModulesUploadDialog() {
-		super(TITLE, new CommandModulesUpload());
-		super.setVisible(true);
+		super(TITLE, new CommandModulesUpload(), Globals.DIALOG_FRAME_DEFAULT_WIDTH, 430);
 		Logging.info(this.getClass(), "SSHModulesUploadDialog build");
-		frameHeight = 430;
-		showDialog();
 	}
 
-	/**
-	 * is called in the end of super.init() init additionial components, which
-	 * are needed in this dialog
-	 */
 	@Override
 	protected void initAdditional() {
 		jLabelCopyToModulesD = new JLabel(
@@ -55,10 +48,6 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		jComboBoxCopyToModulesD.setSelected(false);
 	}
 
-	/**
-	 * is called at beginning of super.initGUI() add additionial components to
-	 * layout, which are needed in this dialog
-	 */
 	@Override
 	protected void initGUIAdditional() {
 		horizontalParallelGroup = inputPanelLayout.createSequentialGroup()
