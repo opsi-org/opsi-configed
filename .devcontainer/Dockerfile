@@ -27,6 +27,9 @@ RUN set -ex; \
     iputils-ping \
     maven \
     openjdk-19-jdk; \
+    # Installing current Node.js runtime LTS version from NodeSource
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash && \
+    apt-get install -y nodejs; \
     # Clean up
     apt-get autoremove -y; \
     apt-get clean -y; \
