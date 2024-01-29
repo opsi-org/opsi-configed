@@ -3,10 +3,6 @@
 {
     "name": "opsi-configed",
     "dockerFile": "Dockerfile",
-    "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "java.jdt.ls.java.home": "/usr/lib/jvm/java-19-openjdk-amd64"
-    },
     "features": {
         "ghcr.io/devcontainers/features/java:1": {
             "version": "none",
@@ -22,6 +18,10 @@
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "java.jdt.ls.java.home": "/usr/lib/jvm/java-19-openjdk-amd64"
+            },
             "extensions": [
                 // Java specific tooling
                 "redhat.java",
