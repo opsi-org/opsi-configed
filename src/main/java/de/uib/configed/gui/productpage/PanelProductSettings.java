@@ -707,6 +707,9 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void noSelection() {
+		if (!(tableProducts.getModel() instanceof InstallationStateTableModel)) {
+			return;
+		}
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
