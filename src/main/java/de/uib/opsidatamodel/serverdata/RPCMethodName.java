@@ -95,7 +95,7 @@ public enum RPCMethodName {
 	SOFTWARE_LICENSE_CREATE_CONCURRENT("softwareLicense_createConcurrent"),
 
 	SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE("softwareLicenseToLicensePool_create"),
-	SOFTWARE_LICENSE_FROM_LICENSE_POOL_DELETE("softwareLicenseFromLicensePool_delete"),
+	SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE("softwareLicenseToLicensePool_delete"),
 	SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS("softwareLicenseToLicensePool_getObjects"),
 
 	LICENSE_ON_CLIENT_CREATE("licenseOnClient_create"), LICENSE_ON_CLIENT_DELETE("licenseOnClient_delete"),

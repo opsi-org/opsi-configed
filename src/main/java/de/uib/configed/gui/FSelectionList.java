@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -160,6 +161,12 @@ public class FSelectionList extends FGeneralDialog {
 
 	public void enableMultiSelection() {
 		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		searchPane.requestFocus();
 	}
 
 	@Override

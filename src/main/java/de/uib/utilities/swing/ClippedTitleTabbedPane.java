@@ -74,10 +74,6 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		if (tip == null) {
-			tip = title;
-		}
-
 		super.insertTab(title, icon, component, tip, index);
 		JLabel label = new JLabel(title, SwingConstants.CENTER);
 		Dimension dim = label.getPreferredSize();

@@ -4,6 +4,8 @@
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
 
+## Changed
+- Rename RPC method `softwareLicenseFromLicensePool_delete` to `softwareLicenseToLicensePool_delete`
 
 ## [4.3.1.5] - 2024-01-19
 ### Fixed

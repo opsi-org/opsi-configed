@@ -277,15 +277,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return n;
 	}
 
-	private static GroupNode produceGroupNode(Map<String, String> group) {
-		String description = group.get("description");
-		if (description == null || "".equals(description.trim())) {
-			description = group.get("groupId");
-		}
-
-		return produceGroupNode(group.get("groupId"), description);
-	}
-
 	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
 				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
@@ -502,7 +493,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 				continue;
 			}
 
-			GroupNode node = produceGroupNode(group.getValue());
+			GroupNode node = produceGroupNode(group.getValue().get("groupId"), group.getValue().get("description"));
 			groupNodes.put(group.getKey(), node);
 		}
 	}
@@ -1086,19 +1077,13 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	private GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
-		String xGroupDescription = groupDescription;
-		if (groupDescription == null || "".equals(groupDescription.trim())) {
-			xGroupDescription = groupObject.toString();
-		}
+		GroupNode node = produceGroupNode(groupObject, groupDescription);
 
-		GroupNode node = produceGroupNode(groupObject, xGroupDescription);
-
-		DefaultMutableTreeNode xParent = parent;
 		if (parent == null) {
-			xParent = groupNodeGroups;
+			parent = groupNodeGroups;
 		}
 
-		insertNodeInOrder(node, xParent);
+		insertNodeInOrder(node, parent);
 
 		return node;
 	}
