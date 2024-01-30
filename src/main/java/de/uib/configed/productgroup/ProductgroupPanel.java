@@ -92,16 +92,6 @@ public class ProductgroupPanel extends JPanel {
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
-		IconButton buttonCollectiveAction = new IconButton(
-				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
-				"images/execute16_lightblue.png", "images/execute16_lightblue.png", "", true);
-
-		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
-
-		buttonCollectiveAction.addActionListener(
-				event -> handleCollectiveAction(" ", (InstallationStateTableModel) tableProducts.getModel()));
-		buttonCollectiveAction.setPreferredSize(Globals.NEW_SMALL_BUTTON);
-
 		Map<String, String> values = new LinkedHashMap<>();
 
 		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
