@@ -43,7 +43,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -68,7 +68,7 @@ public class PanelProductSettings extends JSplitPane {
 	private JTable tableProducts;
 	private ProductSettingsTableModel productSettingsTableModel;
 
-	private ProductgroupPanel groupPanel;
+	private ProductActionPanel groupPanel;
 
 	// right pane
 	private ProductInfoPane infoPane;
@@ -107,7 +107,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		tableProducts.setDragEnabled(true);
 
-		groupPanel = new ProductgroupPanel(this, tableProducts);
+		groupPanel = new ProductActionPanel(this, tableProducts);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();

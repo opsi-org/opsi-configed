@@ -35,7 +35,7 @@ import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class ProductgroupPanel extends JPanel {
+public class ProductActionPanel extends JPanel {
 	private TablesearchPane searchPane;
 	private JTable tableProducts;
 
@@ -45,7 +45,7 @@ public class ProductgroupPanel extends JPanel {
 
 	private PanelProductSettings associate;
 
-	public ProductgroupPanel(PanelProductSettings associate, JTable table) {
+	public ProductActionPanel(PanelProductSettings associate, JTable table) {
 		this.associate = associate;
 		this.tableProducts = table;
 
