@@ -36,7 +36,6 @@ public class SSHConnectExec extends SSHConnect {
 
 	public SSHConnectExec() {
 		super(null);
-		connect();
 	}
 
 	public SSHConnectExec(SSHCommand sshcommand) {
@@ -132,83 +131,80 @@ public class SSHConnectExec extends SSHConnect {
 				+ "] sequential[" + sequential + "] dialog[" + dialog + "]");
 		if (!isConnectionAllowed()) {
 			Logging.warning(this, "connection forbidden.");
-		} else {
-			multiCommand = true;
-			interruptChannel = false;
-			commandInfoName = commands.getMainName();
-			SSHConnectionExecDialog multiDialog = null;
-			if (dialog != null) {
-				Logging.info(this, "exec_list, take given dialog");
-				multiDialog = dialog;
-			} else {
-				Logging.info(this, "exec_list, create SSHConnectionExecDialog");
-				multiDialog = new SSHConnectionExecDialog();
-			}
-			outputDialog = multiDialog;
-			final SSHConnectionExecDialog finalDialog = multiDialog;
-
-			StringBuilder defaultCommandsString = new StringBuilder();
-			int anzahlCommands = ((SSHCommandTemplate) commands).getOriginalCommands().size();
-			Logging.info(this, "exec_list, anzahlCommands " + anzahlCommands);
-
-			for (int i = 0; i < anzahlCommands; i++) {
-				String com = ((SSHCommandTemplate) commands).getOriginalCommands().get(i).getCommandRaw();
-				com = "(" + (i + 1) + ")  " + com;
-
-				defaultCommandsString.append(com + "   \n");
-			}
-
-			finalDialog.appendLater("\n\n\n" + LocalDate.now() + " " + LocalTime.now());
-			finalDialog.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
-					+ "]\n" + defaultCommandsString + "\n\n");
-			if (SSHCommandFactory.alwaysExecInBackground()) {
-				multiDialog.setVisible(false);
-				finalDialog.setVisible(false);
-			}
-
-			final SSHMultiCommand commandToExec = commands;
-			Logging.info(this, "exec_list command " + commands);
-			Logging.info(this, "exec_list commandToExec " + commandToExec);
-			final SSHCommandParameterMethods pmethodHandler = SSHCommandFactory.getInstance(configedMain)
-					.getParameterHandler();
-			final SSHConnectExec caller = this;
-			foundError = false;
-
-			if (!SSHCommandFactory.alwaysExecInBackground()) {
-				finalDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-				finalDialog.setVisible(true);
-			}
-
-			pmethodHandler.setCanceled(false);
-			boolean foundErrorInCommandList = false;
-			List<SSHCommand> commandList = commandToExec.getCommands();
-			for (SSHCommand co : commandToExec.getCommands()) {
-				if (!foundErrorInCommandList) {
-					// ???????? sollte hier eigentlich stehen?!
-					// # nein! co wird vom phander verändert
-					co = pmethodHandler.parseParameter(co, caller);
-					if (!pmethodHandler.isCanceled()) {
-						if (co instanceof SSHSFTPCommand) {
-							SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
-							sftp.exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
-									commandList.size());
-						} else {
-							exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
-									commandList.size());
-						}
-					} else {
-						foundErrorInCommandList = true;
-					}
-				}
-			}
-			if (foundErrorInCommandList) {
-				finalDialog.appendLater("[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
-						+ "]     " + "" + Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
-			}
-
-			Logging.info(this, "exec_list command after starting " + commands);
-			Logging.info(this, "exec_list commandToExec " + commandToExec);
+			return;
 		}
+
+		multiCommand = true;
+		interruptChannel = false;
+		commandInfoName = commands.getMainName();
+		SSHConnectionExecDialog multiDialog = null;
+		if (dialog != null) {
+			Logging.info(this, "exec_list, take given dialog");
+			multiDialog = dialog;
+		} else {
+			Logging.info(this, "exec_list, create SSHConnectionExecDialog");
+			multiDialog = new SSHConnectionExecDialog();
+		}
+		outputDialog = multiDialog;
+		final SSHConnectionExecDialog finalDialog = multiDialog;
+
+		StringBuilder defaultCommandsString = new StringBuilder();
+		int anzahlCommands = ((SSHCommandTemplate) commands).getOriginalCommands().size();
+		Logging.info(this, "exec_list, anzahlCommands " + anzahlCommands);
+
+		for (int i = 0; i < anzahlCommands; i++) {
+			String com = ((SSHCommandTemplate) commands).getOriginalCommands().get(i).getCommandRaw();
+			com = "(" + (i + 1) + ")  " + com;
+
+			defaultCommandsString.append(com + "   \n");
+		}
+
+		finalDialog.appendLater("\n\n\n" + LocalDate.now() + " " + LocalTime.now());
+		finalDialog.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
+				+ "]\n" + defaultCommandsString + "\n\n");
+		if (SSHCommandFactory.alwaysExecInBackground()) {
+			multiDialog.setVisible(false);
+			finalDialog.setVisible(false);
+		}
+
+		final SSHMultiCommand commandToExec = commands;
+		Logging.info(this, "exec_list command " + commands);
+		Logging.info(this, "exec_list commandToExec " + commandToExec);
+		final SSHCommandParameterMethods pmethodHandler = SSHCommandFactory.getInstance(configedMain)
+				.getParameterHandler();
+		final SSHConnectExec caller = this;
+		foundError = false;
+
+		if (!SSHCommandFactory.alwaysExecInBackground()) {
+			finalDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+			finalDialog.setVisible(true);
+		}
+
+		pmethodHandler.setCanceled(false);
+		boolean foundErrorInCommandList = false;
+		List<SSHCommand> commandList = commandToExec.getCommands();
+		for (SSHCommand co : commandToExec.getCommands()) {
+			co = pmethodHandler.parseParameter(co, caller);
+			if (!pmethodHandler.isCanceled()) {
+				if (co instanceof SSHSFTPCommand) {
+					SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
+					sftp.exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
+							commandList.size());
+				} else {
+					exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
+							commandList.size());
+				}
+			} else {
+				foundErrorInCommandList = true;
+			}
+		}
+		if (foundErrorInCommandList) {
+			finalDialog.appendLater("[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist") + "]     "
+					+ "" + Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
+		}
+
+		Logging.info(this, "exec_list command after starting " + commands);
+		Logging.info(this, "exec_list commandToExec " + commandToExec);
 	}
 
 	public String exec(SSHCommand command) {
@@ -224,6 +220,7 @@ public class SSHConnectExec extends SSHConnect {
 		return exec(command, withGui, dialog, false, false, 1, 1);
 	}
 
+	@SuppressWarnings({ "java:S2301" })
 	public String exec(SSHCommand command, boolean withGui, SSHConnectionExecDialog dialog, boolean sequential,
 			boolean rememberPw, int commandnumber, int maxcommandnumber) {
 		if (!isConnectionAllowed()) {
@@ -247,29 +244,12 @@ public class SSHConnectExec extends SSHConnect {
 
 		if (withGui) {
 			Logging.info(this, "exec given dialog " + dialog);
-
-			if (dialog != null) {
-				outputDialog = dialog;
-				if (!EventQueue.isDispatchThread()) {
-					// does this really occur anywhere?
-
-					SwingUtilities.invokeLater(() -> outputDialog.setVisible(true));
-				} else {
-					outputDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-					outputDialog.setVisible(true);
-				}
-			} else {
-				outputDialog = new SSHConnectionExecDialog();
-			}
-
-			outputDialog.setTitle(Configed.getResourceValue("SSHConnection.Exec.title") + " "
-					+ Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
-					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
-					+ ")");
-			outputDialog.setVisible(!SSHCommandFactory.alwaysExecInBackground());
+			displayOutputDialog(dialog);
 		} else {
 			outputDialog = null;
 		}
+
+		String result = null;
 
 		try {
 			Logging.info(this, "exec isConnected " + isConnected());
@@ -281,18 +261,17 @@ public class SSHConnectExec extends SSHConnect {
 			Logging.info(this, "execute was called with task for command " + command.getSecuredCommand());
 
 			if (sequential) {
-				return task.get();
-			}
-
-			if (SSHCommandFactory.alwaysExecInBackground() && withGui && outputDialog != null) {
-				outputDialog.setVisible(false);
-			}
-
-			if (withGui) {
-				return "finish";
+				result = task.get();
 			} else {
-				String result = task.get();
-				return result;
+				if (SSHCommandFactory.alwaysExecInBackground() && withGui && outputDialog != null) {
+					outputDialog.setVisible(false);
+				}
+
+				if (withGui) {
+					result = "finish";
+				} else {
+					result = task.get();
+				}
 			}
 		} catch (InterruptedException e) {
 			Logging.error(this, "exec InterruptedException", e);
@@ -300,7 +279,26 @@ public class SSHConnectExec extends SSHConnect {
 		} catch (ExecutionException e) {
 			Logging.error(this, "exec ExecutionException", e);
 		}
-		return null;
+		return result;
+	}
+
+	private void displayOutputDialog(SSHConnectionExecDialog dialog) {
+		if (dialog != null) {
+			outputDialog = dialog;
+			if (!EventQueue.isDispatchThread()) {
+				SwingUtilities.invokeLater(() -> outputDialog.setVisible(true));
+			} else {
+				outputDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+				outputDialog.setVisible(true);
+			}
+		} else {
+			outputDialog = new SSHConnectionExecDialog();
+		}
+
+		outputDialog.setTitle(Configed.getResourceValue("SSHConnection.Exec.title") + " "
+				+ Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
+				+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost() + ")");
+		outputDialog.setVisible(!SSHCommandFactory.alwaysExecInBackground());
 	}
 
 	public boolean isMultiCommand() {

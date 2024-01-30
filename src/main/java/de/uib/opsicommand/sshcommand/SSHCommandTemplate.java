@@ -483,7 +483,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		return true;
 	}
 
-	private boolean areBothNull(String a, String b) {
+	private static boolean areBothNull(String a, String b) {
 		return a == null && b == null;
 	}
 
