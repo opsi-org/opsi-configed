@@ -43,6 +43,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class PanelTabbedDocuments extends JTabbedPane {
+	private static final String ALL_LOGFILES_SUFFIX = "all";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
 	private LogPane[] textPanes;
@@ -53,15 +54,11 @@ public class PanelTabbedDocuments extends JTabbedPane {
 	private File chooserDirectory;
 	private ConfigedMain configedMain;
 
-	private double proportionOfTotalWidth;
-
 	public PanelTabbedDocuments(final String[] idents, String defaultText, ConfigedMain configedMain) {
 		this.idents = idents;
 		this.configedMain = configedMain;
 
 		identsList = Arrays.asList(idents);
-
-		proportionOfTotalWidth = 0.5;
 
 		textPanes = new LogPane[idents.length];
 
@@ -75,7 +72,6 @@ public class PanelTabbedDocuments extends JTabbedPane {
 				initTabWidth();
 			}
 		});
-
 		super.addChangeListener(changeEvent -> initTabWidth());
 	}
 
@@ -103,43 +99,40 @@ public class PanelTabbedDocuments extends JTabbedPane {
 
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;
 		for (int i = 0; i < tabCount; i++) {
-			JLabel l = (JLabel) getTabComponentAt(i);
-			if (l == null) {
+			Component tabComponent = getTabComponentAt(i);
+			if (tabComponent == null) {
 				break;
 			}
 
 			if (i < gap) {
 				tabWidth = tabWidth + 1;
 			}
-			l.setPreferredSize(new Dimension(tabWidth, l.getPreferredSize().height));
+			tabComponent.setPreferredSize(new Dimension(tabWidth, tabComponent.getPreferredSize().height));
 		}
 		revalidate();
 	}
 
-	private int calcWidth() {
-		return (int) (getWidth() * proportionOfTotalWidth);
-	}
-
 	private Insets getTabInsets() {
-		Insets i = UIManager.getInsets("TabbedPane.tabInsets");
-		if (i != null) {
-			return i;
-		} else {
-			SynthStyle style = SynthLookAndFeel.getStyle(this, Region.TABBED_PANE_TAB);
-			SynthContext context = new SynthContext(this, Region.TABBED_PANE_TAB, style, SynthConstants.ENABLED);
-			return style.getInsets(context, null);
-		}
+		return getInsets("TabbedPane.tabInsets", Region.TABBED_PANE_TAB);
 	}
 
 	private Insets getTabAreaInsets() {
-		Insets i = UIManager.getInsets("TabbedPane.tabAreaInsets");
-		if (i != null) {
-			return i;
-		} else {
-			SynthStyle style = SynthLookAndFeel.getStyle(this, Region.TABBED_PANE_TAB_AREA);
-			SynthContext context = new SynthContext(this, Region.TABBED_PANE_TAB_AREA, style, SynthConstants.ENABLED);
-			return style.getInsets(context, null);
+		return getInsets("TabbedPane.tabAreaInsets", Region.TABBED_PANE_TAB_AREA);
+	}
+
+	private Insets getInsets(String insetsKey, Region insetsRegion) {
+		Insets insets = UIManager.getInsets(insetsKey);
+		if (insets == null) {
+			SynthStyle style = SynthLookAndFeel.getStyle(this, insetsRegion);
+			SynthContext context = new SynthContext(this, insetsRegion, style, SynthConstants.ENABLED);
+			insets = style.getInsets(context, null);
 		}
+		return insets;
+	}
+
+	private int calcWidth() {
+		double proportionOfTotalWidth = 0.5;
+		return (int) (getWidth() * proportionOfTotalWidth);
 	}
 
 	@Override
@@ -166,14 +159,10 @@ public class PanelTabbedDocuments extends JTabbedPane {
 			@Override
 			public void save() {
 				ConfigedMain.getMainFrame().activateLoadingCursor();
-				String filename = idents[i];
-				if (getInfo() != null) {
-					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
-				}
-				Logging.debug(this, "save with filename " + filename);
-				String pathname = openFile(filename + ".log");
-				if (pathname != null && !pathname.isEmpty()) {
-					saveToFile(pathname, getLines());
+				String fileName = retrieveFileName(getInfo(), idents[i]);
+				String filePath = retrieveFilePath(fileName + ".log");
+				if (filePath != null && !filePath.isEmpty()) {
+					saveToFile(filePath, getLines());
 				}
 				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
@@ -181,55 +170,35 @@ public class PanelTabbedDocuments extends JTabbedPane {
 			@Override
 			protected void saveAsZip() {
 				Logging.info(this, "saveAsZip");
-
 				ConfigedMain.getMainFrame().activateLoadingCursor();
-				String filename = idents[i];
-				if (getInfo() != null) {
-					filename = getInfo().replace('.', '_') + "___" + idents[i] + ".log";
-				}
-				String pathname = openFile(filename + ".zip");
-				if (pathname != null && !pathname.isEmpty()) {
-					saveToZipFile(pathname, filename, getLines());
+				String fileName = retrieveFileName(getInfo(), idents[i]);
+				String filePath = retrieveFilePath(fileName + ".zip");
+				if (filePath != null && !filePath.isEmpty()) {
+					saveToZipFile(filePath, fileName, getLines());
 				}
 				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 
 			@Override
-			protected void saveAllAsZip(boolean loadMissingDocs) {
+			protected void saveAllAsZip() {
 				if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().isEmpty()) {
 					return;
 				}
 
-				Logging.info(this, "saveAllAsZip got ident " + idents[i] + " loadMissingDocs " + loadMissingDocs);
+				Logging.info(this, "got ident " + idents[i]);
 
 				ConfigedMain.getMainFrame().activateLoadingCursor();
-				String fname = idents[i];
-				if (getInfo() != null) {
-					fname = getInfo().replace('.', '_') + "_all";
-				}
+				String fileName = retrieveFileName(getInfo(), ALL_LOGFILES_SUFFIX);
+				Logging.info(this, "retrieving file path");
+				String filePath = retrieveFilePath(fileName + ".zip");
 
-				Logging.info(this, "saveAllAsZip, start getting pathname");
-				String pathname = openFile(fname + ".zip");
-
-				if (pathname == null || pathname.isEmpty()) {
+				if (filePath == null || filePath.isEmpty()) {
 					return;
 				}
 
-				Logging.info(this, "saveAllAsZip, got pathname");
+				Logging.info(this, "file path retrieved: " + filePath);
 
-				Map<String, String> logfiles = new HashMap<>();
-				if (loadMissingDocs) {
-					for (String ident : idents) {
-						Map<String, String> logfile = PersistenceControllerFactory.getPersistenceController()
-								.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0), ident);
-						if (logfile.get(ident).split("\n").length > 1) {
-							logfiles.put(ident, logfile.get(ident));
-						}
-
-						Logging.info(this, "saveAllAsZip " + ident + " " + logfile.get(ident).split("\n").length);
-					}
-				}
-				saveAllToZipFile(pathname, logfiles);
+				saveAllToZipFile(filePath, retrieveAllLogFiles());
 				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			}
 		};
@@ -239,63 +208,42 @@ public class PanelTabbedDocuments extends JTabbedPane {
 		super.addTab(idents[i], textPanes[i]);
 	}
 
-	// override in subclasses
+	private static String retrieveFileName(String clientName, String suffix) {
+		String fileName = suffix;
+		if (clientName != null) {
+			suffix = ALL_LOGFILES_SUFFIX.equals(suffix) ? ALL_LOGFILES_SUFFIX : (suffix + ".log");
+			fileName = clientName.replace('.', '_') + "___" + suffix;
+		}
+		return fileName;
+	}
+
+	private Map<String, String> retrieveAllLogFiles() {
+		Map<String, String> logfiles = new HashMap<>();
+		for (String ident : idents) {
+			Map<String, String> logfile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+					.getLogfile(configedMain.getSelectedClients().get(0), ident);
+			if (logfile.get(ident).split("\n").length > 1) {
+				logfiles.put(ident, logfile.get(ident));
+			}
+
+			Logging.info(this, "saveAllAsZip " + ident + " " + logfile.get(ident).split("\n").length);
+		}
+		return logfiles;
+	}
+
 	public void loadDocument(String ident) {
 		Logging.debug(this, "loadDocument ident " + ident);
 	}
 
-	private void setDocument(int i, final String document, final String info) {
-		Logging.info(this, "setDocument " + i + " document == null " + (document == null));
-		if (i < 0 || i >= idents.length) {
-			return;
-		}
-
-		if (document == null) {
-			textPanes[i].setText("");
-			textPanes[i].setTitle("");
-			return;
-		}
-
-		textPanes[i].setTitle(idents[i] + "  " + info);
-
-		// should be name of client, delivered from info textfield
-		textPanes[i].setInfo(info);
-		textPanes[i].setText(document);
-	}
-
-	private void setDocument(String ident, final String document, final String info) {
-		int i = identsList.indexOf(ident);
-		setDocument(i, document, info);
-	}
-
-	public void setDocuments(final Map<String, String> documents, final String info) {
-		Logging.info(this, "idents.length " + idents.length + " info: " + info);
-		for (String ident : idents) {
-			setDocument(ident, documents.get(ident), info);
-		}
-	}
-
-	private void setFileChooser(String fn) {
-		if (chooser == null) {
-			chooser = new JFileChooser(fn);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
-			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
-		}
-	}
-
-	private String openFile(String typename) {
+	private String retrieveFilePath(String typeName) {
 		String fileName = null;
 
-		// Guarantee that chooser is not null
 		if (chooser == null) {
 			setFileChooser("");
 			chooserDirectory = chooser.getCurrentDirectory();
 		}
 
-		File f = new File(chooserDirectory, typename);
+		File f = new File(chooserDirectory, typeName);
 		chooser.setSelectedFile(f);
 
 		int returnVal = chooser.showSaveDialog(ConfigedMain.getMainFrame());
@@ -307,58 +255,49 @@ public class PanelTabbedDocuments extends JTabbedPane {
 		return fileName;
 	}
 
-	private static void saveToFile(String fn, String[] lines) {
-		FileWriter fWriter = null;
-		try {
-			fWriter = new FileWriter(fn, StandardCharsets.UTF_8);
-		} catch (IOException ex) {
-			Logging.error("Error opening file: " + fn + "\n --- " + ex);
-			return;
-		}
-		int i = 0;
-		while (i < lines.length) {
-			try {
+	private void setFileChooser(String fileName) {
+		chooser = new JFileChooser(fileName);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setFileFilter(new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setDialogTitle(Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
+	}
+
+	private static void saveToFile(String fileName, String[] lines) {
+		try (FileWriter fWriter = new FileWriter(fileName, StandardCharsets.UTF_8)) {
+			for (int i = 0; i < lines.length; i++) {
 				fWriter.write(lines[i] + "\n");
-			} catch (IOException ex) {
-				Logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}
-			i++;
-		}
-		try {
-			fWriter.close();
 		} catch (IOException ex) {
-			Logging.error("Error closing file: " + fn + "\n --- " + ex);
+			Logging.error("Error writing to a file: " + fileName + "\n --- " + ex);
 		}
 	}
 
-	private void saveAllToZipFile(String pn, Map<String, String> logfiles) {
-		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
+	private void saveAllToZipFile(String filePath, Map<String, String> logfiles) {
+		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
 			for (String ident : idents) {
 				if (logfiles.get(ident) != null && logfiles.get(ident).split("\n").length > 1) {
-					ZipEntry entry = new ZipEntry(
-							configedMain.getSelectedClients().get(0).replace(".", "_") + "___" + ident + ".log");
+					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
+							ident);
+					ZipEntry entry = new ZipEntry(fileName);
 					out.putNextEntry(entry);
 					writeToOutputStream(logfiles.get(ident).split("\n"), out);
 				}
-				out.closeEntry();
 			}
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + pn + "\n --- " + ex);
+			Logging.error("Error writing zip file: " + filePath + "\n --- " + ex);
 		}
 	}
 
-	private static void saveToZipFile(String pn, String fn, String[] lines) {
-		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(pn))) {
+	private static void saveToZipFile(String filePath, String fileName, String[] lines) {
+		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			ZipEntry entry = new ZipEntry(fn);
+			ZipEntry entry = new ZipEntry(fileName);
 			out.putNextEntry(entry);
-
 			writeToOutputStream(lines, out);
-
-			out.closeEntry();
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
+			Logging.error("Error writing zip file: " + fileName + "\n --- " + ex);
 		}
 	}
 
@@ -372,5 +311,30 @@ public class PanelTabbedDocuments extends JTabbedPane {
 				Logging.error("Error writing zip file: " + "\n --- " + ex);
 			}
 		}
+	}
+
+	public void setDocuments(final Map<String, String> documents, final String info) {
+		Logging.info(this, "idents.length " + idents.length + " info: " + info);
+		for (String ident : idents) {
+			setDocument(ident, documents.get(ident), info);
+		}
+	}
+
+	private void setDocument(String ident, final String document, final String info) {
+		int i = identsList.indexOf(ident);
+		Logging.info(this, "setDocument " + i + " document == null " + (document == null));
+		if (i < 0 || i >= idents.length) {
+			return;
+		}
+
+		if (document == null) {
+			textPanes[i].setText("");
+			textPanes[i].setTitle("");
+			return;
+		}
+
+		textPanes[i].setTitle(idents[i] + "  " + info);
+		textPanes[i].setInfo(info);
+		textPanes[i].setText(document);
 	}
 }
