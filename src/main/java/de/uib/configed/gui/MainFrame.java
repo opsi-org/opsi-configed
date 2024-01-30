@@ -2269,8 +2269,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
 				showSoftwareLog, null, ConfigedMain.VIEW_SOFTWARE_INFO);
 
-		showLogfiles = new TabbedLogPane(Utils.getLogTypes(),
-				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"), configedMain) {
+		showLogfiles = new TabbedLogPane(configedMain) {
 			@Override
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);

@@ -26,19 +26,20 @@ import javax.swing.plaf.synth.SynthContext;
 import javax.swing.plaf.synth.SynthLookAndFeel;
 import javax.swing.plaf.synth.SynthStyle;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class TabbedLogPane extends JTabbedPane {
 	private LogPane[] textPanes;
-	private String[] idents;
+	private String[] idents = Utils.getLogTypes();
 	private final List<String> identsList;
 
 	private ConfigedMain configedMain;
 
-	public TabbedLogPane(final String[] idents, String defaultText, ConfigedMain configedMain) {
-		this.idents = idents;
+	public TabbedLogPane(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
 		identsList = Arrays.asList(idents);
@@ -46,7 +47,7 @@ public class TabbedLogPane extends JTabbedPane {
 		textPanes = new LogPane[idents.length];
 
 		for (int i = 0; i < idents.length; i++) {
-			initLogTabComponent(i, defaultText);
+			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
 		}
 
 		super.addComponentListener(new ComponentAdapter() {
