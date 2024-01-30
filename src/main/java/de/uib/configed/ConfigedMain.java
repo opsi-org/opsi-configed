@@ -244,7 +244,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private ClientTree clientTree;
 
 	private Map<String, Map<String, String>> productGroups;
-	private Map<String, Set<String>> productGroupMembers;
 
 	private DepotsList depotsList;
 	private Map<String, Map<String, Object>> depots;
@@ -646,7 +645,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
 		fillterPermittedProductGroups(productGroups.keySet());
-		productGroupMembers = persistenceController.getGroupDataService().getFProductGroup2Members();
 
 		persistenceController.getDepotDataService().retrieveProductsPD();
 
@@ -2028,6 +2026,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return clientTree.getActiveParents();
 	}
 
+	// TODO refactor method, remove and use with persistencecontroller where called
 	public boolean addGroup(StringValuedRelationElement newGroup) {
 		return persistenceController.getGroupDataService().addGroup(newGroup);
 	}
@@ -2052,7 +2051,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return persistenceController.getGroupDataService().addObject2Group(objectId, groupId);
 	}
 
-	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
+	private boolean setProductGroup(String groupId, String description, Set<String> productSet) {
 		return persistenceController.getGroupDataService().setProductGroup(groupId, description, productSet);
 	}
 
@@ -2263,7 +2262,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 											+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY))
 							.replaceAll("").split(",")));
 		}
-		panelProductSettings.setGroupsData(productGroups, productGroupMembers);
+
+		//panelProductSettings.setGroupsData(productGroups, productGroupMembers);
 		panelProductSettings.reduceToSet(savedFilter);
 
 		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);

@@ -1202,7 +1202,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
+	private Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
 		Set<String> notHandled = new HashSet<>(startProductSet);
 		Set<String> endResultSet = new HashSet<>(startProductSet);
 		Set<String> startResultSet = null;

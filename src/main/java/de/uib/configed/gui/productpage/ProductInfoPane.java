@@ -274,6 +274,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 	}
 
 	public void setEditValues(String productId, String productVersion, String packageVersion, String depotId) {
+		Logging.devel(productId + " " + productVersion + " " + depotId);
 		setProductId(productId);
 		setProductVersion(productVersion + "-" + packageVersion);
 

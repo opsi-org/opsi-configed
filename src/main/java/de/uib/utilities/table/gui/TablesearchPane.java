@@ -237,7 +237,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark.setSelected(b);
 	}
 
-	public void setFiltered(boolean filtered) {
+	private void setFiltered(boolean filtered) {
 		targetModel.setFiltered(filtered);
 		setFilteredMode(filtered);
 	}
@@ -254,10 +254,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupMarkAndFilter.setEnabled(!b);
 		popupEmptySearchfield.setEnabled(!b);
 		setFilterMark(b);
-	}
-
-	public boolean isFilteredMode() {
-		return filteredMode;
 	}
 
 	public void setNarrow(boolean b) {
@@ -911,13 +907,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// ----------------------------------
 
 	private void switchFilterOff() {
-		if (isFilteredMode()) {
+		if (filteredMode) {
 			setFiltered(false);
 		}
 	}
 
 	private void switchFilterOn() {
-		if (!isFilteredMode()) {
+		if (!filteredMode) {
 			setFiltered(true);
 		}
 	}
@@ -958,9 +954,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void filtermarkEvent() {
-		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + isFilteredMode());
+		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filteredMode);
 
-		if (isFilteredMode()) {
+		if (filteredMode) {
 			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 
 			setFiltered(false);

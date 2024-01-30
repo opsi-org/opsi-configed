@@ -107,7 +107,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		tableProducts.setDragEnabled(true);
 
-		groupPanel = new ProductgroupPanel(this, configedMain, tableProducts);
+		groupPanel = new ProductgroupPanel(this, tableProducts);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();
@@ -184,23 +184,14 @@ public class PanelProductSettings extends JSplitPane {
 		paneProducts.addMouseListener(new PopupMouseListener(popup));
 		tableProducts.addMouseListener(new PopupMouseListener(popup));
 
-		activatePacketSelectionHandling(true);
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
-	public void setGroupsData(final Map<String, Map<String, String>> data,
+	/*public void setGroupsData(final Map<String, Map<String, String>> data,
 			final Map<String, Set<String>> productGroupMembers) {
 		groupPanel.setGroupsData(data, productGroupMembers);
 		showAll();
-	}
-
-	protected void activatePacketSelectionHandling(boolean b) {
-		if (b) {
-			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
-		} else {
-			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
-		}
-	}
+	}*/
 
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
@@ -450,13 +441,8 @@ public class PanelProductSettings extends JSplitPane {
 		itemOnDemand.setVisible(visible);
 	}
 
-	public void clearSelection() {
-		tableProducts.clearSelection();
-	}
-
 	public void setSelection(Set<String> selectedIDs) {
-		activatePacketSelectionHandling(false);
-		clearSelection();
+		tableProducts.clearSelection();
 
 		if (selectedIDs == null) {
 			Logging.info("selectedIds is null");
@@ -472,9 +458,6 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 		}
-
-		activatePacketSelectionHandling(true);
-		groupPanel.findGroup(selectedIDs);
 	}
 
 	public Set<String> getSelectedIDs() {
@@ -498,8 +481,6 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void reduceToSet(Set<String> filter) {
-		activatePacketSelectionHandling(false);
-
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
@@ -508,7 +489,6 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.setFilteredMode(filter != null && !filter.isEmpty());
 
 		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
 	}
 
 	public void reduceToSelected() {
@@ -531,10 +511,8 @@ public class PanelProductSettings extends JSplitPane {
 		}
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 
-		activatePacketSelectionHandling(false);
 		tModel.setFilterFrom((Set<String>) null);
 		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
 	}
 
 	public void showAll() {
