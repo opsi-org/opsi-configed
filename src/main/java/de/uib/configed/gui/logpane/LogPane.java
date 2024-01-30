@@ -366,11 +366,8 @@ public class LogPane extends JPanel implements KeyListener {
 		case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
 			saveAsZip();
 			break;
-		case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
-			saveAllAsZip(false);
-			break;
 		case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-			saveAllAsZip(true);
+			saveAllAsZip();
 			break;
 		case PopupMenuTrait.POPUP_FLOATINGCOPY:
 			floatExternal();
@@ -460,8 +457,8 @@ public class LogPane extends JPanel implements KeyListener {
 		Logging.debug(this, "save as zip action");
 	}
 
-	protected void saveAllAsZip(boolean loadMissingDocs) {
-		Logging.debug(this, "save all as zip action, loadMissingDocs = " + loadMissingDocs);
+	protected void saveAllAsZip() {
+		Logging.debug(this, "save all as zip action");
 	}
 
 	public void floatExternal() {

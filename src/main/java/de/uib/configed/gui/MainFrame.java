@@ -324,7 +324,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 	private JPanel showSoftwareLog;
 
-	private PanelTabbedDocuments showLogfiles;
+	private TabbedLogPane showLogfiles;
 
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
@@ -2269,8 +2269,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
 				showSoftwareLog, null, ConfigedMain.VIEW_SOFTWARE_INFO);
 
-		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
-				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"), configedMain) {
+		showLogfiles = new TabbedLogPane(configedMain) {
 			@Override
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);
