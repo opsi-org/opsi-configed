@@ -9,8 +9,10 @@ package de.uib.configed.gui.hostconfigs;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Map;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Configed;
@@ -19,10 +21,14 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
 	private static final int LABEL_HEIGHT = 22;
 
-	public HostConfigNodeRenderer() {
-		super();
+	private Map<String, String> tooltips;
 
+	public HostConfigNodeRenderer() {
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
+	}
+
+	public void setTooltips(Map<String, String> tooltips) {
+		this.tooltips = tooltips;
 	}
 
 	@Override
@@ -30,7 +36,7 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 			int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		if (value instanceof SimpleIconNode) {
+		if (value instanceof DefaultMutableTreeNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			if ("".equals(stringValue)) {
@@ -39,34 +45,16 @@ public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 				setText(stringValue);
 			}
 
-			setToolTipText(((SimpleIconNode) value).getToolTipText());
-
-			// adaption to size of bold font??
-
-			// Attention: must be a SimpleIconNode
-			SimpleIconNode node = (SimpleIconNode) value;
-			boolean enabled = tree.isEnabled();
-			setEnabled(enabled);
-			node.setEnabled(enabled);
+			if (tooltips != null && tooltips.get(stringValue) != null && !tooltips.get(stringValue).isEmpty()) {
+				setToolTipText(Configed.getResourceValue(tooltips.get(stringValue)));
+			} else {
+				setToolTipText(null);
+			}
 
 			if (row == 0) {
 				setFont(getFont().deriveFont(Font.BOLD));
 			} else {
 				setFont(getFont().deriveFont(Font.PLAIN));
-			}
-
-			if (leaf) {
-				setIcon(node.getLeafIcon());
-			} else {
-				if (expanded) {
-					setIcon(node.getOpenIcon());
-				} else {
-					setIcon(node.getClosedIcon());
-				}
-			}
-
-			if (!sel) {
-				setIcon(node.getNonSelectedIcon());
 			}
 		}
 

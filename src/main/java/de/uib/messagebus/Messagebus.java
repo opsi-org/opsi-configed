@@ -42,9 +42,14 @@ public class Messagebus implements MessagebusListener {
 	private boolean disconnecting;
 	private boolean reconnecting;
 	private boolean initialSubscriptionReceived;
+	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+
+	public Messagebus(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+	}
 
 	public WebSocketClientEndpoint getWebSocket() {
 		return messagebusWebSocket;
@@ -69,6 +74,7 @@ public class Messagebus implements MessagebusListener {
 		if (ConfigedMain.getMainFrame() != null) {
 			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getHostsStatusPanel());
 		}
+		messagebusWebSocket.registerListener(configedMain);
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		if (exec.getSessionId() != null) {
 			Logging.debug("Adding cookie header");

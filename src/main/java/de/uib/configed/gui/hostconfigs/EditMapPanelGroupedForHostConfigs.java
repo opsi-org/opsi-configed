@@ -88,6 +88,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	protected XTree tree;
 	private JPanel emptyRightPane;
 	private HostConfigTreeModel treemodel;
+	private HostConfigNodeRenderer cellRenderer;
 
 	private NavigableMap<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
@@ -319,6 +320,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {
+		cellRenderer.setTooltips(classesMap);
 		givenClasses = classesMap;
 	}
 
@@ -381,7 +383,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		ToolTipManager.sharedInstance().registerComponent(tree);
 
-		tree.setCellRenderer(new HostConfigNodeRenderer());
+		cellRenderer = new HostConfigNodeRenderer();
+		tree.setCellRenderer(cellRenderer);
 		tree.expandAll();
 
 		tree.addTreeSelectionListener(this);
@@ -416,7 +419,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		super.setEditableMap(visualdata, optionsMap);
 		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
-			treemodel = new HostConfigTreeModel(givenClasses);
+			treemodel = new HostConfigTreeModel(givenClasses.keySet());
 			tree.setModel(treemodel);
 			tree.expandAll();
 
