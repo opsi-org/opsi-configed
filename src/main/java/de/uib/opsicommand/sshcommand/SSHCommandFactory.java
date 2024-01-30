@@ -46,10 +46,6 @@ public final class SSHCommandFactory {
 	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
 	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
 	public static final String STRING_COMMAND_CAT_DIRECTORY = "cat *.dir.*OPSI/control | grep \"id: \"";
-	public static final String STRING_COMMAND_FILE_EXISTS_NOT_REMOVE = "[ -d .filename. ] && echo \"File exists\" "
-			+ "|| echo \"File not exist\"";
-
-	public static final String STRING_REPLACEMENT_FILENAME = ".filename.";
 
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";

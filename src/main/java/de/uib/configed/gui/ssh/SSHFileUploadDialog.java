@@ -30,8 +30,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.EmptyCommand;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -171,10 +169,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonExecute);
 
 		enableComponents(jRadioButtonFromServer.isSelected());
-
-		new SSHConnectExec().exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
-				.replace(SSHCommandFactory.STRING_REPLACEMENT_FILENAME, command.getTargetPath()) // /etc/opsi/modules.d
-		), false);
 
 		initAdditional();
 	}
@@ -325,19 +319,21 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	@Override
 	public void doAction2() {
 		Logging.info(this, "doAction2 upload ");
-		if (jRadioButtonLocal.isSelected()) {
-			if (jTextFieldLocalPath.getText().isEmpty()) {
-				Logging.warning(this, "Please select local file.");
-			}
-		} else if (jRadioButtonFromServer.isSelected()
+		if (jRadioButtonLocal.isSelected() && jTextFieldLocalPath.getText().isEmpty()) {
+			Logging.warning(this, "Please select local file.");
+			return;
+		}
+
+		if (jRadioButtonFromServer.isSelected()
 				&& (jTextFieldURL.getText().isEmpty() || jTextFieldURL.getText().equals(WGET_DEFAULT_URL_TEXT))) {
 			Logging.warning(this, "Please enter url to file.");
-		} else {
-			uploadNoOptionSelected();
+			return;
 		}
+
+		uploadFile();
 	}
 
-	private void uploadNoOptionSelected() {
+	private void uploadFile() {
 		String modulesServerPath = doAction1AdditionalSetPath();
 
 		SSHCommandTemplate fullcommand = new SSHCommandTemplate();

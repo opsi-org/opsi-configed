@@ -291,7 +291,8 @@ public class SSHConnectExec extends SSHConnect {
 			if (withGui) {
 				return "finish";
 			} else {
-				return task.get();
+				String result = task.get();
+				return result;
 			}
 		} catch (InterruptedException e) {
 			Logging.error(this, "exec InterruptedException", e);

@@ -437,20 +437,23 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 			return false;
 		}
 
-		if (!this.getId().trim().equals(com.getId().trim())) {
+		if (!areBothNull(this.getId(), com.getId()) || !this.getId().trim().equals(com.getId().trim())) {
 			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;
 		}
-		if (!this.getMenuText().trim().equals(com.getMenuText().trim())) {
+		if (!areBothNull(this.getMenuText(), com.getMenuText())
+				|| !this.getMenuText().trim().equals(com.getMenuText().trim())) {
 			Logging.debug(this, "equals different menuText's " + this.getMenuText() + " != " + com.getMenuText() + "");
 			return false;
 		}
-		if (!this.getParentMenuText().trim().equals(com.getParentMenuText().trim())) {
+		if (!areBothNull(this.getParentMenuText(), com.getParentMenuText())
+				|| !this.getParentMenuText().trim().equals(com.getParentMenuText().trim())) {
 			Logging.debug(this, "equals different parentMenuText's " + this.getParentMenuText() + " != "
 					+ com.getParentMenuText() + "");
 			return false;
 		}
-		if (!this.getToolTipText().trim().equals(com.getToolTipText().trim())) {
+		if (!areBothNull(this.getToolTipText(), com.getToolTipText())
+				|| !this.getToolTipText().trim().equals(com.getToolTipText().trim())) {
 			Logging.debug(this,
 					"equals different toolTipText's " + this.getToolTipText() + " != " + com.getToolTipText() + "");
 			return false;
@@ -478,6 +481,10 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		}
 		Logging.debug(this, "equals commands are equal");
 		return true;
+	}
+
+	private boolean areBothNull(String a, String b) {
+		return a == null && b == null;
 	}
 
 	@Override
