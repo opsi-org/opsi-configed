@@ -70,10 +70,6 @@ public class DefaultEditMapPanel extends JPanel {
 		public void saveData() {
 			Logging.info(this, "DefaultEditMapPanel: saveData");
 		}
-
-		public void deleteData() {
-			Logging.info(this, "DefaultEditMapPanel: deleteData");
-		}
 	}
 
 	protected abstract static class AbstractPropertyHandler {
