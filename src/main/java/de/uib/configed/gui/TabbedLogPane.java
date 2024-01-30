@@ -42,7 +42,7 @@ import de.uib.configed.gui.logpane.LogPane;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class PanelTabbedDocuments extends JTabbedPane {
+public class TabbedLogPane extends JTabbedPane {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
@@ -54,7 +54,7 @@ public class PanelTabbedDocuments extends JTabbedPane {
 	private File chooserDirectory;
 	private ConfigedMain configedMain;
 
-	public PanelTabbedDocuments(final String[] idents, String defaultText, ConfigedMain configedMain) {
+	public TabbedLogPane(final String[] idents, String defaultText, ConfigedMain configedMain) {
 		this.idents = idents;
 		this.configedMain = configedMain;
 
