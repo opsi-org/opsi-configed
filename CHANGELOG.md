@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.27] - 2024-01-31
+## Fixed
+- The authorization is overriden, when logging in with an uppercase in the username
+
 ## [4.2.22.26] - 2024-01-26
 ## Changed
 - Disable depot selection for driver upload
