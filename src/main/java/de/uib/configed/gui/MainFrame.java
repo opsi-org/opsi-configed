@@ -2217,8 +2217,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 		});
 
-		// --- panel_Clientselection
-
 		panelClientlist.addMouseListener(new PopupMouseListener(popupClients));
 
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
@@ -2228,11 +2226,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		panelLocalbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
-				configedMain.getDisplayFieldsLocalbootProducts());
+				configedMain.getDisplayFieldsLocalbootProducts(),
+				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
 
 		panelNetbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
-				configedMain.getDisplayFieldsNetbootProducts());
+				configedMain.getDisplayFieldsNetbootProducts(),
+				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
 				panelLocalbootProductSettings, null, ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
