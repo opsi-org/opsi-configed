@@ -3,6 +3,7 @@
 ## [4.3.X.X] - XXXX-XX-XX
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
+- The authorization is overriden, when logging in with an uppercase in the username
 
 ## Changed
 - Rename RPC method `softwareLicenseFromLicensePool_delete` to `softwareLicenseToLicensePool_delete`
