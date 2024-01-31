@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -229,7 +230,7 @@ public final class Configed {
 			host = Globals.getCLIparam("Host: ", false);
 		}
 		if (user == null) {
-			user = Globals.getCLIparam("User: ", false);
+			user = Globals.getCLIparam("User: ", false).toLowerCase(Locale.ROOT);
 		}
 		if (password == null) {
 			password = Globals.getCLIparam("Password: ", true);

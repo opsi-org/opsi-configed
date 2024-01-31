@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -325,8 +326,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 			MessageFormat messageFormatMainTitle = new MessageFormat(
 					Configed.getResourceValue("ConfigedMain.appTitle"));
-			configedMain.setAppTitle(messageFormatMainTitle
-					.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
+			configedMain.setAppTitle(messageFormatMainTitle.format(new Object[] { Globals.APPNAME,
+					fieldHost.getSelectedItem(), fieldUser.getText().toLowerCase(Locale.ROOT) }));
 			configedMain.loadDataAndGo();
 		} else {
 			// return to Passwordfield
@@ -407,10 +408,11 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setActivated(false);
 
 		ConfigedMain.host = (String) fieldHost.getSelectedItem();
-		ConfigedMain.user = fieldUser.getText();
+		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
+		ConfigedMain.user = user;
 		ConfigedMain.password = String.valueOf(passwordField.getPassword());
-		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
-				+ fieldUser.getText());
+		Logging.info(this,
+				"invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", " + user);
 
 		if (waitingWorker != null && !waitingWorker.isReady()) {
 
@@ -429,8 +431,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			public void run() {
 				Logging.info(this, "get persis");
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-						(String) fieldHost.getSelectedItem(), fieldUser.getText(),
-						String.valueOf(passwordField.getPassword()));
+						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()));
 
 				Logging.info(this, "got persis, == null " + (persistenceController == null));
 
@@ -439,7 +440,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			}
 		}.start();
 
-		SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
+		SSHConnectionInfo.getInstance().setUser(user);
 
 		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
 		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
