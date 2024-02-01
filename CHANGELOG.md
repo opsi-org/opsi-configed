@@ -5,6 +5,10 @@
 - Modules file uploading via SFTP
 
 
+## Changed
+- Remove net_connection from default WAN config
+
+
 ## [4.3.1.6] - 2024-02-01
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
