@@ -240,10 +240,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return result;
 	}
 
-	protected Object modifyHeaderValue(Object value) {
-		return value;
-	}
-
 	/**
 	 * sets frame to return to e.g. from option dialogs
 	 *
@@ -312,14 +308,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		theTable.addMouseListener(this);
-
-		theTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
-					@Override
-					protected Object modifyValue(Object value) {
-						return modifyHeaderValue(value);
-					}
-				});
 
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

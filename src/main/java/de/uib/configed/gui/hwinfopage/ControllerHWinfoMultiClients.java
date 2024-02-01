@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -16,7 +17,9 @@ import java.util.TreeSet;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -87,15 +90,20 @@ public class ControllerHWinfoMultiClients {
 				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());
 				super.reload();
 			}
-
-			@Override
-			protected Object modifyHeaderValue(Object s) {
-				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
-					return ((String) s).substring(DELETE_PREFIX.length());
-				}
-				return s;
-			}
 		};
+
+		// We want to remove the prefix from the header values
+		panel.getTheTable().getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				if (value instanceof String && ((String) value).startsWith(DELETE_PREFIX)) {
+					value = ((String) value).substring(DELETE_PREFIX.length());
+				}
+
+				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			}
+		});
 
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
