@@ -550,9 +550,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		Logging.devel("updateProductsTableForClient " + clientId + " " + productType);
 		int selectedView = getViewIndex();
-		Logging.devel(productType);
 		if (selectedView == VIEW_LOCALBOOT_PRODUCTS) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
@@ -3658,7 +3656,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
 			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
-			savedSearchesDialog.init(new Dimension(300, 400));
+			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
+			savedSearchesDialog.init();
 		}
 		savedSearchesDialog.start();
 	}

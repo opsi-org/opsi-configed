@@ -125,7 +125,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
 	@SuppressWarnings({ "java:S103" })
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
-	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
 	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
 
 	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";

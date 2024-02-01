@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -208,7 +209,7 @@ public final class Configed {
 			host = Utils.getCLIParam("Host: ");
 		}
 		if (user == null) {
-			user = Utils.getCLIParam("User: ");
+			user = Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
 		}
 		if (password == null) {
 			password = Utils.getCLIPasswordParam("Password: ");

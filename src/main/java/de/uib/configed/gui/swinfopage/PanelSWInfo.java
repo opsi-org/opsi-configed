@@ -47,7 +47,7 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -153,7 +153,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelTable.setSearchSelectMode(true);
-		panelTable.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
+		panelTable.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 
 		List<String> columnNames;
 		List<String> classNames;
