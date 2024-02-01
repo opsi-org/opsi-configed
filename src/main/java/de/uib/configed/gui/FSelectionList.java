@@ -29,15 +29,17 @@ import de.uib.utilities.table.gui.TablesearchPane;
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TablesearchPane searchPane;
+	private String savedStatesObjectTag;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight) {
-		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight);
+			int preferredHeight, String savedStatesObjectTag) {
+		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight, savedStatesObjectTag);
 	}
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int preferredWidth, int preferredHeight) {
+			int preferredWidth, int preferredHeight, String savedStatesObjectTag) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
+		this.savedStatesObjectTag = savedStatesObjectTag;
 		this.owner = owner;
 	}
 
@@ -83,8 +85,7 @@ public class FSelectionList extends FGeneralDialog {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());
-
-		searchPane = new TablesearchPane(searchTargetModel, "sessionlist");
+		searchPane = new TablesearchPane(searchTargetModel, savedStatesObjectTag);
 		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
