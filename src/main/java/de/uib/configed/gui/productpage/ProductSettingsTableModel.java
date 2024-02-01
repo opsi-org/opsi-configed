@@ -85,26 +85,26 @@ public class ProductSettingsTableModel {
 
 		productCompleteNameTableCellRenderer = new ColorTableCellRenderer();
 
-		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(null,
+		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStatus.getLabel2TextColor(), null,
+				InstallationStatus.getLabel2TextColor(),
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
-		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(null,
+		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
 
-		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(null,
+		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
 
-		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(null,
+		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
 
-		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(), null,
+		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(),
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
 
-		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(null,
+		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY) + ": ");
 
 		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer(

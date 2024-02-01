@@ -7,7 +7,6 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Component;
-import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -18,8 +17,8 @@ import de.uib.opsidatamodel.productstate.ActionProgress;
 import utils.Utils;
 
 public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-	ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String tooltipPrefix) {
-		super(mapOfStringValues, tooltipPrefix);
+	ActionProgressTableCellRenderer(String tooltipPrefix) {
+		super(tooltipPrefix);
 	}
 
 	// overwrite the renderer in order to get the behaviour:

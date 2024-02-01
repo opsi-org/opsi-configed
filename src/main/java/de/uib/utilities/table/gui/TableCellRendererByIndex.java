@@ -17,12 +17,10 @@ import javax.swing.JTable;
 import utils.Utils;
 
 public class TableCellRendererByIndex extends StandardTableCellRenderer {
-	private Map<String, String> mapOfStrings;
 	private Map<String, ImageIcon> mapOfImages;
 
-	public TableCellRendererByIndex(Map<String, String> mapOfStringValues, String tooltipPrefix) {
+	public TableCellRendererByIndex(String tooltipPrefix) {
 		super(tooltipPrefix);
-		mapOfStrings = mapOfStringValues;
 		mapOfImages = new HashMap<>();
 	}
 
@@ -31,25 +29,16 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		String selectedString = "";
 		ImageIcon selectedIcon = null;
 
-		if (value != null) {
-			if (mapOfStrings != null) {
-				selectedString = mapOfStrings.get("" + value);
-			}
-
-			if (mapOfImages != null) {
-				selectedIcon = mapOfImages.get("" + value);
-			}
+		if (value != null && mapOfImages != null) {
+			selectedIcon = mapOfImages.get("" + value);
 		}
 
 		if (result instanceof JLabel) {
-			((JLabel) result).setText(selectedString);
-
+			((JLabel) result).setText(value + "");
 			((JLabel) result).setIcon(selectedIcon);
-			((JLabel) result)
-					.setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
+			((JLabel) result).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}
 
 		return result;
