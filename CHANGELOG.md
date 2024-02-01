@@ -1,12 +1,21 @@
 # Changelog
 
-## [4.3.X.X] - XXXX-XX-XX
+## [4.3.1.6] - 2024-02-01
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
 - The authorization is overriden, when logging in with an uppercase in the username
+- Enable messagebus updates after reconnection to server
+- Logviewer can open files without file extension
+
 
 ## Changed
 - Rename RPC method `softwareLicenseFromLicensePool_delete` to `softwareLicenseToLicensePool_delete`
+- Small performance improvement on startup, reload and depot change in environments with many clients
+- Make extra credits dialogue to separate Credits from About dialogue
+
+
+## Added
+- Add search field for product selection dialogue
 
 ## [4.3.1.5] - 2024-01-19
 ### Fixed
@@ -378,6 +387,7 @@
 ### Changed
 - Reworking Loading Panel on login
 - Reworking positions and sizes of windows
+
 - sizes of columns now will not change on reload (clientlist, Localboot products and Netboot products)
 - some performance boosts
 - JavaFX now used to start Browser in Markdown (works better under Linux)
