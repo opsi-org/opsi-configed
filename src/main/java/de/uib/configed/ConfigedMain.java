@@ -3656,7 +3656,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
 			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
-			savedSearchesDialog.init(new Dimension(300, 400));
+			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
+			savedSearchesDialog.init();
 		}
 		savedSearchesDialog.start();
 	}

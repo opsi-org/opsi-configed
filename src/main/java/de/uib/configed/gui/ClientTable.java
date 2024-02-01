@@ -48,14 +48,14 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
 public class ClientTable extends JPanel implements KeyListener {
 
 	private JScrollPane scrollpane;
 
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 
 	private FDialogRemoteControl dialogRemoteControl;
 	private Map<String, RemoteControl> remoteControls;
@@ -104,7 +104,7 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		activateListSelectionListener();
 
-		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true, null);
 		searchPane.setFiltering(true);
 
 		// filter icon inside searchpane

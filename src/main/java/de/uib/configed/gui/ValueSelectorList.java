@@ -22,7 +22,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 
 public class ValueSelectorList extends JPanel {
 	private DepotsList valueList;
@@ -31,7 +31,7 @@ public class ValueSelectorList extends JPanel {
 
 	private JLabel labelValue;
 
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 
 	private boolean multidepot;
 
@@ -57,8 +57,8 @@ public class ValueSelectorList extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
 
-		searchPane = new TablesearchPane(searchTargetModel, "depotlist");
-		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
+		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 		searchPane.setToolTipTextCheckMarkAllColumns(
 				Configed.getResourceValue("ValueSelectorList.checkmarkAllColumns.tooltip"));
