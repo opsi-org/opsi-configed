@@ -158,7 +158,6 @@ public final class TerminalFrame implements MessagebusListener {
 		TerminalSettingsProvider.setTerminalTheme(selectedTheme);
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
-			widget.changeTheme();
 			widget.repaint();
 		}
 	}

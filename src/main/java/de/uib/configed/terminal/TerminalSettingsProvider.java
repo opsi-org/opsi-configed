@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.jediterm.core.Platform;
 import com.jediterm.terminal.TerminalColor;
-import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.emulator.ColorPalette;
 import com.jediterm.terminal.ui.TerminalActionPresentation;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
@@ -141,17 +140,11 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	}
 
 	@Override
-	public TextStyle getDefaultStyle() {
-		TextStyle defaultStyle = new TextStyle(FOREGROUND_COLOR_DARK, BACKGROUND_COLOR_DARK);
-		if ("Light".equals(theme)) {
-			defaultStyle = new TextStyle(FOREGROUND_COLOR_LIGHT, BACKGROUND_COLOR_LIGHT);
-		}
-		return defaultStyle;
-	}
-
-	@Override
 	public ColorPalette getTerminalColorPalette() {
-		return ColorPaletteImpl.DEFAULT_COLOR_PALETTE;
+		if ("Light".equals(theme)) {
+			return ColorPaletteImpl.LIGHT_COLOR_PALETTE;
+		}
+		return ColorPaletteImpl.DARK_COLOR_PALETTE;
 	}
 
 	@Override

@@ -49,7 +49,21 @@ public class ColorPaletteImpl extends ColorPalette {
 		DEFAULT_COLORS[15] = new Color(0xffffff);
 	}
 
+	private static final Color[] DARK_COLORS = DEFAULT_COLORS.clone();
+	static {
+		DARK_COLORS[0] = new Color(0xffffff);
+		DARK_COLORS[15] = new Color(0x000000);
+	}
+
+	private static final Color[] LIGHT_COLORS = DEFAULT_COLORS.clone();
+	static {
+		LIGHT_COLORS[0] = new Color(0x000000);
+		LIGHT_COLORS[15] = new Color(0xffffff);
+	}
+
 	public static final ColorPalette DEFAULT_COLOR_PALETTE = new ColorPaletteImpl(DEFAULT_COLORS);
+	public static final ColorPalette DARK_COLOR_PALETTE = new ColorPaletteImpl(DARK_COLORS);
+	public static final ColorPalette LIGHT_COLOR_PALETTE = new ColorPaletteImpl(LIGHT_COLORS);
 
 	private Color[] colors;
 
