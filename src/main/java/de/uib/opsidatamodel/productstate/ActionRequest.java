@@ -41,7 +41,6 @@ public class ActionRequest {
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
-	private static Map<String, String> label2displayLabel;
 	private static Map<String, Color> label2textColor;
 
 	private static Set<Integer> states;
@@ -133,21 +132,7 @@ public class ActionRequest {
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
 
-		label2displayLabel = new HashMap<>();
-		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		label2displayLabel.put("not_available", "not_available");
-		label2displayLabel.put("none", "none");
-		label2displayLabel.put("setup", "setup");
-		label2displayLabel.put("update", "update");
-		label2displayLabel.put("uninstall", "uninstall");
-		label2displayLabel.put("always", "always");
-		label2displayLabel.put("once", "once");
-		label2displayLabel.put("custom", "custom");
-
-		choiceLabels = new String[] { label2displayLabel.get("none"), label2displayLabel.get("setup"),
-				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
-				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
+		choiceLabels = new String[] { "none", "setup", "update", "uninstall", "always", "once", "custom", };
 
 		label2textColor = new HashMap<>();
 		label2textColor.put("none", Globals.ACTION_REQUEST_NONE_COLOR);
@@ -167,12 +152,6 @@ public class ActionRequest {
 	public static Map<String, String> getScriptKey2Label() {
 		checkCollections();
 		return scriptKey2label;
-	}
-
-	public static Map<String, String> getLabel2DisplayLabel() {
-		checkCollections();
-
-		return label2displayLabel;
 	}
 
 	public static Map<Integer, String> getState2Label() {
@@ -231,7 +210,7 @@ public class ActionRequest {
 	public static String getDisplayLabel(int state) {
 		checkCollections();
 
-		return label2displayLabel.get(getLabel(state));
+		return getLabel(state);
 	}
 
 	public static String[] getDisplayLabelsForChoice() {

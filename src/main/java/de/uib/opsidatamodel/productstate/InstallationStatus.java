@@ -40,7 +40,6 @@ public final class InstallationStatus {
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
-	private static Map<String, String> label2displayLabel;
 	private static Map<String, Color> label2textColor;
 
 	private static Set<Integer> states;
@@ -99,28 +98,13 @@ public final class InstallationStatus {
 
 		label2state.put("unknown", UNKNOWN);
 
-		label2displayLabel = new HashMap<>();
-		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		label2displayLabel.put("undefined", "undefined");
-		label2displayLabel.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
-		label2displayLabel.put(InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-
-		label2displayLabel.put("unknown", "unknown");
-
-		choiceLabels = new String[] { label2displayLabel.get(InstallationStatus.KEY_NOT_INSTALLED),
-				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("unknown") };
+		choiceLabels = new String[] { InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_INSTALLED,
+				"unknown" };
 
 		label2textColor = new HashMap<>();
 		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
 		label2textColor.put(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
 		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
-	}
-
-	public static Map<String, String> getLabel2DisplayLabel() {
-		checkCollections();
-
-		return label2displayLabel;
 	}
 
 	public static Map<String, Color> getLabel2TextColor() {
@@ -175,7 +159,7 @@ public final class InstallationStatus {
 	public static String getDisplayLabel(int state) {
 		checkCollections();
 
-		return label2displayLabel.get(getLabel(state));
+		return getLabel(state);
 	}
 
 	public static String[] getDisplayLabelsForChoice() {

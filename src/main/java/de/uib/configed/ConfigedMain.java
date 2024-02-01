@@ -109,7 +109,6 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -2292,7 +2291,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			attributes.remove(ProductState.KEY_POSITION);
 
 			if (ServerFacade.isOpsi43()) {
-				attributes.add(ActionSequence.KEY);
+				attributes.add(ProductState.KEY_ACTION_SEQUENCE);
 			}
 		}
 

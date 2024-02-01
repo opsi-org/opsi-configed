@@ -35,7 +35,7 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_PRODUCT_ID = "productId";
 
 	public static final String KEY_PRODUCT_PRIORITY = "priority";
-	public static final String KEY_ACTION_SEQUENCE = ActionSequence.KEY;
+	public static final String KEY_ACTION_SEQUENCE = "actionSequence";
 
 	// transformed values
 	public static final String KEY_INSTALLATION_INFO = "installationInfo";

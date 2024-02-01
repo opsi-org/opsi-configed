@@ -25,10 +25,8 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.ProductVersionCellRenderer;
-import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
-import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.IntComparatorForStrings;
@@ -91,23 +89,22 @@ public class ProductSettingsTableModel {
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStatus.getLabel2TextColor(), InstallationStatus.getLabel2DisplayLabel(),
+				InstallationStatus.getLabel2TextColor(), null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
-		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(ActionProgress.getLabel2DisplayLabel(),
+		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
 
-		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(ActionResult.getLabel2DisplayLabel(),
+		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
 
-		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2DisplayLabel(),
+		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
 
-		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(),
-				ActionRequest.getLabel2DisplayLabel(),
+		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(), null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
 
-		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(ActionSequence.getLabel2DisplayLabel(),
+		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY) + ": ");
 
 		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer(
@@ -135,11 +132,9 @@ public class ProductSettingsTableModel {
 				// Safe sind instanceof returns false if null
 				if (value instanceof String) {
 					String val = (String) value;
-					if (val.startsWith(
-							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.FAILED)))) {
+					if (val.startsWith(ActionResult.getLabel(ActionResult.FAILED))) {
 						c.setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
-					} else if (val.startsWith(
-							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL)))) {
+					} else if (val.startsWith(ActionResult.getLabel(ActionResult.SUCCESSFUL))) {
 						c.setForeground(Globals.OK_COLOR);
 					} else {
 						// Don't set foreground if no special result
