@@ -31,10 +31,10 @@ import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
@@ -85,10 +85,9 @@ public class ProductSettingsTableModel {
 
 		productNameTableCellRenderer = new ProductNameTableCellRenderer("");
 
-		productCompleteNameTableCellRenderer = new StandardTableCellRenderer("");
+		productCompleteNameTableCellRenderer = new ColorTableCellRenderer();
 
-		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				TargetConfiguration.getLabel2DisplayLabel(),
+		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(null,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
@@ -325,8 +324,7 @@ public class ProductSettingsTableModel {
 				stateChange = "";
 			}
 
-			stateChange = table.getValueAt(row, column).toString() + ", "
-					+ Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
+			stateChange = Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
 
 			jc.setToolTipText(stateChange);
 
