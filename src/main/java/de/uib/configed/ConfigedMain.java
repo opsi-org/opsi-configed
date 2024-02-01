@@ -550,9 +550,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		Logging.devel("updateProductsTableForClient " + clientId + " " + productType);
 		int selectedView = getViewIndex();
-		Logging.devel(productType);
 		if (selectedView == VIEW_LOCALBOOT_PRODUCTS) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
