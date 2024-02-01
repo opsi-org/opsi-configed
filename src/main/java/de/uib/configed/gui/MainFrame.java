@@ -324,7 +324,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 	private JPanel showSoftwareLog;
 
-	private PanelTabbedDocuments showLogfiles;
+	private TabbedLogPane showLogfiles;
 
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
@@ -2224,8 +2224,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null,
-				panelClientSelection, Configed.getResourceValue("MainFrame.panel_Clientselection"),
-				ConfigedMain.VIEW_CLIENTS);
+				panelClientSelection, null, ConfigedMain.VIEW_CLIENTS);
 
 		panelLocalbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
@@ -2236,26 +2235,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				configedMain.getDisplayFieldsNetbootProducts());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
-				panelLocalbootProductSettings, Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
+				panelLocalbootProductSettings, null, ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), null,
-				panelNetbootProductSettings, Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
+				panelNetbootProductSettings, null, ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panelHostConfig = new PanelHostConfig(configedMain);
 
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null,
-				panelHostConfig, Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				ConfigedMain.VIEW_NETWORK_CONFIGURATION);
+				panelHostConfig, null, ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null,
-				showHardwareLog, Configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				ConfigedMain.VIEW_HARDWARE_INFO);
+				showHardwareLog, null, ConfigedMain.VIEW_HARDWARE_INFO);
 
 		initSoftWareInfo();
 		initHardwareInfo();
@@ -2272,11 +2267,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
-				showSoftwareLog, Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				ConfigedMain.VIEW_SOFTWARE_INFO);
+				showSoftwareLog, null, ConfigedMain.VIEW_SOFTWARE_INFO);
 
-		showLogfiles = new PanelTabbedDocuments(Utils.getLogTypes(),
-				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"), configedMain) {
+		showLogfiles = new TabbedLogPane(configedMain) {
 			@Override
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);
@@ -2286,7 +2279,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		};
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null, showLogfiles,
-				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
+				null, ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
 			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
@@ -2302,8 +2295,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelProductProperties = new PanelProductProperties(configedMain);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null,
-				panelProductProperties, Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
+				panelProductProperties, null, ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		Logging.info(this,
 				"added tab  " + Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
@@ -2314,8 +2306,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null,
-				panelHostProperties, Configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				ConfigedMain.VIEW_HOST_PROPERTIES);
+				panelHostProperties, null, ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));

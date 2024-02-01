@@ -581,7 +581,7 @@ public class SoftwareDataService {
 		}
 
 		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_FROM_LICENSE_POOL_DELETE,
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
 					new String[] { softwareLicenseId, licensePoolId });
 			return exec.doCall(omc);
 		}
