@@ -35,7 +35,6 @@ import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
@@ -173,9 +172,6 @@ public class ProductSettingsTableModel {
 		};
 
 		tableProducts.setRowSorter(rowSorter);
-
-		tableProducts.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
 	}
 
 	public void setRenderer(InstallationStateTableModel istm) {

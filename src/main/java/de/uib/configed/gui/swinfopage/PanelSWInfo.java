@@ -44,7 +44,6 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TableSearchPane;
@@ -292,8 +291,6 @@ public class PanelSWInfo extends JPanel {
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-		jTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(jTable.getTableHeader().getDefaultRenderer()));
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);

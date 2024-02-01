@@ -8,12 +8,10 @@ package de.uib.utilities.table.gui;
 
 import java.awt.Component;
 
-import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
+public class ColorHeaderCellRenderer implements TableCellRenderer {
 	private TableCellRenderer rend;
 
 	public ColorHeaderCellRenderer(TableCellRenderer rend) {
@@ -28,19 +26,6 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
-				column);
-
-		if (cell instanceof JComponent) {
-			JComponent jc = (JComponent) cell;
-
-			if (value != null) {
-				String val1 = "" + value;
-
-				jc.setToolTipText(val1);
-			}
-		}
-
-		return cell;
+		return rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row, column);
 	}
 }

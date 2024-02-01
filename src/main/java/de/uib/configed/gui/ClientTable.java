@@ -46,7 +46,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
@@ -93,8 +92,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		table.getTableHeader().setReorderingAllowed(false);
-		table.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
 		// Ask to be notified of selection changes.
 		selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
 		// the default implementation in JTable yields this type
