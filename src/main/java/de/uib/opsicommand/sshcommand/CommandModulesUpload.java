@@ -8,13 +8,13 @@ package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.ssh.SSHModulesUploadDialog;
+import de.uib.configed.gui.ssh.SSHFileUploadDialog;
 
 public class CommandModulesUpload extends CommandSFTPUpload {
-	public static final String ACTUAL_MODULES_DIRECTORY = "/etc/opsi/";
-	public static final String UNOFFICIAL_MODULES_DIRECTORY = "/etc/opsi/modules.d/";
-	public static final String DEFAULT_FILENAME = "modules";
+	private static final String ACTUAL_MODULES_DIRECTORY = "/etc/opsi/";
+	private static final String DEFAULT_FILENAME = "modules";
 
 	public CommandModulesUpload() {
 		super.setTitle("Modules Upload");
@@ -42,7 +42,23 @@ public class CommandModulesUpload extends CommandSFTPUpload {
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new SSHModulesUploadDialog();
+		dialog = new SSHFileUploadDialog(Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title"),
+				new CommandModulesUpload(), Globals.DIALOG_FRAME_DEFAULT_WIDTH, 430) {
+			@Override
+			protected String doAction1AdditionalSetPath() {
+				String modulesServerPath = CommandModulesUpload.ACTUAL_MODULES_DIRECTORY;
+				command.setTargetPath(CommandModulesUpload.ACTUAL_MODULES_DIRECTORY);
+				command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
+				return modulesServerPath;
+			}
+
+			@Override
+			protected CommandWget doAction1AdditionalSetWget(CommandWget c, String path) {
+				c.setFileName(path + command.getTargetFilename());
+				return c;
+			}
+		};
+		dialog.setVisible(true);
 	}
 
 	@Override
