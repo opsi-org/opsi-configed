@@ -24,11 +24,11 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 	private String savedStatesObjectTag;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
@@ -85,8 +85,8 @@ public class FSelectionList extends FGeneralDialog {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());
-		searchPane = new TablesearchPane(searchTargetModel, savedStatesObjectTag);
-		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel, savedStatesObjectTag);
+		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
 		additionalLayout.setHorizontalGroup(additionalLayout.createParallelGroup()

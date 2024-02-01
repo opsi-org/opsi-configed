@@ -148,7 +148,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private boolean withTablesearchPane;
 
-	protected TablesearchPane searchPane;
+	protected TableSearchPane searchPane;
 
 	private boolean filteringActive;
 	private boolean singleSelection;
@@ -294,7 +294,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		exportTable = new ExporterToCSV(theTable);
 
-		searchPane = new TablesearchPane(this, true, null);
+		searchPane = new TableSearchPane(this, true, null);
 
 		searchPane.setVisible(withTablesearchPane);
 
@@ -1045,7 +1045,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return theTable.getSelectionModel();
 	}
 
-	public TablesearchPane getTheSearchpane() {
+	public TableSearchPane getTheSearchpane() {
 		return searchPane;
 	}
 

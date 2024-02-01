@@ -35,7 +35,7 @@ import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
 public class SavedSearchesDialog extends FEditStringList {
@@ -46,9 +46,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	private ClientTable selectionPanel;
 	private ConfigedMain configedMain;
 
-	private GlassPane glassPane;
-
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -76,9 +74,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		buttonAdd.setVisible(true);
 		buttonRemove.setVisible(false);
 		extraField.setVisible(false);
-
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
 	}
 
 	public void start() {
@@ -93,8 +88,8 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
 				new ArrayList<>());
-		searchPane = new TablesearchPane(searchTargetModel, "savedsearches");
-		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel, "savedsearches");
+		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 		editingArea.add(searchPane, BorderLayout.NORTH);
 
@@ -179,7 +174,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	@Override
 	protected void commit() {
-		glassPane.activate(true);
+		setCursor(Globals.WAIT_CURSOR);
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -199,6 +194,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		} finally {
 			buttonCommit.setEnabled(true);
 			buttonCancel.setEnabled(true);
+			setCursor(null);
 		}
 
 		Logging.info(this, "commit result == null " + (result == null));
@@ -206,8 +202,6 @@ public class SavedSearchesDialog extends FEditStringList {
 			Logging.info(this, "result size " + result.size());
 			selectionPanel.setSelectedValues(result);
 		}
-
-		glassPane.activate(false);
 	}
 
 	@Override
