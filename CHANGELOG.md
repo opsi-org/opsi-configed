@@ -3,7 +3,7 @@
 ## [4.3.X.X] - XXXX-XX-XX
 ## Fixed
 - Host paramater `user.{<user>}.privilege.host.all.registered_readonly` has no effect
-
+- Modules file uploading via SFTP
 
 ## [4.3.1.5] - 2024-01-19
 ### Fixed
