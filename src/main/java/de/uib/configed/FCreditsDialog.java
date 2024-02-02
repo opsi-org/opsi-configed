@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JFrame;
 import javax.swing.SwingConstants;
@@ -36,8 +37,9 @@ public final class FCreditsDialog extends FGeneralDialog {
 	}
 
 	private void appendCreditsFromFile(StringBuilder message) {
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(
-				Thread.currentThread().getContextClassLoader().getResourceAsStream("credits.md")))) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("credits.md"),
+						StandardCharsets.UTF_8))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				message.append(line + "<br>");
