@@ -88,24 +88,24 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void readRetrieved() {
-		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
+		put(KEY_PRODUCT_ID, getRetrievedValue(KEY_PRODUCT_ID));
 
-		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(key2servicekey.get(KEY_TARGET_CONFIGURATION)));
-		put(KEY_INSTALLATION_STATUS, getRetrievedValue(key2servicekey.get(KEY_INSTALLATION_STATUS)));
+		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(KEY_TARGET_CONFIGURATION));
+		put(KEY_INSTALLATION_STATUS, getRetrievedValue(KEY_INSTALLATION_STATUS));
 
-		put(KEY_ACTION_RESULT, getRetrievedValue(key2servicekey.get(KEY_ACTION_RESULT)));
-		put(KEY_ACTION_PROGRESS, getRetrievedValue(key2servicekey.get(KEY_ACTION_PROGRESS)));
-		put(KEY_LAST_ACTION, getRetrievedValue(key2servicekey.get(KEY_LAST_ACTION)));
+		put(KEY_ACTION_RESULT, getRetrievedValue(KEY_ACTION_RESULT));
+		put(KEY_ACTION_PROGRESS, getRetrievedValue(KEY_ACTION_PROGRESS));
+		put(KEY_LAST_ACTION, getRetrievedValue(KEY_LAST_ACTION));
 
-		put(KEY_ACTION_REQUEST, getRetrievedValue(key2servicekey.get(KEY_ACTION_REQUEST)));
+		put(KEY_ACTION_REQUEST, getRetrievedValue(KEY_ACTION_REQUEST));
 
-		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_PRIORITY)));
-		put(KEY_ACTION_SEQUENCE, getRetrievedValue(key2servicekey.get(KEY_ACTION_SEQUENCE)));
+		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(KEY_PRODUCT_PRIORITY));
+		put(KEY_ACTION_SEQUENCE, getRetrievedValue(KEY_ACTION_SEQUENCE));
 
-		put(KEY_PRODUCT_VERSION, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_VERSION)));
-		put(KEY_PACKAGE_VERSION, getRetrievedValue(key2servicekey.get(KEY_PACKAGE_VERSION)));
+		put(KEY_PRODUCT_VERSION, getRetrievedValue(KEY_PRODUCT_VERSION));
+		put(KEY_PACKAGE_VERSION, getRetrievedValue(KEY_PACKAGE_VERSION));
 
-		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(key2servicekey.get(KEY_LAST_STATE_CHANGE)));
+		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(KEY_LAST_STATE_CHANGE));
 	}
 
 	@Override

@@ -2296,8 +2296,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_PROGRESS));
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_ACTION));
+			attributes.add(ProductState.KEY_ACTION_PROGRESS);
+			attributes.add(ProductState.KEY_LAST_ACTION);
 		}
 
 		// Remove uneeded attributes
