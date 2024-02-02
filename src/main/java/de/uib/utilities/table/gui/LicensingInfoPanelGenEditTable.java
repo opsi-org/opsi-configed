@@ -17,9 +17,9 @@ import javax.swing.table.TableColumn;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
-	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition,
-			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
-		super(title, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
+	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
+			boolean withTablesearchPane) {
+		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
 	}
 
 	@Override

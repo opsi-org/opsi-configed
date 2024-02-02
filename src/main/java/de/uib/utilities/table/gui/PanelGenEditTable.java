@@ -141,8 +141,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private boolean deleteAllowed = true;
 
-	private boolean switchLineColors = true;
-
 	private boolean awareOfSelectionListener;
 	private boolean awareOfTableChangedListener = true;
 
@@ -166,8 +164,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private AbstractExportTable exportTable;
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
-			int[] popupsWanted, boolean withTablesearchPane) {
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
+			boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
 		this.generalPopupPosition = generalPopupPosition;
@@ -200,22 +198,19 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			this.editing = false;
 		}
 
-		this.switchLineColors = switchLineColors;
-
 		initComponents();
 	}
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
-			int[] popupsWanted) {
-		this(title, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted) {
+		this(title, editing, generalPopupPosition, popupsWanted, false);
 	}
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors) {
-		this(title, editing, generalPopupPosition, switchLineColors, null);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition) {
+		this(title, editing, generalPopupPosition, null);
 	}
 
 	public PanelGenEditTable(String title, boolean editing) {
-		this(title, editing, 0, false);
+		this(title, editing, 0);
 	}
 
 	public PanelGenEditTable() {
@@ -301,11 +296,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		// NOT WORK
 
-		if (switchLineColors) {
-			theTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		} else {
-			theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-		}
+		theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		theTable.addMouseListener(this);
 

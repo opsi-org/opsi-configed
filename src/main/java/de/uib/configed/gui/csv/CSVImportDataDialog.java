@@ -319,7 +319,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public JPanel initPanel() {
 		// don't use a definite max table width (-1), with popups
-		thePanel = new PanelGenEditTable("", true, 0, true,
+		thePanel = new PanelGenEditTable("", true, 0,
 				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);
 
 		boolean updatedSuccessfull = modifier.updateTable(format, startLine, thePanel);

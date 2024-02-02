@@ -91,7 +91,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		this.myController = myController;
 		this.configedMain = configedMain;
 
-		panelSWnames = new PanelGenEditTable("", false, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true) {
+		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true) {
 			@Override
 			public void setDataChanged(boolean b) {
 				Logging.info(this, "panelSWNames setDataChanged " + b);
@@ -99,8 +99,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 			}
 		};
 
-		panelSWxLicensepool = new PanelGenEditTable("", true, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD },
-				false) {
+		panelSWxLicensepool = new PanelGenEditTable("", true, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, false) {
 			@Override
 			public void setDataChanged(boolean b) {
 				Logging.info(this, "panelSWxLicensepool setDataChanged " + b);

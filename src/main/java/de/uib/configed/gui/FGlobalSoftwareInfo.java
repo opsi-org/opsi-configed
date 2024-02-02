@@ -47,7 +47,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		this.myController = myController;
 
-		panelGlobalSoftware = new PanelGenEditTable("", false, 2, true);
+		panelGlobalSoftware = new PanelGenEditTable("", false, 2);
 
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));

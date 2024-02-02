@@ -79,7 +79,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	private void initPanel() {
-		panel = new PanelGenEditTable("", true, 0, false,
+		panel = new PanelGenEditTable("", true, 0,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 			@Override
 			public void commit() {
