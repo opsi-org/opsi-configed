@@ -75,12 +75,6 @@ public class ActionProgress {
 		return state2label.get(state);
 	}
 
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return getLabel(state);
-	}
-
 	@Override
 	public String toString() {
 		return getLabel(state);
