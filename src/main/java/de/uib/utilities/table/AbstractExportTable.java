@@ -6,6 +6,7 @@
 
 package de.uib.utilities.table;
 
+import java.awt.Container;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -69,7 +69,7 @@ public abstract class AbstractExportTable {
 		return menuItem;
 	}
 
-	public void addMenuItemsTo(JComponent component) {
+	public void addMenuItemsTo(Container component) {
 		component.add(getMenuItemExport());
 		component.add(getMenuItemExportSelected());
 	}
