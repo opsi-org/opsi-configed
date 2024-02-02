@@ -44,8 +44,8 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TableSearchPane;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
@@ -287,7 +287,7 @@ public class PanelSWInfo extends JPanel {
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
 
-		jTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
+		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);

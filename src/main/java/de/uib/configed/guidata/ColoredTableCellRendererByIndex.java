@@ -20,18 +20,14 @@ import java.util.Map;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
-public class ColoredTableCellRendererByIndex extends StandardTableCellRenderer {
+public class ColoredTableCellRendererByIndex extends ColorTableCellRenderer {
 	private Map<String, Color> mapOfTextColors;
 
-	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors, String tooltipPrefix) {
-		super(tooltipPrefix);
+	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors) {
+		super();
 		this.mapOfTextColors = mapOfTextColors;
-	}
-
-	public ColoredTableCellRendererByIndex(String tooltipPrefix) {
-		this(null, tooltipPrefix);
 	}
 
 	public ColoredTableCellRendererByIndex() {

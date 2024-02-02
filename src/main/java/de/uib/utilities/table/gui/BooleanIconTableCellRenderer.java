@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 
 import de.uib.utilities.logging.Logging;
 
-public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
+public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 	private Icon trueIcon;
 	private Icon falseIcon;
 	private boolean allowingString;

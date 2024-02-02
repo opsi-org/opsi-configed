@@ -46,7 +46,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
@@ -82,7 +82,7 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		table.setDragEnabled(true);
 
-		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
+		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		table.setAutoCreateRowSorter(true);
 

@@ -937,7 +937,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			default:
 				// no special renderer set
-				tableColumn.setCellRenderer(new StandardTableCellRenderer());
+				tableColumn.setCellRenderer(new ColorTableCellRenderer());
 				break;
 			}
 		}

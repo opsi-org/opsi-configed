@@ -33,7 +33,6 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public class ProductSettingsTableModel {
 	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;
@@ -80,9 +79,9 @@ public class ProductSettingsTableModel {
 		targetConfigurationTableCellRenderer = new ColorTableCellRenderer();
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStatus.getLabel2TextColor(), null);
+				InstallationStatus.getLabel2TextColor());
 
-		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(), null);
+		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor());
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex();
 
@@ -232,9 +231,9 @@ public class ProductSettingsTableModel {
 		}
 	}
 
-	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
+	private class ProductNameTableCellRenderer extends ColorTableCellRenderer {
 		public ProductNameTableCellRenderer() {
-			super(null);
+			super();
 		}
 
 		@Override

@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer {
+public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 	// These strings should be in an alphabetic order since the table will be sorted by these strings
 	public static final String CONNECTED_BY_MESSAGEBUS = "connected_by_messagebus";
 	public static final String REACHABLE = "reachable";
