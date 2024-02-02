@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -69,9 +69,9 @@ public abstract class AbstractExportTable {
 		return menuItem;
 	}
 
-	public void addMenuItemsTo(JPopupMenu popup) {
-		popup.add(getMenuItemExport());
-		popup.add(getMenuItemExportSelected());
+	public void addMenuItemsTo(JComponent component) {
+		component.add(getMenuItemExport());
+		component.add(getMenuItemExportSelected());
 	}
 
 	public JMenuItem getMenuItemExportSelected() {

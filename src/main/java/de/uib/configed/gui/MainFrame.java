@@ -757,6 +757,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// produces a global reaction when pressing space
 		jMenuRemoteControl.addActionListener((ActionEvent e) -> panelClientlist.startRemoteControlForSelectedClients());
 
+		JCheckBoxMenuItem jMenuSelectionToggleClientFilter = new JCheckBoxMenuItem();
+		jMenuSelectionToggleClientFilter
+				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
+		jMenuSelectionToggleClientFilter.setState(false);
+
+		jMenuSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
+
+		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
+				Utils.createImageIcon("images/reload16.png", ""));
+		jMenuRebuildClientList.addActionListener((ActionEvent e) -> configedMain.reloadHosts());
+
+		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
+				Utils.createImageIcon("images/acrobat_reader16.png", ""));
+		jMenuCreatePdf.setText(Configed.getResourceValue("FGeneralDialog.pdf"));
+		jMenuCreatePdf.addActionListener((ActionEvent e) -> createPdf());
+
 		jMenuClients.add(jMenuWakeOnLan);
 		jMenuClients.add(jMenuOpsiClientdEvent);
 		jMenuClients.add(jMenuShowPopupMessage);
@@ -791,6 +807,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (multidepot) {
 			jMenuClients.add(jMenuChangeDepot);
 		}
+		jMenuClients.addSeparator();
+
+		jMenuClients.add(jMenuSelectionToggleClientFilter);
+
+		jMenuClients.add(jMenuRebuildClientList);
+		jMenuClients.add(jMenuCreatePdf);
+		exportTable.addMenuItemsTo(jMenuClients);
+
+		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(panelClientlist.getTable());
+		clientTableExporter.addMenuItemsTo(jMenuClients);
+
 		jMenuClients.addSeparator();
 
 		// --
