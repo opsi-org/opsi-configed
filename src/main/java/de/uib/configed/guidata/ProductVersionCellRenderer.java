@@ -15,8 +15,8 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
 public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
-	public ProductVersionCellRenderer(String tooltipPrefix) {
-		super(tooltipPrefix);
+	public ProductVersionCellRenderer() {
+		super();
 	}
 
 	@Override

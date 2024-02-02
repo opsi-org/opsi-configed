@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.util.Comparator;
 
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
@@ -81,49 +80,36 @@ public class ProductSettingsTableModel {
 	private void initRenderer() {
 		standardListCellRenderer = new StandardListCellRenderer();
 
-		productNameTableCellRenderer = new ProductNameTableCellRenderer("");
+		productNameTableCellRenderer = new ProductNameTableCellRenderer();
 
 		productCompleteNameTableCellRenderer = new ColorTableCellRenderer();
 
-		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
+		targetConfigurationTableCellRenderer = new ColorTableCellRenderer();
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStatus.getLabel2TextColor(),
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
+				InstallationStatus.getLabel2TextColor(), null);
 
-		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
+		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer();
 
-		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
+		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex();
 
-		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
+		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex();
 
-		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(),
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
+		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(), null);
 
-		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY) + ": ");
+		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex();
 
-		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE));
+		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer();
 
-		productsequenceTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_POSITION));
+		productsequenceTableCellRenderer = new ColoredTableCellRenderer();
 
-		productversionTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_VERSION));
+		productversionTableCellRenderer = new ColoredTableCellRenderer();
 
-		packageversionTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_PACKAGE_VERSION));
+		packageversionTableCellRenderer = new ColoredTableCellRenderer();
 
-		versionInfoTableCellRenderer = new ProductVersionCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_VERSION_INFO));
+		versionInfoTableCellRenderer = new ProductVersionCellRenderer();
 
-		installationInfoTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_INFO)) {
+		installationInfoTableCellRenderer = new ColoredTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
@@ -295,22 +281,14 @@ public class ProductSettingsTableModel {
 	}
 
 	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
-		public ProductNameTableCellRenderer(String tooltipPrefix) {
-			super(tooltipPrefix);
+		public ProductNameTableCellRenderer() {
+			super(null);
 		}
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-			// Will be done if c==null is true since instanceof
-			// returns false if null
-			if (!(c instanceof JComponent)) {
-				return c;
-			}
-
-			JComponent jc = (JComponent) c;
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			String stateChange = ((InstallationStateTableModel) table.getModel())
 					.getLastStateChange(tableProducts.convertRowIndexToModel(row));
@@ -319,11 +297,10 @@ public class ProductSettingsTableModel {
 				stateChange = "";
 			}
 
-			stateChange = Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
+			setToolTipText(
+					Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange);
 
-			jc.setToolTipText(stateChange);
-
-			return jc;
+			return this;
 		}
 	}
 }

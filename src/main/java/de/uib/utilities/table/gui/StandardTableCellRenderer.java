@@ -8,8 +8,6 @@ package de.uib.utilities.table.gui;
 
 import java.awt.Component;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import utils.Utils;
@@ -32,25 +30,14 @@ public class StandardTableCellRenderer extends ColorTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!(c instanceof JComponent)) {
-			return c;
+		if (tooltipPrefix == null || tooltipPrefix.isEmpty()) {
+			setToolTipText(null);
+		} else {
+			setToolTipText(Utils.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH));
 		}
 
-		JComponent jc = (JComponent) c;
-
-		if (jc instanceof JLabel) {
-			String tooltipText = null;
-			if (tooltipPrefix != null && !tooltipPrefix.isEmpty()) {
-				tooltipText = Utils.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
-			} else {
-				tooltipText = Utils.fillStringToLength(value + " ", FILL_LENGTH);
-			}
-
-			((JLabel) jc).setToolTipText(tooltipText);
-		}
-
-		return jc;
+		return this;
 	}
 }

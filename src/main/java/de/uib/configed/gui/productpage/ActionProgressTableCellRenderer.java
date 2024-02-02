@@ -17,8 +17,8 @@ import de.uib.opsidatamodel.productstate.ActionProgress;
 import utils.Utils;
 
 public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-	ActionProgressTableCellRenderer(String tooltipPrefix) {
-		super(tooltipPrefix);
+	ActionProgressTableCellRenderer() {
+		super();
 	}
 
 	// overwrite the renderer in order to get the behaviour:

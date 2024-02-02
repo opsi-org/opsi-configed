@@ -14,8 +14,8 @@ import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public class ColoredTableCellRenderer extends StandardTableCellRenderer {
-	public ColoredTableCellRenderer(String tooltipPrefix) {
-		super(tooltipPrefix);
+	public ColoredTableCellRenderer() {
+		super(null);
 	}
 
 	@Override

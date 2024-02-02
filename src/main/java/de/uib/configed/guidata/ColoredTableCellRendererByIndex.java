@@ -25,13 +25,17 @@ import de.uib.utilities.table.gui.TableCellRendererByIndex;
 public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
 	private Map<String, Color> mapOfTextColors;
 
+	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors, String tooltipPrefix) {
+		super(tooltipPrefix);
+		this.mapOfTextColors = mapOfTextColors;
+	}
+
 	public ColoredTableCellRendererByIndex(String tooltipPrefix) {
 		this(null, tooltipPrefix);
 	}
 
-	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors, String tooltipPrefix) {
-		super(tooltipPrefix);
-		this.mapOfTextColors = mapOfTextColors;
+	public ColoredTableCellRendererByIndex() {
+		this(null);
 	}
 
 	@Override

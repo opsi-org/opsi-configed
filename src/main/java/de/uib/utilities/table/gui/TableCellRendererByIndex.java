@@ -14,8 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import utils.Utils;
-
 public class TableCellRendererByIndex extends StandardTableCellRenderer {
 	private Map<String, ImageIcon> mapOfImages;
 
@@ -38,7 +36,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		if (result instanceof JLabel) {
 			((JLabel) result).setText(value + "");
 			((JLabel) result).setIcon(selectedIcon);
-			((JLabel) result).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}
 
 		return result;
