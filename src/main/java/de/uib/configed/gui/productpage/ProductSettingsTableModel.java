@@ -42,8 +42,6 @@ public class ProductSettingsTableModel {
 
 	private static final int WIDTH_COLUMN_PRODUCT_SEQUENCE = 40;
 	private static final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
-	private static final int WIDTH_COLUMN_PRODUCT_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
-	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
 	private ListCellRenderer<Object> standardListCellRenderer;
@@ -53,14 +51,9 @@ public class ProductSettingsTableModel {
 
 	private TableCellRenderer targetConfigurationTableCellRenderer;
 	private TableCellRenderer installationStatusTableCellRenderer;
-	private TableCellRenderer actionProgressTableCellRenderer;
-	private TableCellRenderer lastActionTableCellRenderer;
-	private TableCellRenderer actionResultTableCellRenderer;
 	private TableCellRenderer actionRequestTableCellRenderer;
 	private ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
 	private ColoredTableCellRenderer productsequenceTableCellRenderer;
-	private ColoredTableCellRenderer productversionTableCellRenderer;
-	private ColoredTableCellRenderer packageversionTableCellRenderer;
 
 	private ColoredTableCellRenderer versionInfoTableCellRenderer;
 	private ColoredTableCellRenderer installationInfoTableCellRenderer;
@@ -89,12 +82,6 @@ public class ProductSettingsTableModel {
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStatus.getLabel2TextColor(), null);
 
-		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer();
-
-		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex();
-
-		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex();
-
 		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(), null);
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex();
@@ -102,10 +89,6 @@ public class ProductSettingsTableModel {
 		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer();
 
 		productsequenceTableCellRenderer = new ColoredTableCellRenderer();
-
-		productversionTableCellRenderer = new ColoredTableCellRenderer();
-
-		packageversionTableCellRenderer = new ColoredTableCellRenderer();
 
 		versionInfoTableCellRenderer = new ProductVersionCellRenderer();
 
@@ -191,25 +174,6 @@ public class ProductSettingsTableModel {
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_PROGRESS)) > -1) {
-			TableColumn progressColumn = tableProducts.getColumnModel().getColumn(colIndex);
-
-			progressColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
-			progressColumn.setCellRenderer(actionProgressTableCellRenderer);
-		}
-
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_LAST_ACTION)) > -1) {
-			TableColumn lastactionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			lastactionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
-			lastactionColumn.setCellRenderer(lastActionTableCellRenderer);
-		}
-
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_RESULT)) > -1) {
-			TableColumn actionresultColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			actionresultColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
-			actionresultColumn.setCellRenderer(actionResultTableCellRenderer);
-		}
-
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_REQUEST)) > -1) {
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
@@ -245,18 +209,6 @@ public class ProductSettingsTableModel {
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
 			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
-		}
-
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_VERSION)) > -1) {
-			TableColumn productversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			productversionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_VERSION);
-			productversionColumn.setCellRenderer(productversionTableCellRenderer);
-		}
-
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PACKAGE_VERSION)) > -1) {
-			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			packageversionColumn.setPreferredWidth(WIDTH_COLUMN_PACKAGE_VERSION);
-			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_VERSION_INFO)) > -1) {
