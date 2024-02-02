@@ -95,7 +95,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				setSelectedTheme();
+				focusOnSelectedWidget();
 			}
 		});
 	}
@@ -154,10 +154,10 @@ public final class TerminalFrame implements MessagebusListener {
 		return northPanel;
 	}
 
-	private void setSelectedTheme() {
+	private void focusOnSelectedWidget() {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
-			widget.repaint();
+			widget.requestFocusInWindow();
 		}
 	}
 
