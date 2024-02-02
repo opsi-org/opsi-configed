@@ -10,15 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.Configed;
-import de.uib.messages.Messages;
 
 public class TerminalMenuBar extends JMenuBar {
 	private TerminalFrame frame;
@@ -51,22 +48,10 @@ public class TerminalMenuBar extends JMenuBar {
 				KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		jMenuItemChangeSession.addActionListener((ActionEvent e) -> frame.displaySessionsDialog());
 
-		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
-		ButtonGroup groupThemes = new ButtonGroup();
-
-		for (final String theme : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
-			themeItem.setSelected(TerminalSettingsProvider.getTerminalTheme().equals(theme));
-			jMenuTheme.add(themeItem);
-			groupThemes.add(themeItem);
-			themeItem.addActionListener((ActionEvent e) -> frame.setSelectedTheme(theme));
-		}
-
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		menuFile.add(jMenuItemNewWindow);
 		menuFile.add(jMenuItemNewSession);
 		menuFile.add(jMenuItemChangeSession);
-		menuFile.add(jMenuTheme);
 		return menuFile;
 	}
 
