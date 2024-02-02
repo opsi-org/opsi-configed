@@ -8,7 +8,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
@@ -27,25 +26,24 @@ public class ActionProgressTableCellRenderer extends ColoredTableCellRendererByI
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component result = null;
 		if (!isValueNull(value)) {
-			result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
+			super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
 
-			((JLabel) result).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
+			setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-			result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
-					row, column);
+			super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus, row,
+					column);
 
-			((JLabel) result).setToolTipText(
+			setToolTipText(
 					Utils.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
 		} else {
-			result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
+			super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
 
-			((JLabel) result).setToolTipText(Utils.fillStringToLength(
+			setToolTipText(Utils.fillStringToLength(
 					tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ", FILL_LENGTH));
 		}
 
-		return result;
+		return this;
 	}
 
 	// Tests if the value is such that it should not be shown
