@@ -9,9 +9,9 @@ package de.uib.utilities.table.gui;
 import java.awt.Component;
 
 import javax.swing.Icon;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
+import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
@@ -37,46 +37,44 @@ public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!(c instanceof JLabel)) {
-			Logging.warning(this, "component is not a JLabel, but it should be, it is" + c.getClass().toString());
-			return c;
-		}
+		setText("");
 
-		JLabel label = (JLabel) c;
-
-		label.setText("");
-
-		if (value == null) {
-			label.setIcon(null);
-		} else if (value instanceof String) {
+		if (value instanceof String) {
 			switch ((String) value) {
 			case CONNECTED_BY_MESSAGEBUS:
-				label.setIcon(messagebusIcon);
+				setIcon(messagebusIcon);
+				setToolTipText(Configed.getResourceValue("ConnectionStatusTableCellRenderer.connected.tooltip"));
 				break;
 
 			case REACHABLE:
-				label.setIcon(trueIcon);
+				setIcon(trueIcon);
+				setToolTipText(Configed.getResourceValue("ConnectionStatusTableCellRenderer.reachable.tooltip"));
 				break;
 
 			case NOT_REACHABLE:
-				label.setIcon(falseIcon);
+				setIcon(falseIcon);
+				setToolTipText(Configed.getResourceValue("ConnectionStatusTableCellRenderer.notReachable.tooltip"));
 				break;
 
 			case UNKNOWN:
-				label.setIcon(null);
+				setIcon(null);
+				setToolTipText(Configed.getResourceValue("ConnectionStatusTableCellRenderer.notConnected.tooltip"));
 				break;
 
 			default:
 				Logging.warning(this, "unexpected value: " + value + "; set Icon null");
-				label.setIcon(null);
+				setIcon(null);
+				setToolTipText(null);
 				break;
 			}
 		} else {
 			Logging.warning(this, "it's unexpected that value is not a string, but: " + value.getClass());
+			setIcon(null);
+			setToolTipText(null);
 		}
 
-		return c;
+		return this;
 	}
 }
