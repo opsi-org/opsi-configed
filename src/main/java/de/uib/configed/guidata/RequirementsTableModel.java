@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
@@ -201,25 +199,22 @@ public class RequirementsTableModel extends AbstractTableModel {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-			if (cell instanceof JComponent) {
-				((JComponent) cell).setToolTipText("" + value);
-			}
+			setToolTipText("" + value);
 
 			// Don't warn in opsi 4.3, since now not only "setup" is allowed for dependencies
 			if (!ServerFacade.isOpsi43()) {
 				if (shouldWarn(column, String.valueOf(value))) {
-					((JLabel) cell).setIcon(Utils.createImageIcon("images/warning.png", "warning"));
+					setIcon(Utils.createImageIcon("images/warning.png", "warning"));
 
-					((JLabel) cell)
-							.setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
+					setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
 				} else {
-					((JLabel) cell).setIcon(null);
+					setIcon(null);
 				}
 			}
 
-			return cell;
+			return this;
 		}
 
 		private static boolean shouldWarn(int column, String cellValue) {

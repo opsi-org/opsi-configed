@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.util.Map;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -35,8 +34,8 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			value = LicensingInfoMap.DISPLAY_INFINITE;
 		}
 
-		JLabel jc = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		ColorTableCellRenderer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0);
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		ColorTableCellRenderer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0);
 
 		String latestChange = licensingInfoMap.getLatestDate();
 		String columnName = licensingInfoMap.getColumnNames().get(column);
@@ -44,18 +43,18 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
 				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available")))) {
-			jc.setToolTipText(value.toString());
+			setToolTipText(value.toString());
 		}
 
 		if (columnName == null) {
 			Logging.warning(this, "columnName is null");
 		} else if (columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
-			jc.setText("");
+			setText("");
 
 			if (value.equals(true)) {
-				jc.setIcon(Utils.createImageIcon("images/checked_withoutbox.png", ""));
+				setIcon(Utils.createImageIcon("images/checked_withoutbox.png", ""));
 			} else {
-				jc.setIcon(Utils.createImageIcon("images/checked_void.png", ""));
+				setIcon(Utils.createImageIcon("images/checked_void.png", ""));
 			}
 		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
 				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
@@ -65,36 +64,35 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 			String licenses = moduleToDateData.get(LicensingInfoMap.LICENSE_IDS).toString().replace(", ", ", <br>");
 			if (!state.equals(LicensingInfoMap.STATE_UNLICENSED)) {
-				jc.setToolTipText(
+				setToolTipText(
 						"<html>" + "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 			} else {
-				jc.setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
+				setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
 			}
 
 			if (columnName.equals(latestChange)) {
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					jc.setForeground(Globals.OPSI_WARNING);
+					setForeground(Globals.OPSI_WARNING);
 
-					jc.setToolTipText(
-							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
-									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
+					setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
+							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					jc.setForeground(Globals.OPSI_ERROR);
+					setForeground(Globals.OPSI_ERROR);
 
-					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
+					setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-					jc.setForeground(Globals.OPSI_WARNING);
+					setForeground(Globals.OPSI_WARNING);
 
-					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
+					setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-					jc.setForeground(Globals.OPSI_ERROR);
+					setForeground(Globals.OPSI_ERROR);
 
-					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
+					setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				} else {
-					jc.setForeground(Globals.OPSI_OK);
+					setForeground(Globals.OPSI_OK);
 				}
 			}
 
@@ -105,13 +103,13 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
 						.toString();
 				if (clientNum != null && prevClientNum != null && !clientNum.equals(prevClientNum)) {
-					jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+					setFont(getFont().deriveFont(Font.BOLD));
 				}
 			}
 		} else {
 			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
 		}
 
-		return jc;
+		return this;
 	}
 }

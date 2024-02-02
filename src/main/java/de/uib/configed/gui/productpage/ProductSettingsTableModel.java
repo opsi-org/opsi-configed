@@ -95,21 +95,21 @@ public class ProductSettingsTableModel {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
-				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 				// Safe sind instanceof returns false if null
 				if (value instanceof String) {
 					String val = (String) value;
 					if (val.startsWith(ActionResult.getLabel(ActionResult.FAILED))) {
-						c.setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
+						setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
 					} else if (val.startsWith(ActionResult.getLabel(ActionResult.SUCCESSFUL))) {
-						c.setForeground(Globals.OK_COLOR);
+						setForeground(Globals.OK_COLOR);
 					} else {
 						// Don't set foreground if no special result
 					}
 				}
 
-				return c;
+				return this;
 			}
 		};
 	}

@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.text.NumberFormat;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import de.uib.utilities.logging.Logging;
@@ -26,7 +25,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";
 		ImageIcon selectedIcon = null;
@@ -42,12 +41,10 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 			selectedString = "";
 		}
 
-		if (result instanceof JLabel) {
-			((JLabel) result).setText(selectedString);
-			((JLabel) result).setIcon(selectedIcon);
-			((JLabel) result).setToolTipText(selectedString);
-		}
+		setText(selectedString);
+		setIcon(selectedIcon);
+		setToolTipText(selectedString);
 
-		return result;
+		return this;
 	}
 }

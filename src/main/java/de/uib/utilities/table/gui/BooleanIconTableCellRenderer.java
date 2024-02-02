@@ -9,7 +9,6 @@ package de.uib.utilities.table.gui;
 import java.awt.Component;
 
 import javax.swing.Icon;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
@@ -34,35 +33,29 @@ public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		Logging.debug("row=" + row + ", column=" + column + ", comp=" + comp.getClass() + ", value=" + value
-				+ ", allowingString=" + allowingString + ", trueIcon=" + trueIcon + ", falseIcon=" + falseIcon);
-
-		if (!(comp instanceof JLabel)) {
-			return comp;
-		}
+		Logging.debug("row=" + row + ", column=" + column + ", value=" + value + ", allowingString=" + allowingString
+				+ ", trueIcon=" + trueIcon + ", falseIcon=" + falseIcon);
 
 		if (value != null && !(value instanceof Boolean) && !(value instanceof String)) {
-			return comp;
+			return this;
 		}
 
 		if (value != null && !allowingString && !(value instanceof Boolean)) {
-			return comp;
+			return this;
 		}
 
-		JLabel label = (JLabel) comp;
-
-		label.setText("");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
+		setText("");
+		setHorizontalAlignment(SwingConstants.CENTER);
 
 		if (objAsBoolean(value).booleanValue()) {
-			label.setIcon(trueIcon);
+			setIcon(trueIcon);
 		} else {
-			label.setIcon(falseIcon);
+			setIcon(falseIcon);
 		}
 
-		return comp;
+		return this;
 	}
 
 	private Boolean objAsBoolean(Object obj) {
