@@ -26,7 +26,6 @@ import de.uib.configed.gui.FSelectionList;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import utils.Utils;
 
@@ -96,7 +95,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				setSelectedTheme(Messages.getSelectedTheme());
+				setSelectedTheme();
 			}
 		});
 	}
@@ -155,8 +154,7 @@ public final class TerminalFrame implements MessagebusListener {
 		return northPanel;
 	}
 
-	private void setSelectedTheme(String selectedTheme) {
-		TerminalSettingsProvider.setTerminalTheme(selectedTheme);
+	private void setSelectedTheme() {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
 			widget.repaint();
