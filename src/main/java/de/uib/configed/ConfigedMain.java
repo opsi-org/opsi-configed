@@ -557,7 +557,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+			attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
 
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else {
@@ -2303,7 +2303,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		// Remove uneeded attributes
 		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
-		attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
 		return attributes;
 	}
 
@@ -2311,15 +2311,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> attributes = new ArrayList<>();
 		for (String v : productDisplayFields) {
 			if (ProductState.KEY_VERSION_INFO.equals(v)) {
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PACKAGE_VERSION));
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
+				attributes.add(ProductState.KEY_PACKAGE_VERSION);
+				attributes.add(ProductState.KEY_PRODUCT_VERSION);
 				continue;
-			}
-			if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_RESULT));
-			}
-			if (ProductState.key2servicekey.containsKey(v)) {
-				attributes.add(ProductState.key2servicekey.get(v));
+			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
+				attributes.add(ProductState.KEY_ACTION_RESULT);
+			} else {
+				attributes.add(v);
 			}
 		}
 
