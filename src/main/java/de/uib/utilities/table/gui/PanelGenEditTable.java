@@ -901,22 +901,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.setSelectMode(select);
 	}
 
-	/**
-	 * should mark the columns which are editable after being generated // TODO
-	 * remove?
-	 */
-	public void setEmphasizedColumns(int[] cols) {
-		if (cols == null) {
-			return;
-		}
-
-		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
-			for (int col : cols) {
-				theTable.getColumnModel().getColumn(col).setCellRenderer(new ColorTableCellRenderer());
-			}
-		}
-	}
-
 	public void setDataChanged(boolean b) {
 		if (!editing) {
 			return;

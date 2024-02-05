@@ -432,7 +432,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelLicensepools.reset();
 		thePanel.getPanelLicensepools().setTableModel(modelLicensepools);
 		modelLicensepools.setEditableColumns(new int[] { 0, 1 });
-		thePanel.getPanelLicensepools().setEmphasizedColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddPool = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licenses.NewLicensepool"));
 		menuItemAddPool.addActionListener((ActionEvent e) -> {
@@ -493,7 +492,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelProductId2LPool.reset();
 		thePanel.getPanelProductId2LPool().setTableModel(modelProductId2LPool);
 		modelProductId2LPool.setEditableColumns(new int[] { 0, 1 });
-		thePanel.getPanelProductId2LPool().setEmphasizedColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddRelationProductId2LPool = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewRelationProductId2LPool"));
@@ -594,7 +592,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setTableModel(modelWindowsSoftwareIds);
 		thePanel.getPanelRegisteredSoftware().setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		modelWindowsSoftwareIds.setEditableColumns(new int[] {});
-		thePanel.getPanelRegisteredSoftware().setEmphasizedColumns(new int[] {});
 
 		Integer[] searchCols = new Integer[columnNames.size()];
 		for (int j = 0; j < columnNames.size(); j++) {

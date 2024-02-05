@@ -149,7 +149,6 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		modelLicensesUsage.reset();
 		thePanel.getPanelUsage().setTableModel(modelLicensesUsage);
 		modelLicensesUsage.setEditableColumns(new int[] { 3, 4 });
-		thePanel.getPanelUsage().setEmphasizedColumns(new int[] { 3, 4 });
 
 		TableColumn col;
 		col = thePanel.getPanelUsage().getColumnModel().getColumn(4);

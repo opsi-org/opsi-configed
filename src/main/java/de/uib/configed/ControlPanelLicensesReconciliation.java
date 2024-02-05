@@ -161,7 +161,6 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		modelLicensesReconciliation.reset();
 		thePanel.getPanelReconciliation().setTableModel(modelLicensesReconciliation);
 		modelLicensesReconciliation.setEditableColumns(new int[] {});
-		thePanel.getPanelReconciliation().setEmphasizedColumns(new int[] {});
 	}
 
 	private void initTreatmentOfColumns() {

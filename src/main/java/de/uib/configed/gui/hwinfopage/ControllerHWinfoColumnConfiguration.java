@@ -169,7 +169,6 @@ public class ControllerHWinfoColumnConfiguration {
 		model.setEditableColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTableModel(model);
-		panel.setEmphasizedColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(Configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
