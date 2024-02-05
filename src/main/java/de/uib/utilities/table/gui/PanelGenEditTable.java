@@ -68,7 +68,6 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
-import de.uib.utilities.table.TableCellRendererCurrency;
 import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
@@ -929,10 +928,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			switch (classname) {
 			case "java.sql.Timestamp":
 				tableColumn.setCellRenderer(new TableCellRendererDate());
-				break;
-
-			case "java.math.BigDecimal":
-				tableColumn.setCellRenderer(new TableCellRendererCurrency());
 				break;
 
 			default:
