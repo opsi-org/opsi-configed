@@ -114,29 +114,9 @@ public class ProductSettingsTableModel {
 		};
 	}
 
-	public void setRowSorter() {
-		final Comparator<String> myComparator = Comparator.comparing(String::toString);
-
-		rowSorter = new TableRowSorter<>(tableProducts.getModel()) {
-			@Override
-			protected boolean useToString(int column) {
-				return true;
-			}
-
-			@Override
-			public Comparator<?> getComparator(int column) {
-				if (column == 0) {
-					return myComparator;
-				} else {
-					return super.getComparator(column);
-				}
-			}
-		};
-
-		tableProducts.setRowSorter(rowSorter);
-	}
-
 	public void setRenderer(InstallationStateTableModel istm) {
+		setRowSorter();
+
 		int colIndex = -1;
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_ID)) > -1) {
@@ -229,6 +209,28 @@ public class ProductSettingsTableModel {
 
 			installationInfoColumn.setCellEditor(cellEditor);
 		}
+	}
+
+	private void setRowSorter() {
+		final Comparator<String> myComparator = Comparator.comparing(String::toString);
+
+		rowSorter = new TableRowSorter<>(tableProducts.getModel()) {
+			@Override
+			protected boolean useToString(int column) {
+				return true;
+			}
+
+			@Override
+			public Comparator<?> getComparator(int column) {
+				if (column == 0) {
+					return myComparator;
+				} else {
+					return super.getComparator(column);
+				}
+			}
+		};
+
+		tableProducts.setRowSorter(rowSorter);
 	}
 
 	private class ProductNameTableCellRenderer extends ColorTableCellRenderer {
