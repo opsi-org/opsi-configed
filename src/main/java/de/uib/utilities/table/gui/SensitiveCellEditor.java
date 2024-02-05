@@ -7,6 +7,7 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		// true has undesired effects in the interaction of the CellEditor and the FEditList
 		listeditor.setModal(false);
+		listeditor.setPreferredScrollPaneSize(new Dimension(300, 240));
 		listeditor.init();
 	}
 
