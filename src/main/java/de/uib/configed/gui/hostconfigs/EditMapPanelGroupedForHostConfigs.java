@@ -576,9 +576,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 						}
 					};
 
-					TableCellRenderer colorized = new ColorTableCellRenderer();
-
-					table.setDefaultRenderer(Object.class, colorized);
+					table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 					table.addMouseWheelListener(
 							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
