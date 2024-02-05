@@ -180,7 +180,6 @@ public class LicenseDisplayer {
 		GenTableModel modelSWnames;
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		List<MapBasedTableEditItem> updateCollection;
 
@@ -189,17 +188,12 @@ public class LicenseDisplayer {
 			columnNames.add(key);
 		}
 
-		classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
 		updateCollection = new ArrayList<>();
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {

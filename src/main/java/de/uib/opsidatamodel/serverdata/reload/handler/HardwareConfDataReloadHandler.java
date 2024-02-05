@@ -39,7 +39,6 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.HOST_COLUMN_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES);
-		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES);
 		hardwareDataService.retrieveClient2HwRowsColumnNamesPD();
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES);

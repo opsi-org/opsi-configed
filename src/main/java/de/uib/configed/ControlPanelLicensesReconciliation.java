@@ -89,20 +89,16 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 
 	private void initPanels() {
 		List<String> columnNames;
-		List<String> classNames;
 
 		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 
 		columnNames = new ArrayList<>();
-		classNames = new ArrayList<>();
 
 		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
-		classNames.add("java.lang.String");
 
 		for (String fieldName : extraHostFields) {
 			columnNames.add(fieldName);
-			classNames.add("java.lang.String");
 		}
 
 		columnNames.add("licensePoolId");
@@ -113,13 +109,10 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		Logging.debug(this, "columnNames: " + columnNames);
 		Logging.debug(this, "cols index_used_by_opsi  " + indexUsedByOpsi + " , " + indexSWInventoryUsed);
 
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.Boolean");
-		classNames.add("java.lang.Boolean");
 		MapTableUpdateItemFactory updateItemFactoryLicensesReconciliation = new MapTableUpdateItemFactory(
 				modelLicensesReconciliation, columnNames);
 		modelLicensesReconciliation = new GenTableModel(updateItemFactoryLicensesReconciliation,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {

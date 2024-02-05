@@ -57,7 +57,6 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 	private PanelGenEditTable panelSWxLicensepool;
 	private GenTableModel modelSWxLicensepool;
 	private List<String> columnNamesSWxLicensepool;
-	private List<String> classNamesSWxLicensepool;
 
 	private TableModelFilterCondition showOnlyNamesWithVariantLicenses;
 	private TableModelFilterCondition showOnlyNamesWithoutLicenses;
@@ -265,11 +264,6 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		columnNamesSWxLicensepool.add(AuditSoftwareXLicensePool.SW_ID);
 		columnNamesSWxLicensepool.add(LicensepoolEntry.ID_SERVICE_KEY);
 
-		classNamesSWxLicensepool = new ArrayList<>();
-		for (int i = 0; i < columnNamesSWxLicensepool.size(); i++) {
-			classNamesSWxLicensepool.add("java.lang.String");
-		}
-
 		showOnlyNamesWithVariantLicenses = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicensepoolRestriction.SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS) {
 			@Override
@@ -327,7 +321,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		Logging.info(this, "init modelSWnames");
 
 		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
@@ -461,15 +455,14 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 	}
 
 	private void setTableModelSWxLicensepool(String swName) {
-		Logging.info(this, " setTableModelSWxLicensepool for " + swName + " with cols " + columnNamesSWxLicensepool
-				+ " and classes " + classNamesSWxLicensepool);
+		Logging.info(this, " setTableModelSWxLicensepool for " + swName + " with cols " + columnNamesSWxLicensepool);
 
 		MapTableUpdateItemFactory updateItemFactoySWxLicensepool = new MapTableUpdateItemFactory(
 				columnNamesSWxLicensepool);
 
 		if (modelSWxLicensepool == null) {
-			modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool, new DefaultTableProvider(
-					new RetrieverMapSource(columnNamesSWxLicensepool, classNamesSWxLicensepool, new MapRetriever() {
+			modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
+					new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool, new MapRetriever() {
 						@Override
 						public void reloadMap() {
 							Logging.info(this, "retrieveMap for swName " + swName);

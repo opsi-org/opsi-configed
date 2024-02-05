@@ -21,8 +21,8 @@ public class RetrieverMapSource extends MapSource {
 		rows = new ArrayList<>();
 	}
 
-	public RetrieverMapSource(List<String> columnNames, List<String> classNames, MapRetriever retriever) {
-		this(columnNames, classNames, retriever, false);
+	public RetrieverMapSource(List<String> columnNames, MapRetriever retriever) {
+		this(columnNames, null, retriever, false);
 	}
 
 	@Override
