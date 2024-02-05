@@ -782,13 +782,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "toggleLicensesFrame is visible" + licensesFrame.isVisible());
 		licensesFrame.setLocationRelativeTo(mainFrame);
 		licensesFrame.setVisible(true);
-		mainFrame.visualizeLicensesFramesActive(true);
+		mainFrame.getIconBarPanel().visualizeLicensesFramesActive(true);
 	}
 
 	public void setEditingTarget(EditingTarget t) {
 		Logging.info(this, "setEditingTarget " + t);
 		editingTarget = t;
-		mainFrame.visualizeEditingTarget(t);
+		mainFrame.getIconBarPanel().visualizeEditingTarget(t);
 		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
@@ -3176,7 +3176,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				fShowReachableInfo.setVisible(false);
 
-				mainFrame.getIconButtonReachableInfo().setEnabled(true);
+				mainFrame.getIconBarPanel().getIconButtonReachableInfo().setEnabled(true);
 
 				setReachableInfo();
 			}
@@ -3256,7 +3256,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
-		mainFrame.getIconButtonSessionInfo().setEnabled(false);
+		mainFrame.getIconBarPanel().getIconButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
