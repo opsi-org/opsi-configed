@@ -105,7 +105,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 		} else {
 			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty		
 			setIcon(null);
-			setToolTipText(null);
+			setToolTipText("");
 		}
 
 		return this;
