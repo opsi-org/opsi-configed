@@ -18,19 +18,11 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
 		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
-		theTable.setDefaultRenderer(Object.class, new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
 	@Override
 	protected void setCellRenderers() {
-		//theTable.setDefaultRenderer(Object.class, new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
-		/*LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
-		for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			String name = tableModel.getColumnName(i);
-			TableColumn col = theTable.getColumn(name);
-		
-			col.setCellRenderer(new LicensingInfoTableCellRenderer(lInfoMap));
-		}*/
+		theTable.setDefaultRenderer(Object.class, new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
 	public void setMarkBoldHeaderCellRenderer() {
