@@ -20,11 +20,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
 	}
 
-	@Override
-	protected void setCellRenderers() {
-		theTable.setDefaultRenderer(Object.class, new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
-	}
-
 	public void setMarkBoldHeaderCellRenderer() {
 		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 			@Override

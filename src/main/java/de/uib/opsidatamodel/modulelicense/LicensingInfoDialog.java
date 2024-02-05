@@ -36,6 +36,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
+import de.uib.utilities.table.gui.LicensingInfoTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
@@ -361,6 +362,9 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		classNames = theModel.getClassNames();
 
 		thePanel.setTableModel(theModel);
+
+		thePanel.getTheTable().setDefaultRenderer(Object.class,
+				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
 	public void reload() {

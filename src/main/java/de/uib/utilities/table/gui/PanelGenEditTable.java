@@ -754,7 +754,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		setSorter();
 
 		setDataChanged(false);
-		setCellRenderers();
 
 		setModelFilteringBySelection();
 	}
@@ -916,10 +915,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				theTable.getColumnModel().getColumn(col).setCellRenderer(new ColorTableCellRenderer());
 			}
 		}
-	}
-
-	protected void setCellRenderers() {
-		// Leave empty to override 
 	}
 
 	public void setDataChanged(boolean b) {
