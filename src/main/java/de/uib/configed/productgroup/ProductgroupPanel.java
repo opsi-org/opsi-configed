@@ -406,7 +406,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		// create list with tooltips
 		JList<String> listChooseAction = new JList<>(modelChooseAction);
-		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(null, values, "");
+		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(values);
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);

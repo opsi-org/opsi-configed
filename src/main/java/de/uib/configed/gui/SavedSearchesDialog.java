@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -255,19 +254,17 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		SavedSearches savedSearches = manager.getSavedSearches();
 		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
-		Map<String, String> valueMap = new HashMap<>();
 		Map<String, String> descMap = new TreeMap<>();
 
 		for (String ele : nameSet) {
 			model.addElement(ele);
-			valueMap.put(ele, ele);
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
 		searchPane.setTargetModel(new SearchTargetModelFromJList(visibleList, new ArrayList<>(descMap.keySet()),
 				new ArrayList<>(descMap.values())));
 
-		setCellRenderer(new ListCellRendererByIndex(valueMap, descMap, ""));
+		setCellRenderer(new ListCellRendererByIndex(descMap));
 
 		initSelection();
 	}

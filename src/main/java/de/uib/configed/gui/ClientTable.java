@@ -379,13 +379,11 @@ public class ClientTable extends JPanel implements KeyListener {
 
 			Logging.debug(this, "remoteControls " + remoteControls);
 
-			Map<String, String> entries = new LinkedHashMap<>();
 			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 
 			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
-				entries.put(entry.getKey(), entry.getKey());
 				RemoteControl rc = entry.getValue();
 				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
 					tooltips.put(entry.getKey(), rc.getDescription());
@@ -406,7 +404,7 @@ public class ClientTable extends JPanel implements KeyListener {
 			sortedKeys.sort(Comparator.comparing(String::toString));
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
 
 			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 			dialogRemoteControl.setModal(false);
