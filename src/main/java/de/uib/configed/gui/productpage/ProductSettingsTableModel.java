@@ -13,7 +13,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -45,19 +44,19 @@ public class ProductSettingsTableModel {
 
 	private ListCellRenderer<Object> standardListCellRenderer;
 
-	private TableCellRenderer productNameTableCellRenderer;
-	private TableCellRenderer productCompleteNameTableCellRenderer;
+	private ColorTableCellRenderer colorTableCellRenderer;
 
-	private TableCellRenderer targetConfigurationTableCellRenderer;
-	private TableCellRenderer installationStatusTableCellRenderer;
-	private TableCellRenderer actionRequestTableCellRenderer;
+	private ProductNameTableCellRenderer productNameTableCellRenderer;
+
+	private ColoredTableCellRendererByIndex installationStatusTableCellRenderer;
+	private ColoredTableCellRendererByIndex actionRequestTableCellRenderer;
 	private ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
 	private ColoredTableCellRenderer productsequenceTableCellRenderer;
 
 	private ColoredTableCellRenderer versionInfoTableCellRenderer;
 	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
-	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
+	private ColoredTableCellRenderer coloredTableCellRenderer;
 
 	private JTable tableProducts;
 
@@ -74,9 +73,7 @@ public class ProductSettingsTableModel {
 
 		productNameTableCellRenderer = new ProductNameTableCellRenderer();
 
-		productCompleteNameTableCellRenderer = new ColorTableCellRenderer();
-
-		targetConfigurationTableCellRenderer = new ColorTableCellRenderer();
+		colorTableCellRenderer = new ColorTableCellRenderer();
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
 				InstallationStatus.getLabel2TextColor());
@@ -85,8 +82,7 @@ public class ProductSettingsTableModel {
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex();
 
-		lastStateChangeTableCellRenderer = new ColoredTableCellRenderer();
-
+		coloredTableCellRenderer = new ColoredTableCellRenderer();
 		productsequenceTableCellRenderer = new ColoredTableCellRenderer();
 
 		versionInfoTableCellRenderer = new ProductVersionCellRenderer();
@@ -128,7 +124,7 @@ public class ProductSettingsTableModel {
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_NAME)) > -1) {
 			TableColumn completeNameColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			completeNameColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_COMPLETE_NAME);
-			completeNameColumn.setCellRenderer(productCompleteNameTableCellRenderer);
+			completeNameColumn.setCellRenderer(colorTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_TARGET_CONFIGURATION)) > -1) {
@@ -139,7 +135,7 @@ public class ProductSettingsTableModel {
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
-			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
+			targetColumn.setCellRenderer(colorTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_STATUS)) > -1) {
@@ -167,7 +163,7 @@ public class ProductSettingsTableModel {
 			TableColumn laststatechangeColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			laststatechangeColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
-			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
+			laststatechangeColumn.setCellRenderer(coloredTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_PRIORITY)) > -1) {
