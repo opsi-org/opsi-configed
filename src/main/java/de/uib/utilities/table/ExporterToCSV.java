@@ -30,7 +30,7 @@ public class ExporterToCSV extends AbstractExportTable {
 	private static final String THIS_EXTENSION = ".csv";
 
 	public ExporterToCSV(JTable table) {
-		super(table, null);
+		super(table);
 
 		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
