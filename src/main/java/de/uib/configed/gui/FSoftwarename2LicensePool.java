@@ -52,7 +52,6 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 	private GenTableModel modelSWnames;
 
 	private List<String> columnNames;
-	private List<String> classNames;
 
 	private PanelGenEditTable panelSWxLicensepool;
 	private GenTableModel modelSWxLicensepool;
@@ -251,11 +250,6 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		columnNames = new ArrayList<>();
 		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
-		}
-
-		classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new ArrayList<>();

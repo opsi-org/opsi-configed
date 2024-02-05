@@ -129,14 +129,12 @@ public class CSVImportDataModifier {
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
-		List<String> classNames = new ArrayList<>();
-		populateClassNames(classNames, columnNames);
 
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
-		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
+		TableSource source = new MapSource(columnNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
 		GenTableModel createdModel = new GenTableModel(updateItemFactory, new DefaultTableProvider(source), 0,
@@ -159,16 +157,6 @@ public class CSVImportDataModifier {
 		for (Map<String, Object> line : data) {
 			theSourceMap.put(String.valueOf(id), line);
 			id++;
-		}
-	}
-
-	private static void populateClassNames(List<String> classNames, List<String> columnNames) {
-		if (!classNames.isEmpty()) {
-			classNames.clear();
-		}
-
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
 		}
 	}
 

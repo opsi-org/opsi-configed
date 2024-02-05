@@ -552,7 +552,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {

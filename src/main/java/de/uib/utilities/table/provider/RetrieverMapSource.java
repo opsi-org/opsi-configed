@@ -14,15 +14,14 @@ public class RetrieverMapSource extends MapSource {
 
 	private MapRetriever retriever;
 
-	public RetrieverMapSource(List<String> columnNames, List<String> classNames, MapRetriever retriever,
-			boolean rowCounting) {
-		super(columnNames, classNames, null, rowCounting);
+	public RetrieverMapSource(List<String> columnNames, MapRetriever retriever, boolean rowCounting) {
+		super(columnNames, null, rowCounting);
 		this.retriever = retriever;
 		rows = new ArrayList<>();
 	}
 
 	public RetrieverMapSource(List<String> columnNames, MapRetriever retriever) {
-		this(columnNames, null, retriever, false);
+		this(columnNames, retriever, false);
 	}
 
 	@Override

@@ -42,12 +42,10 @@ public class MapSource implements TableSource {
 
 	protected boolean reloadRequested = true;
 
-	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
-			boolean rowCounting) {
+	public MapSource(List<String> columnNames, Map<String, Map<String, Object>> table, boolean rowCounting) {
 		Logging.info(this.getClass(), "constructed with cols " + columnNames);
 		Logging.info(this.getClass(), "constructed with classes " + classNames);
 		this.columnNames = columnNames;
-		this.classNames = classNames;
 		this.table = table;
 		this.rowCounting = rowCounting;
 
