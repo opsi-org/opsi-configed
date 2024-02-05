@@ -11,8 +11,6 @@ import java.util.List;
 public interface TableSource {
 	List<String> retrieveColumnNames();
 
-	List<String> retrieveClassNames();
-
 	// we get a new version
 	List<List<Object>> retrieveRows();
 

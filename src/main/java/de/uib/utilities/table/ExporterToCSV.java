@@ -48,10 +48,6 @@ public class ExporterToCSV extends AbstractExportTable {
 			return;
 		}
 
-		if (theTable.getModel() instanceof GenTableModel) {
-			setClassNames(((GenTableModel) theTable.getModel()).getClassNames());
-		}
-
 		if ((fileName = checkFile(fileName, extensionFilter)) != null) {
 			writeToCSVFile(fileName, onlySelectedRows);
 		}

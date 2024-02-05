@@ -7,7 +7,6 @@
 package de.uib.utilities.table.provider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,18 +22,9 @@ import de.uib.utilities.logging.Logging;
 public class MapSource implements TableSource {
 	private static final String ROW_COUNTER_NAME = "rowcounter";
 
-	private static final Map<String, Object> class2defaultValue;
-	static {
-		class2defaultValue = new HashMap<>();
-		class2defaultValue.put("java.lang.Boolean", false);
-		class2defaultValue.put("java.lang.String", "");
-	}
-
 	private boolean rowCounting;
 
 	private List<String> columnNames;
-
-	private List<String> classNames;
 
 	protected Map<String, Map<String, Object>> table;
 
@@ -44,7 +34,6 @@ public class MapSource implements TableSource {
 
 	public MapSource(List<String> columnNames, Map<String, Map<String, Object>> table, boolean rowCounting) {
 		Logging.info(this.getClass(), "constructed with cols " + columnNames);
-		Logging.info(this.getClass(), "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.table = table;
 		this.rowCounting = rowCounting;
@@ -56,7 +45,6 @@ public class MapSource implements TableSource {
 		setRowCounting(rowCounting);
 		if (rowCounting) {
 			Logging.info(this, "completed to cols " + columnNames);
-			Logging.info(this, "completed to classes " + classNames);
 		}
 		rows = new ArrayList<>();
 	}
@@ -87,7 +75,6 @@ public class MapSource implements TableSource {
 
 				if (obj != null) {
 					vRow.add(obj);
-					warnIfDataWrongClass(obj, classNames.get(i));
 				} else if (mRow.containsKey(columnNames.get(i))) {
 					Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
 							+ " supplement by null");
@@ -96,8 +83,6 @@ public class MapSource implements TableSource {
 					vRow.add(obj);
 				} else if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 					vRow.add("" + rowCount);
-				} else if (class2defaultValue.get(classNames.get(i)) != null) {
-					vRow.add(class2defaultValue.get(classNames.get(i)));
 				} else {
 					Logging.warning(this,
 							"fetchData row " + mRow + " ob == null, possibly the column name is not correct, column "
@@ -134,11 +119,6 @@ public class MapSource implements TableSource {
 	}
 
 	@Override
-	public List<String> retrieveClassNames() {
-		return classNames;
-	}
-
-	@Override
 	public List<List<Object>> retrieveRows() {
 		Logging.info(this, " -- retrieveRows");
 		fetchData();
@@ -161,7 +141,6 @@ public class MapSource implements TableSource {
 		if (!rowCounting && b) {
 			rowCounting = true;
 
-			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
 			columnNames.add(ROW_COUNTER_NAME);
 		}
