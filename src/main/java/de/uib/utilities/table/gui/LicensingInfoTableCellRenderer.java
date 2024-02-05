@@ -11,7 +11,6 @@ import java.awt.Font;
 import java.util.Map;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -19,7 +18,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
+public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	protected LicensingInfoMap licensingInfoMap;
 
 	public LicensingInfoTableCellRenderer(LicensingInfoMap lInfoMap) {
@@ -35,22 +34,16 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		ColorTableCellRenderer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0);
 
 		String latestChange = licensingInfoMap.getLatestDate();
 		String columnName = licensingInfoMap.getColumnNames().get(column);
 		String rowName = licensingInfoMap.getModules().get(row);
 
-		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
-				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available")))) {
-			setToolTipText(value.toString());
-		}
-
-		setIcon(null);
 		if (columnName == null) {
 			Logging.warning(this, "columnName is null");
 		} else if (columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
-			setText("");
+			setText(null);
+			setToolTipText(null);
 
 			if (value.equals(true)) {
 				setIcon(Utils.createImageIcon("images/checked_withoutbox.png", ""));
@@ -70,6 +63,8 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			} else {
 				setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
 			}
+
+			setIcon(null);
 
 			if (columnName.equals(latestChange)) {
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
@@ -108,7 +103,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				}
 			}
 		} else {
-			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
+			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty		
+			setIcon(null);
+			setToolTipText(null);
 		}
 
 		return this;
