@@ -3,11 +3,10 @@
 ## [4.3.x.x] - XXXX-XX-XX
 ## Fixed
 - Modules file uploading via SFTP
-
+- `NullPointerException` when priority or position columns in localboot or netboot product tab is displayed by default
 
 ## Changed
 - Remove net_connection from default WAN config
-
 
 ## [4.3.1.6] - 2024-02-01
 ## Fixed
@@ -16,12 +15,10 @@
 - Enable messagebus updates after reconnection to server
 - Logviewer can open files without file extension
 
-
 ## Changed
 - Rename RPC method `softwareLicenseFromLicensePool_delete` to `softwareLicenseToLicensePool_delete`
 - Small performance improvement on startup, reload and depot change in environments with many clients
 - Make extra credits dialogue to separate Credits from About dialogue
-
 
 ## Added
 - Add search field for product selection dialogue
