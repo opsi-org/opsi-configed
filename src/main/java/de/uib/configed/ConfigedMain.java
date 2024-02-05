@@ -410,7 +410,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
-		mainFrame.updateHostCheckboxenText();
+		mainFrame.getClientInfoPanel().updateClientCheckboxText();
 		mainFrame.enableAfterLoading();
 	}
 
@@ -885,7 +885,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.setClientInfoediting(getSelectedClients().size() == 1);
+			mainFrame.getClientInfoPanel().setClientInfoEditing(getSelectedClients().size() == 1);
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
@@ -909,9 +909,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			clientInDepot = depotsAdded.toString();
 
 			if (getSelectedClients().size() == 1) {
-				mainFrame.setClientID(getSelectedClients().get(0));
+				mainFrame.getClientInfoPanel().setClientID(getSelectedClients().get(0));
 			} else {
-				mainFrame.setClientID("");
+				mainFrame.getClientInfoPanel().setClientID("");
 			}
 
 			hostInfo.resetGui();
@@ -2819,7 +2819,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			requestRefreshDataForClientSelection();
 
-			mainFrame.updateHostCheckboxenText();
+			mainFrame.getClientInfoPanel().updateClientCheckboxText();
 			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
