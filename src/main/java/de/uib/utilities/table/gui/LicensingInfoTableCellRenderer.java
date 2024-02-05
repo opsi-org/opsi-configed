@@ -46,6 +46,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			setToolTipText(value.toString());
 		}
 
+		setIcon(null);
 		if (columnName == null) {
 			Logging.warning(this, "columnName is null");
 		} else if (columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {

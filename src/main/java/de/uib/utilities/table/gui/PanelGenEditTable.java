@@ -47,7 +47,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -68,7 +67,6 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
-import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
 import utils.PopupMouseListener;
@@ -905,7 +903,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	/**
-	 * should mark the columns which are editable after being generated
+	 * should mark the columns which are editable after being generated // TODO
+	 * remove?
 	 */
 	public void setEmphasizedColumns(int[] cols) {
 		if (cols == null) {
@@ -920,22 +919,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	protected void setCellRenderers() {
-		for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			String name = tableModel.getColumnName(i);
-			TableColumn tableColumn = theTable.getColumn(name);
-			String classname = tableModel.getClassNames().get(i);
-
-			switch (classname) {
-			case "java.sql.Timestamp":
-				tableColumn.setCellRenderer(new TableCellRendererDate());
-				break;
-
-			default:
-				// no special renderer set
-				tableColumn.setCellRenderer(new ColorTableCellRenderer());
-				break;
-			}
-		}
+		// Leave empty to override 
 	}
 
 	public void setDataChanged(boolean b) {
