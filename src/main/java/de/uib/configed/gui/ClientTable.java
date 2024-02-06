@@ -431,7 +431,7 @@ public class ClientTable extends JPanel implements KeyListener {
 			startRemoteControlForSelectedClients();
 		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
 			Logging.debug(this, "keypressed: f10");
-			ConfigedMain.getMainFrame().showPopupClients();
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().showPopupClients();
 		} else {
 			// Nothing to do for all the other keys
 		}

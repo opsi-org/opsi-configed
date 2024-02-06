@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -20,7 +19,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -38,21 +36,16 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -60,13 +53,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.gui.hostconfigs.PanelHostConfig;
-import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
-import de.uib.configed.gui.hwinfopage.PanelHWInfo;
-import de.uib.configed.gui.productpage.PanelProductProperties;
-import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.configed.gui.swinfopage.PanelSWInfo;
-import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -81,11 +67,9 @@ import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.FEditObject;
-import utils.PopupMouseListener;
 import utils.Utils;
 
 public class MainFrame extends JFrame {
@@ -146,34 +130,10 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
 	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
 
-	private JPopupMenu popupClients;
-
 	private BorderLayout borderLayout1 = new BorderLayout();
-	private JTabbedPane jTabbedPaneConfigPanes;
-	private JSplitPane panelClientSelection;
+	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
 	private HostsStatusPanel statusPane;
-
-	private PanelProductSettings panelLocalbootProductSettings;
-	private PanelProductSettings panelNetbootProductSettings;
-	private PanelHostConfig panelHostConfig;
-	private PanelHostProperties panelHostProperties;
-	private PanelProductProperties panelProductProperties;
-
-	private PanelHWInfo panelHWInfo;
-	private JPanel showHardwareLogNotFound;
-	private ControllerHWinfoMultiClients controllerHWinfoMultiClients;
-	private JPanel showHardwareLogMultiClientReport;
-	private JPanel showHardwareLogParentOfNotFoundPanel;
-	private JPanel showHardwareLog;
-	private JLabel labelNoSoftware;
-
-	private PanelSWInfo panelSWInfo;
-	private JPanel showSoftwareLogNotFound;
-	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private JPanel showSoftwareLog;
-
-	private TabbedLogPane showLogfiles;
 
 	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 
@@ -187,7 +147,6 @@ public class MainFrame extends JFrame {
 
 	private ClientTree treeClients;
 
-	private ClientInfoPanel clientInfoPanel;
 	private IconBarPanel iconBarPanel;
 
 	private LicenseDisplayer licenseDisplayer;
@@ -235,16 +194,16 @@ public class MainFrame extends JFrame {
 		return iconBarPanel;
 	}
 
-	public HostsStatusPanel getHostsStatusPanel() {
-		return statusPane;
+	public ClientMenu getClientMenu() {
+		return clientMenu;
 	}
 
-	// This shall be called after MainFrame is made visible
-	public void initSplitPanes() {
-		panelClientSelection.setDividerLocation(0.8);
-		panelLocalbootProductSettings.setDividerLocation(0.8);
-		panelNetbootProductSettings.setDividerLocation(0.8);
-		panelProductProperties.setDividerLocation(0.8);
+	public TabbedConfigPanes getTabbedConfigPanes() {
+		return jTabbedPaneConfigPanes;
+	}
+
+	public HostsStatusPanel getHostsStatusPanel() {
+		return statusPane;
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -583,7 +542,6 @@ public class MainFrame extends JFrame {
 		jMenuClientselection.add(jMenuClientselectionFailedProduct);
 		jMenuClientselection.add(jMenuClientselectionFailedInPeriod);
 
-		// ----------
 		jMenuClientselection.addSeparator();
 		jMenuClientselection.add(jMenuClientselectionToggleClientFilter);
 	}
@@ -739,13 +697,16 @@ public class MainFrame extends JFrame {
 
 		this.setIconImage(Utils.getMainIcon());
 
+		clientMenu = new ClientMenu(this, configedMain);
+		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
 		JPanel allPanel = new JPanel();
 		allPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Logging.debug(this, "componentResized");
 
-				moveDivider1(panelClientSelection, clientInfoPanel, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+				moveDivider1(jTabbedPaneConfigPanes.getPanelClientSelection(),
+						jTabbedPaneConfigPanes.getClientInfoPanel(), (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 						(int) (F_WIDTH_RIGHTHANDED * 1.5));
 				Logging.debug(this, "componentResized ready");
 			}
@@ -756,7 +717,6 @@ public class MainFrame extends JFrame {
 
 		initMenuData();
 
-		clientMenu = new ClientMenu(this, configedMain);
 		setupMenuFile();
 		setupMenuGrouping();
 		setupMenuServer();
@@ -817,9 +777,6 @@ public class MainFrame extends JFrame {
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE));
 
-		jTabbedPaneConfigPanes = new JTabbedPane();
-		jTabbedPaneConfigPanes.setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
-
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
@@ -833,158 +790,10 @@ public class MainFrame extends JFrame {
 		allPanel.add(centralPane, BorderLayout.CENTER);
 		allPanel.add(statusPane, BorderLayout.SOUTH);
 
-		// tab panes
-
-		jTabbedPaneConfigPanes.addChangeListener((ChangeEvent e) -> {
-			// report state change request to
-			int visualIndex = jTabbedPaneConfigPanes.getSelectedIndex();
-
-			// report state change request to controller
-
-			Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
-			configedMain.setViewIndex(visualIndex);
-
-			// retrieve the state index finally produced by main
-			int newStateIndex = configedMain.getViewIndex();
-
-			// if the controller did not accept the new index set it back
-			// observe that we get a recursion since we initiate another state change
-			// the recursion breaks since main.setViewIndex does not yield a different value
-			if (visualIndex != newStateIndex) {
-				jTabbedPaneConfigPanes.setSelectedIndex(newStateIndex);
-			}
-		});
-
-		popupClients = clientMenu.getPopupMenuClone();
-		clientTable.addMouseListener(new PopupMouseListener(popupClients));
-
-		clientInfoPanel = new ClientInfoPanel(configedMain);
-		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, clientTable, clientInfoPanel);
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null,
-				panelClientSelection, null, ConfigedMain.VIEW_CLIENTS);
-
-		panelLocalbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
-				configedMain.getDisplayFieldsLocalbootProducts(),
-				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
-
-		panelNetbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
-				configedMain.getDisplayFieldsNetbootProducts(),
-				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
-				panelLocalbootProductSettings, null, ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), null,
-				panelNetbootProductSettings, null, ConfigedMain.VIEW_NETBOOT_PRODUCTS);
-
-		panelHostConfig = new PanelHostConfig(configedMain);
-
-		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null,
-				panelHostConfig, null, ConfigedMain.VIEW_NETWORK_CONFIGURATION);
-
-		showHardwareLog = new JPanel();
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null,
-				showHardwareLog, null, ConfigedMain.VIEW_HARDWARE_INFO);
-
-		initSoftWareInfo();
-		initHardwareInfo();
-
-		labelNoSoftware = new JLabel();
-
-		showSoftwareLogNotFound = new JPanel(new FlowLayout());
-		showSoftwareLogNotFound.add(labelNoSoftware);
-
-		showSoftwareLog = showSoftwareLogNotFound;
-
-		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
-		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null,
-				showSoftwareLog, null, ConfigedMain.VIEW_SOFTWARE_INFO);
-
-		showLogfiles = new TabbedLogPane(configedMain) {
-			@Override
-			public void loadDocument(String logtype) {
-				super.loadDocument(logtype);
-				Logging.info(this, "loadDocument logtype " + logtype);
-				setUpdatedLogfilePanel(logtype);
-			}
-		};
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null, showLogfiles,
-				null, ConfigedMain.VIEW_LOG);
-
-		showLogfiles.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
-
-			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
-
-			// logfile empty?
-			if (!configedMain.logfileExists(logtype)) {
-				setUpdatedLogfilePanel(logtype);
-			}
-		});
-
-		panelProductProperties = new PanelProductProperties(configedMain);
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null,
-				panelProductProperties, null, ConfigedMain.VIEW_PRODUCT_PROPERTIES);
-
-		Logging.info(this,
-				"added tab  " + Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
-						+ jTabbedPaneConfigPanes
-								.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-		panelHostProperties = new PanelHostProperties();
-		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
-
-		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null,
-				panelHostProperties, null, ConfigedMain.VIEW_HOST_PROPERTIES);
-
-		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
-				+ jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
-
-		jTabbedPaneConfigPanes.setSelectedIndex(0);
-
 		setTitle(configedMain.getAppTitle());
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
-	}
-
-	public ClientInfoPanel getClientInfoPanel() {
-		return clientInfoPanel;
-	}
-
-	public void showPopupClients() {
-		popupClients.show(clientTable, -1, -1);
-	}
-
-	public void setConfigPanesEnabled(boolean b) {
-		for (int i = 0; i < jTabbedPaneConfigPanes.getTabCount(); i++) {
-			jTabbedPaneConfigPanes.setEnabledAt(i, b);
-		}
-	}
-
-	public void setVisualViewIndex(int i) {
-		if (i >= 0 && i < jTabbedPaneConfigPanes.getTabCount()) {
-			jTabbedPaneConfigPanes.setSelectedIndex(i);
-		}
-	}
-
-	public void setConfigPaneEnabled(int tabindex, boolean b) {
-		jTabbedPaneConfigPanes.setEnabledAt(tabindex, b);
-	}
-
-	public int getTabIndex(String tabname) {
-		return jTabbedPaneConfigPanes.indexOfTab(tabname);
 	}
 
 	// -- helper methods for interaction
@@ -1311,155 +1120,6 @@ public class MainFrame extends JFrame {
 	public void enableAfterLoading() {
 		iconBarPanel.enableAfterLoading();
 		jMenuFrameLicenses.setEnabled(true);
-	}
-
-	private void initHardwareInfo() {
-		if (panelHWInfo == null) {
-			panelHWInfo = new PanelHWInfo(configedMain) {
-				@Override
-				protected void reload() {
-					super.reload();
-					// otherwise we get a wait cursor only in table component
-					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
-				}
-			};
-		}
-	}
-
-	private void showHardwareInfo() {
-		jTabbedPaneConfigPanes.setComponentAt(
-				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog")),
-				showHardwareLog);
-
-		showHardwareLog.repaint();
-	}
-
-	public void setHardwareInfoNotPossible(String label) {
-		Logging.info(this, "setHardwareInfoNotPossible");
-
-		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
-			showHardwareLogNotFound = new JPanel();
-			showHardwareLogNotFound.add(new JLabel(label));
-			showHardwareLogParentOfNotFoundPanel = new JPanel();
-
-			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
-			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
-		}
-
-		showHardwareLog = showHardwareLogParentOfNotFoundPanel;
-		showHardwareInfo();
-	}
-
-	public void setHardwareInfoMultiClients() {
-		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
-			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
-			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.getPanel();
-		}
-
-		Logging.info(this, "setHardwareInfoMultiClients ");
-
-		controllerHWinfoMultiClients.setFilter();
-		showHardwareLog = showHardwareLogMultiClientReport;
-
-		showHardwareInfo();
-	}
-
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
-		panelHWInfo.setHardwareInfo(hardwareInfo);
-
-		showHardwareLog = panelHWInfo;
-		showHardwareInfo();
-	}
-
-	private void showSoftwareInfo() {
-		jTabbedPaneConfigPanes.setComponentAt(
-				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")),
-				showSoftwareLog);
-
-		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
-	}
-
-	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
-			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().size());
-
-			showSoftwareLog = showSoftwareLogMultiClientReport;
-			showSoftwareInfo();
-		} else {
-			// handled by the following methods
-			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
-			showSoftwareLog = showSoftwareLogNotFound;
-			showSoftwareInfo();
-		}
-	}
-
-	private void initSoftWareInfo() {
-		panelSWInfo = new PanelSWInfo(configedMain) {
-			@Override
-			protected void reload() {
-				super.reload();
-				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
-			}
-		};
-	}
-
-	public void setSoftwareAudit(String hostId) {
-		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
-
-		Logging.debug(this, "setSoftwareAudit for " + hostId);
-		panelSWInfo.setAskForOverwrite(true);
-		panelSWInfo.setHost(hostId);
-		panelSWInfo.updateModel();
-
-		showSoftwareLog = panelSWInfo;
-
-		showSoftwareInfo();
-	}
-
-	public void setUpdatedLogfilePanel(String logtype) {
-		Logging.info(this, "setUpdatedLogfilePanel " + logtype);
-		setLogfilePanel(configedMain.getLogfilesUpdating(logtype));
-	}
-
-	public void setLogfilePanel(final Map<String, String> logs) {
-		jTabbedPaneConfigPanes.setComponentAt(
-				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_logfiles")),
-				showLogfiles);
-
-		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
-	}
-
-	public void setLogview(String logtype) {
-		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
-			return;
-		}
-		showLogfiles.setSelectedIndex(i);
-	}
-
-	public PanelProductSettings getPanelLocalbootProductSettings() {
-		return panelLocalbootProductSettings;
-	}
-
-	public PanelProductSettings getPanelNetbootProductSettings() {
-		return panelNetbootProductSettings;
-	}
-
-	public PanelHostConfig getPanelHostConfig() {
-		return panelHostConfig;
-	}
-
-	public PanelHostProperties getPanelHostProperties() {
-		return panelHostProperties;
-	}
-
-	public PanelProductProperties getPanelProductProperties() {
-		return panelProductProperties;
-	}
-
-	public ControllerHWinfoMultiClients getControllerHWinfoMultiClients() {
-		return controllerHWinfoMultiClients;
 	}
 
 	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
