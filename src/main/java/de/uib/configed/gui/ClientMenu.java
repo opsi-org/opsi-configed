@@ -91,6 +91,10 @@ public class ClientMenu extends JMenu {
 		initJMenu();
 	}
 
+	public JCheckBoxMenuItem getClientSelectionToggleFilterMenu() {
+		return jMenuClientSelectionToggleFilter;
+	}
+
 	@SuppressWarnings({ "java:S138" })
 	private void initJMenu() {
 		setText(Configed.getResourceValue("MainFrame.jMenuClients"));
@@ -578,10 +582,5 @@ public class ClientMenu extends JMenu {
 		}
 
 		return clonedItem;
-	}
-
-	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
-		jMenuClientSelectionToggleFilter.setState(configedMain.isFilterClientList());
 	}
 }

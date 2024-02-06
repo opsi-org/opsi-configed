@@ -1041,7 +1041,7 @@ public class MainFrame extends JFrame {
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
 		configedMain.toggleFilterClientList(rebuildClientListTableModel);
-		clientMenu.toggleClientFilterAction(rebuildClientListTableModel);
+		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
