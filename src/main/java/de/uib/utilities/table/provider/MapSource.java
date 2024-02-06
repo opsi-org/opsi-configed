@@ -84,6 +84,7 @@ public class MapSource implements TableSource {
 				} else if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 					vRow.add("" + rowCount);
 				} else {
+					vRow.add(null);
 					Logging.warning(this,
 							"fetchData row " + mRow + " ob == null, possibly the column name is not correct, column "
 									+ i + ", " + columnNames.get(i));
