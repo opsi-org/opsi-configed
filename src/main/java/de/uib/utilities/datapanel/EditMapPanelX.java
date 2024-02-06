@@ -353,9 +353,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			}
 		};
 
-		TableCellRenderer colorized = new ColorTableCellRenderer();
-
-		table.setDefaultRenderer(Object.class, colorized);
+		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));

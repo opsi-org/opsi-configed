@@ -30,14 +30,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	private JTextField jTextFieldUser;
 	private JTextField jTextFieldPassword;
 	private JLabel jLabelPassword;
-	private SSHWgetAuthenticationPanel instance;
 
 	public SSHWgetAuthenticationPanel() {
 		super();
 		initComponents();
 		initLayout();
-		this.close();
-		instance = this;
 	}
 
 	private void initComponents() {
@@ -48,9 +45,9 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		jCheckBoxNeedAuthentication = new JCheckBox();
 		jCheckBoxNeedAuthentication.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-				instance.open();
+				open();
 			} else {
-				instance.close();
+				close();
 			}
 		});
 		jLabeluser = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
@@ -70,19 +67,17 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	}
 
 	public JComponent get(String comp) {
+		JComponent result;
 		if (comp.equals(LBLNEEDAUTH)) {
-			return jLabelNeedAuthentication;
+			result = jLabelNeedAuthentication;
+		} else if (comp.equals(CBNEEDAUTH)) {
+			result = jCheckBoxNeedAuthentication;
+		} else if (comp.equals(LBLUSER)) {
+			result = jLabeluser;
+		} else {
+			result = null;
 		}
-
-		if (comp.equals(CBNEEDAUTH)) {
-			return jCheckBoxNeedAuthentication;
-		}
-
-		if (comp.equals(LBLUSER)) {
-			return jLabeluser;
-		}
-
-		return null;
+		return result;
 	}
 
 	public String getUser() {

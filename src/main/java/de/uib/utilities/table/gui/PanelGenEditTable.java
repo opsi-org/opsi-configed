@@ -47,7 +47,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -66,10 +65,7 @@ import de.uib.utilities.table.CursorrowObserver;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
-import de.uib.utilities.table.TableCellRendererCurrency;
-import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
 import utils.PopupMouseListener;
@@ -141,14 +137,12 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private boolean deleteAllowed = true;
 
-	private boolean switchLineColors = true;
-
 	private boolean awareOfSelectionListener;
 	private boolean awareOfTableChangedListener = true;
 
 	private boolean withTablesearchPane;
 
-	protected TablesearchPane searchPane;
+	protected TableSearchPane searchPane;
 
 	private boolean filteringActive;
 	private boolean singleSelection;
@@ -166,8 +160,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private AbstractExportTable exportTable;
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
-			int[] popupsWanted, boolean withTablesearchPane) {
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
+			boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
 		this.generalPopupPosition = generalPopupPosition;
@@ -200,22 +194,19 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			this.editing = false;
 		}
 
-		this.switchLineColors = switchLineColors;
-
 		initComponents();
 	}
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors,
-			int[] popupsWanted) {
-		this(title, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted) {
+		this(title, editing, generalPopupPosition, popupsWanted, false);
 	}
 
-	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, boolean switchLineColors) {
-		this(title, editing, generalPopupPosition, switchLineColors, null);
+	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition) {
+		this(title, editing, generalPopupPosition, null);
 	}
 
 	public PanelGenEditTable(String title, boolean editing) {
-		this(title, editing, 0, false);
+		this(title, editing, 0);
 	}
 
 	public PanelGenEditTable() {
@@ -238,10 +229,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		return result;
-	}
-
-	protected Object modifyHeaderValue(Object value) {
-		return value;
 	}
 
 	/**
@@ -290,11 +277,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
 
-		theTable = new JTableWithToolTips();
+		theTable = new JTable();
 
 		exportTable = new ExporterToCSV(theTable);
 
-		searchPane = new TablesearchPane(this, true, null);
+		searchPane = new TableSearchPane(this, true, null);
 
 		searchPane.setVisible(withTablesearchPane);
 
@@ -305,21 +292,9 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		// NOT WORK
 
-		if (switchLineColors) {
-			theTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		} else {
-			theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-		}
+		theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		theTable.addMouseListener(this);
-
-		theTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
-					@Override
-					protected Object modifyValue(Object value) {
-						return modifyHeaderValue(value);
-					}
-				});
 
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -778,7 +753,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		setSorter();
 
 		setDataChanged(false);
-		setCellRenderers();
 
 		setModelFilteringBySelection();
 	}
@@ -926,44 +900,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.setSelectMode(select);
 	}
 
-	/**
-	 * should mark the columns which are editable after being generated
-	 */
-	public void setEmphasizedColumns(int[] cols) {
-		if (cols == null) {
-			return;
-		}
-
-		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
-			for (int col : cols) {
-				theTable.getColumnModel().getColumn(col).setCellRenderer(new ColorTableCellRenderer());
-			}
-		}
-	}
-
-	protected void setCellRenderers() {
-		for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			String name = tableModel.getColumnName(i);
-			TableColumn tableColumn = theTable.getColumn(name);
-			String classname = tableModel.getClassNames().get(i);
-
-			switch (classname) {
-			case "java.sql.Timestamp":
-				tableColumn.setCellRenderer(new TableCellRendererDate());
-				break;
-
-			case "java.math.BigDecimal":
-				tableColumn.setCellRenderer(new TableCellRendererCurrency());
-				break;
-
-			default:
-				// no special renderer set
-				tableColumn.setCellRenderer(new StandardTableCellRenderer());
-				break;
-			}
-		}
-	}
-
 	public void setDataChanged(boolean b) {
 		if (!editing) {
 			return;
@@ -1045,7 +981,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return theTable.getSelectionModel();
 	}
 
-	public TablesearchPane getTheSearchpane() {
+	public TableSearchPane getTheSearchpane() {
 		return searchPane;
 	}
 

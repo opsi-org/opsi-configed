@@ -35,7 +35,6 @@ public class TargetConfiguration {
 
 	// mappings
 	private static Map<Integer, String> state2label;
-	private static Map<String, String> label2displayLabel;
 
 	private static Set<Integer> states;
 	private static List<String> labels;
@@ -73,23 +72,7 @@ public class TargetConfiguration {
 		state2label.put(ALWAYS, "always");
 		state2label.put(FORBIDDEN, "forbidden");
 
-		label2displayLabel = new HashMap<>();
-		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		label2displayLabel.put("undefined", "undefined");
-		label2displayLabel.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
-		label2displayLabel.put("always", "always");
-		label2displayLabel.put("forbidden", "forbidden");
-
-		choiceLabels = new String[] { label2displayLabel.get("undefined"),
-				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("always"),
-				label2displayLabel.get("forbidden") };
-	}
-
-	public static Map<String, String> getLabel2DisplayLabel() {
-		checkCollections();
-
-		return label2displayLabel;
+		choiceLabels = new String[] { "undefined", InstallationStatus.KEY_INSTALLED, "always", "forbidden" };
 	}
 
 	private static boolean existsState(int state) {

@@ -46,16 +46,15 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
+import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
 public class ClientTable extends JPanel implements KeyListener {
 
 	private JScrollPane scrollpane;
 
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 
 	private FDialogRemoteControl dialogRemoteControl;
 	private Map<String, RemoteControl> remoteControls;
@@ -83,7 +82,7 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		table.setDragEnabled(true);
 
-		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
+		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		table.setAutoCreateRowSorter(true);
 
@@ -93,8 +92,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		table.getTableHeader().setReorderingAllowed(false);
-		table.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
 		// Ask to be notified of selection changes.
 		selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
 		// the default implementation in JTable yields this type
@@ -104,7 +101,7 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		activateListSelectionListener();
 
-		searchPane = new TablesearchPane(new SearchTargetModelFromClientTable(table), true, null);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true, null);
 		searchPane.setFiltering(true);
 
 		// filter icon inside searchpane
@@ -382,13 +379,11 @@ public class ClientTable extends JPanel implements KeyListener {
 
 			Logging.debug(this, "remoteControls " + remoteControls);
 
-			Map<String, String> entries = new LinkedHashMap<>();
 			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 
 			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
-				entries.put(entry.getKey(), entry.getKey());
 				RemoteControl rc = entry.getValue();
 				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
 					tooltips.put(entry.getKey(), rc.getDescription());
@@ -409,7 +404,7 @@ public class ClientTable extends JPanel implements KeyListener {
 			sortedKeys.sort(Comparator.comparing(String::toString));
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
 
 			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 			dialogRemoteControl.setModal(false);

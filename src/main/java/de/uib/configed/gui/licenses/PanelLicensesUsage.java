@@ -61,7 +61,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 
 	private void initSubPanel() {
 		panelLicensePools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0, false,
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0,
 				new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
@@ -101,7 +101,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 
 	private void initComponents() {
 		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true,
-				0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+				0, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 

@@ -49,8 +49,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected static final int BUTTON_WIDTH = 30;
 
-	private Dimension areaDimension = new Dimension(300, 240);
-
 	private Object initialValue = "";
 	protected boolean leaveOnCommit = true;
 
@@ -101,7 +99,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected void createComponents() {
 		framingPanel = new JPanel();
-		editingArea = new JPanel(new BorderLayout());
+		editingArea = new JPanel(new BorderLayout(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
 		loggingPanel = new JPanel(new BorderLayout());
 		loggingPanel.setBorder(new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 				Globals.MIN_GAP_SIZE));
@@ -255,16 +253,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		leaveOnCommit = b;
 	}
 
-	public boolean init(Dimension usableAreaSize) {
-		if (editingArea.getComponentCount() != 1) {
-			Logging.error(" editing area not filled with component");
-			return false;
-		}
-
-		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
+	public void init() {
 		initComponents();
 		initEditing();
-		return true;
 	}
 
 	protected void initEditing() {
@@ -273,10 +264,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonAdd.setEnabled(false);
 		buttonRemove.setEnabled(false);
 		extraField.setText("");
-	}
-
-	public boolean init() {
-		return init(areaDimension);
 	}
 
 	public void setExtraLabel(String s) {

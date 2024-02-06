@@ -525,9 +525,7 @@ public class PanelProductSettings extends JSplitPane {
 		// delete old row sorter before setting new model
 
 		tableProducts.setModel(istm);
-
 		productSettingsTableModel.setRenderer(istm);
-		productSettingsTableModel.setRowSorter();
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();

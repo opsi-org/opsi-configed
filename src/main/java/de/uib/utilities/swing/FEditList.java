@@ -186,6 +186,10 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		}
 	}
 
+	public void setPreferredScrollPaneSize(Dimension size) {
+		scrollpane.setPreferredSize(size);
+	}
+
 	@Override
 	public Object getValue() {
 		return getSelectedList();
@@ -286,9 +290,9 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		/* Not needed */}
 
 	@Override
-	public boolean init() {
+	public void init() {
 		setStartValue(selValue);
-		return super.init();
+		super.init();
 	}
 
 	public List<O> getSelectedList() {

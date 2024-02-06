@@ -10,11 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
-
-import utils.Utils;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
 	// this is the normal preferred height for components with content.
@@ -22,37 +18,19 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	private static final int CELL_HEIGHT = 20;
 	protected static final int FILL_LENGTH = 20;
 
-	protected String tooltipPrefix = "";
-
 	public StandardListCellRenderer() {
 		super();
-	}
-
-	public StandardListCellRenderer(String tooltipPrefix) {
-		super();
-		this.tooltipPrefix = tooltipPrefix;
 	}
 
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
-		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		Dimension prefDimension = c.getPreferredSize();
+		Dimension prefDimension = getPreferredSize();
 		prefDimension.setSize(prefDimension.getWidth(), CELL_HEIGHT);
-		c.setPreferredSize(prefDimension);
+		setPreferredSize(prefDimension);
 
-		// condition true if c is null
-		if (!(c instanceof JComponent)) {
-			return c;
-		}
-
-		JComponent jc = (JComponent) c;
-
-		if (jc instanceof JLabel) {
-			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
-		}
-
-		return jc;
+		return this;
 	}
 }

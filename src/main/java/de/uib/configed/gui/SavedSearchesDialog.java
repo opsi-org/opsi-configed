@@ -6,12 +6,14 @@
 
 package de.uib.configed.gui;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.DefaultListModel;
@@ -30,6 +32,9 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
+import de.uib.utilities.table.gui.SearchTargetModel;
+import de.uib.utilities.table.gui.SearchTargetModelFromJList;
+import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
 public class SavedSearchesDialog extends FEditStringList {
@@ -40,7 +45,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	private ClientTable selectionPanel;
 	private ConfigedMain configedMain;
 
-	private GlassPane glassPane;
+	private TableSearchPane searchPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -68,9 +73,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		buttonAdd.setVisible(true);
 		buttonRemove.setVisible(false);
 		extraField.setVisible(false);
-
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
 	}
 
 	public void start() {
@@ -82,6 +84,13 @@ public class SavedSearchesDialog extends FEditStringList {
 	@Override
 	protected void createComponents() {
 		super.createComponents();
+
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
+				new ArrayList<>());
+		searchPane = new TableSearchPane(searchTargetModel, "savedsearches");
+		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane.setNarrow(true);
+		editingArea.add(searchPane, BorderLayout.NORTH);
 
 		// redefine buttonCommit
 		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
@@ -164,7 +173,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	@Override
 	protected void commit() {
-		glassPane.activate(true);
+		setCursor(Globals.WAIT_CURSOR);
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -184,6 +193,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		} finally {
 			buttonCommit.setEnabled(true);
 			buttonCancel.setEnabled(true);
+			setCursor(null);
 		}
 
 		Logging.info(this, "commit result == null " + (result == null));
@@ -191,8 +201,6 @@ public class SavedSearchesDialog extends FEditStringList {
 			Logging.info(this, "result size " + result.size());
 			selectionPanel.setSelectedValues(result);
 		}
-
-		glassPane.activate(false);
 	}
 
 	@Override
@@ -246,16 +254,17 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		SavedSearches savedSearches = manager.getSavedSearches();
 		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
-		Map<String, String> valueMap = new HashMap<>();
-		Map<String, String> descMap = new HashMap<>();
+		Map<String, String> descMap = new TreeMap<>();
 
 		for (String ele : nameSet) {
 			model.addElement(ele);
-			valueMap.put(ele, ele);
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		setCellRenderer(new ListCellRendererByIndex(valueMap, descMap, ""));
+		searchPane.setTargetModel(new SearchTargetModelFromJList(visibleList, new ArrayList<>(descMap.keySet()),
+				new ArrayList<>(descMap.values())));
+
+		setCellRenderer(new ListCellRendererByIndex(descMap));
 
 		initSelection();
 	}

@@ -16,7 +16,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTable;
@@ -69,19 +68,15 @@ public class ExporterToPDF extends AbstractExportTable {
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;
 
-	public ExporterToPDF(JTable table, List<String> classNames) {
-		super(table, classNames);
+	public ExporterToPDF(JTable table) {
+		super(table);
 		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
 		document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 	}
 
 	public ExporterToPDF(PanelGenEditTable table) {
-		this(table.getTheTable(), null);
-	}
-
-	public ExporterToPDF(JTable table) {
-		this(table, null);
+		this(table.getTheTable());
 	}
 
 	@Override

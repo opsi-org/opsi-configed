@@ -43,7 +43,7 @@ import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
-public class TablesearchPane extends JPanel implements DocumentListener, KeyListener {
+public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
 	private static final int BLINK_RATE = 0;
 	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
 	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
@@ -109,7 +109,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String            saving of states is activated, the keys are
 	 *                          tagged with the parameter
 	 */
-	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
+	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
 		this(null, targetModel, withRegEx, savedStatesObjectTag);
 	}
 
@@ -122,11 +122,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String  saving of states is activated, the keys are tagged with
 	 *                the parameter
 	 */
-	public TablesearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
+	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
 		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
 	}
 
-	public TablesearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx,
+	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx,
 			String savedStatesObjectTag) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
@@ -148,7 +148,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String            saving of states is activated, the keys are
 	 *                          tagged with the parameter
 	 */
-	public TablesearchPane(SearchTargetModel targetModel, String savedStatesObjectTag) {
+	public TableSearchPane(SearchTargetModel targetModel, String savedStatesObjectTag) {
 		this(targetModel, false, savedStatesObjectTag);
 	}
 

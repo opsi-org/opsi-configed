@@ -34,7 +34,6 @@ public final class ActionResult {
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
-	private static Map<String, String> label2displayLabel;
 
 	private static Set<Integer> states;
 	private static List<String> labels;
@@ -86,20 +85,6 @@ public final class ActionResult {
 		label2state.put("none", NONE);
 		label2state.put("failed", FAILED);
 		label2state.put("successful", SUCCESSFUL);
-
-		label2displayLabel = new HashMap<>();
-		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
-		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
-		label2displayLabel.put("not_available", "not_available");
-		label2displayLabel.put("none", "none");
-		label2displayLabel.put("failed", "failed");
-		label2displayLabel.put("successful", "success");
-	}
-
-	public static Map<String, String> getLabel2DisplayLabel() {
-		checkCollections();
-
-		return label2displayLabel;
 	}
 
 	private static boolean existsState(int state) {
@@ -147,7 +132,7 @@ public final class ActionResult {
 	public static String getDisplayLabel(int state) {
 		checkCollections();
 
-		return label2displayLabel.get(getLabel(state));
+		return getLabel(state);
 	}
 
 	// instance methods

@@ -177,7 +177,7 @@ public class HostDataService {
 				itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
 				itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 				itemProducts.put("clientId", newClientId);
-				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
+				itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
 				productsNetbootJsonObject.add(itemProducts);
 			}
 
@@ -323,7 +323,7 @@ public class HostDataService {
 			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
 			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
+			itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
 			jsonObjects.add(itemProducts);
 			omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, new Object[] { jsonObjects });
 			result = exec.doCall(omc);

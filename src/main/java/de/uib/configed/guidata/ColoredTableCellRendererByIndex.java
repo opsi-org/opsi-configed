@@ -20,45 +20,40 @@ import java.util.Map;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.table.gui.TableCellRendererByIndex;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
-public class ColoredTableCellRendererByIndex extends TableCellRendererByIndex {
+public class ColoredTableCellRendererByIndex extends ColorTableCellRenderer {
 	private Map<String, Color> mapOfTextColors;
 
-	public ColoredTableCellRendererByIndex(Map<String, String> mapOfStringValues, String tooltipPrefix) {
-		this(null, mapOfStringValues, tooltipPrefix);
+	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors) {
+		super();
+		this.mapOfTextColors = mapOfTextColors;
 	}
 
-	public ColoredTableCellRendererByIndex(Map<String, Color> mapOfTextColors, Map<String, String> mapOfStringValues,
-			String tooltipPrefix) {
-		super(mapOfStringValues, tooltipPrefix);
-		this.mapOfTextColors = mapOfTextColors;
+	public ColoredTableCellRendererByIndex() {
+		this(null);
 	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-		if (value == null) {
-			return c;
-		}
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value.equals(Globals.CONFLICT_STATE_STRING)) {
-			c.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
+			setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 		} else if (mapOfTextColors != null && value instanceof String) {
 			Color textcolor = mapOfTextColors.get(value);
 			if (textcolor != null) {
 				if (textcolor.equals(Globals.INVISIBLE)) {
-					c.setForeground(c.getBackground());
+					setForeground(getBackground());
 				} else {
-					c.setForeground(textcolor);
+					setForeground(textcolor);
 				}
 			}
 		} else {
 			// Do nothing. Leave default foreground color since no special coloring was found
 		}
 
-		return c;
+		return this;
 	}
 }

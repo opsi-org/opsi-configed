@@ -6,8 +6,6 @@
 
 package de.uib.opsidatamodel.productstate;
 
-import static java.util.Map.entry;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,7 @@ public class ProductState extends HashMap<String, String> {
 			"actionProgress", "actionResult", "priority", "actionSequence");
 
 	// directly taken values
-	public static final String KEY_LAST_STATE_CHANGE = "stateChange";
+	public static final String KEY_LAST_STATE_CHANGE = "modificationTime";
 	public static final String KEY_PRODUCT_VERSION = "productVersion";
 	public static final String KEY_PACKAGE_VERSION = "packageVersion";
 	public static final String KEY_TARGET_CONFIGURATION = TargetConfiguration.KEY;
@@ -35,7 +33,7 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_PRODUCT_ID = "productId";
 
 	public static final String KEY_PRODUCT_PRIORITY = "priority";
-	public static final String KEY_ACTION_SEQUENCE = ActionSequence.KEY;
+	public static final String KEY_ACTION_SEQUENCE = "actionSequence";
 
 	// transformed values
 	public static final String KEY_INSTALLATION_INFO = "installationInfo";
@@ -49,15 +47,6 @@ public class ProductState extends HashMap<String, String> {
 			KEY_INSTALLATION_STATUS, KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION,
 			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_POSITION, KEY_ACTION_REQUEST, KEY_VERSION_INFO,
 			KEY_PRODUCT_VERSION, KEY_PACKAGE_VERSION, KEY_LAST_STATE_CHANGE);
-
-	public static final Map<String, String> key2servicekey = Map.ofEntries(entry(KEY_PRODUCT_ID, "productId"),
-			entry(KEY_TARGET_CONFIGURATION, "targetConfiguration"),
-			entry(KEY_INSTALLATION_STATUS, "installationStatus"), entry(KEY_ACTION_RESULT, "actionResult"),
-			entry(KEY_ACTION_PROGRESS, "actionProgress"), entry(KEY_LAST_ACTION, "lastAction"),
-			entry(KEY_PRODUCT_PRIORITY, "priority"), entry(KEY_POSITION, "position"),
-			entry(KEY_ACTION_SEQUENCE, "actionSequence"), entry(KEY_ACTION_REQUEST, "actionRequest"),
-			entry(KEY_PRODUCT_VERSION, "productVersion"), entry(KEY_PACKAGE_VERSION, "packageVersion"),
-			entry(KEY_LAST_STATE_CHANGE, "modificationTime"));
 
 	private final Map<String, String> retrieved;
 
@@ -88,24 +77,24 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void readRetrieved() {
-		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
+		put(KEY_PRODUCT_ID, getRetrievedValue(KEY_PRODUCT_ID));
 
-		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(key2servicekey.get(KEY_TARGET_CONFIGURATION)));
-		put(KEY_INSTALLATION_STATUS, getRetrievedValue(key2servicekey.get(KEY_INSTALLATION_STATUS)));
+		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(KEY_TARGET_CONFIGURATION));
+		put(KEY_INSTALLATION_STATUS, getRetrievedValue(KEY_INSTALLATION_STATUS));
 
-		put(KEY_ACTION_RESULT, getRetrievedValue(key2servicekey.get(KEY_ACTION_RESULT)));
-		put(KEY_ACTION_PROGRESS, getRetrievedValue(key2servicekey.get(KEY_ACTION_PROGRESS)));
-		put(KEY_LAST_ACTION, getRetrievedValue(key2servicekey.get(KEY_LAST_ACTION)));
+		put(KEY_ACTION_RESULT, getRetrievedValue(KEY_ACTION_RESULT));
+		put(KEY_ACTION_PROGRESS, getRetrievedValue(KEY_ACTION_PROGRESS));
+		put(KEY_LAST_ACTION, getRetrievedValue(KEY_LAST_ACTION));
 
-		put(KEY_ACTION_REQUEST, getRetrievedValue(key2servicekey.get(KEY_ACTION_REQUEST)));
+		put(KEY_ACTION_REQUEST, getRetrievedValue(KEY_ACTION_REQUEST));
 
-		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_PRIORITY)));
-		put(KEY_ACTION_SEQUENCE, getRetrievedValue(key2servicekey.get(KEY_ACTION_SEQUENCE)));
+		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(KEY_PRODUCT_PRIORITY));
+		put(KEY_ACTION_SEQUENCE, getRetrievedValue(KEY_ACTION_SEQUENCE));
 
-		put(KEY_PRODUCT_VERSION, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_VERSION)));
-		put(KEY_PACKAGE_VERSION, getRetrievedValue(key2servicekey.get(KEY_PACKAGE_VERSION)));
+		put(KEY_PRODUCT_VERSION, getRetrievedValue(KEY_PRODUCT_VERSION));
+		put(KEY_PACKAGE_VERSION, getRetrievedValue(KEY_PACKAGE_VERSION));
 
-		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(key2servicekey.get(KEY_LAST_STATE_CHANGE)));
+		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(KEY_LAST_STATE_CHANGE));
 	}
 
 	@Override

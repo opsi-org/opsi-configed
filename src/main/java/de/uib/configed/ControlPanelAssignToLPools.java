@@ -169,27 +169,24 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty()) {
-			thePanel.getFMissingSoftwareInfo()
-					.setTableModel(new GenTableModel(
-							new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
-							new DefaultTableProvider(
-									new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
-											thePanel.getFMissingSoftwareInfo().getClassNames(), new MapRetriever() {
-												@Override
-												public void reloadMap() {
-													if (!configedMain.isAllLicenseDataReloaded()) {
-														persistenceController.reloadData(
-																ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-													}
-												}
+			thePanel.getFMissingSoftwareInfo().setTableModel(new GenTableModel(
+					new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
+					new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
+							new MapRetriever() {
+								@Override
+								public void reloadMap() {
+									if (!configedMain.isAllLicenseDataReloaded()) {
+										persistenceController
+												.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+									}
+								}
 
-												@Override
-												public Map<String, Map<String, Object>> retrieveMap() {
-													return getMissingSoftwareMap(poolID);
-												}
-											})),
-							0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(),
-							updateCollection));
+								@Override
+								public Map<String, Map<String, Object>> retrieveMap() {
+									return getMissingSoftwareMap(poolID);
+								}
+							})),
+					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
 		}
 
 		thePanel.getFieldCountAssignedStatus().setToolTipText(" <html><br /></html>");
@@ -432,7 +429,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelLicensepools.reset();
 		thePanel.getPanelLicensepools().setTableModel(modelLicensepools);
 		modelLicensepools.setEditableColumns(new int[] { 0, 1 });
-		thePanel.getPanelLicensepools().setEmphasizedColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddPool = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licenses.NewLicensepool"));
 		menuItemAddPool.addActionListener((ActionEvent e) -> {
@@ -466,13 +462,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		List<String> classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
@@ -493,7 +486,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelProductId2LPool.reset();
 		thePanel.getPanelProductId2LPool().setTableModel(modelProductId2LPool);
 		modelProductId2LPool.setEditableColumns(new int[] { 0, 1 });
-		thePanel.getPanelProductId2LPool().setEmphasizedColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddRelationProductId2LPool = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewRelationProductId2LPool"));
@@ -552,23 +544,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
 
 		columnNames.add(COLUMN_MARK_CURSOR_ROW, "");
-		classNames.add("java.lang.Boolean");
 
 		columnNames.remove("licenseKey");
 
-		classNames = new ArrayList<>();
-		for (int i = 1; i <= columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
 		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
 				+ columnNames);
-		Logging.info(this, "panelRegisteredSoftware constructed with (size) classes " + "(" + classNames.size() + ") "
-				+ classNames);
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {
@@ -594,7 +578,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setTableModel(modelWindowsSoftwareIds);
 		thePanel.getPanelRegisteredSoftware().setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		modelWindowsSoftwareIds.setEditableColumns(new int[] {});
-		thePanel.getPanelRegisteredSoftware().setEmphasizedColumns(new int[] {});
 
 		Integer[] searchCols = new Integer[columnNames.size()];
 		for (int j = 0; j < columnNames.size(); j++) {

@@ -79,7 +79,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	private void initPanel() {
-		panel = new PanelGenEditTable("", true, 0, false,
+		panel = new PanelGenEditTable("", true, 0,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 			@Override
 			public void commit() {
@@ -127,16 +127,10 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(COL_USE_IN_QUERY);
 		columnNames.add(COL_OPSI_DB_COLUMN_TYPE);
 
-		List<String> classNames = new ArrayList<>();
-
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
 		model = new GenTableModel(updateItemFactory,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						// Nothing to reload.
@@ -169,7 +163,6 @@ public class ControllerHWinfoColumnConfiguration {
 		model.setEditableColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTableModel(model);
-		panel.setEmphasizedColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(Configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);

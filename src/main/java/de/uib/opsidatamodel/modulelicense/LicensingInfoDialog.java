@@ -36,6 +36,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
+import de.uib.utilities.table.gui.LicensingInfoTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
@@ -55,7 +56,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private TableSource tableSource;
 
 	private List<String> columnNames = new ArrayList<>();
-	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
 	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
@@ -133,14 +133,13 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
 		columnNames = licenseMap.getColumnNames();
-		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
 	}
 
 	private PanelGenEditTable initMainPanel() {
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0, true,
+		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
 						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
@@ -156,7 +155,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 						!LicensingInfoDialog.extendedView);
 				retrieveData();
-				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
+				tableSource = new MapSource(columnNames, theSourceMap, false);
 				buildModel();
 				super.reload();
 			}
@@ -164,7 +163,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		thePanel.setMarkBoldHeaderCellRenderer();
 
-		tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
+		tableSource = new MapSource(columnNames, theSourceMap, false);
 
 		buildModel();
 
@@ -358,9 +357,11 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		theModel.reset();
 
 		columnNames = theModel.getColumnNames();
-		classNames = theModel.getClassNames();
 
 		thePanel.setTableModel(theModel);
+
+		thePanel.getTheTable().setDefaultRenderer(Object.class,
+				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
 	public void reload() {

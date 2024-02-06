@@ -15,8 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
@@ -28,7 +26,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 // Verwendung in Beisspielsweise SSHOpsiSetRightsDialog.java
 public class SSHCompletionComboButton {
@@ -216,16 +213,7 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-					@Override
-					public String getErrorText() {
-						return ROOT_DIRECTORY;
-					}
-				};
-
-				SSHConnectExec ssh = new SSHConnectExec();
-				String result = ssh.exec(getDirectories, false);
+				String result = getDirectories(curdir);
 				if (result == null || result.isEmpty()) {
 					result = HOME_DIRECTORY;
 				}
@@ -240,25 +228,11 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
-				SSHConnectExec ssh = new SSHConnectExec();
-				String result = ssh.exec(getFiles, false);
+				String result = getDirectories(curdir);
 				if (result == null || result.isEmpty()) {
 					result = ROOT_DIRECTORY;
 				}
-
-				getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
-						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-					@Override
-					public String getErrorText() {
-						return ROOT_DIRECTORY;
-					}
-				};
-
-				////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
-				// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-				String tempResult = ssh.exec(getFiles, false);
+				String tempResult = getFiles(curdir);
 				if (tempResult != null && !"null".equals(tempResult.trim())) {
 					result += tempResult;
 				}
@@ -267,6 +241,33 @@ public class SSHCompletionComboButton {
 				enableComponents(true);
 			}
 		}.start();
+	}
+
+	private static String getDirectories(String curdir) {
+		EmptyCommand getDirectoriesCommand = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+			@Override
+			public String getErrorText() {
+				return ROOT_DIRECTORY;
+			}
+		};
+		SSHConnectExec ssh = new SSHConnectExec();
+		return ssh.exec(getDirectoriesCommand, false);
+	}
+
+	private static String getFiles(String curdir) {
+		EmptyCommand getFilesCommand = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
+				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+			@Override
+			public String getErrorText() {
+				return ROOT_DIRECTORY;
+			}
+		};
+
+		////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
+		// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
+		SSHConnectExec ssh = new SSHConnectExec();
+		return ssh.exec(getFilesCommand, false);
 	}
 
 	private boolean containsInDefaults(String other) {
@@ -317,49 +318,25 @@ public class SSHCompletionComboButton {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
-			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			Logging.debug(this, "getListCellRendererComponent called");
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			// is null or not JComponent
-			if (!(c instanceof JComponent)) {
-				return c;
+			if (autocompletion == null || getText() == null || getText().isEmpty()) {
+				return this;
 			}
 
-			JComponent jc = (JComponent) c;
+			String text = getText().trim();
+			String basicPath = autocompletion.getBasicPath();
 
-			if (jc instanceof JLabel) {
-				String getText = ((JLabel) jc).getText();
-				if (autocompletion == null || getText == null || getText.isEmpty()) {
-					return c;
-				}
+			// könnte eigtl raus. funktiniert sonst aber nicht...
+			if (!basicPath.isEmpty() && !text.isEmpty()) {
+				basicPath = basicPath.replace("//", "/");
+				text = text.replace("//", "/");
 
-				getText = getText.trim();
-				String basicPath = autocompletion.getBasicPath();
-				Logging.debug(this, "(1)  basicPath " + basicPath + " getText " + getText);
-
-				// könnte eigtl raus. funktiniert sonst aber nicht...
-				if (!basicPath.isEmpty() && !getText.isEmpty()) {
-					if (basicPath.contains("//")) {
-						basicPath = basicPath.replace("//", "/");
-					}
-
-					if (getText.contains("//")) {
-						getText = getText.replace("//", "/");
-					}
-
-					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
-						Logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");
-						ColorTableCellRenderer.colorize(jc, isSelected, true);
-					}
-
-					if (getText.startsWith(basicPath) && !getText.equals(basicPath)
-							&& !basicPath.equals(ROOT_DIRECTORY)) {
-						((JLabel) jc).setText(getText.replace(basicPath, ""));
-					}
-					Logging.debug(this, "(2) basicPath " + basicPath + " getText " + getText);
+				if (text.startsWith(basicPath) && !text.equals(basicPath) && !basicPath.equals(ROOT_DIRECTORY)) {
+					setText(text.replace(basicPath, ""));
 				}
 			}
-			return jc;
+			return this;
 		}
 	}
 }

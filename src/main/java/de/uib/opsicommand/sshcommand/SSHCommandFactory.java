@@ -46,10 +46,6 @@ public final class SSHCommandFactory {
 	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
 	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
 	public static final String STRING_COMMAND_CAT_DIRECTORY = "cat *.dir.*OPSI/control | grep \"id: \"";
-	public static final String STRING_COMMAND_FILE_EXISTS_NOT_REMOVE = "[ -d .filename. ] && echo \"File exists\" "
-			+ "|| echo \"File not exist\"";
-
-	public static final String STRING_REPLACEMENT_FILENAME = ".filename.";
 
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
@@ -142,7 +138,6 @@ public final class SSHCommandFactory {
 	private SSHCommandFactory(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		Logging.info(this.getClass(), "SSHComandFactory new instance");
-		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.configedMain);
 		pmethodHandler = new SSHCommandParameterMethods(this.configedMain);
@@ -155,11 +150,10 @@ public final class SSHCommandFactory {
 	 * @return SSHCommandFactory instance
 	 **/
 	public static SSHCommandFactory getInstance(ConfigedMain configedMain) {
-		if (instance != null) {
-			return instance;
-		} else {
-			return new SSHCommandFactory(configedMain);
+		if (instance == null) {
+			instance = new SSHCommandFactory(configedMain);
 		}
+		return instance;
 	}
 
 	/**
@@ -451,35 +445,30 @@ public final class SSHCommandFactory {
 	}
 
 	public boolean isSSHCommandEqualSavedCommand(SSHCommandTemplate command) {
+		boolean result = false;
 		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "isSSHCommandEqualSavedCommand compare command " + command.toString());
 			if (sshCommandList == null) {
 				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
-				return false;
-			}
-			if (sshCommandList.isEmpty()) {
+				result = false;
+			} else if (sshCommandList.isEmpty()) {
 				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list has no elements ");
-				return false;
-			}
-
-			if (getSSHCommandByMenu(command.getMenuText()) == null) {
+				result = false;
+			} else if (getSSHCommandByMenu(command.getMenuText()) == null) {
 				Logging.info(this,
 						" isSSHCommandEqualSavedCommand getSSHCommandByMenu( command.getMenuText() ) is null ");
-				return false;
+				result = false;
+			} else {
+				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list " + (sshCommandList));
+				Logging.info(this, "isSSHCommandEqualSavedCommand with found "
+						+ sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))));
+				Logging.info(this, "isSSHCommandEqualSavedCommand equals " + sshCommandList
+						.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).equals(command));
+				result = sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText())))
+						.equals(command);
 			}
-
-			Logging.info(this, "isSSHCommandEqualSavedCommand  command_list " + (sshCommandList));
-
-			Logging.info(this, "isSSHCommandEqualSavedCommand with found "
-					+ sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))));
-			Logging.info(this, "isSSHCommandEqualSavedCommand equals " + sshCommandList
-					.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).equals(command));
-
-			return sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText())))
-					.equals(command);
 		}
-
-		return false;
+		return result;
 	}
 
 	/**
@@ -489,7 +478,6 @@ public final class SSHCommandFactory {
 	 **/
 	public void deleteSSHCommandByMenu(String menu) {
 		Logging.info(this, "deleteSSHCommand menu " + menu);
-		// return
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
 		if (persistenceController.getSSHCommandDataService().deleteSSHCommand(jsonObjects)) {
@@ -499,7 +487,7 @@ public final class SSHCommandFactory {
 	}
 
 	/**
-	 * Reload configed menu server-konsole
+	 * Reload configed menu server-console
 	 */
 	public void reloadServerMenu() {
 		SwingUtilities.invokeLater(configedMain::reloadServerMenu);
