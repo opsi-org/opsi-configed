@@ -697,9 +697,15 @@ public class MainFrame extends JFrame {
 
 		this.setIconImage(Utils.getMainIcon());
 
-		clientMenu = new ClientMenu(this, configedMain);
-		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
+		setJMenuBar(initMenuBar());
+
 		JPanel allPanel = new JPanel();
+		JSplitPane centralPane = initCentralPane();
+		statusPane = new HostsStatusPanel();
+		iconBarPanel = new IconBarPanel(configedMain, this);
+		allPanel.add(iconBarPanel, BorderLayout.NORTH);
+		allPanel.add(centralPane, BorderLayout.CENTER);
+		allPanel.add(statusPane, BorderLayout.SOUTH);
 		allPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -712,11 +718,18 @@ public class MainFrame extends JFrame {
 			}
 		});
 		allPanel.setLayout(borderLayout1);
-
 		getContentPane().add(allPanel);
 
+		setTitle(configedMain.getAppTitle());
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
+	}
+
+	private JMenuBar initMenuBar() {
 		initMenuData();
 
+		clientMenu = new ClientMenu(this, configedMain);
 		setupMenuFile();
 		setupMenuGrouping();
 		setupMenuServer();
@@ -730,8 +743,11 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(jMenuServer);
 		jMenuBar.add(jMenuFrames);
 		jMenuBar.add(jMenuHelp);
-		setJMenuBar(jMenuBar);
 
+		return jMenuBar;
+	}
+
+	private JSplitPane initCentralPane() {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
 		scrollpaneTreeClients.getViewport().add(treeClients);
@@ -777,23 +793,12 @@ public class MainFrame extends JFrame {
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE));
 
+		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
-		// statusPane
-
-		statusPane = new HostsStatusPanel();
-
-		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.add(iconBarPanel, BorderLayout.NORTH);
-		allPanel.add(centralPane, BorderLayout.CENTER);
-		allPanel.add(statusPane, BorderLayout.SOUTH);
-
-		setTitle(configedMain.getAppTitle());
-
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
+		return centralPane;
 	}
 
 	// -- helper methods for interaction
