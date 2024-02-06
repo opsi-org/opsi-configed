@@ -1651,9 +1651,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
-		if (mainFrame != null) {
-			mainFrame.activateLoadingCursor();
-		}
 		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
@@ -1698,9 +1695,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
-		if (mainFrame != null) {
-			mainFrame.deactivateLoadingCursor();
-		}
 	}
 
 	private String getSelectedClientsString() {
@@ -2056,10 +2050,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 
-		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.activateLoadingCursor();
-		}
-
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
@@ -2076,10 +2066,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		setViewIndex(getViewIndex());
-
-		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.deactivateLoadingCursor();
-		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -2586,9 +2572,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			mainFrame.activateLoadingCursor();
 			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
-			mainFrame.deactivateLoadingCursor();
 			Logging.debug(this, "log pages set");
 		}
 
