@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,17 +48,11 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.table.TableModel;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -76,7 +69,6 @@ import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
-import de.uib.configed.type.HostInfo;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -93,11 +85,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.FEditObject;
-import de.uib.utilities.swing.FEditTextWithExtra;
-import de.uib.utilities.table.AbstractExportTable;
-import de.uib.utilities.table.ClientTableExporterToCSV;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
 import utils.PopupMouseListener;
 import utils.Utils;
 
@@ -118,70 +105,20 @@ public class MainFrame extends JFrame {
 
 	private static JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
-	private AbstractExportTable exportTable;
-
 	private ConfigedMain configedMain;
-
-	// menu system
-	private Map<String, List<JMenuItem>> menuItemsHost;
 
 	private JMenu jMenuFile;
 	private JMenuItem jMenuFileSaveConfigurations;
 
-	private JMenu jMenuClients = new JMenu();
-
-	private JMenuItem jMenuDirectWOL = new JMenuItem();
-	private JMenuItem jMenuNewScheduledWOL = new JMenuItem();
+	private ClientMenu clientMenu;
 
 	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
-	private JMenuItem jMenuShowPopupMessage = new JMenuItem();
-	private JMenuItem jMenuRequestSessionInfo = new JMenuItem();
-	private JMenuItem jMenuShutdownClient = new JMenuItem();
-	private JMenuItem jMenuRebootClient = new JMenuItem();
-	private JMenuItem jMenuChangeDepot = new JMenuItem();
-	private JMenuItem jMenuChangeClientID = new JMenuItem();
-
-	private JMenuItem jMenuAddClient = new JMenuItem();
-	private JMenuItem jMenuDeleteClient = new JMenuItem();
-	private JMenuItem jMenuCopyClient = new JMenuItem();
-
-	private JMenu jMenuResetProducts = new JMenu();
-
-	private JMenuItem jMenuFreeLicenses = new JMenuItem();
-	private JMenuItem jMenuDeletePackageCaches = new JMenuItem();
-
-	private JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
-	private JMenuItem jMenuResetProductOnClient = new JMenuItem();
-	private JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
-	private JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
-	private JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
-	private JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
-
 	private JMenu jMenuServer = new JMenu();
 
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
 
-	private Map<String, Integer> labelledDelays;
-
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
-
-	private JMenu jMenuShowColumns = new JMenu();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowSystemUUIDColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
-	private JMenuItem jMenuRemoteControl = new JMenuItem();
-
-	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
-			jMenuResetProducts, jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo,
-			jMenuDeletePackageCaches, jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
 	private JMenu jMenuClientselection = new JMenu();
 	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
@@ -209,58 +146,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
 	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
 
-	private JPopupMenu popupClients = new JPopupMenu();
-
-	private JMenu popupResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
-	private JMenuItem popupResetLocalbootProductOnClientWithStates = new JMenuItem();
-	private JMenuItem popupResetLocalbootProductOnClient = new JMenuItem();
-	private JMenuItem popupResetNetbootProductOnClientWithStates = new JMenuItem();
-	private JMenuItem popupResetNetbootProductOnClient = new JMenuItem();
-	private JMenuItem popupResetProductOnClientWithStates = new JMenuItem();
-	private JMenuItem popupResetProductOnClient = new JMenuItem();
-
-	private JMenuItem popupAddClient = new JMenuItem();
-	private JMenuItem popupCopyClient = new JMenuItem();
-	private JMenuItem popupDeleteClient = new JMenuItem();
-	private JMenuItem popupFreeLicenses = new JMenuItem();
-	private JMenuItem popupDeletePackageCaches = new JMenuItem();
-	private JMenu popupWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-	private JMenuItem popupWakeOnLanDirect = new JMenuItem();
-	private JMenuItem popupWakeOnLanScheduler = new JMenuItem();
-
-	private JMenuItem popupShowPopupMessage = new JMenuItem();
-	private JMenuItem popupRequestSessionInfo = new JMenuItem();
-	private JMenuItem popupShutdownClient = new JMenuItem();
-	private JMenuItem popupRebootClient = new JMenuItem();
-	private JMenuItem popupChangeDepot = new JMenuItem();
-	private JMenuItem popupChangeClientID = new JMenuItem();
-	private JMenuItem popupRemoteControl = new JMenuItem();
-
-	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupDeleteClient,
-			popupResetProducts, popupFreeLicenses, popupShowPopupMessage, popupRequestSessionInfo,
-			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupRemoteControl };
-
-	private JMenu popupShowColumns = new JMenu();
-	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowSystemUUIDColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowHardwareAddressColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowSessionInfoColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowInventoryNumberColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowUefiBoot = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowInstallByShutdownColumn = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem popupShowDepotColumn = new JCheckBoxMenuItem();
-
-	private JMenuItem popupSelectionGetGroup = new JMenuItem();
-	private JMenuItem popupSelectionGetSavedSearch = new JMenuItem();
-
-	private JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
-
-	private JMenuItem popupRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-			Utils.createImageIcon("images/reload16.png", ""));
-	private JMenuItem popupCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-			Utils.createImageIcon("images/acrobat_reader16.png", ""));
+	private JPopupMenu popupClients;
 
 	private BorderLayout borderLayout1 = new BorderLayout();
 	private JTabbedPane jTabbedPaneConfigPanes;
@@ -317,8 +203,6 @@ public class MainFrame extends JFrame {
 
 		this.clientTable = panelClientlist;
 
-		exportTable = new ExporterToCSV(panelClientlist.getTable());
-
 		this.treeClients = treeClients;
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
@@ -337,6 +221,14 @@ public class MainFrame extends JFrame {
 
 	private void initData() {
 		statusPane.updateValues(0, null, null, null);
+	}
+
+	public boolean isMultiDepot() {
+		return multidepot;
+	}
+
+	public ClientTable getClientTable() {
+		return clientTable;
 	}
 
 	public IconBarPanel getIconBarPanel() {
@@ -359,13 +251,6 @@ public class MainFrame extends JFrame {
 	// configure interaction
 	// ------------------------------------------------------------------------------------------
 	// menus
-
-	private void setupMenuLists() {
-		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<>());
-		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<>());
-		menuItemsHost.put(ITEM_FREE_LICENSES, new ArrayList<>());
-	}
 
 	private void setupMenuFile() {
 		jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -443,16 +328,6 @@ public class MainFrame extends JFrame {
 	}
 
 	private void initMenuData() {
-		labelledDelays = new LinkedHashMap<>();
-		labelledDelays.put("0 sec", 0);
-		labelledDelays.put("5 sec", 5);
-		labelledDelays.put("20 sec", 20);
-		labelledDelays.put("1 min", 60);
-		labelledDelays.put("2 min", 120);
-		labelledDelays.put("10 min", 600);
-		labelledDelays.put("20 min", 1200);
-		labelledDelays.put("1 h", 3600);
-
 		searchedTimeSpans = new LinkedHashMap<>();
 
 		final String TODAY = "today";
@@ -477,324 +352,6 @@ public class MainFrame extends JFrame {
 		searchedTimeSpansText.put(LAST_7_DAYS, Configed.getResourceValue("MainFrame.LAST_7_DAYS"));
 		searchedTimeSpansText.put(LAST_MONTH, Configed.getResourceValue("MainFrame.LAST_MONTH"));
 		searchedTimeSpansText.put(ANY_TIME, Configed.getResourceValue("MainFrame.ANY_TIME"));
-	}
-
-	private void setupMenuClients() {
-		jMenuClients.setText(Configed.getResourceValue("MainFrame.jMenuClients"));
-
-		jMenuClients.addMenuListener(new MenuListener() {
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void menuSelected(MenuEvent arg0) {
-				enableMenuItemsForClients();
-			}
-		});
-
-		jCheckBoxMenuItemShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		jCheckBoxMenuItemShowCreatedColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowCreatedColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-			popupShowCreatedColumn.setSelected(jCheckBoxMenuItemShowCreatedColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowWANactiveColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		jCheckBoxMenuItemShowWANactiveColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowWANactiveColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-			popupShowWANactiveColumn.setSelected(jCheckBoxMenuItemShowWANactiveColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowIPAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		jCheckBoxMenuItemShowIPAddressColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowIPAddressColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-			popupShowIPAddressColumn.setSelected(jCheckBoxMenuItemShowIPAddressColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		jCheckBoxMenuItemShowSystemUUIDColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSystemUUIDColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
-			popupShowSystemUUIDColumn.setSelected(jCheckBoxMenuItemShowSystemUUIDColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowHardwareAddressColumn
-				.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		jCheckBoxMenuItemShowHardwareAddressColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowHardwareAddressColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-			popupShowHardwareAddressColumn.setSelected(jCheckBoxMenuItemShowHardwareAddressColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowSessionInfoColumn
-				.setText(Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
-		jCheckBoxMenuItemShowSessionInfoColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-			popupShowSessionInfoColumn.setSelected(jCheckBoxMenuItemShowSessionInfoColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowInventoryNumberColumn
-				.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInventoryNumberColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-			popupShowInventoryNumberColumn.setSelected(jCheckBoxMenuItemShowInventoryNumberColumn.isSelected());
-		});
-
-		jCheckBoxMenuItemShowUefiBoot.setText(Configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		jCheckBoxMenuItemShowUefiBoot
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowUefiBoot.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-			popupShowUefiBoot.setSelected(jCheckBoxMenuItemShowUefiBoot.isSelected());
-		});
-
-		jCheckBoxMenuItemShowInstallByShutdown
-				.setText(Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		jCheckBoxMenuItemShowInstallByShutdown.setSelected(
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInstallByShutdown.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-			popupShowInstallByShutdownColumn.setSelected(jCheckBoxMenuItemShowInstallByShutdown.isSelected());
-		});
-
-		jCheckBoxMenuItemShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		jCheckBoxMenuItemShowDepotColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDepotColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-			popupShowDepotColumn.setSelected(jCheckBoxMenuItemShowDepotColumn.isSelected());
-		});
-
-		jMenuChangeDepot.setText(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
-
-		jMenuChangeDepot.addActionListener((ActionEvent e) -> changeDepotAction());
-
-		jMenuChangeClientID.setText(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-
-		jMenuChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
-
-		jMenuResetProducts.setText(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
-
-		jMenuResetProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
-
-		jMenuResetProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
-
-		jMenuResetProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
-
-		jMenuResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
-
-		jMenuResetLocalbootProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
-
-		jMenuResetLocalbootProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, false));
-
-		jMenuResetLocalbootProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
-
-		jMenuResetLocalbootProductOnClient
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, false));
-
-		jMenuResetNetbootProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
-
-		jMenuResetNetbootProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, false, true));
-
-		jMenuResetNetbootProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
-
-		jMenuResetNetbootProductOnClient
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
-
-		jMenuAddClient.setText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-		jMenuAddClient.addActionListener((ActionEvent e) -> addClientAction());
-
-		menuItemsHost.get(ITEM_ADD_CLIENT).add(jMenuAddClient);
-
-		JMenu jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-
-		jMenuDirectWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		jMenuDirectWOL.addActionListener((ActionEvent e) -> wakeOnLanAction());
-
-		jMenuWakeOnLan.add(jMenuDirectWOL);
-
-		jMenuNewScheduledWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
-					configedMain);
-			fStartWakeOnLan.setLocationRelativeTo(this);
-
-			fStartWakeOnLan.setVisible(true);
-			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
-
-			fStartWakeOnLan.setClients();
-		});
-
-		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
-
-		jMenuWakeOnLan.addSeparator();
-
-		jMenuShowScheduledWOL.setEnabled(false);
-		jMenuShowScheduledWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.addActionListener(
-				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
-
-		jMenuWakeOnLan.add(jMenuShowScheduledWOL);
-
-		jMenuDeletePackageCaches.setText(Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-		jMenuDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
-
-		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
-
-		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
-			JMenuItem item = new JMenuItem(event);
-
-			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
-
-			jMenuOpsiClientdEvent.add(item);
-		}
-
-		jMenuShowPopupMessage.setText(Configed.getResourceValue("MainFrame.jMenuShowPopupMessage"));
-		jMenuShowPopupMessage.addActionListener((ActionEvent e) -> showPopupOnClientsAction());
-
-		jMenuShutdownClient.setText(Configed.getResourceValue("MainFrame.jMenuShutdownClient"));
-		jMenuShutdownClient.addActionListener((ActionEvent e) -> shutdownClientsAction());
-
-		jMenuRequestSessionInfo.setText(Configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-		jMenuRequestSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			getSessionInfo();
-		});
-
-		jMenuRebootClient.setText(Configed.getResourceValue("MainFrame.jMenuRebootClient"));
-		jMenuRebootClient.addActionListener((ActionEvent e) -> rebootClientsAction());
-
-		jMenuDeleteClient.setText(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
-		jMenuDeleteClient.addActionListener((ActionEvent e) -> deleteClientAction());
-
-		jMenuCopyClient.setText(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
-		jMenuCopyClient.addActionListener((ActionEvent e) -> copyClientAction());
-
-		menuItemsHost.get(ITEM_DELETE_CLIENT).add(jMenuDeleteClient);
-
-		jMenuFreeLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
-		jMenuFreeLicenses.addActionListener((ActionEvent e) -> freeLicensesAction());
-
-		menuItemsHost.get(ITEM_FREE_LICENSES).add(jMenuFreeLicenses);
-
-		jMenuRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
-
-		// produces a global reaction when pressing space
-		jMenuRemoteControl.addActionListener((ActionEvent e) -> clientTable.startRemoteControlForSelectedClients());
-
-		JCheckBoxMenuItem jMenuSelectionToggleClientFilter = new JCheckBoxMenuItem();
-		jMenuSelectionToggleClientFilter
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
-		jMenuSelectionToggleClientFilter.setState(false);
-
-		jMenuSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
-		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-				Utils.createImageIcon("images/reload16.png", ""));
-		jMenuRebuildClientList.addActionListener((ActionEvent e) -> configedMain.reloadHosts());
-
-		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-				Utils.createImageIcon("images/acrobat_reader16.png", ""));
-		jMenuCreatePdf.setText(Configed.getResourceValue("FGeneralDialog.pdf"));
-		jMenuCreatePdf.addActionListener((ActionEvent e) -> createPdf());
-
-		jMenuClients.add(jMenuWakeOnLan);
-		jMenuClients.add(jMenuOpsiClientdEvent);
-		jMenuClients.add(jMenuShowPopupMessage);
-		jMenuClients.add(jMenuRequestSessionInfo);
-		jMenuClients.add(jMenuDeletePackageCaches);
-
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuShutdownClient);
-		jMenuClients.add(jMenuRebootClient);
-		jMenuClients.add(jMenuRemoteControl);
-
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuAddClient);
-		if (ServerFacade.isOpsi43()) {
-			jMenuClients.add(jMenuCopyClient);
-		}
-		jMenuClients.add(jMenuDeleteClient);
-
-		jMenuResetProducts.add(jMenuResetLocalbootProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetLocalbootProductOnClient);
-		jMenuResetProducts.add(jMenuResetNetbootProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetNetbootProductOnClient);
-		jMenuResetProducts.add(jMenuResetProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetProductOnClient);
-
-		jMenuClients.add(jMenuResetProducts);
-
-		jMenuClients.add(jMenuFreeLicenses);
-		jMenuClients.add(jMenuChangeClientID);
-		if (multidepot) {
-			jMenuClients.add(jMenuChangeDepot);
-		}
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuSelectionToggleClientFilter);
-
-		jMenuClients.add(jMenuRebuildClientList);
-		jMenuClients.add(jMenuCreatePdf);
-		exportTable.addMenuItemsTo(jMenuClients);
-
-		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(clientTable.getTable());
-		clientTableExporter.addMenuItemsTo(jMenuClients);
-
-		jMenuClients.addSeparator();
-
-		// --
-
-		jMenuShowColumns.setText(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-
-		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
-		if (ServerFacade.isOpsi43()) {
-			jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
-		}
-		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
-
-		if (!ServerFacade.isOpsi43()) {
-			jMenuShowColumns.add(jCheckBoxMenuItemShowUefiBoot);
-		}
-
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
-
-		jMenuClients.add(jMenuShowColumns);
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
@@ -1159,321 +716,6 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 	}
 
-	// ------------------------------------------------------------------------------------------
-	// context menus
-
-	private void setupPopupMenuClientsTab() {
-		popupShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		popupShowCreatedColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-		popupShowCreatedColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowCreatedColumn.setSelected(popupShowCreatedColumn.isSelected());
-		});
-
-		popupShowWANactiveColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		popupShowWANactiveColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-
-		popupShowWANactiveColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowWANactiveColumn.setSelected(popupShowWANactiveColumn.isSelected());
-		});
-
-		popupShowIPAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		popupShowIPAddressColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-		popupShowIPAddressColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowIPAddressColumn.setSelected(popupShowIPAddressColumn.isSelected());
-		});
-
-		popupShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		popupShowSystemUUIDColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-		popupShowSystemUUIDColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowSystemUUIDColumn.setSelected(popupShowSystemUUIDColumn.isSelected());
-		});
-
-		popupShowHardwareAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		popupShowHardwareAddressColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-		popupShowHardwareAddressColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowHardwareAddressColumn.setSelected(popupShowHardwareAddressColumn.isSelected());
-		});
-
-		popupShowSessionInfoColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
-		popupShowSessionInfoColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		popupShowSessionInfoColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowSessionInfoColumn.setSelected(popupShowSessionInfoColumn.isSelected());
-		});
-
-		popupShowInventoryNumberColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		popupShowInventoryNumberColumn.setSelected(
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-		popupShowInventoryNumberColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(popupShowInventoryNumberColumn.isSelected());
-		});
-
-		popupShowUefiBoot.setText(Configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		popupShowUefiBoot
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-		popupShowUefiBoot.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowUefiBoot.setSelected(popupShowUefiBoot.isSelected());
-		});
-
-		popupShowInstallByShutdownColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		popupShowInstallByShutdownColumn.setSelected(
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-		popupShowInstallByShutdownColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowInstallByShutdown.setSelected(popupShowInstallByShutdownColumn.isSelected());
-		});
-
-		popupShowDepotColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		popupShowDepotColumn
-				.setSelected(configedMain.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-		popupShowDepotColumn.addActionListener((ActionEvent e) -> {
-			configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-			jCheckBoxMenuItemShowDepotColumn.setSelected(popupShowDepotColumn.isSelected());
-		});
-
-		popupChangeDepot.setText(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
-
-		popupChangeDepot.addActionListener((ActionEvent e) -> changeDepotAction());
-
-		popupChangeClientID.setText(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-
-		popupChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
-
-		popupResetLocalbootProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
-
-		popupResetLocalbootProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, false));
-
-		popupResetLocalbootProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
-
-		popupResetLocalbootProductOnClient
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, false));
-
-		popupResetNetbootProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
-
-		popupResetNetbootProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, false, true));
-
-		popupResetNetbootProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
-
-		popupResetNetbootProductOnClient
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
-
-		popupResetProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
-
-		popupResetProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
-
-		popupResetProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
-
-		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
-
-		popupAddClient.setText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-
-		popupAddClient.addActionListener((ActionEvent e) -> addClientAction());
-
-		menuItemsHost.get(ITEM_ADD_CLIENT).add(popupAddClient);
-
-		popupWakeOnLan.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-
-		popupWakeOnLanDirect.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		popupWakeOnLanDirect.addActionListener((ActionEvent e) -> wakeOnLanAction());
-		popupWakeOnLan.add(popupWakeOnLanDirect);
-
-		popupWakeOnLanScheduler.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
-					configedMain);
-			fStartWakeOnLan.setLocationRelativeTo(this);
-
-			fStartWakeOnLan.setVisible(true);
-			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
-
-			fStartWakeOnLan.setClients();
-		});
-		popupWakeOnLan.add(popupWakeOnLanScheduler);
-
-		popupDeletePackageCaches.setText(Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-		popupDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
-
-		popupShowPopupMessage.setText(Configed.getResourceValue("MainFrame.jMenuShowPopupMessage"));
-		popupShowPopupMessage.addActionListener((ActionEvent e) -> showPopupOnClientsAction());
-
-		popupRequestSessionInfo.setText(Configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-		popupRequestSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			getSessionInfo();
-		});
-
-		popupShutdownClient.setText(Configed.getResourceValue("MainFrame.jMenuShutdownClient"));
-		popupShutdownClient.addActionListener((ActionEvent e) -> shutdownClientsAction());
-
-		popupRebootClient.setText(Configed.getResourceValue("MainFrame.jMenuRebootClient"));
-		popupRebootClient.addActionListener((ActionEvent e) -> rebootClientsAction());
-
-		popupDeleteClient.setText(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
-		popupDeleteClient.addActionListener((ActionEvent e) -> deleteClientAction());
-
-		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupDeleteClient);
-
-		popupCopyClient.setText(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
-		popupCopyClient.addActionListener((ActionEvent e) -> copyClientAction());
-
-		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupCopyClient);
-
-		popupFreeLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
-		popupFreeLicenses.addActionListener((ActionEvent e) -> freeLicensesAction());
-
-		menuItemsHost.get(ITEM_FREE_LICENSES).add(popupFreeLicenses);
-
-		popupRemoteControl.setText(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-
-		popupRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-		popupRemoteControl.addActionListener((ActionEvent e) -> clientTable.startRemoteControlForSelectedClients());
-
-		popupSelectionGetGroup.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		popupSelectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
-
-		popupSelectionGetSavedSearch.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		popupSelectionGetSavedSearch.addActionListener((ActionEvent e) -> configedMain.clientSelectionGetSavedSearch());
-
-		// pdf generating
-		popupCreatePdf.setText(Configed.getResourceValue("FGeneralDialog.pdf"));
-		popupCreatePdf.addActionListener((ActionEvent e) -> createPdf());
-		//
-
-		popupSelectionToggleClientFilter
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
-		popupSelectionToggleClientFilter.setState(false);
-
-		popupSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
-		popupRebuildClientList.addActionListener((ActionEvent e) -> configedMain.reloadHosts());
-
-		// ----
-
-		popupClients.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				enableMenuItemsForClients();
-			}
-		});
-
-		popupClients.add(popupWakeOnLan);
-
-		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
-
-		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
-			JMenuItem item = new JMenuItem(event);
-
-			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
-
-			menuPopupOpsiClientdEvent.add(item);
-		}
-
-		popupClients.add(menuPopupOpsiClientdEvent);
-		popupClients.add(popupShowPopupMessage);
-		popupClients.add(popupRequestSessionInfo);
-		popupClients.add(popupDeletePackageCaches);
-
-		popupClients.addSeparator();
-
-		popupClients.add(popupShutdownClient);
-		popupClients.add(popupRebootClient);
-		popupClients.add(popupRemoteControl);
-
-		popupClients.addSeparator();
-
-		// --
-		popupClients.add(popupAddClient);
-		if (ServerFacade.isOpsi43()) {
-			popupClients.add(popupCopyClient);
-		}
-		popupClients.add(popupDeleteClient);
-
-		popupResetProducts.add(popupResetLocalbootProductOnClientWithStates);
-		popupResetProducts.add(popupResetLocalbootProductOnClient);
-		popupResetProducts.add(popupResetNetbootProductOnClientWithStates);
-		popupResetProducts.add(popupResetNetbootProductOnClient);
-		popupResetProducts.add(popupResetProductOnClientWithStates);
-		popupResetProducts.add(popupResetProductOnClient);
-		popupClients.add(popupResetProducts);
-
-		popupClients.add(popupFreeLicenses);
-		popupClients.add(popupChangeClientID);
-		if (multidepot) {
-			popupClients.add(popupChangeDepot);
-		}
-
-		// ----
-		popupClients.addSeparator();
-		popupClients.add(popupSelectionGetGroup);
-		popupClients.add(popupSelectionGetSavedSearch);
-
-		popupClients.addSeparator();
-		popupClients.add(popupSelectionToggleClientFilter);
-
-		popupClients.add(popupRebuildClientList);
-		popupClients.add(popupCreatePdf);
-
-		exportTable.addMenuItemsTo(popupClients);
-
-		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(clientTable.getTable());
-		clientTableExporter.addMenuItemsTo(popupClients);
-
-		// ----
-		popupClients.addSeparator();
-
-		popupShowColumns.setText(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		popupShowColumns.add(popupShowWANactiveColumn);
-		popupShowColumns.add(popupShowIPAddressColumn);
-		if (ServerFacade.isOpsi43()) {
-			popupShowColumns.add(popupShowSystemUUIDColumn);
-		}
-		popupShowColumns.add(popupShowHardwareAddressColumn);
-		popupShowColumns.add(popupShowSessionInfoColumn);
-		popupShowColumns.add(popupShowInventoryNumberColumn);
-		popupShowColumns.add(popupShowCreatedColumn);
-
-		if (!ServerFacade.isOpsi43()) {
-			popupShowColumns.add(popupShowUefiBoot);
-		}
-
-		popupShowColumns.add(popupShowInstallByShutdownColumn);
-		popupShowColumns.add(popupShowDepotColumn);
-
-		popupClients.add(popupShowColumns);
-	}
-
 	private static void applyLoglevel(ActionEvent actionEvent) {
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
 			if (actionEvent.getSource() == rbLoglevelItems[i]) {
@@ -1485,33 +727,6 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
-	}
-
-	private void createPdf() {
-		TableModel tm = configedMain.getSelectedClientsTableModel();
-		JTable jTable = new JTable(tm);
-
-		Map<String, String> metaData = new HashMap<>();
-		String title = Configed.getResourceValue("MainFrame.ClientList");
-
-		if (statusPane.getGroupName().length() != 0) {
-			title = title + ": " + statusPane.getGroupName();
-		}
-		metaData.put("header", title);
-		title = "";
-		if (statusPane.getInvolvedDepots().length() != 0) {
-			title = title + "Depot(s) : " + statusPane.getInvolvedDepots();
-		}
-
-		metaData.put("title", title);
-		metaData.put("subject", "report of table");
-		metaData.put("keywords", "");
-
-		ExporterToPDF pdfExportTable = new ExporterToPDF(clientTable.getTable());
-
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
 	}
 
 	private void guiInit() {
@@ -1541,11 +756,9 @@ public class MainFrame extends JFrame {
 
 		initMenuData();
 
-		setupMenuLists();
-
+		clientMenu = new ClientMenu(this, configedMain);
 		setupMenuFile();
 		setupMenuGrouping();
-		setupMenuClients();
 		setupMenuServer();
 		setupMenuFrames();
 		setupMenuHelp();
@@ -1553,14 +766,11 @@ public class MainFrame extends JFrame {
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(jMenuFile);
 		jMenuBar.add(jMenuClientselection);
-		jMenuBar.add(jMenuClients);
+		jMenuBar.add(clientMenu);
 		jMenuBar.add(jMenuServer);
 		jMenuBar.add(jMenuFrames);
 		jMenuBar.add(jMenuHelp);
-
-		this.setJMenuBar(jMenuBar);
-
-		setupPopupMenuClientsTab();
+		setJMenuBar(jMenuBar);
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
@@ -1645,6 +855,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 
+		popupClients = clientMenu.getPopupMenuClone();
 		clientTable.addMouseListener(new PopupMouseListener(popupClients));
 
 		clientInfoPanel = new ClientInfoPanel(configedMain);
@@ -1792,59 +1003,6 @@ public class MainFrame extends JFrame {
 	// ----------------------------------------------------------------------------------------
 	// action methods for visual interactions
 
-	private void wakeOnLanAction() {
-		configedMain.wakeSelectedClients();
-	}
-
-	private void deletePackageCachesAction() {
-		configedMain.deletePackageCachesOfSelectedClients();
-	}
-
-	private void fireOpsiclientdEventAction(String event) {
-		configedMain.fireOpsiclientdEventOnSelectedClients(event);
-	}
-
-	private void showPopupOnClientsAction() {
-		FEditTextWithExtra fText = new FEditTextWithExtra("", Configed.getResourceValue("MainFrame.writePopupMessage"),
-				Configed.getResourceValue("MainFrame.writePopupDuration")) {
-			@Override
-			protected void commit() {
-				super.commit();
-				Float duration = 0F;
-				if (!getExtra().isEmpty()) {
-					duration = Float.parseFloat(getExtra());
-				}
-				configedMain.showPopupOnSelectedClients(getText(), duration);
-			}
-		};
-
-		fText.setTitle(Configed.getResourceValue("MainFrame.popupFrameTitle"));
-		fText.init();
-		fText.setLocationRelativeTo(this);
-		fText.setVisible(true);
-	}
-
-	private void shutdownClientsAction() {
-		configedMain.shutdownSelectedClients();
-	}
-
-	private void rebootClientsAction() {
-		configedMain.rebootSelectedClients();
-	}
-
-	private void deleteClientAction() {
-		configedMain.deleteSelectedClients();
-	}
-
-	private void copyClientAction() {
-		configedMain.copySelectedClient();
-	}
-
-	private void freeLicensesAction() {
-		Logging.info(this, "freeLicensesAction ");
-		configedMain.freeAllPossibleLicensesForSelectedClients();
-	}
-
 	/**
 	 * Calls method from configedMain to start the execution of given command
 	 *
@@ -1883,8 +1041,7 @@ public class MainFrame extends JFrame {
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
 		configedMain.toggleFilterClientList(rebuildClientListTableModel);
-		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
-		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
+		clientMenu.toggleClientFilterAction(rebuildClientListTableModel);
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
@@ -1988,71 +1145,8 @@ public class MainFrame extends JFrame {
 		}.start();
 	}
 
-	private void checkMenuItemsDisabling() {
-		if (menuItemsHost == null) {
-			Logging.info(this, "checkMenuItemsDisabling: menuItemsHost not yet enabled");
-			return;
-		}
-
-		List<String> disabledClientMenuEntries = persistenceController.getConfigDataService()
-				.getDisabledClientMenuEntries();
-
-		if (disabledClientMenuEntries != null) {
-			for (String menuActionType : disabledClientMenuEntries) {
-				for (JMenuItem menuItem : menuItemsHost.get(menuActionType)) {
-					Logging.debug(this, "disable " + menuActionType + ", " + menuItem);
-					menuItem.setEnabled(false);
-				}
-			}
-
-			iconBarPanel.getIconButtonNewClient().setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
-
-			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
-				jMenuAddClient.setEnabled(false);
-				jMenuCopyClient.setEnabled(false);
-				popupAddClient.setEnabled(false);
-				popupCopyClient.setEnabled(false);
-				iconBarPanel.getIconButtonNewClient().setVisible(false);
-			}
-		}
-	}
-
-	private void enableMenuItemsForClients() {
-		int countSelectedClients = configedMain.getSelectedClients().size();
-		Logging.debug(this, " enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
-
-		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			jMenuItem.setEnabled(countSelectedClients >= 1);
-		}
-
-		for (JMenuItem jMenuItem : clientPopupsDependOnSelectionCount) {
-			jMenuItem.setEnabled(countSelectedClients >= 1);
-		}
-
-		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
-		jMenuCopyClient.setEnabled(countSelectedClients == 1);
-		popupChangeClientID.setEnabled(countSelectedClients == 1);
-		popupCopyClient.setEnabled(countSelectedClients == 1);
-
-		checkMenuItemsDisabling();
-	}
-
-	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
-			boolean resetNetbootProducts) {
-		configedMain.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
-				resetNetbootProducts);
-	}
-
 	protected void addClientAction() {
 		configedMain.callNewClientDialog();
-	}
-
-	private void changeClientIDAction() {
-		configedMain.callChangeClientIDDialog();
-	}
-
-	private void changeDepotAction() {
-		configedMain.callChangeDepotDialog();
 	}
 
 	private void showBackendConfigurationAction() {
@@ -2142,8 +1236,6 @@ public class MainFrame extends JFrame {
 			fDialogOpsiLicensingInfo.setVisible(true);
 		}
 	}
-
-	// ----------------------------------------------------------------------------------------
 
 	private static void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
 			int maxRightWidth) {
