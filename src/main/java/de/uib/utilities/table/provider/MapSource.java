@@ -49,10 +49,6 @@ public class MapSource implements TableSource {
 		rows = new ArrayList<>();
 	}
 
-	private static boolean dynInstanceOf(Object ob, Class<?> cl) {
-		return cl.isAssignableFrom(ob.getClass());
-	}
-
 	protected void fetchData() {
 		rows.clear();
 
@@ -98,19 +94,6 @@ public class MapSource implements TableSource {
 			rows.add(vRow);
 
 			rowCount++;
-		}
-	}
-
-	private void warnIfDataWrongClass(Object obj, String className) {
-		try {
-			Class<?> cl = Class.forName(className);
-			if (!dynInstanceOf(obj, cl)) {
-				Logging.warning(this, "MapSource fetchData(): data type does not fit");
-				Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
-				Logging.info(this, "class should be " + cl);
-			}
-		} catch (ClassNotFoundException e) {
-			Logging.error(this, "could not find class " + className, e);
 		}
 	}
 
