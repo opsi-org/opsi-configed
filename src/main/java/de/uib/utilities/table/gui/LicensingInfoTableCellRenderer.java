@@ -19,6 +19,8 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
+	private static final String DISPLAY_INFINITE = "\u221E";
+
 	protected LicensingInfoMap licensingInfoMap;
 
 	public LicensingInfoTableCellRenderer(LicensingInfoMap lInfoMap) {
@@ -30,7 +32,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 		if (value.equals(LicensingInfoMap.UNLIMITED_NUMBER)) {
-			value = LicensingInfoMap.DISPLAY_INFINITE;
+			value = DISPLAY_INFINITE;
 		}
 
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
