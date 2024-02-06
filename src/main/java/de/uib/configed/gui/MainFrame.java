@@ -703,6 +703,7 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
+		allPanel.setLayout(borderLayout1);
 		allPanel.add(iconBarPanel, BorderLayout.NORTH);
 		allPanel.add(centralPane, BorderLayout.CENTER);
 		allPanel.add(statusPane, BorderLayout.SOUTH);
@@ -710,14 +711,12 @@ public class MainFrame extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Logging.debug(this, "componentResized");
-
 				moveDivider1(jTabbedPaneConfigPanes.getPanelClientSelection(),
 						jTabbedPaneConfigPanes.getClientInfoPanel(), (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 						(int) (F_WIDTH_RIGHTHANDED * 1.5));
 				Logging.debug(this, "componentResized ready");
 			}
 		});
-		allPanel.setLayout(borderLayout1);
 		getContentPane().add(allPanel);
 
 		setTitle(configedMain.getAppTitle());
