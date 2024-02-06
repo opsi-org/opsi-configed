@@ -449,11 +449,6 @@ public class HardwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class);
 	}
 
-	public List<String> getClient2HwRowsJavaclassNamesPD() {
-		retrieveClient2HwRowsColumnNamesPD();
-		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES, List.class);
-	}
-
 	public List<String> getHwInfoClassNamesPD() {
 		retrieveClient2HwRowsColumnNamesPD();
 		return cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class);
@@ -465,8 +460,7 @@ public class HardwareDataService {
 				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
 		if (cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class) != null
 				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES, List.class) != null) {
+				&& cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null) {
 			return;
 		}
 
@@ -499,12 +493,10 @@ public class HardwareDataService {
 				}
 			}
 		}
-		List<String> client2HwRowsJavaclassNames = new ArrayList<>();
 		Set<String> hwInfoClasses = new HashSet<>();
 
 		for (String columnName : client2HwRowsColumnNames) {
 			Logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
-			client2HwRowsJavaclassNames.add("java.lang.String");
 			String className = cutClassName(columnName);
 			if (className != null) {
 				hwInfoClasses.add(className);
@@ -517,7 +509,6 @@ public class HardwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_COLUMN_NAMES, hostColumnNames);
 		cacheManager.setCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, hwInfoClassNames);
 		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, client2HwRowsColumnNames);
-		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES, client2HwRowsJavaclassNames);
 	}
 
 	private String cutClassName(String columnName) {

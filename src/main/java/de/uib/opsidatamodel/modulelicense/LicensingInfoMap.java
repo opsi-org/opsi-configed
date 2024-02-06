@@ -103,7 +103,6 @@ public final class LicensingInfoMap {
 	private List<String> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
-	private List<String> classNames;
 	private Map<String, Map<String, Object>> tableMap;
 	private String latestDateString;
 	private String checksum;
@@ -464,13 +463,8 @@ public final class LicensingInfoMap {
 		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.Boolean");
-
 		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
 			columnNames.add(date.getKey());
-			classNames.add("java.lang.String");
 		}
 
 		for (String currentModule : shownModules) {
@@ -704,10 +698,6 @@ public final class LicensingInfoMap {
 
 	public List<String> getColumnNames() {
 		return columnNames;
-	}
-
-	public List<String> getClassNames() {
-		return classNames;
 	}
 
 	public Map<String, Map<String, Map<String, Object>>> getDatesMap() {

@@ -56,7 +56,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private TableSource tableSource;
 
 	private List<String> columnNames = new ArrayList<>();
-	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
 	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
@@ -134,7 +133,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
 		columnNames = licenseMap.getColumnNames();
-		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
 	}
 
@@ -157,7 +155,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 						!LicensingInfoDialog.extendedView);
 				retrieveData();
-				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
+				tableSource = new MapSource(columnNames, theSourceMap, false);
 				buildModel();
 				super.reload();
 			}
@@ -165,7 +163,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		thePanel.setMarkBoldHeaderCellRenderer();
 
-		tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
+		tableSource = new MapSource(columnNames, theSourceMap, false);
 
 		buildModel();
 
@@ -359,7 +357,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		theModel.reset();
 
 		columnNames = theModel.getColumnNames();
-		classNames = theModel.getClassNames();
 
 		thePanel.setTableModel(theModel);
 

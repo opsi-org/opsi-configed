@@ -30,7 +30,7 @@ public class ExporterToCSV extends AbstractExportTable {
 	private static final String THIS_EXTENSION = ".csv";
 
 	public ExporterToCSV(JTable table) {
-		super(table, null);
+		super(table);
 
 		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
@@ -46,10 +46,6 @@ public class ExporterToCSV extends AbstractExportTable {
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null) {
 			return;
-		}
-
-		if (theTable.getModel() instanceof GenTableModel) {
-			setClassNames(((GenTableModel) theTable.getModel()).getClassNames());
 		}
 
 		if ((fileName = checkFile(fileName, extensionFilter)) != null) {

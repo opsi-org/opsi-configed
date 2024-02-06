@@ -1050,49 +1050,40 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		List<String> classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
-		licensePoolTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-						}
-					}
+		licensePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
+			@Override
+			public void reloadMap() {
+				if (!isAllLicenseDataReloaded()) {
+					persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
+				}
+			}
 
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
-					}
-				}));
+			@Override
+			public Map<String, Map<String, Object>> retrieveMap() {
+				return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+			}
+		}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
-		licenseOptionsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController
-									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
-						}
-					}
+		licenseOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
+			@Override
+			public void reloadMap() {
+				if (!isAllLicenseDataReloaded()) {
+					persistenceController
+							.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+				}
+			}
 
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
-					}
-				}));
+			@Override
+			public Map<String, Map<String, Object>> retrieveMap() {
+				return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+			}
+		}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1101,16 +1092,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
 		licenseContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!isAllLicenseDataReloaded()) {
@@ -1132,16 +1116,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
 		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("de.uib.utilities.ExtendedInteger");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-
 		softwarelicensesTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!isAllLicenseDataReloaded()) {

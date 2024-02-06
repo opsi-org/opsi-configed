@@ -33,7 +33,6 @@ public class GenTableModel extends AbstractTableModel {
 	private int rowsLength;
 	private int colsLength;
 	private List<String> columnNames;
-	private List<String> classNames;
 	private List<List<Object>> rows;
 
 	private Set<Integer> addedRows;
@@ -130,9 +129,6 @@ public class GenTableModel extends AbstractTableModel {
 		columnNames = tableProvider.getColumnNames();
 		Logging.info(this, "initColumns " + columnNames);
 
-		classNames = tableProvider.getClassNames();
-		Logging.info(this, "initColumns  classNames " + classNames);
-
 		if (columnNames == null) {
 			colsLength = 0;
 		} else {
@@ -146,11 +142,6 @@ public class GenTableModel extends AbstractTableModel {
 		columnNames = tableProvider.getColumnNames();
 		colsLength = columnNames.size();
 		return columnNames;
-	}
-
-	public List<String> getClassNames() {
-		classNames = tableProvider.getClassNames();
-		return classNames;
 	}
 
 	public int getKeyCol() {

@@ -115,13 +115,12 @@ public class ControllerHWinfoMultiClients {
 
 	private void initModel() {
 		List<String> columnNames = persistenceController.getHardwareDataService().getClient2HwRowsColumnNamesPD();
-		List<String> classNames = persistenceController.getHardwareDataService().getClient2HwRowsJavaclassNamesPD();
 
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 
 		model = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						// Nothing to reload.
