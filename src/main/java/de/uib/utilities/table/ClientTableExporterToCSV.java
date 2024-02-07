@@ -48,6 +48,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
+		columnNames.add("opsiHostKey");
 		printer.printRecord(columnNames);
 
 	}
@@ -77,6 +78,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 			row.add(Boolean.toString(clientInfo.getWanConfig()));
 			row.add(Boolean.toString(clientInfo.getUefiBoot()));
 			row.add(Boolean.toString(clientInfo.getShutdownInstall()));
+			row.add(clientInfo.getHostKey());
 			if (!row.isEmpty()) {
 				printer.printRecord(row);
 			}
