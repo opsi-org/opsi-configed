@@ -93,7 +93,8 @@ public class MainFrame extends JFrame {
 	private JMenu jMenuFile;
 	private JMenuItem jMenuFileSaveConfigurations;
 
-	private ClientMenu clientMenu;
+	private ClientMenuManager clientMenu;
+	private JMenu jMenuClients;
 
 	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
 	private JMenu jMenuServer = new JMenu();
@@ -191,7 +192,7 @@ public class MainFrame extends JFrame {
 		return iconBarPanel;
 	}
 
-	public ClientMenu getClientMenu() {
+	public ClientMenuManager getClientMenu() {
 		return clientMenu;
 	}
 
@@ -738,7 +739,8 @@ public class MainFrame extends JFrame {
 	private JMenuBar initMenuBar() {
 		initMenuData();
 
-		clientMenu = new ClientMenu(this, configedMain);
+		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
+		jMenuClients = clientMenu.getJMenu();
 		setupMenuFile();
 		setupMenuGrouping();
 		setupMenuServer();
@@ -748,7 +750,7 @@ public class MainFrame extends JFrame {
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(jMenuFile);
 		jMenuBar.add(jMenuClientselection);
-		jMenuBar.add(clientMenu);
+		jMenuBar.add(jMenuClients);
 		jMenuBar.add(jMenuServer);
 		jMenuBar.add(jMenuFrames);
 		jMenuBar.add(jMenuHelp);

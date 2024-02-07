@@ -41,6 +41,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductgroupPanel;
@@ -256,6 +257,17 @@ public class PanelProductSettings extends JSplitPane {
 		if (ServerFacade.isOpsi43()) {
 			popup.add(itemOnDemandForSelectedProducts);
 		}
+
+		popup.addSeparator();
+
+		ClientMenuManager clientMenuManager = ClientMenuManager.getInstance();
+		JMenu resetProductsMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
+		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
+			clientMenuManager.addResetLocalbootProductsMenuItemsTo(resetProductsMenu);
+		} else {
+			clientMenuManager.addResetNetbootProductsMenuItemsTo(resetProductsMenu);
+		}
+		popup.add(resetProductsMenu);
 
 		popup.addSeparator();
 

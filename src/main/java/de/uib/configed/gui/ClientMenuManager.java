@@ -48,10 +48,12 @@ import de.uib.utilities.table.ExporterToPDF;
 import utils.Utils;
 
 @SuppressWarnings({ "java:S1200" })
-public class ClientMenu extends JMenu {
+public final class ClientMenuManager {
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
+
+	private static ClientMenuManager instance;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -81,25 +83,39 @@ public class ClientMenu extends JMenu {
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
+	private JMenu jMenu;
+
 	private Map<String, JMenuItem> menuItemsHost;
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
 
-	public ClientMenu(MainFrame mainFrame, ConfigedMain configedMain) {
+	private ClientMenuManager(ConfigedMain configedMain, MainFrame mainFrame) {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
 		initJMenu();
+	}
+
+	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
+		instance = new ClientMenuManager(configedMain, mainFrame);
+		return instance;
+	}
+
+	public static ClientMenuManager getInstance() {
+		return instance;
 	}
 
 	public JCheckBoxMenuItem getClientSelectionToggleFilterMenu() {
 		return jMenuClientSelectionToggleFilter;
 	}
 
+	public JMenu getJMenu() {
+		return jMenu;
+	}
+
 	@SuppressWarnings({ "java:S138" })
 	private void initJMenu() {
-		setText(Configed.getResourceValue("MainFrame.jMenuClients"));
-
-		addMenuListener(new MenuListener() {
+		jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
+		jMenu.addMenuListener(new MenuListener() {
 			@Override
 			public void menuCanceled(MenuEvent arg0) {
 				// Nothing to do.
@@ -168,55 +184,55 @@ public class ClientMenu extends JMenu {
 		jMenuRemoteControl.addActionListener(
 				(ActionEvent e) -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 
-		add(initWakeOnLANMenu());
-		add(jMenuOpsiClientdEvent);
-		add(jMenuShowPopupMessage);
-		add(jMenuRequestSessionInfo);
-		add(jMenuDeletePackageCaches);
+		jMenu.add(initWakeOnLANMenu());
+		jMenu.add(jMenuOpsiClientdEvent);
+		jMenu.add(jMenuShowPopupMessage);
+		jMenu.add(jMenuRequestSessionInfo);
+		jMenu.add(jMenuDeletePackageCaches);
 
-		addSeparator();
+		jMenu.addSeparator();
 
-		add(jMenuShutdownClient);
-		add(jMenuRebootClient);
-		add(jMenuRemoteControl);
+		jMenu.add(jMenuShutdownClient);
+		jMenu.add(jMenuRebootClient);
+		jMenu.add(jMenuRemoteControl);
 
-		addSeparator();
+		jMenu.addSeparator();
 
-		add(jMenuAddClient);
+		jMenu.add(jMenuAddClient);
 		if (ServerFacade.isOpsi43()) {
-			add(jMenuCopyClient);
+			jMenu.add(jMenuCopyClient);
 		}
-		add(jMenuDeleteClient);
+		jMenu.add(jMenuDeleteClient);
 
-		add(initResetProductsMenu());
+		jMenu.add(initResetProductsMenu());
 
-		add(jMenuFreeLicenses);
-		add(jMenuChangeClientID);
+		jMenu.add(jMenuFreeLicenses);
+		jMenu.add(jMenuChangeClientID);
 		if (mainFrame.isMultiDepot()) {
-			add(jMenuChangeDepot);
+			jMenu.add(jMenuChangeDepot);
 		}
-		addSeparator();
+		jMenu.addSeparator();
 
-		add(jMenuSelectionGetGroup);
-		add(jMenuSelectionGetSavedSearch);
+		jMenu.add(jMenuSelectionGetGroup);
+		jMenu.add(jMenuSelectionGetSavedSearch);
 
-		addSeparator();
+		jMenu.addSeparator();
 
-		add(jMenuClientSelectionToggleFilter);
+		jMenu.add(jMenuClientSelectionToggleFilter);
 
-		add(jMenuRebuildClientList);
-		add(jMenuCreatePdf);
+		jMenu.add(jMenuRebuildClientList);
+		jMenu.add(jMenuCreatePdf);
 
 		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTable().getTable());
-		exportTable.addMenuItemsTo(this);
+		exportTable.addMenuItemsTo(jMenu);
 
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
 				mainFrame.getClientTable().getTable());
-		clientTableExporter.addMenuItemsTo(this);
+		clientTableExporter.addMenuItemsTo(jMenu);
 
-		addSeparator();
+		jMenu.addSeparator();
 
-		add(initShowColumnsMenu());
+		jMenu.add(initShowColumnsMenu());
 	}
 
 	private JMenu initWakeOnLANMenu() {
@@ -259,6 +275,24 @@ public class ClientMenu extends JMenu {
 	}
 
 	private JMenu initResetProductsMenu() {
+		addResetProductsMenuItemsTo(jMenuResetProducts);
+		return jMenuResetProducts;
+	}
+
+	public void addResetProductsMenuItemsTo(JMenu jMenu) {
+		addResetProductsMenuItemsTo(jMenu, true, true, true);
+	}
+
+	public void addResetLocalbootProductsMenuItemsTo(JMenu jMenu) {
+		addResetProductsMenuItemsTo(jMenu, true, false, false);
+	}
+
+	public void addResetNetbootProductsMenuItemsTo(JMenu jMenu) {
+		addResetProductsMenuItemsTo(jMenu, false, true, false);
+	}
+
+	private void addResetProductsMenuItemsTo(JMenu jMenu, boolean includeResetOptionForLocalbootProducts,
+			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
 		JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 		jMenuResetProductOnClientWithStates
@@ -288,14 +322,18 @@ public class ClientMenu extends JMenu {
 		jMenuResetNetbootProductOnClient
 				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
 
-		jMenuResetProducts.add(jMenuResetLocalbootProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetLocalbootProductOnClient);
-		jMenuResetProducts.add(jMenuResetNetbootProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetNetbootProductOnClient);
-		jMenuResetProducts.add(jMenuResetProductOnClientWithStates);
-		jMenuResetProducts.add(jMenuResetProductOnClient);
-
-		return jMenuResetProducts;
+		if (includeResetOptionForLocalbootProducts) {
+			jMenu.add(jMenuResetLocalbootProductOnClientWithStates);
+			jMenu.add(jMenuResetLocalbootProductOnClient);
+		}
+		if (includeResetOptionForNetbootProducts) {
+			jMenu.add(jMenuResetNetbootProductOnClientWithStates);
+			jMenu.add(jMenuResetNetbootProductOnClient);
+		}
+		if (includeResetOptionForBothProducts) {
+			jMenu.add(jMenuResetProductOnClientWithStates);
+			jMenu.add(jMenuResetProductOnClient);
+		}
 	}
 
 	@SuppressWarnings({ "java:S138" })
@@ -534,8 +572,8 @@ public class ClientMenu extends JMenu {
 	}
 
 	private void cloneMenuItems(JPopupMenu popupMenu) {
-		for (int i = 0; i < getItemCount(); i++) {
-			Component component = getMenuComponent(i);
+		for (int i = 0; i < jMenu.getItemCount(); i++) {
+			Component component = jMenu.getMenuComponent(i);
 			if (component instanceof JSeparator) {
 				popupMenu.addSeparator();
 			}
