@@ -68,6 +68,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
 	private Map<String, List<Map<String, Object>>> hwInfo;
+	private Map<String, Map<String, Object>> devicesInfo;
 	private String treeRootTitle;
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
@@ -105,14 +106,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		buildPanel();
 	}
 
-	private static String encodeString(String s) {
-		return s;
-	}
-
 	private void buildPanel() {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
+		tree.addTreeSelectionListener(this);
+		tree.setCellRenderer(new IconNodeRenderer());
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -223,8 +222,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel = new DefaultTreeModel(root);
 
 		tree.setModel(treeModel);
-		tree.addTreeSelectionListener(this);
-		tree.setCellRenderer(new IconNodeRenderer());
 
 		rootPath = tree.getPathForRow(0);
 	}
@@ -281,7 +278,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
-		Map<String, Object> deviceInfo = node.getDeviceInfo();
+
+		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
 
 		return devices != null && deviceInfo != null;
 	}
@@ -313,7 +311,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-		Map<String, Object> deviceInfo = node.getDeviceInfo();
+		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
@@ -324,7 +322,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				Logging.debug(this, "opsi " + opsi);
 
 				// table row keys //no encoding needed
-				String ui = encodeString((String) value.get("UI"));
+				String ui = (String) value.get("UI");
 				String unit = null;
 				if (value.containsKey("Unit")) {
 					unit = (String) value.get("Unit");
@@ -469,6 +467,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		Arrays.sort(hwClassesUI);
 
+		devicesInfo = new HashMap<>();
+
 		for (int i = 0; i < hwClassesUI.length; i++) {
 			// get next key - value - pair
 			String hwClassUI = hwClassesUI[i];
@@ -480,7 +480,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				continue;
 			}
 
-			IconNode classNode = new IconNode(encodeString(hwClassUI));
+			IconNode classNode = new IconNode(hwClassUI);
 			Icon classIcon;
 			classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
 			if (classIcon == null) {
@@ -547,9 +547,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (String name : names) {
 			for (Map<String, Object> device : devices) {
 				if (name.equals(device.get("displayName"))) {
-					IconNode iconNode = new IconNode(encodeString((String) device.get("displayName")));
+					IconNode iconNode = new IconNode(device.get("displayName"));
 					iconNode.setIcon(classIcon);
-					iconNode.setDeviceInfo(device);
+					devicesInfo.put((String) device.get("displayName"), device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);
 					break;

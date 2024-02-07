@@ -147,12 +147,13 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
 
 		if (clickNode.getAllowsChildren()) {
-			if (((GroupNode) clickNode).allowsSubGroups()) {
+			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())) {
 				menuItemCreateNode.setVisible(true);
 				numberVisibleItems++;
 			}
 
-			if (((GroupNode) clickNode).allowsSubGroups() && !(((GroupNode) clickNode).isFixed())) {
+			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())
+					&& !(((GroupNode) clickNode).isFixed())) {
 				menuItemEditNode.setVisible(true);
 				numberVisibleItems++;
 			}
