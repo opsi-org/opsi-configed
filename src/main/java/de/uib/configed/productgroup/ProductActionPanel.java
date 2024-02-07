@@ -33,10 +33,10 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 	private JTable tableProducts;
 
 	private IconButton buttonReloadProductStates;
@@ -73,7 +73,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TablesearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
+		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true, null);
 		searchPane.setFiltering(true);
 
@@ -110,7 +110,7 @@ public class ProductActionPanel extends JPanel {
 
 		// create list with tooltips
 		JList<String> listChooseAction = new JList<>(modelChooseAction);
-		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(null, values, "");
+		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(values);
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
