@@ -16,14 +16,14 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 public class DepotsList extends JList<String> implements ComponentListener {
-	private MyListCellRenderer myListCellRenderer;
+	private DepotListCellRenderer myListCellRenderer;
 	private List<String> saveV;
 
 	private Map<String, Map<String, Object>> depotInfo;
 
 	public DepotsList() {
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		myListCellRenderer = new MyListCellRenderer();
+		myListCellRenderer = new DepotListCellRenderer();
 		super.setCellRenderer(myListCellRenderer);
 	}
 
