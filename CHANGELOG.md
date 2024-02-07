@@ -7,6 +7,7 @@
 
 ## Changed
 - Remove net_connection from default WAN config
+- Provide tooltips for depot selection (on the right side next to "Edit properties on depot(s)" label) in "default properties" tab
 
 ## [4.3.1.6] - 2024-02-01
 ## Fixed
