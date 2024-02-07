@@ -543,7 +543,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (String name : names) {
 			for (Map<String, Object> device : devices) {
 				if (name.equals(device.get("displayName"))) {
-					IconNode iconNode = new IconNode((String) device.get("displayName"));
+					IconNode iconNode = new IconNode(device.get("displayName"));
 					iconNode.setIcon(classIcon);
 					iconNode.setDeviceInfo(device);
 					classNode.add(iconNode);
