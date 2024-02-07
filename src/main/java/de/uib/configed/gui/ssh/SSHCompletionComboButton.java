@@ -15,7 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
@@ -319,22 +318,14 @@ public class SSHCompletionComboButton {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
-			Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			Logging.debug(this, "getListCellRendererComponent called");
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (!(component instanceof JLabel)) {
-				return component;
+			if (autocompletion == null || getText() == null || getText().isEmpty()) {
+				return this;
 			}
 
-			JLabel labelComponent = (JLabel) component;
-			String text = labelComponent.getText();
-			if (autocompletion == null || text == null || text.isEmpty()) {
-				return component;
-			}
-
-			text = text.trim();
+			String text = getText().trim();
 			String basicPath = autocompletion.getBasicPath();
-			Logging.debug(this, "(1)  basicPath " + basicPath + " text " + text);
 
 			// könnte eigtl raus. funktiniert sonst aber nicht...
 			if (!basicPath.isEmpty() && !text.isEmpty()) {
@@ -342,11 +333,10 @@ public class SSHCompletionComboButton {
 				text = text.replace("//", "/");
 
 				if (text.startsWith(basicPath) && !text.equals(basicPath) && !basicPath.equals(ROOT_DIRECTORY)) {
-					labelComponent.setText(text.replace(basicPath, ""));
+					setText(text.replace(basicPath, ""));
 				}
-				Logging.debug(this, "(2) basicPath " + basicPath + " text " + text);
 			}
-			return labelComponent;
+			return this;
 		}
 	}
 }

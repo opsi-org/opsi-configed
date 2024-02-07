@@ -155,19 +155,16 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new ArrayList<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
 			finalColumns[i] = i;
 		}
 
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						// Nothing to reload.

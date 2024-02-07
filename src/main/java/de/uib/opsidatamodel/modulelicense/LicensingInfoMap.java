@@ -79,10 +79,6 @@ public final class LicensingInfoMap {
 	public static final int CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT = 5;
 	public static final int CLIENT_LIMIT_WARNING_DAYS_DEFAULT = 30;
 
-	private static final String CLASSNAME = LicensingInfoMap.class.getName();
-
-	public static final String DISPLAY_INFINITE = "\u221E";
-
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
@@ -103,7 +99,6 @@ public final class LicensingInfoMap {
 	private List<String> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
-	private List<String> classNames;
 	private Map<String, Map<String, Object>> tableMap;
 	private String latestDateString;
 	private String checksum;
@@ -117,7 +112,7 @@ public final class LicensingInfoMap {
 	private List<String> disabledWarningModules;
 
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
-		Logging.info(CLASSNAME + "generate with reducedView " + reduced + " at the moment ignored, we set false");
+		Logging.info(getClass(), "generate with reducedView " + reduced + " at the moment ignored, we set false");
 		reducedView = reduced;
 
 		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
@@ -174,7 +169,7 @@ public final class LicensingInfoMap {
 
 	public static LicensingInfoMap getInstance() {
 		if (instance == null) {
-			Logging.error(CLASSNAME + " instance  not initialized");
+			Logging.error(" instance  not initialized");
 		}
 
 		return instance;
@@ -464,13 +459,8 @@ public final class LicensingInfoMap {
 		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.Boolean");
-
 		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
 			columnNames.add(date.getKey());
-			classNames.add("java.lang.String");
 		}
 
 		for (String currentModule : shownModules) {
@@ -514,7 +504,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " getCurrentlyActiveLicense " + ex);
+			Logging.error(getClass(), " getCurrentlyActiveLicense " + ex);
 		}
 
 		return newest;
@@ -547,7 +537,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " findNextChangeDate ", ex);
+			Logging.error(getClass(), " findNextChangeDate ", ex);
 		}
 
 		return null;
@@ -564,7 +554,7 @@ public final class LicensingInfoMap {
 
 			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange ", ex);
+			Logging.error(getClass(), " getDaysLeftUntilNextChange ", ex);
 		}
 
 		return null;
@@ -593,7 +583,7 @@ public final class LicensingInfoMap {
 					}
 				}
 			} catch (ParseException ex) {
-				Logging.error(CLASSNAME + " checkTimeLeft ", ex);
+				Logging.error(getClass(), " checkTimeLeft ", ex);
 			}
 		}
 
@@ -704,10 +694,6 @@ public final class LicensingInfoMap {
 
 	public List<String> getColumnNames() {
 		return columnNames;
-	}
-
-	public List<String> getClassNames() {
-		return classNames;
 	}
 
 	public Map<String, Map<String, Map<String, Object>>> getDatesMap() {

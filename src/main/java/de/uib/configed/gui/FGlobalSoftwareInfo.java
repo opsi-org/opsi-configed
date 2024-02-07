@@ -30,7 +30,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	private PanelGenEditTable panelGlobalSoftware;
 
 	private List<String> columnNames;
-	private List<String> classNames;
 
 	private int keyCol;
 
@@ -68,11 +67,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		columnNames.add("ID");
 		for (String key : SWAuditEntry.KEYS_FOR_IDENT) {
 			columnNames.add(key);
-		}
-
-		classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
 		}
 
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -136,9 +130,5 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	public List<String> getColumnNames() {
 		return columnNames;
-	}
-
-	public List<String> getClassNames() {
-		return classNames;
 	}
 }

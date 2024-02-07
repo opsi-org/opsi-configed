@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -43,7 +44,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.StandardListCellRenderer;
 import utils.Utils;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
@@ -75,7 +75,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.addMouseListener(this);
 		listDepots.addKeyListener(this);
 
-		listDepots.setCellRenderer(new StandardListCellRenderer());
+		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer();
+		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
+		listDepots.setCellRenderer(myListCellRenderer);
 
 		listSelectedDepots = new ArrayList<>();
 

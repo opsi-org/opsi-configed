@@ -239,11 +239,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code List<String>}
 	 */
-	CLIENT_TO_HW_ROWS_JAVA_CLASS_NAMES("client_to_hw_rows_java_class_names"),
-
-	/**
-	 * return type {@code List<String>}
-	 */
 	HOST_COLUMN_NAMES("host_column_names"),
 
 	/**

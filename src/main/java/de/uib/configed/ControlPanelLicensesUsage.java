@@ -109,7 +109,6 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 
 	private void initPanels() {
 		List<String> columnNames;
-		List<String> classNames;
 
 		// --- panelLicensesUsage
 		columnNames = new ArrayList<>();
@@ -118,16 +117,10 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		columnNames.add(LicenseUsageEntry.LICENSE_POOL_ID_KEY);
 		columnNames.add(LicenseUsageEntry.LICENSE_KEY_KEY);
 		columnNames.add(LicenseUsageEntry.NOTES_KEY);
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicensesUsage = new MapTableUpdateItemFactory(modelLicensesUsage,
 				columnNames);
 		modelLicensesUsage = new GenTableModel(updateItemFactoryLicensesUsage,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded()) {

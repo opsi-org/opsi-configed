@@ -102,15 +102,10 @@ public class PanelProductProperties extends JSplitPane {
 		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
 
-		List<String> classNames = new ArrayList<>();
-		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
-		}
-
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, classNames, configedMain.getSelectedDepots())),
-				-1, paneProducts, updateCollection);
+				new DefaultTableProvider(new ExternalSource(columnNames, configedMain.getSelectedDepots())), -1,
+				paneProducts, updateCollection);
 	}
 
 	public void setProductProperties() {

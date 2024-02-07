@@ -65,7 +65,6 @@ import de.uib.utilities.table.CursorrowObserver;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
@@ -278,7 +277,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
 
-		theTable = new JTableWithToolTips();
+		theTable = new JTable();
 
 		exportTable = new ExporterToCSV(theTable);
 

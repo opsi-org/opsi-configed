@@ -52,7 +52,6 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 		updateCollection = new ArrayList<MapBasedTableEditItem>();
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
@@ -61,17 +60,10 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 		columnNames.add("remaining_opsi");
 		columnNames.add("SWinventory_used");
 		columnNames.add("SWinventory_remaining");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryStatistics = new MapTableUpdateItemFactory(modelStatistics,
 				columnNames);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
