@@ -4,6 +4,7 @@
 ## Fixed
 - Modules file uploading via SFTP
 - `NullPointerException` when priority or position columns in localboot or netboot product tab is displayed by default
+- Product states and actions for netboot products aren't shown
 - No depot selected by default
 
 ## Changed
