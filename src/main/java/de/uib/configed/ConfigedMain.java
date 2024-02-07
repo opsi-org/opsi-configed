@@ -3286,6 +3286,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		requestReloadStatesAndActions();
+
+		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS || getViewIndex() == VIEW_NETBOOT_PRODUCTS) {
+			resetView(getViewIndex());
+		}
+
 		mainFrame.deactivateLoadingCursor();
 	}
 
