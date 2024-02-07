@@ -105,10 +105,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		buildPanel();
 	}
 
-	private static String encodeString(String s) {
-		return s;
-	}
-
 	private void buildPanel() {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
@@ -324,7 +320,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				Logging.debug(this, "opsi " + opsi);
 
 				// table row keys //no encoding needed
-				String ui = encodeString((String) value.get("UI"));
+				String ui = (String) value.get("UI");
 				String unit = null;
 				if (value.containsKey("Unit")) {
 					unit = (String) value.get("Unit");
@@ -480,7 +476,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				continue;
 			}
 
-			IconNode classNode = new IconNode(encodeString(hwClassUI));
+			IconNode classNode = new IconNode(hwClassUI);
 			Icon classIcon;
 			classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
 			if (classIcon == null) {
@@ -547,7 +543,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (String name : names) {
 			for (Map<String, Object> device : devices) {
 				if (name.equals(device.get("displayName"))) {
-					IconNode iconNode = new IconNode(encodeString((String) device.get("displayName")));
+					IconNode iconNode = new IconNode((String) device.get("displayName"));
 					iconNode.setIcon(classIcon);
 					iconNode.setDeviceInfo(device);
 					classNode.add(iconNode);
