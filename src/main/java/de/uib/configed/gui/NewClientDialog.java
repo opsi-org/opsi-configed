@@ -775,6 +775,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
+		columnNames.add("opsiHostKey");
 
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
@@ -832,6 +833,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		columnNames.add("wanConfig");
 		columnNames.add("uefiBoot");
 		columnNames.add("shutdownInstall");
+		columnNames.add("opsiHostKey");
 
 		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
 		JPanel centerPanel = dialog.initPanel();

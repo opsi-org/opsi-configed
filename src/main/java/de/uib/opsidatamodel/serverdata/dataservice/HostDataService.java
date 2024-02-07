@@ -110,6 +110,7 @@ public class HostDataService {
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));
+			String opsiHostKey = ((String) client.get(14)).trim();
 
 			String newClientId = hostname + "." + domainname;
 
@@ -121,6 +122,7 @@ public class HostDataService {
 			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
+			hostItem.put(HostInfo.HOST_KEY_KEY, opsiHostKey);
 
 			clientsJsonObject.add(hostItem);
 
