@@ -110,6 +110,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
+		tree.addTreeSelectionListener(this);
+		tree.setCellRenderer(new IconNodeRenderer());
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -220,8 +222,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel = new DefaultTreeModel(root);
 
 		tree.setModel(treeModel);
-		tree.addTreeSelectionListener(this);
-		tree.setCellRenderer(new IconNodeRenderer());
 
 		rootPath = tree.getPathForRow(0);
 	}
