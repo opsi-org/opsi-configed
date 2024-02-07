@@ -121,7 +121,7 @@ public class ClientMenu extends JMenu {
 
 		JMenuItem jMenuSelectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuSelectionGetGroup.addActionListener((ActionEvent e) -> mainFrame.callSelectionDialog());
+		jMenuSelectionGetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
 		JMenuItem jMenuSelectionGetSavedSearch = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));

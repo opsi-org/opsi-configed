@@ -14,6 +14,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -64,10 +65,6 @@ public class IconBarPanel extends JPanel {
 
 	public IconButton getIconButtonReloadLicenses() {
 		return iconButtonReloadLicenses;
-	}
-
-	public IconButton getIconButtonNewClient() {
-		return iconButtonNewClient;
 	}
 
 	public IconButton getIconButtonSaveConfiguration() {
@@ -367,7 +364,7 @@ public class IconBarPanel extends JPanel {
 		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.jMenuFileReload"), "images/reload.gif",
 				"images/reload_over.gif", "");
 		iconButtonReload.setFocusable(false);
-		iconButtonReload.addActionListener((ActionEvent e) -> mainFrame.reloadAction());
+		iconButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
 
 		iconButtonReloadLicenses = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
 				"images/reload_licenses.png", "images/reload_licenses_over.png", "", true);
@@ -378,17 +375,17 @@ public class IconBarPanel extends JPanel {
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", "");
 		iconButtonNewClient.setFocusable(false);
-		iconButtonNewClient.addActionListener((ActionEvent e) -> mainFrame.addClientAction());
+		iconButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
 		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", "");
 		iconButtonSetGroup.setFocusable(false);
-		iconButtonSetGroup.addActionListener((ActionEvent e) -> mainFrame.callSelectionDialog());
+		iconButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply.png", "", "images/apply_disabled.png", false);
 		iconButtonSaveConfiguration.setFocusable(false);
-		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> mainFrame.saveAction());
+		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		iconButtonToggleClientFilter = new IconButton(
 				Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
@@ -401,7 +398,10 @@ public class IconBarPanel extends JPanel {
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
 				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
 		iconButtonReachableInfo.setFocusable(false);
-		iconButtonReachableInfo.addActionListener((ActionEvent e) -> mainFrame.getReachableInfo());
+		iconButtonReachableInfo.addActionListener((ActionEvent e) -> {
+			iconButtonReachableInfo.setEnabled(false);
+			SwingUtilities.invokeLater(configedMain::getReachableInfo);
+		});
 
 		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
@@ -411,7 +411,7 @@ public class IconBarPanel extends JPanel {
 		iconButtonSessionInfo.setEnabled(true);
 		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
 			configedMain.setColumnSessionInfo(true);
-			mainFrame.getSessionInfo();
+			configedMain.getSessionInfo();
 		});
 	}
 

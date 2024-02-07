@@ -52,7 +52,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
-import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -149,8 +148,6 @@ public class MainFrame extends JFrame {
 
 	private IconBarPanel iconBarPanel;
 
-	private LicenseDisplayer licenseDisplayer;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -215,16 +212,16 @@ public class MainFrame extends JFrame {
 		jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
+		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> saveAction());
+		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
-			reloadAction();
+			configedMain.reload();
 			if (iconBarPanel.getIconButtonReloadLicenses().isEnabled()) {
 				reloadLicensesAction();
 			}
@@ -508,7 +505,7 @@ public class MainFrame extends JFrame {
 		jMenuClientselection.setText(Configed.getResourceValue("MainFrame.jMenuClientselection"));
 
 		jMenuClientselectionGetGroup.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuClientselectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
+		jMenuClientselectionGetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
 		jMenuClientselectionGetSavedSearch
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
@@ -872,28 +869,6 @@ public class MainFrame extends JFrame {
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 
-	private void exitAction() {
-		configedMain.finishApp(true, 0);
-	}
-
-	protected void saveAction() {
-		configedMain.checkSaveAll(false);
-	}
-
-	protected void getSessionInfo() {
-		configedMain.getSessionInfo();
-	}
-
-	protected void getReachableInfo() {
-		iconBarPanel.getIconButtonReachableInfo().setEnabled(false);
-
-		SwingUtilities.invokeLater(configedMain::getReachableInfo);
-	}
-
-	protected void callSelectionDialog() {
-		configedMain.callClientSelectionDialog();
-	}
-
 	private void groupByNotCurrentProductVersion() {
 		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
@@ -917,10 +892,6 @@ public class MainFrame extends JFrame {
 		fProductSelectionList.setListData(completeList);
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
-	}
-
-	protected void reloadAction() {
-		configedMain.reload();
 	}
 
 	public void activateLoadingPane(String infoText) {
@@ -969,10 +940,6 @@ public class MainFrame extends JFrame {
 				deactivateLoadingPane();
 			}
 		}.start();
-	}
-
-	protected void addClientAction() {
-		configedMain.callNewClientDialog();
 	}
 
 	private void showBackendConfigurationAction() {
@@ -1117,20 +1084,6 @@ public class MainFrame extends JFrame {
 		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if ("arrange".equals(command)) {
 			arrangeWs(instances);
-		}
-	}
-
-	public void startLicenseDisplayer() {
-		if (licenseDisplayer == null) {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.setConfigedMain(configedMain);
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(this, "Unable to open FXML file.", ioE);
-			}
-		} else {
-			licenseDisplayer.display();
 		}
 	}
 

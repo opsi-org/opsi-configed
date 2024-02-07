@@ -9,6 +9,7 @@ package de.uib.configed;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
@@ -309,6 +311,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private boolean isInitialLicenseDataLoading;
 
 	private InitialDataLoader initialDataLoader;
+	private LicenseDisplayer licenseDisplayer;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -761,12 +764,26 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					// using it since it is not needed.
 					new JFXPanel();
 
-					Platform.runLater(mainFrame::startLicenseDisplayer);
+					Platform.runLater(() -> showLicenseDisplayer());
 				}
 
 				mainFrame.deactivateLoadingPane();
 			}
 		}.start();
+	}
+
+	private void showLicenseDisplayer() {
+		if (licenseDisplayer == null) {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.setConfigedMain(ConfigedMain.this);
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(this, "Unable to open FXML file.", ioE);
+			}
+		} else {
+			licenseDisplayer.display();
+		}
 	}
 
 	public void toggleLicensesFrame() {
