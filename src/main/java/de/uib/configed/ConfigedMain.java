@@ -111,7 +111,6 @@ import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -561,7 +560,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+			attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
 
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else {
@@ -1018,12 +1017,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsList.setInfo(depots);
 		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
-				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
-		if (oldSelectedDepots.isEmpty()) {
-			depotsList.setSelectedValue(myServer, true);
-		} else {
-			depotsList.setSelectedValues(oldSelectedDepots);
-		}
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots", myServer)).replaceAll("").split(","));
+		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
@@ -1070,49 +1065,40 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		List<String> classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
-		licensePoolTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-						}
-					}
+		licensePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
+			@Override
+			public void reloadMap() {
+				if (!isAllLicenseDataReloaded()) {
+					persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
+				}
+			}
 
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
-					}
-				}));
+			@Override
+			public Map<String, Map<String, Object>> retrieveMap() {
+				return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+			}
+		}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
-		licenseOptionsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController
-									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
-						}
-					}
+		licenseOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
+			@Override
+			public void reloadMap() {
+				if (!isAllLicenseDataReloaded()) {
+					persistenceController
+							.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+				}
+			}
 
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
-					}
-				}));
+			@Override
+			public Map<String, Map<String, Object>> retrieveMap() {
+				return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+			}
+		}));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -1121,16 +1107,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
 
 		licenseContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!isAllLicenseDataReloaded()) {
@@ -1152,16 +1131,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
 		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
-		classNames = new ArrayList<>();
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-		classNames.add("de.uib.utilities.ExtendedInteger");
-		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
-
 		softwarelicensesTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						if (!isAllLicenseDataReloaded()) {
@@ -1671,9 +1642,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
-		if (mainFrame != null) {
-			mainFrame.activateLoadingCursor();
-		}
 		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
@@ -1718,9 +1686,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
-		if (mainFrame != null) {
-			mainFrame.deactivateLoadingCursor();
-		}
 	}
 
 	private String getSelectedClientsString() {
@@ -2076,10 +2041,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 
-		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.activateLoadingCursor();
-		}
-
 		// when running after the first run, we deactivate buttons
 
 		depotsOfSelectedClients = null;
@@ -2096,10 +2057,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		setViewIndex(getViewIndex());
-
-		if (initialDataLoader.isDataLoaded()) {
-			mainFrame.deactivateLoadingCursor();
-		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -2215,9 +2172,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return getSelectedClients().size() == 1;
 	}
 
-	private boolean setProductsPage(boolean updateStatesAndActions, List<String> attributes, String productServerString,
-			PanelProductSettings panelProductSettings, List<String> productNames, List<String> displayFields,
-			String savedStateObjectTag) {
+	private boolean setProductsPage(boolean updateStatesAndActions,
+			Map<String, Map<String, Map<String, String>>> changedProductStates, List<String> attributes,
+			String productServerString, PanelProductSettings panelProductSettings, List<String> productNames,
+			List<String> displayFields, String savedStateObjectTag) {
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2254,7 +2212,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (updateStatesAndActions) {
 			InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(),
-					this, collectChangedLocalbootStates, productNames, statesAndActions, possibleActions,
+					this, changedProductStates, productNames, statesAndActions, possibleActions,
 					persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
 					displayFields, savedStateObjectTag);
 
@@ -2292,14 +2250,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private boolean setLocalbootProductsPage() {
-		return setProductsPage(localbootStatesAndActionsUpdate, getLocalbootStateAndActionsAttributes(),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
+		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
+				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
 				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(), localbootProductnames,
 				getLocalbootProductDisplayFieldsList(), "localbootProducts");
 	}
 
 	private boolean setNetbootProductsPage() {
-		return setProductsPage(netbootStatesAndActionsUpdate, Collections.emptyList(),
+		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
 				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
 				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(), netbootProductnames,
 				getNetbootProductDisplayFieldsList(), "netbootProducts");
@@ -2313,19 +2271,19 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			attributes.remove(ProductState.KEY_POSITION);
 
 			if (ServerFacade.isOpsi43()) {
-				attributes.add(ActionSequence.KEY);
+				attributes.add(ProductState.KEY_ACTION_SEQUENCE);
 			}
 		}
 
 		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_PROGRESS));
-			attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_ACTION));
+			attributes.add(ProductState.KEY_ACTION_PROGRESS);
+			attributes.add(ProductState.KEY_LAST_ACTION);
 		}
 
 		// Remove uneeded attributes
 		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
 
-		attributes.add(ProductState.key2servicekey.get(ProductState.KEY_LAST_STATE_CHANGE));
+		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
 		return attributes;
 	}
 
@@ -2333,15 +2291,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		List<String> attributes = new ArrayList<>();
 		for (String v : productDisplayFields) {
 			if (ProductState.KEY_VERSION_INFO.equals(v)) {
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PACKAGE_VERSION));
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_PRODUCT_VERSION));
-				continue;
-			}
-			if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
-				attributes.add(ProductState.key2servicekey.get(ProductState.KEY_ACTION_RESULT));
-			}
-			if (ProductState.key2servicekey.containsKey(v)) {
-				attributes.add(ProductState.key2servicekey.get(v));
+				attributes.add(ProductState.KEY_PACKAGE_VERSION);
+				attributes.add(ProductState.KEY_PRODUCT_VERSION);
+			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
+				attributes.add(ProductState.KEY_ACTION_RESULT);
+			} else {
+				attributes.add(v);
 			}
 		}
 
@@ -2615,9 +2570,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			mainFrame.activateLoadingCursor();
 			logfiles = persistenceController.getLogDataService().getLogfile(firstSelectedClient, logtypeToUpdate);
-			mainFrame.deactivateLoadingCursor();
 			Logging.debug(this, "log pages set");
 		}
 
@@ -3681,7 +3634,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
 			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
-			savedSearchesDialog.init(new Dimension(300, 400));
+			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
+			savedSearchesDialog.init();
 		}
 		savedSearchesDialog.start();
 	}

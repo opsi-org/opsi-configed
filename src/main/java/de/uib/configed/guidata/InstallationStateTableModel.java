@@ -191,13 +191,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			columnDict.put(ProductState.KEY_INSTALLATION_INFO,
 					Configed.getResourceValue("InstallationStateTableModel.report"));
-			// combines the following three
-			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
-					Configed.getResourceValue("InstallationStateTableModel.actionProgress"));
-			columnDict.put(ProductState.KEY_ACTION_RESULT,
-					Configed.getResourceValue("InstallationStateTableModel.actionResult"));
-			columnDict.put(ProductState.KEY_LAST_ACTION,
-					Configed.getResourceValue("InstallationStateTableModel.lastAction"));
 
 			columnDict.put(ProductState.KEY_ACTION_REQUEST,
 					Configed.getResourceValue("InstallationStateTableModel.actionRequest"));
@@ -208,12 +201,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			columnDict.put(ProductState.KEY_POSITION,
 					Configed.getResourceValue("InstallationStateTableModel.position"));
 
-			columnDict.put(ProductState.KEY_VERSION_INFO, "Version");
-			// combines the following two
-			columnDict.put(ProductState.KEY_PRODUCT_VERSION,
+			columnDict.put(ProductState.KEY_VERSION_INFO,
 					Configed.getResourceValue("InstallationStateTableModel.productVersion"));
-			columnDict.put(ProductState.KEY_PACKAGE_VERSION,
-					Configed.getResourceValue("InstallationStateTableModel.packageVersion"));
 
 			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));

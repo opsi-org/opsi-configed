@@ -9,52 +9,31 @@ package de.uib.utilities.swing.list;
 import java.awt.Component;
 import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 
 import utils.Utils;
 
 public class ListCellRendererByIndex extends StandardListCellRenderer {
-	private Map<String, String> mapOfStrings;
 	private Map<String, String> mapOfTooltips;
 
-	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String tooltipPrefix) {
-		super(tooltipPrefix);
+	public ListCellRendererByIndex(Map<String, String> mapOfTooltips) {
+		super();
 
-		mapOfStrings = mapOfStringValues;
-		mapOfTooltips = mapOfDescriptions;
+		this.mapOfTooltips = mapOfTooltips;
 	}
 
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
-		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-		if (!(c instanceof JComponent)) {
-			return c;
-		}
-
-		if (value == null) {
-			return c;
-		}
+		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 		String tooltip = mapOfTooltips.get(value);
-		if (tooltip == null || tooltip.isEmpty()) {
-			if (mapOfStrings == null) {
-				tooltip = "" + value;
-			} else {
-				tooltip = mapOfStrings.get(value);
-			}
+		if (tooltip != null && !tooltip.isEmpty()) {
+			setToolTipText(Utils.fillStringToLength(tooltip, FILL_LENGTH));
+		} else {
+			setToolTipText(null);
 		}
 
-		JComponent jc = (JComponent) c;
-
-		if (jc instanceof JLabel) {
-			((JLabel) jc).setToolTipText(Utils.fillStringToLength(tooltipPrefix + " " + tooltip + " ", FILL_LENGTH));
-		}
-
-		return jc;
+		return this;
 	}
 }

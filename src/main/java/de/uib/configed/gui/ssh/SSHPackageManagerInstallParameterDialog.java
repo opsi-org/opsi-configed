@@ -48,11 +48,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;
-		super.initButtons(this);
-		installLocalPanel = new SSHPMInstallLocalPanel();
-		installServerPanel = new SSHPMInstallServerPanel(fromMakeProductfile);
-		installWgetPanel = new SSHPMInstallWgetPanel();
-		installSettingsPanel = new SSHPMInstallSettingsPanel(this);
 
 		initInstances();
 		init();
@@ -64,6 +59,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	private void initInstances() {
+		super.initButtons(this);
 		ButtonGroup group = new ButtonGroup();
 
 		jRadioButtonLocal = new JRadioButton(
@@ -76,14 +72,17 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		group.add(jRadioButtonServer);
 		group.add(jRadioButtonWGet);
 
+		installLocalPanel = new SSHPMInstallLocalPanel();
+		installServerPanel = new SSHPMInstallServerPanel(fromMakeProductfile);
+		installWgetPanel = new SSHPMInstallWgetPanel();
+		installSettingsPanel = new SSHPMInstallSettingsPanel(this);
+
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
 			jRadioButtonServer.setSelected(true);
 
-			// if true, it can be closed
 			installLocalPanel.isOpen = true;
 			installLocalPanel.close();
 
-			// if false it can be opened
 			installServerPanel.isOpen = false;
 			installServerPanel.open();
 
@@ -91,11 +90,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		} else {
 			jRadioButtonLocal.setSelected(true);
 
-			// if false it can be opened
 			installLocalPanel.isOpen = false;
 			installLocalPanel.open();
 
-			// if true, it can be closed
 			installServerPanel.isOpen = true;
 			installServerPanel.close();
 		}

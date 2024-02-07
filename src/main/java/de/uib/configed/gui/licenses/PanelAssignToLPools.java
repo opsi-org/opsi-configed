@@ -385,7 +385,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		panelLicensepools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
@@ -393,7 +393,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelLicensepools.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		panelProductId2LPool = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);

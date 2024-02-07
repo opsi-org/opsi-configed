@@ -10,7 +10,6 @@ import java.awt.Container;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,7 +30,6 @@ import utils.Utils;
 public abstract class AbstractExportTable {
 	protected JTable theTable;
 
-	protected List<String> classNames;
 	protected Map<String, String> metaData;
 
 	protected FileNameExtensionFilter extensionFilter;
@@ -47,14 +45,9 @@ public abstract class AbstractExportTable {
 
 	protected String extension;
 
-	protected AbstractExportTable(JTable table, List<String> classNames) {
+	protected AbstractExportTable(JTable table) {
 		this.theTable = table;
-		this.classNames = classNames;
 		askForOverwrite = true;
-	}
-
-	public void setClassNames(List<String> classNames) {
-		this.classNames = classNames;
 	}
 
 	public void setAskForOverwrite(boolean b) {

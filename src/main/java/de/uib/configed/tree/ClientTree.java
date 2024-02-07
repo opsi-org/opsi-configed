@@ -959,7 +959,8 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 					+ Configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID
 					+ " <<, " + Configed.getResourceValue("ClientTree.selectCorrectLocation"));
-			fList.init(new Dimension(640, 60));
+			fList.setPreferredScrollPaneSize(new Dimension(640, 60));
+			fList.init();
 
 			fList.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			fList.setModal(true);

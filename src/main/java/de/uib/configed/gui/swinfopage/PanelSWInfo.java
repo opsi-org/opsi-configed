@@ -44,10 +44,9 @@ import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
+import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.gui.StandardTableCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -146,29 +145,26 @@ public class PanelSWInfo extends JPanel {
 	private void initTableComponents() {
 		labelSuperTitle = new JLabel();
 
-		panelTable = new PanelGenEditTable("", false, 0, true, new int[] {}, true);
+		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
 
 		panelTable.setColumnSelectionAllowed(false);
 
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelTable.setSearchSelectMode(true);
-		panelTable.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
+		panelTable.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 
 		List<String> columnNames;
-		List<String> classNames;
 
 		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new ArrayList<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
-			classNames.add("java.lang.String");
 			finalColumns[i] = i;
 		}
 
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
 						// Nothing to reload.
@@ -288,12 +284,10 @@ public class PanelSWInfo extends JPanel {
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
 
-		jTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
+		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-		jTable.getTableHeader()
-				.setDefaultRenderer(new ColorHeaderCellRenderer(jTable.getTableHeader().getDefaultRenderer()));
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);

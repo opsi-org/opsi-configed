@@ -53,7 +53,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.gui.TablesearchPane;
+import de.uib.utilities.table.gui.TableSearchPane;
 
 public class ProductgroupPanel extends JPanel implements ListSelectionListener, ItemListener {
 	private static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
@@ -68,7 +68,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private JComboBoxToolTip groupsCombo;
 
-	private TablesearchPane searchPane;
+	private TableSearchPane searchPane;
 	private JTable tableProducts;
 
 	private JTextField saveNameEditor;
@@ -328,7 +328,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private void initData() {
-		searchPane = new TablesearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
+		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true, null);
 		searchPane.setFiltering(true);
 
@@ -411,7 +411,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		// create list with tooltips
 		JList<String> listChooseAction = new JList<>(modelChooseAction);
-		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(null, values, "");
+		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(values);
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);

@@ -56,7 +56,8 @@ public class InstallationStateUpdateManager {
 	private void updateTableForClient(String clientId, List<String> attributes, JTable tableProducts) {
 		InstallationStateTableModel istmForSelectedClients = (InstallationStateTableModel) tableProducts.getModel();
 
-		if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
+		if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING) != null
+				&& productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 			istmForSelectedClients.updateTable(clientId,
 					productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING), attributes);
 		} else {

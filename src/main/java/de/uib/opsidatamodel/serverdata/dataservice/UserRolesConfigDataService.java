@@ -1047,14 +1047,6 @@ public class UserRolesConfigDataService {
 		item = Utils.createNOMBoolConfig(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
 						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
-						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_NET_CONNECTION,
-				false, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-
-		item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
 						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_TIMER,
 				false, "meta configuration for default not wan behaviour");
 

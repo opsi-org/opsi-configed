@@ -888,7 +888,7 @@ public class MainFrame extends JFrame {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
-				F_WIDTH / 2, 600);
+				F_WIDTH / 2, 600, "productselection");
 		fProductSelectionList.setListData(completeList);
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";

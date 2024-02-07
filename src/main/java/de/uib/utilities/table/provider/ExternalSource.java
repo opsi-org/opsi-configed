@@ -16,25 +16,18 @@ public class ExternalSource implements TableSource {
 
 	private Iterable<String> depotIds;
 	private List<String> columnNames;
-	private List<String> classNames;
 	private boolean reloadRequested;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ExternalSource(List<String> columnNames, List<String> classNames, Iterable<String> depotIds) {
+	public ExternalSource(List<String> columnNames, Iterable<String> depotIds) {
 		this.columnNames = columnNames;
-		this.classNames = classNames;
 		this.depotIds = depotIds;
 	}
 
 	@Override
 	public List<String> retrieveColumnNames() {
 		return columnNames;
-	}
-
-	@Override
-	public List<String> retrieveClassNames() {
-		return classNames;
 	}
 
 	@Override

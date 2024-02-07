@@ -15,7 +15,6 @@ import de.uib.utilities.logging.Logging;
 public class DefaultTableProvider {
 	private TableSource source;
 	private List<String> columnNames;
-	private List<String> classNames;
 	private List<List<Object>> rows;
 	private List<List<Object>> rowsCopy;
 
@@ -29,14 +28,6 @@ public class DefaultTableProvider {
 		}
 
 		return columnNames;
-	}
-
-	public List<String> getClassNames() {
-		if (classNames == null) {
-			classNames = source.retrieveClassNames();
-		}
-
-		return classNames;
 	}
 
 	// should deliver a copy of the data
@@ -115,7 +106,6 @@ public class DefaultTableProvider {
 
 	// should initiate reloading the metadata
 	public void structureChanged() {
-		classNames = null;
 		columnNames = null;
 	}
 
