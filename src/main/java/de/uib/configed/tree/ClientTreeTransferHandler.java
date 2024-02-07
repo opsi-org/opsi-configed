@@ -103,7 +103,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "canImport sourceGroupNode " + sourceGroupNode);
 		if (sourceGroupNode != null && targetNode != null) {
 			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
-			Logging.debug(this, "canImport !targetNode.allowsSubGroups() " + !targetNode.allowsSubGroups());
+			Logging.debug(this, "canImport !allows subgroups "
+					+ ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
 		}
 		if (sourceGroupNode == null && targetNode != null) {
 			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
@@ -117,7 +118,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		}
 
 		boolean result = true;
-		boolean canNotImportGroupNode = sourceGroupNode != null && !targetNode.allowsSubGroups();
+		boolean canNotImportGroupNode = sourceGroupNode != null
+				&& ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
 		boolean canNotImportNonGroupNode = sourceGroupNode == null && targetNode.allowsOnlyGroupChilds();
 		boolean isDifferentGroupBranch = (sourceGroupNode != null && sourceObjectPath.length > 1
 				&& dropObjectPath.length > 1 && !(sourceObjectPath[1].equals(dropObjectPath[1])));

@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 public class GroupNode extends IconNode {
 	private boolean allowingOnlyGroupChilds;
-	private boolean allowingSubGroups = true;
 	private boolean immutable;
 	private boolean fixed;
 
@@ -22,14 +21,6 @@ public class GroupNode extends IconNode {
 
 	public boolean allowsOnlyGroupChilds() {
 		return allowingOnlyGroupChilds;
-	}
-
-	public void setAllowsSubGroups(boolean b) {
-		allowingSubGroups = b;
-	}
-
-	public boolean allowsSubGroups() {
-		return allowingSubGroups;
 	}
 
 	public void setImmutable(boolean b) {

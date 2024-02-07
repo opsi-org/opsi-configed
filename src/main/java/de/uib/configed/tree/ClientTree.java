@@ -281,7 +281,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
 				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
 
-		groupNodeDirectoryNotAssigned.setAllowsSubGroups(false);
 		groupNodeDirectoryNotAssigned.setFixed(true);
 
 		groupNodeDirectory.add(groupNodeDirectoryNotAssigned);
