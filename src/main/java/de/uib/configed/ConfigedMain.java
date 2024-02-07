@@ -998,12 +998,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsList.setInfo(depots);
 		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
-				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
-		if (oldSelectedDepots.isEmpty()) {
-			depotsList.setSelectedValue(myServer, true);
-		} else {
-			depotsList.setSelectedValues(oldSelectedDepots);
-		}
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots", myServer)).replaceAll("").split(","));
+		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
