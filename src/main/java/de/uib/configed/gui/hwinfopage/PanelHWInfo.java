@@ -68,6 +68,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
 	private Map<String, List<Map<String, Object>>> hwInfo;
+	private Map<String, Map<String, Object>> devicesInfo;
 	private String treeRootTitle;
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
@@ -277,7 +278,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
-		Map<String, Object> deviceInfo = node.getDeviceInfo();
+
+		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
 
 		return devices != null && deviceInfo != null;
 	}
@@ -309,7 +311,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-		Map<String, Object> deviceInfo = node.getDeviceInfo();
+		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
@@ -465,6 +467,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		Arrays.sort(hwClassesUI);
 
+		devicesInfo = new HashMap<>();
+
 		for (int i = 0; i < hwClassesUI.length; i++) {
 			// get next key - value - pair
 			String hwClassUI = hwClassesUI[i];
@@ -545,7 +549,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				if (name.equals(device.get("displayName"))) {
 					IconNode iconNode = new IconNode(device.get("displayName"));
 					iconNode.setIcon(classIcon);
-					iconNode.setDeviceInfo(device);
+					devicesInfo.put((String) device.get("displayName"), device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);
 					break;
