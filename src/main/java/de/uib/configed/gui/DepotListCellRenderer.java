@@ -18,7 +18,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class MyListCellRenderer extends DefaultListCellRenderer {
+public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private static final int FILL_LENGTH = 30;
 
 	Map<String, Map<String, Object>> extendedInfo;

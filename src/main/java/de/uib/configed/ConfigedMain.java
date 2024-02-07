@@ -996,12 +996,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		depotsList.setInfo(depots);
 		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
-				.matcher(Configed.getSavedStates().getProperty("selectedDepots", "")).replaceAll("").split(","));
-		if (oldSelectedDepots.isEmpty()) {
-			depotsList.setSelectedValue(myServer, true);
-		} else {
-			depotsList.setSelectedValues(oldSelectedDepots);
-		}
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots", myServer)).replaceAll("").split(","));
+		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
@@ -2156,9 +2152,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return getSelectedClients().size() == 1;
 	}
 
-	private boolean setProductsPage(boolean updateStatesAndActions, List<String> attributes, String productServerString,
-			PanelProductSettings panelProductSettings, List<String> productNames, List<String> displayFields,
-			String savedStateObjectTag) {
+	private boolean setProductsPage(boolean updateStatesAndActions,
+			Map<String, Map<String, Map<String, String>>> changedProductStates, List<String> attributes,
+			String productServerString, PanelProductSettings panelProductSettings, List<String> productNames,
+			List<String> displayFields, String savedStateObjectTag) {
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2195,7 +2192,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		if (updateStatesAndActions) {
 			InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(),
-					this, collectChangedLocalbootStates, productNames, statesAndActions, possibleActions,
+					this, changedProductStates, productNames, statesAndActions, possibleActions,
 					persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
 					displayFields, savedStateObjectTag);
 
@@ -2234,13 +2231,14 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private boolean setLocalbootProductsPage() {
-		return setProductsPage(localbootStatesAndActionsUpdate, getLocalbootStateAndActionsAttributes(),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, mainFrame.getPanelLocalbootProductSettings(),
-				localbootProductnames, getLocalbootProductDisplayFieldsList(), "localbootProducts");
+		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
+				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
+				mainFrame.getPanelLocalbootProductSettings(), localbootProductnames,
+				getLocalbootProductDisplayFieldsList(), "localbootProducts");
 	}
 
 	private boolean setNetbootProductsPage() {
-		return setProductsPage(netbootStatesAndActionsUpdate, Collections.emptyList(),
+		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
 				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, mainFrame.getPanelNetbootProductSettings(),
 				netbootProductnames, getNetbootProductDisplayFieldsList(), "netbootProducts");
 	}

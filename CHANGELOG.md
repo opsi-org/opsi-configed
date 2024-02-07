@@ -4,9 +4,12 @@
 ## Fixed
 - Modules file uploading via SFTP
 - `NullPointerException` when priority or position columns in localboot or netboot product tab is displayed by default
+- Product states and actions for netboot products aren't shown
+- No depot selected by default
 
 ## Changed
 - Remove net_connection from default WAN config
+- Provide tooltips for depot selection (on the right side next to "Edit properties on depot(s)" label) in "default properties" tab
 
 ## [4.3.1.6] - 2024-02-01
 ## Fixed
