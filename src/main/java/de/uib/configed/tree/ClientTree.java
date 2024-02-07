@@ -283,7 +283,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		groupNodeDirectoryNotAssigned.setAllowsSubGroups(false);
 		groupNodeDirectoryNotAssigned.setFixed(true);
-		groupNodeDirectoryNotAssigned.setChildsArePersistent(false);
 
 		groupNodeDirectory.add(groupNodeDirectoryNotAssigned);
 	}
@@ -835,7 +834,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			insertNodeInOrder(clientNode, dropParentNode);
 			getModel().nodeStructureChanged(sourceParentNode);
 
-			if (getGroupNode(dropParentID).isChildsArePersistent()) {
+			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
 				addObject2PersistentGroup(importID, dropParentID);
 			}
 
@@ -893,10 +892,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 
 		Logging.debug(this, " -- copyClientTo childs are persistent, newParentNode " + newParentNode + " "
-				+ ((GroupNode) newParentNode).isChildsArePersistent());
+				+ DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
-		if (success && ((GroupNode) newParentNode).isChildsArePersistent()) {
+
+		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
 			addObject2PersistentGroup(objectID, newParentID);
 		}
 
