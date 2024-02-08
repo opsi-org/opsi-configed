@@ -130,7 +130,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	public JPanel initPanel() {
-		format = CSVFormat.DEFAULT.builder().setCommentMarker('#').build();
+		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -144,11 +144,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		JRadioButton commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
 		commaOption.setActionCommand(",");
-		commaOption.setSelected(true);
 
 		JRadioButton semicolonOption = new JRadioButton(
 				Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
 		semicolonOption.setActionCommand(";");
+		semicolonOption.setSelected(true);
 
 		JRadioButton spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
 		spaceOption.setActionCommand(" ");
