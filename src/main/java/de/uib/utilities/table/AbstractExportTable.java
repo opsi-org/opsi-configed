@@ -6,6 +6,7 @@
 
 package de.uib.utilities.table;
 
+import java.awt.Container;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -62,9 +62,9 @@ public abstract class AbstractExportTable {
 		return menuItem;
 	}
 
-	public void addMenuItemsTo(JPopupMenu popup) {
-		popup.add(getMenuItemExport());
-		popup.add(getMenuItemExportSelected());
+	public void addMenuItemsTo(Container component) {
+		component.add(getMenuItemExport());
+		component.add(getMenuItemExportSelected());
 	}
 
 	public JMenuItem getMenuItemExportSelected() {

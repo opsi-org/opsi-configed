@@ -9,6 +9,7 @@ package de.uib.configed;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
@@ -308,6 +310,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private boolean isInitialLicenseDataLoading;
 
 	private InitialDataLoader initialDataLoader;
+	private LicenseDisplayer licenseDisplayer;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
@@ -379,8 +382,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		initMainFrame();
 
 		updateManager = new InstallationStateUpdateManager(this,
-				mainFrame.getPanelLocalbootProductSettings().getTableProducts(),
-				mainFrame.getPanelNetbootProductSettings().getTableProducts());
+				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getTableProducts(),
+				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().getTableProducts());
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
@@ -409,7 +412,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
-		mainFrame.updateHostCheckboxenText();
+		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
 		mainFrame.enableAfterLoading();
 	}
 
@@ -760,12 +763,26 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					// using it since it is not needed.
 					new JFXPanel();
 
-					Platform.runLater(mainFrame::startLicenseDisplayer);
+					Platform.runLater(() -> showLicenseDisplayer());
 				}
 
 				mainFrame.deactivateLoadingPane();
 			}
 		}.start();
+	}
+
+	private void showLicenseDisplayer() {
+		if (licenseDisplayer == null) {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.setConfigedMain(ConfigedMain.this);
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(this, "Unable to open FXML file.", ioE);
+			}
+		} else {
+			licenseDisplayer.display();
+		}
 	}
 
 	public void toggleLicensesFrame() {
@@ -779,13 +796,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "toggleLicensesFrame is visible" + licensesFrame.isVisible());
 		licensesFrame.setLocationRelativeTo(mainFrame);
 		licensesFrame.setVisible(true);
-		mainFrame.visualizeLicensesFramesActive(true);
+		mainFrame.getIconBarPanel().visualizeLicensesFramesActive(true);
 	}
 
 	public void setEditingTarget(EditingTarget t) {
 		Logging.info(this, "setEditingTarget " + t);
 		editingTarget = t;
-		mainFrame.visualizeEditingTarget(t);
+		mainFrame.getIconBarPanel().visualizeEditingTarget(t);
 		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
@@ -813,12 +830,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		mainFrame.setConfigPanesEnabled(true);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
-		mainFrame.setVisualViewIndex(saveClientsViewIndex);
+		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(true);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveClientsViewIndex);
 
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
@@ -836,30 +853,31 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientTree.setEnabled(false);
 
 		initServer();
-		mainFrame.setConfigPanesEnabled(false);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")),
-				ServerFacade.isOpsi43());
+		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), ServerFacade.isOpsi43());
 
-		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+		Logging.info(this,
+				"setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+						+ mainFrame.getTabbedConfigPanes()
+								.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-		mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveDepotsViewIndex);
 	}
 
 	private void setEditingServer() {
 		clientTree.setEnabled(false);
 
 		initServer();
-		mainFrame.setConfigPanesEnabled(false);
-		mainFrame.setConfigPaneEnabled(
-				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
+		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
+				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
-		mainFrame.setVisualViewIndex(saveServerViewIndex);
+		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveServerViewIndex);
 	}
 
 	public void actOnListSelection() {
@@ -882,7 +900,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.setClientInfoediting(getSelectedClients().size() == 1);
+			mainFrame.getTabbedConfigPanes().getClientInfoPanel()
+					.setClientInfoEditing(getSelectedClients().size() == 1);
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
@@ -906,9 +925,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			clientInDepot = depotsAdded.toString();
 
 			if (getSelectedClients().size() == 1) {
-				mainFrame.setClientID(getSelectedClients().get(0));
+				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID(getSelectedClients().get(0));
 			} else {
-				mainFrame.setClientID("");
+				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID("");
 			}
 
 			hostInfo.resetGui();
@@ -1440,8 +1459,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void requestRefreshDataForClientSelection() {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
-		if (mainFrame.getControllerHWinfoMultiClients() != null) {
-			mainFrame.getControllerHWinfoMultiClients().requestResetFilter();
+		if (mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients() != null) {
+			mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().requestResetFilter();
 		}
 	}
 
@@ -1758,8 +1777,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private static void clearListEditors() {
-		mainFrame.getPanelLocalbootProductSettings().clearListEditors();
-		mainFrame.getPanelNetbootProductSettings().clearListEditors();
+		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().clearListEditors();
+		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().clearListEditors();
 	}
 
 	public void setProductEdited(String productname) {
@@ -1795,7 +1814,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
-		mainFrame.getPanelLocalbootProductSettings().initEditing(productname,
+		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().initEditing(productname,
 				persistenceController.getProductDataService().getProductTitle(productname),
 				persistenceController.getProductDataService().getProductInfo(productname),
 				persistenceController.getProductDataService().getProductHint(productname),
@@ -1813,7 +1832,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				clientProductpropertiesUpdateCollection);
 
-		mainFrame.getPanelNetbootProductSettings().initEditing(productname,
+		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().initEditing(productname,
 				persistenceController.getProductDataService().getProductTitle(productname),
 				persistenceController.getProductDataService().getProductInfo(productname),
 				persistenceController.getProductDataService().getProductHint(productname),
@@ -2233,14 +2252,15 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private boolean setLocalbootProductsPage() {
 		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
 				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getPanelLocalbootProductSettings(), localbootProductnames,
+				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(), localbootProductnames,
 				getLocalbootProductDisplayFieldsList(), "localbootProducts");
 	}
 
 	private boolean setNetbootProductsPage() {
 		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, mainFrame.getPanelNetbootProductSettings(),
-				netbootProductnames, getNetbootProductDisplayFieldsList(), "netbootProducts");
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
+				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(), netbootProductnames,
+				getNetbootProductDisplayFieldsList(), "netbootProducts");
 	}
 
 	private List<String> getLocalbootStateAndActionsAttributes() {
@@ -2347,7 +2367,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		Logging.debug(this, "setProductPropertiesPage");
-		mainFrame.getPanelProductProperties().setProductProperties();
+		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -2381,8 +2401,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			depot = depotsList.getSelectedValuesList().get(0);
 		}
 
-		mainFrame.getPanelHostProperties().initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots,
-				hostUpdateCollection, OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		mainFrame.getTabbedConfigPanes().getPanelHostProperties().initMultipleHostsEditing(depot,
+				depotPropertiesForPermittedDepots, hostUpdateCollection,
+				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		return true;
 	}
@@ -2429,9 +2450,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					.getConfigDefaultValuesPD();
 			additionalConfigs.add(defaultValuesMap);
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
-			mainFrame.getPanelHostConfig().initEditing("  " + myServer + " (configuration server)",
-					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
-					additionalConfigs, additionalconfigurationUpdateCollection, true,
+			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
+					"  " + myServer + " (configuration server)", additionalConfigs.get(0),
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
+					additionalconfigurationUpdateCollection, true,
 					OpsiServiceNOMPersistenceController.getPropertyClassesServer());
 		} else if (editingTarget == EditingTarget.DEPOTS) {
 			depotsList.setEnabled(true);
@@ -2443,9 +2465,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, Object> originalMap = mergeMaps(
 					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedDepots()));
-			mainFrame.getPanelHostConfig().initEditing(getSelectedDepotsString(), mergedVisualMap,
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
-					additionalconfigurationUpdateCollection, false,
+			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(getSelectedDepotsString(),
+					mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
+					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
 		} else {
 			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(getSelectedClients());
@@ -2467,9 +2489,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			}
 			Map<String, Object> originalMap = mergeMaps(
 					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedClients()));
-			mainFrame.getPanelHostConfig().initEditing(getSelectedClientsString(), mergedVisualMap,
-					configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
+			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(getSelectedClientsString(),
+					mergedVisualMap, configListCellOptions, additionalConfigs, additionalconfigurationUpdateCollection,
+					false, OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 		}
 
 		return true;
@@ -2505,15 +2527,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().size());
 
 		if (firstSelectedClient == null || getSelectedClients().isEmpty()) {
-			mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			mainFrame.getTabbedConfigPanes()
+					.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 		} else if (getSelectedClients().size() > 1) {
 			if (persistenceController.getModuleDataService().canCallMySQLPD()) {
-				mainFrame.setHardwareInfoMultiClients();
+				mainFrame.getTabbedConfigPanes().setHardwareInfoMultiClients();
 			} else {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+				mainFrame.getTabbedConfigPanes()
+						.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 		} else {
-			mainFrame.setHardwareInfo(
+			mainFrame.getTabbedConfigPanes().setHardwareInfo(
 					persistenceController.getHardwareDataService().getHardwareInfo(firstSelectedClient));
 		}
 
@@ -2525,9 +2549,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				+ ", " + checkOneClientSelected());
 
 		if (firstSelectedClient == null || !checkOneClientSelected()) {
-			mainFrame.setSoftwareAudit();
+			mainFrame.getTabbedConfigPanes().setSoftwareAudit();
 		} else {
-			mainFrame.setSoftwareAudit(firstSelectedClient);
+			mainFrame.getTabbedConfigPanes().setSoftwareAudit(firstSelectedClient);
 		}
 
 		return true;
@@ -2555,8 +2579,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private boolean setLogPage() {
 		Logging.debug(this, "setLogPage(), selected clients: " + getSelectedClients());
-		mainFrame.setUpdatedLogfilePanel("instlog");
-		mainFrame.setLogview("instlog");
+		mainFrame.getTabbedConfigPanes().setUpdatedLogfilePanel("instlog");
+		mainFrame.getTabbedConfigPanes().setLogview("instlog");
 		return true;
 	}
 
@@ -2611,7 +2635,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void setVisualViewIndex(int i) {
-		mainFrame.setVisualViewIndex(i);
+		mainFrame.getTabbedConfigPanes().setVisualViewIndex(i);
 	}
 
 	public void setViewIndex(int visualViewIndex) {
@@ -2764,20 +2788,20 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();
-			mainFrame.getPanelProductProperties().reload();
+			mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
 			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
 				mainFrame.getFDialogOpsiLicensingInfo().reload();
 			}
 
 			requestRefreshDataForClientSelection();
 
-			mainFrame.updateHostCheckboxenText();
+			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
 			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 
-			if (mainFrame.getControllerHWinfoMultiClients() != null) {
-				mainFrame.getControllerHWinfoMultiClients().rebuildModel();
+			if (mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients() != null) {
+				mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().rebuildModel();
 			}
 
 			fetchDepots();
@@ -3128,7 +3152,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 				fShowReachableInfo.setVisible(false);
 
-				mainFrame.getIconButtonReachableInfo().setEnabled(true);
+				mainFrame.getIconBarPanel().getIconButtonReachableInfo().setEnabled(true);
 
 				setReachableInfo();
 			}
@@ -3208,7 +3232,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
-		mainFrame.getIconButtonSessionInfo().setEnabled(false);
+		mainFrame.getIconBarPanel().getIconButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
@@ -3262,6 +3286,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		requestReloadStatesAndActions();
+
+		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS || getViewIndex() == VIEW_NETBOOT_PRODUCTS) {
+			resetView(getViewIndex());
+		}
+
 		mainFrame.deactivateLoadingCursor();
 	}
 
@@ -3573,7 +3602,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getPanelLocalbootProductSettings().getSelectedIDs());
+		processActionRequests(mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getSelectedIDs());
 	}
 
 	private void processActionRequests(Set<String> products) {
