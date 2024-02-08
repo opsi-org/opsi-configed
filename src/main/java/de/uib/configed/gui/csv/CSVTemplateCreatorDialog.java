@@ -319,7 +319,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		if (HostInfo.HOST_KEY_KEY.equals(header)) {
 			headerCheckBox.setToolTipText(Configed.getResourceValue("opsiHostKey.CSVSecurityRisk.toolTip"));
 		} else {
-			headerCheckBox.setToolTipText(Configed.getResourceValue("emptyToolTip"));
+			headerCheckBox.setToolTipText(null);
 		}
 
 		model.addElement(headerCheckBox);

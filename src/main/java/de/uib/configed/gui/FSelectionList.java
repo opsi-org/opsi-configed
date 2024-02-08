@@ -23,7 +23,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
@@ -220,7 +219,7 @@ public class FSelectionList extends FGeneralDialog {
 			if (toolTip != null && !toolTip.isEmpty()) {
 				setToolTipText(toolTip);
 			} else {
-				setToolTipText(Configed.getResourceValue("emptyToolTip"));
+				setToolTipText(null);
 			}
 
 			return this;
