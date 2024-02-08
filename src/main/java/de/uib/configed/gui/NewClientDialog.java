@@ -47,6 +47,7 @@ import de.uib.configed.gui.csv.CSVFormatDetector;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
+import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -524,7 +525,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
+		jCSVTemplateButton.addActionListener((ActionEvent e) -> displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
@@ -567,8 +568,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
 
-			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
-					|| !isBoolean((String) client.get(13))) {
+			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))
+					|| !isBoolean((String) client.get(12))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
 						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
@@ -750,6 +751,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				return;
 			}
 
+			csvImportDataDialog.setVisible(true);
 			if (csvImportDataDialog.getResult() == 2) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
@@ -759,23 +761,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		List<String> columnNames = new ArrayList<>();
-
-		columnNames.add("hostname");
-		columnNames.add("selectedDomain");
-		columnNames.add("depotID");
-		columnNames.add("description");
-		columnNames.add("inventorynumber");
-		columnNames.add("notes");
-		columnNames.add("systemUUID");
-		columnNames.add("macaddress");
-		columnNames.add("ipaddress");
-		columnNames.add("group");
-		columnNames.add("netbootProduct");
-		columnNames.add("wanConfig");
-		columnNames.add("uefiBoot");
-		columnNames.add("shutdownInstall");
-
+		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
 			csvFormatDetector.detectFormat(csvFile);
@@ -802,7 +788,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		csvImportDataDialog.setCenterPaneInScrollpane(centerPanel);
 		csvImportDataDialog.setupLayout();
 		csvImportDataDialog.setDetectedOptions();
-		csvImportDataDialog.setVisible(true);
 
 		return csvImportDataDialog;
 	}
@@ -815,27 +800,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		fInfo.setVisible(true);
 	}
 
-	private static void createCSVTemplate() {
-		List<String> columnNames = new ArrayList<>();
-
-		columnNames.add("hostname");
-		columnNames.add("selectedDomain");
-		columnNames.add("depotID");
-		columnNames.add("description");
-		columnNames.add("inventorynumber");
-		columnNames.add("notes");
-		columnNames.add("systemUUID");
-		columnNames.add("macaddress");
-		columnNames.add("ipaddress");
-		columnNames.add("group");
-		columnNames.add("netbootProduct");
-		columnNames.add("wanConfig");
-		columnNames.add("uefiBoot");
-		columnNames.add("shutdownInstall");
-
+	private static void displayCSVTemplateDialog() {
+		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
 		JPanel centerPanel = dialog.initPanel();
-
 		dialog.setCenterPaneInScrollpane(centerPanel);
 		dialog.setupLayout();
 		dialog.setVisible(true);
