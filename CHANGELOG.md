@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.x.x] - XXXX-XX-XX
+## [4.3.1.7] - 2024-02-08
 ## Fixed
 - Modules file uploading via SFTP
 - `NullPointerException` when priority or position columns in localboot or netboot product tab is displayed by default
@@ -10,6 +10,10 @@
 ## Changed
 - Remove net_connection from default WAN config
 - Provide tooltips for depot selection (on the right side next to "Edit properties on depot(s)" label) in "default properties" tab
+- Remove unnecessary tooltips in tables, tabs, etc.
+
+## Added
+- opsiHostKey for CSV export. You can now choose which data to include into the CSV file
 
 ## [4.3.1.6] - 2024-02-01
 ## Fixed
