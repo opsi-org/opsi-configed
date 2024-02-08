@@ -4145,9 +4145,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
 			updateManager.updateProduct(eventData);
 		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
-			addClientToConnectedList((String) eventData.get("id"));
+			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
-			removeClientFromConnectedList((String) eventData.get("id"));
+			removeClientFromConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
 		} else if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)) {
 			addClientToTable((String) eventData.get("id"));
 		} else if (WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {

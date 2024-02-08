@@ -6,6 +6,7 @@
 - `NullPointerException` when priority or position columns in localboot or netboot product tab is displayed by default
 - Product states and actions for netboot products aren't shown
 - No depot selected by default
+- Messagebus updates for connected clients
 
 ## Changed
 - Remove net_connection from default WAN config
