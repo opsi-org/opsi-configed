@@ -82,10 +82,6 @@ public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENSES = "free licenses for client";
-
 	private static JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
 	private ConfigedMain configedMain;
@@ -94,7 +90,6 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuFileSaveConfigurations;
 
 	private ClientMenuManager clientMenu;
-	private JMenu jMenuClients;
 
 	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
 	private JMenu jMenuServer = new JMenu();
@@ -105,17 +100,10 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpansText;
 
 	private JMenu jMenuClientselection = new JMenu();
-	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
-	private JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem();
-	private JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem();
-	private JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem();
-	private JMenuItem jMenuClientselectionFailedProduct = new JMenuItem();
-	private JMenu jMenuClientselectionFailedInPeriod = new JMenu();
 
 	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	private JMenu jMenuFrames = new JMenu();
-	private JMenuItem jMenuFrameWorkOnGroups = new JMenuItem();
 	private JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
 	private JMenuItem jMenuFrameDashboard = new JMenuItem();
 	private JMenuItem jMenuFrameLicenses = new JMenuItem();
@@ -123,12 +111,6 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuFrameTerminal = new JMenuItem();
 
 	private JMenu jMenuHelp = new JMenu();
-	private JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
-	private JMenuItem jMenuHelpAbout = new JMenuItem();
-	private JMenuItem jMenuHelpCredits = new JMenuItem();
-	private JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
-	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
-	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
 
 	private BorderLayout borderLayout1 = new BorderLayout();
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
@@ -505,29 +487,30 @@ public class MainFrame extends JFrame {
 	private void setupMenuGrouping() {
 		jMenuClientselection.setText(Configed.getResourceValue("MainFrame.jMenuClientselection"));
 
-		jMenuClientselectionGetGroup.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		JMenuItem jMenuClientselectionGetGroup = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		jMenuClientselectionGetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
-		jMenuClientselectionGetSavedSearch
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
+		JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuClientselectionGetSavedSearch
 				.addActionListener((ActionEvent e) -> configedMain.clientSelectionGetSavedSearch());
 
-		jMenuClientselectionProductNotUptodate
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
+		JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
 		jMenuClientselectionProductNotUptodate.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersion());
 
-		jMenuClientselectionProductNotUptodateOrBroken.setText(Configed
+		JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem(Configed
 				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
 		jMenuClientselectionProductNotUptodateOrBroken
 				.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersionOrBrokenInstallation());
 
-		jMenuClientselectionFailedProduct
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
+		JMenuItem jMenuClientselectionFailedProduct = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
 		jMenuClientselectionFailedProduct.addActionListener((ActionEvent e) -> groupByFailedProduct());
 
-		jMenuClientselectionFailedInPeriod
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
+		JMenu jMenuClientselectionFailedInPeriod = new JMenu(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItem(entry.getValue());
@@ -560,7 +543,7 @@ public class MainFrame extends JFrame {
 	private void setupMenuFrames() {
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
-		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
+		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
@@ -623,18 +606,20 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(
+		JMenuItem jMenuHelpOpsiVersion = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + ServerFacade.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
-		jMenuHelpOpsiModuleInformation.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+		JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
 
-		jMenuHelpInternalConfiguration.setText(Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
+		JMenuItem jMenuHelpInternalConfiguration = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
 
 		if (!ServerFacade.isOpsi43()) {
@@ -643,7 +628,7 @@ public class MainFrame extends JFrame {
 
 		addLogfileMenus(jMenuHelp, this);
 
-		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 
 		if (ServerFacade.isOpsi43()) {
@@ -652,11 +637,11 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpCredits.setText(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
+		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
 		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(this));
 		jMenuHelp.add(jMenuHelpCredits);
 
-		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
+		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -740,7 +725,6 @@ public class MainFrame extends JFrame {
 		initMenuData();
 
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
-		jMenuClients = clientMenu.getJMenu();
 		setupMenuFile();
 		setupMenuGrouping();
 		setupMenuServer();
@@ -750,7 +734,7 @@ public class MainFrame extends JFrame {
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(jMenuFile);
 		jMenuBar.add(jMenuClientselection);
-		jMenuBar.add(jMenuClients);
+		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServer);
 		jMenuBar.add(jMenuFrames);
 		jMenuBar.add(jMenuHelp);

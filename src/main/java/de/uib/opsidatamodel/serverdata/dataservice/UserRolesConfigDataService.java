@@ -20,7 +20,6 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.MainFrame;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
@@ -63,6 +62,10 @@ public class UserRolesConfigDataService {
 	private static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
 	private static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
+
+	private static final String ITEM_ADD_CLIENT = "add client";
+	private static final String ITEM_DELETE_CLIENT = "remove client";
+	private static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
@@ -802,9 +805,9 @@ public class UserRolesConfigDataService {
 			configDefaultValues.put(key, defaultValues);
 
 			possibleValues = new ArrayList<>();
-			possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
-			possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
-			possibleValues.add(MainFrame.ITEM_FREE_LICENSES);
+			possibleValues.add(ITEM_ADD_CLIENT);
+			possibleValues.add(ITEM_DELETE_CLIENT);
+			possibleValues.add(ITEM_FREE_LICENSES);
 
 			item = Utils.createNOMitem("UnicodeConfig");
 			item.put("id", key);
