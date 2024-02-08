@@ -9,7 +9,6 @@ package de.uib.utilities.table;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -115,9 +114,6 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				400, 410, "csvExportSelection");
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
 		fColumSelectionList.setListData(defaultValues);
-		Map<String, String> toolTipData = new HashMap<>();
-		toolTipData.put(HostInfo.HOST_KEY_KEY, Configed.getResourceValue("opsiHostKey.CSVSecurityRisk.toolTip"));
-		fColumSelectionList.setToolTipData(toolTipData);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
 		fColumSelectionList.setPreviousSelectionValues(defaultValues);
 		fColumSelectionList.enableMultiSelection();
