@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.1.8] - 2024-02-08
+## Fixed
+- `NullPointerException` when opening product selection dialogue
+
 ## [4.3.1.7] - 2024-02-08
 ## Fixed
 - Modules file uploading via SFTP
