@@ -9,20 +9,25 @@ package de.uib.utilities.table;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
 import org.apache.commons.csv.CSVPrinter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.FSelectionList;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class ClientTableExporterToCSV extends ExporterToCSV {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -30,9 +35,9 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	private List<String> columnNames;
 
-	public ClientTableExporterToCSV(JTable table, List<String> columnNames) {
+	public ClientTableExporterToCSV(JTable table) {
 		super(table);
-		this.columnNames = columnNames;
+		this.columnNames = HostInfo.getKeysForCSV();
 	}
 
 	@Override
@@ -58,7 +63,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 					row.add(clientName.substring(0, clientName.indexOf(".")));
 				} else if ("domain".equals(columnName)) {
 					row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
-				} else if ("group".equals(columnName)) {
+				} else if ("groups".equals(columnName)) {
 					row.add(String.join(",", fObject2Groups.get(clientName)));
 				} else if (clientInfoMap.get(columnName) instanceof Boolean) {
 					row.add(Boolean.toString((Boolean) clientInfoMap.get(columnName)));
@@ -76,7 +81,12 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	@Override
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("ClientTableExporterToCSV.exportTableAsCSV"));
-		menuItem.addActionListener(actionEvent -> execute(null, false));
+		menuItem.addActionListener((ActionEvent actionEvent) -> {
+			columnNames = getColumnsToInclude();
+			if (!columnNames.isEmpty()) {
+				execute(null, false);
+			}
+		});
 		return menuItem;
 	}
 
@@ -88,9 +98,40 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			boolean onlySelected = true;
 			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
-			execute(null, onlySelected);
+			columnNames = getColumnsToInclude();
+			if (!columnNames.isEmpty()) {
+				execute(null, onlySelected);
+			}
 		});
 
 		return menuItem;
+	}
+
+	private static List<String> getColumnsToInclude() {
+		FSelectionList fColumSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"), true,
+				new String[] { "", "" }, new Icon[] { Utils.createImageIcon("images/cancel.png", ""),
+						Utils.createImageIcon("images/apply.png", "") },
+				400, 410, "csvExportSelection");
+		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
+		fColumSelectionList.setListData(defaultValues);
+		Map<String, String> toolTipData = new HashMap<>();
+		toolTipData.put(HostInfo.HOST_KEY_KEY, Configed.getResourceValue("opsiHostKey.CSVSecurityRisk.toolTip"));
+		fColumSelectionList.setToolTipData(toolTipData);
+		defaultValues.remove(HostInfo.HOST_KEY_KEY);
+		fColumSelectionList.setPreviousSelectionValues(defaultValues);
+		fColumSelectionList.enableMultiSelection();
+		fColumSelectionList.setVisible(true);
+
+		List<String> result = new ArrayList<>();
+
+		if (fColumSelectionList.getResult() == 2) {
+			result = fColumSelectionList.getSelectedValues();
+			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
+				result = new ArrayList<>();
+			}
+		}
+
+		return result;
 	}
 }

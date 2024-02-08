@@ -1529,8 +1529,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		exportTable.addMenuItemsTo(popupClients);
 
-		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(panelClientlist.getTable(),
-				HostInfo.getKeysForCSV());
+		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(panelClientlist.getTable());
 		clientTableExporter.addMenuItemsTo(popupClients);
 
 		popupClients.addSeparator();

@@ -6,13 +6,16 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -20,6 +23,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
@@ -31,6 +35,8 @@ public class FSelectionList extends FGeneralDialog {
 	private TableSearchPane searchPane;
 	private String savedStatesObjectTag;
 
+	private Map<String, String> toolTipData;
+
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight, String savedStatesObjectTag) {
 		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight, savedStatesObjectTag);
@@ -38,7 +44,13 @@ public class FSelectionList extends FGeneralDialog {
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int preferredWidth, int preferredHeight, String savedStatesObjectTag) {
-		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
+		this(owner, title, modal, buttonList, icons, preferredWidth, preferredHeight, null, savedStatesObjectTag);
+	}
+
+	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
+			int preferredWidth, int preferredHeight, JPanel additionalPane, String savedStatesObjectTag) {
+		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
+				additionalPane);
 		this.savedStatesObjectTag = savedStatesObjectTag;
 		this.owner = owner;
 	}
@@ -55,7 +67,7 @@ public class FSelectionList extends FGeneralDialog {
 		}
 
 		northPanel = new JPanel();
-		centerPanel = createAditionalPane();
+		centerPanel = createCenterPanel();
 		southPanel = createSouthPanel();
 
 		GroupLayout allLayout = new GroupLayout(allpane);
@@ -71,15 +83,16 @@ public class FSelectionList extends FGeneralDialog {
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 	}
 
-	private JPanel createAditionalPane() {
+	private JPanel createCenterPanel() {
 		Logging.info(this, "allLayout");
 
-		JPanel additionalPanel = new JPanel();
-		GroupLayout additionalLayout = new GroupLayout(additionalPanel);
-		additionalPanel.setLayout(additionalLayout);
+		JPanel centerPanel = new JPanel();
+		GroupLayout centerLayout = new GroupLayout(centerPanel);
+		centerPanel.setLayout(centerLayout);
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		jList.setCellRenderer(new ToolTipCellRenderer());
 		jList.setVisible(true);
 		scrollpane.getViewport().add(jList);
 
@@ -89,14 +102,14 @@ public class FSelectionList extends FGeneralDialog {
 		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
-		additionalLayout.setHorizontalGroup(additionalLayout.createParallelGroup()
+		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
 				.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(scrollpane));
 
-		additionalLayout.setVerticalGroup(additionalLayout.createSequentialGroup()
+		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
 				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane));
-		return additionalPanel;
+		return centerPanel;
 	}
 
 	private JPanel createSouthPanel() {
@@ -112,10 +125,10 @@ public class FSelectionList extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(this.additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
+				.addComponent(this.additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -133,6 +146,10 @@ public class FSelectionList extends FGeneralDialog {
 		jList.setListData(v.toArray(String[]::new));
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
+	}
+
+	public void setToolTipData(Map<String, String> toolTipData) {
+		this.toolTipData = toolTipData;
 	}
 
 	public String getSelectedValue() {
@@ -191,5 +208,22 @@ public class FSelectionList extends FGeneralDialog {
 
 	public void exit() {
 		super.leave();
+	}
+
+	private class ToolTipCellRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+			String toolTip = toolTipData.get(value);
+			if (toolTip != null && !toolTip.isEmpty()) {
+				setToolTipText(toolTip);
+			} else {
+				setToolTipText(Configed.getResourceValue("emptyToolTip"));
+			}
+
+			return this;
+		}
 	}
 }

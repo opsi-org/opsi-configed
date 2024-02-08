@@ -7,6 +7,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,12 +178,12 @@ public class HostInfo {
 		keys.add(CLIENT_SYSTEM_UUID_KEY);
 		keys.add(CLIENT_MAC_ADRESS_KEY);
 		keys.add(CLIENT_IP_ADDRESS_KEY);
-		keys.add("group");
+		keys.add("groups");
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_UEFI_BOOT_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
-		return keys;
+		return Collections.unmodifiableList(keys);
 	}
 
 	public void put(String key, Object value) {

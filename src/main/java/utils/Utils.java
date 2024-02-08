@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
@@ -437,5 +438,20 @@ public final class Utils {
 		}
 
 		return result.toString();
+	}
+
+	public static boolean includeOpsiHostKey() {
+		FTextArea f = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("securityWarning"), true,
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
+				200);
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("Utils.opsiHostKey.message1"));
+		message.append("\n\n");
+		message.append(Configed.getResourceValue("Utils.opsiHostKey.message2"));
+		message.append("\n\n");
+		message.append(Configed.getResourceValue("Utils.opsiHostKey.message3"));
+		f.setMessage(message.toString());
+		f.setVisible(true);
+		return f.getResult() == 2;
 	}
 }
