@@ -106,10 +106,10 @@ public class HostDataService {
 			} else {
 				groups = new String[] {};
 			}
-			String productNetboot = ((String) client.get(10)).trim();
-			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
-			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
+			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
+			String opsiHostKey = ((String) client.get(13)).trim();
 
 			String newClientId = hostname + "." + domainname;
 
@@ -121,6 +121,7 @@ public class HostDataService {
 			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
+			hostItem.put(HostInfo.HOST_KEY_KEY, opsiHostKey);
 
 			clientsJsonObject.add(hostItem);
 
@@ -169,16 +170,6 @@ public class HostDataService {
 					itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
 					groupsJsonObject.add(itemGroup);
 				}
-			}
-
-			if (productNetboot != null && !productNetboot.isEmpty()) {
-				Logging.info(this, "createClient" + " productNetboot " + productNetboot);
-				Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
-				itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
-				itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-				itemProducts.put("clientId", newClientId);
-				itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
-				productsNetbootJsonObject.add(itemProducts);
 			}
 
 			HostInfo hostInfo = new HostInfo(hostItem);

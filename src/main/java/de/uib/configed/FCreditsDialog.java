@@ -21,7 +21,7 @@ import de.uib.utilities.logging.Logging;
 
 public final class FCreditsDialog extends FGeneralDialog {
 	private FCreditsDialog(JFrame owner) {
-		super(owner, Configed.getResourceValue("FCreditsDialog.title") + " " + Globals.APPNAME, true,
+		super(owner, Configed.getResourceValue("MainFrame.jMenuHelpCredits"), true,
 				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
 		allpane.setPreferredSize(new Dimension(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT));
 		TextMarkdownPane jTextPane = new TextMarkdownPane();

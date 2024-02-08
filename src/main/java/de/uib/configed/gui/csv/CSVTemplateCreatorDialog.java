@@ -49,7 +49,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
+import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -61,7 +63,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private JFormattedTextField otherDelimiterInput;
 
 	private List<String> columnNames;
-	private List<JCheckBox> headerButtons;
+	private List<JCheckBox> headerCheckBoxes;
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.csvTemplateLabel"), false,
@@ -129,7 +131,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	public JPanel initPanel() {
-		format = CSVFormat.DEFAULT.builder().setCommentMarker('#').build();
+		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -143,11 +145,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		JRadioButton commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
 		commaOption.setActionCommand(",");
-		commaOption.setSelected(true);
 
 		JRadioButton semicolonOption = new JRadioButton(
 				Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
 		semicolonOption.setActionCommand(";");
+		semicolonOption.setSelected(true);
 
 		JRadioButton spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
 		spaceOption.setActionCommand(" ");
@@ -225,8 +227,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
 
 		DefaultListModel<JCheckBox> model = new DefaultListModel<>();
-		headerButtons = new ArrayList<>();
-		columnNames.forEach(header -> setSelectedColumn(header, model));
+		headerCheckBoxes = new ArrayList<>();
+		columnNames.forEach(header -> addHeaderCheckBox(header, model));
 
 		HeaderOptionsPanel headerOptionsPanel = new HeaderOptionsPanel(model);
 
@@ -297,25 +299,31 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		return centerPanel;
 	}
 
-	private void setSelectedColumn(String header, DefaultListModel<JCheckBox> model) {
-		JCheckBox headerBox = new JCheckBox(header);
-		headerBox.setActionCommand(header);
+	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
+		JCheckBox headerCheckBox = new JCheckBox(header);
+		headerCheckBox.setActionCommand(header);
 
-		if ("hostname".equals(header)) {
-			headerBox.setSelected(true);
+		if (HostInfo.HOSTNAME_KEY.equals(header)) {
+			headerCheckBox.setSelected(true);
 		}
-		if ("selectedDomain".equals(header)) {
-			headerBox.setSelected(true);
+		if ("domain".equals(header)) {
+			headerCheckBox.setSelected(true);
 		}
-		if ("depotID".equals(header)) {
-			headerBox.setSelected(true);
+		if (HostInfo.DEPOT_OF_CLIENT_KEY.equals(header)) {
+			headerCheckBox.setSelected(true);
 		}
-		if ("macaddress".equals(header)) {
-			headerBox.setSelected(true);
+		if (HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header)) {
+			headerCheckBox.setSelected(true);
 		}
 
-		model.addElement(headerBox);
-		headerButtons.add(headerBox);
+		if (HostInfo.HOST_KEY_KEY.equals(header)) {
+			headerCheckBox.setToolTipText(Configed.getResourceValue("opsiHostKey.CSVSecurityRisk.toolTip"));
+		} else {
+			headerCheckBox.setToolTipText(null);
+		}
+
+		model.addElement(headerCheckBox);
+		headerCheckBoxes.add(headerCheckBox);
 	}
 
 	private static class InputListener implements DocumentListener {
@@ -341,6 +349,18 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public void doAction2() {
 		result = 2;
 
+		boolean proceed = true;
+		for (JCheckBox headerCheckBox : headerCheckBoxes) {
+			if (HostInfo.HOST_KEY_KEY.equals(headerCheckBox.getText()) && headerCheckBox.isSelected()
+					&& !Utils.includeOpsiHostKey()) {
+				proceed = false;
+			}
+		}
+
+		if (!proceed) {
+			return;
+		}
+
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
 		jFileChooser.addChoosableFileFilter(fileFilter);
@@ -356,8 +376,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			write(csvFile);
 		}
-
-		leave();
 	}
 
 	private void write(String csvFile) {
@@ -366,9 +384,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			List<String> headers = new ArrayList<>();
 
-			headerButtons.forEach((JCheckBox header) -> {
-				if (header.isSelected()) {
-					headers.add(header.getActionCommand());
+			headerCheckBoxes.forEach((JCheckBox headerCheckBox) -> {
+				if (headerCheckBox.isSelected()) {
+					headers.add(headerCheckBox.getActionCommand());
 				}
 			});
 

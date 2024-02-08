@@ -37,7 +37,7 @@ public class InitialDataLoader extends SwingWorker<Void, Void> {
 		Logging.info("setting mainframe visible");
 
 		ConfigedMain.getMainFrame().setVisible(true);
-		ConfigedMain.getMainFrame().initSplitPanes();
+		ConfigedMain.getMainFrame().getTabbedConfigPanes().initSplitPanes();
 		ConfigedMain.getMainFrame().toFront();
 	}
 
