@@ -80,6 +80,8 @@ public final class ClientMenuManager {
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
+	private JMenuItem jMenuShowScheduledWOL;
+
 	private JMenu jMenu;
 
 	private Map<String, JMenuItem> menuItemsHost;
@@ -258,11 +260,7 @@ public final class ClientMenuManager {
 			fStartWakeOnLan.setClients();
 		});
 
-		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.setEnabled(false);
-		jMenuShowScheduledWOL.addActionListener(
-				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
+		jMenuShowScheduledWOL = createArrangeWindowsMenuItem();
 
 		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
 		jMenuWakeOnLan.addSeparator();
@@ -286,6 +284,20 @@ public final class ClientMenuManager {
 
 	public void addResetNetbootProductsMenuItemsTo(JMenu jMenu) {
 		addResetProductsMenuItemsTo(jMenu, false, true, false);
+	}
+
+	public static JMenuItem createArrangeWindowsMenuItem() {
+		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
+		jMenuShowScheduledWOL.setEnabled(false);
+		jMenuShowScheduledWOL.addActionListener(
+				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
+
+		return jMenuShowScheduledWOL;
+	}
+
+	public void instancesChanged(boolean existJDialogInstances) {
+		jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
 	}
 
 	private void addResetProductsMenuItemsTo(JMenu jMenu, boolean includeResetOptionForLocalbootProducts,
@@ -475,14 +487,14 @@ public final class ClientMenuManager {
 		fText.setVisible(true);
 	}
 
-	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
+	private static void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info("executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if ("arrange".equals(command)) {
 			arrangeWs(instances);
 		}
 	}
 
-	private void arrangeWs(Set<JDialog> frames) {
+	private static void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
 
@@ -490,6 +502,7 @@ public final class ClientMenuManager {
 			return;
 		}
 
+		MainFrame mainFrame = ConfigedMain.getMainFrame();
 		int transpose = 20;
 
 		for (Window f : frames) {

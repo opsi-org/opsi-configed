@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -34,7 +33,6 @@ import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,7 +66,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.swing.FEditObject;
 import utils.Utils;
 
 public class MainFrame extends JFrame {
@@ -91,7 +88,6 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
-	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
 	private JMenu jMenuServer = new JMenu();
 
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
@@ -557,12 +553,7 @@ public class MainFrame extends JFrame {
 		jMenuFrameLicenses.setEnabled(false);
 		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
-		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
-		jMenuFrameShowDialogs.setEnabled(false);
-		jMenuFrameShowDialogs.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "actionPerformed");
-			executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-		});
+		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
@@ -1035,42 +1026,12 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	private void arrangeWs(Set<JDialog> frames) {
-		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
-		// Can iconify, but not deiconify a modal JDialog
-
-		if (frames == null) {
-			return;
-		}
-
-		int transpose = 20;
-
-		for (Window f : frames) {
-			transpose = transpose + Globals.LINE_HEIGHT;
-
-			if (f != null) {
-				f.setVisible(true);
-				f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
-			}
-		}
-	}
-
 	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
-		if (jMenuShowScheduledWOL != null) {
-			jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
-		}
-		if (jMenuFrameShowDialogs != null) {
-			jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
-		}
-	}
+		clientMenu.instancesChanged(existJDialogInstances);
 
-	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
-		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
-		if ("arrange".equals(command)) {
-			arrangeWs(instances);
-		}
+		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
 	}
 
 	public void enableAfterLoading() {
