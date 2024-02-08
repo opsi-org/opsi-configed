@@ -6,8 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.util.Map;
-
 import javax.swing.Icon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -16,11 +14,8 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	private String toolTipText;
 
-	private Map<String, Object> deviceInfo;
-
 	public IconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);
-		deviceInfo = null;
 	}
 
 	public IconNode(Object userObject) {
@@ -33,14 +28,6 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	public String getToolTipText() {
 		return toolTipText;
-	}
-
-	public void setDeviceInfo(Map<String, Object> deviceInfo) {
-		this.deviceInfo = deviceInfo;
-	}
-
-	public Map<String, Object> getDeviceInfo() {
-		return deviceInfo;
 	}
 
 	// set the icon as default for all types of icons

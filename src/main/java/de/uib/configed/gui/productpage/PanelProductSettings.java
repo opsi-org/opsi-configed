@@ -41,6 +41,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductgroupPanel;
@@ -60,6 +61,10 @@ import utils.PopupMouseListener;
 import utils.Utils;
 
 public class PanelProductSettings extends JSplitPane {
+	public enum ProductSettingsType {
+		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
+	}
+
 	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
@@ -70,7 +75,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ProductgroupPanel groupPanel;
 
-	// right pane
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
@@ -83,11 +87,15 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ConfigedMain configedMain;
 
-	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields) {
+	ProductSettingsType type;
+
+	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields,
+			ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.configedMain = configedMain;
 		this.productDisplayFields = productDisplayFields;
+		this.type = type;
 		init();
 
 		super.setResizeWeight(1);
@@ -107,7 +115,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		tableProducts.setDragEnabled(true);
 
-		groupPanel = new ProductgroupPanel(this, configedMain, tableProducts);
+		groupPanel = new ProductgroupPanel(this, configedMain, tableProducts, type);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();
@@ -232,8 +240,8 @@ public class PanelProductSettings extends JSplitPane {
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
-
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
+		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemand);
 
@@ -242,13 +250,24 @@ public class PanelProductSettings extends JSplitPane {
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-
 		itemOnDemandForSelectedProducts
 				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
+		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		if (ServerFacade.isOpsi43()) {
 			popup.add(itemOnDemandForSelectedProducts);
 		}
+
+		popup.addSeparator();
+
+		ClientMenuManager clientMenuManager = ClientMenuManager.getInstance();
+		JMenu resetProductsMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
+		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
+			clientMenuManager.addResetLocalbootProductsMenuItemsTo(resetProductsMenu);
+		} else {
+			clientMenuManager.addResetNetbootProductsMenuItemsTo(resetProductsMenu);
+		}
+		popup.add(resetProductsMenu);
 
 		popup.addSeparator();
 

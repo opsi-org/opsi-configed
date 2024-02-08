@@ -137,10 +137,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private ConfigedMain configedMain;
 
-	public ProductgroupPanel(PanelProductSettings associate, ConfigedMain configedMain, JTable table) {
+	private PanelProductSettings.ProductSettingsType type;
+
+	public ProductgroupPanel(PanelProductSettings associate, ConfigedMain configedMain, JTable table,
+			PanelProductSettings.ProductSettingsType type) {
 		this.associate = associate;
 		this.configedMain = configedMain;
 		this.tableProducts = table;
+		this.type = type;
 
 		initData();
 
@@ -374,6 +378,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 		buttonExecuteNow.setVisible(true);
+		buttonExecuteNow.setEnabled(type != PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		IconButton buttonCollectiveAction = new IconButton(
 				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
