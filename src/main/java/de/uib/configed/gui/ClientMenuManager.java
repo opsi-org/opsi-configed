@@ -38,6 +38,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditTextWithExtra;
@@ -49,10 +50,6 @@ import utils.Utils;
 
 @SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager {
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENSES = "free licenses for client";
-
 	private static ClientMenuManager instance;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -154,9 +151,9 @@ public final class ClientMenuManager {
 		jMenuAddClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
 		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(ITEM_ADD_CLIENT, jMenuAddClient);
-		menuItemsHost.put(ITEM_DELETE_CLIENT, jMenuDeleteClient);
-		menuItemsHost.put(ITEM_FREE_LICENSES, jMenuFreeLicenses);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, jMenuAddClient);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT, jMenuDeleteClient);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES, jMenuFreeLicenses);
 
 		jMenuDeletePackageCaches
 				.addActionListener((ActionEvent e) -> configedMain.deletePackageCachesOfSelectedClients());
