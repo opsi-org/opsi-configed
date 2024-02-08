@@ -375,6 +375,8 @@ public class IconBarPanel extends JPanel {
 		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", "");
 		iconButtonNewClient.setFocusable(false);
+		iconButtonNewClient
+				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 		iconButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
 		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
