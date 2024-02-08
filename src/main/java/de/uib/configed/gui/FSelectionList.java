@@ -11,7 +11,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -31,8 +30,6 @@ public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
 	private String savedStatesObjectTag;
-
-	private Map<String, String> toolTipData;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight, String savedStatesObjectTag) {
@@ -142,10 +139,6 @@ public class FSelectionList extends FGeneralDialog {
 		jList.setListData(v.toArray(String[]::new));
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
-	}
-
-	public void setToolTipData(Map<String, String> toolTipData) {
-		this.toolTipData = toolTipData;
 	}
 
 	public String getSelectedValue() {
