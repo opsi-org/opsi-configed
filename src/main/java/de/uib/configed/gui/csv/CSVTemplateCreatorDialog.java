@@ -49,6 +49,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
+import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
@@ -301,16 +302,16 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JCheckBox headerBox = new JCheckBox(header);
 		headerBox.setActionCommand(header);
 
-		if ("hostname".equals(header)) {
+		if (HostInfo.HOSTNAME_KEY.equals(header)) {
 			headerBox.setSelected(true);
 		}
-		if ("selectedDomain".equals(header)) {
+		if ("domain".equals(header)) {
 			headerBox.setSelected(true);
 		}
-		if ("depotID".equals(header)) {
+		if (HostInfo.DEPOT_OF_CLIENT_KEY.equals(header)) {
 			headerBox.setSelected(true);
 		}
-		if ("macaddress".equals(header)) {
+		if (HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header)) {
 			headerBox.setSelected(true);
 		}
 

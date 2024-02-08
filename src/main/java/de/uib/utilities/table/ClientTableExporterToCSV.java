@@ -28,29 +28,16 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientTableExporterToCSV(JTable table) {
+	private List<String> columnNames;
+
+	public ClientTableExporterToCSV(JTable table, List<String> columnNames) {
 		super(table);
+		this.columnNames = columnNames;
 	}
 
 	@Override
 	protected void writeHeader(CSVPrinter printer) throws IOException {
-		List<String> columnNames = new ArrayList<>();
-		columnNames.add("hostname");
-		columnNames.add("selectedDomain");
-		columnNames.add("depotID");
-		columnNames.add("description");
-		columnNames.add("inventorynumber");
-		columnNames.add("notes");
-		columnNames.add("systemUUID");
-		columnNames.add("macaddress");
-		columnNames.add("ipaddress");
-		columnNames.add("group");
-		columnNames.add("wanConfig");
-		columnNames.add("uefiBoot");
-		columnNames.add("shutdownInstall");
-		columnNames.add("opsiHostKey");
 		printer.printRecord(columnNames);
-
 	}
 
 	@Override
@@ -63,22 +50,23 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 			}
 
 			HostInfo clientInfo = clientInfos.get(theTable.getValueAt(rowI, 0));
-			String clientName = clientInfo.getName();
+			Map<String, Object> clientInfoMap = clientInfo.getMap();
 			List<String> row = new ArrayList<>();
-			row.add(clientName.substring(0, clientName.indexOf(".")));
-			row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
-			row.add(clientInfo.getInDepot());
-			row.add(clientInfo.getDescription());
-			row.add(clientInfo.getInventoryNumber());
-			row.add(clientInfo.getNotes());
-			row.add(clientInfo.getSystemUUID());
-			row.add(clientInfo.getMacAddress());
-			row.add(clientInfo.getIpAddress());
-			row.add(String.join(",", fObject2Groups.get(clientName)));
-			row.add(Boolean.toString(clientInfo.getWanConfig()));
-			row.add(Boolean.toString(clientInfo.getUefiBoot()));
-			row.add(Boolean.toString(clientInfo.getShutdownInstall()));
-			row.add(clientInfo.getHostKey());
+			for (String columnName : columnNames) {
+				String clientName = clientInfo.getName();
+				if ("id".equals(columnName)) {
+					row.add(clientName.substring(0, clientName.indexOf(".")));
+				} else if ("domain".equals(columnName)) {
+					row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
+				} else if ("group".equals(columnName)) {
+					row.add(String.join(",", fObject2Groups.get(clientName)));
+				} else if (clientInfoMap.get(columnName) instanceof Boolean) {
+					row.add(Boolean.toString((Boolean) clientInfoMap.get(columnName)));
+				} else {
+					row.add((String) clientInfoMap.get(columnName));
+				}
+			}
+
 			if (!row.isEmpty()) {
 				printer.printRecord(row);
 			}
