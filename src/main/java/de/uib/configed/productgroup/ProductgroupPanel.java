@@ -595,7 +595,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			theData.remove(removeGroupID);
 
-			if (configedMain.deleteGroup(removeGroupID)) {
+			if (persistenceController.getGroupDataService().deleteGroup(removeGroupID)) {
 				result = true;
 				setInternalGroupsData();
 			}
@@ -634,7 +634,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			selectedProducts = associate.getSelectedIDs();
 
-			if (configedMain.setProductGroup(newGroupID, newDescription, selectedProducts)) {
+			if (persistenceController.getGroupDataService().setProductGroup(newGroupID, newDescription,
+					selectedProducts)) {
 				result = true;
 
 				// modify internal model

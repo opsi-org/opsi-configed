@@ -92,7 +92,6 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
-import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
@@ -116,7 +115,6 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedKeeper;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
@@ -2008,34 +2006,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		return clientTree.getActiveParents();
-	}
-
-	public boolean addGroup(StringValuedRelationElement newGroup) {
-		return persistenceController.getGroupDataService().addGroup(newGroup);
-	}
-
-	public boolean updateGroup(String groupId, Map<String, String> groupInfo) {
-		return persistenceController.getGroupDataService().updateGroup(groupId, groupInfo);
-	}
-
-	public boolean deleteGroup(String groupId) {
-		return persistenceController.getGroupDataService().deleteGroup(groupId);
-	}
-
-	public boolean removeHostGroupElements(List<Object2GroupEntry> entries) {
-		return persistenceController.getGroupDataService().removeHostGroupElements(entries);
-	}
-
-	public boolean removeObject2Group(String objectId, String groupId) {
-		return persistenceController.getGroupDataService().removeObject2Group(objectId, groupId);
-	}
-
-	public boolean addObject2Group(String objectId, String groupId) {
-		return persistenceController.getGroupDataService().addObject2Group(objectId, groupId);
-	}
-
-	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
-		return persistenceController.getGroupDataService().setProductGroup(groupId, description, productSet);
 	}
 
 	private void depotsListValueChanged() {

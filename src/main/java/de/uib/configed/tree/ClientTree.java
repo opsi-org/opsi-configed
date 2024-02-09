@@ -47,6 +47,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
@@ -105,6 +107,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	private Set<String> directlyAllowedGroups;
 
 	private ConfigedMain configedMain;
+
+	private GroupDataService groupDataService = PersistenceControllerFactory.getPersistenceController()
+			.getGroupDataService();
 
 	static {
 		translationsToPersistentNames = new HashMap<>();
@@ -340,7 +345,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		while (e.hasMoreElements()) {
 			DefaultMutableTreeNode nextNode = (DefaultMutableTreeNode) e.nextElement();
 			if (nextNode.getAllowsChildren()) {
-				deleteGroup(nextNode.toString());
+				groupDataService.deleteGroup(nextNode.toString());
 			}
 		}
 	}
@@ -382,7 +387,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		} else {
 			// client node
 			removeClientInternally(nodeID, parent);
-			removeObject2Group(nodeID, parentID);
+			groupDataService.removeObject2Group(nodeID, parentID);
 		}
 		return true;
 	}
@@ -626,7 +631,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		if (!fEdit.isCancelled()) {
 			groups.get(groupId).put("description", groupData.get("description"));
-			updateGroup(groupId, groups.get(groupId));
+			groupDataService.updateGroup(groupId, groups.get(groupId));
 		}
 	}
 
@@ -693,7 +698,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			newGroup.put("description", groupData.get("description"));
 
 			// get persistence
-			if (addGroup(newGroup)) {
+			if (groupDataService.addGroup(newGroup)) {
 				groups.put(newGroupKey, newGroup);
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup " + newGroupKey + ", " + newGroup);
 				GroupNode newNode = insertGroup(newGroupKey, groupData.get("description"), node);
@@ -725,7 +730,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);
-		updateGroup(importID, theGroup);
+		groupDataService.updateGroup(importID, theGroup);
 
 		leafname2AllItsPaths.rebuildFromTree(rootNode);
 	}
@@ -741,7 +746,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
 		}
 
-		return configedMain.removeHostGroupElements(groupEntries);
+		return groupDataService.removeHostGroupElements(groupEntries);
 	}
 
 	private void removeClientInternally(String clientID, GroupNode parentNode) {
@@ -796,7 +801,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			getModel().nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				addObject2PersistentGroup(importID, dropParentID);
+				groupDataService.addObject2Group(importID, dropParentID);
 			}
 
 			// operations in DIRECTORY
@@ -817,7 +822,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 							+ sourcePath);
 
 			// persistent removal
-			removeObject2Group(importID, sourceParentID);
+			groupDataService.removeObject2Group(importID, sourceParentID);
 			removeClientInternally(importID, sourceParentNode);
 
 			makeVisible(newPath);
@@ -858,7 +863,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			addObject2PersistentGroup(objectID, newParentID);
+			groupDataService.addObject2Group(objectID, newParentID);
 		}
 
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
@@ -902,7 +907,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 			for (GroupNode node : groupsInDIRECTORY) {
 				removeClientInternally(clientID, node);
-				removeObject2Group(clientID, node.getUserObject().toString());
+				groupDataService.removeObject2Group(clientID, node.getUserObject().toString());
 			}
 
 			locationsInDIRECTORY.put(clientID, new HashSet<>(correctNode));
@@ -1113,26 +1118,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	public TreePath getGroupPathActivatedByTree() {
 		return configedMain.getGroupPathActivatedByTree();
-	}
-
-	private boolean addObject2PersistentGroup(String objectId, String groupId) {
-		return configedMain.addObject2Group(objectId, groupId);
-	}
-
-	private boolean removeObject2Group(String objectId, String groupId) {
-		return configedMain.removeObject2Group(objectId, groupId);
-	}
-
-	private boolean addGroup(StringValuedRelationElement newGroup) {
-		return configedMain.addGroup(newGroup);
-	}
-
-	private boolean updateGroup(String groupId, Map<String, String> groupInfo) {
-		return configedMain.updateGroup(groupId, groupInfo);
-	}
-
-	private boolean deleteGroup(String groupId) {
-		return configedMain.deleteGroup(groupId);
 	}
 
 	public GroupNode getGroupNode(String groupId) {
