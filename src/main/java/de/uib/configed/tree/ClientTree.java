@@ -270,10 +270,17 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return new DefaultMutableTreeNode(x, false);
 	}
 
-	private GroupNode produceGroupNode(String x, String description) {
-		GroupNode n = new GroupNode(x);
-		initGroupNode(x, description, n);
-		return n;
+	private GroupNode produceGroupNode(String groupId, String description) {
+		GroupNode groupNode = new GroupNode(groupId);
+
+		Map<String, String> groupMap = new HashMap<>();
+		groupMap.put("groupId", groupId);
+		groupMap.put("description", description);
+
+		groups.put(groupId, groupMap);
+		groupNodes.put(groupId, groupNode);
+
+		return groupNode;
 	}
 
 	private void createDirectoryNotAssigned() {
@@ -436,15 +443,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDIRECTORY.clear();
 		produceClients(clientIds, groupNodeAllClients);
-	}
-
-	private void initGroupNode(String groupId, String description, GroupNode groupNode) {
-		Map<String, String> groupMap = new HashMap<>();
-		groupMap.put("groupId", groupId);
-		groupMap.put("description", description);
-
-		groups.put(groupId, groupMap);
-		groupNodes.put(groupId, groupNode);
 	}
 
 	// we produce all partial pathes that are defined by the persistent groups
@@ -636,8 +634,8 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	// calls main controller for getting persistence for the new subgroup
-	public IconNode makeSubgroupAt(TreePath path) {
-		IconNode result = null;
+	public DefaultMutableTreeNode makeSubgroupAt(TreePath path) {
+		DefaultMutableTreeNode result = null;
 
 		DefaultMutableTreeNode node;
 
