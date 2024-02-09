@@ -115,7 +115,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		tableProducts.setDragEnabled(true);
 
-		groupPanel = new ProductgroupPanel(this, configedMain, tableProducts, type);
+		groupPanel = new ProductgroupPanel(this, tableProducts, type);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();

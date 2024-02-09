@@ -135,14 +135,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private AbstractDocumentListener descriptionFieldListener;
 
-	private ConfigedMain configedMain;
-
 	private PanelProductSettings.ProductSettingsType type;
 
-	public ProductgroupPanel(PanelProductSettings associate, ConfigedMain configedMain, JTable table,
+	public ProductgroupPanel(PanelProductSettings associate, JTable table,
 			PanelProductSettings.ProductSettingsType type) {
 		this.associate = associate;
-		this.configedMain = configedMain;
 		this.tableProducts = table;
 		this.type = type;
 
