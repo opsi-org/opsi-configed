@@ -1288,14 +1288,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this,
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
+		Set<String> permittedHostGroups = null;
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
+			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
+		}
+
 		if (rebuildTree) {
-			Set<String> permittedHostGroups = null;
-
-			if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-				Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
-			}
-
 			rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
 		}
 
@@ -1310,7 +1309,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeSet<>(clientsForTableModel), null);
+				rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
 			}
 		}
 
