@@ -38,6 +38,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 import de.uib.utilities.swing.FEditTextWithExtra;
@@ -49,10 +50,6 @@ import utils.Utils;
 
 @SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager {
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENSES = "free licenses for client";
-
 	private static ClientMenuManager instance;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -82,6 +79,8 @@ public final class ClientMenuManager {
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
+
+	private JMenuItem jMenuShowScheduledWOL;
 
 	private JMenu jMenu;
 
@@ -154,9 +153,9 @@ public final class ClientMenuManager {
 		jMenuAddClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
 		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(ITEM_ADD_CLIENT, jMenuAddClient);
-		menuItemsHost.put(ITEM_DELETE_CLIENT, jMenuDeleteClient);
-		menuItemsHost.put(ITEM_FREE_LICENSES, jMenuFreeLicenses);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, jMenuAddClient);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT, jMenuDeleteClient);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES, jMenuFreeLicenses);
 
 		jMenuDeletePackageCaches
 				.addActionListener((ActionEvent e) -> configedMain.deletePackageCachesOfSelectedClients());
@@ -261,11 +260,7 @@ public final class ClientMenuManager {
 			fStartWakeOnLan.setClients();
 		});
 
-		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.setEnabled(false);
-		jMenuShowScheduledWOL.addActionListener(
-				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
+		jMenuShowScheduledWOL = createArrangeWindowsMenuItem();
 
 		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
 		jMenuWakeOnLan.addSeparator();
@@ -289,6 +284,20 @@ public final class ClientMenuManager {
 
 	public void addResetNetbootProductsMenuItemsTo(JMenu jMenu) {
 		addResetProductsMenuItemsTo(jMenu, false, true, false);
+	}
+
+	public static JMenuItem createArrangeWindowsMenuItem() {
+		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
+		jMenuShowScheduledWOL.setEnabled(false);
+		jMenuShowScheduledWOL.addActionListener(
+				(ActionEvent e) -> executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll()));
+
+		return jMenuShowScheduledWOL;
+	}
+
+	public void instancesChanged(boolean existJDialogInstances) {
+		jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
 	}
 
 	private void addResetProductsMenuItemsTo(JMenu jMenu, boolean includeResetOptionForLocalbootProducts,
@@ -478,14 +487,14 @@ public final class ClientMenuManager {
 		fText.setVisible(true);
 	}
 
-	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
+	private static void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info("executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if ("arrange".equals(command)) {
 			arrangeWs(instances);
 		}
 	}
 
-	private void arrangeWs(Set<JDialog> frames) {
+	private static void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
 
@@ -493,6 +502,7 @@ public final class ClientMenuManager {
 			return;
 		}
 
+		MainFrame mainFrame = ConfigedMain.getMainFrame();
 		int transpose = 20;
 
 		for (Window f : frames) {

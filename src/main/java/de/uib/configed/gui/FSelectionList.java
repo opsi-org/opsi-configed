@@ -6,16 +6,13 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -33,8 +30,6 @@ public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
 	private String savedStatesObjectTag;
-
-	private Map<String, String> toolTipData;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight, String savedStatesObjectTag) {
@@ -91,7 +86,6 @@ public class FSelectionList extends FGeneralDialog {
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		jList.setCellRenderer(new ToolTipCellRenderer());
 		jList.setVisible(true);
 		scrollpane.getViewport().add(jList);
 
@@ -145,10 +139,6 @@ public class FSelectionList extends FGeneralDialog {
 		jList.setListData(v.toArray(String[]::new));
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
-	}
-
-	public void setToolTipData(Map<String, String> toolTipData) {
-		this.toolTipData = toolTipData;
 	}
 
 	public String getSelectedValue() {
@@ -207,22 +197,5 @@ public class FSelectionList extends FGeneralDialog {
 
 	public void exit() {
 		super.leave();
-	}
-
-	private class ToolTipCellRenderer extends DefaultListCellRenderer {
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-			String toolTip = toolTipData.get(value);
-			if (toolTip != null && !toolTip.isEmpty()) {
-				setToolTipText(toolTip);
-			} else {
-				setToolTipText(null);
-			}
-
-			return this;
-		}
 	}
 }

@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -34,7 +33,6 @@ import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,7 +66,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.swing.FEditObject;
 import utils.Utils;
 
 public class MainFrame extends JFrame {
@@ -91,7 +88,6 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
-	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
 	private JMenu jMenuServer = new JMenu();
 
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
@@ -101,18 +97,12 @@ public class MainFrame extends JFrame {
 
 	private JMenu jMenuClientselection = new JMenu();
 
-	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
+	private JMenu jMenuFrames;
+	private JMenuItem jMenuFrameLicenses;
+	private JMenuItem jMenuFrameShowDialogs;
 
-	private JMenu jMenuFrames = new JMenu();
-	private JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
-	private JMenuItem jMenuFrameDashboard = new JMenuItem();
-	private JMenuItem jMenuFrameLicenses = new JMenuItem();
-	private JMenuItem jMenuFrameShowDialogs = new JMenuItem();
-	private JMenuItem jMenuFrameTerminal = new JMenuItem();
+	private JMenu jMenuHelp;
 
-	private JMenu jMenuHelp = new JMenu();
-
-	private BorderLayout borderLayout1 = new BorderLayout();
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
 	private HostsStatusPanel statusPane;
@@ -521,8 +511,8 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		jMenuClientselectionToggleClientFilter
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
+		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
@@ -541,30 +531,26 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuFrames() {
-		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
+		jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
-		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
+		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
 		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
 
-		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
+		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jMenuFrameLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
+		jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
 		jMenuFrameLicenses.setEnabled(false);
 		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
-		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
-		jMenuFrameShowDialogs.setEnabled(false);
-		jMenuFrameShowDialogs.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "actionPerformed");
-			executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-		});
+		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -600,7 +586,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuHelp() {
-		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
+		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		addHelpLinks(jMenuHelp);
 
@@ -699,7 +685,7 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.setLayout(borderLayout1);
+		allPanel.setLayout(new BorderLayout());
 		allPanel.add(iconBarPanel, BorderLayout.NORTH);
 		allPanel.add(centralPane, BorderLayout.CENTER);
 		allPanel.add(statusPane, BorderLayout.SOUTH);
@@ -1035,42 +1021,12 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	private void arrangeWs(Set<JDialog> frames) {
-		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
-		// Can iconify, but not deiconify a modal JDialog
-
-		if (frames == null) {
-			return;
-		}
-
-		int transpose = 20;
-
-		for (Window f : frames) {
-			transpose = transpose + Globals.LINE_HEIGHT;
-
-			if (f != null) {
-				f.setVisible(true);
-				f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
-			}
-		}
-	}
-
 	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
-		if (jMenuShowScheduledWOL != null) {
-			jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
-		}
-		if (jMenuFrameShowDialogs != null) {
-			jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
-		}
-	}
+		clientMenu.instancesChanged(existJDialogInstances);
 
-	private void executeCommandOnInstances(String command, Set<JDialog> instances) {
-		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
-		if ("arrange".equals(command)) {
-			arrangeWs(instances);
-		}
+		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
 	}
 
 	public void enableAfterLoading() {

@@ -63,9 +63,9 @@ public class UserRolesConfigDataService {
 
 	private static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
 
-	private static final String ITEM_ADD_CLIENT = "add client";
-	private static final String ITEM_DELETE_CLIENT = "remove client";
-	private static final String ITEM_FREE_LICENSES = "free licenses for client";
+	public static final String ITEM_ADD_CLIENT = "add client";
+	public static final String ITEM_DELETE_CLIENT = "remove client";
+	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;

@@ -12,22 +12,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class IconNode extends DefaultMutableTreeNode {
 	private Icon icon;
 
-	private String toolTipText;
-
 	public IconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);
 	}
 
 	public IconNode(Object userObject) {
 		this(userObject, true);
-	}
-
-	public void setToolTipText(String s) {
-		toolTipText = s;
-	}
-
-	public String getToolTipText() {
-		return toolTipText;
 	}
 
 	// set the icon as default for all types of icons

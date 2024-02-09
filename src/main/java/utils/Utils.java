@@ -448,8 +448,6 @@ public final class Utils {
 		message.append(Configed.getResourceValue("Utils.opsiHostKey.message1"));
 		message.append("\n\n");
 		message.append(Configed.getResourceValue("Utils.opsiHostKey.message2"));
-		message.append("\n\n");
-		message.append(Configed.getResourceValue("Utils.opsiHostKey.message3"));
 		f.setMessage(message.toString());
 		f.setVisible(true);
 		return f.getResult() == 2;

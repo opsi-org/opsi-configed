@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
@@ -76,11 +75,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	private TreePath pathToROOT;
 	private TreePath pathToALL;
-
-	private final Map<String, String> mapAllClients = new HashMap<>();
-	private final Map<String, String> mapGroups = new HashMap<>();
-	private final Map<String, String> mapDirectory = new HashMap<>();
-	private final Map<String, String> mapDirectoryNotAssigned = new HashMap<>();
 
 	public final GroupNode rootNode = new GroupNode("top");
 
@@ -271,9 +265,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return new DefaultMutableTreeNode(x, false);
 	}
 
-	private static GroupNode produceGroupNode(Object x, String description) {
+	private GroupNode produceGroupNode(String x, String description) {
 		GroupNode n = new GroupNode(x);
-		n.setToolTipText(description);
+		initGroupNode(x, description, n);
 		return n;
 	}
 
@@ -292,6 +286,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		rootNode.setFixed(true);
 
 		pathToROOT = new TreePath(new Object[] { rootNode });
+
+		groups = new HashMap<>();
+		groupNodes = new HashMap<>();
 
 		// GROUPS
 		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME, Configed.getResourceValue("ClientTree.GROUPSdescription"));
@@ -436,50 +433,24 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		produceClients(clientIds, groupNodeAllClients);
 	}
 
-	private void initTopGroups() {
-		mapAllClients.put("groupId", ALL_CLIENTS_NAME);
-		mapAllClients.put("description", "root of complete client listing");
-		groupNodes.put(ALL_CLIENTS_NAME, groupNodeAllClients);
+	private void initGroupNode(String groupId, String description, GroupNode groupNode) {
+		Map<String, String> groupMap = new HashMap<>();
+		groupMap.put("groupId", groupId);
+		groupMap.put("description", description);
 
-		groups.put(ALL_CLIENTS_NAME, mapAllClients);
-
-		mapGroups.put("groupId", ALL_GROUPS_NAME);
-
-		mapGroups.put("description", "root of groups");
-
-		groupNodes.put(ALL_GROUPS_NAME, groupNodeGroups);
-
-		groups.put(ALL_GROUPS_NAME, mapGroups);
-
-		mapDirectory.put("groupId", DIRECTORY_NAME);
-
-		mapDirectory.put("description", "root of directory");
-
-		groupNodes.put(DIRECTORY_NAME, groupNodeDirectory);
-
-		groups.put(DIRECTORY_NAME, mapDirectory);
-
-		mapDirectoryNotAssigned.put("groupId", DIRECTORY_NOT_ASSIGNED_NAME);
-		mapDirectoryNotAssigned.put("description", "root of DIRECTORY_NOT_ASSIGNED");
-
-		groupNodes.put(DIRECTORY_NOT_ASSIGNED_NAME, groupNodeDirectoryNotAssigned);
-
-		groups.put(DIRECTORY_NOT_ASSIGNED_NAME, mapDirectoryNotAssigned);
-	}
-
-	public boolean groupNodesExists() {
-		return groupNodes != null;
+		groups.put(groupId, groupMap);
+		groupNodes.put(groupId, groupNode);
 	}
 
 	// we produce all partial pathes that are defined by the persistent groups
 	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups) {
 		Logging.debug(this, "produceAndLinkGroups " + importedGroups.keySet());
 		// we need a local copy since we add virtual groups
-		this.groups = new TreeMap<>(importedGroups);
+		groups.putAll(importedGroups);
+
+		renderer.setGroupNodeTooltips(groups);
 
 		createDirectoryNotAssigned();
-		groupNodes = new HashMap<>();
-		initTopGroups();
 
 		produceGroupNodes();
 		linkGroupNodes();
@@ -663,7 +634,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		if (!fEdit.isCancelled()) {
 			groups.get(groupId).put("description", groupData.get("description"));
-			groupNodes.get(groupId).setToolTipText(groupData.get("description"));
 			updateGroup(groupId, groups.get(groupId));
 		}
 	}
@@ -1076,7 +1046,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
 	}
 
-	private GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
+	private GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
 		GroupNode node = produceGroupNode(groupObject, groupDescription);
 
 		if (parent == null) {

@@ -26,6 +26,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 	private ConfigedMain configedMain;
 
 	private Map<String, HostInfo> host2HostInfo;
+	private Map<String, Map<String, String>> groups;
 
 	private ImageIcon iconClient = Utils.createImageIcon("images/client_small.png", "client");
 	private ImageIcon nonSelectedIconClient = Utils.createImageIcon("images/client_small_unselected.png", "client");
@@ -43,6 +44,10 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 
 	public void setHost2HostInfo(Map<String, HostInfo> host2HostInfo) {
 		this.host2HostInfo = host2HostInfo;
+	}
+
+	public void setGroupNodeTooltips(Map<String, Map<String, String>> groups) {
+		this.groups = groups;
 	}
 
 	@Override
@@ -94,8 +99,9 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 		Object userObject = node.getUserObject();
 
 		if (node instanceof GroupNode) {
-			// TODO We still need to find a better solution for this...
-			setToolTipText(((GroupNode) node).getToolTipText());
+			if (groups != null) {
+				setToolTipText(groups.get(node.toString()).get("description"));
+			}
 		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null
 				&& !"".equals(host2HostInfo.get(userObject).getDescription())) {
 			setToolTipText(host2HostInfo.get(userObject).getDescription());
