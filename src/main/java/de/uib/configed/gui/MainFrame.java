@@ -96,18 +96,12 @@ public class MainFrame extends JFrame {
 
 	private JMenu jMenuClientselection = new JMenu();
 
-	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
+	private JMenu jMenuFrames;
+	private JMenuItem jMenuFrameLicenses;
+	private JMenuItem jMenuFrameShowDialogs;
 
-	private JMenu jMenuFrames = new JMenu();
-	private JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
-	private JMenuItem jMenuFrameDashboard = new JMenuItem();
-	private JMenuItem jMenuFrameLicenses = new JMenuItem();
-	private JMenuItem jMenuFrameShowDialogs = new JMenuItem();
-	private JMenuItem jMenuFrameTerminal = new JMenuItem();
+	private JMenu jMenuHelp;
 
-	private JMenu jMenuHelp = new JMenu();
-
-	private BorderLayout borderLayout1 = new BorderLayout();
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
 	private HostsStatusPanel statusPane;
@@ -518,8 +512,8 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		jMenuClientselectionToggleClientFilter
-				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
+		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
@@ -538,25 +532,26 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuFrames() {
-		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
+		jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
-		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
+		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
 		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
 
-		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
+		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jMenuFrameLicenses.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
+		jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
 		jMenuFrameLicenses.setEnabled(false);
 		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -592,7 +587,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuHelp() {
-		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
+		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		addHelpLinks(jMenuHelp);
 
@@ -691,7 +686,7 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.setLayout(borderLayout1);
+		allPanel.setLayout(new BorderLayout());
 		allPanel.add(iconBarPanel, BorderLayout.NORTH);
 		allPanel.add(centralPane, BorderLayout.CENTER);
 		allPanel.add(statusPane, BorderLayout.SOUTH);
