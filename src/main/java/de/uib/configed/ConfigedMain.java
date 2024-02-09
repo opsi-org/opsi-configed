@@ -1426,7 +1426,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			return false;
 		}
 
-		if (!clientTree.groupNodesExists() || clientTree.getGroupNode(groupname) == null) {
+		if (clientTree.getGroupNode(groupname) == null) {
 			Logging.warning("no group " + groupname);
 			return false;
 		}
