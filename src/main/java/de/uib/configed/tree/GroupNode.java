@@ -6,7 +6,9 @@
 
 package de.uib.configed.tree;
 
-public class GroupNode extends IconNode {
+import javax.swing.tree.DefaultMutableTreeNode;
+
+public class GroupNode extends DefaultMutableTreeNode {
 	private boolean allowingOnlyGroupChilds;
 	private boolean immutable;
 	private boolean fixed;
