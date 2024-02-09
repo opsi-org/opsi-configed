@@ -448,23 +448,15 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		// we need a local copy since we add virtual groups
 		groups.putAll(importedGroups);
 
+		for (String group : importedGroups.keySet()) {
+			groupNodes.put(group, new GroupNode(group));
+		}
+
 		renderer.setGroupNodeTooltips(groups);
 
 		createDirectoryNotAssigned();
 
-		produceGroupNodes();
 		linkGroupNodes();
-	}
-
-	private void produceGroupNodes() {
-		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
-			if (topGroupNames.contains(group.getKey())) {
-				continue;
-			}
-
-			GroupNode node = produceGroupNode(group.getValue().get("groupId"), group.getValue().get("description"));
-			groupNodes.put(group.getKey(), node);
-		}
 	}
 
 	private void linkGroupNodes() {
