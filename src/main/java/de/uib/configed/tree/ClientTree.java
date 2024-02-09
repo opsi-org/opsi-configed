@@ -77,11 +77,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	private TreePath pathToROOT;
 	private TreePath pathToALL;
 
-	private final Map<String, String> mapAllClients = new HashMap<>();
-	private final Map<String, String> mapGroups = new HashMap<>();
-	private final Map<String, String> mapDirectory = new HashMap<>();
-	private final Map<String, String> mapDirectoryNotAssigned = new HashMap<>();
-
 	public final GroupNode rootNode = new GroupNode("top");
 
 	// supervising data
@@ -437,34 +432,22 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	private void initTopGroups() {
-		mapAllClients.put("groupId", ALL_CLIENTS_NAME);
-		mapAllClients.put("description", "root of complete client listing");
-		groupNodes.put(ALL_CLIENTS_NAME, groupNodeAllClients);
+		initGroupNode(ALL_CLIENTS_NAME, "root of complete client listing", groupNodeAllClients);
 
-		groups.put(ALL_CLIENTS_NAME, mapAllClients);
+		initGroupNode(ALL_GROUPS_NAME, "root of groups", groupNodeGroups);
 
-		mapGroups.put("groupId", ALL_GROUPS_NAME);
+		initGroupNode(DIRECTORY_NAME, "root of directory", groupNodeDirectory);
 
-		mapGroups.put("description", "root of groups");
+		initGroupNode(DIRECTORY_NOT_ASSIGNED_NAME, "root of DIRECTORY_NOT_ASSIGNED", groupNodeDirectoryNotAssigned);
+	}
 
-		groupNodes.put(ALL_GROUPS_NAME, groupNodeGroups);
+	private void initGroupNode(String groupId, String description, GroupNode groupNode) {
+		Map<String, String> groupMap = new HashMap<>();
+		groupMap.put("groupId", groupId);
+		groupMap.put("description", description);
 
-		groups.put(ALL_GROUPS_NAME, mapGroups);
-
-		mapDirectory.put("groupId", DIRECTORY_NAME);
-
-		mapDirectory.put("description", "root of directory");
-
-		groupNodes.put(DIRECTORY_NAME, groupNodeDirectory);
-
-		groups.put(DIRECTORY_NAME, mapDirectory);
-
-		mapDirectoryNotAssigned.put("groupId", DIRECTORY_NOT_ASSIGNED_NAME);
-		mapDirectoryNotAssigned.put("description", "root of DIRECTORY_NOT_ASSIGNED");
-
-		groupNodes.put(DIRECTORY_NOT_ASSIGNED_NAME, groupNodeDirectoryNotAssigned);
-
-		groups.put(DIRECTORY_NOT_ASSIGNED_NAME, mapDirectoryNotAssigned);
+		groups.put(groupId, groupMap);
+		groupNodes.put(groupId, groupNode);
 	}
 
 	public boolean groupNodesExists() {
