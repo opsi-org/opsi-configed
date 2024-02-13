@@ -405,8 +405,8 @@ public class ExporterToPDF extends AbstractExportTable {
 		 */
 		@Override
 		public void onCloseDocument(PdfWriter writer, Document document) {
-			ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
-					new Phrase(String.valueOf(writer.getPageNumber() - 1)), 2, 2, 0);
+			ColumnText.showTextAligned(total, Element.ALIGN_LEFT, new Phrase(String.valueOf(writer.getPageNumber())), 2,
+					2, 0);
 		}
 	}
 
