@@ -8,6 +8,8 @@
 - Allow to select only depots, which are specified in `user.{<username>}.privilege.host.depotaccess.depots`
 - Show only groups, which are specified in `user.{<username>}.privilege.host.groupaccess.hostgroups`
 - Show only the total number of clients, that are visible for user, next to "Clients total:" label
+- All products are included in PDF export, when exporting Localboot or Netboot products
+- The page numbering in PDF exports is incorrect 1/3, 2/3, 3/3, 4/3
 
 ## [4.3.1.8] - 2024-02-08
 ## Fixed
