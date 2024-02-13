@@ -60,10 +60,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
 	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
-	private static Map<String, String> translationsToPersistentNames;
 	private static Set<String> topGroupNames;
-
-	private static final Map<String, String> translationsFromPersistentNames;
 
 	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
 
@@ -112,11 +109,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			.getGroupDataService();
 
 	static {
-		translationsToPersistentNames = new HashMap<>();
-		translationsFromPersistentNames = new HashMap<>();
-		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
-		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
-
 		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
 		topGroupNames.add(ALL_GROUPS_NAME);
@@ -131,15 +123,12 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		init();
 	}
 
-	public static Map<String, String> getTranslationsFromPersistentNames() {
-		return translationsFromPersistentNames;
-	}
-
 	public static String translateToPersistentName(String name) {
-		if (translationsToPersistentNames.get(name) != null) {
-			return translationsToPersistentNames.get(name);
+		if (DIRECTORY_NAME.equals(name)) {
+			return DIRECTORY_PERSISTENT_NAME;
+		} else {
+			return name;
 		}
-		return name;
 	}
 
 	private static class NodeComparator implements Comparator<DefaultMutableTreeNode> {
@@ -190,7 +179,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		setRootVisible(false);
 		setShowsRootHandles(true);
 
-		renderer = new ClientTreeRenderer(configedMain);
+		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);
 
 		model = new DefaultTreeModel(rootNode);
@@ -779,7 +768,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		repaint();
 	}
 
-	private void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
@@ -830,20 +819,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 	}
 
-	public void clientCopyOrMoveTo(String importID, TreePath sourcePath, String sourceParentID,
-			GroupNode sourceParentNode, DefaultMutableTreeNode newParentNode, TreePath newParentPath,
-			String newParentID, boolean moving) {
-		Logging.debug(this, "clientCopyOrMoveTo moving " + moving);
-		if (moving) {
-			moveClientTo(importID, sourcePath, sourceParentID, sourceParentNode, newParentNode, newParentPath,
-					newParentID);
-		} else {
-			// including the case sourcePath == null, meaning import from other source
-			copyClientTo(importID, sourcePath, newParentID, newParentNode, newParentPath);
-		}
-	}
-
-	private void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
+	public void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
@@ -1000,37 +976,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			return;
 		}
 
-		String nodeObject = node.getUserObject().toString();
-
-		boolean foundLoc = false;
-
-		Enumeration<TreeNode> en = parent.children();
-
 		// for groups, we should look only for groups
 
-		DefaultMutableTreeNode insertNode = null;
-		while (en.hasMoreElements() && !foundLoc) {
-			insertNode = (DefaultMutableTreeNode) en.nextElement();
+		DefaultMutableTreeNode insertNode = findLocation(parent.children(), node);
 
-			// node with subnodes = group
-			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
-				// leaf
-				continue;
-			}
-
-			// leaf && group
-			if (!insertNode.getAllowsChildren() && node.getAllowsChildren()) {
-				foundLoc = true;
-				continue;
-			}
-
-			// both are leafs or both are groups
-			if (insertNode.toString().compareToIgnoreCase(nodeObject) > 0) {
-				foundLoc = true;
-			}
-		}
-
-		if (insertNode == null || !foundLoc) {
+		if (insertNode == null) {
 			// append
 			parent.add(node);
 		} else {
@@ -1039,6 +989,33 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 
 		model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
+	}
+
+	private static DefaultMutableTreeNode findLocation(Enumeration<TreeNode> children, DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode insertNode = null;
+
+		String nodeObject = node.toString();
+
+		while (children.hasMoreElements()) {
+			insertNode = (DefaultMutableTreeNode) children.nextElement();
+
+			// node with subnodes = group
+			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
+				continue;
+			}
+
+			// leaf && group
+			if (!insertNode.getAllowsChildren() && node.getAllowsChildren()) {
+				return insertNode;
+			}
+
+			// both are leafs or both are groups
+			if (insertNode.toString().compareToIgnoreCase(nodeObject) > 0) {
+				return insertNode;
+			}
+		}
+
+		return null;
 	}
 
 	private GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
@@ -1107,10 +1084,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public Set<String> getActiveParents() {
-		if (activeParents == null) {
-			initActiveParents();
-		}
-
 		return activeParents;
 	}
 

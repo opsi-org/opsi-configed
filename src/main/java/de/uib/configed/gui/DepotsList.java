@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
+
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 	private DepotListCellRenderer myListCellRenderer;
@@ -25,6 +28,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new DepotListCellRenderer();
 		super.setCellRenderer(myListCellRenderer);
+		super.setSelectionModel(new DepotListSelectionModel());
 	}
 
 	public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
@@ -115,5 +119,27 @@ public class DepotsList extends JList<String> implements ComponentListener {
 			}
 		}
 		getSelectionModel().setValueIsAdjusting(false);
+	}
+
+	private class DepotListSelectionModel extends DefaultListSelectionModel {
+		@SuppressWarnings({ "java:S2234" })
+		@Override
+		public void setSelectionInterval(int index0, int index1) {
+			if (index0 < index1) {
+				selectAllowedDepots(index0, index1);
+			} else {
+				selectAllowedDepots(index1, index0);
+			}
+		}
+
+		private void selectAllowedDepots(int index0, int index1) {
+			for (int i = index0; i <= index1; i++) {
+				Object value = getModel().getElementAt(i);
+				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.hasDepotPermission((String) value)) {
+					super.setSelectionInterval(index0, index1);
+				}
+			}
+		}
 	}
 }

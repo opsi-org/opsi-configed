@@ -1284,14 +1284,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this,
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
+		Set<String> permittedHostGroups = null;
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
+			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
+		}
+
 		if (rebuildTree) {
-			Set<String> permittedHostGroups = null;
-
-			if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-				Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-				permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
-			}
-
 			rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
 		}
 
@@ -1306,7 +1305,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeSet<>(clientsForTableModel), null);
+				rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
 			}
 		}
 
@@ -1386,12 +1385,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		clientTree.produceTreeForALL(allPCs);
 
-		clientTree.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD());
+		Map<String, Map<String, String>> hostgroups = persistenceController.getGroupDataService().getHostGroupsPD();
+		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+		if (permittedHostGroups != null && !permittedHostGroups.isEmpty()) {
+			hostgroups.keySet().retainAll(permittedHostGroups);
+			fObject2Groups.values().forEach(hostGroups -> hostGroups.retainAll(permittedHostGroups));
+		}
+		clientTree.produceAndLinkGroups(hostgroups);
 
 		Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
 		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.size());
-		allowedClients = clientTree.associateClientsToGroups(allPCs,
-				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
+		allowedClients = clientTree.associateClientsToGroups(allPCs, fObject2Groups, permittedHostGroups);
 
 		if (allowedClients != null) {
 			Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
@@ -1996,14 +2000,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	public ActivatedGroupModel getActivatedGroupModel() {
 		return activatedGroupModel;
-	}
-
-	public Set<String> getActiveParents() {
-		if (clientTree == null) {
-			return new HashSet<>();
-		}
-
-		return clientTree.getActiveParents();
 	}
 
 	private void depotsListValueChanged() {

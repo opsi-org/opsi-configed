@@ -171,30 +171,19 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
-		return getStringMappedObjectsByKey(omc, key, null, null);
-	}
-
-	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
-		return getStringMappedObjectsByKey(omc, key, sourceVars, targetVars, null);
-	}
-
-	@Override
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 		List<Object> resultlist = getListResult(omc);
 
 		if (resultlist == null) {
 			return new TreeMap<>();
 		}
 
-		return generateStringMappedObjectsByKeyResult(resultlist, key, sourceVars, targetVars, translateValues);
+		return generateStringMappedObjectsByKeyResult(resultlist, key, sourceVars, targetVars);
 	}
 
 	public static Map<String, Map<String, String>> generateStringMappedObjectsByKeyResult(Iterable<Object> objects,
-			String key, String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
+			String key, String[] sourceVars, String[] targetVars) {
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		for (Object object : objects) {
@@ -208,19 +197,15 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 
 			String keyOfItem = originalMap.get(key);
 
-			if (translateValues != null && translateValues.get(keyOfItem) != null) {
-				keyOfItem = translateValues.get(keyOfItem);
-			}
-
 			Map<String, String> detailMap = new HashMap<>();
 
 			if (sourceVars == null) {
 				detailMap.putAll(originalMap);
 			} else {
 				if (targetVars == null) {
-					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, translateValues);
+					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars);
 				} else {
-					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars, translateValues);
+					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars);
 				}
 			}
 
@@ -231,15 +216,11 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	}
 
 	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
-			String[] sourceVars, Map<String, String> translateValues) {
+			String[] sourceVars) {
 		Map<String, String> detailMap = new HashMap<>();
 
 		for (String value : sourceVars) {
 			String val = String.valueOf(originalMap.get(value));
-
-			if (translateValues != null && translateValues.get(val) != null) {
-				val = translateValues.get(val);
-			}
 
 			detailMap.put(value, val);
 		}
@@ -248,7 +229,7 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	}
 
 	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
+			String[] sourceVars, String[] targetVars) {
 		Map<String, String> detailMap = new HashMap<>();
 
 		if (targetVars.length != sourceVars.length) {
@@ -261,10 +242,6 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 
 			if (i < targetVars.length) {
 				value = targetVars[i];
-
-				if (translateValues != null && translateValues.get(val) != null) {
-					val = translateValues.get(val);
-				}
 
 				detailMap.put(value, val);
 			}
