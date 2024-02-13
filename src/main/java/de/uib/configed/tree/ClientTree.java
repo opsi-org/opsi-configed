@@ -779,7 +779,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		repaint();
 	}
 
-	private void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
@@ -830,20 +830,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 	}
 
-	public void clientCopyOrMoveTo(String importID, TreePath sourcePath, String sourceParentID,
-			GroupNode sourceParentNode, DefaultMutableTreeNode newParentNode, TreePath newParentPath,
-			String newParentID, boolean moving) {
-		Logging.debug(this, "clientCopyOrMoveTo moving " + moving);
-		if (moving) {
-			moveClientTo(importID, sourcePath, sourceParentID, sourceParentNode, newParentNode, newParentPath,
-					newParentID);
-		} else {
-			// including the case sourcePath == null, meaning import from other source
-			copyClientTo(importID, sourcePath, newParentID, newParentNode, newParentPath);
-		}
-	}
-
-	private void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
+	public void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
