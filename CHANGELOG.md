@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.X.X] - XXXX-XX-XX
+## Fixed
+- All products are included in PDF export, when exporting Localboot or Netboot products
+- The page numbering in PDF exports is incorrect 1/3, 2/3, 3/3, 4/3
+
 ## [4.3.1.8] - 2024-02-08
 ## Fixed
 - `NullPointerException` when opening product selection dialogue
