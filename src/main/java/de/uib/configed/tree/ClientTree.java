@@ -60,7 +60,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
 	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
-	private static Map<String, String> translationsToPersistentNames;
 	private static Set<String> topGroupNames;
 
 	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
@@ -110,9 +109,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			.getGroupDataService();
 
 	static {
-		translationsToPersistentNames = new HashMap<>();
-		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
-
 		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
 		topGroupNames.add(ALL_GROUPS_NAME);
@@ -128,10 +124,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public static String translateToPersistentName(String name) {
-		if (translationsToPersistentNames.get(name) != null) {
-			return translationsToPersistentNames.get(name);
+		if (DIRECTORY_NAME.equals(name)) {
+			return DIRECTORY_PERSISTENT_NAME;
+		} else {
+			return name;
 		}
-		return name;
 	}
 
 	private static class NodeComparator implements Comparator<DefaultMutableTreeNode> {
