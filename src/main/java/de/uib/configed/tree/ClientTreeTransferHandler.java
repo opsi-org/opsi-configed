@@ -269,8 +269,12 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			moving = chooseMOVE(support, adaptedSourceParentID, dropPath, true);
 		}
 
-		tree.clientCopyOrMoveTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
-				dropPath, dropParentID, moving);
+		if (moving) {
+			tree.moveClientTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
+					dropPath, dropParentID);
+		} else {
+			tree.copyClientTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
+		}
 	}
 
 	@Override

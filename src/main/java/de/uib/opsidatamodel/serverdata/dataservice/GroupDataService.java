@@ -130,7 +130,7 @@ public class GroupDataService {
 		// Load data for hostGroups
 		Map<String, Map<String, String>> source = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
 				hostGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }, null);
+				new String[] { "groupId", "parentGroupId", "description" });
 
 		HostGroups hostGroups = new HostGroups(source);
 		Logging.debug(this, "getHostGroups " + hostGroups);
@@ -143,7 +143,7 @@ public class GroupDataService {
 		// Load data for productGroups
 		Map<String, Map<String, String>> result = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
 				productGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }, null);
+				new String[] { "groupId", "parentGroupId", "description" });
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
 	}
 
@@ -193,8 +193,7 @@ public class GroupDataService {
 		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
 						new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-				ClientTree.getTranslationsFromPersistentNames());
+				"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" });
 		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
 		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
 	}
@@ -228,7 +227,7 @@ public class GroupDataService {
 		// Generate data for host groups
 		Map<String, Map<String, String>> mappedRelationsHostGroups = AbstractPOJOExecutioner
 				.generateStringMappedObjectsByKeyResult(hostGroupsList, "ident", new String[] { "objectId", "groupId" },
-						new String[] { "clientId", "groupId" }, ClientTree.getTranslationsFromPersistentNames());
+						new String[] { "clientId", "groupId" });
 
 		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelationsHostGroups, "clientId", "groupId");
 		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
@@ -236,7 +235,7 @@ public class GroupDataService {
 		// generate data for product groups
 		Map<String, Map<String, String>> mappedRelationsProductGroups = AbstractPOJOExecutioner
 				.generateStringMappedObjectsByKeyResult(productGroupsList, "ident",
-						new String[] { "objectId", "groupId" }, new String[] { "productId", "groupId" }, null);
+						new String[] { "objectId", "groupId" }, new String[] { "productId", "groupId" });
 
 		cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS,
 				projectToFunction(mappedRelationsProductGroups, "groupId", "productId"));

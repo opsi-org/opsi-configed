@@ -16,14 +16,13 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class ClientTreeRenderer extends DefaultTreeCellRenderer {
-	private ConfigedMain configedMain;
+	private ClientTree clientTree;
 
 	private Map<String, HostInfo> host2HostInfo;
 	private Map<String, Map<String, String>> groups;
@@ -36,8 +35,8 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon groupSelected = Utils.createImageIcon("images/group_small.png", "client");
 	private ImageIcon group1SelectedIcon = Utils.createImageIcon("images/group_small_1selected.png", "group 1selected");
 
-	public ClientTreeRenderer(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
+	public ClientTreeRenderer(ClientTree clientTree) {
+		this.clientTree = clientTree;
 
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 	}
@@ -78,7 +77,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			// group
 			if (sel) {
 				setIcon(groupSelected);
-			} else if (configedMain.getActiveParents().contains(stringValue)) {
+			} else if (clientTree.getActiveParents().contains(stringValue)) {
 				setIcon(group1SelectedIcon);
 			} else {
 				setIcon(groupUnselectedIcon);

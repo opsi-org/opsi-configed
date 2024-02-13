@@ -135,14 +135,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private AbstractDocumentListener descriptionFieldListener;
 
-	private ConfigedMain configedMain;
-
 	private PanelProductSettings.ProductSettingsType type;
 
-	public ProductgroupPanel(PanelProductSettings associate, ConfigedMain configedMain, JTable table,
+	public ProductgroupPanel(PanelProductSettings associate, JTable table,
 			PanelProductSettings.ProductSettingsType type) {
 		this.associate = associate;
-		this.configedMain = configedMain;
 		this.tableProducts = table;
 		this.type = type;
 
@@ -595,7 +592,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			theData.remove(removeGroupID);
 
-			if (configedMain.deleteGroup(removeGroupID)) {
+			if (persistenceController.getGroupDataService().deleteGroup(removeGroupID)) {
 				result = true;
 				setInternalGroupsData();
 			}
@@ -634,7 +631,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			selectedProducts = associate.getSelectedIDs();
 
-			if (configedMain.setProductGroup(newGroupID, newDescription, selectedProducts)) {
+			if (persistenceController.getGroupDataService().setProductGroup(newGroupID, newDescription,
+					selectedProducts)) {
 				result = true;
 
 				// modify internal model
