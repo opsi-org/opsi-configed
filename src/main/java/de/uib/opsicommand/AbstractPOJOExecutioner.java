@@ -171,11 +171,6 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
-		return getStringMappedObjectsByKey(omc, key, null, null);
-	}
-
-	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
 		return getStringMappedObjectsByKey(omc, key, sourceVars, targetVars, null);
@@ -208,7 +203,11 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 
 			String keyOfItem = originalMap.get(key);
 
+			if (translateValues != null) {
+				Logging.devel(keyOfItem + " " + translateValues);
+			}
 			if (translateValues != null && translateValues.get(keyOfItem) != null) {
+				Logging.devel(keyOfItem + " " + translateValues.get(keyOfItem));
 				keyOfItem = translateValues.get(keyOfItem);
 			}
 

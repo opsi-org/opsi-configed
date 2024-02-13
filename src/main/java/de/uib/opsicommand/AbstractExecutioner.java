@@ -40,8 +40,6 @@ public abstract class AbstractExecutioner {
 	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars);
 
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key);
-
 	public abstract List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
 
 	public abstract String getStringResult(OpsiMethodCall omc);
