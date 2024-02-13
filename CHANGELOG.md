@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.2.22.28] - 2024-02-13
+## Fixed
+- All products are included in PDF export, when exporting Localboot or Netboot products
+- The page numbering in PDF exports is incorrect 1/3, 2/3, 3/3, 4/3
+
 ## [4.2.22.27] - 2024-01-31
 ## Fixed
 - The authorization is overriden, when logging in with an uppercase in the username
