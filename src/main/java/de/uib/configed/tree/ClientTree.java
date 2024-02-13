@@ -1000,37 +1000,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			return;
 		}
 
-		String nodeObject = node.getUserObject().toString();
-
-		boolean foundLoc = false;
-
-		Enumeration<TreeNode> en = parent.children();
-
 		// for groups, we should look only for groups
 
-		DefaultMutableTreeNode insertNode = null;
-		while (en.hasMoreElements() && !foundLoc) {
-			insertNode = (DefaultMutableTreeNode) en.nextElement();
+		DefaultMutableTreeNode insertNode = findLocation(parent.children(), node);
 
-			// node with subnodes = group
-			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
-				// leaf
-				continue;
-			}
-
-			// leaf && group
-			if (!insertNode.getAllowsChildren() && node.getAllowsChildren()) {
-				foundLoc = true;
-				continue;
-			}
-
-			// both are leafs or both are groups
-			if (insertNode.toString().compareToIgnoreCase(nodeObject) > 0) {
-				foundLoc = true;
-			}
-		}
-
-		if (insertNode == null || !foundLoc) {
+		if (insertNode == null) {
 			// append
 			parent.add(node);
 		} else {
@@ -1039,6 +1013,33 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 
 		model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
+	}
+
+	private static DefaultMutableTreeNode findLocation(Enumeration<TreeNode> children, DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode insertNode = null;
+
+		String nodeObject = node.toString();
+
+		while (children.hasMoreElements()) {
+			insertNode = (DefaultMutableTreeNode) children.nextElement();
+
+			// node with subnodes = group
+			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
+				continue;
+			}
+
+			// leaf && group
+			if (!insertNode.getAllowsChildren() && node.getAllowsChildren()) {
+				return insertNode;
+			}
+
+			// both are leafs or both are groups
+			if (insertNode.toString().compareToIgnoreCase(nodeObject) > 0) {
+				return insertNode;
+			}
+		}
+
+		return null;
 	}
 
 	private GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
