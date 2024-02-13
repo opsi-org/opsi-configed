@@ -35,9 +35,6 @@ public abstract class AbstractExecutioner {
 	public abstract List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc);
 
 	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues);
-
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars);
 
 	public abstract List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc);

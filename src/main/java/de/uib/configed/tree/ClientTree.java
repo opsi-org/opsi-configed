@@ -63,8 +63,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	private static Map<String, String> translationsToPersistentNames;
 	private static Set<String> topGroupNames;
 
-	private static final Map<String, String> translationsFromPersistentNames;
-
 	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
 
 	private DefaultTreeModel model;
@@ -113,9 +111,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	static {
 		translationsToPersistentNames = new HashMap<>();
-		translationsFromPersistentNames = new HashMap<>();
 		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
-		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
 
 		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
@@ -129,10 +125,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		this.configedMain = configedMain;
 
 		init();
-	}
-
-	public static Map<String, String> getTranslationsFromPersistentNames() {
-		return translationsFromPersistentNames;
 	}
 
 	public static String translateToPersistentName(String name) {

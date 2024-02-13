@@ -69,12 +69,6 @@ public class NONEexecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
-		return new HashMap<>();
-	}
-
-	@Override
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
 		return new HashMap<>();
 	}
