@@ -586,14 +586,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			strippIt = true;
 			String[] actCol = new String[jTable.getColumnCount()];
 			for (int i = 0; i < jTable.getColumnCount(); i++) {
-
 				Object cellValue = jTable.getValueAt(j, i);
-
 				String cellValueString = cellValue == null ? "" : cellValue.toString();
-
 				actCol[i] = cellValueString;
-
-				strippIt = shouldStrippIt(jTable.getColumnName(i), cellValueString);
+				strippIt = shouldStrippIt(jTable.getColumnName(i), cellValueString, strippIt);
 			}
 
 			if (!strippIt) {
@@ -611,29 +607,20 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		return new JTable(strippedData, headers);
 	}
 
-	private boolean shouldStrippIt(String columnName, String cellValueString) {
+	private boolean shouldStrippIt(String columnName, String cellValueString, boolean previuosValue) {
+		boolean strippIt = previuosValue;
 
-		boolean strippIt = false;
-
-		switch (columnName) {
-		case "Stand":
-			if (!cellValueString.equals(InstallationStatus.KEY_NOT_INSTALLED)) {
-				strippIt = true;
-			}
-			break;
-		case "Report":
-			if (!cellValueString.isEmpty()) {
-				strippIt = true;
-			}
-			break;
-		case "Angefordert":
-			if (!"none".equals(cellValueString)) {
-				strippIt = true;
-			}
-			break;
-		default:
+		if (Configed.getResourceValue("InstallationStateTableModel.installationStatus").equals(columnName)
+				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
+			strippIt = false;
+		} else if (Configed.getResourceValue("InstallationStateTableModel.report").equals(columnName)
+				&& (cellValueString != null && !cellValueString.isEmpty())) {
+			strippIt = false;
+		} else if (Configed.getResourceValue("InstallationStateTableModel.actionRequest").equals(columnName)
+				&& !"none".equals(cellValueString)) {
+			strippIt = false;
+		} else {
 			Logging.warning(this, "no case found for columnName in jTable");
-			break;
 		}
 
 		return strippIt;
