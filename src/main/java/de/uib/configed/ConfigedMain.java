@@ -2000,14 +2000,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return activatedGroupModel;
 	}
 
-	public Set<String> getActiveParents() {
-		if (clientTree == null) {
-			return new HashSet<>();
-		}
-
-		return clientTree.getActiveParents();
-	}
-
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 

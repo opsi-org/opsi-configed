@@ -190,7 +190,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		setRootVisible(false);
 		setShowsRootHandles(true);
 
-		renderer = new ClientTreeRenderer(configedMain);
+		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);
 
 		model = new DefaultTreeModel(rootNode);
@@ -1107,10 +1107,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public Set<String> getActiveParents() {
-		if (activeParents == null) {
-			initActiveParents();
-		}
-
 		return activeParents;
 	}
 
