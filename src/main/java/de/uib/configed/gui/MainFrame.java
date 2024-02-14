@@ -79,8 +79,6 @@ public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
-	private static JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
-
 	private ConfigedMain configedMain;
 
 	private JMenu jMenuFile;
@@ -635,16 +633,22 @@ public class MainFrame extends JFrame {
 	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
 		JMenu jMenuHelpLoglevel = new JMenu(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
+		JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
+		ButtonGroup loglevelGroup = new ButtonGroup();
+
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
 			rbLoglevelItems[i] = new JRadioButtonMenuItem(
 					"[" + i + "] " + Logging.levelText(i).toLowerCase(Locale.ROOT));
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
+			loglevelGroup.add(rbLoglevelItems[i]);
+
 			if (i == Logging.getLogLevelConsole()) {
 				rbLoglevelItems[i].setSelected(true);
 			}
 
-			rbLoglevelItems[i].addActionListener(MainFrame::applyLoglevel);
+			final int loglevel = i;
+			rbLoglevelItems[loglevel].addActionListener(e -> Logging.setLogLevel(loglevel));
 		}
 
 		jMenuHelp.add(jMenuHelpLoglevel);
@@ -654,19 +658,6 @@ public class MainFrame extends JFrame {
 		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction(centerFrame));
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
-	}
-
-	private static void applyLoglevel(ActionEvent actionEvent) {
-		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
-			if (actionEvent.getSource() == rbLoglevelItems[i]) {
-				rbLoglevelItems[i].setSelected(true);
-				Logging.setLogLevel(i);
-			} else {
-				if (rbLoglevelItems[i] != null) {
-					rbLoglevelItems[i].setSelected(false);
-				}
-			}
-		}
 	}
 
 	private void guiInit() {
