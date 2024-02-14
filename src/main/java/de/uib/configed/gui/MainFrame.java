@@ -54,6 +54,7 @@ import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
+import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;

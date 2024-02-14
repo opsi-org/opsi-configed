@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.tree;
 
 import java.awt.Component;
 import java.util.Collections;
