@@ -81,7 +81,6 @@ public class MainFrame extends JFrame {
 
 	private ConfigedMain configedMain;
 
-	private JMenu jMenuFile;
 	private JMenuItem jMenuFileSaveConfigurations;
 
 	private ClientMenuManager clientMenu;
@@ -93,13 +92,8 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	private JMenu jMenuClientselection = new JMenu();
-
-	private JMenu jMenuFrames;
 	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
-
-	private JMenu jMenuHelp;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -179,8 +173,8 @@ public class MainFrame extends JFrame {
 	// ------------------------------------------------------------------------------------------
 	// menus
 
-	private void setupMenuFile() {
-		jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
+	private JMenu createJMenuFile() {
+		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
@@ -207,6 +201,8 @@ public class MainFrame extends JFrame {
 		jMenuFile.add(createJMenuTheme(this::restartConfiged));
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
+
+		return jMenuFile;
 	}
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
@@ -472,8 +468,8 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	private void setupMenuGrouping() {
-		jMenuClientselection.setText(Configed.getResourceValue("MainFrame.jMenuClientselection"));
+	private JMenu createJMenuClientSelection() {
+		JMenu jMenuClientselection = new JMenu(Configed.getResourceValue("MainFrame.jMenuClientselection"));
 
 		JMenuItem jMenuClientselectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
@@ -526,10 +522,12 @@ public class MainFrame extends JFrame {
 
 		jMenuClientselection.addSeparator();
 		jMenuClientselection.add(jMenuClientselectionToggleClientFilter);
+
+		return jMenuClientselection;
 	}
 
-	private void setupMenuFrames() {
-		jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
+	private JMenu createJMenuFrames() {
+		JMenu jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
@@ -567,6 +565,8 @@ public class MainFrame extends JFrame {
 		}
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
+
+		return jMenuFrames;
 	}
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
@@ -583,8 +583,8 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpSupport);
 	}
 
-	private void setupMenuHelp() {
-		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
+	private JMenu createJMenuHelp() {
+		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		addHelpLinks(jMenuHelp);
 
@@ -628,6 +628,8 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 		jMenuHelp.add(jMenuHelpAbout);
+
+		return jMenuHelp;
 	}
 
 	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
@@ -702,19 +704,15 @@ public class MainFrame extends JFrame {
 		initMenuData();
 
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
-		setupMenuFile();
-		setupMenuGrouping();
 		setupMenuServer();
-		setupMenuFrames();
-		setupMenuHelp();
 
 		JMenuBar jMenuBar = new JMenuBar();
-		jMenuBar.add(jMenuFile);
-		jMenuBar.add(jMenuClientselection);
+		jMenuBar.add(createJMenuFile());
+		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServer);
-		jMenuBar.add(jMenuFrames);
-		jMenuBar.add(jMenuHelp);
+		jMenuBar.add(createJMenuFrames());
+		jMenuBar.add(createJMenuHelp());
 
 		return jMenuBar;
 	}
