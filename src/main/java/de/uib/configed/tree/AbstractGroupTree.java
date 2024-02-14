@@ -11,8 +11,20 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
+	public final GroupNode rootNode = new GroupNode("top");
 
 	protected AbstractGroupTree() {
-		super.addTreeSelectionListener(this);
+		init();
 	}
+
+	private void init() {
+		super.addTreeSelectionListener(this);
+
+		createTopNodes();
+
+		setRootVisible(false);
+		setShowsRootHandles(true);
+	}
+
+	abstract void createTopNodes();
 }

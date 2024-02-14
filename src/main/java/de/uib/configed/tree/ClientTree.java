@@ -73,8 +73,6 @@ public class ClientTree extends AbstractGroupTree {
 	private TreePath pathToROOT;
 	private TreePath pathToALL;
 
-	public final GroupNode rootNode = new GroupNode("top");
-
 	// supervising data
 	private Map<String, Set<GroupNode>> locationsInDIRECTORY;
 	// clientId --> set of all containing groups
@@ -171,11 +169,6 @@ public class ClientTree extends AbstractGroupTree {
 
 		// for debugging
 		setDropMode(DropMode.ON);
-
-		createTopNodes();
-
-		setRootVisible(false);
-		setShowsRootHandles(true);
 
 		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);
@@ -278,7 +271,8 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	// generate tree structure
-	private void createTopNodes() {
+	@Override
+	protected void createTopNodes() {
 		rootNode.setImmutable(true);
 		rootNode.setFixed(true);
 

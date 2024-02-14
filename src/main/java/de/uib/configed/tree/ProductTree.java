@@ -77,15 +77,11 @@ public class ProductTree extends AbstractGroupTree {
 			allProducts.add(new DefaultMutableTreeNode(product.get("productId"), false));
 		}
 
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		root.add(groups);
-		root.add(allProducts);
+		rootNode.add(groups);
+		rootNode.add(allProducts);
 
-		TreeModel treeModel = new DefaultTreeModel(root);
+		TreeModel treeModel = new DefaultTreeModel(rootNode);
 		setModel(treeModel);
-
-		this.setRootVisible(false);
-		setShowsRootHandles(true);
 
 		setCellRenderer(new ProductTreeNodeRenderer());
 
@@ -98,6 +94,11 @@ public class ProductTree extends AbstractGroupTree {
 
 	public void setNetbootPanel(PanelProductSettings netbootPanel) {
 		this.netbootPanel = netbootPanel;
+	}
+
+	@Override
+	protected void createTopNodes() {
+		// TODO
 	}
 
 	private void setGroup(DefaultMutableTreeNode groupNode) {
