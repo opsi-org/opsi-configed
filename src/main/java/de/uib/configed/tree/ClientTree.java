@@ -31,11 +31,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
@@ -55,7 +53,7 @@ import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
 
-public class ClientTree extends JTree implements TreeSelectionListener {
+public class ClientTree extends AbstractGroupTree {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
@@ -200,8 +198,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		setSelectionModel(selectionmodel);
 
 		initTreePopup();
-
-		addTreeSelectionListener(this);
 
 		locationsInDIRECTORY = new HashMap<>();
 		clientNodesInDIRECTORY = new HashMap<>();

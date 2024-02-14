@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -31,7 +30,7 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
-public class ProductTree extends JTree implements TreeSelectionListener {
+public class ProductTree extends AbstractGroupTree {
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -50,8 +49,6 @@ public class ProductTree extends JTree implements TreeSelectionListener {
 		}
 
 		setModel();
-
-		super.addTreeSelectionListener(this);
 	}
 
 	private void setModel() {
