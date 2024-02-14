@@ -752,9 +752,11 @@ public class MainFrame extends JFrame {
 		scrollpaneTreeProducts.setPreferredSize(treeProducts.getMaximumSize());
 
 		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		jTabbedPaneClientSelection.addTab("Depots", depotListPresenter);
-		jTabbedPaneClientSelection.addTab("Clients", scrollpaneTreeClients);
-		jTabbedPaneClientSelection.addTab("Produkte", scrollpaneTreeProducts);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
+				scrollpaneTreeClients);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
+				scrollpaneTreeProducts);
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
 		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
