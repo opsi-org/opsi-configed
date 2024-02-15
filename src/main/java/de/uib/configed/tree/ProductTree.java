@@ -24,6 +24,7 @@ import javax.swing.tree.TreePath;
 
 import com.itextpdf.text.Font;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 
 public class ProductTree extends AbstractGroupTree {
@@ -33,10 +34,12 @@ public class ProductTree extends AbstractGroupTree {
 
 	private Map<String, DefaultMutableTreeNode> nodeMap;
 
-	private DefaultMutableTreeNode groupsNode;
-	private DefaultMutableTreeNode allProductsNode;
+	private GroupNode groupsNode;
+	private GroupNode allProductsNode;
 
-	public ProductTree() {
+	public ProductTree(ConfigedMain configedMain) {
+		super(configedMain);
+
 		setModel();
 	}
 
@@ -63,8 +66,8 @@ public class ProductTree extends AbstractGroupTree {
 			nodeMap.put(groupEntry.getKey(), new DefaultMutableTreeNode(groupEntry.getKey(), true));
 		}
 
-		groupsNode = new DefaultMutableTreeNode("Produkt-Gruppen");
-		allProductsNode = new DefaultMutableTreeNode("Alle Produkte");
+		groupsNode = new GroupNode("Produkt-Gruppen");
+		allProductsNode = new GroupNode("Alle Produkte");
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {

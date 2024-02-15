@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionEvent;
@@ -80,8 +79,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	private Set<String> directlyAllowedGroups;
 
-	private ConfigedMain configedMain;
-
 	static {
 		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
@@ -91,8 +88,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public ClientTree(ConfigedMain configedMain) {
-		super();
-		this.configedMain = configedMain;
+		super(configedMain);
 
 		init();
 	}
@@ -166,18 +162,9 @@ public class ClientTree extends AbstractGroupTree {
 		selectionmodel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		setSelectionModel(selectionmodel);
 
-		initTreePopup();
-
 		locationsInDIRECTORY = new HashMap<>();
 		clientNodesInDIRECTORY = new HashMap<>();
 		leafname2AllItsPaths = new Leafname2AllItsPaths();
-	}
-
-	private void initTreePopup() {
-		// popups on nodes
-		JPopupMenu popupMenu = new JPopupMenu();
-		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this, configedMain);
-		addMouseListener(treePopupMouseListener);
 	}
 
 	public void setClientInfo(Map<String, HostInfo> host2HostInfo) {
@@ -231,9 +218,6 @@ public class ClientTree extends AbstractGroupTree {
 		rootNode.setFixed(true);
 
 		pathToROOT = new TreePath(new Object[] { rootNode });
-
-		groups = new HashMap<>();
-		groupNodes = new HashMap<>();
 
 		// GROUPS
 		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME, Configed.getResourceValue("ClientTree.GROUPSdescription"));

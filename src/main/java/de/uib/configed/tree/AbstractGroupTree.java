@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -38,17 +39,20 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	protected GroupNode groupNodeGroups;
 
-	protected Map<String, Map<String, String>> groups;
+	protected Map<String, Map<String, String>> groups = new HashMap<>();
 	// map of all group maps,
 	// groupid --> group map
 
-	protected Map<String, GroupNode> groupNodes;
+	protected Map<String, GroupNode> groupNodes = new HashMap<>();;
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
 
 	protected DefaultTreeModel model;
 
-	protected AbstractGroupTree() {
+	protected ConfigedMain configedMain;
+
+	protected AbstractGroupTree(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		init();
 
 		model = new DefaultTreeModel(rootNode);
@@ -67,6 +71,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		setRootVisible(false);
 		setShowsRootHandles(true);
+
+		// popups on nodes
+		JPopupMenu popupMenu = new JPopupMenu();
+		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this, configedMain);
+		addMouseListener(treePopupMouseListener);
+
 	}
 
 	abstract void createTopNodes();

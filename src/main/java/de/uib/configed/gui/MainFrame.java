@@ -126,7 +126,7 @@ public class MainFrame extends JFrame {
 		this.clientTable = panelClientlist;
 
 		this.treeClients = treeClients;
-		treeProducts = new ProductTree();
+		treeProducts = new ProductTree(configedMain);
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
