@@ -227,9 +227,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private Set<String> depotsOfSelectedClients;
 	private Set<String> allowedClients;
 
-	private List<String> localbootProductnames;
-	private List<String> netbootProductnames;
-
 	// marker variables for requests for reload when clientlist changes
 	private boolean localbootStatesAndActionsUpdate = true;
 	private boolean netbootStatesAndActionsUpdate = true;
@@ -626,8 +623,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
-		localbootProductnames = persistenceController.getProductDataService().getAllLocalbootProductNames();
-		netbootProductnames = persistenceController.getProductDataService().getAllNetbootProductNames();
 		persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
 
 		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
@@ -2668,10 +2663,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return allowedClients;
 	}
 
-	public List<String> getProductNames() {
-		return localbootProductnames;
-	}
-
 	protected String[] getDepotArray() {
 		if (depots == null) {
 			return new String[] {};
@@ -3293,13 +3284,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void callNewClientDialog() {
-		Collections.sort(netbootProductnames);
-
 		if (newClientDialog == null) {
 			newClientDialog = new NewClientDialog(this, getLinkedDepots());
 		}
 
-		newClientDialog.setProductNetbootList(netbootProductnames);
 		newClientDialog.useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
 				persistenceController.getConfigDataService().isUefiConfigured(myServer),

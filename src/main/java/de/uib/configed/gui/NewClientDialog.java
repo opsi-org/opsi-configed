@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -118,10 +119,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		this.existingHostNames = existingHostNames;
 	}
 
-	public void setProductNetbootList(Iterable<String> productList) {
-		setJComboBoxModel(jComboNetboot, productList);
-	}
-
 	private static void setJComboBoxModel(JComboBox<String> comboBox, Iterable<String> list) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) comboBox.getModel();
 		model.removeAllElements();
@@ -180,6 +177,9 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
+		List<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
+		Collections.sort(netbootProductNames);
+		setJComboBoxModel(jComboNetboot, netbootProductNames);
 
 		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
 
