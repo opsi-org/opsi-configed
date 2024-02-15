@@ -19,8 +19,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -43,9 +41,6 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setModel() {
-		TreeModel treeModel = new DefaultTreeModel(rootNode);
-		setModel(treeModel);
-
 		setCellRenderer(new ProductTreeNodeRenderer());
 
 		expandPath(new TreePath(allProductsNode.getPath()));
@@ -95,6 +90,11 @@ public class ProductTree extends AbstractGroupTree {
 
 		rootNode.add(groupsNode);
 		rootNode.add(allProductsNode);
+	}
+
+	@Override
+	public void removeNodeInternally(String clientID, GroupNode parentNode) {
+		// TODO
 	}
 
 	private void setGroup(DefaultMutableTreeNode groupNode) {

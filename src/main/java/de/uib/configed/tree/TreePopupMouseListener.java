@@ -23,7 +23,7 @@ import de.uib.utilities.logging.Logging;
 import utils.PopupMouseListener;
 
 public class TreePopupMouseListener extends PopupMouseListener {
-	private ClientTree tree;
+	private AbstractGroupTree tree;
 
 	private TreePath mousePath;
 
@@ -34,7 +34,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemActivateElements;
 	private JMenuItem menuItemRemoveElements;
 
-	public TreePopupMouseListener(JPopupMenu jPopupMenu, ClientTree tree, ConfigedMain configedMain) {
+	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree, ConfigedMain configedMain) {
 		super(jPopupMenu);
 		this.tree = tree;
 
