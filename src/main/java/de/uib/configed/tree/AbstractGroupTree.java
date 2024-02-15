@@ -10,7 +10,12 @@ package de.uib.configed.tree;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
+	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
+
 	public final GroupNode rootNode = new GroupNode("top");
 
 	protected AbstractGroupTree() {

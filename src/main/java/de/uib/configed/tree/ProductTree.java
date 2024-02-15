@@ -27,20 +27,40 @@ import javax.swing.tree.TreePath;
 import com.itextpdf.text.Font;
 
 import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class ProductTree extends AbstractGroupTree {
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	private PanelProductSettings localbootPanel;
 	private PanelProductSettings netbootPanel;
 
 	private Map<String, DefaultMutableTreeNode> nodeMap;
 
+	private DefaultMutableTreeNode groupsNode;
+	private DefaultMutableTreeNode allProductsNode;
+
 	public ProductTree() {
+		setModel();
+	}
+
+	private void setModel() {
+		TreeModel treeModel = new DefaultTreeModel(rootNode);
+		setModel(treeModel);
+
+		setCellRenderer(new ProductTreeNodeRenderer());
+
+		expandPath(new TreePath(allProductsNode.getPath()));
+	}
+
+	public void setLocalbootPanel(PanelProductSettings localbootPanel) {
+		this.localbootPanel = localbootPanel;
+	}
+
+	public void setNetbootPanel(PanelProductSettings netbootPanel) {
+		this.netbootPanel = netbootPanel;
+	}
+
+	@Override
+	protected void createTopNodes() {
 		nodeMap = new HashMap<>();
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
@@ -48,17 +68,13 @@ public class ProductTree extends AbstractGroupTree {
 			nodeMap.put(groupEntry.getKey(), new DefaultMutableTreeNode(groupEntry.getKey(), true));
 		}
 
-		setModel();
-	}
-
-	private void setModel() {
-		DefaultMutableTreeNode groups = new DefaultMutableTreeNode("Produkt-Gruppen");
-		DefaultMutableTreeNode allProducts = new DefaultMutableTreeNode("Alle Produkte");
+		groupsNode = new DefaultMutableTreeNode("Produkt-Gruppen");
+		allProductsNode = new DefaultMutableTreeNode("Alle Produkte");
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
 			if ("null".equals(groupEntry.getValue().get("parentGroupId"))) {
-				groups.add(nodeMap.get(groupEntry.getKey()));
+				groupsNode.add(nodeMap.get(groupEntry.getKey()));
 			} else {
 				nodeMap.get(groupEntry.getValue().get("parentGroupId")).add(nodeMap.get(groupEntry.getKey()));
 			}
@@ -74,31 +90,11 @@ public class ProductTree extends AbstractGroupTree {
 		}
 
 		for (Map<String, Object> product : persistenceController.getProductDataService().getAllProducts()) {
-			allProducts.add(new DefaultMutableTreeNode(product.get("productId"), false));
+			allProductsNode.add(new DefaultMutableTreeNode(product.get("productId"), false));
 		}
 
-		rootNode.add(groups);
-		rootNode.add(allProducts);
-
-		TreeModel treeModel = new DefaultTreeModel(rootNode);
-		setModel(treeModel);
-
-		setCellRenderer(new ProductTreeNodeRenderer());
-
-		expandPath(new TreePath(allProducts.getPath()));
-	}
-
-	public void setLocalbootPanel(PanelProductSettings localbootPanel) {
-		this.localbootPanel = localbootPanel;
-	}
-
-	public void setNetbootPanel(PanelProductSettings netbootPanel) {
-		this.netbootPanel = netbootPanel;
-	}
-
-	@Override
-	protected void createTopNodes() {
-		// TODO
+		rootNode.add(groupsNode);
+		rootNode.add(allProductsNode);
 	}
 
 	private void setGroup(DefaultMutableTreeNode groupNode) {
