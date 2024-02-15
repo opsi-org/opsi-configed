@@ -31,6 +31,7 @@ import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -41,6 +42,7 @@ import utils.Utils;
 public class TabbedConfigPanes extends JTabbedPane {
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
+	private ProductTree productTree;
 
 	private PanelProductSettings panelLocalbootProductSettings;
 	private PanelProductSettings panelNetbootProductSettings;
@@ -70,9 +72,11 @@ public class TabbedConfigPanes extends JTabbedPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public TabbedConfigPanes(ConfigedMain configedMain, MainFrame mainFrame) {
+	public TabbedConfigPanes(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
+		this.productTree = productTree;
+
 		init();
 	}
 
@@ -144,11 +148,13 @@ public class TabbedConfigPanes extends JTabbedPane {
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsLocalbootProducts(),
 				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
+		productTree.setLocalbootPanel(panelLocalbootProductSettings);
 
 		panelNetbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts(),
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		productTree.setNetbootPanel(panelNetbootProductSettings);
 
 		insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
 				panelLocalbootProductSettings, null, ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);

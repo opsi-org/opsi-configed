@@ -109,8 +109,8 @@ public class MainFrame extends JFrame {
 
 	private DepotListPresenter depotListPresenter;
 
-	private ClientTree treeClients;
-	private ProductTree treeProducts;
+	private ClientTree clientTree;
+	private ProductTree productTree;
 
 	private IconBarPanel iconBarPanel;
 
@@ -125,8 +125,8 @@ public class MainFrame extends JFrame {
 
 		this.clientTable = panelClientlist;
 
-		this.treeClients = treeClients;
-		treeProducts = new ProductTree(configedMain);
+		this.clientTree = treeClients;
+		productTree = new ProductTree(configedMain);
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
@@ -721,10 +721,10 @@ public class MainFrame extends JFrame {
 
 	private JSplitPane initCentralPane() {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
-		scrollpaneTreeClients.getViewport().add(treeClients);
+		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(treeClients.getMaximumSize());
+		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
@@ -736,10 +736,10 @@ public class MainFrame extends JFrame {
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
 		JScrollPane scrollpaneTreeProducts = new JScrollPane();
-		scrollpaneTreeProducts.getViewport().add(treeProducts);
+		scrollpaneTreeProducts.getViewport().add(productTree);
 		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setPreferredSize(treeProducts.getMaximumSize());
+		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
 
 		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
@@ -751,7 +751,7 @@ public class MainFrame extends JFrame {
 		jTabbedPaneClientSelection.setSelectedIndex(1);
 		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
-		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
+		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
