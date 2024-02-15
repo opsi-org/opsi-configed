@@ -35,7 +35,7 @@ import de.uib.utilities.swing.FEditRecord;
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
 
-	public final GroupNode rootNode = new GroupNode(null);
+	public final GroupNode rootNode = new GroupNode("");
 
 	protected GroupNode groupNodeGroups;
 

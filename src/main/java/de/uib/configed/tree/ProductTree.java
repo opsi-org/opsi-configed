@@ -61,13 +61,20 @@ public class ProductTree extends AbstractGroupTree {
 	protected void createTopNodes() {
 		nodeMap = new HashMap<>();
 
+		// Create groups
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
-			nodeMap.put(groupEntry.getKey(), new DefaultMutableTreeNode(groupEntry.getKey(), true));
+			nodeMap.put(groupEntry.getKey(), new GroupNode(groupEntry.getKey()));
 		}
 
 		groupsNode = new GroupNode("Produkt-Gruppen");
+		groupsNode.setAllowsOnlyGroupChilds(true);
+		groupsNode.setFixed(true);
+
+
 		allProductsNode = new GroupNode("Alle Produkte");
+		allProductsNode.setImmutable(true);
+		allProductsNode.setFixed(true);
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
