@@ -66,5 +66,4 @@ public class ColorPaletteImpl extends ColorPalette {
 	public Color getBackgroundByColorIndex(int colorIndex) {
 		return colors[colorIndex];
 	}
-
 }

@@ -388,7 +388,6 @@ public class ProductDataService {
 						"retrieveAllProductPropertyDefinitions: no depot for " + productId + " version " + versionInfo
 								+ "  product2VersionInfo2Depots.get(productId) "
 								+ product2VersionInfo2Depots.get(productId));
-
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions

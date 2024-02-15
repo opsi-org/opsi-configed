@@ -35,7 +35,7 @@ import de.uib.utilities.swing.FEditRecord;
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
 
-	public final GroupNode rootNode = new GroupNode("");
+	public final GroupNode rootNode = new GroupNode(null);
 
 	protected GroupNode groupNodeGroups;
 
@@ -43,7 +43,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	// map of all group maps,
 	// groupid --> group map
 
-	protected Map<String, GroupNode> groupNodes = new HashMap<>();;
+	protected Map<String, GroupNode> groupNodes = new HashMap<>();
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
 
@@ -76,7 +76,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		JPopupMenu popupMenu = new JPopupMenu();
 		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this, configedMain);
 		addMouseListener(treePopupMouseListener);
-
 	}
 
 	abstract void createTopNodes();
@@ -353,6 +352,5 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				persistenceController.getGroupDataService().deleteGroup(nextNode.toString());
 			}
 		}
-
 	}
 }

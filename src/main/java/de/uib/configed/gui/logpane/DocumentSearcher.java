@@ -178,5 +178,4 @@ public class DocumentSearcher {
 		}
 		return foundMatches;
 	}
-
 }
