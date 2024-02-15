@@ -2176,8 +2176,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
 		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
-		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
-		Logging.debug(this, "setLocalbootProductsPage: changedProductStates " + changedProductStates);
+		Logging.info(this, "setProductsPage: oldProductSelection " + oldProductSelection);
+		Logging.debug(this, "setProductsPage: changedProductStates " + changedProductStates);
 
 		List<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
@@ -2214,7 +2214,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		panelProductSettings.setGroupsData(productGroups, productGroupMembers);
 		panelProductSettings.reduceToSet(savedFilter);
 
-		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
+		Logging.info(this, "setProductsPage oldProductSelection: " + oldProductSelection);
 		panelProductSettings.setSelection(oldProductSelection);
 		panelProductSettings.updateSearchFields();
 
