@@ -2163,7 +2163,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		panelProductSettings.initAllProperties();
 
-		Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
+		Logging.debug(this, "setProductsPage,  depotRepresentative:" + depotRepresentative);
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 
 		// we retrieve the properties for all clients and products
