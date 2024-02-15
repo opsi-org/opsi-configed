@@ -2133,6 +2133,20 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return getSelectedClients().size() == 1;
 	}
 
+	private boolean setLocalbootProductsPage() {
+		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
+				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
+				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
+				getLocalbootProductDisplayFieldsList(), "localbootProducts");
+	}
+
+	private boolean setNetbootProductsPage() {
+		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
+				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList(),
+				"netbootProducts");
+	}
+
 	private boolean setProductsPage(boolean updateStatesAndActions,
 			Map<String, Map<String, Map<String, String>>> changedProductStates, List<String> attributes,
 			String productServerString, PanelProductSettings panelProductSettings, List<String> displayFields,
@@ -2144,7 +2158,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (updateStatesAndActions) {
 			statesAndActions = persistenceController.getProductDataService()
 					.getMapOfProductStatesAndActions(getSelectedClients(), attributes, productServerString);
-			updateStatesAndActions = true;
 		}
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
@@ -2162,14 +2175,9 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.getProductDataService().retrieveProductPropertiesPD(clientTable.getSelectedValues());
 
 		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
-
 		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
-
 		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
-
-		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
-
-		int[] columnWidths = getTableColumnWidths(panelProductSettings.getTableProducts());
+		Logging.debug(this, "setLocalbootProductsPage: changedProductStates " + changedProductStates);
 
 		List<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
@@ -2184,14 +2192,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 					this, changedProductStates, productNames, statesAndActions, possibleActions,
 					persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
 					displayFields, savedStateObjectTag);
-
 			panelProductSettings.setTableModel(istmForSelectedClients);
 		}
 
 		panelProductSettings.setSortKeys(currentSortKeysProducts);
-
-		Logging.info(this, "resetFilter " + Configed.getSavedStates()
-				.getProperty(savedStateObjectTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY));
 
 		Logging.info(this, "resetFilter " + Configed.getSavedStates()
 				.getProperty(savedStateObjectTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY));
@@ -2213,23 +2217,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
 		panelProductSettings.setSelection(oldProductSelection);
 		panelProductSettings.updateSearchFields();
+
+		int[] columnWidths = getTableColumnWidths(panelProductSettings.getTableProducts());
 		setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
 
 		return true;
-	}
-
-	private boolean setLocalbootProductsPage() {
-		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
-				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
-				getLocalbootProductDisplayFieldsList(), "localbootProducts");
-	}
-
-	private boolean setNetbootProductsPage() {
-		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList(),
-				"netbootProducts");
 	}
 
 	private List<String> getLocalbootStateAndActionsAttributes() {
