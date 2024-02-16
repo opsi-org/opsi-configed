@@ -360,7 +360,7 @@ public class GroupDataService {
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE,
-				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
+				new String[] { null, persistentGroupId, objectId });
 
 		boolean result = exec.doCall(omc);
 

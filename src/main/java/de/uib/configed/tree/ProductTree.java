@@ -70,13 +70,13 @@ public class ProductTree extends AbstractGroupTree {
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
-		groupNodes.put("Produkt-Gruppen", groupNodeGroups);
+		groupNodes.put(groupNodeGroups.toString(), groupNodeGroups);
 
 		groupNodeFullList = new GroupNode("Alle Produkte");
 		groupNodeFullList.setImmutable(true);
 		groupNodeFullList.setFixed(true);
 
-		groupNodes.put("Alle Produkte", groupNodeFullList);
+		groupNodes.put(groupNodeFullList.toString(), groupNodeFullList);
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
