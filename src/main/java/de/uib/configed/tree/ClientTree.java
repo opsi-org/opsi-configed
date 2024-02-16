@@ -185,6 +185,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		model = new DefaultTreeModel(rootNode);
 		setModel(model);
 		model.setAsksAllowsChildren(true);
+
 		// If true, a node is a leaf node if it does not allow children.
 		// (If it allows children, it is not a leaf node, even if no children are
 		// present.)
@@ -378,7 +379,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 				deleteGroupWithSubgroups(node);
 				parent.remove(node);
 
-				getModel().nodeStructureChanged(parent);
+				model.nodeStructureChanged(parent);
 			}
 		} else {
 			// client node
@@ -712,7 +713,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		insertNodeInOrder(groupNode, dropParentNode);
-		getModel().nodeStructureChanged(sourceParentNode);
+		model.nodeStructureChanged(sourceParentNode);
 		makeVisible(pathByAddingChild(dropPath, groupNode));
 
 		Map<String, String> theGroup = getGroups().get(importID);
@@ -763,7 +764,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		leafname2AllItsPaths.remove(clientID, simplePathToClient); // 13
 		activeParents.removeAll(simplePathToClient.collectNodeNames());
 
-		getModel().nodeStructureChanged(parentNode);
+		model.nodeStructureChanged(parentNode);
 
 		repaint();
 	}
@@ -785,7 +786,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
 			insertNodeInOrder(clientNode, dropParentNode);
-			getModel().nodeStructureChanged(sourceParentNode);
+			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
 				groupDataService.addObject2Group(importID, dropParentID);
