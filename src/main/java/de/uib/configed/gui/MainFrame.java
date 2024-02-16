@@ -117,7 +117,8 @@ public class MainFrame extends JFrame {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, ClientTable panelClientlist, DepotsList depotsList, ClientTree treeClients) {
+	public MainFrame(ConfigedMain configedMain, ClientTable panelClientlist, DepotsList depotsList,
+			ClientTree treeClients) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -130,7 +131,7 @@ public class MainFrame extends JFrame {
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
 		guiInit();
 		initData();

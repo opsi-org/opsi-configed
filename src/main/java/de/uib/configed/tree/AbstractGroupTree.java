@@ -38,6 +38,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public final GroupNode rootNode = new GroupNode("");
 
 	protected GroupNode groupNodeGroups;
+	protected GroupNode groupNodeFullList;
 
 	protected Map<String, Map<String, String>> groups = new HashMap<>();
 	// map of all group maps,

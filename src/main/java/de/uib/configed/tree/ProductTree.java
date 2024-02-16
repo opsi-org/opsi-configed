@@ -34,9 +34,6 @@ public class ProductTree extends AbstractGroupTree {
 
 	private Map<String, DefaultMutableTreeNode> nodeMap;
 
-	private GroupNode groupsNode;
-	private GroupNode allProductsNode;
-
 	public ProductTree(ConfigedMain configedMain) {
 		super(configedMain);
 
@@ -46,7 +43,7 @@ public class ProductTree extends AbstractGroupTree {
 	private void setModel() {
 		setCellRenderer(new ProductTreeNodeRenderer());
 
-		expandPath(new TreePath(allProductsNode.getPath()));
+		expandPath(new TreePath(groupNodeFullList.getPath()));
 	}
 
 	public void setLocalbootPanel(PanelProductSettings localbootPanel) {
@@ -67,18 +64,18 @@ public class ProductTree extends AbstractGroupTree {
 			nodeMap.put(groupEntry.getKey(), new GroupNode(groupEntry.getKey()));
 		}
 
-		groupsNode = new GroupNode("Produkt-Gruppen");
-		groupsNode.setAllowsOnlyGroupChilds(true);
-		groupsNode.setFixed(true);
+		groupNodeGroups = new GroupNode("Produkt-Gruppen");
+		groupNodeGroups.setAllowsOnlyGroupChilds(true);
+		groupNodeGroups.setFixed(true);
 
-		allProductsNode = new GroupNode("Alle Produkte");
-		allProductsNode.setImmutable(true);
-		allProductsNode.setFixed(true);
+		groupNodeFullList = new GroupNode("Alle Produkte");
+		groupNodeFullList.setImmutable(true);
+		groupNodeFullList.setFixed(true);
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
 			if ("null".equals(groupEntry.getValue().get("parentGroupId"))) {
-				groupsNode.add(nodeMap.get(groupEntry.getKey()));
+				groupNodeGroups.add(nodeMap.get(groupEntry.getKey()));
 			} else {
 				nodeMap.get(groupEntry.getValue().get("parentGroupId")).add(nodeMap.get(groupEntry.getKey()));
 			}
@@ -94,11 +91,11 @@ public class ProductTree extends AbstractGroupTree {
 		}
 
 		for (Map<String, Object> product : persistenceController.getProductDataService().getAllProducts()) {
-			allProductsNode.add(new DefaultMutableTreeNode(product.get("productId"), false));
+			groupNodeFullList.add(new DefaultMutableTreeNode(product.get("productId"), false));
 		}
 
-		rootNode.add(groupsNode);
-		rootNode.add(allProductsNode);
+		rootNode.add(groupNodeGroups);
+		rootNode.add(groupNodeFullList);
 	}
 
 	@Override
