@@ -456,8 +456,8 @@ public class ProductDataService {
 			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = getProduct2VersionInfo2DepotsPD();
 			if (product2VersionInfo2Depots == null || product2VersionInfo2Depots.get(productId) == null
 					|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
-				Logging.warning(this, "unexpected null for product2VersionInfo2Depots productId, versionInfo   "
-						+ productId + ", " + versionInfo);
+				Logging.info(this, "some null for product2VersionInfo2Depots, productId, versionInfo   " + productId
+						+ ", " + versionInfo);
 				continue;
 			}
 			for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
