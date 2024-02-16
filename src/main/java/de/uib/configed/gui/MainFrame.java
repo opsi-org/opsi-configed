@@ -819,17 +819,20 @@ public class MainFrame extends JFrame {
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		String products = getProduct(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		String products = getProduct(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		String products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
+		String products = getProduct(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		configedMain.selectClientsWithFailedProduct(products);
 	}
 

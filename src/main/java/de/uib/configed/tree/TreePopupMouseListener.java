@@ -101,7 +101,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		}
 	}
 
-	private boolean checkAccepted(MouseEvent e) {
+	private boolean shouldShow(MouseEvent e) {
 		if (!tree.isEnabled()) {
 			return false;
 		}
@@ -128,10 +128,14 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
-		if (nodeName.equals(ClientTree.ALL_CLIENTS_NAME)
-				|| (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString()
-						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME))) {
-			// dont show here any menu
+		return !nodeName.equals(ClientTree.ALL_CLIENTS_NAME) && !((DefaultMutableTreeNode) clickNode.getParent())
+				.getUserObject().toString().equals(ClientTree.ALL_CLIENTS_NAME);
+		// dont show here any menu
+	}
+
+	private boolean checkAccepted(MouseEvent e) {
+
+		if (!shouldShow(e)) {
 			return false;
 		}
 
@@ -144,6 +148,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 		int numberVisibleItems = 0;
 
+		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
 
 		if (clickNode.getAllowsChildren()) {

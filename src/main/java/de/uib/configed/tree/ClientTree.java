@@ -148,6 +148,7 @@ public class ClientTree extends AbstractGroupTree {
 		setCellRenderer(renderer);
 
 		model.setAsksAllowsChildren(true);
+
 		// If true, a node is a leaf node if it does not allow children.
 		// (If it allows children, it is not a leaf node, even if no children are
 		// present.)
@@ -462,7 +463,7 @@ public class ClientTree extends AbstractGroupTree {
 	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		insertNodeInOrder(groupNode, dropParentNode);
-		getModel().nodeStructureChanged(sourceParentNode);
+		model.nodeStructureChanged(sourceParentNode);
 		makeVisible(pathByAddingChild(dropPath, groupNode));
 
 		Map<String, String> theGroup = getGroups().get(importID);
@@ -500,7 +501,7 @@ public class ClientTree extends AbstractGroupTree {
 		leafname2AllItsPaths.remove(clientID, simplePathToClient); // 13
 		activeParents.removeAll(simplePathToClient.collectNodeNames());
 
-		getModel().nodeStructureChanged(parentNode);
+		model.nodeStructureChanged(parentNode);
 
 		repaint();
 	}
@@ -522,7 +523,7 @@ public class ClientTree extends AbstractGroupTree {
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
 			insertNodeInOrder(clientNode, dropParentNode);
-			getModel().nodeStructureChanged(sourceParentNode);
+			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
 				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID);
