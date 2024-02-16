@@ -60,6 +60,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		super.setModel(model);
 	}
 
+	public boolean isGroupNodeFullList(DefaultMutableTreeNode compareNode) {
+		return groupNodeFullList.equals(compareNode);
+	}
+
 	@Override
 	public DefaultTreeModel getModel() {
 		return model;

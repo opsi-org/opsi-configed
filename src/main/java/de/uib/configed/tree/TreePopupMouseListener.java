@@ -128,9 +128,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
-		return !nodeName.equals(ClientTree.ALL_CLIENTS_NAME) && !((DefaultMutableTreeNode) clickNode.getParent())
-				.getUserObject().toString().equals(ClientTree.ALL_CLIENTS_NAME);
-		// dont show here any menu
+		return !tree.isGroupNodeFullList(clickNode);
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
