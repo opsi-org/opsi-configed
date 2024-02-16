@@ -71,7 +71,6 @@ public class ProductTree extends AbstractGroupTree {
 		groupsNode.setAllowsOnlyGroupChilds(true);
 		groupsNode.setFixed(true);
 
-
 		allProductsNode = new GroupNode("Alle Produkte");
 		allProductsNode.setImmutable(true);
 		allProductsNode.setFixed(true);

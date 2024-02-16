@@ -1067,9 +1067,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		if (ids != null) {
 			Logging.info(this, "setFilterFrom, save set " + ids.size());
 			reducedIds = new HashSet<>(productsV);
-			if (!ids.isEmpty()) {
-				reducedIds.retainAll(ids);
-			}
+			reducedIds.retainAll(ids);
 
 			filter = new int[reducedIds.size()];
 			int i = 0;
