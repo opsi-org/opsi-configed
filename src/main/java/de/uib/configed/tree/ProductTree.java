@@ -32,8 +32,6 @@ public class ProductTree extends AbstractGroupTree {
 	private PanelProductSettings localbootPanel;
 	private PanelProductSettings netbootPanel;
 
-	private Map<String, DefaultMutableTreeNode> nodeMap;
-
 	public ProductTree(ConfigedMain configedMain) {
 		super(configedMain);
 
@@ -56,7 +54,7 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	protected void createTopNodes() {
-		nodeMap = new HashMap<>();
+		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
 		// Create groups
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()

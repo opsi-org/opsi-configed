@@ -115,18 +115,9 @@ public class TreePopupMouseListener extends PopupMouseListener {
 			return false;
 		}
 
-		Logging.debug(this, "checkAccepted clickPath  " + mousePath);
+		Logging.debug(this, "shouldShow clickPath  " + mousePath);
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-
-		String nodeName = clickNode.getUserObject().toString();
-
-		if (tree.getGroupNode(nodeName) != null && clickNode != tree.getGroupNode(nodeName)) {
-			Logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
-			clickNode = tree.getGroupNode(nodeName);
-		}
-
-		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
 		return !tree.isGroupNodeFullList(clickNode);
 	}
