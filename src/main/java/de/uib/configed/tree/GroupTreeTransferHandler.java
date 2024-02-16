@@ -27,10 +27,10 @@ import javax.swing.tree.TreePath;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class ClientTreeTransferHandler extends TransferHandler {
-	private ClientTree tree;
+public class GroupTreeTransferHandler extends TransferHandler {
+	private AbstractGroupTree tree;
 
-	public ClientTreeTransferHandler(ClientTree tree) {
+	public GroupTreeTransferHandler(AbstractGroupTree tree) {
 		super();
 		this.tree = tree;
 	}
@@ -154,6 +154,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				Logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
 			}
 
+			Logging.devel(dropThisVariant + "");
+
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();
 
 			Logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
@@ -181,8 +183,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				// we dont accept to move any item out of ALL
 			}
 
-			if (tree.isInDIRECTORY(path)) {
-				Logging.debug(this, "getSourceActions , isInDIRECTORY true");
+			if (tree.isInDirectory(path)) {
+				Logging.debug(this, "getSourceActions , isInDirectory true");
 				// action depends additionally from target
 			}
 		}
@@ -223,7 +225,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		boolean result = false;
 
-		boolean stayInsideDIRECTORY = tree.isInDIRECTORY(sourceGroupName) && tree.isInDIRECTORY(dropPath);
+		boolean stayInsideDIRECTORY = tree.isInDirectory(sourceGroupName) && tree.isInDirectory(dropPath);
 		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath);
 
 		Logging.info(this,
@@ -238,7 +240,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
-	private void handleClientID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
+	private void handleObjectID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
 			GroupNode sourceParentNode, String sourceParentID, TreePath dropPath, DefaultMutableTreeNode dropParentNode,
 			String dropParentID) {
 		Logging.debug(this,
@@ -251,14 +253,15 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		GroupNode adaptedSourceParentNode = sourceParentNode;
 
 		// we are in table and did not get a real souce path
+		// TODO necessary?
 		if (sourcePath == null) {
 			String firstDIRECTORYgroupname = null;
-			Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
+			Set<GroupNode> locations = tree.getLocationsInDirectory(importID);
 			if (locations != null && !locations.isEmpty()) {
-				Logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
-				Iterator<GroupNode> iter = tree.getLocationsInDIRECTORY(importID).iterator();
+				Logging.debug(this, "handleClientID tree.getLocationsInDirectory 1");
+				Iterator<GroupNode> iter = tree.getLocationsInDirectory(importID).iterator();
 				firstDIRECTORYgroupname = iter.next().toString();
-				Logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY firstDIRECTORYgroupname "
+				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
 				adaptedSourceParentID = firstDIRECTORYgroupname;
 				moving = chooseMOVE(support, firstDIRECTORYgroupname, dropPath, true);
@@ -270,10 +273,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		}
 
 		if (moving) {
-			tree.moveClientTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
+			tree.moveObjectTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
 					dropPath, dropParentID);
 		} else {
-			tree.copyClientTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
+			tree.copyObjectTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
 		}
 	}
 
@@ -297,7 +300,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "importData, getActivePaths(): " + Arrays.toString(tree.getSelectionPaths()));
 
-		List<String> selectedClients = tree.getSelectedClientsInTable();
+		List<String> selectedClients = tree.getSelectedObjectsInTable();
 
 		// possibly transfer of a group node
 		if (selectedClients.isEmpty()) {
@@ -367,7 +370,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				// client node
 				Logging.debug(this, "importData handling client ID " + importID);
 
-				handleClientID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
+				handleObjectID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
 						dropParentNode, dropParentID);
 			}
 

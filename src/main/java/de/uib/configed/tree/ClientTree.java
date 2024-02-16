@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +28,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
-import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeSelectionModel;
@@ -60,13 +58,10 @@ public class ClientTree extends AbstractGroupTree {
 	private TreePath pathToALL;
 
 	// supervising data
-	private Map<String, Set<GroupNode>> locationsInDIRECTORY;
+	private Map<String, Set<GroupNode>> locationsInDirectory;
 	// clientId --> set of all containing groups
 
-	private Leafname2AllItsPaths leafname2AllItsPaths;
-	// clientId --> list of all paths that have the leaf clientid
-
-	private Map<String, DefaultMutableTreeNode> clientNodesInDIRECTORY;
+	private Map<String, DefaultMutableTreeNode> clientNodesInDirectory;
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
@@ -134,11 +129,6 @@ public class ClientTree extends AbstractGroupTree {
 
 		addMouseListener(ml);
 
-		// preparing Drag and Drop
-		TransferHandler handler = new ClientTreeTransferHandler(this);
-		setTransferHandler(handler);
-		setDragEnabled(true);
-
 		// for debugging
 		setDropMode(DropMode.ON);
 
@@ -161,8 +151,8 @@ public class ClientTree extends AbstractGroupTree {
 		selectionmodel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		setSelectionModel(selectionmodel);
 
-		locationsInDIRECTORY = new HashMap<>();
-		clientNodesInDIRECTORY = new HashMap<>();
+		locationsInDirectory = new HashMap<>();
+		clientNodesInDirectory = new HashMap<>();
 		leafname2AllItsPaths = new Leafname2AllItsPaths();
 	}
 
@@ -255,8 +245,8 @@ public class ClientTree extends AbstractGroupTree {
 		model.nodeStructureChanged(groupNodeGroups);
 
 		// clear supervising data
-		clientNodesInDIRECTORY.clear();
-		locationsInDIRECTORY.clear();
+		clientNodesInDirectory.clear();
+		locationsInDirectory.clear();
 		leafname2AllItsPaths.clear();
 
 		// it is not necessary to clear groups and groupnodes since they will be rebuilt
@@ -264,9 +254,9 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	private void produceDIRECTORYinfo(TreePath clientPath, DefaultMutableTreeNode node) {
-		if (isInDIRECTORY(clientPath)) {
+		if (isInDirectory(clientPath)) {
 			String nodeID = (String) node.getUserObject();
-			locationsInDIRECTORY.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
+			locationsInDirectory.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
 					.add((GroupNode) node.getParent());
 		}
 	}
@@ -287,7 +277,7 @@ public class ClientTree extends AbstractGroupTree {
 		for (String clientId : clientIds) {
 			DefaultMutableTreeNode node = produceClientNode(clientId);
 			if (register) {
-				clientNodesInDIRECTORY.put(clientId, node);
+				clientNodesInDirectory.put(clientId, node);
 			}
 
 			if (parent != null) {
@@ -305,7 +295,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public void produceTreeForALL(Collection<String> clientIds) {
-		clientNodesInDIRECTORY.clear();
+		clientNodesInDirectory.clear();
 		produceClients(clientIds, groupNodeFullList);
 	}
 
@@ -352,7 +342,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	public Set<String> associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> fObject2Groups,
 			Set<String> permittedHostGroups) {
-		locationsInDIRECTORY.clear();
+		locationsInDirectory.clear();
 
 		// we must rebuild this map since the direct call of persist.getFGroup2Members
 		// would eliminate the filter by depot etc.
@@ -367,7 +357,7 @@ public class ClientTree extends AbstractGroupTree {
 			if (groupNode == null) {
 				Logging.warning("group for groupId " + entry.getKey() + " not found");
 			} else {
-				boolean register = isInDIRECTORY(groupNode);
+				boolean register = isInDirectory(groupNode);
 				produceClients(entry.getValue(), groupNode, register);
 			}
 		}
@@ -379,7 +369,7 @@ public class ClientTree extends AbstractGroupTree {
 				DefaultMutableTreeNode node = produceClientNode(clientId);
 				groupNodeDirectoryNotAssigned.add(node);
 
-				clientNodesInDIRECTORY.put(clientId, node);
+				clientNodesInDirectory.put(clientId, node);
 
 				addClientNodeInfo(node);
 			}
@@ -391,8 +381,8 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	private boolean isClientInAnyDIRECTORYGroup(String clientId) {
-		checkDIRECTORY(clientId, null);
-		Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
+		checkDirectory(clientId, null);
+		Set<GroupNode> hostingGroups = locationsInDirectory.get(clientId);
 		return !hostingGroups.isEmpty();
 	}
 
@@ -459,19 +449,6 @@ public class ClientTree extends AbstractGroupTree {
 		return false;
 	}
 
-	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
-			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
-		insertNodeInOrder(groupNode, dropParentNode);
-		model.nodeStructureChanged(sourceParentNode);
-		makeVisible(pathByAddingChild(dropPath, groupNode));
-
-		Map<String, String> theGroup = getGroups().get(importID);
-		theGroup.put("parentGroupId", dropParentID);
-		persistenceController.getGroupDataService().updateGroup(importID, theGroup);
-
-		leafname2AllItsPaths.rebuildFromTree(rootNode);
-	}
-
 	@Override
 	public void removeNodeInternally(String clientID, GroupNode parentNode) {
 		Logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
@@ -480,7 +457,7 @@ public class ClientTree extends AbstractGroupTree {
 
 		int stopCounter = 0;
 
-		while (clientNode != null && stopCounter <= clientNodesInDIRECTORY.size()) {
+		while (clientNode != null && stopCounter <= clientNodesInDirectory.size()) {
 			parentNode.remove(clientNode);
 			// with more than one clientNode we seem to get as many instances of one client
 			// node supplied as there are clients altogether, why ever
@@ -488,11 +465,11 @@ public class ClientTree extends AbstractGroupTree {
 			clientNode = getChildWithUserObjectString(clientID, parentNode);
 			stopCounter++;
 		}
-		if (stopCounter > clientNodesInDIRECTORY.size()) {
+		if (stopCounter > clientNodesInDirectory.size()) {
 			Logging.warning("removing client not successful but stopped because of reaching the repetition limit");
 		}
 
-		clientNodesInDIRECTORY.remove(clientID); // 11
+		clientNodesInDirectory.remove(clientID); // 11
 
 		SimpleTreePath simplePathToClient = new SimpleTreePath(parentNode.getPath());
 		simplePathToClient.add(clientID);
@@ -505,19 +482,19 @@ public class ClientTree extends AbstractGroupTree {
 		repaint();
 	}
 
-	public void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
-
+	@Override
+	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
 		if (existingNode == null) {
 			// we have not a node with this name in the target group
 			if (sourcePath != null) {
 				Logging.debug(this,
-						"moveClientTo checked importID sourcePath.getLastPathComponent(); "
+						"moveObjectTo checked importID sourcePath.getLastPathComponent(); "
 								+ sourcePath.getLastPathComponent() + " class "
 								+ ((sourcePath.getLastPathComponent()).getClass()));
 			} else {
-				Logging.debug(this, "moveClientTo sourcePath null, sourceParentNode " + sourceParentNode);
+				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode " + sourceParentNode);
 			}
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
@@ -530,9 +507,9 @@ public class ClientTree extends AbstractGroupTree {
 
 			// operations in DIRECTORY
 
-			if (isInDIRECTORY(dropPath)) {
-				locationsInDIRECTORY.get(importID).add(getGroupNode(dropParentID));
-				locationsInDIRECTORY.get(importID).remove(sourceParentNode);
+			if (isInDirectory(dropPath)) {
+				locationsInDirectory.get(importID).add(getGroupNode(dropParentID));
+				locationsInDirectory.get(importID).remove(sourceParentNode);
 			}
 
 			TreePath newPath = pathByAddingChild(dropPath, clientNode);
@@ -541,7 +518,7 @@ public class ClientTree extends AbstractGroupTree {
 			activeParents.addAll(simplePath.collectNodeNames());
 
 			Logging.debug(this,
-					"moveClientTo -- remove " + importID + " from " + sourceParentID
+					"moveObjectTo -- remove " + importID + " from " + sourceParentID
 							+ " clientNode, sourceParentNode, sourcePath " + clientNode + ", " + sourceParentNode + ", "
 							+ sourcePath);
 
@@ -552,23 +529,24 @@ public class ClientTree extends AbstractGroupTree {
 			makeVisible(newPath);
 			repaint();
 
-			checkDIRECTORY(importID, (GroupNode) dropParentNode);
+			checkDirectory(importID, (GroupNode) dropParentNode);
 		}
 	}
 
-	public void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
+	@Override
+	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
 		DefaultMutableTreeNode clientNode = null;
 
 		if (sourcePath == null) {
-			clientNode = getClientNode(objectID);
+			clientNode = clientNodesInDirectory.get(objectID);
 		} else {
 			clientNode = (DefaultMutableTreeNode) sourcePath.getLastPathComponent();
 		}
 
-		Logging.debug(this, " -- copyClientTo childs are persistent, newParentNode " + newParentNode + " "
+		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode " + newParentNode + " "
 				+ DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
@@ -584,21 +562,21 @@ public class ClientTree extends AbstractGroupTree {
 
 		// operations in DIRECTORY
 
-		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.get(objectID);
+		Set<GroupNode> groupsInDIRECTORY = locationsInDirectory.get(objectID);
 
 		// remove entry in NOT_ASSIGNED
 		if (groupsInDIRECTORY.contains(groupNodeDirectoryNotAssigned) && groupsInDIRECTORY.size() > 1) {
-			locationsInDIRECTORY.get(objectID).remove(groupNodeDirectoryNotAssigned);
+			locationsInDirectory.get(objectID).remove(groupNodeDirectoryNotAssigned);
 			removeNodeInternally(objectID, groupNodeDirectoryNotAssigned);
 		}
 
 		repaint();
 
-		checkDIRECTORY(objectID, (GroupNode) newParentNode);
+		checkDirectory(objectID, (GroupNode) newParentNode);
 	}
 
-	private void checkDIRECTORY(String clientID, GroupNode selectedNode) {
-		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.computeIfAbsent(clientID,
+	private void checkDirectory(String clientID, GroupNode selectedNode) {
+		Set<GroupNode> groupsInDIRECTORY = locationsInDirectory.computeIfAbsent(clientID,
 				s -> new TreeSet<>(new NodeComparator()));
 
 		if (groupsInDIRECTORY.size() <= 1) {
@@ -622,7 +600,7 @@ public class ClientTree extends AbstractGroupTree {
 						node.getUserObject().toString());
 			}
 
-			locationsInDIRECTORY.put(clientID, new HashSet<>(correctNode));
+			locationsInDirectory.put(clientID, new HashSet<>(correctNode));
 		}
 	}
 
@@ -669,54 +647,28 @@ public class ClientTree extends AbstractGroupTree {
 		return result;
 	}
 
-	public boolean isChildOfALL(TreeNode node) {
-		return node.getParent() == groupNodeFullList;
-	}
-
-	public boolean isInGROUPS(String groupName) {
+	@Override
+	public boolean isInDirectory(String groupName) {
 		GroupNode node = groupNodes.get(groupName);
 		if (node == null) {
 			return false;
 		}
 
-		return isInGROUPS(node);
+		return isInDirectory(node);
 	}
 
-	public boolean isInDIRECTORY(String groupName) {
-		GroupNode node = groupNodes.get(groupName);
-		if (node == null) {
-			return false;
-		}
-
-		return isInDIRECTORY(node);
-	}
-
-	public boolean isInGROUPS(TreePath path) {
-		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeGroups;
-	}
-
-	public boolean isInDIRECTORY(TreePath path) {
+	@Override
+	public boolean isInDirectory(TreePath path) {
 		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeDirectory;
 	}
 
-	private boolean isInDIRECTORY(DefaultMutableTreeNode node) {
+	private boolean isInDirectory(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
 		return path.length >= 2 && path[1] == groupNodeDirectory;
 	}
 
-	private boolean isInGROUPS(DefaultMutableTreeNode node) {
-		TreeNode[] path = node.getPath();
-		return path.length >= 2 && path[1] == groupNodeGroups;
-	}
-
 	public TreePath getPathToALL() {
 		return pathToALL;
-	}
-
-	public TreePath getActiveTreePath(String id) {
-		return Arrays.stream(getSelectionPaths()).filter(
-				treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().equals(id))
-				.findAny().orElse(null);
 	}
 
 	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
@@ -766,20 +718,14 @@ public class ClientTree extends AbstractGroupTree {
 		return activeParents;
 	}
 
+	@Override
 	public TreePath getGroupPathActivatedByTree() {
 		return configedMain.getGroupPathActivatedByTree();
 	}
 
-	public Map<String, Map<String, String>> getGroups() {
-		return groups;
-	}
-
-	public DefaultMutableTreeNode getClientNode(String clientId) {
-		return clientNodesInDIRECTORY.get(clientId);
-	}
-
-	public Set<GroupNode> getLocationsInDIRECTORY(String clientId) {
-		return locationsInDIRECTORY.get(clientId);
+	@Override
+	public Set<GroupNode> getLocationsInDirectory(String clientId) {
+		return locationsInDirectory.get(clientId);
 	}
 
 	@SuppressWarnings("java:S3242")
@@ -800,7 +746,8 @@ public class ClientTree extends AbstractGroupTree {
 		return result;
 	}
 
-	public List<String> getSelectedClientsInTable() {
+	@Override
+	public List<String> getSelectedObjectsInTable() {
 		return configedMain.getSelectedClientsInTable();
 	}
 }

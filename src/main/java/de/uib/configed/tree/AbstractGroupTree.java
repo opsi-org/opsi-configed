@@ -7,16 +7,19 @@
 package de.uib.configed.tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -47,6 +50,9 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	protected Map<String, GroupNode> groupNodes = new HashMap<>();
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
+
+	protected Leafname2AllItsPaths leafname2AllItsPaths;
+	// clientId --> list of all paths that have the leaf clientid
 
 	protected DefaultTreeModel model;
 
@@ -81,6 +87,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		JPopupMenu popupMenu = new JPopupMenu();
 		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this, configedMain);
 		addMouseListener(treePopupMouseListener);
+
+		// preparing Drag and Drop
+		TransferHandler handler = new GroupTreeTransferHandler(this);
+		setTransferHandler(handler);
+		setDragEnabled(true);
 	}
 
 	abstract void createTopNodes();
@@ -358,4 +369,65 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			}
 		}
 	}
+
+	public boolean isInGROUPS(String groupName) {
+		GroupNode node = groupNodes.get(groupName);
+		if (node == null) {
+			return false;
+		}
+
+		return isInGROUPS(node);
+	}
+
+	private boolean isInGROUPS(DefaultMutableTreeNode node) {
+		TreeNode[] path = node.getPath();
+		return path.length >= 2 && path[1] == groupNodeGroups;
+	}
+
+	public boolean isInGROUPS(TreePath path) {
+		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeGroups;
+	}
+
+	public Map<String, Map<String, String>> getGroups() {
+		return groups;
+	}
+
+	public boolean isChildOfALL(TreeNode node) {
+		return node.getParent() == groupNodeFullList;
+	}
+
+	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
+			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
+		insertNodeInOrder(groupNode, dropParentNode);
+		model.nodeStructureChanged(sourceParentNode);
+		makeVisible(pathByAddingChild(dropPath, groupNode));
+
+		Map<String, String> theGroup = getGroups().get(importID);
+		theGroup.put("parentGroupId", dropParentID);
+		persistenceController.getGroupDataService().updateGroup(importID, theGroup);
+
+		leafname2AllItsPaths.rebuildFromTree(rootNode);
+	}
+
+	public TreePath getActiveTreePath(String id) {
+		return Arrays.stream(getSelectionPaths()).filter(
+				treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().equals(id))
+				.findAny().orElse(null);
+	}
+
+	abstract TreePath getGroupPathActivatedByTree();
+
+	abstract boolean isInDirectory(String node);
+
+	abstract boolean isInDirectory(TreePath path);
+
+	abstract Set<GroupNode> getLocationsInDirectory(String importID);
+
+	abstract void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID);
+
+	abstract void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
+			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
+
+	abstract List<String> getSelectedObjectsInTable();
 }

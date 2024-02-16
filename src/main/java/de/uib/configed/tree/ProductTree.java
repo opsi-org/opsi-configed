@@ -7,10 +7,12 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -59,16 +61,22 @@ public class ProductTree extends AbstractGroupTree {
 		// Create groups
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
-			nodeMap.put(groupEntry.getKey(), new GroupNode(groupEntry.getKey()));
+			GroupNode groupNode = new GroupNode(groupEntry.getKey());
+			nodeMap.put(groupEntry.getKey(), groupNode);
+			groupNodes.put(groupEntry.getKey(), groupNode);
 		}
 
 		groupNodeGroups = new GroupNode("Produkt-Gruppen");
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
+		groupNodes.put("Produkt-Gruppen", groupNodeGroups);
+
 		groupNodeFullList = new GroupNode("Alle Produkte");
 		groupNodeFullList.setImmutable(true);
 		groupNodeFullList.setFixed(true);
+
+		groupNodes.put("Alle Produkte", groupNodeFullList);
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
@@ -99,6 +107,46 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public void removeNodeInternally(String clientID, GroupNode parentNode) {
 		// TODO
+	}
+
+	@Override
+	public TreePath getGroupPathActivatedByTree() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
+		//TODO
+	}
+
+	@Override
+	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
+			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
+		//TODO
+	}
+
+	@Override
+	public List<String> getSelectedObjectsInTable() {
+
+		//TODO
+		return new ArrayList<>();
+	}
+
+	@Override
+	public boolean isInDirectory(String groupName) {
+		return false;
+	}
+
+	@Override
+	public boolean isInDirectory(TreePath path) {
+		return false;
+	}
+
+	@Override
+	public Set<GroupNode> getLocationsInDirectory(String clientId) {
+		return new HashSet<>();
 	}
 
 	private void setGroup(DefaultMutableTreeNode groupNode) {
