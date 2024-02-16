@@ -45,13 +45,13 @@ import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends AbstractGroupTree {
-	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
-	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
+	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
+	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
-	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
+	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("AbstractGroupTree.notAssigned");
 	private static Set<String> topGroupNames;
 
-	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
+	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("AbstractGroupTree.allClients");
 
 	private GroupNode groupNodeDirectory;
 	private GroupNode groupNodeDirectoryNotAssigned;
@@ -88,7 +88,7 @@ public class ClientTree extends AbstractGroupTree {
 	public ClientTree(ConfigedMain configedMain) {
 		super(configedMain);
 
-		init();
+		initClientTree();
 	}
 
 	public static String translateToPersistentName(String name) {
@@ -112,7 +112,7 @@ public class ClientTree extends AbstractGroupTree {
 		}
 	}
 
-	private void init() {
+	private void initClientTree() {
 		ToolTipManager.sharedInstance().registerComponent(this);
 
 		Logging.debug(this, "UI " + getUI());
@@ -203,7 +203,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
-				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
+				Configed.getResourceValue("AbstractGroupTree.notAssigned.tooltip"));
 
 		groupNodeDirectoryNotAssigned.setFixed(true);
 
@@ -219,7 +219,8 @@ public class ClientTree extends AbstractGroupTree {
 		pathToROOT = new TreePath(new Object[] { rootNode });
 
 		// GROUPS
-		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME, Configed.getResourceValue("ClientTree.GROUPSdescription"));
+		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,
+				Configed.getResourceValue("AbstractGroupTree.groupsName.tooltip"));
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
@@ -227,7 +228,7 @@ public class ClientTree extends AbstractGroupTree {
 
 		// DIRECTORY
 		groupNodeDirectory = produceGroupNode(DIRECTORY_NAME,
-				Configed.getResourceValue("ClientTree.DIRECTORYdescription"));
+				Configed.getResourceValue("AbstractGroupTree.directory.tooltip"));
 
 		groupNodeDirectory.setAllowsOnlyGroupChilds(true);
 		groupNodeDirectory.setFixed(true);
@@ -235,7 +236,8 @@ public class ClientTree extends AbstractGroupTree {
 		rootNode.add(groupNodeDirectory);
 
 		// ALL
-		groupNodeFullList = produceGroupNode(ALL_CLIENTS_NAME, Configed.getResourceValue("ClientTree.ALLdescription"));
+		groupNodeFullList = produceGroupNode(ALL_CLIENTS_NAME,
+				Configed.getResourceValue("AbstractGroupTree.allClients.tooltip"));
 
 		rootNode.add(groupNodeFullList);
 		groupNodeFullList.setImmutable(true);
