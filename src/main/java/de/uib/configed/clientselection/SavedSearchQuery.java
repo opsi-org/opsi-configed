@@ -103,7 +103,7 @@ public class SavedSearchQuery {
 			Main.endApp(6);
 		}
 
-		if (!controller.getGroupDataService().addGroup(saveGroupRelation)) {
+		if (!controller.getGroupDataService().addGroup(saveGroupRelation, true)) {
 			Logging.error("add group error, group " + saveGroupRelation);
 			Main.endApp(7);
 		}

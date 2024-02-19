@@ -246,7 +246,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			newGroup.put("description", groupData.get("description"));
 
 			// get persistence
-			if (persistenceController.getGroupDataService().addGroup(newGroup)) {
+			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
 				groups.put(newGroupKey, newGroup);
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup " + newGroupKey + ", " + newGroup);
 				GroupNode newNode = insertGroup(newGroupKey, groupData.get("description"), node);

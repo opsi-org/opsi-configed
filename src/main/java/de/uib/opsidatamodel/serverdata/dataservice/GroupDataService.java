@@ -371,7 +371,7 @@ public class GroupDataService {
 		return result;
 	}
 
-	public boolean addGroup(StringValuedRelationElement newgroup) {
+	public boolean addGroup(StringValuedRelationElement newgroup, boolean isHostGroup) {
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
@@ -390,13 +390,19 @@ public class GroupDataService {
 		}
 
 		String description = newgroup.get("description");
-		String notes = "";
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_HOST_GROUP,
-				new Object[] { id, description, notes, parentId });
+		Map<String, String> map = new HashMap<>();
+		map.put("id", id);
+		map.put("type",
+				isHostGroup ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP : Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
+		map.put("description", description);
+		map.put("parentGroupId", parentId);
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_OBJECTS, new Object[] { map });
 		boolean result = exec.doCall(omc);
 		if (result) {
-			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+			CacheIdentifier identifier = isHostGroup ? CacheIdentifier.HOST_GROUPS : CacheIdentifier.PRODUCT_GROUPS;
+			persistenceController.reloadData(identifier.toString());
 		}
 
 		return result;

@@ -63,8 +63,7 @@ public enum RPCMethodName {
 	OBJECT_TO_GROUP_DELETE("objectToGroup_delete"),
 
 	GROUP_GET_OBJECTS("group_getObjects"), GROUP_CREATE_OBJECTS("group_createObjects"),
-	GROUP_UPDATE_OBJECT("group_updateObject"), GROUP_CREATE_HOST_GROUP("group_createHostGroup"),
-	GROUP_DELETE("group_delete"),
+	GROUP_UPDATE_OBJECT("group_updateObject"), GROUP_DELETE("group_delete"),
 
 	AUDIT_HARDWARE_GET_CONFIG("auditHardware_getConfig"),
 
