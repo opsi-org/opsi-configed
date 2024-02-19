@@ -372,15 +372,9 @@ public class GroupDataService {
 	}
 
 	public boolean addGroup(StringValuedRelationElement newgroup) {
-		return addGroup(newgroup, true);
-	}
-
-	public boolean addGroup(StringValuedRelationElement newgroup, boolean requestRefresh) {
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
-
-		Logging.debug(this, "addGroup : " + newgroup + " requestRefresh " + requestRefresh);
 
 		String id = newgroup.get("groupId");
 		String parentId = newgroup.get("parentGroupId");

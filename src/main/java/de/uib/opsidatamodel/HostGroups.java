@@ -38,7 +38,7 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 			directoryGroup.put("parentGroupId", null);
 			directoryGroup.put("description", "root of directory");
 
-			persistenceController.getGroupDataService().addGroup(directoryGroup, false);
+			persistenceController.getGroupDataService().addGroup(directoryGroup);
 
 			groups.add(directoryGroup);
 
