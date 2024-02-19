@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.uib.configed.tree.ClientTree;
+import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -378,7 +379,8 @@ public class GroupDataService {
 
 		String id = newgroup.get("groupId");
 		String parentId = newgroup.get("parentGroupId");
-		if (parentId == null || parentId.equals(ClientTree.ALL_GROUPS_NAME)) {
+		if (parentId == null || parentId.equals(ClientTree.ALL_GROUPS_NAME)
+				|| parentId.equals(ProductTree.ALL_PRODUCT_GROUPS_NAME)) {
 			parentId = null;
 		}
 

@@ -30,6 +30,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 
 public class ProductTree extends AbstractGroupTree {
+	public static final String ALL_PRODUCT_GROUPS_NAME = "Alle Produkte";
 
 	private PanelProductSettings localbootPanel;
 	private PanelProductSettings netbootPanel;
@@ -67,7 +68,7 @@ public class ProductTree extends AbstractGroupTree {
 			groups.put(groupEntry.getKey(), groupEntry.getValue());
 		}
 
-		groupNodeGroups = new GroupNode("Produkt-Gruppen");
+		groupNodeGroups = new GroupNode(ALL_PRODUCT_GROUPS_NAME);
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
