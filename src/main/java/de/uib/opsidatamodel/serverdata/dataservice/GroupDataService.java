@@ -324,15 +324,18 @@ public class GroupDataService {
 		return result;
 	}
 
-	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries) {
+	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries, boolean isHostGroup) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
+		String productType = isHostGroup ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
 			Map<String, Object> deleteItem = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, productType);
 			deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
 			deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());
 

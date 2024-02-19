@@ -94,7 +94,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 				}
 			}
 
-			if (tree.removeClientNodes(clientNodesToRemove)) {
+			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view
 				configedMain.setGroup(node.toString());
 			}

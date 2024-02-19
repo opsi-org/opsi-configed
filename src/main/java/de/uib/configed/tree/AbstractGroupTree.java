@@ -322,18 +322,19 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return groupNodes.get(groupId);
 	}
 
-	public boolean removeClientNodes(Iterable<DefaultMutableTreeNode> clientNodes) {
+	public boolean removeNodes(Iterable<DefaultMutableTreeNode> nodes) {
 		List<Object2GroupEntry> groupEntries = new ArrayList<>();
 
-		for (DefaultMutableTreeNode clientNode : clientNodes) {
-			String clientId = (String) (clientNode.getUserObject());
-			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) clientNode.getParent();
+		for (DefaultMutableTreeNode node : nodes) {
+			String clientId = (String) node.getUserObject();
+			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 
 			removeNodeInternally(clientId, (GroupNode) parent);
 			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
 		}
 
-		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries);
+		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries,
+				this instanceof ClientTree);
 	}
 
 	protected TreePath pathByAddingChild(TreePath treePath, Object child) {
