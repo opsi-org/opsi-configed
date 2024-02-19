@@ -481,6 +481,7 @@ public class GroupDataService {
 		return object2Groups;
 	}
 
+	// TODO remove? It was used in old panel to define product groups
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
