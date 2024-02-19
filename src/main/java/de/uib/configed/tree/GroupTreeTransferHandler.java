@@ -154,8 +154,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				Logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
 			}
 
-			Logging.devel(dropThisVariant + "");
-
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();
 
 			Logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
