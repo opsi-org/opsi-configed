@@ -7,12 +7,10 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -30,7 +28,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 
 public class ProductTree extends AbstractGroupTree {
-	public static final String ALL_PRODUCT_GROUPS_NAME = "Alle Produkte";
+	public static final String ALL_PRODUCT_GROUPS_NAME = "Alle Gruppen";
 
 	private PanelProductSettings localbootPanel;
 	private PanelProductSettings netbootPanel;
@@ -124,10 +122,12 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public List<String> getSelectedObjectsInTable() {
+	public Set<String> getSelectedObjectsInTable() {
 
-		//TODO
-		return new ArrayList<>();
+		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
+		selectedProducts.addAll(netbootPanel.getSelectedIDs());
+
+		return selectedProducts;
 	}
 
 	@Override

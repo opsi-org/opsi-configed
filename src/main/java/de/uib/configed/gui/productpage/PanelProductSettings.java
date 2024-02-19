@@ -105,11 +105,11 @@ public class PanelProductSettings extends JSplitPane {
 		tableProducts = new JTable() {
 			@Override
 			public void setValueAt(Object value, int row, int column) {
-				List<String> saveSelectedProducts = getSelectedProducts();
+				Set<String> saveSelectedProducts = getSelectedIDs();
 				// only in case of setting ActionRequest needed, since we there call
 				// fireTableDataChanged
 				super.setValueAt(value, row, column);
-				setSelection(new HashSet<>(saveSelectedProducts));
+				setSelection(saveSelectedProducts);
 			}
 		};
 
@@ -569,22 +569,6 @@ public class PanelProductSettings extends JSplitPane {
 	private void clearEditing() {
 		initEditing("", "", "", "", "", null, null, null, null);
 		infoPane.clearEditing();
-	}
-
-	public List<String> getSelectedProducts() {
-		// in model terms
-
-		List<Integer> selectedRows = getSelectedRowsInModelTerms();
-
-		List<String> selectedProductsList = new ArrayList<>();
-
-		for (int row : selectedRows) {
-			selectedProductsList.add((String) tableProducts.getModel().getValueAt(row, 0));
-		}
-
-		Logging.info(this, "selectedProducts " + selectedProductsList);
-
-		return selectedProductsList;
 	}
 
 	public JTable getTableProducts() {

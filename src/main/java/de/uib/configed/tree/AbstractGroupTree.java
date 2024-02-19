@@ -431,5 +431,5 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	abstract void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
-	abstract List<String> getSelectedObjectsInTable();
+	abstract Set<String> getSelectedObjectsInTable();
 }

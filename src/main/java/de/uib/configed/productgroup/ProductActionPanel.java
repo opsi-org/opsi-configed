@@ -11,8 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -178,10 +178,10 @@ public class ProductActionPanel extends JPanel {
 
 	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
 
-		List<String> saveSelectedProducts = associate.getSelectedProducts();
+		Set<String> saveSelectedProducts = associate.getSelectedIDs();
 
 		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());
-		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedProducts());
+		Logging.info(this, "handleCollectiveAction, selected products " + saveSelectedProducts);
 
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();

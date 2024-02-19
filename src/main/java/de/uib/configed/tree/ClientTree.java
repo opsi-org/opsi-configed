@@ -747,7 +747,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public List<String> getSelectedObjectsInTable() {
-		return configedMain.getSelectedClientsInTable();
+	public Set<String> getSelectedObjectsInTable() {
+		return configedMain.getClientTable().getSelectedSet();
 	}
 }

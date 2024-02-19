@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -212,7 +211,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return new StringSelection(buff.substring(0, buff.length() - 1));
 	}
 
-	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
+	private boolean chooseMove(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
 		Logging.info(this, "chooseMOVE  support " + support);
 		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
@@ -262,12 +261,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
 				adaptedSourceParentID = firstDIRECTORYgroupname;
-				moving = chooseMOVE(support, firstDIRECTORYgroupname, dropPath, true);
+				moving = chooseMove(support, firstDIRECTORYgroupname, dropPath, true);
 
 				adaptedSourceParentNode = tree.getGroupNode(adaptedSourceParentID);
 			}
 		} else {
-			moving = chooseMOVE(support, adaptedSourceParentID, dropPath, true);
+			moving = chooseMove(support, adaptedSourceParentID, dropPath, true);
 		}
 
 		if (moving) {
@@ -298,37 +297,37 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "importData, getActivePaths(): " + Arrays.toString(tree.getSelectionPaths()));
 
-		List<String> selectedClients = tree.getSelectedObjectsInTable();
+		Set<String> selectedObjects = tree.getSelectedObjectsInTable();
 
 		// possibly transfer of a group node
-		if (selectedClients.isEmpty()) {
+		if (selectedObjects.isEmpty()) {
 			TreePath[] activePaths = tree.getSelectionPaths();
 			if (activePaths != null && activePaths.length == 1) {
 				String importID = (String) (((DefaultMutableTreeNode) (activePaths[0]).getLastPathComponent())
 						.getUserObject());
-				selectedClients = Collections.singletonList(importID);
+				selectedObjects = Collections.singleton(importID);
 			}
 		}
 
-		Logging.debug(this, "importData, values: " + selectedClients);
+		Logging.debug(this, "importData, values: " + selectedObjects);
 
 		// if the source is the tree then we arranged lines for the transfer
 		// the other possible source are lines from the JTable, as well arranged to
 		// lines
 
 		// Perform the actual import.
-		for (String selectedClient : selectedClients) {
+		for (String selectedObject : selectedObjects) {
 			String importID = null;
 			String sourceParentID = null;
 
 			// if values not got from transferable, the following reduces
-			if (selectedClient.split("\t").length > 1) {
+			if (selectedObject.split("\t").length > 1) {
 				// probably an import from the JTable
 
 				// we assume a table source with first fieldvalue being a clientID
-				importID = selectedClient.split("\t")[0];
+				importID = selectedObject.split("\t")[0];
 			} else {
-				String[] parts = selectedClient.split(",");
+				String[] parts = selectedObject.split(",");
 
 				importID = parts[parts.length - 1];
 			}
@@ -356,14 +355,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			if (groupNode != null) {
 				// it is a group and it could be moved
 				// it is a group, and it will be moved, but only inside one partial tree
-				if (chooseMOVE(support, sourceParentID, dropPath, false)) {
+				if (chooseMove(support, sourceParentID, dropPath, false)) {
 					tree.moveGroupTo(importID, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
 				} else {
 					Logging.info(this, "importData: this group will not be moved");
 				}
 			} else {
-				// client node
-				Logging.debug(this, "importData handling client ID " + importID);
+				// import node
+				Logging.debug(this, "importData handling import ID " + importID);
 
 				handleObjectID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
 						dropParentNode, dropParentID);
