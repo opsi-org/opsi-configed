@@ -8,7 +8,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -468,88 +467,6 @@ public class GroupDataService {
 		if (result) {
 			CacheIdentifier identifier = isHostGroup ? CacheIdentifier.HOST_GROUPS : CacheIdentifier.PRODUCT_GROUPS;
 			persistenceController.reloadData(identifier.toString());
-		}
-
-		return result;
-	}
-
-	private static List<Map<String, String>> createObject2Groups(String groupId, Map<String, String> typingObject,
-			Set<String> products) {
-		List<Map<String, String>> object2Groups = new ArrayList<>();
-		for (String objectId : products) {
-			Map<String, String> m = new HashMap<>(typingObject);
-			m.put("groupId", groupId);
-			m.put("objectId", objectId);
-			object2Groups.add(m);
-		}
-
-		return object2Groups;
-	}
-
-	// TODO remove? It was used in old panel to define product groups
-	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
-			return false;
-		}
-
-		Logging.debug(this, "setProductGroup: groupId " + groupId);
-		if (groupId == null) {
-			return false;
-		}
-
-		Logging.info(this, "setProductGroup: groupId " + groupId + " should have members " + productSet);
-
-		Map<String, String> map = new HashMap<>();
-
-		map.put("id", groupId);
-		map.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
-
-		if (description != null) {
-			map.put("description", description);
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_CREATE_OBJECTS,
-				new Object[] { new Object[] { map } });
-		boolean result = exec.doCall(omc);
-
-		Set<String> inNewSetnotInOriSet = new HashSet<>(productSet);
-		Set<String> inOriSetnotInNewSet = new HashSet<>();
-
-		if (getFProductGroup2Members().get(groupId) != null) {
-			Set<String> oriSet = getFProductGroup2Members().get(groupId);
-			Logging.debug(this, "setProductGroup: oriSet " + oriSet);
-			inOriSetnotInNewSet = new HashSet<>(oriSet);
-			inOriSetnotInNewSet.removeAll(productSet);
-			inNewSetnotInOriSet.removeAll(oriSet);
-		}
-
-		Logging.info(this, "setProductGroup: inOriSetnotInNewSet, inNewSetnotInOriSet. " + inOriSetnotInNewSet + ", "
-				+ inNewSetnotInOriSet);
-
-		final Map<String, String> typingObject = new HashMap<>();
-		typingObject.put("groupType", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
-		typingObject.put("type", Object2GroupEntry.TYPE_NAME);
-
-		List<Map<String, String>> object2Groups = createObject2Groups(groupId, typingObject, inOriSetnotInNewSet);
-
-		Logging.debug(this, "delete objects " + object2Groups);
-
-		if (!object2Groups.isEmpty()) {
-			result = result && exec.doCall(
-					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS, new Object[] { object2Groups }));
-		}
-
-		object2Groups = createObject2Groups(groupId, typingObject, inNewSetnotInOriSet);
-
-		Logging.debug(this, "create new objects " + object2Groups);
-
-		if (!object2Groups.isEmpty()) {
-			result = result && exec.doCall(
-					new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { object2Groups }));
-		}
-
-		if (result) {
-			getFProductGroup2Members().put(groupId, productSet);
 		}
 
 		return result;
