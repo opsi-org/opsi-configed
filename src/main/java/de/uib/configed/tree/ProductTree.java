@@ -151,27 +151,40 @@ public class ProductTree extends AbstractGroupTree {
 		return new HashSet<>();
 	}
 
-	private void setGroup(DefaultMutableTreeNode groupNode) {
-		Set<String> productIds = new HashSet<>();
-
-		addGroupsRecoursively(groupNode.children(), productIds);
-
-		setSelection(productIds);
+	@Override
+	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
+		Set<String> productIds = getChildrenRecursively(groupNode);
+		setFilter(productIds);
+		localbootPanel.setSelection(productIds);
+		netbootPanel.setSelection(productIds);
 	}
 
-	private static void addGroupsRecoursively(Enumeration<TreeNode> children, Set<String> productIds) {
+	private void setGroup(DefaultMutableTreeNode groupNode) {
+		Set<String> productIds = getChildrenRecursively(groupNode);
+		setFilter(productIds);
+	}
+
+	private static Set<String> getChildrenRecursively(DefaultMutableTreeNode groupNode) {
+		Set<String> productIds = new HashSet<>();
+
+		addChildrenRecoursively(groupNode.children(), productIds);
+
+		return productIds;
+	}
+
+	private static void addChildrenRecoursively(Enumeration<TreeNode> children, Set<String> productIds) {
 		while (children.hasMoreElements()) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
 
 			if (child.getAllowsChildren()) {
-				addGroupsRecoursively(child.children(), productIds);
+				addChildrenRecoursively(child.children(), productIds);
 			} else {
 				productIds.add(child.getUserObject().toString());
 			}
 		}
 	}
 
-	private void setSelection(Set<String> productIds) {
+	private void setFilter(Set<String> productIds) {
 		localbootPanel.setFilter(productIds);
 		netbootPanel.setFilter(productIds);
 	}
@@ -179,7 +192,7 @@ public class ProductTree extends AbstractGroupTree {
 	private void setProduct(String productId) {
 		Set<String> productSet = Collections.singleton(productId);
 
-		setSelection(productSet);
+		setFilter(productSet);
 		localbootPanel.setSelection(productSet);
 		netbootPanel.setSelection(productSet);
 	}
@@ -207,7 +220,7 @@ public class ProductTree extends AbstractGroupTree {
 				if (!node.getAllowsChildren()) {
 					productIds.add(node.getUserObject().toString());
 				}
-				setSelection(productIds);
+				setFilter(productIds);
 			}
 		}
 	}

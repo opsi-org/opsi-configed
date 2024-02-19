@@ -140,7 +140,7 @@ public final class Configed {
 	private static void setStartSettings(ConfigedMain configedMain) {
 		if (paramClient != null || paramClientgroup != null) {
 			if (paramClientgroup != null) {
-				configedMain.setGroup(paramClientgroup);
+				configedMain.setGroupAndSelect(paramClientgroup);
 			}
 
 			if (paramClient != null) {

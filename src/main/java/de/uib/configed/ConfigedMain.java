@@ -1442,7 +1442,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	 *
 	 * @param groupname
 	 */
-	public void setGroup(String groupname) {
+	public void setGroupAndSelect(String groupname) {
 		Logging.info(this, "setGroup " + groupname);
 		if (!activateGroup(true, groupname)) {
 			return;

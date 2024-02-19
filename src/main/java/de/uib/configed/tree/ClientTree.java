@@ -122,7 +122,7 @@ public class ClientTree extends AbstractGroupTree {
 				if (selRow != -1 && e.getClickCount() == 2
 						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
 					expandPath(selPath);
-					configedMain.setGroup(selPath.getLastPathComponent().toString());
+					configedMain.setGroupAndSelect(selPath.getLastPathComponent().toString());
 				}
 			}
 		};
@@ -292,6 +292,11 @@ public class ClientTree extends AbstractGroupTree {
 		}
 
 		model.nodeStructureChanged(parent);
+	}
+
+	@Override
+	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
+		configedMain.setGroupAndSelect(groupNode.toString());
 	}
 
 	public void produceTreeForALL(Collection<String> clientIds) {

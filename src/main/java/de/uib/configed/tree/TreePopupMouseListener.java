@@ -18,7 +18,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import utils.PopupMouseListener;
 
@@ -34,7 +33,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemActivateElements;
 	private JMenuItem menuItemRemoveElements;
 
-	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree, ConfigedMain configedMain) {
+	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
 		super(jPopupMenu);
 		this.tree = tree;
 
@@ -55,11 +54,11 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
 		menuItemActivateElements = new JMenuItem(Configed.getResourceValue("ClientTree.selectAllElements"));
-		menuItemActivateElements.addActionListener(actionEvent -> activateElements(configedMain));
+		menuItemActivateElements.addActionListener(actionEvent -> activateElements());
 		jPopupMenu.add(menuItemActivateElements);
 
 		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue("ClientTree.removeAllElements"));
-		menuItemRemoveElements.addActionListener(actionEvent -> removeElements(configedMain));
+		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
 		jPopupMenu.add(menuItemRemoveElements);
 	}
 
@@ -71,15 +70,15 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		}
 	}
 
-	private void activateElements(ConfigedMain configedMain) {
+	private void activateElements() {
 		TreePath sourcePath = mousePath;
 		if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
 			GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-			configedMain.setGroup(node.toString());
+			tree.setGroupAndSelect(node);
 		}
 	}
 
-	private void removeElements(ConfigedMain configedMain) {
+	private void removeElements() {
 		if (mousePath != null && mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode) {
 			GroupNode node = (GroupNode) mousePath.getPathComponent(mousePath.getPathCount() - 1);
 
@@ -96,7 +95,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view
-				configedMain.setGroup(node.toString());
+				tree.setGroupAndSelect(node);
 			}
 		}
 	}
