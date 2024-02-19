@@ -112,12 +112,6 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public TreePath getGroupPathActivatedByTree() {
-		// TODO
-		return null;
-	}
-
-	@Override
 	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		//TODO

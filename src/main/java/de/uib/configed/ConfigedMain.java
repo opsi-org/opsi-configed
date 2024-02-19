@@ -178,7 +178,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private List<String> preSaveSelectedClients;
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
-	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
 	private boolean anyDataChanged;
@@ -1429,7 +1428,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		GroupNode node = clientTree.getGroupNode(groupname);
 		TreePath path = clientTree.getPathToNode(node);
 
-		activateGroupByTree(preferringOldSelection, node, path);
+		activateGroupByTree(preferringOldSelection, node);
 
 		Logging.info(this, "expand activated  path " + path);
 		clientTree.expandPath(path);
@@ -1857,7 +1856,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
 
 		if (selectedNode.getAllowsChildren()) {
-			activateGroupByTree(false, selectedNode, newSelectedPath);
+			activateGroupByTree(false, selectedNode);
 		} else {
 			setClientByTree(selectedNode, newSelectedPath);
 		}
@@ -1962,8 +1961,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		clientTree.repaint();
 	}
 
-	private void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
-		Logging.info(this, "activateGroupByTree, node: " + node + ", pathToNode : " + pathToNode);
+	private void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node) {
+		Logging.info(this, "activateGroupByTree, node: " + node);
 
 		setGroupByTree(node);
 
@@ -1976,8 +1975,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
 
-		groupPathActivatedByTree = pathToNode;
-
 		activatedGroupModel.setNode("" + node);
 		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
@@ -1987,10 +1984,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		if (filterClientList) {
 			mainFrame.toggleClientFilterAction();
 		}
-	}
-
-	public TreePath getGroupPathActivatedByTree() {
-		return groupPathActivatedByTree;
 	}
 
 	public ActivatedGroupModel getActivatedGroupModel() {

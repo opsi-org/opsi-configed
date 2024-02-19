@@ -724,11 +724,6 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public TreePath getGroupPathActivatedByTree() {
-		return configedMain.getGroupPathActivatedByTree();
-	}
-
-	@Override
 	public Set<GroupNode> getLocationsInDirectory(String clientId) {
 		return locationsInDirectory.get(clientId);
 	}

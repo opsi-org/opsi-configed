@@ -312,9 +312,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "importData, values: " + selectedClients);
 
-		TreePath groupPathActivatedByTree = tree.getGroupPathActivatedByTree();
-		Logging.debug(this, "importData, groupPathActivatedByTree: " + groupPathActivatedByTree);
-
 		// if the source is the tree then we arranged lines for the transfer
 		// the other possible source are lines from the JTable, as well arranged to
 		// lines

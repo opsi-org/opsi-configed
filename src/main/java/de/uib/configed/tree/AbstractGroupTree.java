@@ -419,8 +419,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				.findAny().orElse(null);
 	}
 
-	abstract TreePath getGroupPathActivatedByTree();
-
 	abstract boolean isInDirectory(String node);
 
 	abstract boolean isInDirectory(TreePath path);
