@@ -136,7 +136,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		if (!fEdit.isCancelled()) {
 			groups.get(groupId).put("description", groupData.get("description"));
-			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId));
+			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId),
+					this instanceof ClientTree);
 		}
 	}
 
@@ -404,7 +405,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);
-		persistenceController.getGroupDataService().updateGroup(importID, theGroup);
+		persistenceController.getGroupDataService().updateGroup(importID, theGroup, this instanceof ClientTree);
 
 		leafname2AllItsPaths.rebuildFromTree(rootNode);
 	}

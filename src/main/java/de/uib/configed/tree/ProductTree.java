@@ -64,6 +64,7 @@ public class ProductTree extends AbstractGroupTree {
 			GroupNode groupNode = new GroupNode(groupEntry.getKey());
 			nodeMap.put(groupEntry.getKey(), groupNode);
 			groupNodes.put(groupEntry.getKey(), groupNode);
+			groups.put(groupEntry.getKey(), groupEntry.getValue());
 		}
 
 		groupNodeGroups = new GroupNode("Produkt-Gruppen");

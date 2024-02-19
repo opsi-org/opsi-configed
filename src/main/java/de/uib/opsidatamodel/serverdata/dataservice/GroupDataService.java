@@ -427,7 +427,7 @@ public class GroupDataService {
 		return result;
 	}
 
-	public boolean updateGroup(String groupId, Map<String, String> updateInfo) {
+	public boolean updateGroup(String groupId, Map<String, String> updateInfo, boolean isHostGroup) {
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
 		}
@@ -441,7 +441,11 @@ public class GroupDataService {
 		}
 
 		updateInfo.put("ident", groupId);
-		updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+		if (isHostGroup) {
+			updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+		} else {
+			updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
+		}
 
 		if (updateInfo.get("parentGroupId").equals(ClientTree.ALL_GROUPS_NAME)) {
 			updateInfo.put("parentGroupId", "null");
@@ -457,7 +461,8 @@ public class GroupDataService {
 		boolean result = exec.doCall(omc);
 
 		if (result) {
-			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+			CacheIdentifier identifier = isHostGroup ? CacheIdentifier.HOST_GROUPS : CacheIdentifier.PRODUCT_GROUPS;
+			persistenceController.reloadData(identifier.toString());
 		}
 
 		return result;
