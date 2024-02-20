@@ -451,7 +451,8 @@ public class GroupDataService {
 			updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		}
 
-		if (updateInfo.get("parentGroupId").equals(ClientTree.ALL_GROUPS_NAME)) {
+		if (updateInfo.get("parentGroupId").equals(ClientTree.ALL_GROUPS_NAME)
+				|| updateInfo.get("parentGroupId").equals(ProductTree.ALL_PRODUCT_GROUPS_NAME)) {
 			updateInfo.put("parentGroupId", "null");
 		}
 
