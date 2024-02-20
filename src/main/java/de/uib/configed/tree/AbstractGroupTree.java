@@ -385,10 +385,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			return false;
 		}
 
-		return isInGROUPS(node);
-	}
-
-	private boolean isInGROUPS(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
 		return path.length >= 2 && path[1] == groupNodeGroups;
 	}
