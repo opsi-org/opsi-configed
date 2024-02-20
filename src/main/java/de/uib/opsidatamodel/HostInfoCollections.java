@@ -48,9 +48,9 @@ public class HostInfoCollections {
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// We need the argument here since the controller is not loaded yet
-	public HostInfoCollections(OpsiServiceNOMPersistenceController pc) {
+	public HostInfoCollections(OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
-		this.persistenceController = pc;
+		this.persistenceController = persistenceController;
 	}
 
 	// deliver data

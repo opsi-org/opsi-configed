@@ -64,7 +64,8 @@ public class LicenseDisplayer {
 	@FXML
 	private ScrollPane scrollPane;
 
-	private OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private LicenseDisplayer controller;
 
 	private Stage stage;
@@ -142,9 +143,9 @@ public class LicenseDisplayer {
 
 	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
@@ -197,13 +198,13 @@ public class LicenseDisplayer {
 					@Override
 					public void reloadMap() {
 						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
-							persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
@@ -251,8 +252,8 @@ public class LicenseDisplayer {
 		// nearly done in produceModelSWxLicensepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
-		for (String swID : persist.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persist.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL);

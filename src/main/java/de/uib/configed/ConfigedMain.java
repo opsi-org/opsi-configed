@@ -1230,8 +1230,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 	}
 
-	public void setPersistenceController(OpsiServiceNOMPersistenceController persis) {
-		persistenceController = persis;
+	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {
+		this.persistenceController = persistenceController;
 	}
 
 	public void setAppTitle(String s) {

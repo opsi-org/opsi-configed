@@ -477,15 +477,15 @@ public final class Configed {
 			addMissingArgs();
 			initSavedStates();
 
-			OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host,
-					user, password);
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getNewPersistenceController(host, user, password);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
-					persist.getHostInfoCollections().getDepotNamesList(),
-					persist.getGroupDataService().getHostGroupIds(),
-					persist.getGroupDataService().getProductGroupsPD().keySet(),
-					persist.getConfigDataService().getConfigDefaultValuesPD(),
-					persist.getConfigDataService().getConfigListCellOptionsPD());
+					persistenceController.getHostInfoCollections().getDepotNamesList(),
+					persistenceController.getGroupDataService().getHostGroupIds(),
+					persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
+					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);

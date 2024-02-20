@@ -20,7 +20,7 @@ import utils.Utils;
 public class CopySuffixAddition {
 	private static final String COPY_SUFFIX = "-copy";
 	private static final Pattern numberSuffixPattern = Pattern.compile("\\d+$");
-	private static OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private String clientName;
@@ -113,7 +113,7 @@ public class CopySuffixAddition {
 	}
 
 	private static boolean clientExists(String clientName) {
-		List<String> opsiHostNames = persist.getHostInfoCollections().getOpsiHostNames();
+		List<String> opsiHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
 		return opsiHostNames.stream().anyMatch(opsiHostName -> opsiHostName.equals(clientName));
 	}
 }

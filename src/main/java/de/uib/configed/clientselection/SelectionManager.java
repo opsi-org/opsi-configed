@@ -159,10 +159,12 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		OpsiServiceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
 
-		boolean withMySQL = controller.getModuleDataService().canCallMySQLPD() && controller.getConfigDataService()
-				.getGlobalBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+		boolean withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
+				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
+						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {

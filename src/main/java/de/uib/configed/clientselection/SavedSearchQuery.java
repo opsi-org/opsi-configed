@@ -28,7 +28,7 @@ public class SavedSearchQuery {
 	private String password;
 	private String searchName;
 
-	private OpsiServiceNOMPersistenceController controller;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
 	public SavedSearchQuery(String host, String user, String password, String searchName) {
 		setArgs(host, user, password, searchName);
@@ -44,9 +44,10 @@ public class SavedSearchQuery {
 	}
 
 	private void initConnection() {
-		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
 
-		if (controller == null || controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
+		if (persistenceController == null
+				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			Logging.error("Authentication error.");
 			Main.endApp(1);
 		}
@@ -55,10 +56,10 @@ public class SavedSearchQuery {
 	}
 
 	public List<String> runSearch(boolean printing) {
-		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
+		Map<String, Map<String, Object>> depots = persistenceController.getHostInfoCollections().getAllDepots();
 
 		// Load data that we need to find clients for selection
-		controller.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
+		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();
@@ -87,7 +88,7 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = controller.getGroupDataService().getHostGroupsPD();
+		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
@@ -98,17 +99,17 @@ public class SavedSearchQuery {
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 
-		if (!controller.getGroupDataService().deleteGroup(groupName)) {
+		if (!persistenceController.getGroupDataService().deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
 			Main.endApp(6);
 		}
 
-		if (!controller.getGroupDataService().addGroup(saveGroupRelation, true)) {
+		if (!persistenceController.getGroupDataService().addGroup(saveGroupRelation, true)) {
 			Logging.error("add group error, group " + saveGroupRelation);
 			Main.endApp(7);
 		}
 
-		if (!controller.getGroupDataService().addHosts2Group(hosts, groupName)) {
+		if (!persistenceController.getGroupDataService().addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group " + groupName);
 			Main.endApp(8);
 		}
