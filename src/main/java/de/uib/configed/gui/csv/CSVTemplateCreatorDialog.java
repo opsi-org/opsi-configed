@@ -303,17 +303,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JCheckBox headerCheckBox = new JCheckBox(header);
 		headerCheckBox.setActionCommand(header);
 
-		if (HostInfo.HOSTNAME_KEY.equals(header)) {
+		if (isImportantHeader(header)) {
 			headerCheckBox.setSelected(true);
-		}
-		if ("domain".equals(header)) {
-			headerCheckBox.setSelected(true);
-		}
-		if (HostInfo.DEPOT_OF_CLIENT_KEY.equals(header)) {
-			headerCheckBox.setSelected(true);
-		}
-		if (HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header)) {
-			headerCheckBox.setSelected(true);
+			headerCheckBox.setEnabled(false);
 		}
 
 		if (HostInfo.HOST_KEY_KEY.equals(header)) {
@@ -324,6 +316,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		model.addElement(headerCheckBox);
 		headerCheckBoxes.add(headerCheckBox);
+	}
+
+	private static boolean isImportantHeader(String header) {
+		return HostInfo.HOSTNAME_KEY.equals(header) || "domain".equals(header)
+				|| HostInfo.DEPOT_OF_CLIENT_KEY.equals(header) || HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header);
 	}
 
 	private static class InputListener implements DocumentListener {
