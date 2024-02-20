@@ -20,6 +20,7 @@ import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -77,6 +78,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	private void init() {
+		ToolTipManager.sharedInstance().registerComponent(this);
+
 		super.addTreeSelectionListener(this);
 
 		createTopNodes();

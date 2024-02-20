@@ -26,7 +26,6 @@ import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -105,8 +104,6 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	private void initClientTree() {
-		ToolTipManager.sharedInstance().registerComponent(this);
-
 		Logging.debug(this, "UI " + getUI());
 
 		setToggleClickCount(0);
