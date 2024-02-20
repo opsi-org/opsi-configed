@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
@@ -128,9 +127,6 @@ public class ClientTree extends AbstractGroupTree {
 		};
 
 		addMouseListener(ml);
-
-		// for debugging
-		setDropMode(DropMode.ON);
 
 		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);

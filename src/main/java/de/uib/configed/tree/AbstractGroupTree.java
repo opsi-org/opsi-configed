@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -92,6 +93,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		TransferHandler handler = new GroupTreeTransferHandler(this);
 		setTransferHandler(handler);
 		setDragEnabled(true);
+		setDropMode(DropMode.ON);
 	}
 
 	abstract void createTopNodes();
