@@ -162,10 +162,6 @@ public class ClientTree extends AbstractGroupTree {
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
-	private static DefaultMutableTreeNode produceClientNode(Object x) {
-		return new DefaultMutableTreeNode(x, false);
-	}
-
 	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
 				Configed.getResourceValue("AbstractGroupTree.notAssigned.tooltip"));
@@ -250,7 +246,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent, boolean register) {
 		for (String clientId : clientIds) {
-			DefaultMutableTreeNode node = produceClientNode(clientId);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(clientId, false);
 			if (register) {
 				clientNodesInDirectory.put(clientId, node);
 			}
@@ -346,7 +342,7 @@ public class ClientTree extends AbstractGroupTree {
 			if (!isClientInAnyDIRECTORYGroup(clientId)) {
 				membersOfDirectoryNotAssigned.add(clientId);
 
-				DefaultMutableTreeNode node = produceClientNode(clientId);
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(clientId, false);
 				groupNodeDirectoryNotAssigned.add(node);
 
 				clientNodesInDirectory.put(clientId, node);
@@ -708,13 +704,11 @@ public class ClientTree extends AbstractGroupTree {
 		Enumeration<TreeNode> enumer = groupNode.children();
 		DefaultMutableTreeNode result = null;
 
-		boolean foundAny = false;
-		while (!foundAny && enumer.hasMoreElements()) {
+		while (enumer.hasMoreElements()) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) enumer.nextElement();
-
 			if (child.getUserObject().toString().equals(objectID)) {
-				foundAny = true;
 				result = child;
+				break;
 			}
 		}
 
