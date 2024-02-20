@@ -482,7 +482,7 @@ public class ClientTree extends AbstractGroupTree {
 			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID);
+				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, false);
 			}
 
 			// operations in DIRECTORY
@@ -532,7 +532,7 @@ public class ClientTree extends AbstractGroupTree {
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
 		}
 
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);

@@ -305,15 +305,18 @@ public class GroupDataService {
 		return exec.doCall(omc);
 	}
 
-	public boolean addObject2Group(String objectId, String groupId) {
+	public boolean addObject2Group(String objectId, String groupId, boolean isHostGroup) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
+
+		String groupType = isHostGroup ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
-				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
+				new String[] { groupType, persistentGroupId, objectId });
 
 		boolean result = exec.doCall(omc);
 		if (result) {

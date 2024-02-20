@@ -118,7 +118,9 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
-		//TODO
+		newParentNode.add(new DefaultMutableTreeNode(objectID, false));
+
+		persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
 	}
 
 	@Override
