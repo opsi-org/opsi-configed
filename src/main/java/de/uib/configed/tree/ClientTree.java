@@ -29,10 +29,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -130,22 +128,6 @@ public class ClientTree extends AbstractGroupTree {
 
 		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);
-
-		model.setAsksAllowsChildren(true);
-
-		// If true, a node is a leaf node if it does not allow children.
-		// (If it allows children, it is not a leaf node, even if no children are
-		// present.)
-
-		TreeSelectionModel selectionmodel = new DefaultTreeSelectionModel();
-
-		// comment is not more valid:
-		// not allowing discontigous multiselection, we build a similar behavior based
-		// on activeTreeNodes
-		// since otherwise we could not discriminate between open and select click
-
-		selectionmodel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		setSelectionModel(selectionmodel);
 
 		locationsInDirectory = new HashMap<>();
 		clientNodesInDirectory = new HashMap<>();
