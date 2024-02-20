@@ -648,7 +648,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
-		activeParents.addAll(collectParentIDs(node));
+		activeParents.addAll(collectParentIDs(node.toString()));
 	}
 
 	public void initActiveParents() {
@@ -667,19 +667,10 @@ public class ClientTree extends AbstractGroupTree {
 		repaint();
 	}
 
-	private Set<String> collectParentIDs(DefaultMutableTreeNode node) {
-		String nodeID = (String) node.getUserObject();
-		return collectParentIDs(nodeID);
-	}
-
-	private List<SimpleTreePath> getSimpleTreePaths(String leafname) {
-		return leafname2AllItsPaths.getSimpleTreePaths(leafname);
-	}
-
 	public Set<String> collectParentIDs(String nodeID) {
 		Set<String> allParents = new HashSet<>();
 
-		List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
+		List<SimpleTreePath> treePaths = leafname2AllItsPaths.getSimpleTreePaths(nodeID);
 
 		if (treePaths != null) {
 			for (SimpleTreePath path : treePaths) {
