@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -50,6 +51,8 @@ import utils.ExtractorUtil;
 import utils.Utils;
 
 public class LogFrame extends JFrame implements WindowListener {
+	private static final Pattern IS_FILE_EXTENSION_NUMBER_PATTERN = Pattern.compile("\\d+");
+
 	private static String fileName = "";
 	private StandaloneLogPane logPane;
 
@@ -412,7 +415,8 @@ public class LogFrame extends JFrame implements WindowListener {
 						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));
 				fUnsupportedFileExtensionInfo.setVisible(true);
 				result = "";
-			} else if (fileName.endsWith(".log") || fileName.endsWith(".txt") || !fileName.contains(".")) {
+			} else if (fileName.endsWith(".log") || fileName.endsWith(".txt")
+					|| IS_FILE_EXTENSION_NUMBER_PATTERN.matcher(fileExtension).matches() || !fileName.contains(".")) {
 				result = readNotCompressedFile(file);
 			} else {
 				result = readCompressedFile(file);
@@ -453,7 +457,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 		boolean matchesCompressedFileExtension = "zip".equals(fileExtension) || "gz".equals(fileExtension)
 				|| "7z".equals(fileExtension);
-		boolean matchesNotCompressedFileExtension = "log".equals(fileExtension) || "txt".equals(fileExtension);
+		boolean matchesNotCompressedFileExtension = "log".equals(fileExtension) || "txt".equals(fileExtension)
+				|| IS_FILE_EXTENSION_NUMBER_PATTERN.matcher(fileExtension).matches();
 		return matchesCompressedFileExtension || matchesNotCompressedFileExtension;
 	}
 
