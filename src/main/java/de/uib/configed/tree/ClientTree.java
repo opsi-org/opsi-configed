@@ -64,8 +64,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	private ClientTreeRenderer renderer;
 
-	private Set<String> directlyAllowedGroups;
-
 	static {
 		topGroupNames = new HashSet<>();
 		topGroupNames.add(ALL_CLIENTS_NAME);
@@ -386,30 +384,16 @@ public class ClientTree extends AbstractGroupTree {
 
 		allowedClients = new TreeSet<>();
 
-		if (directlyAllowedGroups == null) {
-			directlyAllowedGroups = new TreeSet<>();
-		}
-
 		for (Entry<String, ArrayList<SimpleTreePath>> entry : leafname2AllItsPaths.entrySet()) {
 			for (SimpleTreePath path : entry.getValue()) {
 				// retained are the elements not permitted
 				if (!Collections.disjoint(path, permittedHostGroups)) {
 					allowedClients.add(entry.getKey());
-					directlyAllowedGroups.addAll(path);
 				}
 			}
 		}
 
-		// they were the last element in pathElements
-		directlyAllowedGroups.removeAll(allowedClients);
-
-		Logging.info(this, "associateClientsToGroups allowed Groups " + directlyAllowedGroups);
-
 		return allowedClients;
-	}
-
-	public Set<String> getDirectlyAllowedGroups() {
-		return directlyAllowedGroups;
 	}
 
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
