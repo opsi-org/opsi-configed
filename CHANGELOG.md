@@ -10,6 +10,7 @@
 - Allow to select only depots, which are specified in `user.{<username>}.privilege.host.depotaccess.depots`
 - Show only groups, which are specified in `user.{<username>}.privilege.host.groupaccess.hostgroups`
 - Show only the total number of clients, that are visible for user, next to "Clients total:" label
+- Support txt files in logviewer
 
 ## [4.3.1.8] - 2024-02-08
 ## Fixed
