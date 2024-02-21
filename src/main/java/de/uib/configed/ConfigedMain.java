@@ -1012,8 +1012,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
-			ClientTree treeClients) {
-		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients);
+			ClientTree clientTree) {
+		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree);
 
 		// rearranging visual components
 		mainFrame.validate();

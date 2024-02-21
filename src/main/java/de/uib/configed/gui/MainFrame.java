@@ -118,7 +118,7 @@ public class MainFrame extends JFrame {
 			.getPersistenceController();
 
 	public MainFrame(ConfigedMain configedMain, ClientTable panelClientlist, DepotsList depotsList,
-			ClientTree treeClients) {
+			ClientTree clientTree) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -126,7 +126,7 @@ public class MainFrame extends JFrame {
 
 		this.clientTable = panelClientlist;
 
-		this.clientTree = treeClients;
+		this.clientTree = clientTree;
 		productTree = new ProductTree(configedMain);
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);

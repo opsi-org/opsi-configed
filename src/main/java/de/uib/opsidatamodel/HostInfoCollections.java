@@ -44,7 +44,7 @@ import utils.Utils;
 @SuppressWarnings({ "unchecked" })
 public class HostInfoCollections {
 	private CacheManager cacheManager;
-	private ClientTree connectedTree;
+	private ClientTree clientTree;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// We need the argument here since the controller is not loaded yet
@@ -61,8 +61,8 @@ public class HostInfoCollections {
 		return result;
 	}
 
-	public void setTree(ClientTree tree) {
-		connectedTree = tree;
+	public void setTree(ClientTree clientTree) {
+		this.clientTree = clientTree;
 	}
 
 	public String getConfigServer() {
@@ -358,10 +358,10 @@ public class HostInfoCollections {
 
 		retrieveOpsiHostsPD();
 		Map<String, Set<String>> fNode2Treeparents = new HashMap<>();
-		if (connectedTree != null) {
+		if (clientTree != null) {
 			List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
 			for (String host : opsiHostNames) {
-				fNode2Treeparents.put(host, connectedTree.collectParentIDs(host));
+				fNode2Treeparents.put(host, clientTree.collectParentIDs(host));
 			}
 		}
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);
