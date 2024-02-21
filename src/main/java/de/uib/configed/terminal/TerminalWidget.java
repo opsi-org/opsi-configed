@@ -191,10 +191,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				getTerminalTextBuffer().getScreenLines().trim().split("\n").length);
 	}
 
-	public void changeTheme() {
-		getTerminal().getStyleState().setDefaultStyle(settingsProvider.getDefaultStyle());
-	}
-
 	public void openSession(String session) {
 		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);

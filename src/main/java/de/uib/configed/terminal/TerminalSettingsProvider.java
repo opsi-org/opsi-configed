@@ -17,13 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.jediterm.core.Platform;
 import com.jediterm.terminal.TerminalColor;
-import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.emulator.ColorPalette;
 import com.jediterm.terminal.ui.TerminalActionPresentation;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
 import de.uib.configed.Configed;
-import de.uib.messages.Messages;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final int FONT_SIZE_MIN_LIMIT = 8;
@@ -33,7 +31,6 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public static final TerminalColor BACKGROUND_COLOR_LIGHT = new TerminalColor(249, 249, 249);
 	public static final TerminalColor FOREGROUND_COLOR_LIGHT = new TerminalColor(96, 96, 96);
 
-	private static String theme = Messages.getSelectedTheme();
 	private int fontSize = 12;
 
 	@Override
@@ -141,17 +138,8 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	}
 
 	@Override
-	public TextStyle getDefaultStyle() {
-		TextStyle defaultStyle = new TextStyle(FOREGROUND_COLOR_DARK, BACKGROUND_COLOR_DARK);
-		if ("Light".equals(theme)) {
-			defaultStyle = new TextStyle(FOREGROUND_COLOR_LIGHT, BACKGROUND_COLOR_LIGHT);
-		}
-		return defaultStyle;
-	}
-
-	@Override
 	public ColorPalette getTerminalColorPalette() {
-		return ColorPaletteImpl.DEFAULT_COLOR_PALETTE;
+		return ColorPaletteImpl.getDefaultColorPalette();
 	}
 
 	@Override
@@ -171,13 +159,5 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	public void setTerminalFontSize(int size) {
 		fontSize = size;
-	}
-
-	public static void setTerminalTheme(String theme) {
-		TerminalSettingsProvider.theme = theme;
-	}
-
-	public static String getTerminalTheme() {
-		return theme;
 	}
 }
