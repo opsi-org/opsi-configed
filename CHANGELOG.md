@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.X.X] - XXXX-XX-XX
+## [4.3.1.9] - 2024-02-21
 ## Fixed
 - If `user.{<username>}.privilege.host.createclient` is disabled "Create new opsi-client" button disappears only when client menu or popup menu is opened
 - All products are included in PDF export, when exporting Localboot or Netboot products
