@@ -51,7 +51,6 @@ public class LogFileParser {
 		typesList = new ArrayList<>();
 
 		for (int i = 0; i < lines.length; i++) {
-
 			int levelForLine = getLoglevelForLine(lines[i]);
 			parsedLogLines.add(new LogLine(i, levelForLine, getTypeIndexForLine(lines[i]),
 					getStyleByLevelNo(levelForLine), lines[i]));
