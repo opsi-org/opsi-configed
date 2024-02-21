@@ -38,7 +38,6 @@ import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends AbstractGroupTree {
-	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
 	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("AbstractGroupTree.notAssigned");

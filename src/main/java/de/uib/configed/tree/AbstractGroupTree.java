@@ -38,6 +38,8 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditRecord;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
+	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
+
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
 
 	public final GroupNode rootNode = new GroupNode("");

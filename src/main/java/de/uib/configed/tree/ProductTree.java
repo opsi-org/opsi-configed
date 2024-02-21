@@ -24,12 +24,11 @@ import javax.swing.tree.TreePath;
 
 import com.itextpdf.text.Font;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 
 public class ProductTree extends AbstractGroupTree {
-	public static final String ALL_PRODUCT_GROUPS_NAME = "Alle Gruppen";
-
 	private PanelProductSettings localbootPanel;
 	private PanelProductSettings netbootPanel;
 
@@ -66,13 +65,13 @@ public class ProductTree extends AbstractGroupTree {
 			groups.put(groupEntry.getKey(), groupEntry.getValue());
 		}
 
-		groupNodeGroups = new GroupNode(ALL_PRODUCT_GROUPS_NAME);
+		groupNodeGroups = new GroupNode(ALL_GROUPS_NAME);
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
 		groupNodes.put(groupNodeGroups.toString(), groupNodeGroups);
 
-		groupNodeFullList = new GroupNode("Alle Produkte");
+		groupNodeFullList = new GroupNode(Configed.getResourceValue("ProductTree.allProducts"));
 		groupNodeFullList.setImmutable(true);
 		groupNodeFullList.setFixed(true);
 
