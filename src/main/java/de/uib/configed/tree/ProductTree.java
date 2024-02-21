@@ -124,7 +124,6 @@ public class ProductTree extends AbstractGroupTree {
 
 			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
 
-			Logging.devel(newParentPath.toString());
 			model.nodeStructureChanged(newParentNode);
 
 			makeVisible(pathByAddingChild(newParentPath, objectID));
