@@ -2205,7 +2205,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 							.replaceAll("").split(",")));
 		}
 
-		//panelProductSettings.setGroupsData(productGroups, productGroupMembers);
 		panelProductSettings.reduceToSet(savedFilter);
 
 		Logging.info(this, "setProductsPage oldProductSelection: " + oldProductSelection);
