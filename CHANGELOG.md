@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.X.X] - XXXX-XX-XX
+## [4.3.1.9] - 2024-02-21
 ## Fixed
 - If `user.{<username>}.privilege.host.createclient` is disabled "Create new opsi-client" button disappears only when client menu or popup menu is opened
 - All products are included in PDF export, when exporting Localboot or Netboot products
@@ -10,6 +10,8 @@
 - Allow to select only depots, which are specified in `user.{<username>}.privilege.host.depotaccess.depots`
 - Show only groups, which are specified in `user.{<username>}.privilege.host.groupaccess.hostgroups`
 - Show only the total number of clients, that are visible for user, next to "Clients total:" label
+- Support TXT files in logviewer
+- Removed partial loading mechanism for logfiles
 
 ## [4.3.1.8] - 2024-02-08
 ## Fixed
