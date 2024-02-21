@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -688,22 +687,6 @@ public class ClientTree extends AbstractGroupTree {
 	@Override
 	public Set<GroupNode> getLocationsInDirectory(String clientId) {
 		return locationsInDirectory.get(clientId);
-	}
-
-	@SuppressWarnings("java:S3242")
-	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
-		Enumeration<TreeNode> enumer = groupNode.children();
-		DefaultMutableTreeNode result = null;
-
-		while (enumer.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) enumer.nextElement();
-			if (child.getUserObject().toString().equals(objectID)) {
-				result = child;
-				break;
-			}
-		}
-
-		return result;
 	}
 
 	@Override

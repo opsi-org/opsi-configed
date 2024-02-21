@@ -420,6 +420,22 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				.findAny().orElse(null);
 	}
 
+	protected static DefaultMutableTreeNode getChildWithUserObjectString(String objectID,
+			DefaultMutableTreeNode groupNode) {
+		Enumeration<TreeNode> enumer = groupNode.children();
+		DefaultMutableTreeNode result = null;
+
+		while (enumer.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) enumer.nextElement();
+			if (child.getUserObject().toString().equals(objectID)) {
+				result = child;
+				break;
+			}
+		}
+
+		return result;
+	}
+
 	abstract boolean isInDirectory(String node);
 
 	abstract boolean isInDirectory(TreePath path);
