@@ -30,6 +30,7 @@ import org.apache.commons.csv.CSVRecord;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -89,15 +90,29 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	@SuppressWarnings({ "java:S135" })
+	@SuppressWarnings({ "java:S135", "java:S1168" })
 	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
 		format = format.builder().setCommentMarker('#').setHeader().build();
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = new CSVParser(reader, format)) {
+			List<String> headerNames = parser.getHeaderNames();
+			List<String> importantHeaderNames = new ArrayList<>();
+			importantHeaderNames.add(HostInfo.HOSTNAME_KEY);
+			importantHeaderNames.add("domain");
+			importantHeaderNames.add(HostInfo.DEPOT_OF_CLIENT_KEY);
+			importantHeaderNames.add(HostInfo.CLIENT_MAC_ADRESS_KEY);
+			if (!headerNames.containsAll(importantHeaderNames)) {
+				StringBuilder message = new StringBuilder();
+				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
+				message.append(" " + importantHeaderNames.toString().replace("[", "").replace("]", ""));
+				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
+						message.toString());
+				return null;
+			}
 			tmpHeaderNames.clear();
 			tmpHeaderNames.addAll(columnNames);
-			tmpHeaderNames.addAll(parser.getHeaderNames());
+			tmpHeaderNames.addAll(headerNames);
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
 					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),

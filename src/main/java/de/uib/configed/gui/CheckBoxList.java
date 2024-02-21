@@ -30,7 +30,9 @@ public class CheckBoxList extends JList<JCheckBox> {
 
 				if (index != -1) {
 					JCheckBox checkbox = getModel().getElementAt(index);
-					checkbox.setSelected(!checkbox.isSelected());
+					if (checkbox.isEnabled()) {
+						checkbox.setSelected(!checkbox.isSelected());
+					}
 					repaint();
 				}
 			}
@@ -42,7 +44,7 @@ public class CheckBoxList extends JList<JCheckBox> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox, int index,
 				boolean isSelected, boolean cellHasFocus) {
-			checkbox.setEnabled(isEnabled());
+			checkbox.setEnabled(checkbox.isEnabled());
 			checkbox.setFocusPainted(false);
 			checkbox.setBorderPainted(true);
 			checkbox.setBorder(noFocusBorder);
