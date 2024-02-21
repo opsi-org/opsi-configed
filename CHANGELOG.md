@@ -11,6 +11,7 @@
 - Show only groups, which are specified in `user.{<username>}.privilege.host.groupaccess.hostgroups`
 - Show only the total number of clients, that are visible for user, next to "Clients total:" label
 - Support TXT files in logviewer
+- Removed partial loading mechanism for logfiles
 
 ## [4.3.1.8] - 2024-02-08
 ## Fixed
