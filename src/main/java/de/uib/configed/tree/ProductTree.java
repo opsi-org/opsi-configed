@@ -212,7 +212,6 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
-
 		if (getSelectionCount() == 0) {
 			localbootPanel.noSelection();
 			netbootPanel.noSelection();
@@ -225,8 +224,8 @@ public class ProductTree extends AbstractGroupTree {
 				if (!node.getAllowsChildren()) {
 					productIds.add(node.getUserObject().toString());
 				}
-				setFilter(productIds);
 			}
+			setFilter(productIds);
 		}
 	}
 
