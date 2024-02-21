@@ -106,7 +106,10 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void removeNodeInternally(String clientID, GroupNode parentNode) {
-		// TODO
+		DefaultMutableTreeNode clientNode = getChildWithUserObjectString(clientID, parentNode);
+		parentNode.remove(clientNode);
+
+		getModel().nodeStructureChanged(parentNode);
 	}
 
 	@Override
