@@ -53,11 +53,15 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
-		menuItemActivateElements = new JMenuItem(Configed.getResourceValue("ClientTree.selectAllElements"));
+		String selectAllKey = tree instanceof ClientTree ? "ClientTree.selectAllElements"
+				: "ProductTree.selectAllElements";
+		menuItemActivateElements = new JMenuItem(Configed.getResourceValue(selectAllKey));
 		menuItemActivateElements.addActionListener(actionEvent -> activateElements());
 		jPopupMenu.add(menuItemActivateElements);
 
-		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue("ClientTree.removeAllElements"));
+		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
+				: "ProductTree.removeAllElements";
+		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
 		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
 		jPopupMenu.add(menuItemRemoveElements);
 	}
