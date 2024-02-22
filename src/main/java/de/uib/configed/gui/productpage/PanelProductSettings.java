@@ -195,12 +195,6 @@ public class PanelProductSettings extends JSplitPane {
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
-	/*public void setGroupsData(final Map<String, Map<String, String>> data,
-			final Map<String, Set<String>> productGroupMembers) {
-		groupPanel.setGroupsData(data, productGroupMembers);
-		showAll();
-	}*/
-
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
 	}

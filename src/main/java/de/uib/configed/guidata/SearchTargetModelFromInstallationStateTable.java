@@ -32,13 +32,13 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 	@Override
 	public void setFiltered(boolean b) {
 		if (!filtered) {
-			viewRowfilter = table.getSelectedRows();
+			selectedRows = table.getSelectedRows();
 		}
 
-		if (b && viewRowfilter.length > 0) {
-			int[] modelRowFilter = new int[viewRowfilter.length];
-			for (int i = 0; i < viewRowfilter.length; i++) {
-				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
+		if (b && selectedRows.length > 0) {
+			int[] modelRowFilter = new int[selectedRows.length];
+			for (int i = 0; i < selectedRows.length; i++) {
+				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
 			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
