@@ -148,13 +148,12 @@ public class TabbedConfigPanes extends JTabbedPane {
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsLocalbootProducts(),
 				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
-		productTree.setLocalbootPanel(panelLocalbootProductSettings);
 
 		panelNetbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
 				configedMain.getDisplayFieldsNetbootProducts(),
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
-		productTree.setNetbootPanel(panelNetbootProductSettings);
+		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 
 		insertTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
 				panelLocalbootProductSettings, null, ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);

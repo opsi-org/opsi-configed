@@ -44,12 +44,11 @@ public class ProductTree extends AbstractGroupTree {
 		expandPath(new TreePath(groupNodeFullList.getPath()));
 	}
 
-	public void setLocalbootPanel(PanelProductSettings localbootPanel) {
+	public void setPanels(PanelProductSettings localbootPanel, PanelProductSettings netbootPanel) {
 		this.localbootPanel = localbootPanel;
-	}
-
-	public void setNetbootPanel(PanelProductSettings netbootPanel) {
 		this.netbootPanel = netbootPanel;
+
+		setSelectionPath(new TreePath(groupNodeFullList.getPath()));
 	}
 
 	@Override
