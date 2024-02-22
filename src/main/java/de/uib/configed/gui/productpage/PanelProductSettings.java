@@ -513,19 +513,9 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	public void noSelection() {
-		if (!(tableProducts.getModel() instanceof InstallationStateTableModel)) {
-			return;
-		}
-		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
-
-		tModel.setFilterFrom((Set<String>) null);
-		tableProducts.revalidate();
-	}
-
 	public void showAll() {
 		Set<String> selection = getSelectedIDs();
-		noSelection();
+		setFilter(null);
 		setSelection(selection);
 	}
 

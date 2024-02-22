@@ -212,8 +212,7 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
 		if (getSelectionCount() == 0) {
-			localbootPanel.noSelection();
-			netbootPanel.noSelection();
+			setFilter(null);
 		} else if (getSelectionCount() == 1) {
 			nodeSelection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
 		} else {
