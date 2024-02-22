@@ -20,6 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -38,7 +39,7 @@ import de.uib.utilities.logging.Logging;
 import utils.PopupMouseListener;
 import utils.Utils;
 
-public class TabbedConfigPanes extends JTabbedPane {
+public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
 
@@ -111,25 +112,7 @@ public class TabbedConfigPanes extends JTabbedPane {
 	private void init() {
 		setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 
-		addChangeListener((ChangeEvent e) -> {
-			// report state change request to
-			int visualIndex = getSelectedIndex();
-
-			// report state change request to controller
-
-			Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
-			configedMain.setViewIndex(visualIndex);
-
-			// retrieve the state index finally produced by main
-			int newStateIndex = configedMain.getViewIndex();
-
-			// if the controller did not accept the new index set it back
-			// observe that we get a recursion since we initiate another state change
-			// the recursion breaks since main.setViewIndex does not yield a different value
-			if (visualIndex != newStateIndex) {
-				setSelectedIndex(newStateIndex);
-			}
-		});
+		addChangeListener(this);
 
 		popupClients = mainFrame.getClientMenu().getPopupMenuClone();
 		mainFrame.getClientTable().addMouseListener(new PopupMouseListener(popupClients));
@@ -226,6 +209,27 @@ public class TabbedConfigPanes extends JTabbedPane {
 				+ indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
 
 		setSelectedIndex(0);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// report state change request to
+		int visualIndex = getSelectedIndex();
+
+		// report state change request to controller
+
+		Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
+		configedMain.setViewIndex(visualIndex);
+
+		// retrieve the state index finally produced by main
+		int newStateIndex = configedMain.getViewIndex();
+
+		// if the controller did not accept the new index set it back
+		// observe that we get a recursion since we initiate another state change
+		// the recursion breaks since main.setViewIndex does not yield a different value
+		if (visualIndex != newStateIndex) {
+			setSelectedIndex(newStateIndex);
+		}
 	}
 
 	private void initSoftWareInfo() {
@@ -366,13 +370,5 @@ public class TabbedConfigPanes extends JTabbedPane {
 		if (i >= 0 && i < getTabCount()) {
 			setSelectedIndex(i);
 		}
-	}
-
-	public void setConfigPaneEnabled(int tabindex, boolean b) {
-		setEnabledAt(tabindex, b);
-	}
-
-	public int getTabIndex(String tabname) {
-		return indexOfTab(tabname);
 	}
 }

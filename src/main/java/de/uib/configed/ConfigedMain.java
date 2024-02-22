@@ -824,10 +824,10 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(true);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveClientsViewIndex);
 
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
@@ -847,17 +847,17 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), ServerFacade.isOpsi43());
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), ServerFacade.isOpsi43());
 
 		Logging.info(this,
 				"setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
 						+ mainFrame.getTabbedConfigPanes()
-								.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+								.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveDepotsViewIndex);
 	}
@@ -867,8 +867,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
-		mainFrame.getTabbedConfigPanes().setConfigPaneEnabled(mainFrame.getTabbedConfigPanes()
-				.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
+				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveServerViewIndex);
 	}
