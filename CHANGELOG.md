@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.1.10] - 2024-xx-xx
+## Fixed
+- Remote control should start only on space when in client table
+
+
 ## [4.3.1.9] - 2024-02-21
 ## Fixed
 - If `user.{<username>}.privilege.host.createclient` is disabled "Create new opsi-client" button disappears only when client menu or popup menu is opened
