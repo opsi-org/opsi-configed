@@ -714,11 +714,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		groupActionFrame.start();
 	}
 
-	public void handleProductActionRequest() {
-		startProductActionFrame();
-	}
-
-	private void startProductActionFrame() {
+	public void startProductActionFrame() {
 		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
@@ -2788,14 +2784,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		}
 
 		mainFrame.deactivateLoadingPane();
-	}
-
-	public HostsStatusPanel getHostsStatusInfo() {
-		return mainFrame.getHostsStatusPanel();
-	}
-
-	public TableModel getSelectedClientsTableModel() {
-		return clientTable.getSelectedRowsModel();
 	}
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {

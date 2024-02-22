@@ -441,7 +441,7 @@ public final class ClientMenuManager {
 	}
 
 	private void createPdf() {
-		TableModel tm = configedMain.getSelectedClientsTableModel();
+		TableModel tm = configedMain.getClientTable().getSelectedRowsModel();
 		JTable jTable = new JTable(tm);
 
 		Map<String, String> metaData = new HashMap<>();
