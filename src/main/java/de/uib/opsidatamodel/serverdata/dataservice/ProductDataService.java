@@ -1201,29 +1201,6 @@ public class ProductDataService {
 		return result;
 	}
 
-	private Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
-		Set<String> notHandled = new HashSet<>(startProductSet);
-		Set<String> endResultSet = new HashSet<>(startProductSet);
-		Set<String> startResultSet = null;
-
-		while (!notHandled.isEmpty()) {
-			startResultSet = new HashSet<>(endResultSet);
-
-			for (String prod : notHandled) {
-				Logging.info(this, " extendToDependentProducts prod " + prod);
-				for (Map<String, String> m : getProductDependencies(depot, prod)) {
-					Logging.info(this, " extendToDependentProducts m " + m.get("requiredProductId"));
-					endResultSet.add(m.get("requiredProductId"));
-				}
-			}
-
-			notHandled = new HashSet<>(endResultSet);
-			notHandled.removeAll(startResultSet);
-		}
-
-		return new TreeSet<>(endResultSet);
-	}
-
 	// collect productPropertyState updates and deletions
 	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
 			List<Map<String, Object>> updateCollection, List<Map<String, Object>> deleteCollection) {
