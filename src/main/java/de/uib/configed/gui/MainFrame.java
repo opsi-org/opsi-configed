@@ -538,7 +538,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
-		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
+		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
 		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());

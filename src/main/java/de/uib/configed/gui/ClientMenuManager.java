@@ -179,7 +179,7 @@ public final class ClientMenuManager {
 		jMenuCopyClient.addActionListener((ActionEvent e) -> configedMain.copySelectedClient());
 		jMenuFreeLicenses
 				.addActionListener((ActionEvent e) -> configedMain.freeAllPossibleLicensesForSelectedClients());
-		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl.addActionListener(
 				(ActionEvent e) -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 
@@ -441,7 +441,7 @@ public final class ClientMenuManager {
 	}
 
 	private void createPdf() {
-		TableModel tm = configedMain.getSelectedClientsTableModel();
+		TableModel tm = configedMain.getClientTable().getSelectedRowsModel();
 		JTable jTable = new JTable(tm);
 
 		Map<String, String> metaData = new HashMap<>();

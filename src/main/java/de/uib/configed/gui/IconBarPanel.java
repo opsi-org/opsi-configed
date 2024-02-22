@@ -217,7 +217,7 @@ public class IconBarPanel extends JPanel {
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 		jButtonWorkOnProducts.setFocusable(false);
 
-		jButtonWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
+		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
 		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_unselected.png", ""));
 		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));

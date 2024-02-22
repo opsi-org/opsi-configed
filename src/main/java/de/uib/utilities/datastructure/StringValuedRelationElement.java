@@ -23,8 +23,6 @@ public class StringValuedRelationElement extends HashMap<String, String> {
 	}
 
 	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
-		this();
-
 		this.allowedAttributes = allowedAttributes;
 		produceFrom(map);
 	}
