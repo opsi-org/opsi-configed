@@ -2126,20 +2126,19 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
 				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
 				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
-				getLocalbootProductDisplayFieldsList(), "localbootProducts");
+				getLocalbootProductDisplayFieldsList());
 	}
 
 	private boolean setNetbootProductsPage() {
 		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
 				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList(),
-				"netbootProducts");
+				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(),
+				getNetbootProductDisplayFieldsList());
 	}
 
 	private boolean setProductsPage(boolean updateStatesAndActions,
 			Map<String, Map<String, Map<String, String>>> changedProductStates, List<String> attributes,
-			String productServerString, PanelProductSettings panelProductSettings, List<String> displayFields,
-			String savedStateObjectTag) {
+			String productServerString, PanelProductSettings panelProductSettings, List<String> displayFields) {
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2180,31 +2179,18 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(),
 					this, changedProductStates, productNames, statesAndActions, possibleActions,
 					persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
-					displayFields, savedStateObjectTag);
+					displayFields);
 			panelProductSettings.setTableModel(istmForSelectedClients);
 		}
 
 		panelProductSettings.setSortKeys(currentSortKeysProducts);
 
-		Logging.info(this, "resetFilter " + Configed.getSavedStates()
-				.getProperty(savedStateObjectTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY));
-
-		Set<String> savedFilter = null;
-
-		if (Configed.getSavedStates().getProperty(
-				savedStateObjectTag + "." + InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY) != null) {
-			savedFilter = new HashSet<>(
-					Arrays.asList(backslashPattern
-							.matcher(Configed.getSavedStates()
-									.getProperty(savedStateObjectTag + "."
-											+ InstallationStateTableModel.STATE_TABLE_FILTERS_PROPERTY))
-							.replaceAll("").split(",")));
-		}
-
-		panelProductSettings.reduceToSet(savedFilter);
-
 		Logging.info(this, "setProductsPage oldProductSelection: " + oldProductSelection);
 		panelProductSettings.setSelection(oldProductSelection);
+		if (panelProductSettings.isFilteredMode()) {
+			panelProductSettings.reduceToSelected();
+		}
+
 		panelProductSettings.updateSearchFields();
 
 		int[] columnWidths = getTableColumnWidths(panelProductSettings.getTableProducts());

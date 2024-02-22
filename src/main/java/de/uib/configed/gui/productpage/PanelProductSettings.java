@@ -482,6 +482,10 @@ public class PanelProductSettings extends JSplitPane {
 		return selectionInModelTerms;
 	}
 
+	public boolean isFilteredMode() {
+		return groupPanel.isFilteredMode();
+	}
+
 	public void reduceToSet(Set<String> filter) {
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);

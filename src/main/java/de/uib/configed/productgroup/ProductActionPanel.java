@@ -64,6 +64,10 @@ public class ProductActionPanel extends JPanel {
 		searchPane.setFilteredMode(b);
 	}
 
+	public boolean isFilteredMode() {
+		return searchPane.isFilteredMode();
+	}
+
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
 	}

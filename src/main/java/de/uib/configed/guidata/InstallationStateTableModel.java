@@ -52,7 +52,6 @@ import de.uib.utilities.logging.Logging;
  * getting cell editors.
  */
 public class InstallationStateTableModel extends AbstractTableModel implements ComboBoxModeller {
-	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
@@ -92,8 +91,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// for each product, we shall collect the clients that have a changed action
 	// request
 
-	protected String savedStateObjTag;
-
 	protected int[] filter;
 	// filter is a function
 	// row --> somerow (from super.table)
@@ -132,7 +129,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	public InstallationStateTableModel(List<String> selectedClients, ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
 			Logging.info(this.getClass(), " statesAndActions null ");
@@ -147,7 +144,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;
-		this.savedStateObjTag = savedStateObjTag;
 
 		initColumnNames(displayColumns);
 		initChangedStates();
@@ -1050,19 +1046,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 	}
 
-	private void saveFilterSet(Set<String> filterSet) {
-		if (filterSet != null) {
-			Configed.getSavedStates().setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
-					filterSet.toString());
-			Logging.info(this, "saveFilterSet " + filterSet);
-		} else {
-			Configed.getSavedStates().remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
-		}
-	}
-
 	public void setFilterFrom(Set<String> ids) {
-		saveFilterSet(ids);
-
 		Set<String> reducedIds = null;
 		if (ids != null) {
 			Logging.info(this, "setFilterFrom, save set " + ids.size());

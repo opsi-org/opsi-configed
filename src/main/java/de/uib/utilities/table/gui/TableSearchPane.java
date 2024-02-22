@@ -256,6 +256,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		setFilterMark(b);
 	}
 
+	public boolean isFilteredMode() {
+		return filteredMode;
+	}
+
 	public void setNarrow(boolean b) {
 		showFilterIcon(b);
 		checkmarkSearchProgressive.setVisible(b);
