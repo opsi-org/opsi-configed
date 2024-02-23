@@ -7,7 +7,6 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -163,12 +162,7 @@ public class ProductTree extends AbstractGroupTree {
 		netbootPanel.setSelection(productIds);
 	}
 
-	private void setGroup(DefaultMutableTreeNode groupNode) {
-		Set<String> productIds = getChildrenRecursively(groupNode);
-		setFilter(productIds);
-	}
-
-	private static Set<String> getChildrenRecursively(DefaultMutableTreeNode groupNode) {
+	public static Set<String> getChildrenRecursively(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = new HashSet<>();
 
 		addChildrenRecoursively(groupNode.children(), productIds);
@@ -193,38 +187,10 @@ public class ProductTree extends AbstractGroupTree {
 		netbootPanel.setFilter(productIds);
 	}
 
-	private void setProduct(String productId) {
-		Set<String> productSet = Collections.singleton(productId);
-
-		setFilter(productSet);
-		localbootPanel.setSelection(productSet);
-		netbootPanel.setSelection(productSet);
-	}
-
-	private void nodeSelection(DefaultMutableTreeNode node) {
-		if (node.getAllowsChildren()) {
-			setGroup(node);
-		} else {
-			setProduct(node.getUserObject().toString());
-		}
-	}
-
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
-		if (getSelectionCount() == 0) {
-			setFilter(null);
-		} else if (getSelectionCount() == 1) {
-			nodeSelection((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent());
-		} else {
-			Set<String> productIds = new HashSet<>();
-			for (TreePath path : getSelectionPaths()) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-				if (!node.getAllowsChildren()) {
-					productIds.add(node.getUserObject().toString());
-				}
-			}
-			setFilter(productIds);
-		}
+		localbootPanel.valueChanged(getSelectionPaths());
+		netbootPanel.valueChanged(getSelectionPaths());
 	}
 
 	private static class ProductTreeNodeRenderer extends DefaultTreeCellRenderer {

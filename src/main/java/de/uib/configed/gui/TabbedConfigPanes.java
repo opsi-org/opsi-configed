@@ -128,12 +128,12 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				ConfigedMain.VIEW_CLIENTS);
 
 		panelLocalbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain,
+				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain, productTree,
 				configedMain.getDisplayFieldsLocalbootProducts(),
 				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
 
 		panelNetbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain,
+				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain, productTree,
 				configedMain.getDisplayFieldsNetbootProducts(),
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);

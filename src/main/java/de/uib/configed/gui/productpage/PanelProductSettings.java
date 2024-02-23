@@ -38,6 +38,8 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -45,6 +47,7 @@ import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
+import de.uib.configed.tree.ProductTree;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -85,14 +88,17 @@ public class PanelProductSettings extends JSplitPane {
 
 	private String title;
 
+	private ProductTree productTree;
+
 	private ConfigedMain configedMain;
 
 	ProductSettingsType type;
 
-	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields,
-			ProductSettingsType type) {
+	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
+			Map<String, Boolean> productDisplayFields, ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
+		this.productTree = productTree;
 		this.configedMain = configedMain;
 		this.productDisplayFields = productDisplayFields;
 		this.type = type;
@@ -517,11 +523,42 @@ public class PanelProductSettings extends JSplitPane {
 		setSelection(selection);
 	}
 
+	public void valueChanged(TreePath[] selectionPaths) {
+		if (selectionPaths == null) {
+			setFilter(null);
+		} else if (selectionPaths.length == 1) {
+			nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
+		} else {
+			Set<String> productIds = new HashSet<>();
+			for (TreePath path : selectionPaths) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (!node.getAllowsChildren()) {
+					productIds.add(node.getUserObject().toString());
+				}
+			}
+			setFilter(productIds);
+		}
+	}
+
+	private void nodeSelection(DefaultMutableTreeNode node) {
+		if (node.getAllowsChildren()) {
+			Set<String> productIds = ProductTree.getChildrenRecursively(node);
+			setFilter(productIds);
+
+		} else {
+			Set<String> productIds = Collections.singleton(node.toString());
+			setFilter(productIds);
+			setSelection(productIds);
+		}
+	}
+
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
 
 		tableProducts.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
+
+		valueChanged(productTree.getSelectionPaths());
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
