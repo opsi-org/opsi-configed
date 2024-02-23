@@ -132,6 +132,8 @@ public class ProductTree extends AbstractGroupTree {
 		parentNode.remove(clientNode);
 
 		getModel().nodeStructureChanged(parentNode);
+
+		repaint();
 	}
 
 	@Override
