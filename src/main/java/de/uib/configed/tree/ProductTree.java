@@ -18,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -48,6 +49,30 @@ public class ProductTree extends AbstractGroupTree {
 		this.netbootPanel = netbootPanel;
 
 		setSelectionPath(new TreePath(groupNodeFullList.getPath()));
+	}
+
+	public void reInitTree() {
+		String nodeToSelect;
+
+		if (getSelectionPath() == null) {
+			nodeToSelect = null;
+		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
+			nodeToSelect = getSelectionPath().getLastPathComponent().toString();
+		} else {
+			nodeToSelect = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
+		}
+
+		groupNodes.clear();
+		groups.clear();
+		rootNode.removeAllChildren();
+		createTopNodes();
+		setModel(new DefaultTreeModel(rootNode));
+
+		if (nodeToSelect != null) {
+			TreePath pathToSelect = new TreePath(getModel().getPathToRoot(groupNodes.get(nodeToSelect)));
+			setSelectionPath(pathToSelect);
+			expandPath(pathToSelect);
+		}
 	}
 
 	@Override

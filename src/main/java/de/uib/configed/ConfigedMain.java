@@ -90,6 +90,7 @@ import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
+import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
@@ -237,6 +238,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private ClientTable clientTable;
 
 	private ClientTree clientTree;
+	private ProductTree productTree;
 
 	private Map<String, Map<String, String>> productGroups;
 
@@ -973,7 +975,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		clientTable.initSortKeys();
 
-		startMainFrame(this, clientTable, depotsList, clientTree);
+		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 	}
 
 	private void initDepots() {
@@ -1008,8 +1010,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
-			ClientTree clientTree) {
-		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree);
+			ClientTree clientTree, ProductTree productTree) {
+		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree, productTree);
 
 		// rearranging visual components
 		mainFrame.validate();
@@ -1910,6 +1912,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "initTree");
 
 		clientTree = new ClientTree(this);
+		productTree = new ProductTree(this);
 		persistenceController.getHostInfoCollections().setTree(clientTree);
 	}
 
@@ -2737,6 +2740,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			}
 
 			fetchDepots();
+			productTree.reInitTree();
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
