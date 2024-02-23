@@ -510,7 +510,7 @@ public class ClientTree extends AbstractGroupTree {
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, true);
 		}
 
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
