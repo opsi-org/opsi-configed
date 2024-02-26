@@ -537,6 +537,7 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 			setFilter(productIds);
+			setSelection(productIds);
 		}
 	}
 

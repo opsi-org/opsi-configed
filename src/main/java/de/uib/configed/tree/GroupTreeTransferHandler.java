@@ -292,7 +292,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData, getActivePaths(): " + Arrays.toString(tree.getSelectionPaths()));
 
 		Set<String> selectedObjects = tree.getSelectedObjectsInTable();
-
 		// possibly transfer of a group node
 		if (selectedObjects.isEmpty()) {
 			TreePath[] activePaths = tree.getSelectionPaths();
