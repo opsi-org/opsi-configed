@@ -281,16 +281,12 @@ public class MainFrame extends JFrame {
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + status);
 	}
 
-	public void reloadServerMenu() {
-		setupMenuServer();
-	}
-
 	/**
 	 * Get existing (sorted) sshcommands and build the menu "server-konsole"
 	 * (include config, control and terminal dialog) also check the depot
 	 * configs for setting the field editable (or not)
 	 **/
-	private void setupMenuServer() {
+	public void setupMenuServer() {
 		Logging.info(this, "setupMenuServer ");
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		SSHConnectionInfo connectionInfo = SSHConnectionInfo.getInstance();
@@ -302,7 +298,7 @@ public class MainFrame extends JFrame {
 
 		Logging.info(this, "setupMenuServer add configpage");
 		JMenuItem jMenuSSHConfig = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
-		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
+		jMenuSSHConfig.addActionListener((ActionEvent e) -> configedMain.startSSHConfigDialog());
 
 		jMenuSSHConnection.setEnabled(false);
 
@@ -318,7 +314,7 @@ public class MainFrame extends JFrame {
 
 		Logging.info(this, "setupMenuServer add commandcontrol");
 		JMenuItem jMenuSSHCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> startSSHControlAction());
+		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> configedMain.startSSHControlDialog());
 		// SSHCommandControlDialog
 
 		jMenuServer.add(jMenuSSHConnection);
@@ -446,8 +442,8 @@ public class MainFrame extends JFrame {
 		} else {
 			// Create new instance of the same command, so that further
 			// modifications would not affect the original command.
-			final SSHCommandTemplate c = new SSHCommandTemplate(com);
-			remoteSSHExecAction(c);
+			final SSHCommandTemplate command = new SSHCommandTemplate(com);
+			configedMain.startSSHOpsiServerExec(command);
 		}
 	}
 
@@ -461,7 +457,7 @@ public class MainFrame extends JFrame {
 			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 					+ factory.getConnectionState());
 		} else {
-			remoteSSHExecAction(command);
+			configedMain.startSSHOpsiServerExec(command);
 		}
 	}
 
@@ -760,32 +756,6 @@ public class MainFrame extends JFrame {
 
 	// ----------------------------------------------------------------------------------------
 	// action methods for visual interactions
-
-	/**
-	 * Calls method from configedMain to start the execution of given command
-	 *
-	 * @param SSHCommand command
-	 */
-	private void remoteSSHExecAction(SSHCommand command) {
-		Logging.debug(this, "jMenuRemoteSSHExecAction");
-		configedMain.startSSHOpsiServerExec(command);
-	}
-
-	/**
-	 * Calls method from configedMain to start the config dialog
-	 */
-	private void startSSHConfigAction() {
-		Logging.debug(this, "jMenuSSHConfigAction");
-		configedMain.startSSHConfigDialog();
-	}
-
-	/**
-	 * Calls method from configedMain to start the command control dialog
-	 */
-	private void startSSHControlAction() {
-		Logging.debug(this, "jMenuSSHControlAction");
-		configedMain.startSSHControlDialog();
-	}
 
 	public void setClientFilterAction(boolean b) {
 		if (configedMain.isFilterClientList() != b) {

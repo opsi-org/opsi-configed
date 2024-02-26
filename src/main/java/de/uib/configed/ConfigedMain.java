@@ -2747,7 +2747,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			clientTable.setSelectedValues(clientsLeft);
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-			mainFrame.reloadServerMenu();
+			mainFrame.setupMenuServer();
 			updateHostInfo();
 			hostInfo.resetGui();
 		}
@@ -3562,10 +3562,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		savedSearchesDialog.setLocationRelativeTo(mainFrame);
 		savedSearchesDialog.setVisible(true);
-	}
-
-	public void reloadServerMenu() {
-		mainFrame.reloadServerMenu();
 	}
 
 	/**
