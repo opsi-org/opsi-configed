@@ -9,8 +9,6 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -31,7 +29,6 @@ import java.util.TreeSet;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -75,9 +72,6 @@ public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 
 	public static final int F_WIDTH = 800;
-
-	// todo rework 
-	private static final int F_WIDTH_RIGHTHANDED = 200;
 
 	private ConfigedMain configedMain;
 
@@ -685,16 +679,7 @@ public class MainFrame extends JFrame {
 		allPanel.add(iconBarPanel, BorderLayout.NORTH);
 		allPanel.add(centralPane, BorderLayout.CENTER);
 		allPanel.add(statusPane, BorderLayout.SOUTH);
-		allPanel.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Logging.debug(this, "componentResized");
-				moveDivider1(jTabbedPaneConfigPanes.getPanelClientSelection(),
-						jTabbedPaneConfigPanes.getClientInfoPanel(), (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-						(int) (F_WIDTH_RIGHTHANDED * 1.5));
-				Logging.debug(this, "componentResized ready");
-			}
-		});
+
 		getContentPane().add(allPanel);
 
 		setTitle(configedMain.getAppTitle());
@@ -980,25 +965,6 @@ public class MainFrame extends JFrame {
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
-		}
-	}
-
-	private static void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
-			int maxRightWidth) {
-		if (splitpane == null || rightpane == null) {
-			return;
-		}
-
-		int dividerLocation = splitpane.getDividerLocation();
-
-		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-		int missingSpace = minRightWidth - sizeOfRightPanel;
-		if (missingSpace > 0 && dividerLocation > minLeftWidth) {
-			splitpane.setDividerLocation(dividerLocation - missingSpace);
-		}
-
-		if (sizeOfRightPanel > maxRightWidth) {
-			splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
 		}
 	}
 
