@@ -129,7 +129,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
 		Logging.debug(this, "canImport: " + result);
-
 		return result;
 	}
 
@@ -187,7 +186,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		Logging.debug(this, "getSourceActions all remaining, TransferHandler.COPY_OR_MOVE");
-
 		return TransferHandler.COPY_OR_MOVE;
 	}
 
@@ -279,11 +277,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public boolean importData(TransferHandler.TransferSupport support) {
-		if (!canImport(support)) {
-			return false;
-		}
 		// we are at a group node
-
 		// where we want to move/copy to
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		TreePath dropPath = dropLocation.getPath();

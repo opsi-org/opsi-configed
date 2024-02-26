@@ -544,7 +544,6 @@ public class PanelProductSettings extends JSplitPane {
 		if (node.getAllowsChildren()) {
 			Set<String> productIds = ProductTree.getChildrenRecursively(node);
 			setFilter(productIds);
-
 		} else {
 			Set<String> productIds = Collections.singleton(node.toString());
 			setFilter(productIds);
