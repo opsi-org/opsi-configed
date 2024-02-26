@@ -240,8 +240,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
-	private Map<String, Map<String, String>> productGroups;
-
 	private DepotsList depotsList;
 	private Map<String, Map<String, Object>> depots;
 	private List<String> depotNamesLinked;
@@ -637,7 +635,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 
-		productGroups = persistenceController.getGroupDataService().getProductGroupsPD();
+		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
+				.getProductGroupsPD();
 		fillterPermittedProductGroups(productGroups.keySet());
 
 		persistenceController.getDepotDataService().retrieveProductsPD();

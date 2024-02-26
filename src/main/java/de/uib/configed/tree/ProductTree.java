@@ -181,7 +181,7 @@ public class ProductTree extends AbstractGroupTree {
 		netbootPanel.setSelection(productIds);
 	}
 
-	public static Set<String> getChildrenRecursively(DefaultMutableTreeNode groupNode) {
+	public static Set<String> getChildrenRecursively(TreeNode groupNode) {
 		Set<String> productIds = new HashSet<>();
 
 		addChildrenRecoursively(groupNode.children(), productIds);
@@ -189,7 +189,7 @@ public class ProductTree extends AbstractGroupTree {
 		return productIds;
 	}
 
-	private static void addChildrenRecoursively(Enumeration<TreeNode> children, Set<String> productIds) {
+	private static void addChildrenRecoursively(Enumeration<? extends TreeNode> children, Set<String> productIds) {
 		while (children.hasMoreElements()) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
 
