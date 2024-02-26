@@ -6,7 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.awt.Component;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,15 +13,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -39,7 +34,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setModel() {
-		setCellRenderer(new ProductTreeNodeRenderer());
+		setCellRenderer(new ProductTreeRenderer(groups));
 
 		expandPath(new TreePath(groupNodeFullList.getPath()));
 	}
@@ -88,17 +83,15 @@ public class ProductTree extends AbstractGroupTree {
 			groups.put(groupEntry.getKey(), groupEntry.getValue());
 		}
 
-		groupNodeGroups = new GroupNode(ALL_GROUPS_NAME);
+		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,
+				Configed.getResourceValue("ProductTree.groupsName.tooltip"));
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
-		groupNodes.put(groupNodeGroups.toString(), groupNodeGroups);
-
-		groupNodeFullList = new GroupNode(Configed.getResourceValue("ProductTree.allProducts"));
+		groupNodeFullList = produceGroupNode(Configed.getResourceValue("ProductTree.allProducts"),
+				Configed.getResourceValue("ProductTree.allProducts.tooltip"));
 		groupNodeFullList.setImmutable(true);
 		groupNodeFullList.setFixed(true);
-
-		groupNodes.put(groupNodeFullList.toString(), groupNodeFullList);
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
@@ -217,21 +210,5 @@ public class ProductTree extends AbstractGroupTree {
 	public void valueChanged(TreeSelectionEvent event) {
 		localbootPanel.valueChanged(getSelectionPaths());
 		netbootPanel.valueChanged(getSelectionPaths());
-	}
-
-	private static class ProductTreeNodeRenderer extends DefaultTreeCellRenderer {
-		@Override
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-				boolean leaf, int row, boolean hasFocus) {
-			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-			if (((DefaultMutableTreeNode) value).getAllowsChildren()) {
-				setFont(getFont().deriveFont(Font.NORMAL));
-			} else {
-				setFont(getFont().deriveFont(Font.BOLD));
-			}
-
-			return this;
-		}
 	}
 }
