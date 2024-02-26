@@ -1487,19 +1487,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				getSelectedClientsString(), clientInDepot);
 	}
 
-	/**
-	 * transports the selected values of the selection panel to the outer world
-	 * // TODO we may remove and replace with
-	 * getClientTable().getSelectedValues() in methods
-	 */
-	public List<String> getSelectedClientsInTable() {
-		if (clientTable == null) {
-			return new ArrayList<>();
-		}
-
-		return clientTable.getSelectedValues();
-	}
-
 	private void setSelectedClients(List<String> clientNames) {
 		if (clientNames == null) {
 			Logging.info(this, "setSelectedClients clientNames null");
