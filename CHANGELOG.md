@@ -1,6 +1,11 @@
 # Changelog
 
-## [4.3.1.10] - 2024-xx-xx
+## [4.3.2.1] - 2024-02-26
+## Added
+- Add a product tree to show recursively all product groups and preselect the products for the tables
+- Tabs to switch between the depot selection and the product/client trees
+
+## [4.3.1.10] - 2024-02-26
 ## Fixed
 - Remote control should start only on space when in client table
 
