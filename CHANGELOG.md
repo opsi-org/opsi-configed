@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.2.2] - 2024-02-26
+## Fixed
+- Nullpointerexception on reload
+
 ## [4.3.2.1] - 2024-02-26
 ## Added
 - Add a product tree to show recursively all product groups and preselect the products for the tables

@@ -36,7 +36,7 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 			setFont(getFont().deriveFont(Font.BOLD));
 		}
 
-		if (value instanceof GroupNode) {
+		if (value instanceof GroupNode && groups.containsKey(value.toString())) {
 			setToolTipText(groups.get(value.toString()).get("description"));
 		} else {
 			setToolTipText(null);
