@@ -67,8 +67,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JMenuItem popupItemAddStringListEntry;
 	private JMenuItem popupItemAddBooleanListEntry;
 
-	private ToolTipManager ttm;
-
 	private Map<String, Object> originalMap;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
@@ -127,7 +125,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		Logging.debug(this.getClass(), " created EditMapPanelX instance No " + objectCounter + "::" + keylistExtendible
 				+ ",  " + entryRemovable + ",  " + reloadable);
-		ttm = ToolTipManager.sharedInstance();
+		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
 		ttm.setDismissDelay(Globals.TOOLTIP_DISMISS_DELAY_MS);

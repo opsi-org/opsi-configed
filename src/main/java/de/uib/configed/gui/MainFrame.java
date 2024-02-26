@@ -29,7 +29,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -41,9 +40,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -52,6 +54,7 @@ import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
+import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -70,14 +73,11 @@ import utils.Utils;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
-	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
 
+	// todo rework 
 	private static final int F_WIDTH_RIGHTHANDED = 200;
-
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
 	private ConfigedMain configedMain;
 
@@ -109,14 +109,16 @@ public class MainFrame extends JFrame {
 
 	private DepotListPresenter depotListPresenter;
 
-	private ClientTree treeClients;
+	private ClientTree clientTree;
+	private ProductTree productTree;
 
 	private IconBarPanel iconBarPanel;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, ClientTable panelClientlist, DepotsList depotsList, ClientTree treeClients) {
+	public MainFrame(ConfigedMain configedMain, ClientTable panelClientlist, DepotsList depotsList,
+			ClientTree clientTree, ProductTree productTree) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -124,11 +126,12 @@ public class MainFrame extends JFrame {
 
 		this.clientTable = panelClientlist;
 
-		this.treeClients = treeClients;
+		this.clientTree = clientTree;
+		this.productTree = productTree;
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
 		guiInit();
 		initData();
@@ -719,11 +722,10 @@ public class MainFrame extends JFrame {
 
 	private JSplitPane initCentralPane() {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
-
-		scrollpaneTreeClients.getViewport().add(treeClients);
+		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(treeClients.getMaximumSize());
+		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
@@ -734,37 +736,24 @@ public class MainFrame extends JFrame {
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		JSplitPane splitpaneClientSelection = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false,
-				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
+		JScrollPane scrollpaneTreeProducts = new JScrollPane();
+		scrollpaneTreeProducts.getViewport().add(productTree);
+		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
 
-		Logging.info(this, "multidepot " + multidepot);
-		if (multidepot) {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
-		} else {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT);
-		}
+		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
+				scrollpaneTreeClients);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
+				scrollpaneTreeProducts);
 
-		JPanel panelTreeClientSelection = new JPanel();
-		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
-		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
+		jTabbedPaneClientSelection.setSelectedIndex(1);
+		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
-		layoutPanelTreeClientSelection
-				.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(depotListPresenter, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
-
-		layoutPanelTreeClientSelection
-				.setVerticalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE));
-
-		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
-		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
+		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
+		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 

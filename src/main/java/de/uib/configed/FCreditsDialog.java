@@ -58,5 +58,4 @@ public final class FCreditsDialog extends FGeneralDialog {
 	protected boolean wantToBeRegisteredWithRunningInstances() {
 		return false;
 	}
-
 }

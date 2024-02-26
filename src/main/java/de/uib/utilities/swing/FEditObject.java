@@ -395,6 +395,4 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	public void removeUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
-	// -------------
-
 }

@@ -12,62 +12,38 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DropMode;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JTree;
-import javax.swing.ToolTipManager;
-import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.HostInfo;
-import de.uib.configed.type.Object2GroupEntry;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
-import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.tree.SimpleTreePath;
 
-public class ClientTree extends JTree implements TreeSelectionListener {
-	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
-	public static final String DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
+public class ClientTree extends AbstractGroupTree {
+	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
 	public static final String DIRECTORY_PERSISTENT_NAME = "clientdirectory";
-	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
+	public static final String DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("AbstractGroupTree.notAssigned");
 	private static Set<String> topGroupNames;
 
-	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
-
-	private DefaultTreeModel model;
-
-	private GroupNode groupNodeAllClients;
-	private GroupNode groupNodeGroups;
+	public static final String ALL_CLIENTS_NAME = Configed.getResourceValue("AbstractGroupTree.allClients");
 
 	private GroupNode groupNodeDirectory;
 	private GroupNode groupNodeDirectoryNotAssigned;
@@ -75,24 +51,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	private TreePath pathToROOT;
 	private TreePath pathToALL;
 
-	public final GroupNode rootNode = new GroupNode("top");
-
 	// supervising data
-	private Map<String, Set<GroupNode>> locationsInDIRECTORY;
+	private Map<String, Set<GroupNode>> locationsInDirectory;
 	// clientId --> set of all containing groups
 
-	private Leafname2AllItsPaths leafname2AllItsPaths;
-	// clientId --> list of all paths that have the leaf clientid
-
-	private Map<String, Map<String, String>> groups;
-	// map of all group maps,
-	// groupid --> group map
-
-	private Map<String, GroupNode> groupNodes;
-	// groupid --> group node
-	// is a function since a group name cannot occur twice
-
-	private Map<String, DefaultMutableTreeNode> clientNodesInDIRECTORY;
+	private Map<String, DefaultMutableTreeNode> clientNodesInDirectory;
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
@@ -100,13 +63,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	// groups containing clients (especially the selected ones)
 
 	private ClientTreeRenderer renderer;
-
-	private Set<String> directlyAllowedGroups;
-
-	private ConfigedMain configedMain;
-
-	private GroupDataService groupDataService = PersistenceControllerFactory.getPersistenceController()
-			.getGroupDataService();
 
 	static {
 		topGroupNames = new HashSet<>();
@@ -117,10 +73,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	public ClientTree(ConfigedMain configedMain) {
-		super();
-		this.configedMain = configedMain;
+		super(configedMain);
 
-		init();
+		initClientTree();
 	}
 
 	public static String translateToPersistentName(String name) {
@@ -144,9 +99,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 	}
 
-	private void init() {
-		ToolTipManager.sharedInstance().registerComponent(this);
-
+	private void initClientTree() {
 		Logging.debug(this, "UI " + getUI());
 
 		setToggleClickCount(0);
@@ -159,61 +112,19 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 				if (selRow != -1 && e.getClickCount() == 2
 						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
 					expandPath(selPath);
-					configedMain.setGroup(selPath.getLastPathComponent().toString());
+					configedMain.setGroupAndSelect(selPath.getLastPathComponent().toString());
 				}
 			}
 		};
 
 		addMouseListener(ml);
 
-		// preparing Drag and Drop
-		TransferHandler handler = new ClientTreeTransferHandler(this);
-		setTransferHandler(handler);
-		setDragEnabled(true);
-
-		// for debugging
-		setDropMode(DropMode.ON);
-
-		createTopNodes();
-
-		setRootVisible(false);
-		setShowsRootHandles(true);
-
 		renderer = new ClientTreeRenderer(this);
 		setCellRenderer(renderer);
 
-		model = new DefaultTreeModel(rootNode);
-		setModel(model);
-		model.setAsksAllowsChildren(true);
-
-		// If true, a node is a leaf node if it does not allow children.
-		// (If it allows children, it is not a leaf node, even if no children are
-		// present.)
-
-		TreeSelectionModel selectionmodel = new DefaultTreeSelectionModel();
-
-		// comment is not more valid:
-		// not allowing discontigous multiselection, we build a similar behavior based
-		// on activeTreeNodes
-		// since otherwise we could not discriminate between open and select click
-
-		selectionmodel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		setSelectionModel(selectionmodel);
-
-		initTreePopup();
-
-		addTreeSelectionListener(this);
-
-		locationsInDIRECTORY = new HashMap<>();
-		clientNodesInDIRECTORY = new HashMap<>();
+		locationsInDirectory = new HashMap<>();
+		clientNodesInDirectory = new HashMap<>();
 		leafname2AllItsPaths = new Leafname2AllItsPaths();
-	}
-
-	private void initTreePopup() {
-		// popups on nodes
-		JPopupMenu popupMenu = new JPopupMenu();
-		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this, configedMain);
-		addMouseListener(treePopupMouseListener);
 	}
 
 	public void setClientInfo(Map<String, HostInfo> host2HostInfo) {
@@ -224,15 +135,6 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	@Override
 	public TreePath[] getPathBetweenRows(int index0, int index1) {
 		return super.getPathBetweenRows(index0, index1);
-	}
-
-	public TreePath pathByAddingChild(TreePath treePath, Object child) {
-		if (child == null) {
-			Logging.debug(this, "pathByAddingChild: child null cannot be added");
-			return null;
-		}
-
-		return treePath.pathByAddingChild(child);
 	}
 
 	public TreePath getPathToNode(DefaultMutableTreeNode node) {
@@ -256,26 +158,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
-	private static DefaultMutableTreeNode produceClientNode(Object x) {
-		return new DefaultMutableTreeNode(x, false);
-	}
-
-	private GroupNode produceGroupNode(String groupId, String description) {
-		GroupNode groupNode = new GroupNode(groupId);
-
-		Map<String, String> groupMap = new HashMap<>();
-		groupMap.put("groupId", groupId);
-		groupMap.put("description", description);
-
-		groups.put(groupId, groupMap);
-		groupNodes.put(groupId, groupNode);
-
-		return groupNode;
-	}
-
 	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
-				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
+				Configed.getResourceValue("AbstractGroupTree.notAssigned.tooltip"));
 
 		groupNodeDirectoryNotAssigned.setFixed(true);
 
@@ -283,17 +168,16 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	// generate tree structure
-	private void createTopNodes() {
+	@Override
+	protected void createTopNodes() {
 		rootNode.setImmutable(true);
 		rootNode.setFixed(true);
 
 		pathToROOT = new TreePath(new Object[] { rootNode });
 
-		groups = new HashMap<>();
-		groupNodes = new HashMap<>();
-
 		// GROUPS
-		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME, Configed.getResourceValue("ClientTree.GROUPSdescription"));
+		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,
+				Configed.getResourceValue("AbstractGroupTree.groupsName.tooltip"));
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
@@ -301,7 +185,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		// DIRECTORY
 		groupNodeDirectory = produceGroupNode(DIRECTORY_NAME,
-				Configed.getResourceValue("ClientTree.DIRECTORYdescription"));
+				Configed.getResourceValue("AbstractGroupTree.directory.tooltip"));
 
 		groupNodeDirectory.setAllowsOnlyGroupChilds(true);
 		groupNodeDirectory.setFixed(true);
@@ -309,90 +193,37 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		rootNode.add(groupNodeDirectory);
 
 		// ALL
-		groupNodeAllClients = produceGroupNode(ALL_CLIENTS_NAME,
-				Configed.getResourceValue("ClientTree.ALLdescription"));
+		groupNodeFullList = produceGroupNode(ALL_CLIENTS_NAME,
+				Configed.getResourceValue("AbstractGroupTree.allClients.tooltip"));
 
-		rootNode.add(groupNodeAllClients);
-		groupNodeAllClients.setImmutable(true);
-		groupNodeAllClients.setFixed(true);
+		rootNode.add(groupNodeFullList);
+		groupNodeFullList.setImmutable(true);
+		groupNodeFullList.setFixed(true);
 
-		pathToALL = new TreePath(new Object[] { rootNode, groupNodeAllClients });
+		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
 	}
 
 	public void clear() {
 		// clear jtree model
-		groupNodeAllClients.removeAllChildren();
+		groupNodeFullList.removeAllChildren();
 		groupNodeDirectory.removeAllChildren();
 		groupNodeGroups.removeAllChildren();
 
 		model.nodeStructureChanged(groupNodeGroups);
 
 		// clear supervising data
-		clientNodesInDIRECTORY.clear();
-		locationsInDIRECTORY.clear();
+		clientNodesInDirectory.clear();
+		locationsInDirectory.clear();
 		leafname2AllItsPaths.clear();
 
 		// it is not necessary to clear groups and groupnodes since they will be rebuilt
 		// by produceAndLinkGroups
 	}
 
-	private void deleteGroupWithSubgroups(DefaultMutableTreeNode node) {
-		Enumeration<TreeNode> e = node.depthFirstEnumeration();
-
-		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode nextNode = (DefaultMutableTreeNode) e.nextElement();
-			if (nextNode.getAllowsChildren()) {
-				groupDataService.deleteGroup(nextNode.toString());
-			}
-		}
-	}
-
-	protected boolean deleteNode(TreePath path) {
-		if (path == null) {
-			return false;
-		}
-
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-
-		String nodeID = (String) node.getUserObject();
-
-		GroupNode parent = (GroupNode) node.getParent();
-
-		if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
-			Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
-			parent = (GroupNode) groupNodes.get(nodeID).getParent();
-		}
-
-		String parentID = (String) parent.getUserObject();
-
-		if (groupNodes.get(nodeID) != null) {
-			// found a group
-			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"), JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.WARNING_MESSAGE, null, null, null);
-
-			if (returnedOption == JOptionPane.OK_OPTION) {
-				groupNodes.remove(nodeID);
-				groups.remove(nodeID);
-
-				deleteGroupWithSubgroups(node);
-				parent.remove(node);
-
-				model.nodeStructureChanged(parent);
-			}
-		} else {
-			// client node
-			removeClientInternally(nodeID, parent);
-			groupDataService.removeObject2Group(nodeID, parentID);
-		}
-		return true;
-	}
-
 	private void produceDIRECTORYinfo(TreePath clientPath, DefaultMutableTreeNode node) {
-		if (isInDIRECTORY(clientPath)) {
+		if (isInDirectory(clientPath)) {
 			String nodeID = (String) node.getUserObject();
-			locationsInDIRECTORY.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
+			locationsInDirectory.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
 					.add((GroupNode) node.getParent());
 		}
 	}
@@ -411,9 +242,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent, boolean register) {
 		for (String clientId : clientIds) {
-			DefaultMutableTreeNode node = produceClientNode(clientId);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(clientId, false);
 			if (register) {
-				clientNodesInDIRECTORY.put(clientId, node);
+				clientNodesInDirectory.put(clientId, node);
 			}
 
 			if (parent != null) {
@@ -430,9 +261,14 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		model.nodeStructureChanged(parent);
 	}
 
+	@Override
+	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
+		configedMain.setGroupAndSelect(groupNode.toString());
+	}
+
 	public void produceTreeForALL(Collection<String> clientIds) {
-		clientNodesInDIRECTORY.clear();
-		produceClients(clientIds, groupNodeAllClients);
+		clientNodesInDirectory.clear();
+		produceClients(clientIds, groupNodeFullList);
 	}
 
 	// we produce all partial pathes that are defined by the persistent groups
@@ -476,14 +312,9 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		}
 	}
 
-	@Override
-	public DefaultTreeModel getModel() {
-		return model;
-	}
-
 	public Set<String> associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> fObject2Groups,
 			Set<String> permittedHostGroups) {
-		locationsInDIRECTORY.clear();
+		locationsInDirectory.clear();
 
 		// we must rebuild this map since the direct call of persist.getFGroup2Members
 		// would eliminate the filter by depot etc.
@@ -498,7 +329,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			if (groupNode == null) {
 				Logging.warning("group for groupId " + entry.getKey() + " not found");
 			} else {
-				boolean register = isInDIRECTORY(groupNode);
+				boolean register = isInDirectory(groupNode);
 				produceClients(entry.getValue(), groupNode, register);
 			}
 		}
@@ -507,10 +338,10 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			if (!isClientInAnyDIRECTORYGroup(clientId)) {
 				membersOfDirectoryNotAssigned.add(clientId);
 
-				DefaultMutableTreeNode node = produceClientNode(clientId);
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(clientId, false);
 				groupNodeDirectoryNotAssigned.add(node);
 
-				clientNodesInDIRECTORY.put(clientId, node);
+				clientNodesInDirectory.put(clientId, node);
 
 				addClientNodeInfo(node);
 			}
@@ -522,8 +353,8 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 	}
 
 	private boolean isClientInAnyDIRECTORYGroup(String clientId) {
-		checkDIRECTORY(clientId, null);
-		Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
+		checkDirectory(clientId, null);
+		Set<GroupNode> hostingGroups = locationsInDirectory.get(clientId);
 		return !hostingGroups.isEmpty();
 	}
 
@@ -553,150 +384,16 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		allowedClients = new TreeSet<>();
 
-		if (directlyAllowedGroups == null) {
-			directlyAllowedGroups = new TreeSet<>();
-		}
-
 		for (Entry<String, ArrayList<SimpleTreePath>> entry : leafname2AllItsPaths.entrySet()) {
 			for (SimpleTreePath path : entry.getValue()) {
 				// retained are the elements not permitted
 				if (!Collections.disjoint(path, permittedHostGroups)) {
 					allowedClients.add(entry.getKey());
-					directlyAllowedGroups.addAll(path);
 				}
 			}
 		}
-
-		// they were the last element in pathElements
-		directlyAllowedGroups.removeAll(allowedClients);
-
-		Logging.info(this, "associateClientsToGroups allowed Groups " + directlyAllowedGroups);
 
 		return allowedClients;
-	}
-
-	public Set<String> getDirectlyAllowedGroups() {
-		return directlyAllowedGroups;
-	}
-
-	protected void editGroupNode(TreePath path) {
-		DefaultMutableTreeNode node = null;
-
-		if (path == null) {
-			return;
-		} else {
-			node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		}
-
-		if (!node.getAllowsChildren()) {
-			return;
-		}
-
-		String groupId = node.toString();
-
-		Map<String, String> groupData = new LinkedHashMap<>();
-		groupData.put("groupname", groupId);
-		groupData.put("description", groups.get(groupId).get("description"));
-		Map<String, String> labels = new HashMap<>();
-		labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-		labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-		Map<String, Boolean> editable = new HashMap<>();
-		editable.put("groupname", false);
-		editable.put("description", true);
-
-		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
-		fEdit.setRecord(groupData, labels, null, editable, null);
-		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode"));
-		fEdit.init();
-		fEdit.setSize(450, 250);
-		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		fEdit.setModal(true);
-
-		fEdit.setVisible(true);
-
-		groupData = fEdit.getData();
-
-		if (!fEdit.isCancelled()) {
-			groups.get(groupId).put("description", groupData.get("description"));
-			groupDataService.updateGroup(groupId, groups.get(groupId));
-		}
-	}
-
-	// calls main controller for getting persistence for the new subgroup
-	public DefaultMutableTreeNode makeSubgroupAt(TreePath path) {
-		DefaultMutableTreeNode result = null;
-
-		DefaultMutableTreeNode node;
-
-		if (path == null) {
-			node = groupNodeGroups;
-		} else {
-			node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		}
-
-		if (node.getAllowsChildren()) {
-			Map<String, String> groupData = new LinkedHashMap<>();
-			groupData.put("groupname", "");
-			groupData.put("description", "");
-			Map<String, String> labels = new HashMap<>();
-			labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-			labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-			Map<String, Boolean> editable = new HashMap<>();
-			editable.put("groupname", true);
-			editable.put("description", true);
-
-			String newGroupKey = "";
-
-			String inscription = "";
-
-			FEditRecord fEdit = new FEditRecord(inscription);
-			fEdit.setRecord(groupData, labels, null, editable, null);
-			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title"));
-			fEdit.init();
-			fEdit.setSize(450, 250);
-			fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-			fEdit.setModal(true);
-
-			while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey)) {
-				if ("".equals(newGroupKey)) {
-					inscription = Configed.getResourceValue("ClientTree.requestGroup");
-				} else {
-					inscription = "'" + newGroupKey + "' "
-							+ Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
-				}
-
-				fEdit.setHint(inscription);
-
-				fEdit.setVisible(true);
-
-				newGroupKey = fEdit.getData().get("groupname").toLowerCase(Locale.ROOT);
-
-				if (fEdit.isCancelled()) {
-					return null;
-				}
-			}
-			// Now variable gotName equals true
-
-			StringValuedRelationElement newGroup = new StringValuedRelationElement();
-
-			newGroup.put("groupId", newGroupKey);
-			newGroup.put("parentGroupId", node.toString());
-			newGroup.put("description", groupData.get("description"));
-
-			// get persistence
-			if (groupDataService.addGroup(newGroup)) {
-				groups.put(newGroupKey, newGroup);
-				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup " + newGroupKey + ", " + newGroup);
-				GroupNode newNode = insertGroup(newGroupKey, groupData.get("description"), node);
-				groupNodes.put(newGroupKey, newNode);
-
-				result = newNode;
-			}
-		}
-
-		return result;
 	}
 
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
@@ -710,41 +407,15 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return false;
 	}
 
-	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
-			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
-		insertNodeInOrder(groupNode, dropParentNode);
-		model.nodeStructureChanged(sourceParentNode);
-		makeVisible(pathByAddingChild(dropPath, groupNode));
-
-		Map<String, String> theGroup = getGroups().get(importID);
-		theGroup.put("parentGroupId", dropParentID);
-		groupDataService.updateGroup(importID, theGroup);
-
-		leafname2AllItsPaths.rebuildFromTree(rootNode);
-	}
-
-	public boolean removeClientNodes(Iterable<DefaultMutableTreeNode> clientNodes) {
-		List<Object2GroupEntry> groupEntries = new ArrayList<>();
-
-		for (DefaultMutableTreeNode clientNode : clientNodes) {
-			String clientId = (String) (clientNode.getUserObject());
-			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) clientNode.getParent();
-
-			removeClientInternally(clientId, (GroupNode) parent);
-			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
-		}
-
-		return groupDataService.removeHostGroupElements(groupEntries);
-	}
-
-	private void removeClientInternally(String clientID, GroupNode parentNode) {
+	@Override
+	public void removeNodeInternally(String clientID, GroupNode parentNode) {
 		Logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
 
 		DefaultMutableTreeNode clientNode = getChildWithUserObjectString(clientID, parentNode);
 
 		int stopCounter = 0;
 
-		while (clientNode != null && stopCounter <= clientNodesInDIRECTORY.size()) {
+		while (clientNode != null && stopCounter <= clientNodesInDirectory.size()) {
 			parentNode.remove(clientNode);
 			// with more than one clientNode we seem to get as many instances of one client
 			// node supplied as there are clients altogether, why ever
@@ -752,11 +423,11 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			clientNode = getChildWithUserObjectString(clientID, parentNode);
 			stopCounter++;
 		}
-		if (stopCounter > clientNodesInDIRECTORY.size()) {
+		if (stopCounter > clientNodesInDirectory.size()) {
 			Logging.warning("removing client not successful but stopped because of reaching the repetition limit");
 		}
 
-		clientNodesInDIRECTORY.remove(clientID); // 11
+		clientNodesInDirectory.remove(clientID); // 11
 
 		SimpleTreePath simplePathToClient = new SimpleTreePath(parentNode.getPath());
 		simplePathToClient.add(clientID);
@@ -769,19 +440,19 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		repaint();
 	}
 
-	public void moveClientTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
-
+	@Override
+	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
 		if (existingNode == null) {
 			// we have not a node with this name in the target group
 			if (sourcePath != null) {
 				Logging.debug(this,
-						"moveClientTo checked importID sourcePath.getLastPathComponent(); "
+						"moveObjectTo checked importID sourcePath.getLastPathComponent(); "
 								+ sourcePath.getLastPathComponent() + " class "
 								+ ((sourcePath.getLastPathComponent()).getClass()));
 			} else {
-				Logging.debug(this, "moveClientTo sourcePath null, sourceParentNode " + sourceParentNode);
+				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode " + sourceParentNode);
 			}
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
@@ -789,14 +460,14 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				groupDataService.addObject2Group(importID, dropParentID);
+				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, false);
 			}
 
 			// operations in DIRECTORY
 
-			if (isInDIRECTORY(dropPath)) {
-				locationsInDIRECTORY.get(importID).add(getGroupNode(dropParentID));
-				locationsInDIRECTORY.get(importID).remove(sourceParentNode);
+			if (isInDirectory(dropPath)) {
+				locationsInDirectory.get(importID).add(getGroupNode(dropParentID));
+				locationsInDirectory.get(importID).remove(sourceParentNode);
 			}
 
 			TreePath newPath = pathByAddingChild(dropPath, clientNode);
@@ -805,40 +476,41 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			activeParents.addAll(simplePath.collectNodeNames());
 
 			Logging.debug(this,
-					"moveClientTo -- remove " + importID + " from " + sourceParentID
+					"moveObjectTo -- remove " + importID + " from " + sourceParentID
 							+ " clientNode, sourceParentNode, sourcePath " + clientNode + ", " + sourceParentNode + ", "
 							+ sourcePath);
 
 			// persistent removal
-			groupDataService.removeObject2Group(importID, sourceParentID);
-			removeClientInternally(importID, sourceParentNode);
+			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
+			removeNodeInternally(importID, sourceParentNode);
 
 			makeVisible(newPath);
 			repaint();
 
-			checkDIRECTORY(importID, (GroupNode) dropParentNode);
+			checkDirectory(importID, (GroupNode) dropParentNode);
 		}
 	}
 
-	public void copyClientTo(String objectID, TreePath sourcePath, String newParentID,
+	@Override
+	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
 		DefaultMutableTreeNode clientNode = null;
 
 		if (sourcePath == null) {
-			clientNode = getClientNode(objectID);
+			clientNode = clientNodesInDirectory.get(objectID);
 		} else {
 			clientNode = (DefaultMutableTreeNode) sourcePath.getLastPathComponent();
 		}
 
-		Logging.debug(this, " -- copyClientTo childs are persistent, newParentNode " + newParentNode + " "
+		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode " + newParentNode + " "
 				+ DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			groupDataService.addObject2Group(objectID, newParentID);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, true);
 		}
 
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
@@ -848,21 +520,21 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		// operations in DIRECTORY
 
-		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.get(objectID);
+		Set<GroupNode> groupsInDIRECTORY = locationsInDirectory.get(objectID);
 
 		// remove entry in NOT_ASSIGNED
 		if (groupsInDIRECTORY.contains(groupNodeDirectoryNotAssigned) && groupsInDIRECTORY.size() > 1) {
-			locationsInDIRECTORY.get(objectID).remove(groupNodeDirectoryNotAssigned);
-			removeClientInternally(objectID, groupNodeDirectoryNotAssigned);
+			locationsInDirectory.get(objectID).remove(groupNodeDirectoryNotAssigned);
+			removeNodeInternally(objectID, groupNodeDirectoryNotAssigned);
 		}
 
 		repaint();
 
-		checkDIRECTORY(objectID, (GroupNode) newParentNode);
+		checkDirectory(objectID, (GroupNode) newParentNode);
 	}
 
-	private void checkDIRECTORY(String clientID, GroupNode selectedNode) {
-		Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.computeIfAbsent(clientID,
+	private void checkDirectory(String clientID, GroupNode selectedNode) {
+		Set<GroupNode> groupsInDIRECTORY = locationsInDirectory.computeIfAbsent(clientID,
 				s -> new TreeSet<>(new NodeComparator()));
 
 		if (groupsInDIRECTORY.size() <= 1) {
@@ -881,11 +553,12 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 			groupsInDIRECTORY.removeAll(correctNode);
 
 			for (GroupNode node : groupsInDIRECTORY) {
-				removeClientInternally(clientID, node);
-				groupDataService.removeObject2Group(clientID, node.getUserObject().toString());
+				removeNodeInternally(clientID, node);
+				persistenceController.getGroupDataService().removeObject2Group(clientID,
+						node.getUserObject().toString());
 			}
 
-			locationsInDIRECTORY.put(clientID, new HashSet<>(correctNode));
+			locationsInDirectory.put(clientID, new HashSet<>(correctNode));
 		}
 	}
 
@@ -932,117 +605,32 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return result;
 	}
 
-	public boolean isChildOfALL(TreeNode node) {
-		return node.getParent() == groupNodeAllClients;
-	}
-
-	public boolean isInGROUPS(String groupName) {
+	@Override
+	public boolean isInDirectory(String groupName) {
 		GroupNode node = groupNodes.get(groupName);
 		if (node == null) {
 			return false;
 		}
 
-		return isInGROUPS(node);
+		return isInDirectory(node);
 	}
 
-	public boolean isInDIRECTORY(String groupName) {
-		GroupNode node = groupNodes.get(groupName);
-		if (node == null) {
-			return false;
-		}
-
-		return isInDIRECTORY(node);
-	}
-
-	public boolean isInGROUPS(TreePath path) {
-		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeGroups;
-	}
-
-	public boolean isInDIRECTORY(TreePath path) {
+	@Override
+	public boolean isInDirectory(TreePath path) {
 		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeDirectory;
 	}
 
-	private boolean isInDIRECTORY(DefaultMutableTreeNode node) {
+	private boolean isInDirectory(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
 		return path.length >= 2 && path[1] == groupNodeDirectory;
-	}
-
-	private boolean isInGROUPS(DefaultMutableTreeNode node) {
-		TreeNode[] path = node.getPath();
-		return path.length >= 2 && path[1] == groupNodeGroups;
-	}
-
-	private void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {
-		if (node == null || parent == null) {
-			return;
-		}
-
-		// for groups, we should look only for groups
-
-		DefaultMutableTreeNode insertNode = findLocation(parent.children(), node);
-
-		if (insertNode == null) {
-			// append
-			parent.add(node);
-		} else {
-			int i = parent.getIndex(insertNode);
-			parent.insert(node, i);
-		}
-
-		model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
-	}
-
-	private static DefaultMutableTreeNode findLocation(Enumeration<TreeNode> children, DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode insertNode = null;
-
-		String nodeObject = node.toString();
-
-		while (children.hasMoreElements()) {
-			insertNode = (DefaultMutableTreeNode) children.nextElement();
-
-			// node with subnodes = group
-			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
-				continue;
-			}
-
-			// leaf && group
-			if (!insertNode.getAllowsChildren() && node.getAllowsChildren()) {
-				return insertNode;
-			}
-
-			// both are leafs or both are groups
-			if (insertNode.toString().compareToIgnoreCase(nodeObject) > 0) {
-				return insertNode;
-			}
-		}
-
-		return null;
-	}
-
-	private GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
-		GroupNode node = produceGroupNode(groupObject, groupDescription);
-
-		if (parent == null) {
-			parent = groupNodeGroups;
-		}
-
-		insertNodeInOrder(node, parent);
-
-		return node;
 	}
 
 	public TreePath getPathToALL() {
 		return pathToALL;
 	}
 
-	public TreePath getActiveTreePath(String id) {
-		return Arrays.stream(getSelectionPaths()).filter(
-				treePath -> ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject().equals(id))
-				.findAny().orElse(null);
-	}
-
 	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
-		activeParents.addAll(collectParentIDs(node));
+		activeParents.addAll(collectParentIDs(node.toString()));
 	}
 
 	public void initActiveParents() {
@@ -1061,19 +649,10 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		repaint();
 	}
 
-	private Set<String> collectParentIDs(DefaultMutableTreeNode node) {
-		String nodeID = (String) node.getUserObject();
-		return collectParentIDs(nodeID);
-	}
-
-	private List<SimpleTreePath> getSimpleTreePaths(String leafname) {
-		return leafname2AllItsPaths.getSimpleTreePaths(leafname);
-	}
-
 	public Set<String> collectParentIDs(String nodeID) {
 		Set<String> allParents = new HashSet<>();
 
-		List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
+		List<SimpleTreePath> treePaths = leafname2AllItsPaths.getSimpleTreePaths(nodeID);
 
 		if (treePaths != null) {
 			for (SimpleTreePath path : treePaths) {
@@ -1088,45 +667,13 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 		return activeParents;
 	}
 
-	public TreePath getGroupPathActivatedByTree() {
-		return configedMain.getGroupPathActivatedByTree();
+	@Override
+	public Set<GroupNode> getLocationsInDirectory(String clientId) {
+		return locationsInDirectory.get(clientId);
 	}
 
-	public GroupNode getGroupNode(String groupId) {
-		return groupNodes.get(groupId);
-	}
-
-	public Map<String, Map<String, String>> getGroups() {
-		return groups;
-	}
-
-	public DefaultMutableTreeNode getClientNode(String clientId) {
-		return clientNodesInDIRECTORY.get(clientId);
-	}
-
-	public Set<GroupNode> getLocationsInDIRECTORY(String clientId) {
-		return locationsInDIRECTORY.get(clientId);
-	}
-
-	@SuppressWarnings("java:S3242")
-	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
-		Enumeration<TreeNode> enumer = groupNode.children();
-		DefaultMutableTreeNode result = null;
-
-		boolean foundAny = false;
-		while (!foundAny && enumer.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) enumer.nextElement();
-
-			if (child.getUserObject().toString().equals(objectID)) {
-				foundAny = true;
-				result = child;
-			}
-		}
-
-		return result;
-	}
-
-	public List<String> getSelectedClientsInTable() {
-		return configedMain.getSelectedClientsInTable();
+	@Override
+	public Set<String> getSelectedObjectsInTable() {
+		return configedMain.getClientTable().getSelectedSet();
 	}
 }

@@ -388,7 +388,6 @@ public class ProductDataService {
 						"retrieveAllProductPropertyDefinitions: no depot for " + productId + " version " + versionInfo
 								+ "  product2VersionInfo2Depots.get(productId) "
 								+ product2VersionInfo2Depots.get(productId));
-
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
@@ -1200,29 +1199,6 @@ public class ProductDataService {
 		}
 
 		return result;
-	}
-
-	public Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
-		Set<String> notHandled = new HashSet<>(startProductSet);
-		Set<String> endResultSet = new HashSet<>(startProductSet);
-		Set<String> startResultSet = null;
-
-		while (!notHandled.isEmpty()) {
-			startResultSet = new HashSet<>(endResultSet);
-
-			for (String prod : notHandled) {
-				Logging.info(this, " extendToDependentProducts prod " + prod);
-				for (Map<String, String> m : getProductDependencies(depot, prod)) {
-					Logging.info(this, " extendToDependentProducts m " + m.get("requiredProductId"));
-					endResultSet.add(m.get("requiredProductId"));
-				}
-			}
-
-			notHandled = new HashSet<>(endResultSet);
-			notHandled.removeAll(startResultSet);
-		}
-
-		return new TreeSet<>(endResultSet);
 	}
 
 	// collect productPropertyState updates and deletions

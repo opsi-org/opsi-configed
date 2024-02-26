@@ -23,7 +23,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	// in case that we are working in our standard context
 	private PanelGenEditTable thePanel;
 
-	protected int[] viewRowfilter = new int[0];
+	protected int[] selectedRows = new int[0];
 
 	protected boolean filtered;
 
@@ -150,7 +150,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int[] getUnfilteredSelection() {
-		return viewRowfilter;
+		return selectedRows;
 	}
 
 	@Override
@@ -186,13 +186,13 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		GenTableModel model = (GenTableModel) table.getModel();
 
 		if (!filtered) {
-			viewRowfilter = table.getSelectedRows();
+			selectedRows = table.getSelectedRows();
 		}
 
-		if (b && viewRowfilter.length > 0) {
-			int[] modelRowFilter = new int[viewRowfilter.length];
-			for (int i = 0; i < viewRowfilter.length; i++) {
-				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
+		if (b && selectedRows.length > 0) {
+			int[] modelRowFilter = new int[selectedRows.length];
+			for (int i = 0; i < selectedRows.length; i++) {
+				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
 			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
@@ -208,7 +208,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
 
 			// restore the original selection
-			setSelection(viewRowfilter);
+			setSelection(selectedRows);
 		}
 		filtered = b;
 

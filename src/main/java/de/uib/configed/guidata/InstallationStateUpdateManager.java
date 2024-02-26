@@ -63,7 +63,6 @@ public class InstallationStateUpdateManager {
 		} else {
 			istmForSelectedClients.updateTable(clientId, attributes);
 		}
-
 	}
 
 	private boolean isProductsUpdatedForClient(String clientId, String productType) {
