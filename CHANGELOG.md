@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.1.10] - 2024-xx-xx
+## [4.3.1.10] - 2024-02-26
 ## Fixed
 - Remote control should start only on space when in client table
 
