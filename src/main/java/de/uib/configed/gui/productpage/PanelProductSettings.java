@@ -36,6 +36,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -434,7 +435,7 @@ public class PanelProductSettings extends JSplitPane {
 		if (tableProducts.getRowSorter() != null) {
 			return tableProducts.getRowSorter().getSortKeys();
 		} else {
-			return Collections.emptyList();
+			return Collections.singletonList(new SortKey(0, SortOrder.ASCENDING));
 		}
 	}
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## [4.3.2.3] - 2024-xx-xx
+## Fixed
+- `NullpointerException` when messagebus update on products
+- Sort product tables on start
+
 ## [4.3.2.2] - 2024-02-26
 ## Fixed
-- Nullpointerexception on reload
+- `NullpointerException` on reload
 
 ## [4.3.2.1] - 2024-02-26
 ## Added
