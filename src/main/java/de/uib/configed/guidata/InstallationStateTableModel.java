@@ -971,83 +971,88 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		return globalProductInfos;
 	}
 
+	private String[] producePossibleActions() {
+		// selection of actions
+
+		Logging.debug(this, " possible actions  " + possibleActions);
+		List<String> actionsForProduct = new ArrayList<>();
+		if (possibleActions != null) {
+			for (String label : possibleActions.get(actualProduct)) {
+				ActionRequest ar = ActionRequest.produceFromLabel(label);
+				actionsForProduct.add(ActionRequest.getDisplayLabel(ar.getVal()));
+			}
+
+			// Add in values in correct ordering
+			String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
+			actionsForProduct.retainAll(Arrays.asList(displayLabels));
+
+			Logging.debug("Possible actions as array  " + actionsForProduct);
+		}
+
+		if (actionsForProduct.isEmpty()) {
+			actionsForProduct.add("null");
+		}
+
+		return actionsForProduct.toArray(new String[0]);
+	}
+
+	private String[] producePossibleInstallationStatus(String[] defaultValues) {
+		// selection of status
+
+		// we dont have the product in our depot selection
+		if (possibleActions.get(actualProduct) == null) {
+			String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
+			if (state == null) {
+				return new String[] { "null" };
+			}
+
+			return new String[0];
+		}
+
+		return defaultValues;
+	}
+
+	private static String[] producePossibleInstallationInfos(String cellValue) {
+		if (cellValue == null) {
+			cellValue = "";
+		}
+
+		Set<String> values = new LinkedHashSet<>();
+
+		if (!defaultDisplayValues.contains(cellValue)) {
+			values.add(cellValue);
+		}
+
+		values.addAll(defaultDisplayValues);
+
+		return values.toArray(new String[0]);
+	}
+
 	// interface ComboBoxModeller
 	@Override
 	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 		row = originRow(row);
 		actualProduct = productsV.get(row);
 
+		String[] possibleOptions;
+
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) {
-			// selection of actions
-
-			Logging.debug(this, " possible actions  " + possibleActions);
-			List<String> actionsForProduct = new ArrayList<>();
-			if (possibleActions != null) {
-				for (String label : possibleActions.get(actualProduct)) {
-					ActionRequest ar = ActionRequest.produceFromLabel(label);
-					actionsForProduct.add(ActionRequest.getDisplayLabel(ar.getVal()));
-				}
-
-				// Add in values in correct ordering
-				String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-				actionsForProduct.retainAll(Arrays.asList(displayLabels));
-
-				Logging.debug("Possible actions as array  " + actionsForProduct);
-			}
-
-			if (actionsForProduct.isEmpty()) {
-				actionsForProduct.add("null");
-			}
-
-			return new DefaultComboBoxModel<>(actionsForProduct.toArray(new String[0]));
+			possibleOptions = producePossibleActions();
 		} else if (column == displayColumns.indexOf(InstallationStatus.KEY)) {
 			// selection of status
-
-			// we dont have the product in our depot selection
-			if (possibleActions.get(actualProduct) == null) {
-				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
-				if (state == null) {
-					return new DefaultComboBoxModel<>(new String[] { "null" });
-				}
-
-				return new DefaultComboBoxModel<>(new String[] {});
-			}
-
-			return new DefaultComboBoxModel<>(InstallationStatus.getDisplayLabelsForChoice());
+			possibleOptions = producePossibleInstallationStatus(InstallationStatus.getDisplayLabelsForChoice());
 		} else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) {
-			// selection of status
-
-			// we dont have the product in our depot selection
-			if (possibleActions.get(actualProduct) == null) {
-				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
-				if (state == null) {
-					return new DefaultComboBoxModel<>(new String[] { "null" });
-				}
-
-				return new DefaultComboBoxModel<>(new String[] {});
-			}
-
-			return new DefaultComboBoxModel<>(TargetConfiguration.getDisplayLabelsForChoice());
+			// selection of target status
+			possibleOptions = producePossibleInstallationStatus(TargetConfiguration.getDisplayLabelsForChoice());
 		} else if (column == displayColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
-			String delivered = (String) getValueAt(row, column);
-			if (delivered == null) {
-				delivered = "";
-			}
-
-			Set<String> values = new LinkedHashSet<>();
-
-			if (!defaultDisplayValues.contains(delivered)) {
-				values.add(delivered);
-			}
-
-			values.addAll(defaultDisplayValues);
-
-			return new DefaultComboBoxModel<>(values.toArray(new String[0]));
+			possibleOptions = producePossibleInstallationInfos((String) getValueAt(row, column));
 		} else {
 			Logging.warning(this, "unexpected column " + column);
 
 			return null;
 		}
+
+		return new DefaultComboBoxModel<>(possibleOptions);
 	}
 
 	public void setFilterFrom(Set<String> ids) {
