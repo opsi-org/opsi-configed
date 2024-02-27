@@ -247,7 +247,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private void saveHealthDataToFile() {
 		File healthDataFile = new File(getDirectoryLocation(), Globals.HEALTH_CHECK_LOG_FILE_NAME);
-		writeToFile(healthDataFile, ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
+		writeToFile(healthDataFile, ByteBuffer.wrap(HealthInfo.getHealthData().getBytes(StandardCharsets.UTF_8)));
 	}
 
 	private void saveDiagnosticDataToFile() {
