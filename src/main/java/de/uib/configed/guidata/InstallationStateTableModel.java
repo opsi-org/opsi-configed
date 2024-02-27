@@ -311,19 +311,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				}
 
 				// change values for visual output
-				String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
-				if (targetConfiguration == null || targetConfiguration.isEmpty()) {
-					targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
-				}
-
-				stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
-
-				String priority = "";
-				if (globalProductInfos != null && globalProductInfos.get(product.getKey()) != null) {
-					priority = "" + globalProductInfos.get(product.getKey()).get("priority");
-				}
-
-				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
+				changeValuesForVisualOutput(stateAndAction, product.getKey());
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
@@ -331,6 +319,22 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				}
 			}
 		}
+	}
+
+	private void changeValuesForVisualOutput(Map<String, String> stateAndAction, String productId) {
+		String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
+		if (targetConfiguration == null || targetConfiguration.isEmpty()) {
+			targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
+		}
+
+		stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
+
+		String priority = "";
+		if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
+			priority = "" + globalProductInfos.get(productId).get("priority");
+		}
+
+		stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
 	}
 
 	private void completeVisualStatesByDefaults() {
