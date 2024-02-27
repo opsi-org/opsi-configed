@@ -247,14 +247,13 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		String adaptedSourceParentID = sourceParentID;
 		GroupNode adaptedSourceParentNode = sourceParentNode;
 
-		// we are in table and did not get a real souce path
-		// TODO necessary?
+		// we are in table and did not get a real souce path if sourcePath is null
 		if (sourcePath == null) {
 			String firstDIRECTORYgroupname = null;
 			Set<GroupNode> locations = tree.getLocationsInDirectory(importID);
-			if (locations != null && !locations.isEmpty()) {
+			if (!locations.isEmpty()) {
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory 1");
-				Iterator<GroupNode> iter = tree.getLocationsInDirectory(importID).iterator();
+				Iterator<GroupNode> iter = locations.iterator();
 				firstDIRECTORYgroupname = iter.next().toString();
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
