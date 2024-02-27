@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -471,10 +470,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
 
-		Iterator<String> iter = columnsToDisplay.iterator();
-		int j = 0;
-		while (iter.hasNext()) {
-			String column = iter.next();
+		for (int j = 0; j < columnsToDisplay.size(); j++) {
+			String column = columnsToDisplay.get(j);
 			Logging.debug(this, " ------- treat column " + column);
 			int k = preparedColumns.indexOf(column);
 			if (k >= 0) {
@@ -485,8 +482,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				Logging.info(this, "column " + column + " is not prepared");
 				columnTitles.add(column);
 			}
-
-			j++;
 		}
 
 		numberOfColumns = displayColumns.size();
@@ -1295,35 +1290,40 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 
 		if (!retrieveValue.equals(value)) {
-			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
-				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
-				if ("installed".equals(value)
-						&& combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct).isEmpty()) {
-					setLatestProductVersion();
-				}
-			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
-				registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
-			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ActionRequest.KEY)) {
-				// an action has changed
-				// change recursively visible action changes and collect the changes for saving
+			changeValue(value, col);
+		}
 
-				initCollectiveChange();
-				collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
-				finishCollectiveChange();
-			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
-				if (value.equals(NONE_DISPLAY_STRING)) {
-					value = NONE_STRING;
-				}
+	}
 
-				setInstallationInfo(actualProduct, (String) value);
-			} else {
-				Logging.warning(this, "unexpected indexPreparedColumns[col] " + indexPreparedColumns[col]);
+	private void changeValue(Object value, int col) {
+		if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
+			combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
+			registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
+			if ("installed".equals(value)
+					&& combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct).isEmpty()) {
+				setLatestProductVersion();
+			}
+		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
+			combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
+			registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
+		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ActionRequest.KEY)) {
+			// an action has changed
+			// change recursively visible action changes and collect the changes for saving
+
+			initCollectiveChange();
+			collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
+			finishCollectiveChange();
+		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
+			if (value.equals(NONE_DISPLAY_STRING)) {
+				value = NONE_STRING;
 			}
 
-			configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+			setInstallationInfo(actualProduct, (String) value);
+		} else {
+			Logging.warning(this, "unexpected indexPreparedColumns[col] " + indexPreparedColumns[col]);
 		}
+
+		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private void setLatestProductVersion() {
