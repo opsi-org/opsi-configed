@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.2.3] - 2024-xx-xx
+## [4.3.2.3] - 2024-02-27
 ## Fixed
 - `NullpointerException` when messagebus update on products
 - Sort product tables on start
