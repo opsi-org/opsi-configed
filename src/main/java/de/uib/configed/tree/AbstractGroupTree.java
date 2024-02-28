@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
@@ -47,7 +48,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	protected GroupNode groupNodeGroups;
 	protected GroupNode groupNodeFullList;
 
-	protected Map<String, Map<String, String>> groups = new HashMap<>();
+	protected Map<String, Map<String, String>> groups = new TreeMap<>();
 	// map of all group maps,
 	// groupid --> group map
 
