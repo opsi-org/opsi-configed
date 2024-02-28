@@ -111,8 +111,8 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		for (Map<String, Object> product : persistenceController.getProductDataService().getAllProducts()) {
-			groupNodeFullList.add(new DefaultMutableTreeNode(product.get("productId"), false));
+		for (String productId : persistenceController.getProductDataService().getProductIdsPD()) {
+			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
 		}
 
 		rootNode.add(groupNodeGroups);
