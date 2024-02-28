@@ -27,13 +27,11 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 	private Map<String, HostInfo> host2HostInfo;
 	private Map<String, Map<String, String>> groups;
 
-	private ImageIcon iconClient = Utils.createImageIcon("images/client_small.png", "client");
-	private ImageIcon nonSelectedIconClient = Utils.createImageIcon("images/client_small_unselected.png", "client");
+	private ImageIcon clientIcon = Utils.getThemeIconPNG("bootstrap/laptop", "client");
+	private ImageIcon clientSelectedIcon = Utils.getThemeIconPNG("bootstrap/laptop_selected", "client");
 
-	private ImageIcon groupUnselectedIcon = Utils.createImageIcon("images/group_small_unselected.png",
-			"group unselected");
-	private ImageIcon groupSelected = Utils.createImageIcon("images/group_small.png", "client");
-	private ImageIcon group1SelectedIcon = Utils.createImageIcon("images/group_small_1selected.png", "group 1selected");
+	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
+	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
 
 	public ClientTreeRenderer(ClientTree clientTree) {
 		this.clientTree = clientTree;
@@ -69,18 +67,16 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 		if (!node.getAllowsChildren()) {
 			// client
 			if (sel) {
-				setIcon(iconClient);
+				setIcon(clientSelectedIcon);
 			} else {
-				setIcon(nonSelectedIconClient);
+				setIcon(clientIcon);
 			}
 		} else {
 			// group
-			if (sel) {
-				setIcon(groupSelected);
-			} else if (clientTree.getActiveParents().contains(stringValue)) {
-				setIcon(group1SelectedIcon);
+			if (clientTree.getActiveParents().contains(stringValue)) {
+				setIcon(groupContainsSelectedIcon);
 			} else {
-				setIcon(groupUnselectedIcon);
+				setIcon(groupIcon);
 			}
 		}
 

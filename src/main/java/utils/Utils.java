@@ -116,6 +116,12 @@ public final class Utils {
 		return createImageIcon(saveIconPath, "");
 	}
 
+	public static ImageIcon getThemeIconPNG(String pathName, String description) {
+		pathName += FlatLaf.isLafDark() ? "_invert.png" : ".png";
+
+		return createImageIcon(pathName, description);
+	}
+
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = Globals.IMAGE_BASE + path;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();

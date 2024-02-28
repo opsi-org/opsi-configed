@@ -1,4 +1,11 @@
 # Changelog
+## [4.3.2.4] - 2024-xx-xx
+## Changed
+- Update Icons in client tree
+- Only show Clients in allowed group, but not in their subgroups
+
+## Fixed
+- Show every product only once in product tree
 
 ## [4.3.2.3] - 2024-02-27
 ## Fixed
