@@ -56,9 +56,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
 
-	protected Leafname2AllItsPaths leafname2AllItsPaths;
-	// clientId --> list of all paths that have the leaf clientid
-
 	protected DefaultTreeModel model;
 
 	protected ConfigedMain configedMain;
@@ -413,8 +410,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);
 		persistenceController.getGroupDataService().updateGroup(importID, theGroup, this instanceof ClientTree);
-
-		leafname2AllItsPaths.rebuildFromTree(rootNode);
 	}
 
 	public TreePath getActiveTreePath(String id) {

@@ -127,7 +127,6 @@ public class ClientTree extends AbstractGroupTree {
 
 		locationsInDirectory = new HashMap<>();
 		clientNodesInDirectory = new HashMap<>();
-		leafname2AllItsPaths = new Leafname2AllItsPaths();
 	}
 
 	public void setClientInfo(Map<String, HostInfo> host2HostInfo) {
@@ -217,26 +216,17 @@ public class ClientTree extends AbstractGroupTree {
 		// clear supervising data
 		clientNodesInDirectory.clear();
 		locationsInDirectory.clear();
-		leafname2AllItsPaths.clear();
 
 		// it is not necessary to clear groups and groupnodes since they will be rebuilt
 		// by produceAndLinkGroups
 	}
 
-	private void produceDIRECTORYinfo(TreePath clientPath, DefaultMutableTreeNode node) {
-		if (isInDirectory(clientPath)) {
+	private void produceDIRECTORYinfo(DefaultMutableTreeNode node) {
+		if (isInDirectory(new TreePath(node.getPath()))) {
 			String nodeID = (String) node.getUserObject();
 			locationsInDirectory.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
 					.add((GroupNode) node.getParent());
 		}
-	}
-
-	private TreePath addClientNodeInfo(DefaultMutableTreeNode node) {
-		TreePath clientPath = new TreePath(node.getPath());
-		String clientId = (String) node.getUserObject();
-
-		leafname2AllItsPaths.add(clientId, clientPath);
-		return clientPath;
 	}
 
 	private void produceClients(Collection<String> clientIds, DefaultMutableTreeNode parent) {
@@ -256,9 +246,7 @@ public class ClientTree extends AbstractGroupTree {
 				Logging.debug(this, "not added Node for " + clientId + " under " + parent);
 			}
 
-			TreePath clientPath = addClientNodeInfo(node);
-
-			produceDIRECTORYinfo(clientPath, node);
+			produceDIRECTORYinfo(node);
 		}
 
 		model.nodeStructureChanged(parent);
@@ -347,8 +335,6 @@ public class ClientTree extends AbstractGroupTree {
 				groupNodeDirectoryNotAssigned.add(node);
 
 				clientNodesInDirectory.put(clientId, node);
-
-				addClientNodeInfo(node);
 			}
 		}
 
@@ -424,7 +410,6 @@ public class ClientTree extends AbstractGroupTree {
 		SimpleTreePath simplePathToClient = new SimpleTreePath(parentNode.getPath());
 		simplePathToClient.add(clientID);
 
-		leafname2AllItsPaths.remove(clientID, simplePathToClient); // 13
 		activeParents.removeAll(simplePathToClient);
 
 		model.nodeStructureChanged(parentNode);
@@ -464,7 +449,7 @@ public class ClientTree extends AbstractGroupTree {
 
 			TreePath newPath = pathByAddingChild(dropPath, clientNode);
 			SimpleTreePath simplePath = new SimpleTreePath(dropPath.getPath());
-			leafname2AllItsPaths.add(importID, newPath);
+
 			activeParents.addAll(simplePath);
 
 			Logging.debug(this,
@@ -507,7 +492,7 @@ public class ClientTree extends AbstractGroupTree {
 
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
 		SimpleTreePath simplePath = new SimpleTreePath(newPath.getPath());
-		leafname2AllItsPaths.add(objectID, newPath);
+
 		activeParents.addAll(simplePath);
 
 		// operations in DIRECTORY
