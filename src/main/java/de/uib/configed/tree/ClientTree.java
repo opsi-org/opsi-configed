@@ -315,6 +315,8 @@ public class ClientTree extends AbstractGroupTree {
 		}
 	}
 
+	// Return null means, all clients are allowed
+	@SuppressWarnings("java:S1168")
 	public Set<String> associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> fObject2Groups,
 			Set<String> permittedHostGroups) {
 		locationsInDirectory.clear();
@@ -352,7 +354,17 @@ public class ClientTree extends AbstractGroupTree {
 
 		model.nodeStructureChanged(groupNodeDirectory);
 
-		return getAllowedClients(permittedHostGroups);
+		if (permittedHostGroups == null) {
+			// null means, all are allowed
+			return null;
+		}
+
+		Set<String> allowedClients = new HashSet<>();
+		for (String permittedGroup : permittedHostGroups) {
+			allowedClients.addAll(group2Members.get(permittedGroup));
+		}
+
+		return allowedClients;
 	}
 
 	private boolean isClientInAnyDIRECTORYGroup(String clientId) {
@@ -374,29 +386,6 @@ public class ClientTree extends AbstractGroupTree {
 			}
 		}
 		return group2Members;
-	}
-
-	private Set<String> getAllowedClients(Set<String> permittedHostGroups) {
-		TreeSet<String> allowedClients = null;
-
-		Logging.info(this, "associateClientsToGroups, evaluate permittedHostGroups " + permittedHostGroups);
-
-		if (permittedHostGroups == null) {
-			return allowedClients;
-		}
-
-		allowedClients = new TreeSet<>();
-
-		for (Entry<String, ArrayList<SimpleTreePath>> entry : leafname2AllItsPaths.entrySet()) {
-			for (SimpleTreePath path : entry.getValue()) {
-				// retained are the elements not permitted
-				if (!Collections.disjoint(path, permittedHostGroups)) {
-					allowedClients.add(entry.getKey());
-				}
-			}
-		}
-
-		return allowedClients;
 	}
 
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
