@@ -433,7 +433,7 @@ public class ClientTree extends AbstractGroupTree {
 		simplePathToClient.add(clientID);
 
 		leafname2AllItsPaths.remove(clientID, simplePathToClient); // 13
-		activeParents.removeAll(simplePathToClient.collectNodeNames());
+		activeParents.removeAll(simplePathToClient);
 
 		model.nodeStructureChanged(parentNode);
 
@@ -473,7 +473,7 @@ public class ClientTree extends AbstractGroupTree {
 			TreePath newPath = pathByAddingChild(dropPath, clientNode);
 			SimpleTreePath simplePath = new SimpleTreePath(dropPath.getPath());
 			leafname2AllItsPaths.add(importID, newPath);
-			activeParents.addAll(simplePath.collectNodeNames());
+			activeParents.addAll(simplePath);
 
 			Logging.debug(this,
 					"moveObjectTo -- remove " + importID + " from " + sourceParentID
@@ -516,7 +516,7 @@ public class ClientTree extends AbstractGroupTree {
 		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
 		SimpleTreePath simplePath = new SimpleTreePath(newPath.getPath());
 		leafname2AllItsPaths.add(objectID, newPath);
-		activeParents.addAll(simplePath.collectNodeNames());
+		activeParents.addAll(simplePath);
 
 		// operations in DIRECTORY
 
@@ -656,7 +656,7 @@ public class ClientTree extends AbstractGroupTree {
 
 		if (treePaths != null) {
 			for (SimpleTreePath path : treePaths) {
-				allParents.addAll(path.collectNodeNames());
+				allParents.addAll(path);
 			}
 		}
 
