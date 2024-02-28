@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -361,7 +362,7 @@ public class HostInfoCollections {
 		if (clientTree != null) {
 			List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
 			for (String host : opsiHostNames) {
-				fNode2Treeparents.put(host, clientTree.collectParentIDs(host));
+				fNode2Treeparents.put(host, clientTree.collectParentIDs(Collections.singleton(host)));
 			}
 		}
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);

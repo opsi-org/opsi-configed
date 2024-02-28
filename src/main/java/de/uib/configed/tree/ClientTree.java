@@ -12,9 +12,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -633,30 +636,36 @@ public class ClientTree extends AbstractGroupTree {
 		activeParents.clear();
 	}
 
-	public void produceActiveParents(Iterable<String> clientIds) {
+	public void produceActiveParents(Collection<String> clientIds) {
 		initActiveParents();
 
-		for (String clientId : clientIds) {
-			activeParents.addAll(collectParentIDs(clientId));
-		}
-
+		activeParents.addAll(collectParentIDs(clientIds));
 		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
 
 		repaint();
 	}
 
-	public Set<String> collectParentIDs(String nodeID) {
-		Set<String> allParents = new HashSet<>();
+	public Set<String> collectParentIDs(Collection<String> nodeIds) {
+		Set<String> result = new HashSet<>();
 
-		List<SimpleTreePath> treePaths = leafname2AllItsPaths.getSimpleTreePaths(nodeID);
+		recursivelyCollectParentIDs(result, rootNode, nodeIds);
 
-		if (treePaths != null) {
-			for (SimpleTreePath path : treePaths) {
-				allParents.addAll(path);
+		return result;
+	}
+
+	private static void recursivelyCollectParentIDs(Set<String> allNodes, DefaultMutableTreeNode node,
+			Collection<String> nodeIds) {
+		Enumeration<TreeNode> children = node.children();
+
+		while (children.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+
+			if (nodeIds.contains(child.toString())) {
+				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).collect(Collectors.toList()));
 			}
-		}
 
-		return allParents;
+			recursivelyCollectParentIDs(allNodes, child, nodeIds);
+		}
 	}
 
 	public Set<String> getActiveParents() {

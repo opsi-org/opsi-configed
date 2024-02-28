@@ -9,7 +9,6 @@ package de.uib.configed.tree;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -31,10 +30,6 @@ public class Leafname2AllItsPaths {
 		return invertedSimpleClientPaths.entrySet();
 	}
 
-	public List<SimpleTreePath> get(String k) {
-		return invertedSimpleClientPaths.get(k);
-	}
-
 	public void clear() {
 		invertedSimpleClientPaths.clear();
 	}
@@ -52,10 +47,6 @@ public class Leafname2AllItsPaths {
 				add(nodeinfo, new SimpleTreePath(element.getPath()));
 			}
 		}
-	}
-
-	public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
-		return invertedSimpleClientPaths.get(leafname);
 	}
 
 	private void add(String leafname, SimpleTreePath simpleTreePath) {
