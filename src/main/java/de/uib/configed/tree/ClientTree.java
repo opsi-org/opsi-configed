@@ -629,10 +629,6 @@ public class ClientTree extends AbstractGroupTree {
 		return pathToALL;
 	}
 
-	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
-		activeParents.addAll(collectParentIDs(node.toString()));
-	}
-
 	public void initActiveParents() {
 		activeParents.clear();
 	}

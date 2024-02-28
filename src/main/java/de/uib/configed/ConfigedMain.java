@@ -1840,8 +1840,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
-		clearTree();
-
 		clientsFilteredByTree.clear();
 		if (selTreePaths != null) {
 			for (TreePath selectionPath : selTreePaths) {
@@ -1858,15 +1856,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
 			Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
-			for (TreePath selectedTreePath : selTreePaths) {
-				DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selectedTreePath.getLastPathComponent();
-
-				if (selNode.getAllowsChildren()) {
-					continue;
-				}
-
-				clientTree.collectParentIDsFrom(selNode);
-			}
 
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
 					.getLastPathComponent();
@@ -1904,24 +1893,16 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 	private void activateClientByTree(TreePath pathToNode) {
 		Logging.info(this, "activateClientByTree, pathToNode: " + pathToNode);
 
-		clientTree.collectParentIDsFrom((DefaultMutableTreeNode) pathToNode.getLastPathComponent());
-
-		clientTree.repaint();
-
 		// since we select based on the tree view we disable the filter
 		if (filterClientList) {
 			mainFrame.toggleClientFilterAction(false);
 		}
 	}
 
-	public void clearTree() {
-		clientTree.initActiveParents();
-	}
-
 	private void setGroupByTree(DefaultMutableTreeNode node) {
 		Logging.info(this, "setGroupByTree, node " + node);
-		clearTree();
 
+		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
