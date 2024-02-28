@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2024-02-26";
+	public static final String VERDATE = "2024-02-28";
 
 	public static final String VERHASHTAG = "";
 

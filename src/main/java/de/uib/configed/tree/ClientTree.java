@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
@@ -289,7 +290,7 @@ public class ClientTree extends JTree implements TreeSelectionListener {
 
 		pathToROOT = new TreePath(new Object[] { rootNode });
 
-		groups = new HashMap<>();
+		groups = new TreeMap<>();
 		groupNodes = new HashMap<>();
 
 		// GROUPS
