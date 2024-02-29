@@ -38,7 +38,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
-import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
@@ -407,11 +406,6 @@ public class ClientTree extends AbstractGroupTree {
 
 		clientNodesInDirectory.remove(clientID); // 11
 
-		SimpleTreePath simplePathToClient = new SimpleTreePath(parentNode.getPath());
-		simplePathToClient.add(clientID);
-
-		activeParents.removeAll(simplePathToClient);
-
 		model.nodeStructureChanged(parentNode);
 
 		repaint();
@@ -448,9 +442,7 @@ public class ClientTree extends AbstractGroupTree {
 			}
 
 			TreePath newPath = pathByAddingChild(dropPath, clientNode);
-			SimpleTreePath simplePath = new SimpleTreePath(dropPath.getPath());
-
-			activeParents.addAll(simplePath);
+			activeParents.addAll(Arrays.stream(dropPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
 			Logging.debug(this,
 					"moveObjectTo -- remove " + importID + " from " + sourceParentID
@@ -473,14 +465,6 @@ public class ClientTree extends AbstractGroupTree {
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
-		DefaultMutableTreeNode clientNode = null;
-
-		if (sourcePath == null) {
-			clientNode = clientNodesInDirectory.get(objectID);
-		} else {
-			clientNode = (DefaultMutableTreeNode) sourcePath.getLastPathComponent();
-		}
-
 		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode " + newParentNode + " "
 				+ DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
@@ -490,10 +474,7 @@ public class ClientTree extends AbstractGroupTree {
 			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, true);
 		}
 
-		TreePath newPath = pathByAddingChild(newParentPath, clientNode);
-		SimpleTreePath simplePath = new SimpleTreePath(newPath.getPath());
-
-		activeParents.addAll(simplePath);
+		activeParents.addAll(Arrays.stream(newParentPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
 		// operations in DIRECTORY
 

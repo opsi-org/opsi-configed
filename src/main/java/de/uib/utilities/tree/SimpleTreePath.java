@@ -20,13 +20,6 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 		super(prototype);
 	}
 
-	public SimpleTreePath(Object[] path) {
-		super();
-		for (Object pathPart : path) {
-			super.add(pathPart.toString());
-		}
-	}
-
 	@Override
 	public SimpleTreePath subList(int j, int i) {
 		return new SimpleTreePath(super.subList(j, i));
