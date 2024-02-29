@@ -66,7 +66,6 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 
 				path2Node.computeIfAbsent(partialPath, (String arg) -> {
 					DefaultMutableTreeNode node = new DefaultMutableTreeNode(pathAsList.get(lastElement));
-					path2Node.put(arg, node);
 					parentNode.add(node);
 					return node;
 				});
