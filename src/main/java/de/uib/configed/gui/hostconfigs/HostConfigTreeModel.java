@@ -22,7 +22,7 @@ import de.uib.utilities.logging.Logging;
 public class HostConfigTreeModel extends DefaultTreeModel {
 	public final DefaultMutableTreeNode rootNode;
 
-	private Set<String> allPathes;
+	private NavigableSet<String> allPathes;
 
 	public HostConfigTreeModel(Set<String> keys) {
 		super(new DefaultMutableTreeNode(""));
@@ -32,25 +32,23 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 
 		rootNode = (DefaultMutableTreeNode) super.getRoot();
 
-		allPathes = new TreeSet<>(keys);
-
-		generateAllPaths();
+		generateAllPaths(keys);
 	}
 
 	public NavigableSet<String> getGeneratedKeys() {
-		return new TreeSet<>(allPathes);
+		return allPathes;
 	}
 
 	public void setRootLabel(String s) {
 		((DefaultMutableTreeNode) getRoot()).setUserObject(s);
 	}
 
-	private void generateAllPaths() {
-		Logging.debug(this, "generateFrom allPathes " + allPathes);
+	private void generateAllPaths(Set<String> keys) {
+		Logging.debug(this, "generateFrom keys " + keys);
 
 		Map<String, DefaultMutableTreeNode> path2Node = new TreeMap<>();
 
-		for (String path : allPathes) {
+		for (String path : keys) {
 			DefaultMutableTreeNode parent = rootNode;
 
 			List<String> pathAsList = Arrays.asList(path.split("\\."));
@@ -72,6 +70,7 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 			}
 		}
 
-		Logging.debug(this, "generateFrom allPathes ready");
+		allPathes = new TreeSet<>(path2Node.keySet());
+		Logging.debug(this, "generateFrom keys ready");
 	}
 }
