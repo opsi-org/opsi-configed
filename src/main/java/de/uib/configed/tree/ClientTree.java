@@ -377,7 +377,7 @@ public class ClientTree extends AbstractGroupTree {
 		// child with this objectID not existing
 		if (getChildWithUserObjectString(objectID, newGroupNode) == null) {
 			produceClients(Collections.singleton(objectID), newGroupNode);
-			makeVisible(pathByAddingChild(newPath, objectID));
+			makeVisible(newPath.pathByAddingChild(objectID));
 			return true;
 		}
 
@@ -441,7 +441,6 @@ public class ClientTree extends AbstractGroupTree {
 				locationsInDirectory.get(importID).remove(sourceParentNode);
 			}
 
-			TreePath newPath = pathByAddingChild(dropPath, clientNode);
 			activeParents.addAll(Arrays.stream(dropPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
 			Logging.debug(this,
@@ -453,7 +452,7 @@ public class ClientTree extends AbstractGroupTree {
 			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
 			removeNodeInternally(importID, sourceParentNode);
 
-			makeVisible(newPath);
+			makeVisible(dropPath.pathByAddingChild(clientNode));
 			repaint();
 
 			checkDirectory(importID, (GroupNode) dropParentNode);

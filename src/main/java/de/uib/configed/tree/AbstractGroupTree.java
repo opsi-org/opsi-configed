@@ -344,15 +344,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				this instanceof ClientTree);
 	}
 
-	protected TreePath pathByAddingChild(TreePath treePath, Object child) {
-		if (child == null) {
-			Logging.debug(this, "pathByAddingChild: child null cannot be added");
-			return null;
-		}
-
-		return treePath.pathByAddingChild(child);
-	}
-
 	protected GroupNode produceGroupNode(String groupId, String description) {
 		GroupNode groupNode = new GroupNode(groupId);
 
@@ -405,7 +396,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		insertNodeInOrder(groupNode, dropParentNode);
 		model.nodeStructureChanged(sourceParentNode);
-		makeVisible(pathByAddingChild(dropPath, groupNode));
+		makeVisible(dropPath.pathByAddingChild(groupNode));
 
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);

@@ -145,7 +145,7 @@ public class ProductTree extends AbstractGroupTree {
 
 			model.nodeStructureChanged(newParentNode);
 
-			makeVisible(pathByAddingChild(newParentPath, objectID));
+			makeVisible(newParentPath.pathByAddingChild(objectID));
 		}
 	}
 
