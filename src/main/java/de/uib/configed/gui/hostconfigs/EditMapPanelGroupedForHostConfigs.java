@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,6 +24,7 @@ import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -63,7 +65,6 @@ import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.tree.SimpleTreePath;
 import de.uib.utilities.tree.XTree;
 import utils.PopupMouseListener;
 import utils.Utils;
@@ -483,23 +484,28 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	// TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		TreePath p = tree.getSelectionPath();
+		TreePath selectedPath = tree.getSelectionPath();
 
 		int divLoc = splitPane.getDividerLocation();
 
-		if (p == null) {
+		if (selectedPath == null) {
 			splitPane.setRightComponent(emptyRightPane);
 			splitPane.setDividerLocation(divLoc);
 			return;
 		}
 
-		boolean isRoot = p.getPathCount() == 1;
+		boolean isRoot = selectedPath.getPathCount() == 1;
 
 		if (isRoot) {
 			splitPane.setRightComponent(emptyRightPane);
 		} else {
+			List<String> pathForKey = Arrays.stream(selectedPath.getPath()).map(Object::toString)
+					.collect(Collectors.toList());
+
 			// we start at 1 since we eliminate the root node
-			String key = SimpleTreePath.dottedString(1, p);
+			pathForKey.remove(0);
+
+			String key = String.join(".", pathForKey);
 
 			if (partialPanels.get(key) == null) {
 				splitPane.setRightComponent(emptyRightPane);
