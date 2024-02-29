@@ -58,17 +58,18 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 			for (int i = 1; i <= pathAsList.size(); i++) {
 				String partialPath = String.join(".", pathAsList.subList(0, i).toArray(new String[0]));
 				if (i > 1) {
-					parent = path2Node.get(partialPath);
+					parent = path2Node.get(String.join(".", pathAsList.subList(0, i - 1).toArray(new String[0])));
 				}
 
-				DefaultMutableTreeNode node = path2Node.get(partialPath);
+				final int lastElement = i - 1;
+				final DefaultMutableTreeNode parentNode = parent;
 
-				if (node == null) {
-					node = new DefaultMutableTreeNode(pathAsList.get(i - 1));
-
-					path2Node.put(partialPath, node);
-					parent.add(node);
-				}
+				path2Node.computeIfAbsent(partialPath, (String arg) -> {
+					DefaultMutableTreeNode node = new DefaultMutableTreeNode(pathAsList.get(lastElement));
+					path2Node.put(arg, node);
+					parentNode.add(node);
+					return node;
+				});
 			}
 		}
 
