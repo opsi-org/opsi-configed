@@ -1509,7 +1509,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		setSelectedClientsArray(clientNames);
 
-		clientTree.produceActiveParents(getSelectedClients());
+		clientTree.produceActiveParents();
 
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)

@@ -8,14 +8,17 @@ package de.uib.configed.tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
@@ -55,6 +58,9 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	protected Map<String, GroupNode> groupNodes = new HashMap<>();
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
+
+	protected Set<String> activeParents = new HashSet<>();
+	// groups containing clients (especially the selected ones)
 
 	protected DefaultTreeModel model;
 
@@ -102,6 +108,46 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	abstract void createTopNodes();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
+
+	public void initActiveParents() {
+		activeParents.clear();
+	}
+
+	public void produceActiveParents() {
+		initActiveParents();
+
+		activeParents.addAll(collectParentIDs(getSelectedObjectsInTable()));
+		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
+
+		repaint();
+	}
+
+	public Set<String> collectParentIDs(Collection<String> elementIds) {
+		Set<String> result = new HashSet<>();
+
+		recursivelyCollectParentIDs(result, rootNode, elementIds);
+
+		return result;
+	}
+
+	private static void recursivelyCollectParentIDs(Set<String> allNodes, DefaultMutableTreeNode node,
+			Collection<String> nodeIds) {
+		Enumeration<TreeNode> children = node.children();
+
+		while (children.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+
+			if (nodeIds.contains(child.toString())) {
+				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).collect(Collectors.toList()));
+			}
+
+			recursivelyCollectParentIDs(allNodes, child, nodeIds);
+		}
+	}
+
+	public Set<String> getActiveParents() {
+		return activeParents;
+	}
 
 	public void editGroupNode(TreePath path) {
 		DefaultMutableTreeNode node = null;

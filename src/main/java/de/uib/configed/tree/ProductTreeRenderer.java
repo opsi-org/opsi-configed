@@ -24,12 +24,13 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon productSelectedIcon = Utils.getThemeIconPNG("bootstrap/product_selected", "client");
 
 	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
-
-	// TODO find a way to get all the productgroups that contain a selected product and they should have this icon
 	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
 
-	public ProductTreeRenderer(Map<String, Map<String, String>> groups) {
+	private ProductTree productTree;
+
+	public ProductTreeRenderer(Map<String, Map<String, String>> groups, ProductTree productTree) {
 		this.groups = groups;
+		this.productTree = productTree;
 
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 	}
@@ -39,8 +40,14 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 			int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
+		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
+
 		if (((DefaultMutableTreeNode) value).getAllowsChildren()) {
-			setIcon(groupIcon);
+			if (productTree.getActiveParents().contains(text)) {
+				setIcon(groupContainsSelectedIcon);
+			} else {
+				setIcon(groupIcon);
+			}
 		} else {
 			if (sel) {
 				setIcon(productSelectedIcon);
@@ -49,8 +56,8 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 			}
 		}
 
-		if (value instanceof GroupNode && groups.containsKey(value.toString())) {
-			setToolTipText(groups.get(value.toString()).get("description"));
+		if (value instanceof GroupNode && groups.containsKey(text)) {
+			setToolTipText(groups.get(text).get("description"));
 		} else {
 			setToolTipText(null);
 		}

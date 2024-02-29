@@ -56,9 +56,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			Logging.warning(this, "We expected a DefaultMutableTreeNode, but received " + value.getClass().toString());
 		}
 
-		String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
-
-		setText(stringValue);
+		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
@@ -73,7 +71,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			}
 		} else {
 			// group
-			if (clientTree.getActiveParents().contains(stringValue)) {
+			if (clientTree.getActiveParents().contains(text)) {
 				setIcon(groupContainsSelectedIcon);
 			} else {
 				setIcon(groupIcon);

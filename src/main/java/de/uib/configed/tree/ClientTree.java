@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,9 +59,6 @@ public class ClientTree extends AbstractGroupTree {
 	private Map<String, DefaultMutableTreeNode> clientNodesInDirectory;
 	// clientid --> client node
 	// is a function, when the directory has been cleared
-
-	private Set<String> activeParents = new HashSet<>();
-	// groups containing clients (especially the selected ones)
 
 	private ClientTreeRenderer renderer;
 
@@ -584,46 +580,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	public TreePath getPathToALL() {
 		return pathToALL;
-	}
-
-	public void initActiveParents() {
-		activeParents.clear();
-	}
-
-	public void produceActiveParents(Collection<String> clientIds) {
-		initActiveParents();
-
-		activeParents.addAll(collectParentIDs(clientIds));
-		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
-
-		repaint();
-	}
-
-	public Set<String> collectParentIDs(Collection<String> nodeIds) {
-		Set<String> result = new HashSet<>();
-
-		recursivelyCollectParentIDs(result, rootNode, nodeIds);
-
-		return result;
-	}
-
-	private static void recursivelyCollectParentIDs(Set<String> allNodes, DefaultMutableTreeNode node,
-			Collection<String> nodeIds) {
-		Enumeration<TreeNode> children = node.children();
-
-		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
-
-			if (nodeIds.contains(child.toString())) {
-				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).collect(Collectors.toList()));
-			}
-
-			recursivelyCollectParentIDs(allNodes, child, nodeIds);
-		}
-	}
-
-	public Set<String> getActiveParents() {
-		return activeParents;
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setModel() {
-		setCellRenderer(new ProductTreeRenderer(groups));
+		setCellRenderer(new ProductTreeRenderer(groups, this));
 
 		expandPath(new TreePath(groupNodeFullList.getPath()));
 	}

@@ -353,6 +353,8 @@ public class PanelProductSettings extends JSplitPane {
 			configedMain.setProductEdited(
 					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
 		}
+
+		productTree.produceActiveParents();
 	}
 
 	private JTable strippTable(JTable jTable) {
