@@ -38,7 +38,7 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 		TreeSet<String> result = new TreeSet<>();
 
 		for (SimpleTreePath path : allPathes) {
-			result.add(path.dottedString(0, path.size()));
+			result.add(String.join(".", path));
 		}
 
 		return result;
