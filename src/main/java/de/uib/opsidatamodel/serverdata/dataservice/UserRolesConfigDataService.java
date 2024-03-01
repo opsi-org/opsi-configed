@@ -757,49 +757,10 @@ public class UserRolesConfigDataService {
 
 	}
 
-	@SuppressWarnings({ "java:S103" })
-	private boolean checkStandardConfigs() {
-		boolean result = configDataService.getConfigListCellOptionsPD() != null;
-		Logging.info(this, "checkStandardConfigs, already there " + result);
-
-		if (!result) {
-			return false;
-		}
-
-		String key;
-		final List<Map<String, Object>> readyObjects = new ArrayList<>();
-
-		Map<String, List<Object>> configDefaultValues = cacheManager
-				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-
-		// list of domains for new clients		
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
-				arg -> computeConfigedGivenDomains(readyObjects));
-
-		// search by sql if possible
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-				arg -> computeSearchBySQL(readyObjects));
-
-		// global value for install_by_shutdown
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				arg -> computeClientConfigInstallByShutdown(readyObjects));
-
-		// product_sort_algorithm
-		// will not be used in opsi 4.3
-		if (!ServerFacade.isOpsi43()) {
-			configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM,
-					arg -> computeProductSortAlgorithm(readyObjects));
-		}
-
-		// extra display fields in licencing
-		configDefaultValues.computeIfAbsent(
-				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION,
-				arg -> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(readyObjects));
-
-		// remote controls
-
+	private void checkRemoteControlConfigs(Map<String, List<Object>> configDefaultValues,
+			List<Map<String, Object>> readyObjects) {
 		// ping_linux
-		key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
+		String key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
 		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
@@ -864,9 +825,11 @@ public class UserRolesConfigDataService {
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
 		}
+	}
 
-		// additional queries
-		key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
+	private void checkAdditionalQueries(Map<String, List<Object>> configDefaultValues,
+			List<Map<String, Object>> readyObjects) {
+		String key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
 		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
@@ -889,18 +852,11 @@ public class UserRolesConfigDataService {
 					description, ""));
 		}
 
-		// WAN_CONFIGURATION
-		// does it exist?
+	}
 
-		Map<String, ConfigOption> wanConfigOptions = configDataService.retrieveWANConfigOptionsPD();
-		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
-			Logging.info(this, "build default wanConfigOptions");
-			buildWANConfigOptions(readyObjects);
-		}
-
-		// saved searches
-
-		key = SavedSearch.CONFIG_KEY + "." + "product_failed";
+	private void checkSavedSearches(Map<String, List<Object>> configDefaultValues,
+			List<Map<String, Object>> readyObjects) {
+		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
 
 		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
@@ -925,11 +881,10 @@ public class UserRolesConfigDataService {
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
 					key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
 		}
+	}
 
-		// configuration of host menus
-		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
-				arg -> computeDisabledClientActions(readyObjects));
-
+	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
+			List<Map<String, Object>> readyObjects) {
 		if (!configDefaultValues.containsKey(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
@@ -947,6 +902,70 @@ public class UserRolesConfigDataService {
 					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
 		}
+	}
+
+	@SuppressWarnings({ "java:S103" })
+	private boolean checkStandardConfigs() {
+		boolean result = configDataService.getConfigListCellOptionsPD() != null;
+		Logging.info(this, "checkStandardConfigs, already there " + result);
+
+		if (!result) {
+			return false;
+		}
+
+		// Must be final for the lambdas
+		final List<Map<String, Object>> readyObjects = new ArrayList<>();
+
+		Map<String, List<Object>> configDefaultValues = cacheManager
+				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
+
+		// list of domains for new clients		
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
+				arg -> computeConfigedGivenDomains(readyObjects));
+
+		// search by sql if possible
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+				arg -> computeSearchBySQL(readyObjects));
+
+		// global value for install_by_shutdown
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
+				arg -> computeClientConfigInstallByShutdown(readyObjects));
+
+		// product_sort_algorithm
+		// will not be used in opsi 4.3
+		if (!ServerFacade.isOpsi43()) {
+			configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM,
+					arg -> computeProductSortAlgorithm(readyObjects));
+		}
+
+		// extra display fields in licencing
+		configDefaultValues.computeIfAbsent(
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION,
+				arg -> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(readyObjects));
+
+		// remote controls
+		checkRemoteControlConfigs(configDefaultValues, readyObjects);
+
+		// additional queries
+		checkAdditionalQueries(configDefaultValues, readyObjects);
+
+		// WAN_CONFIGURATION
+		// does it exist?
+
+		Map<String, ConfigOption> wanConfigOptions = configDataService.retrieveWANConfigOptionsPD();
+		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
+			Logging.info(this, "build default wanConfigOptions");
+			buildWANConfigOptions(readyObjects);
+		}
+
+		// saved searches
+		checkSavedSearches(configDefaultValues, readyObjects);
+
+		// configuration of host menus
+		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
+				arg -> computeDisabledClientActions(readyObjects));
+
+		checkSSHCommands(configDefaultValues, readyObjects);
 
 		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
 			Logging.warning(this,
@@ -965,7 +984,6 @@ public class UserRolesConfigDataService {
 				arg -> computeOpsiclientdExtraEvents(readyObjects));
 
 		// for warnings for opsi licenses
-
 		// percentage number of clients
 		configDefaultValues.computeIfAbsent(
 				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT,
