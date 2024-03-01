@@ -224,11 +224,6 @@ public class OpsiServiceNOMPersistenceController {
 		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
 
-		userRolesConfigDataService.setConfigDataService(configDataService);
-		userRolesConfigDataService.setGroupDataService(groupDataService);
-		userRolesConfigDataService.setHostInfoCollections(hostInfoCollections);
-		userRolesConfigDataService.setModuleDataService(moduleDataService);
-
 		depotDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		depotDataService.setProductDataService(productDataService);
 		depotDataService.setHostInfoCollections(hostInfoCollections);
