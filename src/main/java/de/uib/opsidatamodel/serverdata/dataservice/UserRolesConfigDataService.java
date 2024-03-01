@@ -27,7 +27,6 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -71,32 +70,12 @@ public class UserRolesConfigDataService {
 	private CacheManager cacheManager;
 	private AbstractExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
-	private ConfigDataService configDataService;
-	private GroupDataService groupDataService;
-	private ModuleDataService moduleDataService;
-	private HostInfoCollections hostInfoCollections;
 
 	public UserRolesConfigDataService(AbstractExecutioner exec,
 			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
-	}
-
-	public void setGroupDataService(GroupDataService groupDataService) {
-		this.groupDataService = groupDataService;
-	}
-
-	public void setModuleDataService(ModuleDataService moduleDataService) {
-		this.moduleDataService = moduleDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
 	}
 
 	public boolean isGlobalReadOnly() {
@@ -149,11 +128,12 @@ public class UserRolesConfigDataService {
 
 	public final void checkConfigurationPD() {
 		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
-		moduleDataService.retrieveOpsiModules();
+		persistenceController.getModuleDataService().retrieveOpsiModules();
 		Logging.info(this,
 				"checkConfiguration, modules " + cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class));
 
-		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
 
 		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, doesUserBelongToSystemsReadOnlyGroup());
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
@@ -193,12 +173,15 @@ public class UserRolesConfigDataService {
 		applyUserSpecializedConfigPD();
 
 		// Load all data together to prevent an extra RPC-call
-		groupDataService.retrieveAllGroupsPD();
+		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
-				hostInfoCollections.getConfigServer(), hostInfoCollections.getDepotNamesList(),
-				groupDataService.getHostGroupIds(), groupDataService.getProductGroupsPD().keySet(),
-				configDataService.getConfigDefaultValuesPD(), configDataService.getConfigListCellOptionsPD()).produce();
+				persistenceController.getHostInfoCollections().getConfigServer(),
+				persistenceController.getHostInfoCollections().getDepotNamesList(),
+				persistenceController.getGroupDataService().getHostGroupIds(),
+				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
+				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
@@ -221,7 +204,8 @@ public class UserRolesConfigDataService {
 
 	private boolean isUserRegisterActivated() {
 		boolean result = false;
-		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
 		// dont do anything if we have not got the config
 		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) != null
 				&& !serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER).isEmpty()) {
@@ -234,7 +218,8 @@ public class UserRolesConfigDataService {
 	private final boolean checkUserRolesModulePD() {
 		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
 				Boolean.class);
-		if (Boolean.TRUE.equals(keyUserRegisterValue) && !moduleDataService.isWithUserRolesPD()) {
+		if (Boolean.TRUE.equals(keyUserRegisterValue)
+				&& !persistenceController.getModuleDataService().isWithUserRolesPD()) {
 			keyUserRegisterValue = false;
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
@@ -266,7 +251,7 @@ public class UserRolesConfigDataService {
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
-		boolean withUserRoles = moduleDataService.isWithUserRolesPD();
+		boolean withUserRoles = persistenceController.getModuleDataService().isWithUserRolesPD();
 		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
@@ -337,7 +322,8 @@ public class UserRolesConfigDataService {
 	private void checkPermissions() {
 		UserOpsipermission.ActionPrivilege serverActionPermission;
 
-		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
 
 		// variable for simplifying the use of the map
 		String configKey = null;
@@ -383,17 +369,17 @@ public class UserRolesConfigDataService {
 		configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key " + configKey);
 
-		if (serverPropertyMap.get(configKey) != null && moduleDataService.isWithUserRolesPD()) {
+		if (serverPropertyMap.get(configKey) != null
+				&& persistenceController.getModuleDataService().isWithUserRolesPD()) {
 			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
 
-		String configKeyUseList = null;
-		String configKeyList = null;
+		String configKeyUseList = userPartPD()
+				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
+		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
 
-		configKeyUseList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
-		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
 		Set<String> depotsPermitted = new HashSet<>();
 
 		boolean depotsFullPermission = checkFullPermission(depotsPermitted, configKeyUseList, configKeyList,
@@ -477,7 +463,8 @@ public class UserRolesConfigDataService {
 			return applyUserSpecializedConfig;
 		}
 
-		applyUserSpecializedConfig = moduleDataService.isWithUserRolesPD() && hasKeyUserRegisterValuePD();
+		applyUserSpecializedConfig = persistenceController.getModuleDataService().isWithUserRolesPD()
+				&& hasKeyUserRegisterValuePD();
 		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
 		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 
@@ -522,10 +509,10 @@ public class UserRolesConfigDataService {
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 
 		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(configDataService.getOpsiDefaultDomainPD());
+		defaultValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
 
 		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(configDataService.getOpsiDefaultDomainPD());
+		possibleValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
 
 		item.put("ident", OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
 		item.put("description", "saved domains for creating clients");
@@ -906,7 +893,7 @@ public class UserRolesConfigDataService {
 
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
-		boolean result = configDataService.getConfigListCellOptionsPD() != null;
+		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there " + result);
 
 		if (!result) {
@@ -952,7 +939,8 @@ public class UserRolesConfigDataService {
 		// WAN_CONFIGURATION
 		// does it exist?
 
-		Map<String, ConfigOption> wanConfigOptions = configDataService.retrieveWANConfigOptionsPD();
+		Map<String, ConfigOption> wanConfigOptions = persistenceController.getConfigDataService()
+				.retrieveWANConfigOptionsPD();
 		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
 			Logging.info(this, "build default wanConfigOptions");
 			buildWANConfigOptions(readyObjects);
@@ -971,11 +959,12 @@ public class UserRolesConfigDataService {
 			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + CONFIGED_WORKBENCH_KEY);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
-					configDataService.getConfigedWorkbenchDefaultValuePD(), "default path to opsiproducts"));
+					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
+					"default path to opsiproducts"));
 		} else {
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to "
 					+ (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
-			configDataService.setConfigedWorkbenchDefaultValuePD(
+			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(
 					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 		}
 
