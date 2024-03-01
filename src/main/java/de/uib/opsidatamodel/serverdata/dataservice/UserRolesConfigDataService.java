@@ -364,8 +364,8 @@ public class UserRolesConfigDataService {
 			Logging.info(this, "checkPermissions  configKey " + configKey);
 
 			if (serverPropertyMap.get(configKey) != null) {
-				Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
-				mayWriteOnOpsiserver = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
+				Logging.info(this, " checkPermissions  value  " + serverPropertyMap.get(configKey).get(0));
+				mayWriteOnOpsiserver = (Boolean) serverPropertyMap.get(configKey).get(0);
 			}
 
 			Logging.info(this, " checkPermissions mayWriteOnOpsiserver " + mayWriteOnOpsiserver);
@@ -376,15 +376,15 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		boolean serverFullPermission = serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE;
-		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverFullPermission);
+		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION,
+				serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE);
 
 		configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key " + configKey);
-		boolean withUserRoles = moduleDataService.isWithUserRolesPD();
-		if (serverPropertyMap.get(configKey) != null && withUserRoles) {
+
+		if (serverPropertyMap.get(configKey) != null && moduleDataService.isWithUserRolesPD()) {
 			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
-			boolean createClientPermission = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
+			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
 
@@ -399,8 +399,8 @@ public class UserRolesConfigDataService {
 				serverPropertyMap);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_PERMITTED, depotsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
-		Logging.info(this,
-				"checkPermissions depotsFullPermission (false means, depots must be specified " + depotsFullPermission);
+		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) "
+				+ depotsFullPermission);
 		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
 
 		configKeyUseList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
@@ -429,21 +429,23 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
-		Set<String> permittedProducts = null;
-
 		if (!productgroupsFullPermission) {
-			permittedProducts = new TreeSet<>();
-
-			for (String group : productGroupsPermitted) {
-				Map<String, Set<String>> fProductGroup2Members = cacheManager
-						.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
-				Set<String> products = fProductGroup2Members.get(group);
-				if (products != null) {
-					permittedProducts.addAll(products);
-				}
-			}
-			cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
+			setProductsPermitted(productGroupsPermitted);
 		}
+	}
+
+	private void setProductsPermitted(Set<String> productGroupsPermitted) {
+		Set<String> permittedProducts = new TreeSet<>();
+
+		for (String group : productGroupsPermitted) {
+			Map<String, Set<String>> fProductGroup2Members = cacheManager
+					.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
+			Set<String> products = fProductGroup2Members.get(group);
+			if (products != null) {
+				permittedProducts.addAll(products);
+			}
+		}
+		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 
 		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
 	}
