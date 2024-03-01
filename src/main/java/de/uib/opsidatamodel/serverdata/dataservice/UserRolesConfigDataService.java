@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -515,6 +516,247 @@ public class UserRolesConfigDataService {
 		return fullPermission;
 	}
 
+	private List<Object> computeConfigedGivenDomains(List<Map<String, Object>> readyObjects) {
+		Logging.info(this, "checkStandardConfigs: create domain list");
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+
+		List<Object> defaultValues = new ArrayList<>();
+		defaultValues.add(configDataService.getOpsiDefaultDomainPD());
+
+		List<Object> possibleValues = new ArrayList<>();
+		possibleValues.add(configDataService.getOpsiDefaultDomainPD());
+
+		item.put("ident", OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
+		item.put("description", "saved domains for creating clients");
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", true);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeSearchBySQL(List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL);
+
+		Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+				OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL,
+				"Use SQL calls for search if SQL backend is active");
+		readyObjects.add(item);
+
+		return Collections.singletonList(OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+	}
+
+	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+
+		Map<String, Object> item = Utils.createNOMBoolConfig(
+				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
+				DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, "Use install by shutdown if possible");
+		readyObjects.add(item);
+
+		return Collections.singletonList(DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+	}
+
+	private List<Object> computeProductSortAlgorithm(List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM);
+
+		List<Object> defaultValues = new ArrayList<>();
+		defaultValues.add("algorithm1");
+
+		List<Object> possibleValues = new ArrayList<>();
+		possibleValues.add("algorithm1");
+		possibleValues.add("algorithm2");
+
+		// create config for service
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		item.put("ident", OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM);
+		item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
+		item.put("defaultValues", defaultValues);
+
+		item.put("possibleValues", possibleValues);
+		item.put("editable", false);
+		item.put("multiValue", false);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
+			List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
+		// key not yet configured
+		List<Object> defaultValues = new ArrayList<>();
+		// example for standard configuration other than empty
+		// extra columns for license management, page licenses reconciliation
+		List<Object> possibleValues = new ArrayList<>();
+		possibleValues.add("description");
+		possibleValues.add("inventoryNumber");
+		possibleValues.add("notes");
+		possibleValues.add("ipAddress");
+		possibleValues.add("lastSeen");
+
+		// create config for service
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		item.put("ident",
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
+		item.put("description",
+				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation.ExtraHostFields"));
+		item.put("defaultValues", defaultValues);
+
+		item.put("possibleValues", possibleValues);
+		item.put("editable", false);
+		item.put("multiValue", true);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeDisabledClientActions(List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
+		// key not yet configured
+		List<Object> defaultValues = Collections.emptyList();
+
+		List<Object> possibleValues = new ArrayList<>();
+		possibleValues.add(ITEM_ADD_CLIENT);
+		possibleValues.add(ITEM_DELETE_CLIENT);
+		possibleValues.add(ITEM_FREE_LICENSES);
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		item.put("id", ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
+		item.put("description", "");
+		item.put("defaultValues", defaultValues);
+
+		item.put("possibleValues", possibleValues);
+		item.put("editable", false);
+		item.put("multiValue", true);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeOpsiclientdExtraEvents(List<Map<String, Object>> readyObjects) {
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+				+ ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
+		// key not yet configured
+		List<Object> defaultValues = Collections
+				.singletonList(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+
+		List<Object> possibleValues = new ArrayList<>();
+
+		possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+		possibleValues.add(OPSI_CLIENTD_EVENT_SILENT_INSTALL);
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		item.put("id", ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
+		item.put("description", "");
+		item.put("defaultValues", defaultValues);
+
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", true);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeClientLimitWarningPercent(List<Map<String, Object>> readyObjects) {
+		Logging.info(this, "checkStandardConfigs: create domain list");
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+
+		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT);
+		item.put("description", "saved domains for creating clients");
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", false);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeClientLimitWarningAbsolute(List<Map<String, Object>> readyObjects) {
+		Logging.info(this, "checkStandardConfigs: create domain list");
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+
+		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE);
+		item.put("description", "saved domains for creating clients");
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", false);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeClientLimitWarningDays(List<Map<String, Object>> readyObjects) {
+		Logging.info(this, "checkStandardConfigs: create domain list");
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+
+		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS);
+		item.put("description", "saved domains for creating clients");
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", false);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+	}
+
+	private List<Object> computeDisableWarningModules(List<Map<String, Object>> readyObjects) {
+		Logging.info(this, "checkStandardConfigs: create domain list");
+
+		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+
+		List<Object> defaultValues = Collections.emptyList();
+
+		List<Object> possibleValues = Collections.emptyList();
+
+		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES);
+		item.put("description", "saved domains for creating clients");
+		item.put("defaultValues", defaultValues);
+		item.put("possibleValues", possibleValues);
+		item.put("editable", true);
+		item.put("multiValue", true);
+
+		readyObjects.add(item);
+
+		return defaultValues;
+
+	}
+
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = configDataService.getConfigListCellOptionsPD() != null;
@@ -524,146 +766,45 @@ public class UserRolesConfigDataService {
 			return false;
 		}
 
-		List<Object> defaultValues;
-		List<Object> possibleValues;
-		Map<String, Object> item;
 		String key;
-		List<Map<String, Object>> readyObjects = new ArrayList<>();
+		final List<Map<String, Object>> readyObjects = new ArrayList<>();
 
-		// list of domains for new clients
-		key = OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY;
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.info(this, "checkStandardConfigs: create domain list");
 
-			item = Utils.createNOMitem("UnicodeConfig");
-
-			defaultValues = new ArrayList<>();
-			defaultValues.add(configDataService.getOpsiDefaultDomainPD());
-
-			possibleValues = new ArrayList<>();
-			possibleValues.add(configDataService.getOpsiDefaultDomainPD());
-
-			item.put("ident", key);
-			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", defaultValues);
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", true);
-
-			readyObjects.add(item);
-
-			configDefaultValues.put(key, defaultValues);
-		}
+		// list of domains for new clients		
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
+				arg -> computeConfigedGivenDomains(readyObjects));
 
 		// search by sql if possible
-		key = OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL;
-
-		defaultValues = configDefaultValues.get(key);
-
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-
-			item = Utils.createNOMBoolConfig(key, OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL,
-					"Use SQL calls for search if SQL backend is active");
-			readyObjects.add(item);
-		}
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+				arg -> computeSearchBySQL(readyObjects));
 
 		// global value for install_by_shutdown
-
-		key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
-
-		defaultValues = configDefaultValues.get(key);
-
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-
-			item = Utils.createNOMBoolConfig(key, DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-					"Use install by shutdown if possible");
-			readyObjects.add(item);
-		}
+		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
+				arg -> computeClientConfigInstallByShutdown(readyObjects));
 
 		// product_sort_algorithm
 		// will not be used in opsi 4.3
 		if (!ServerFacade.isOpsi43()) {
-			key = OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM;
-			// defaultValues
-			defaultValues = configDefaultValues.get(key);
-			Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
-
-			if (defaultValues == null) {
-				Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-
-				defaultValues = new ArrayList<>();
-				defaultValues.add("algorithm1");
-
-				possibleValues = new ArrayList<>();
-				possibleValues.add("algorithm1");
-				possibleValues.add("algorithm2");
-
-				// create config for service
-				item = Utils.createNOMitem("UnicodeConfig");
-				item.put("ident", key);
-				item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-				item.put("defaultValues", defaultValues);
-
-				item.put("possibleValues", possibleValues);
-				item.put("editable", false);
-				item.put("multiValue", false);
-
-				readyObjects.add(item);
-			}
+			configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM,
+					arg -> computeProductSortAlgorithm(readyObjects));
 		}
 
 		// extra display fields in licencing
-
-		key = OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION;
-
-		// defaultValues
-
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-			// key not yet configured
-			defaultValues = new ArrayList<>();
-			// example for standard configuration other than empty
-			// extra columns for license management, page licenses reconciliation
-			possibleValues = new ArrayList<>();
-			possibleValues.add("description");
-			possibleValues.add("inventoryNumber");
-			possibleValues.add("notes");
-			possibleValues.add("ipAddress");
-			possibleValues.add("lastSeen");
-
-			// create config for service
-			item = Utils.createNOMitem("UnicodeConfig");
-			item.put("ident", key);
-			item.put("description",
-					Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation.ExtraHostFields"));
-			item.put("defaultValues", defaultValues);
-
-			item.put("possibleValues", possibleValues);
-			item.put("editable", false);
-			item.put("multiValue", true);
-
-			readyObjects.add(item);
-		}
+		configDefaultValues.computeIfAbsent(
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION,
+				arg -> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(readyObjects));
 
 		// remote controls
-		String command;
-		String description;
 
 		// ping_linux
 		key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
-
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-			command = "xterm +hold -e ping %host%";
-			description = "ping, started in a Linux environment";
+			String command = "xterm +hold -e ping %host%";
+			String description = "ping, started in a Linux environment";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
 			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
@@ -676,12 +817,11 @@ public class UserRolesConfigDataService {
 		// ping_windows
 		key = RemoteControl.CONFIG_KEY + "." + "ping_windows";
 
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-			command = "cmd.exe /c start ping %host%";
-			description = "ping, started in a Windows terminal";
+			String command = "cmd.exe /c start ping %host%";
+			String description = "ping, started in a Windows terminal";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
 			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
@@ -694,12 +834,11 @@ public class UserRolesConfigDataService {
 		// connect to opsiclientd timeline, linux
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_linux";
 
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-			command = "firefox https://%host%:4441/info.html";
-			description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
+			String command = "firefox https://%host%:4441/info.html";
+			String description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
 			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
@@ -712,12 +851,11 @@ public class UserRolesConfigDataService {
 		// connect to opsiclientd timeline, windows
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_windows";
 
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-			command = "cmd.exe /c start https://%host%:4441/info.html";
-			description = "opsiclientd  timeline, called rfrom a Windows environment";
+			String command = "cmd.exe /c start https://%host%:4441/info.html";
+			String description = "opsiclientd  timeline, called rfrom a Windows environment";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, command, description));
 			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY,
@@ -728,24 +866,20 @@ public class UserRolesConfigDataService {
 		}
 
 		// additional queries
-		String query;
-		StringBuilder qbuf;
 		key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
-		defaultValues = configDefaultValues.get(key);
-
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-			qbuf = new StringBuilder("select");
+			StringBuilder qbuf = new StringBuilder("select");
 			qbuf.append(" hostId, productId, installationStatus from ");
 			qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
 			qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
 			qbuf.append(" AND =  installationStatus='installed' ");
 			qbuf.append(" order by hostId, productId ");
 
-			query = qbuf.toString();
-			description = "all hosts and their installed products";
+			String query = qbuf.toString();
+			String description = "all hosts and their installed products";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, query, description));
 			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false,
@@ -761,16 +895,14 @@ public class UserRolesConfigDataService {
 		Map<String, ConfigOption> wanConfigOptions = configDataService.retrieveWANConfigOptionsPD();
 		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
 			Logging.info(this, "build default wanConfigOptions");
-			readyObjects = buildWANConfigOptions(readyObjects);
+			buildWANConfigOptions(readyObjects);
 		}
 
 		// saved searches
 
 		key = SavedSearch.CONFIG_KEY + "." + "product_failed";
 
-		defaultValues = configDefaultValues.get(key);
-
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(key)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
 			StringBuilder val = new StringBuilder();
@@ -785,7 +917,7 @@ public class UserRolesConfigDataService {
 
 			String value = val.toString();
 
-			description = "any product failed";
+			String description = "any product failed";
 
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, value, description));
 
@@ -795,200 +927,64 @@ public class UserRolesConfigDataService {
 		}
 
 		// configuration of host menus
+		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
+				arg -> computeDisabledClientActions(readyObjects));
 
-		key = ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS;
-
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
-			// key not yet configured
-			defaultValues = new ArrayList<>();
-			configDefaultValues.put(key, defaultValues);
-
-			possibleValues = new ArrayList<>();
-			possibleValues.add(ITEM_ADD_CLIENT);
-			possibleValues.add(ITEM_DELETE_CLIENT);
-			possibleValues.add(ITEM_FREE_LICENSES);
-
-			item = Utils.createNOMitem("UnicodeConfig");
-			item.put("id", key);
-			item.put("description", "");
-			item.put("defaultValues", defaultValues);
-
-			item.put("possibleValues", possibleValues);
-			item.put("editable", false);
-			item.put("multiValue", true);
-
-			readyObjects.add(item);
-		}
-
-		key = OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
+					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER,
 					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
 
-		key = OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
+		if (!configDefaultValues.containsKey(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
+					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW,
 					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
 		}
 
-		key = CONFIGED_WORKBENCH_KEY;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key,
+		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
+			Logging.warning(this,
+					"checkStandardConfigs:  since no values found setting values for  " + CONFIGED_WORKBENCH_KEY);
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
 					configDataService.getConfigedWorkbenchDefaultValuePD(), "default path to opsiproducts"));
 		} else {
-			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
-			configDataService.setConfigedWorkbenchDefaultValuePD((String) defaultValues.get(0));
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to "
+					+ (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
+			configDataService.setConfigedWorkbenchDefaultValuePD(
+					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 		}
 
 		// configuration of opsiclientd extra events
-
-		key = ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS;
-
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
-			// key not yet configured
-			defaultValues = new ArrayList<>();
-
-			defaultValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
-
-			configDefaultValues.put(key, defaultValues);
-
-			possibleValues = new ArrayList<>();
-
-			possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
-			possibleValues.add(OPSI_CLIENTD_EVENT_SILENT_INSTALL);
-
-			item = Utils.createNOMitem("UnicodeConfig");
-			item.put("id", key);
-			item.put("description", "");
-			item.put("defaultValues", defaultValues);
-
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", true);
-
-			readyObjects.add(item);
-		}
+		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS,
+				arg -> computeOpsiclientdExtraEvents(readyObjects));
 
 		// for warnings for opsi licenses
 
 		// percentage number of clients
-		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.info(this, "checkStandardConfigs: create domain list");
-
-			item = Utils.createNOMitem("UnicodeConfig");
-
-			defaultValues = new ArrayList<>();
-			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-			possibleValues = new ArrayList<>();
-			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-			item.put("ident", key);
-			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", defaultValues);
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", false);
-
-			readyObjects.add(item);
-
-			configDefaultValues.put(key, defaultValues);
-		}
+		configDefaultValues.computeIfAbsent(
+				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT,
+				arg -> computeClientLimitWarningPercent(readyObjects));
 
 		// absolute number of clients
-		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.info(this, "checkStandardConfigs: create domain list");
-
-			item = Utils.createNOMitem("UnicodeConfig");
-
-			defaultValues = new ArrayList<>();
-			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
-
-			possibleValues = new ArrayList<>();
-			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
-
-			item.put("ident", key);
-			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", defaultValues);
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", false);
-
-			readyObjects.add(item);
-
-			configDefaultValues.put(key, defaultValues);
-		}
+		configDefaultValues.computeIfAbsent(
+				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE,
+				arg -> computeClientLimitWarningAbsolute(readyObjects));
 
 		// days limit warning
-		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.info(this, "checkStandardConfigs: create domain list");
-
-			item = Utils.createNOMitem("UnicodeConfig");
-
-			defaultValues = new ArrayList<>();
-			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-			possibleValues = new ArrayList<>();
-			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-			item.put("ident", key);
-			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", defaultValues);
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", false);
-
-			readyObjects.add(item);
-
-			configDefaultValues.put(key, defaultValues);
-		}
+		configDefaultValues.computeIfAbsent(
+				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS,
+				arg -> computeClientLimitWarningDays(readyObjects));
 
 		// modules disabled for warnings
-		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES;
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.info(this, "checkStandardConfigs: create domain list");
-
-			item = Utils.createNOMitem("UnicodeConfig");
-
-			defaultValues = new ArrayList<>();
-
-			possibleValues = new ArrayList<>();
-
-			item.put("ident", key);
-			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", defaultValues);
-			item.put("possibleValues", possibleValues);
-			item.put("editable", true);
-			item.put("multiValue", true);
-
-			readyObjects.add(item);
-
-			configDefaultValues.put(key, defaultValues);
-		}
+		configDefaultValues.computeIfAbsent(
+				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES,
+				arg -> computeDisableWarningModules(readyObjects));
 
 		// add metaconfigs
 
@@ -1031,7 +1027,7 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private static List<Map<String, Object>> buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
+	private static void buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = Utils.createNOMBoolConfig(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
@@ -1056,8 +1052,6 @@ public class UserRolesConfigDataService {
 				false, "meta configuration for default not wan behaviour");
 
 		readyObjects.add(item);
-
-		return readyObjects;
 	}
 
 	public boolean hasDepotPermission(String depotId) {
