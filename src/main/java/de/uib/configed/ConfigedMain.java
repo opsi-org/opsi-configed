@@ -129,7 +129,6 @@ import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import utils.ProductPackageVersionSeparator;
 import utils.Utils;
 
 public class ConfigedMain implements ListSelectionListener, MessagebusListener {
@@ -1783,41 +1782,11 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
-		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().initEditing(productname,
-				persistenceController.getProductDataService().getProductTitle(productname),
-				persistenceController.getProductDataService().getProductInfo(productname),
-				persistenceController.getProductDataService().getProductHint(productname),
-				persistenceController.getProductDataService().getProductVersion(productname)
-						+ ProductPackageVersionSeparator.FOR_DISPLAY
-						+ persistenceController.getProductDataService().getProductPackageVersion(productname) + "   "
-						+ persistenceController.getProductDataService().getProductLockedInfo(productname),
-				// List of the properties map of all selected clients
-				productProperties,
-				// these properties merged to one map
-				mergedProductProperties,
+		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().initEditing(productname, productProperties,
+				mergedProductProperties, clientProductpropertiesUpdateCollection);
 
-				// editmappanelx
-				persistenceController.getProductDataService().getProductPropertyOptionsMap(productname),
-
-				clientProductpropertiesUpdateCollection);
-
-		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().initEditing(productname,
-				persistenceController.getProductDataService().getProductTitle(productname),
-				persistenceController.getProductDataService().getProductInfo(productname),
-				persistenceController.getProductDataService().getProductHint(productname),
-				persistenceController.getProductDataService().getProductVersion(productname)
-						+ ProductPackageVersionSeparator.FOR_DISPLAY
-						+ persistenceController.getProductDataService().getProductPackageVersion(productname) + "   "
-						+ persistenceController.getProductDataService().getProductLockedInfo(productname),
-				// array of the properties map of all selected clients
-				productProperties,
-				// these properties merged to one map
-				mergedProductProperties,
-
-				// editmappanelx
-				persistenceController.getProductDataService().getProductPropertyOptionsMap(productname),
-
-				clientProductpropertiesUpdateCollection);
+		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().initEditing(productname, productProperties,
+				mergedProductProperties, clientProductpropertiesUpdateCollection);
 	}
 
 	public int getViewIndex() {

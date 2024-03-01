@@ -60,8 +60,8 @@ import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.ListCellOptions;
 import utils.PopupMouseListener;
+import utils.ProductPackageVersionSeparator;
 import utils.Utils;
 
 public class PanelProductSettings extends JSplitPane {
@@ -93,7 +93,10 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ConfigedMain configedMain;
 
-	ProductSettingsType type;
+	private ProductSettingsType type;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
 			Map<String, Boolean> productDisplayFields, ProductSettingsType type) {
@@ -216,8 +219,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
-		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
 		save.addActionListener((ActionEvent e) -> {
@@ -230,8 +232,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
-		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
@@ -240,8 +241,8 @@ public class PanelProductSettings extends JSplitPane {
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"),
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
-		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		itemOnDemandForSelectedProducts
+				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
 				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -571,21 +572,20 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	public void initEditing(String productID, String productTitle, String productInfo, String productHint,
-			String productVersion, Collection<Map<String, Object>> storableProductProperties,
-			Map editableProductProperties,
-			// editmappanelx
-			Map<String, ListCellOptions> productpropertyOptionsMap,
-			ProductpropertiesUpdateCollection updateCollection) {
+	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
+			Map editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setProductId(productID);
-		infoPane.setProductName(productTitle);
-		infoPane.setProductInfo(productInfo);
-		infoPane.setProductVersion(productVersion);
+		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
+		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
+		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
+				+ ProductPackageVersionSeparator.FOR_DISPLAY
+				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
+				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 
-		infoPane.setProductAdvice(productHint);
+		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductHint(productID));
 
-		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
-
+		propertiesPanel.setEditableMap(editableProductProperties,
+				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);
 	}
@@ -595,7 +595,9 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private void clearEditing() {
-		initEditing("", "", "", "", "", null, null, null, null);
+		propertiesPanel.setEditableMap(null, null);
+		propertiesPanel.setStoreData(null);
+		propertiesPanel.setUpdateCollection(null);
 		infoPane.clearEditing();
 	}
 
