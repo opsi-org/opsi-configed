@@ -1026,8 +1026,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// interface ComboBoxModeller
 	@Override
 	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-		row = originRow(row);
-		actualProduct = productsV.get(row);
+		actualProduct = productsV.get(originRow(row));
 
 		String[] possibleOptions;
 
@@ -1132,7 +1131,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	public String getLastStateChange(int row) {
-		String product = productsV.get(row);
+		String product = productsV.get(originRow(row));
 
 		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(product);
 	}
