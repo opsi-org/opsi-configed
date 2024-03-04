@@ -110,8 +110,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			if (groups != null) {
 				setToolTipText(groups.get(node.toString()).get("description"));
 			}
-		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null
-				&& !"".equals(host2HostInfo.get(userObject).getDescription())) {
+		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null) {
 			setToolTipText(host2HostInfo.get(userObject).getDescription());
 		} else {
 			setToolTipText(null);

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -111,7 +112,8 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		for (String productId : persistenceController.getProductDataService().getProductIdsPD()) {
+		for (String productId : new TreeSet<>(persistenceController.getProductDataService()
+				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet())) {
 			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
 		}
 

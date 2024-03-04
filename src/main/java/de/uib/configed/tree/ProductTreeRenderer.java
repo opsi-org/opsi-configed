@@ -7,6 +7,8 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
+import java.awt.font.TextAttribute;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -15,6 +17,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import utils.Utils;
 
 public class ProductTreeRenderer extends DefaultTreeCellRenderer {
@@ -30,6 +34,9 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
 
 	private ProductTree productTree;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public ProductTreeRenderer(Map<String, Map<String, String>> groups, ProductTree productTree) {
 		this.groups = groups;
@@ -58,7 +65,14 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 		if (value instanceof GroupNode && groups.containsKey(text)) {
 			setToolTipText(groups.get(text).get("description"));
 		} else {
-			setToolTipText(null);
+			setToolTipText(persistenceController.getProductDataService().getProductInfo(text));
+		}
+
+		if (hasFocus) {
+			setFont(getFont()
+					.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+		} else {
+			setFont(getFont().deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, -1)));
 		}
 
 		return this;
