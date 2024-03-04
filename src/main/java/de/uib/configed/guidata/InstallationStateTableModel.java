@@ -765,26 +765,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.size());
 
 			// -- not each client got a new action for this product
+			String visualActionRequest = getVisualActionRequestForSelectedClients(product);
 
-			String newValUntilNow = null;
-			boolean started = false;
-
-			for (String clientId : selectedClients) {
-				if (!started) {
-					started = true;
-					newValUntilNow = getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST);
-				} else if (newValUntilNow == null) {
-					if (getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST) != null) {
-						newValUntilNow = Globals.CONFLICT_STATE_STRING;
-					}
-				} else if (!newValUntilNow
-						.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
-					newValUntilNow = Globals.CONFLICT_STATE_STRING;
-				} else {
-					// No conflict between old and new values, they are equal
-				}
-			}
-			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(product.getKey(), newValUntilNow);
+			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(product.getKey(), visualActionRequest);
 		}
 
 		// removes the selection
@@ -792,6 +775,28 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		// ordering command
 		tellAndClearMissingProducts(productId);
+	}
+
+	private String getVisualActionRequestForSelectedClients(Entry<String, Set<String>> product) {
+		String result = null;
+		boolean started = false;
+
+		for (String clientId : selectedClients) {
+			if (!started) {
+				started = true;
+				result = getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST);
+			} else if (result == null) {
+				if (getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST) != null) {
+					return Globals.CONFLICT_STATE_STRING;
+				}
+			} else if (!result.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
+				return Globals.CONFLICT_STATE_STRING;
+			} else {
+				// No conflict between old and new values, they are equal
+			}
+		}
+
+		return result;
 	}
 
 	private void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
