@@ -38,13 +38,7 @@ public class FSelectionList extends FGeneralDialog {
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int preferredWidth, int preferredHeight, String savedStatesObjectTag) {
-		this(owner, title, modal, buttonList, icons, preferredWidth, preferredHeight, null, savedStatesObjectTag);
-	}
-
-	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int preferredWidth, int preferredHeight, JPanel additionalPane, String savedStatesObjectTag) {
-		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
-				additionalPane);
+		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false, null);
 		this.savedStatesObjectTag = savedStatesObjectTag;
 		this.owner = owner;
 	}

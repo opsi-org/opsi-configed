@@ -261,7 +261,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		setNowTimeAsTarget();
 
 		JLabel labelColon = new JLabel(":");
-
 		JLabel labelDelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.delay"));
 		JLabel labelStartdelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.setTime"));
 		JLabel labelStartAt = new JLabel(Configed.getResourceValue("FStartWakeOnLan.resultingStartTime"));
@@ -444,7 +443,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		remMinutesS = formatlNumberUpTo99(remminutes);
 		hoursS = formatlNumberUpTo99(hours);
 
-		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
+		return hoursS + ":" + remMinutesS + ":" + remSecondsS;
 	}
 
 	private static String formatlNumberUpTo99(long n) {
