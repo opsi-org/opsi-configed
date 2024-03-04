@@ -649,22 +649,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
 						+ combineCols);
 
-		if (value == null) {
+		// Search only for value longer than one digit
+		if (value == null || value.toString().length() < 2) {
 			return -1;
 		}
 
 		String val = value.toString().toLowerCase(Locale.ROOT);
 
-		if (val.length() < 2) {
-			return -1;
-		}
-		// dont start searching for single chars
-
-		int viewrow = 0;
-
-		if (startviewrow > 0) {
-			viewrow = startviewrow;
-		}
+		int viewrow = Math.max(0, startviewrow);
 
 		Pattern pattern = null;
 		if (regex) {

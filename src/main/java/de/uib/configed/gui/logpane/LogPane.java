@@ -35,7 +35,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -395,10 +394,6 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.setCaretPosition(caretPosition);
 	}
 
-	public String getFilenameFromTitle() {
-		return title.replace(" ", "_").replace(".", "_") + ".log";
-	}
-
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
 	private static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
@@ -453,17 +448,13 @@ public class LogPane extends JPanel implements KeyListener {
 		LogPane copyOfMe = new LogPane("", false);
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, showTypeRestricted, selTypeIndex, parser);
-		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
+		copyOfMe.jTextPane.setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
-		externalize(copyOfMe, title);
+		externalize(copyOfMe, title, this.getSize());
 	}
 
 	public void externalize(String title, Dimension size) {
 		externalize(this, title, size);
-	}
-
-	public void externalize(LogPane logPane, String title) {
-		externalize(logPane, title, this.getSize());
 	}
 
 	public void externalize(LogPane logPane, String title, Dimension size) {
@@ -476,10 +467,6 @@ public class LogPane extends JPanel implements KeyListener {
 		}
 		externalView.setLocationRelativeTo(Main.getMainFrame());
 		externalView.setVisible(true);
-	}
-
-	private JTextComponent getTextComponent() {
-		return jTextPane;
 	}
 
 	public void setTitle(String s) {
@@ -712,10 +699,6 @@ public class LogPane extends JPanel implements KeyListener {
 		buildDocument();
 	}
 
-	private void editSearchString() {
-		jComboBoxSearch.requestFocus();
-	}
-
 	private void search() {
 		Logging.debug(this, "Searching string in log");
 
@@ -783,7 +766,7 @@ public class LogPane extends JPanel implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 		if (e.getSource() == jTextPane) {
 			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') {
-				editSearchString();
+				jComboBoxSearch.requestFocus();
 			}
 
 			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) {
