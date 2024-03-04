@@ -1259,7 +1259,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		Logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, originRow(row), col);
 		fireTableCellUpdated(originRow(row), col);
-		fireTableCellUpdated(row, col);
 	}
 
 	protected void changeValueAt(Object value, int row, int col) {

@@ -1,4 +1,13 @@
 # Changelog
+
+## [4.3.2.x] - 2024-xx-xx
+## Fixed
+- Tooltip for changed states in Product id
+
+## Changed
+- Update group icons
+- Tooltip for products in product tree
+
 ## [4.3.2.4] - 2024-02-28
 ## Changed
 - Update Icons in client tree
