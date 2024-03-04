@@ -32,7 +32,6 @@ import de.uib.configed.clientselection.operations.OrOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -84,13 +83,6 @@ public class OpsiDataSerializer {
 		set.addAll(searches.keySet());
 		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
 		return new LinkedList<>(set);
-	}
-
-	/**
-	 * Get the saved searches map
-	 */
-	public SavedSearches getSavedSearches() {
-		return persistenceController.getConfigDataService().getSavedSearchesPD();
 	}
 
 	/**
@@ -500,13 +492,16 @@ public class OpsiDataSerializer {
 			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
 				element = manager.getNewSoftwareNameElement();
 			} else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-				element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
+				element = new GroupWithSubgroupsElement(
+						persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
 			} else if (elementName.equals(ELEMENT_NAME_GROUP)) {
 				// constructing a compatibility with format without GroupWithSubgroupsElement
 				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-					element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
+					element = new GroupWithSubgroupsElement(
+							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
 				} else {
-					element = new GroupElement(manager.getBackend().getGroups().toArray(new String[0]));
+					element = new GroupElement(
+							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
 				}
 			} else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
 				if (hardware == null) {

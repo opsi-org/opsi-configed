@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
@@ -495,14 +494,6 @@ public final class OpsiDataBackend {
 			clients.add(client);
 		}
 		return clients;
-	}
-
-	public List<String> getGroups() {
-		return persistenceController.getGroupDataService().getHostGroupIds();
-	}
-
-	public NavigableSet<String> getProductIDs() {
-		return persistenceController.getProductDataService().getProductIdsPD();
 	}
 
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {

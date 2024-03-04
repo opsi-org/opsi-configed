@@ -252,7 +252,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		Logging.info(this, "resetModel");
 		model.removeAllElements();
 
-		SavedSearches savedSearches = manager.getSavedSearches();
+		SavedSearches savedSearches = persistenceController.getConfigDataService().getSavedSearchesPD();
 		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
 		Map<String, String> descMap = new TreeMap<>();
 

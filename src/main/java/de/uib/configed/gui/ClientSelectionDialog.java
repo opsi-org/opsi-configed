@@ -117,6 +117,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ConfigedMain configedMain;
 
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	public ClientSelectionDialog(ConfigedMain configedMain, ClientTable selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
@@ -125,8 +128,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);
 
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
 		this.withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
 				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
 						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
@@ -166,7 +167,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		manager.loadSearch(name);
 		loadFromManager();
-		SavedSearch search = manager.getSavedSearches().get(name);
+		SavedSearch search = persistenceController.getConfigDataService().getSavedSearchesPD().get(name);
 		saveNameField.setText(search.getName());
 		saveDescriptionField.setText(search.getDescription());
 	}
@@ -461,10 +462,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.type = GroupType.HOST_GROUP;
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
 
-		result.groupList
-				.add(createSimpleGroup(new GroupElement(manager.getBackend().getGroups().toArray(new String[0]))));
-		result.groupList.add(createSimpleGroup(
-				new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]))));
+		result.groupList.add(createSimpleGroup(new GroupElement(
+				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
+		result.groupList.add(createSimpleGroup(new GroupWithSubgroupsElement(
+				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(
 				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));
