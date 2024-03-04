@@ -26,6 +26,9 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
 	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
 
+	private ImageIcon groupOpenIcon = Utils.getThemeIconPNG("bootstrap/group_open", "");
+	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
+
 	private ProductTree productTree;
 
 	public ProductTreeRenderer(Map<String, Map<String, String>> groups, ProductTree productTree) {
@@ -43,11 +46,7 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 		if (((DefaultMutableTreeNode) value).getAllowsChildren()) {
-			if (productTree.getActiveParents().contains(text)) {
-				setIcon(groupContainsSelectedIcon);
-			} else {
-				setIcon(groupIcon);
-			}
+			setGroupIcon(expanded, productTree.getActiveParents().contains(text));
 		} else {
 			if (sel) {
 				setIcon(productSelectedIcon);
@@ -63,5 +62,21 @@ public class ProductTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
+	}
+
+	private void setGroupIcon(boolean expanded, boolean containsSelected) {
+		if (expanded) {
+			if (containsSelected) {
+				setIcon(groupOpenContainsSelectedIcon);
+			} else {
+				setIcon(groupOpenIcon);
+			}
+		} else {
+			if (containsSelected) {
+				setIcon(groupContainsSelectedIcon);
+			} else {
+				setIcon(groupIcon);
+			}
+		}
 	}
 }

@@ -33,6 +33,9 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
 	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
 
+	private ImageIcon groupOpenIcon = Utils.getThemeIconPNG("bootstrap/group_open", "");
+	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
+
 	public ClientTreeRenderer(ClientTree clientTree) {
 		this.clientTree = clientTree;
 
@@ -71,11 +74,7 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			}
 		} else {
 			// group
-			if (clientTree.getActiveParents().contains(text)) {
-				setIcon(groupContainsSelectedIcon);
-			} else {
-				setIcon(groupIcon);
-			}
+			setGroupIcon(expanded, clientTree.getActiveParents().contains(text));
 		}
 
 		if (hasFocus) {
@@ -86,6 +85,22 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
+	}
+
+	private void setGroupIcon(boolean expanded, boolean containsSelected) {
+		if (expanded) {
+			if (containsSelected) {
+				setIcon(groupOpenContainsSelectedIcon);
+			} else {
+				setIcon(groupOpenIcon);
+			}
+		} else {
+			if (containsSelected) {
+				setIcon(groupContainsSelectedIcon);
+			} else {
+				setIcon(groupIcon);
+			}
+		}
 	}
 
 	private void setTooltip(DefaultMutableTreeNode node) {
