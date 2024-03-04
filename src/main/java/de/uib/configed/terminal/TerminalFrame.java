@@ -313,6 +313,11 @@ public final class TerminalFrame implements MessagebusListener {
 		southPanel.setVisible(show);
 	}
 
+	public void execute(String command) {
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		widget.getTerminalPanel().getTerminalOutputStream().sendString(command + "\r", true);
+	}
+
 	public void display() {
 		if (frame == null) {
 			createAndShowGUI();

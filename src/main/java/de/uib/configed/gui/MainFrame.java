@@ -58,6 +58,7 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
+import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -86,6 +87,7 @@ public class MainFrame extends JFrame {
 	private ClientMenuManager clientMenu;
 
 	private JMenu jMenuServer = new JMenu();
+	private JMenu jMenuTerminal = new JMenu();
 
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
 
@@ -437,6 +439,19 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+	private void setupMenuTerminal() {
+		jMenuTerminal.removeAll();
+		jMenuTerminal.setText("Terminal");
+		jMenuTerminal.add(jMenuTerminal);
+
+		TerminalCommandOpsiSetRights opsiSetRights = new TerminalCommandOpsiSetRights();
+		JMenuItem opsiSetRightsMenuItem = new JMenuItem();
+		opsiSetRightsMenuItem.setText(opsiSetRights.getMenuText());
+		opsiSetRightsMenuItem.setToolTipText(opsiSetRights.getToolTipText());
+		opsiSetRightsMenuItem.addActionListener((ActionEvent e) -> opsiSetRights.startParameterGui(configedMain));
+		jMenuTerminal.add(opsiSetRightsMenuItem);
+	}
+
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {
 		if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
 			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
@@ -705,12 +720,14 @@ public class MainFrame extends JFrame {
 
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
 		setupMenuServer();
+		setupMenuTerminal();
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServer);
+		jMenuBar.add(jMenuTerminal);
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
