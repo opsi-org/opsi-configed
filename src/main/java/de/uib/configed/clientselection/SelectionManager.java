@@ -161,9 +161,6 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
 		boolean withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
 				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
 						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
