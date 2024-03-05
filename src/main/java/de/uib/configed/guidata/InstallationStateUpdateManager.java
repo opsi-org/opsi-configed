@@ -77,7 +77,6 @@ public class InstallationStateUpdateManager {
 		if (collectChangedProductStates != null && !collectChangedProductStates.isEmpty()) {
 			for (Entry<String, Map<String, Map<String, String>>> changedClientState : collectChangedProductStates
 					.entrySet()) {
-
 				Map<String, Map<String, String>> clientValues = changedClientState.getValue();
 
 				Logging.debug(this, "updateProductStates, collectChangedProductStates , client "

@@ -126,7 +126,6 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
-
 		if (!shouldShow(e)) {
 			return false;
 		}

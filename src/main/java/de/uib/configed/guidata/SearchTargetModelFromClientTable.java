@@ -13,7 +13,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModelFromTable;
 
 public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
-
 	public SearchTargetModelFromClientTable(JTable table) {
 		super(table);
 

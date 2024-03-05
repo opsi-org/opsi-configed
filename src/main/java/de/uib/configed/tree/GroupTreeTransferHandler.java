@@ -172,7 +172,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		// there can only be one group selected, and it can only be moved
 		// (for top groups the NONE handler was already returned)
 		for (TreePath path : tree.getSelectionPaths()) {
-
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
 				Logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
 				return TransferHandler.COPY;

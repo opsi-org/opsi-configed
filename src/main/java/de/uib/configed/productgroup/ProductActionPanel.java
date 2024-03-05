@@ -181,7 +181,6 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
-
 		Set<String> saveSelectedProducts = associate.getSelectedIDs();
 
 		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());

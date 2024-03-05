@@ -730,7 +730,6 @@ public class UserRolesConfigDataService {
 		readyObjects.add(item);
 
 		return defaultValues;
-
 	}
 
 	private void checkRemoteControlConfigs(Map<String, List<Object>> configDefaultValues,
@@ -827,7 +826,6 @@ public class UserRolesConfigDataService {
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY,
 					description, ""));
 		}
-
 	}
 
 	private void checkSavedSearches(Map<String, List<Object>> configDefaultValues,

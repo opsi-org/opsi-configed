@@ -87,7 +87,6 @@ public class FTextArea extends FGeneralDialog {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
 		if (!e.isShiftDown() && e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jButton1.requestFocus();
 		}

@@ -21,7 +21,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
-
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
 

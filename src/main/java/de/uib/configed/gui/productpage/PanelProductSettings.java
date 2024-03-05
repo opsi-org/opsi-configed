@@ -140,7 +140,6 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private void init() {
-
 		initTopPane();
 
 		JScrollPane paneProducts = new JScrollPane();

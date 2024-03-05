@@ -153,7 +153,6 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-
 		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
 		selectedProducts.addAll(netbootPanel.getSelectedIDs());
 
