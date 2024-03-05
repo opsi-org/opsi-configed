@@ -320,7 +320,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkPermissions() {
-		UserOpsipermission.ActionPrivilege serverActionPermission;
+		boolean serverActionPermission = true;
 
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
@@ -342,29 +342,18 @@ public class UserRolesConfigDataService {
 		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
 
 		if (globalReadOnly) {
-			serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
+			serverActionPermission = false;
 		} else {
-			// is default!!
-			boolean mayWriteOnOpsiserver = true;
-
 			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
 			Logging.info(this, "checkPermissions  configKey " + configKey);
 
 			if (serverPropertyMap.get(configKey) != null) {
 				Logging.info(this, " checkPermissions  value  " + serverPropertyMap.get(configKey).get(0));
-				mayWriteOnOpsiserver = (Boolean) serverPropertyMap.get(configKey).get(0);
-			}
-
-			Logging.info(this, " checkPermissions mayWriteOnOpsiserver " + mayWriteOnOpsiserver);
-			if (mayWriteOnOpsiserver) {
-				serverActionPermission = UserOpsipermission.ActionPrivilege.READ_WRITE;
-			} else {
-				serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
+				serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION,
-				serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE);
+		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
 
 		configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key " + configKey);
