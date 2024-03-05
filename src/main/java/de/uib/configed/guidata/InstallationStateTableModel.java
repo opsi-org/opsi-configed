@@ -1286,7 +1286,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		if (!retrieveValue.equals(value)) {
 			changeValue(value, col);
 		}
-
 	}
 
 	private void changeValue(Object value, int col) {
