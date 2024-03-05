@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.2.x] - 2024-xx-xx
+## [4.3.2.5] - 2024-03-05
 ## Fixed
 - Tooltip for changed states in Product id
 
