@@ -471,6 +471,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return result;
 	}
 
+	public String getGroupDescription(String groupId) {
+		return groups.get(groupId).get("description");
+	}
+
 	abstract boolean isInDirectory(String node);
 
 	abstract boolean isInDirectory(TreePath path);
@@ -484,4 +488,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
+
+	abstract String getObjectDescription(String objectId);
 }

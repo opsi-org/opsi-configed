@@ -1372,7 +1372,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + allPCs);
 
 		clientTree.clear();
-		clientTree.setClientInfo(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
 		clientTree.produceTreeForALL(allPCs);
 
