@@ -11,9 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,14 +46,18 @@ import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
+	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+
 	private static final int BLINK_RATE = 0;
 	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
+	private static final String FULL_TEXT_SEARCH_WITH_ALTERNATIVES_PROPERTY = "fullTextSearchWithAlternatives";
 	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
 	private static final String PROGRESSIVE_SEARCH_PROPERTY = "progressiveSearch";
 
 	public static final int FULL_TEXT_SEARCH = 0;
-	public static final int START_TEXT_SEARCH = 1;
-	public static final int REGEX_SEARCH = 2;
+	public static final int FULL_TEXT_SEARCH_WITH_ALTERNATIVES = 1;
+	public static final int START_TEXT_SEARCH = 2;
+	public static final int REGEX_SEARCH = 3;
 
 	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
@@ -180,6 +186,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
 			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
 			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
+			Configed.getSavedStates()
+					.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_WITH_ALTERNATIVES_PROPERTY, "0");
 		}
 	}
 
@@ -383,6 +391,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"),
 				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives"),
+				Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives.tooltip"));
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
 				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
 		if (withRegEx) {
@@ -643,7 +653,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
-			boolean regex, boolean combineCols) {
+			boolean fulltextWithAlternatives, boolean regex, boolean combineCols) {
 		Logging.debug(this,
 				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
 						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
@@ -660,7 +670,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		Pattern pattern = null;
 		if (regex) {
-			if (fulltext) {
+			if (fulltext || fulltextWithAlternatives) {
 				val = ".*" + val + ".*";
 			}
 
@@ -727,6 +737,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						} else {
 							if (fulltext) {
 								found = stringContainsParts(compareVal, valParts).success;
+							} else if (fulltextWithAlternatives) {
+								String valLower = val.toLowerCase(Locale.ROOT);
+								List<String> alternativeWords = getWords(valLower);
+								found = fullTextSearchingWithAlternatives(alternativeWords, compareVal);
 							} else {
 								found = stringStartsWith(compareVal, val);
 							}
@@ -749,6 +763,26 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		return -1;
+	}
+
+	private static List<String> getWords(String line) {
+		List<String> result = new ArrayList<>();
+		String[] splitted = S_PLUS_PATTERN.split(line);
+		for (String s : splitted) {
+			if (!" ".equals(s)) {
+				result.add(s);
+			}
+		}
+		return result;
+	}
+
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setResetFilterModeOnNewSearch(boolean b) {
@@ -868,6 +902,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		final Set<Integer> selectedCols = selectedCols0;
 
 		final boolean fulltextSearch = comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH;
+		final boolean fullTextSearchWithAlternatives = comboSearchFieldsMode
+				.getSelectedIndex() == FULL_TEXT_SEARCH_WITH_ALTERNATIVES;
 		final boolean regexSearch = comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH;
 		final boolean combineCols = fulltextSearch;
 
@@ -876,7 +912,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {
-			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch, combineCols);
+			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch,
+					fullTextSearchWithAlternatives, regexSearch, combineCols);
 
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
