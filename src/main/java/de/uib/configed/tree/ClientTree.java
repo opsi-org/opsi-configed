@@ -417,7 +417,7 @@ public class ClientTree extends AbstractGroupTree {
 			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, false);
+				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, true);
 			}
 
 			// operations in DIRECTORY
