@@ -93,8 +93,9 @@ public class FSelectionList extends FGeneralDialog {
 				.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(scrollpane));
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
-				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+		centerLayout.setVerticalGroup(centerLayout
+				.createSequentialGroup().addComponent(searchPane, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane));
 		return centerPanel;
 	}

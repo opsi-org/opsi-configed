@@ -6,10 +6,13 @@
 
 package de.uib.utilities.table.gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -70,12 +73,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelSearch;
 	private CheckedLabel checkmarkSearch;
-	private CheckedLabel checkmarkSearchProgressive;
 	private JLabel labelSearchMode;
 	private CheckedLabel filtermark;
-	private CheckedLabel checkmarkAllColumns;
-	private CheckedLabel checkmarkFullText;
 
+	private JLabel labelShowHideExtraOptions;
 	private JLabel labelFilterMarkGap;
 
 	private NavigationPanel navPane;
@@ -222,8 +223,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
-		checkmarkAllColumns.setEnabled(b);
-		checkmarkFullText.setEnabled(b);
 		fieldSearch.setEnabled(b);
 	}
 
@@ -269,10 +268,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
+		if (b) {
+			setupNarrowLayout();
+		}
 		showFilterIcon(b);
-		checkmarkSearchProgressive.setVisible(b);
-		checkmarkAllColumns.setVisible(b);
-		checkmarkFullText.setVisible(b);
+		labelShowHideExtraOptions.setVisible(b);
 		comboSearchFields.setVisible(!b);
 		comboSearchFieldsMode.setVisible(!b);
 		labelSearch.setVisible(!b);
@@ -281,10 +281,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
 		this.targetModel = searchTargetModel;
-	}
-
-	public void setToolTipTextCheckMarkAllColumns(String s) {
-		checkmarkAllColumns.setToolTipText(s);
 	}
 
 	private void initComponents() {
@@ -298,13 +294,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-
+		checkmarkSearch.setVisible(true);
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
 		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
-
-		selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
-		unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16_blockselect.png", "");
 
 		boolean active = true;
 
@@ -313,17 +306,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
 		}
 
-		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
 		if (active) {
 			searchInputType = SearchInputType.PROGRESSIVE;
 		} else {
 			searchInputType = SearchInputType.LINE;
 		}
-
-		checkmarkSearchProgressive.addActionListener(event -> checkmarkSearchProgressiveEvent());
-		checkmarkSearchProgressive.setChangeStateAutonomously(true);
-		checkmarkSearchProgressive
-				.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
 
 		fieldSearch = new JTextField();
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
@@ -401,10 +388,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFieldsMode = new JComboBoxToolTip();
-
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
@@ -418,33 +403,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		showFilterIcon(filtering);
 
-		Icon unselectedIcon;
-		Icon selectedIcon;
-
-		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
-		selectedIcon = Utils.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
-
-		active = true;
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0;
-		}
-
-		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
-
-		checkmarkAllColumns.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
-		checkmarkAllColumns.addActionListener(event -> checkmarkAllColumnsEvent());
-
-		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
-		selectedIcon = Utils.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
-
 		active = true;
 		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
 			active = Integer.valueOf(
 					Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
 		}
-
-		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
 		if (active) {
 			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
@@ -452,8 +415,82 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 		}
 
-		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
-		checkmarkFullText.addActionListener(event -> checkmarkFullTextEvent());
+		labelShowHideExtraOptions = new JLabel("▶");
+		labelShowHideExtraOptions.setFont(new Font("TimesRoman", Font.PLAIN, 14));
+		labelShowHideExtraOptions
+				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
+		labelShowHideExtraOptions.setVisible(false);
+		labelShowHideExtraOptions.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				showExtraOptions();
+			}
+		});
+	}
+
+	private void showExtraOptions() {
+		if ("▶".equals(labelShowHideExtraOptions.getText())) {
+			labelShowHideExtraOptions.setText("▼");
+		} else {
+			labelShowHideExtraOptions.setText("▶");
+		}
+		comboSearchFields.setVisible(!comboSearchFields.isVisible());
+		comboSearchFieldsMode.setVisible(!comboSearchFieldsMode.isVisible());
+		labelSearch.setVisible(!labelSearch.isVisible());
+		labelSearchMode.setVisible(!labelSearchMode.isVisible());
+	}
+
+	private void setupNarrowLayout() {
+		GroupLayout layoutTablesearchPane = new GroupLayout(this);
+		setLayout(layoutTablesearchPane);
+
+		int checkedLabelWidth = 18;
+		layoutTablesearchPane
+				.setHorizontalGroup(layoutTablesearchPane
+						.createParallelGroup(
+								GroupLayout.Alignment.LEADING)
+						.addGroup(layoutTablesearchPane.createSequentialGroup()
+								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+								.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+										Globals.MIN_GAP_SIZE)
+								.addComponent(labelShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE))
+						.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(Globals.GAP_SIZE)
+								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE));
+
+		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
+				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelFilterMarkGap, 10, 10, 10).addComponent(labelShowHideExtraOptions, 10,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
 	private void setupLayout() {
@@ -473,10 +510,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
 				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-				.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addComponent(labelShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+						Globals.MIN_GAP_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -496,10 +531,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, 10, 10, 10)
-				.addComponent(checkmarkAllColumns, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkFullText, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkSearchProgressive, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -951,41 +984,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
-	private void checkmarkAllColumnsEvent() {
-		Logging.debug(this, "actionPerformed on checkmarkAllColumns");
-
-		comboSearchFields.setSelectedIndex(0);
-		if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
-			// all columns
-
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "1");
-			}
-		}
-	}
-
-	private void checkmarkFullTextEvent() {
-		Logging.debug(this, "actionPerformed on checkmarkFullText");
-
-		if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
-			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
-			}
-		}
-	}
-
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filteredMode);
 
@@ -1000,26 +998,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		} else {
 			switchFilterOn();
 		}
-	}
-
-	private void checkmarkSearchProgressiveEvent() {
-		Logging.debug(this,
-				"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
-		if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
-			searchInputType = SearchInputType.PROGRESSIVE;
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			searchInputType = SearchInputType.LINE;
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "1");
-			}
-		}
-
-		Logging.debug(this, "actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
 	}
 
 	// DocumentListener interface
