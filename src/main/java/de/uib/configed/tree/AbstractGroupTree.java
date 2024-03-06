@@ -471,7 +471,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	public String getGroupDescription(String groupId) {
-		return groups.get(groupId).get("description");
+		if (groups.containsKey(groupId)) {
+			return groups.get(groupId).get("description");
+		} else {
+			return null;
+		}
 	}
 
 	abstract boolean isInDirectory(String node);

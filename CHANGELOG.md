@@ -1,4 +1,7 @@
 # Changelog
+## [4.3.2.5] - 2024-03-05
+## Fixed
+- `Nullpointerexception` on reload
 
 ## [4.3.2.5] - 2024-03-05
 ## Fixed
