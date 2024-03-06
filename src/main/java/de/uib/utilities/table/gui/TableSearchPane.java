@@ -104,23 +104,30 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private boolean filteredMode;
 
 	/**
+	 * Provides search functionality for tables.
+	 * 
 	 * @param SearchTargetModel the model for delivering data and selecting
-	 * @param boolean           modifies the search function
-	 * @param String            saving of states is activated, the keys are
-	 *                          tagged with the parameter
+	 */
+	public TableSearchPane(SearchTargetModel targetModel) {
+		this(targetModel, false);
+	}
+
+	/**
+	 * Provides search functionality for tables.
+	 * 
+	 * @param targetModel the model for delivering data and selecting
+	 * @param withRegex   modifies the search function
 	 */
 	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx) {
 		this(null, targetModel, withRegEx);
 	}
 
 	/**
-	 * a search target model is produces for the table in PanelGenEditTable,
-	 * keeping access tho PanelGenEditTable public methods
+	 * Provides search functionality for tables.
 	 * 
-	 * @param JTable  the model for delivering data and selecting
-	 * @param boolean
-	 * @param String  saving of states is activated, the keys are tagged with
-	 *                the parameter
+	 * @param thePanel    the model for delivering data and selecting
+	 * @param targetModel the model for delivering data and selecting
+	 * @param withRegex   modifies the search function
 	 */
 	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx) {
 		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx);
@@ -135,18 +142,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comparator = getCollator();
 
 		init();
-	}
-
-	/**
-	 * a search target model is produces from a JTable the regex parameter
-	 * default false is used
-	 * 
-	 * @param SearchTargetModel
-	 * @param String            saving of states is activated, the keys are
-	 *                          tagged with the parameter
-	 */
-	public TableSearchPane(SearchTargetModel targetModel) {
-		this(targetModel, false);
 	}
 
 	private void init() {
