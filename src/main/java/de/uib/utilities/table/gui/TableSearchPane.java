@@ -95,12 +95,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private final Comparator<Object> comparator;
 
-	private enum SearchInputType {
-		LINE, PROGRESSIVE
-	}
-
-	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
-
 	private boolean filteredMode;
 
 	/**
@@ -323,11 +317,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		searchMenuEntries.put(popupEmptySearchfield, true);
 		buildMenuSearchfield();
 
-		fieldSearch.addActionListener((ActionEvent actionEvent) -> {
-			if (searchInputType == SearchInputType.PROGRESSIVE) {
-				searchNextRow(selectMode);
-			}
-		});
+		fieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
@@ -922,10 +912,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
-			if (searchInputType == SearchInputType.PROGRESSIVE) {
-				switchFilterOff();
-				searchTheRow(selectMode);
-			}
+			switchFilterOff();
+			searchTheRow(selectMode);
 		}
 	}
 
@@ -934,10 +922,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
-			if (searchInputType == SearchInputType.PROGRESSIVE) {
-				switchFilterOff();
-				searchTheRow(selectMode);
-			}
+			switchFilterOff();
+			searchTheRow(selectMode);
 		}
 	}
 
@@ -965,15 +951,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			if (allowSearchAction()) {
 				searchNextRow(selectMode);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			Logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
-					+ " searchInputType " + searchInputType);
-
-			if (searchInputType == SearchInputType.LINE && !fieldSearch.getText().isEmpty()) {
-				switchFilterOff();
-				markAllAndFilter();
-				switchFilterOn();
 			}
 		} else {
 			// We want to do nothing on other keys
