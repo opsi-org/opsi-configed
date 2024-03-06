@@ -76,7 +76,6 @@ public class PanelSWInfo extends JPanel {
 
 	private boolean askForOverwrite = true;
 
-	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -92,54 +91,55 @@ public class PanelSWInfo extends JPanel {
 
 	private JCheckBox checkWithMsUpdates;
 
-	private int indexOfColWindowsSoftwareID;
-
-	private TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
-		@Override
-		public void setFilter(Set<Object> filter) {
-			/* Not needed */}
-
-		@Override
-		public boolean test(List<Object> row) {
-			String entry = (String) row.get(indexOfColWindowsSoftwareID);
-			boolean isKb = entry.startsWith("kb");
-
-			return !isKb;
-			// on filtering active everything is taken if not isKb
-		}
-	};
-
 	private JCheckBox checkWithMsUpdates2;
 
-	private final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
-
-	private TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
-		@Override
-		public void setFilter(Set<Object> filter) {
-			/* Not needed */}
-
-		@Override
-		public boolean test(List<Object> row) {
-			String entry = (String) row.get(indexOfColWindowsSoftwareID);
-			boolean isKb = patternWithKB.matcher(entry).matches();
-
-			return !isKb;
-			// on filtering active everything is taken if not isKb
-		}
-	};
-
-	public PanelSWInfo(ConfigedMain configedMain) {
-		this(true, configedMain);
-	}
-
-	public PanelSWInfo(boolean withPopup, ConfigedMain configedMain) {
+	public PanelSWInfo(boolean withPopup) {
 		this.withPopup = withPopup;
-		this.configedMain = configedMain;
 
 		initTableComponents();
 		setupTableLayout();
 
 		buildPanel();
+	}
+
+	private static TableModelFilter createTableModelFilter1(int indexOfColWindowsSoftwareID) {
+		TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
+			@Override
+			public void setFilter(Set<Object> filter) {
+				/* Not needed */}
+
+			@Override
+			public boolean test(List<Object> row) {
+				String entry = (String) row.get(indexOfColWindowsSoftwareID);
+				boolean isKb = entry.startsWith("kb");
+
+				return !isKb;
+				// on filtering active everything is taken if not isKb
+			}
+		};
+
+		return new TableModelFilter(filterConditionWithMsUpdates);
+	}
+
+	private static TableModelFilter createTableModelFilter2(int indexOfColWindowsSoftwareID) {
+		final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
+
+		TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
+			@Override
+			public void setFilter(Set<Object> filter) {
+				/* Not needed */}
+
+			@Override
+			public boolean test(List<Object> row) {
+				String entry = (String) row.get(indexOfColWindowsSoftwareID);
+				boolean isKb = patternWithKB.matcher(entry).matches();
+
+				return !isKb;
+				// on filtering active everything is taken if not isKb
+			}
+		};
+
+		return new TableModelFilter(filterConditionWithMsUpdates2);
 	}
 
 	private void initTableComponents() {
@@ -200,8 +200,8 @@ public class PanelSWInfo extends JPanel {
 					}
 				})), -1, finalColumns, null, null);
 
-		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
-		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
+		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
+		modelSWInfo.chainFilter(FILTER_MS_UPDATES, createTableModelFilter1(indexOfColWindowsSoftwareID));
 		modelSWInfo.reset();
 
 		panelTable.setDataChanged(false);
@@ -210,7 +210,7 @@ public class PanelSWInfo extends JPanel {
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
 
-		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, new TableModelFilter(filterConditionWithMsUpdates2));
+		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, createTableModelFilter2(indexOfColWindowsSoftwareID));
 		modelSWInfo.reset();
 
 		panelTable.setDataChanged(false);
@@ -446,7 +446,7 @@ public class PanelSWInfo extends JPanel {
 		PanelSWInfo copyOfMe;
 		GeneralFrame externalView;
 
-		copyOfMe = new PanelSWInfo(false, configedMain);
+		copyOfMe = new PanelSWInfo(false);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 

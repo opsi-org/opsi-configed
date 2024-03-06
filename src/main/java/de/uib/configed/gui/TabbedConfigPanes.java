@@ -238,7 +238,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initSoftWareInfo() {
-		panelSWInfo = new PanelSWInfo(configedMain) {
+		panelSWInfo = new PanelSWInfo(true) {
 			@Override
 			protected void reload() {
 				super.reload();
