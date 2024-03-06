@@ -152,7 +152,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelTable.setSearchSelectMode(true);
-		panelTable.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
 		List<String> columnNames;
 

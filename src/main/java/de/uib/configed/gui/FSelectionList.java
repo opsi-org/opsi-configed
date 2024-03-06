@@ -86,7 +86,7 @@ public class FSelectionList extends FGeneralDialog {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel, savedStatesObjectTag);
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()

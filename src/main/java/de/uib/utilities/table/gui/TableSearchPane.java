@@ -57,10 +57,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
 	private static final String PROGRESSIVE_SEARCH_PROPERTY = "progressiveSearch";
 
-	public static final int FULL_TEXT_SEARCH = 0;
-	public static final int FULL_TEXT_SEARCH_WITH_ALTERNATIVES = 1;
-	public static final int START_TEXT_SEARCH = 2;
-	public static final int REGEX_SEARCH = 3;
+	public enum SearchMode {
+		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
+	}
 
 	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
@@ -389,7 +388,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFieldsMode = new JComboBoxToolTip();
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
-		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
+		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
@@ -410,9 +409,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		if (active) {
-			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
+			comboSearchFieldsMode.setSelectedIndex(SearchMode.FULL_TEXT_SEARCH.ordinal());
 		} else {
-			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
+			comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		}
 
 		labelShowHideExtraOptions = new JLabel("▶");
@@ -582,14 +581,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFields.setSelectedIndex(0);
 	}
 
-	public void setSearchMode(int a) {
-		if (a <= START_TEXT_SEARCH) {
-			comboSearchFieldsMode.setSelectedIndex(a);
-		} else {
-			if (withRegEx) {
-				comboSearchFieldsMode.setSelectedIndex(REGEX_SEARCH);
-			}
+	public void setSearchMode(SearchMode mode) {
+		if (mode == SearchMode.REGEX_SEARCH && !withRegEx) {
+			return;
 		}
+
+		comboSearchFieldsMode.setSelectedIndex(mode.ordinal());
 	}
 
 	@Override
@@ -685,117 +682,92 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return comparator.compare(s.substring(0, part.length()), part) == 0;
 	}
 
-	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
-			boolean fulltextWithAlternatives, boolean regex, boolean combineCols) {
-		Logging.debug(this,
-				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
-						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
-						+ combineCols);
-
+	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
 		// Search only for value longer than one digit
 		if (value == null || value.toString().length() < 2) {
 			return -1;
 		}
 
-		String val = value.toString().toLowerCase(Locale.ROOT);
-
-		int viewrow = Math.max(0, startviewrow);
-
-		Pattern pattern = null;
-		if (regex) {
-			if (fulltext || fulltextWithAlternatives) {
-				val = ".*" + val + ".*";
-			}
-
-			pattern = Pattern.compile(val);
+		String valueLower = value.toString().toLowerCase(Locale.ROOT);
+		Pattern regexPattern = null;
+		SearchMode mode = getSearchMode(comboSearchFieldsMode.getSelectedIndex());
+		if (mode == SearchMode.REGEX_SEARCH) {
+			regexPattern = Pattern.compile(valueLower);
 		}
 
-		String[] valParts = val.split(" ");
-
+		int viewrow = Math.max(0, startviewrow);
 		boolean found = false;
 
 		while (!found && viewrow < targetModel.getRowCount()) {
-			if (combineCols) {
-				// only fulltext
-				StringBuilder buffRow = new StringBuilder();
-
-				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-					// we dont compare all values (comparing all values is default)
-					if (colIndices != null && !colIndices.contains(j)) {
-						continue;
-					}
-
-					int colJ = targetModel.getColForVisualCol(j);
-
-					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
-
-					if (valJ != null) {
-						String valSJ = valJ.toString().toLowerCase(Locale.ROOT);
-
-						buffRow.append(valSJ);
-					}
-				}
-
-				String compareVal = buffRow.toString();
-
-				if (!compareVal.isEmpty()) {
-					found = stringContainsParts(compareVal, valParts).success;
-				} else if (val.isEmpty()) {
-					found = true;
-				} else {
-					// Do nothing when 'val' is not empty and 'compareValue' is empty
-				}
-			} else {
-				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-					// we dont compare all values (comparing all values is default)
-					if (colIndices != null && !colIndices.contains(j)) {
-						continue;
-					}
-
-					int colJ = targetModel.getColForVisualCol(j);
-
-					Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
-
-					if (compareValue == null) {
-						if (val.isEmpty()) {
-							found = true;
-						}
-					} else {
-						String compareVal = compareValue.toString().toLowerCase(Locale.ROOT);
-
-						if (regex) {
-							if (pattern.matcher(compareVal).matches()) {
-								found = true;
-							}
-						} else {
-							if (fulltext) {
-								found = stringContainsParts(compareVal, valParts).success;
-							} else if (fulltextWithAlternatives) {
-								String valLower = val.toLowerCase(Locale.ROOT);
-								List<String> alternativeWords = getWords(valLower);
-								found = fullTextSearchingWithAlternatives(alternativeWords, compareVal);
-							} else {
-								found = stringStartsWith(compareVal, val);
-							}
-						}
-					}
-
-					if (found) {
-						break;
-					}
-				}
-			}
-
+			found = searchForStringInColumns(viewrow, colIndices, valueLower, regexPattern, mode);
 			if (!found) {
 				viewrow++;
 			}
 		}
 
-		if (found) {
-			return viewrow;
+		return found ? viewrow : -1;
+	}
+
+	private static SearchMode getSearchMode(int i) {
+		for (SearchMode mode : SearchMode.values()) {
+			if (mode.ordinal() == i) {
+				return mode;
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("java:S135")
+	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String valueLower,
+			Pattern regexPattern, SearchMode mode) {
+		boolean found = false;
+		for (int j = 0; j < targetModel.getColumnCount(); j++) {
+			// we dont compare all values (comparing all values is default)
+			if (colIndices != null && !colIndices.contains(j)) {
+				continue;
+			}
+
+			Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow),
+					targetModel.getColForVisualCol(j));
+
+			if (compareValue != null) {
+				String compareValueLower = compareValue.toString().toLowerCase(Locale.ROOT);
+				found = searchForStringBasedOnSearchMode(compareValueLower, valueLower, regexPattern, mode);
+			}
+
+			if (found) {
+				break;
+			}
+		}
+		return found;
+	}
+
+	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern,
+			SearchMode mode) {
+		boolean found = false;
+		if (mode == null) {
+			return found;
 		}
 
-		return -1;
+		switch (mode) {
+		case REGEX_SEARCH:
+			if (regexPattern.matcher(searchString).matches()) {
+				found = true;
+			}
+			break;
+		case FULL_TEXT_SEARCH:
+			found = stringContainsParts(searchString, searchPattern.split(" ")).success;
+			break;
+		case FULL_TEXT_WITH_ALTERNATIVES_SEARCH:
+			String valLower = searchPattern.toLowerCase(Locale.ROOT);
+			List<String> alternativeWords = getWords(valLower);
+			found = fullTextSearchingWithAlternatives(alternativeWords, searchString);
+			break;
+		default:
+			found = stringStartsWith(searchString, searchPattern);
+		}
+
+		return found;
 	}
 
 	private static List<String> getWords(String line) {
@@ -934,19 +906,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		final Set<Integer> selectedCols = selectedCols0;
 
-		final boolean fulltextSearch = comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH;
-		final boolean fullTextSearchWithAlternatives = comboSearchFieldsMode
-				.getSelectedIndex() == FULL_TEXT_SEARCH_WITH_ALTERNATIVES;
-		final boolean regexSearch = comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH;
-		final boolean combineCols = fulltextSearch;
-
 		fieldSearch.getCaret().setVisible(false);
 
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {
-			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch,
-					fullTextSearchWithAlternatives, regexSearch, combineCols);
+			foundrow = findViewRowFromValue(startrow, value, selectedCols);
 
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
