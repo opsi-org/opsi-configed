@@ -23,7 +23,6 @@ import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import utils.Utils;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
-
 	private JLabel jLabelUploadFrom;
 	private JLabel jLabelUploadTo;
 	private JTextField jTextFieldPath;

@@ -246,7 +246,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private Map<String, Object> mergeProperties(
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
-
 		if (depots.isEmpty()) {
 			// Do nothing
 		} else if (depots.size() == 1) {

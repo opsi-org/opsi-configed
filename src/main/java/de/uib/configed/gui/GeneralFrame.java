@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import utils.Utils;
 
 public class GeneralFrame extends JDialog {
-
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
 		super.setTitle(title);

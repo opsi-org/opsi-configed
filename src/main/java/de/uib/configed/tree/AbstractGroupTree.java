@@ -37,7 +37,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditRecord;
 
@@ -292,7 +291,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			}
 			// Now variable gotName equals true
 
-			StringValuedRelationElement newGroup = new StringValuedRelationElement();
+			Map<String, String> newGroup = new HashMap<>();
 
 			newGroup.put("groupId", newGroupKey);
 			newGroup.put("parentGroupId", node.toString());
@@ -471,6 +470,14 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return result;
 	}
 
+	public String getGroupDescription(String groupId) {
+		if (groups.containsKey(groupId)) {
+			return groups.get(groupId).get("description");
+		} else {
+			return null;
+		}
+	}
+
 	abstract boolean isInDirectory(String node);
 
 	abstract boolean isInDirectory(TreePath path);
@@ -484,4 +491,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
+
+	abstract String getObjectDescription(String objectId);
 }

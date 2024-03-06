@@ -9,7 +9,6 @@ package de.uib.configed.tree;
 import java.awt.Component;
 import java.awt.font.TextAttribute;
 import java.util.Collections;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
@@ -17,18 +16,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class ClientTreeRenderer extends DefaultTreeCellRenderer {
-	private ClientTree clientTree;
+public class GroupTreeRenderer extends DefaultTreeCellRenderer {
+	private AbstractGroupTree abstractGroupTree;
 
-	private Map<String, HostInfo> host2HostInfo;
-	private Map<String, Map<String, String>> groups;
-
-	private ImageIcon clientIcon = Utils.getThemeIconPNG("bootstrap/laptop", "client");
-	private ImageIcon clientSelectedIcon = Utils.getThemeIconPNG("bootstrap/laptop_selected", "client");
+	private ImageIcon objectIcon;
+	private ImageIcon objectSelectedIcon;
 
 	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
 	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
@@ -36,18 +31,18 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon groupOpenIcon = Utils.getThemeIconPNG("bootstrap/group_open", "");
 	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
 
-	public ClientTreeRenderer(ClientTree clientTree) {
-		this.clientTree = clientTree;
+	public GroupTreeRenderer(AbstractGroupTree abstractGroupTree) {
+		this.abstractGroupTree = abstractGroupTree;
 
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
-	}
 
-	public void setHost2HostInfo(Map<String, HostInfo> host2HostInfo) {
-		this.host2HostInfo = host2HostInfo;
-	}
-
-	public void setGroupNodeTooltips(Map<String, Map<String, String>> groups) {
-		this.groups = groups;
+		if (abstractGroupTree instanceof ClientTree) {
+			objectIcon = Utils.getThemeIconPNG("bootstrap/laptop", "client");
+			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/laptop_selected", "client");
+		} else {
+			objectIcon = Utils.getThemeIconPNG("bootstrap/product", "client");
+			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/product_selected", "client");
+		}
 	}
 
 	@Override
@@ -63,18 +58,22 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
-		setTooltip(node);
+		if (node instanceof GroupNode) {
+			setToolTipText(abstractGroupTree.getGroupDescription(text));
+		} else {
+			setToolTipText(abstractGroupTree.getObjectDescription(text));
+		}
 
 		if (!node.getAllowsChildren()) {
 			// client
 			if (sel) {
-				setIcon(clientSelectedIcon);
+				setIcon(objectSelectedIcon);
 			} else {
-				setIcon(clientIcon);
+				setIcon(objectIcon);
 			}
 		} else {
 			// group
-			setGroupIcon(expanded, clientTree.getActiveParents().contains(text));
+			setGroupIcon(expanded, abstractGroupTree.getActiveParents().contains(text));
 		}
 
 		if (hasFocus) {
@@ -100,20 +99,6 @@ public class ClientTreeRenderer extends DefaultTreeCellRenderer {
 			} else {
 				setIcon(groupIcon);
 			}
-		}
-	}
-
-	private void setTooltip(DefaultMutableTreeNode node) {
-		Object userObject = node.getUserObject();
-
-		if (node instanceof GroupNode) {
-			if (groups != null) {
-				setToolTipText(groups.get(node.toString()).get("description"));
-			}
-		} else if (host2HostInfo != null && host2HostInfo.get(userObject) != null) {
-			setToolTipText(host2HostInfo.get(userObject).getDescription());
-		} else {
-			setToolTipText(null);
 		}
 	}
 }

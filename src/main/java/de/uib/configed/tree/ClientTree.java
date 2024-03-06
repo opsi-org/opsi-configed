@@ -34,7 +34,6 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 
@@ -59,8 +58,6 @@ public class ClientTree extends AbstractGroupTree {
 	private Map<String, DefaultMutableTreeNode> clientNodesInDirectory;
 	// clientid --> client node
 	// is a function, when the directory has been cleared
-
-	private ClientTreeRenderer renderer;
 
 	static {
 		topGroupNames = new HashSet<>();
@@ -117,15 +114,10 @@ public class ClientTree extends AbstractGroupTree {
 
 		addMouseListener(ml);
 
-		renderer = new ClientTreeRenderer(this);
-		setCellRenderer(renderer);
+		setCellRenderer(new GroupTreeRenderer(this));
 
 		locationsInDirectory = new HashMap<>();
 		clientNodesInDirectory = new HashMap<>();
-	}
-
-	public void setClientInfo(Map<String, HostInfo> host2HostInfo) {
-		renderer.setHost2HostInfo(host2HostInfo);
 	}
 
 	// publishing the private method
@@ -266,8 +258,6 @@ public class ClientTree extends AbstractGroupTree {
 		for (String group : importedGroups.keySet()) {
 			groupNodes.put(group, new GroupNode(group));
 		}
-
-		renderer.setGroupNodeTooltips(groups);
 
 		createDirectoryNotAssigned();
 
@@ -427,7 +417,7 @@ public class ClientTree extends AbstractGroupTree {
 			model.nodeStructureChanged(sourceParentNode);
 
 			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, false);
+				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, true);
 			}
 
 			// operations in DIRECTORY
@@ -590,5 +580,10 @@ public class ClientTree extends AbstractGroupTree {
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
 		return configedMain.getClientTable().getSelectedSet();
+	}
+
+	@Override
+	public String getObjectDescription(String objectId) {
+		return persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(objectId).getDescription();
 	}
 }

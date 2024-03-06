@@ -172,7 +172,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		// there can only be one group selected, and it can only be moved
 		// (for top groups the NONE handler was already returned)
 		for (TreePath path : tree.getSelectionPaths()) {
-
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
 				Logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
 				return TransferHandler.COPY;
@@ -209,14 +208,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return new StringSelection(buff.substring(0, buff.length() - 1));
 	}
 
-	private boolean chooseMove(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
-			boolean isLeaf) {
-		Logging.info(this, "chooseMOVE  support " + support);
+	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
 		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
-		Logging.info(this,
-				"chooseMOVE support.getUserDropAction() == TransferHandler.MOVE "
-						+ (support.getUserDropAction() == TransferHandler.MOVE) + " support.getUserDropAction() "
-						+ support.getUserDropAction());
 
 		boolean result = false;
 
@@ -235,17 +228,13 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
-	private void handleObjectID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
-			GroupNode sourceParentNode, String sourceParentID, TreePath dropPath, DefaultMutableTreeNode dropParentNode,
-			String dropParentID) {
+	private void handleObjectID(String importID, TreePath sourcePath, GroupNode sourceParentNode, String sourceParentID,
+			TreePath dropPath, DefaultMutableTreeNode dropParentNode, String dropParentID) {
 		Logging.debug(this,
 				"handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  " + importID
 						+ ", " + sourcePath + " , " + sourceParentID + ", " + sourceParentNode + ", " + dropParentID);
 
 		boolean moving = false;
-
-		String adaptedSourceParentID = sourceParentID;
-		GroupNode adaptedSourceParentNode = sourceParentNode;
 
 		// we are in table and did not get a real souce path if sourcePath is null
 		if (sourcePath == null) {
@@ -257,18 +246,18 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				firstDIRECTORYgroupname = iter.next().toString();
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
-				adaptedSourceParentID = firstDIRECTORYgroupname;
-				moving = chooseMove(support, firstDIRECTORYgroupname, dropPath, true);
+				sourceParentID = firstDIRECTORYgroupname;
+				moving = chooseMove(firstDIRECTORYgroupname, dropPath, true);
 
-				adaptedSourceParentNode = tree.getGroupNode(adaptedSourceParentID);
+				sourceParentNode = tree.getGroupNode(sourceParentID);
 			}
 		} else {
-			moving = chooseMove(support, adaptedSourceParentID, dropPath, true);
+			moving = chooseMove(sourceParentID, dropPath, true);
 		}
 
 		if (moving) {
-			tree.moveObjectTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
-					dropPath, dropParentID);
+			tree.moveObjectTo(importID, sourcePath, sourceParentID, sourceParentNode, dropParentNode, dropPath,
+					dropParentID);
 		} else {
 			tree.copyObjectTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
 		}
@@ -309,25 +298,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		// Perform the actual import.
 		for (String selectedObject : selectedObjects) {
-			String importID = null;
 			String sourceParentID = null;
 
-			// if values not got from transferable, the following reduces
-			if (selectedObject.split("\t").length > 1) {
-				// probably an import from the JTable
+			Logging.debug(this, "importData " + selectedObject);
 
-				// we assume a table source with first fieldvalue being a clientID
-				importID = selectedObject.split("\t")[0];
-			} else {
-				String[] parts = selectedObject.split(",");
-
-				importID = parts[parts.length - 1];
-			}
-
-			Logging.debug(this, "importData " + importID);
-
-			TreePath sourcePath = tree.getActiveTreePath(importID);
-			Logging.debug(this, "active source tree path for importID " + importID + ": " + sourcePath);
+			TreePath sourcePath = tree.getActiveTreePath(selectedObject);
+			Logging.debug(this, "active source tree path for selectedObject " + selectedObject + ": " + sourcePath);
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
@@ -336,7 +312,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				sourceParentID = (String) ((DefaultMutableTreeNode) sourcePath.getParentPath().getLastPathComponent())
 						.getUserObject();
 				sourceParentNode = tree.getGroupNode(sourceParentID);
-				groupNode = tree.getGroupNode(importID);
+				groupNode = tree.getGroupNode(selectedObject);
 			} else {
 				// coming from table, replace!
 				Logging.debug(this, "importData, sourceParentID " + sourceParentID);
@@ -347,20 +323,21 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			if (groupNode != null) {
 				// it is a group and it could be moved
 				// it is a group, and it will be moved, but only inside one partial tree
-				if (chooseMove(support, sourceParentID, dropPath, false)) {
-					tree.moveGroupTo(importID, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
+				if (chooseMove(sourceParentID, dropPath, false)) {
+					tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath,
+							dropParentID);
 				} else {
 					Logging.info(this, "importData: this group will not be moved");
 				}
 			} else {
 				// import node
-				Logging.debug(this, "importData handling import ID " + importID);
+				Logging.debug(this, "importData handling selectedObject " + selectedObject);
 
-				handleObjectID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
-						dropParentNode, dropParentID);
+				handleObjectID(selectedObject, sourcePath, sourceParentNode, sourceParentID, dropPath, dropParentNode,
+						dropParentID);
 			}
 
-			Logging.debug(this, "importData ready, importID " + importID);
+			Logging.debug(this, "importData ready, selectedObject " + selectedObject);
 		}
 
 		return true;

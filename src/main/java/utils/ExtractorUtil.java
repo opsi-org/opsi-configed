@@ -64,7 +64,7 @@ public final class ExtractorUtil {
 
 	private static Map<String, String> extractZIP(File file) {
 		Map<String, String> files = new HashMap<>();
-		try (ZipFile zipFile = new ZipFile(file)) {
+		try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
 			Enumeration<ZipArchiveEntry> zipEntries = zipFile.getEntries();
 			while (zipEntries.hasMoreElements()) {
 				ZipArchiveEntry entry = zipEntries.nextElement();
@@ -127,7 +127,7 @@ public final class ExtractorUtil {
 
 	private static Map<String, String> extractSevenZIP(File file) {
 		Map<String, String> files = new HashMap<>();
-		try (SevenZFile sevenZFile = new SevenZFile(file)) {
+		try (SevenZFile sevenZFile = SevenZFile.builder().setFile(file).get()) {
 			SevenZArchiveEntry entry = null;
 			while ((entry = sevenZFile.getNextEntry()) != null) {
 				if (!entry.isDirectory()) {

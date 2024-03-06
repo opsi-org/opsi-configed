@@ -371,7 +371,6 @@ public class ProductDataService {
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
 
 		for (Map<String, Object> retrievedMap : retrieved) {
-
 			String propertyId = (String) retrievedMap.get("propertyId");
 			String productId = (String) retrievedMap.get("productId");
 

@@ -35,7 +35,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setModel() {
-		setCellRenderer(new ProductTreeRenderer(groups, this));
+		setCellRenderer(new GroupTreeRenderer(this));
 
 		expandPath(new TreePath(groupNodeFullList.getPath()));
 	}
@@ -153,7 +153,6 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-
 		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
 		selectedProducts.addAll(netbootPanel.getSelectedIDs());
 
@@ -212,5 +211,10 @@ public class ProductTree extends AbstractGroupTree {
 	public void valueChanged(TreeSelectionEvent event) {
 		localbootPanel.valueChanged(getSelectionPaths());
 		netbootPanel.valueChanged(getSelectionPaths());
+	}
+
+	@Override
+	public String getObjectDescription(String productId) {
+		return persistenceController.getProductDataService().getProductInfo(productId);
 	}
 }

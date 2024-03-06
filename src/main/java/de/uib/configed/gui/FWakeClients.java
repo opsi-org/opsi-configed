@@ -61,7 +61,6 @@ public class FWakeClients extends FShowList {
 
 				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
-
 					// Get the executioner for the depot, and create new one if non-existant
 					AbstractExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
 							this::computeExecutionerForDepot);

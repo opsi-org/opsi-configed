@@ -51,7 +51,6 @@ import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
 public class ClientTable extends JPanel implements KeyListener {
-
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -247,7 +246,6 @@ public class ClientTable extends JPanel implements KeyListener {
 			// so we do it manually
 			configedMain.actOnListSelection();
 		} else {
-
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
 			selectionModel.clearSelection();

@@ -1,6 +1,10 @@
 # Changelog
+## [4.3.2.6] - 2024-03-06
+## Fixed
+- `Nullpointerexception` on reload
+- `Nullpointerexception` on updating product table, when list is reduced
 
-## [4.3.2.x] - 2024-xx-xx
+## [4.3.2.5] - 2024-03-05
 ## Fixed
 - Tooltip for changed states in Product id
 

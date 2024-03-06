@@ -221,7 +221,6 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void setupTableLayout() {
-
 		subPanelTitle = new JPanel();
 
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
