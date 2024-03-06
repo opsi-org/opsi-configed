@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.X] - XXXX-XX-XX
+## Fixed
+- When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
+
 ## [4.3.2.6] - 2024-03-06
 ## Fixed
 - `Nullpointerexception` on reload
