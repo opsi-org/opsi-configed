@@ -67,7 +67,7 @@ public class DepotListPresenter extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
+		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 

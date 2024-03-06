@@ -57,7 +57,7 @@ public class ValueSelectorList extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
+		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 

@@ -52,10 +52,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int BLINK_RATE = 0;
-	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
-	private static final String FULL_TEXT_SEARCH_WITH_ALTERNATIVES_PROPERTY = "fullTextSearchWithAlternatives";
-	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
-	private static final String PROGRESSIVE_SEARCH_PROPERTY = "progressiveSearch";
 
 	public enum SearchMode {
 		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
@@ -105,8 +101,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	private String savedStatesObjectTag;
-
 	private boolean filteredMode;
 
 	/**
@@ -115,8 +109,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String            saving of states is activated, the keys are
 	 *                          tagged with the parameter
 	 */
-	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
-		this(null, targetModel, withRegEx, savedStatesObjectTag);
+	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx) {
+		this(null, targetModel, withRegEx);
 	}
 
 	/**
@@ -128,21 +122,18 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String  saving of states is activated, the keys are tagged with
 	 *                the parameter
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
+	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx) {
+		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx);
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx,
-			String savedStatesObjectTag) {
+	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
 		this.withRegEx = withRegEx;
 		filtering = true;
-		this.savedStatesObjectTag = savedStatesObjectTag;
 
 		comparator = getCollator();
 
-		initSavedStates();
 		init();
 	}
 
@@ -154,8 +145,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param String            saving of states is activated, the keys are
 	 *                          tagged with the parameter
 	 */
-	public TableSearchPane(SearchTargetModel targetModel, String savedStatesObjectTag) {
-		this(targetModel, false, savedStatesObjectTag);
+	public TableSearchPane(SearchTargetModel targetModel) {
+		this(targetModel, false);
 	}
 
 	private void init() {
@@ -179,16 +170,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
 		this.masterFrame = masterFrame;
-	}
-
-	private void initSavedStates() {
-		if (savedStatesObjectTag != null) {
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
-			Configed.getSavedStates()
-					.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_WITH_ALTERNATIVES_PROPERTY, "0");
-		}
 	}
 
 	public void setWithNavPane(boolean b) {
@@ -298,19 +279,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
 
-		boolean active = true;
-
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
-		}
-
-		if (active) {
-			searchInputType = SearchInputType.PROGRESSIVE;
-		} else {
-			searchInputType = SearchInputType.LINE;
-		}
-
 		fieldSearch = new JTextField();
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
@@ -401,18 +369,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		labelFilterMarkGap = new JLabel();
 
 		showFilterIcon(filtering);
-
-		active = true;
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(
-					Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
-		}
-
-		if (active) {
-			comboSearchFieldsMode.setSelectedIndex(SearchMode.FULL_TEXT_SEARCH.ordinal());
-		} else {
-			comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
-		}
 
 		labelShowHideExtraOptions = new JLabel("▶");
 		labelShowHideExtraOptions.setFont(new Font("TimesRoman", Font.PLAIN, 14));

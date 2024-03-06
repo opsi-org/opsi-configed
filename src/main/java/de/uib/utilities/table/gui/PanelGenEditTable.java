@@ -281,7 +281,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		exportTable = new ExporterToCSV(theTable);
 
-		searchPane = new TableSearchPane(this, true, null);
+		searchPane = new TableSearchPane(this, true);
 
 		searchPane.setVisible(withTablesearchPane);
 

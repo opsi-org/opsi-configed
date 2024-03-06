@@ -111,7 +111,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"), true,
 				new String[] { "", "" }, new Icon[] { Utils.createImageIcon("images/cancel.png", ""),
 						Utils.createImageIcon("images/apply.png", "") },
-				400, 410, "csvExportSelection");
+				400, 410);
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
 		fColumSelectionList.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
