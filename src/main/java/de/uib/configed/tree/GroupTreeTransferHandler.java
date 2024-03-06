@@ -208,14 +208,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return new StringSelection(buff.substring(0, buff.length() - 1));
 	}
 
-	private boolean chooseMove(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
-			boolean isLeaf) {
-		Logging.info(this, "chooseMOVE  support " + support);
+	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
 		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
-		Logging.info(this,
-				"chooseMOVE support.getUserDropAction() == TransferHandler.MOVE "
-						+ (support.getUserDropAction() == TransferHandler.MOVE) + " support.getUserDropAction() "
-						+ support.getUserDropAction());
 
 		boolean result = false;
 
@@ -234,9 +228,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
-	private void handleObjectID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
-			GroupNode sourceParentNode, String sourceParentID, TreePath dropPath, DefaultMutableTreeNode dropParentNode,
-			String dropParentID) {
+	private void handleObjectID(String importID, TreePath sourcePath, GroupNode sourceParentNode, String sourceParentID,
+			TreePath dropPath, DefaultMutableTreeNode dropParentNode, String dropParentID) {
 		Logging.debug(this,
 				"handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  " + importID
 						+ ", " + sourcePath + " , " + sourceParentID + ", " + sourceParentNode + ", " + dropParentID);
@@ -254,12 +247,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
 				sourceParentID = firstDIRECTORYgroupname;
-				moving = chooseMove(support, firstDIRECTORYgroupname, dropPath, true);
+				moving = chooseMove(firstDIRECTORYgroupname, dropPath, true);
 
 				sourceParentNode = tree.getGroupNode(sourceParentID);
 			}
 		} else {
-			moving = chooseMove(support, sourceParentID, dropPath, true);
+			moving = chooseMove(sourceParentID, dropPath, true);
 		}
 
 		if (moving) {
@@ -330,7 +323,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			if (groupNode != null) {
 				// it is a group and it could be moved
 				// it is a group, and it will be moved, but only inside one partial tree
-				if (chooseMove(support, sourceParentID, dropPath, false)) {
+				if (chooseMove(sourceParentID, dropPath, false)) {
 					tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath,
 							dropParentID);
 				} else {
@@ -340,8 +333,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				// import node
 				Logging.debug(this, "importData handling selectedObject " + selectedObject);
 
-				handleObjectID(selectedObject, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
-						dropParentNode, dropParentID);
+				handleObjectID(selectedObject, sourcePath, sourceParentNode, sourceParentID, dropPath, dropParentNode,
+						dropParentID);
 			}
 
 			Logging.debug(this, "importData ready, selectedObject " + selectedObject);
