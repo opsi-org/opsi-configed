@@ -85,17 +85,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			sourceObjectPath = sourceGroupNode.getUserObjectPath();
 		}
 
-		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
-		String id = dropOnThis.getUserObject().toString();
-		GroupNode targetNode = tree.getGroupNode(id);
+		String dropOnThisNodeId = dropLocation.getPath().getLastPathComponent().toString();
+		GroupNode targetNode = tree.getGroupNode(dropOnThisNodeId);
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null) {
 			dropObjectPath = targetNode.getUserObjectPath();
-		}
-
-		// debugging the if clause
-
-		if (targetNode != null) {
 			Logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}
 
@@ -104,9 +98,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
 			Logging.debug(this, "canImport !allows subgroups "
 					+ ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
-		}
-		if (sourceGroupNode == null && targetNode != null) {
-			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
 		}
 
 		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
@@ -127,7 +118,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			result = false;
 		}
 
-		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
+		Logging.debug(this, "canImport, dropOnThis " + dropOnThisNodeId);
 		Logging.debug(this, "canImport: " + result);
 		return result;
 	}
