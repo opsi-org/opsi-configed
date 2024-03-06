@@ -1375,17 +1375,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 		clientTree.produceTreeForALL(allPCs);
 
-		Map<String, Map<String, String>> hostgroups = persistenceController.getGroupDataService().getHostGroupsPD();
-		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
-		if (permittedHostGroups != null && !permittedHostGroups.isEmpty()) {
-			hostgroups.keySet().retainAll(permittedHostGroups);
-			fObject2Groups.values().forEach(hostGroups -> hostGroups.retainAll(permittedHostGroups));
-		}
-		clientTree.produceAndLinkGroups(hostgroups);
+		clientTree.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
+				permittedHostGroups);
 
 		Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
 		Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.size());
-		allowedClients = clientTree.associateClientsToGroups(allPCs, fObject2Groups, permittedHostGroups);
+		allowedClients = clientTree.associateClientsToGroups(allPCs,
+				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
 
 		if (allowedClients != null) {
 			Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
