@@ -243,9 +243,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		boolean moving = false;
 
-		String adaptedSourceParentID = sourceParentID;
-		GroupNode adaptedSourceParentNode = sourceParentNode;
-
 		// we are in table and did not get a real souce path if sourcePath is null
 		if (sourcePath == null) {
 			String firstDIRECTORYgroupname = null;
@@ -256,18 +253,18 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				firstDIRECTORYgroupname = iter.next().toString();
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
-				adaptedSourceParentID = firstDIRECTORYgroupname;
+				sourceParentID = firstDIRECTORYgroupname;
 				moving = chooseMove(support, firstDIRECTORYgroupname, dropPath, true);
 
-				adaptedSourceParentNode = tree.getGroupNode(adaptedSourceParentID);
+				sourceParentNode = tree.getGroupNode(sourceParentID);
 			}
 		} else {
-			moving = chooseMove(support, adaptedSourceParentID, dropPath, true);
+			moving = chooseMove(support, sourceParentID, dropPath, true);
 		}
 
 		if (moving) {
-			tree.moveObjectTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
-					dropPath, dropParentID);
+			tree.moveObjectTo(importID, sourcePath, sourceParentID, sourceParentNode, dropParentNode, dropPath,
+					dropParentID);
 		} else {
 			tree.copyObjectTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
 		}
