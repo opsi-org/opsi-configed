@@ -6,14 +6,19 @@
 
 package de.uib.utilities.table.gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,14 +49,13 @@ import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
-	private static final int BLINK_RATE = 0;
-	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
-	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
-	private static final String PROGRESSIVE_SEARCH_PROPERTY = "progressiveSearch";
+	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
-	public static final int FULL_TEXT_SEARCH = 0;
-	public static final int START_TEXT_SEARCH = 1;
-	public static final int REGEX_SEARCH = 2;
+	private static final int BLINK_RATE = 0;
+
+	public enum SearchMode {
+		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
+	}
 
 	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
@@ -64,12 +68,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelSearch;
 	private CheckedLabel checkmarkSearch;
-	private CheckedLabel checkmarkSearchProgressive;
 	private JLabel labelSearchMode;
 	private CheckedLabel filtermark;
-	private CheckedLabel checkmarkAllColumns;
-	private CheckedLabel checkmarkFullText;
 
+	private JLabel labelShowHideExtraOptions;
 	private JLabel labelFilterMarkGap;
 
 	private NavigationPanel navPane;
@@ -99,57 +101,47 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	private String savedStatesObjectTag;
-
 	private boolean filteredMode;
 
 	/**
+	 * Provides search functionality for tables.
+	 * 
 	 * @param SearchTargetModel the model for delivering data and selecting
-	 * @param boolean           modifies the search function
-	 * @param String            saving of states is activated, the keys are
-	 *                          tagged with the parameter
 	 */
-	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
-		this(null, targetModel, withRegEx, savedStatesObjectTag);
+	public TableSearchPane(SearchTargetModel targetModel) {
+		this(targetModel, false);
 	}
 
 	/**
-	 * a search target model is produces for the table in PanelGenEditTable,
-	 * keeping access tho PanelGenEditTable public methods
+	 * Provides search functionality for tables.
 	 * 
-	 * @param JTable  the model for delivering data and selecting
-	 * @param boolean
-	 * @param String  saving of states is activated, the keys are tagged with
-	 *                the parameter
+	 * @param targetModel the model for delivering data and selecting
+	 * @param withRegex   modifies the search function
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
+	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx) {
+		this(null, targetModel, withRegEx);
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx,
-			String savedStatesObjectTag) {
+	/**
+	 * Provides search functionality for tables.
+	 * 
+	 * @param thePanel    the model for delivering data and selecting
+	 * @param targetModel the model for delivering data and selecting
+	 * @param withRegex   modifies the search function
+	 */
+	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx) {
+		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx);
+	}
+
+	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
 		this.withRegEx = withRegEx;
 		filtering = true;
-		this.savedStatesObjectTag = savedStatesObjectTag;
 
 		comparator = getCollator();
 
-		initSavedStates();
 		init();
-	}
-
-	/**
-	 * a search target model is produces from a JTable the regex parameter
-	 * default false is used
-	 * 
-	 * @param SearchTargetModel
-	 * @param String            saving of states is activated, the keys are
-	 *                          tagged with the parameter
-	 */
-	public TableSearchPane(SearchTargetModel targetModel, String savedStatesObjectTag) {
-		this(targetModel, false, savedStatesObjectTag);
 	}
 
 	private void init() {
@@ -173,14 +165,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
 		this.masterFrame = masterFrame;
-	}
-
-	private void initSavedStates() {
-		if (savedStatesObjectTag != null) {
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
-			Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
-		}
 	}
 
 	public void setWithNavPane(boolean b) {
@@ -214,8 +198,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
-		checkmarkAllColumns.setEnabled(b);
-		checkmarkFullText.setEnabled(b);
 		fieldSearch.setEnabled(b);
 	}
 
@@ -261,10 +243,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
+		if (b) {
+			setupNarrowLayout();
+		}
 		showFilterIcon(b);
-		checkmarkSearchProgressive.setVisible(b);
-		checkmarkAllColumns.setVisible(b);
-		checkmarkFullText.setVisible(b);
+		labelShowHideExtraOptions.setVisible(b);
 		comboSearchFields.setVisible(!b);
 		comboSearchFieldsMode.setVisible(!b);
 		labelSearch.setVisible(!b);
@@ -273,10 +256,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
 		this.targetModel = searchTargetModel;
-	}
-
-	public void setToolTipTextCheckMarkAllColumns(String s) {
-		checkmarkAllColumns.setToolTipText(s);
 	}
 
 	private void initComponents() {
@@ -290,32 +269,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-
+		checkmarkSearch.setVisible(true);
 		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
 		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
 		checkmarkSearch.setChangeStateAutonomously(false);
-
-		selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
-		unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16_blockselect.png", "");
-
-		boolean active = true;
-
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
-		}
-
-		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
-		if (active) {
-			searchInputType = SearchInputType.PROGRESSIVE;
-		} else {
-			searchInputType = SearchInputType.LINE;
-		}
-
-		checkmarkSearchProgressive.addActionListener(event -> checkmarkSearchProgressiveEvent());
-		checkmarkSearchProgressive.setChangeStateAutonomously(true);
-		checkmarkSearchProgressive
-				.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
 
 		fieldSearch = new JTextField();
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
@@ -383,6 +340,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"),
 				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives"),
+				Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives.tooltip"));
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
 				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
 		if (withRegEx) {
@@ -391,10 +350,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFieldsMode = new JComboBoxToolTip();
-
 		comboSearchFieldsMode.setValues(tooltipsMap, false);
-		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-
+		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
@@ -408,42 +365,82 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		showFilterIcon(filtering);
 
-		Icon unselectedIcon;
-		Icon selectedIcon;
+		labelShowHideExtraOptions = new JLabel("▶");
+		labelShowHideExtraOptions.setFont(new Font("TimesRoman", Font.PLAIN, 14));
+		labelShowHideExtraOptions
+				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
+		labelShowHideExtraOptions.setVisible(false);
+		labelShowHideExtraOptions.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				showExtraOptions();
+			}
+		});
+	}
 
-		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
-		selectedIcon = Utils.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
-
-		active = true;
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0;
-		}
-
-		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
-
-		checkmarkAllColumns.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
-		checkmarkAllColumns.addActionListener(event -> checkmarkAllColumnsEvent());
-
-		unselectedIcon = Utils.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
-		selectedIcon = Utils.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
-
-		active = true;
-		if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-			active = Integer.valueOf(
-					Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
-		}
-
-		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
-
-		if (active) {
-			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
+	private void showExtraOptions() {
+		if ("▶".equals(labelShowHideExtraOptions.getText())) {
+			labelShowHideExtraOptions.setText("▼");
 		} else {
-			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
+			labelShowHideExtraOptions.setText("▶");
 		}
+		comboSearchFields.setVisible(!comboSearchFields.isVisible());
+		comboSearchFieldsMode.setVisible(!comboSearchFieldsMode.isVisible());
+		labelSearch.setVisible(!labelSearch.isVisible());
+		labelSearchMode.setVisible(!labelSearchMode.isVisible());
+	}
 
-		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
-		checkmarkFullText.addActionListener(event -> checkmarkFullTextEvent());
+	private void setupNarrowLayout() {
+		GroupLayout layoutTablesearchPane = new GroupLayout(this);
+		setLayout(layoutTablesearchPane);
+
+		int checkedLabelWidth = 18;
+		layoutTablesearchPane
+				.setHorizontalGroup(layoutTablesearchPane
+						.createParallelGroup(
+								GroupLayout.Alignment.LEADING)
+						.addGroup(layoutTablesearchPane.createSequentialGroup()
+								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+								.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+										Globals.MIN_GAP_SIZE)
+								.addComponent(labelShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE))
+						.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(Globals.GAP_SIZE)
+								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE));
+
+		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
+				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelFilterMarkGap, 10, 10, 10).addComponent(labelShowHideExtraOptions, 10,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
 	private void setupLayout() {
@@ -463,10 +460,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
 				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-				.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addComponent(labelShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+						Globals.MIN_GAP_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -486,10 +481,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, 10, 10, 10)
-				.addComponent(checkmarkAllColumns, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkFullText, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkSearchProgressive, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -539,14 +532,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFields.setSelectedIndex(0);
 	}
 
-	public void setSearchMode(int a) {
-		if (a <= START_TEXT_SEARCH) {
-			comboSearchFieldsMode.setSelectedIndex(a);
-		} else {
-			if (withRegEx) {
-				comboSearchFieldsMode.setSelectedIndex(REGEX_SEARCH);
-			}
+	public void setSearchMode(SearchMode mode) {
+		if (mode == SearchMode.REGEX_SEARCH && !withRegEx) {
+			return;
 		}
+
+		comboSearchFieldsMode.setSelectedIndex(mode.ordinal());
 	}
 
 	@Override
@@ -642,113 +633,112 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return comparator.compare(s.substring(0, part.length()), part) == 0;
 	}
 
-	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
-			boolean regex, boolean combineCols) {
-		Logging.debug(this,
-				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
-						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
-						+ combineCols);
-
+	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
 		// Search only for value longer than one digit
 		if (value == null || value.toString().length() < 2) {
 			return -1;
 		}
 
-		String val = value.toString().toLowerCase(Locale.ROOT);
-
-		int viewrow = Math.max(0, startviewrow);
-
-		Pattern pattern = null;
-		if (regex) {
-			if (fulltext) {
-				val = ".*" + val + ".*";
-			}
-
-			pattern = Pattern.compile(val);
+		String valueLower = value.toString().toLowerCase(Locale.ROOT);
+		Pattern regexPattern = null;
+		SearchMode mode = getSearchMode(comboSearchFieldsMode.getSelectedIndex());
+		if (mode == SearchMode.REGEX_SEARCH) {
+			regexPattern = Pattern.compile(valueLower);
 		}
 
-		String[] valParts = val.split(" ");
-
+		int viewrow = Math.max(0, startviewrow);
 		boolean found = false;
 
 		while (!found && viewrow < targetModel.getRowCount()) {
-			if (combineCols) {
-				// only fulltext
-				StringBuilder buffRow = new StringBuilder();
-
-				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-					// we dont compare all values (comparing all values is default)
-					if (colIndices != null && !colIndices.contains(j)) {
-						continue;
-					}
-
-					int colJ = targetModel.getColForVisualCol(j);
-
-					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
-
-					if (valJ != null) {
-						String valSJ = valJ.toString().toLowerCase(Locale.ROOT);
-
-						buffRow.append(valSJ);
-					}
-				}
-
-				String compareVal = buffRow.toString();
-
-				if (!compareVal.isEmpty()) {
-					found = stringContainsParts(compareVal, valParts).success;
-				} else if (val.isEmpty()) {
-					found = true;
-				} else {
-					// Do nothing when 'val' is not empty and 'compareValue' is empty
-				}
-			} else {
-				for (int j = 0; j < targetModel.getColumnCount(); j++) {
-					// we dont compare all values (comparing all values is default)
-					if (colIndices != null && !colIndices.contains(j)) {
-						continue;
-					}
-
-					int colJ = targetModel.getColForVisualCol(j);
-
-					Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
-
-					if (compareValue == null) {
-						if (val.isEmpty()) {
-							found = true;
-						}
-					} else {
-						String compareVal = compareValue.toString().toLowerCase(Locale.ROOT);
-
-						if (regex) {
-							if (pattern.matcher(compareVal).matches()) {
-								found = true;
-							}
-						} else {
-							if (fulltext) {
-								found = stringContainsParts(compareVal, valParts).success;
-							} else {
-								found = stringStartsWith(compareVal, val);
-							}
-						}
-					}
-
-					if (found) {
-						break;
-					}
-				}
-			}
-
+			found = searchForStringInColumns(viewrow, colIndices, valueLower, regexPattern, mode);
 			if (!found) {
 				viewrow++;
 			}
 		}
 
-		if (found) {
-			return viewrow;
+		return found ? viewrow : -1;
+	}
+
+	private static SearchMode getSearchMode(int i) {
+		for (SearchMode mode : SearchMode.values()) {
+			if (mode.ordinal() == i) {
+				return mode;
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("java:S135")
+	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String valueLower,
+			Pattern regexPattern, SearchMode mode) {
+		boolean found = false;
+		for (int j = 0; j < targetModel.getColumnCount(); j++) {
+			// we dont compare all values (comparing all values is default)
+			if (colIndices != null && !colIndices.contains(j)) {
+				continue;
+			}
+
+			Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow),
+					targetModel.getColForVisualCol(j));
+
+			if (compareValue != null) {
+				String compareValueLower = compareValue.toString().toLowerCase(Locale.ROOT);
+				found = searchForStringBasedOnSearchMode(compareValueLower, valueLower, regexPattern, mode);
+			}
+
+			if (found) {
+				break;
+			}
+		}
+		return found;
+	}
+
+	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern,
+			SearchMode mode) {
+		boolean found = false;
+		if (mode == null) {
+			return found;
 		}
 
-		return -1;
+		switch (mode) {
+		case REGEX_SEARCH:
+			if (regexPattern.matcher(searchString).matches()) {
+				found = true;
+			}
+			break;
+		case FULL_TEXT_SEARCH:
+			found = stringContainsParts(searchString, searchPattern.split(" ")).success;
+			break;
+		case FULL_TEXT_WITH_ALTERNATIVES_SEARCH:
+			String valLower = searchPattern.toLowerCase(Locale.ROOT);
+			List<String> alternativeWords = getWords(valLower);
+			found = fullTextSearchingWithAlternatives(alternativeWords, searchString);
+			break;
+		default:
+			found = stringStartsWith(searchString, searchPattern);
+		}
+
+		return found;
+	}
+
+	private static List<String> getWords(String line) {
+		List<String> result = new ArrayList<>();
+		String[] splitted = S_PLUS_PATTERN.split(line);
+		for (String s : splitted) {
+			if (!" ".equals(s)) {
+				result.add(s);
+			}
+		}
+		return result;
+	}
+
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setResetFilterModeOnNewSearch(boolean b) {
@@ -867,16 +857,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		final Set<Integer> selectedCols = selectedCols0;
 
-		final boolean fulltextSearch = comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH;
-		final boolean regexSearch = comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH;
-		final boolean combineCols = fulltextSearch;
-
 		fieldSearch.getCaret().setVisible(false);
 
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {
-			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch, combineCols);
+			foundrow = findViewRowFromValue(startrow, value, selectedCols);
 
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
@@ -914,41 +900,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
-	private void checkmarkAllColumnsEvent() {
-		Logging.debug(this, "actionPerformed on checkmarkAllColumns");
-
-		comboSearchFields.setSelectedIndex(0);
-		if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
-			// all columns
-
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "1");
-			}
-		}
-	}
-
-	private void checkmarkFullTextEvent() {
-		Logging.debug(this, "actionPerformed on checkmarkFullText");
-
-		if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
-			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-			if (Configed.getSavedStates().getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
-			}
-		}
-	}
-
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filteredMode);
 
@@ -963,26 +914,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		} else {
 			switchFilterOn();
 		}
-	}
-
-	private void checkmarkSearchProgressiveEvent() {
-		Logging.debug(this,
-				"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
-		if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
-			searchInputType = SearchInputType.PROGRESSIVE;
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
-			}
-		} else {
-			searchInputType = SearchInputType.LINE;
-			if (Configed.getSavedStates()
-					.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
-				Configed.getSavedStates().setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "1");
-			}
-		}
-
-		Logging.debug(this, "actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
 	}
 
 	// DocumentListener interface

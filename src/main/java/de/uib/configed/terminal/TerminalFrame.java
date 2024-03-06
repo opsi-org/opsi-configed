@@ -114,7 +114,7 @@ public final class TerminalFrame implements MessagebusListener {
 	public void displaySessionsDialog() {
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
-				500, 300, "sessionlist");
+				500, 300);
 		List<String> clientsConnectedByMessagebus = new ArrayList<>(PersistenceControllerFactory
 				.getPersistenceController().getHostDataService().getMessagebusConnectedClients());
 		clientsConnectedByMessagebus.add("Configserver");

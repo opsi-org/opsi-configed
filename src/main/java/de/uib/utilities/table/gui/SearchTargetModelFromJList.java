@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
+import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
@@ -49,7 +50,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		super.setTable(new JTable(tableModel));
 	}
 
+	@SuppressWarnings({ "java:S1188" })
 	private static AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
+		String[] columnNames = new String[] { Configed.getResourceValue("SearchTargetModelFromJList.columnName"),
+				Configed.getResourceValue("SearchTargetModelFromJList.columnDescription") };
+
 		return new AbstractTableModel() {
 			@Override
 			public int getRowCount() {
@@ -59,6 +64,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			@Override
 			public int getColumnCount() {
 				return 2;
+			}
+
+			@Override
+			public String getColumnName(int col) {
+				return columnNames[col];
 			}
 
 			@Override

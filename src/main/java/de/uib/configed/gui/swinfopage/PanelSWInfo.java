@@ -146,13 +146,10 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
-
 		panelTable.setColumnSelectionAllowed(false);
-
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
 		panelTable.setSearchSelectMode(true);
-		panelTable.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
 		List<String> columnNames;
 
