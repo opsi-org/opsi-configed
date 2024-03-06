@@ -2591,10 +2591,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		return depotNamesLinked;
 	}
 
-	public String getConfigserver() {
-		return myServer;
-	}
-
 	public void reloadLicensesData() {
 		Logging.info(this, "reloadLicensesData");
 		if (initialDataLoader.isDataLoaded()) {

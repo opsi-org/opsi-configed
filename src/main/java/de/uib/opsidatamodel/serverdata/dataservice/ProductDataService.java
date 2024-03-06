@@ -1003,7 +1003,7 @@ public class ProductDataService {
 		return exec.getListOfMaps(omc);
 	}
 
-	public List<String> getWinProducts(String depotId, String depotProductDirectory) {
+	public List<String> getWinProducts(String depotProductDirectory) {
 		List<String> winProducts = new ArrayList<>();
 		if (depotProductDirectory == null) {
 			return winProducts;
@@ -1011,7 +1011,8 @@ public class ProductDataService {
 
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
-		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
+		for (String product : new TreeSet<>(
+				getAllNetbootProductNames(persistenceController.getHostInfoCollections().getConfigServer()))) {
 			if (!smbMounted
 					|| new File(
 							depotProductDirectory + File.separator + product + File.separator + SmbConnect.DIRECTORY_PE)

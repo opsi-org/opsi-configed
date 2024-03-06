@@ -168,13 +168,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private String server;
 	private SecondaryFrame rootFrame;
 
 	public PanelDriverUpload(ConfigedMain configedMain, SecondaryFrame root) {
 		this.configedMain = configedMain;
 		this.rootFrame = root;
-		server = configedMain.getConfigserver();
 
 		defineChoosers();
 
@@ -279,8 +277,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		Logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
 
-		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
-				depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -660,8 +657,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldClientname.setText(s);
 	}
 
-	public void setDepot(String s) {
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(new String[] { s }));
+	public void setDepot() {
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
+				new String[] { persistenceController.getHostInfoCollections().getConfigServer() }));
 	}
 
 	private void produceTarget() {
