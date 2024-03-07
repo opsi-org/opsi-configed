@@ -103,10 +103,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		return clientInfoPanel;
 	}
 
-	public JSplitPane getPanelClientSelection() {
-		return panelClientSelection;
-	}
-
 	private void init() {
 		setBorder(new EmptyBorder(0, 0, 0, Globals.MIN_GAP_SIZE));
 
@@ -317,12 +313,9 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public void setUpdatedLogfilePanel(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel " + logtype);
-		setLogfilePanel(configedMain.getLogfilesUpdating(logtype));
-	}
-
-	public void setLogfilePanel(final Map<String, String> logs) {
 		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_logfiles")), showLogfiles);
-		showLogfiles.setDocuments(logs, mainFrame.getHostsStatusPanel().getSelectedClientNames());
+		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
+				mainFrame.getHostsStatusPanel().getSelectedClientNames());
 	}
 
 	public void setLogview(String logtype) {
