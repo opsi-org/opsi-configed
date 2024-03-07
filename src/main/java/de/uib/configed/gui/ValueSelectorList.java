@@ -57,11 +57,9 @@ public class ValueSelectorList extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
-		searchPane.setToolTipTextCheckMarkAllColumns(
-				Configed.getResourceValue("ValueSelectorList.checkmarkAllColumns.tooltip"));
 
 		initComponents();
 		layouting();

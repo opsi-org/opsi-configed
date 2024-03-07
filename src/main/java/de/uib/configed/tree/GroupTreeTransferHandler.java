@@ -85,17 +85,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			sourceObjectPath = sourceGroupNode.getUserObjectPath();
 		}
 
-		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
-		String id = dropOnThis.getUserObject().toString();
-		GroupNode targetNode = tree.getGroupNode(id);
+		String dropOnThisNodeId = dropLocation.getPath().getLastPathComponent().toString();
+		GroupNode targetNode = tree.getGroupNode(dropOnThisNodeId);
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null) {
 			dropObjectPath = targetNode.getUserObjectPath();
-		}
-
-		// debugging the if clause
-
-		if (targetNode != null) {
 			Logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}
 
@@ -105,29 +99,28 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			Logging.debug(this, "canImport !allows subgroups "
 					+ ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
 		}
-		if (sourceGroupNode == null && targetNode != null) {
-			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
-		}
 
 		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
 		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
 
+		return canImport(targetNode, sourceGroupNode, dropObjectPath, sourceObjectPath, dropOnThisNodeId);
+	}
+
+	private boolean canImport(GroupNode targetNode, GroupNode sourceGroupNode, Object[] dropObjectPath,
+			Object[] sourceObjectPath, String dropOnThisNodeId) {
 		if (targetNode == null) {
 			return false;
 		}
 
-		boolean result = true;
-		boolean canNotImportGroupNode = sourceGroupNode != null
-				&& ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
-		boolean canNotImportNonGroupNode = sourceGroupNode == null && targetNode.allowsOnlyGroupChilds();
-		boolean isDifferentGroupBranch = (sourceGroupNode != null && sourceObjectPath.length > 1
-				&& dropObjectPath.length > 1 && !(sourceObjectPath[1].equals(dropObjectPath[1])));
+		boolean canImportGroupNode = sourceGroupNode == null
+				|| !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
+		boolean canImportNonGroupNode = sourceGroupNode != null || !targetNode.allowsOnlyGroupChilds();
+		boolean isSameGroupBranch = (sourceGroupNode == null || sourceObjectPath.length <= 1
+				|| dropObjectPath.length <= 1 || sourceObjectPath[1].equals(dropObjectPath[1]));
 
-		if (targetNode.isImmutable() || canNotImportGroupNode || canNotImportNonGroupNode || isDifferentGroupBranch) {
-			result = false;
-		}
+		boolean result = !targetNode.isImmutable() && canImportGroupNode && canImportNonGroupNode && isSameGroupBranch;
 
-		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
+		Logging.debug(this, "canImport, dropOnThis " + dropOnThisNodeId);
 		Logging.debug(this, "canImport: " + result);
 		return result;
 	}
@@ -136,9 +129,17 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	public int getSourceActions(JComponent c) {
 		Logging.debug(this, "getSourceActions,  activePaths " + Arrays.toString(tree.getSelectionPaths()));
 
+		if (isSourceActionsNONE()) {
+			return TransferHandler.NONE;
+		} else {
+			return getSourceActions();
+		}
+	}
+
+	private boolean isSourceActionsNONE() {
 		if (tree.getSelectionPaths() == null || tree.getSelectionPaths().length == 0) {
 			Logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
-			return TransferHandler.NONE;
+			return true;
 		}
 
 		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getSelectionPaths()[0].getLastPathComponent();
@@ -158,10 +159,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			if (parent.isImmutable()) {
 				Logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
-				return TransferHandler.NONE;
+				return true;
 			}
 		}
 
+		return false;
+	}
+
+	private int getSourceActions() {
+		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getSelectionPaths()[0].getLastPathComponent();
 		String nodeString = dropThis.getUserObject().toString();
 
 		if (tree.getGroups().keySet().contains(nodeString)) {

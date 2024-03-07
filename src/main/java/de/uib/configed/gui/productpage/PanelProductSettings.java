@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
@@ -70,9 +69,6 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private static final int HEIGHT_MIN = 200;
-
-	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
-	private static final int FRAME_HEIGHT = 490;
 
 	private JTable tableProducts;
 	private ProductSettingsTableModel productSettingsTableModel;
@@ -145,7 +141,6 @@ public class PanelProductSettings extends JSplitPane {
 		JScrollPane paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
-		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
