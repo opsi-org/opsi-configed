@@ -2392,14 +2392,12 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().size());
 
 		if (firstSelectedClient == null || getSelectedClients().isEmpty()) {
-			mainFrame.getTabbedConfigPanes()
-					.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 		} else if (getSelectedClients().size() > 1) {
 			if (persistenceController.getModuleDataService().canCallMySQLPD()) {
 				mainFrame.getTabbedConfigPanes().setHardwareInfoMultiClients();
 			} else {
-				mainFrame.getTabbedConfigPanes()
-						.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+				mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 			}
 		} else {
 			mainFrame.getTabbedConfigPanes().setHardwareInfo(

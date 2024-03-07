@@ -510,7 +510,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
-		tree.expandRow(1);
 	}
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,

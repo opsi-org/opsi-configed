@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -54,15 +52,11 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private JPanel showHardwareLog;
-	private JPanel showSoftwareLog;
 	private JLabel labelNoSoftware;
 
 	private PanelHWInfo panelHWInfo;
-	private JPanel showHardwareLogNotFound;
 	private ControllerHWinfoMultiClients controllerHWinfoMultiClients;
-	private JPanel showHardwareLogMultiClientReport;
-	private JPanel showHardwareLogParentOfNotFoundPanel;
+	private JPanel showHardwareLogNotFoundPanel;
 
 	private TabbedLogPane showLogfiles;
 	private JSplitPane panelClientSelection;
@@ -151,9 +145,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		insertTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null, panelHostConfig, null,
 				ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
-		showHardwareLog = new JPanel();
-
-		insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null, showHardwareLog, null,
+		insertTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null, new JPanel(), null,
 				ConfigedMain.VIEW_HARDWARE_INFO);
 
 		initSoftWareInfo();
@@ -161,16 +153,14 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		labelNoSoftware = new JLabel();
 
-		showSoftwareLogNotFound = new JPanel(new FlowLayout());
+		showSoftwareLogNotFound = new JPanel();
 		showSoftwareLogNotFound.add(labelNoSoftware);
-
-		showSoftwareLog = showSoftwareLogNotFound;
 
 		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
 		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
-		insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null, showSoftwareLog, null,
+		insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null, showSoftwareLogNotFound, null,
 				ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new TabbedLogPane(configedMain) {
@@ -265,13 +255,11 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
 			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().size());
 
-			showSoftwareLog = showSoftwareLogMultiClientReport;
-			showSoftwareInfo();
+			showSoftwareInfo(showSoftwareLogMultiClientReport);
 		} else {
 			// handled by the following methods
 			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
-			showSoftwareLog = showSoftwareLogNotFound;
-			showSoftwareInfo();
+			showSoftwareInfo(showSoftwareLogNotFound);
 		}
 	}
 
@@ -283,55 +271,46 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelSWInfo.setHost(hostId);
 		panelSWInfo.updateModel();
 
-		showSoftwareLog = panelSWInfo;
-
-		showSoftwareInfo();
+		showSoftwareInfo(panelSWInfo);
 	}
 
-	private void showHardwareInfo() {
+	private void showHardwareInfo(JPanel showHardwareLog) {
 		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog")), showHardwareLog);
 
 		showHardwareLog.repaint();
 	}
 
-	public void setHardwareInfoNotPossible(String label) {
+	public void setHardwareInfoNotPossible() {
 		Logging.info(this, "setHardwareInfoNotPossible");
 
-		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
-			showHardwareLogNotFound = new JPanel();
-			showHardwareLogNotFound.add(new JLabel(label));
-			showHardwareLogParentOfNotFoundPanel = new JPanel();
-
-			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
-			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
+		if (showHardwareLogNotFoundPanel == null) {
+			showHardwareLogNotFoundPanel = new JPanel();
+			showHardwareLogNotFoundPanel
+					.add(new JLabel(Configed.getResourceValue("MainFrame.TabActiveForSingleClient")));
 		}
 
-		showHardwareLog = showHardwareLogParentOfNotFoundPanel;
-		showHardwareInfo();
+		showHardwareInfo(showHardwareLogNotFoundPanel);
 	}
 
 	public void setHardwareInfoMultiClients() {
-		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
+		if (controllerHWinfoMultiClients == null) {
 			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
-			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.getPanel();
 		}
 
 		Logging.info(this, "setHardwareInfoMultiClients ");
 
 		controllerHWinfoMultiClients.setFilter();
-		showHardwareLog = showHardwareLogMultiClientReport;
 
-		showHardwareInfo();
+		showHardwareInfo(controllerHWinfoMultiClients.getPanel());
 	}
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		panelHWInfo.setHardwareInfo(hardwareInfo);
 
-		showHardwareLog = panelHWInfo;
-		showHardwareInfo();
+		showHardwareInfo(panelHWInfo);
 	}
 
-	private void showSoftwareInfo() {
+	private void showSoftwareInfo(JPanel showSoftwareLog) {
 		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")), showSoftwareLog);
 		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
 	}
