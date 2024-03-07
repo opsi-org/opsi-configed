@@ -58,6 +58,7 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
+import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -444,12 +445,20 @@ public class MainFrame extends JFrame {
 		jMenuTerminal.setText("Terminal");
 		jMenuTerminal.add(jMenuTerminal);
 
-		TerminalCommandOpsiSetRights opsiSetRights = new TerminalCommandOpsiSetRights();
-		JMenuItem opsiSetRightsMenuItem = new JMenuItem();
-		opsiSetRightsMenuItem.setText(opsiSetRights.getMenuText());
-		opsiSetRightsMenuItem.setToolTipText(opsiSetRights.getToolTipText());
-		opsiSetRightsMenuItem.addActionListener((ActionEvent e) -> opsiSetRights.startParameterGui(configedMain));
-		jMenuTerminal.add(opsiSetRightsMenuItem);
+		TerminalCommandOpsiSetRights opsiSetRightsCommand = new TerminalCommandOpsiSetRights();
+		JMenuItem opsiSetRightsCommandMenuItem = new JMenuItem();
+		opsiSetRightsCommandMenuItem.setText(opsiSetRightsCommand.getMenuText());
+		opsiSetRightsCommandMenuItem.setToolTipText(opsiSetRightsCommand.getToolTipText());
+		opsiSetRightsCommandMenuItem
+				.addActionListener((ActionEvent e) -> opsiSetRightsCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(opsiSetRightsCommandMenuItem);
+
+		TerminalCommandCurl curlCommand = new TerminalCommandCurl();
+		JMenuItem curlCommandMenuItem = new JMenuItem();
+		curlCommandMenuItem.setText(curlCommand.getMenuText());
+		curlCommandMenuItem.setToolTipText(curlCommand.getToolTipText());
+		curlCommandMenuItem.addActionListener((ActionEvent e) -> curlCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(curlCommandMenuItem);
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {

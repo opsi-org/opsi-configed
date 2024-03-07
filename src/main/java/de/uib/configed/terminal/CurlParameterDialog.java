@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.ssh;
+package de.uib.configed.terminal;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,12 +30,15 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.configed.gui.ssh.CurlAuthenticationPanel;
+import de.uib.configed.gui.ssh.SSHCompletionComboButton;
+import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
+import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;
+import de.uib.opsicommand.terminalcommand.TerminalCommandHelp;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class SSHWgetParameterDialog extends FGeneralDialog {
+public class CurlParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
@@ -43,7 +46,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JLabel jLabelDir = new JLabel();
 	private JLabel jLabelVerbosity = new JLabel();
 	private JLabel jLabelFreeInput = new JLabel();
-	private JLabel jLabelFullCommand = new JLabel();
 
 	private JButton jButtonHelp;
 	private JButton jButtonExecute;
@@ -55,12 +57,15 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JComboBox<Integer> jComboBoxVerbosity;
 	private JTextField jTextFieldFreeInput;
 
-	private CommandWget commandWget = new CommandWget();
+	private TerminalCommandCurl commandCurl = new TerminalCommandCurl();
 	private SSHCompletionComboButton completion = new SSHCompletionComboButton();
-	private CurlAuthenticationPanel wgetAuthPanel;
+	private CurlAuthenticationPanel curlAuthPanel;
 
-	public SSHWgetParameterDialog() {
-		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
+	private ConfigedMain configedMain;
+
+	public CurlParameterDialog(ConfigedMain configedMain) {
+		super(null, Configed.getResourceValue("CurlParameterDialog.title"), false);
+		this.configedMain = configedMain;
 
 		init();
 		initLayout();
@@ -100,7 +105,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new Dimension(376, 220));
 
-		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
+		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
 		jTextFieldURL = new JTextField();
 		jTextFieldURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
 		jTextFieldURL.getDocument().addDocumentListener(new DocumentListener() {
@@ -144,15 +149,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 
 		jComboBoxVerbosity.setSelectedItem(1);
-		jComboBoxVerbosity.addItemListener((ItemEvent itemEvent) -> {
-			commandWget.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
-			updateCommand();
-		});
+		jComboBoxVerbosity.addItemListener(
+				(ItemEvent itemEvent) -> commandCurl.setVerbosity((int) jComboBoxVerbosity.getSelectedItem()));
 
-		jLabelFreeInput.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();
-		jTextFieldFreeInput
-				.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
+		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
 		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -170,14 +172,14 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		wgetAuthPanel = new CurlAuthenticationPanel();
-		((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
-		wgetAuthPanel.isOpen = true;
-		wgetAuthPanel.close();
-		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
+		curlAuthPanel = new CurlAuthenticationPanel();
+		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
+		curlAuthPanel.isOpen(true);
+		curlAuthPanel.close();
+		curlAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
-		jButtonHelp = new JButton(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
-		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
+		jButtonHelp = new JButton(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"));
+		jButtonHelp.setToolTipText(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
@@ -197,38 +199,29 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonHelp);
 		buttonPanel.add(jButtonExecute);
 
-		jLabelFullCommand.setText("wget ");
-
 		changeUrl();
 		changeFreeInput();
 	}
 
-	private void updateCommand() {
-		jLabelFullCommand.setText(commandWget.getCommand());
-	}
-
 	private void changeFreeInput() {
 		if (!jTextFieldFreeInput.getText().isBlank()) {
-			commandWget.setFreeInput(jTextFieldFreeInput.getText().trim());
+			commandCurl.setFreeInput(jTextFieldFreeInput.getText().trim());
 		} else {
-			commandWget.setFreeInput("");
+			commandCurl.setFreeInput("");
 		}
-
-		updateCommand();
 	}
 
 	private void changeUrl() {
 		if (!(jTextFieldURL.getText().isEmpty())) {
-			commandWget.setUrl(jTextFieldURL.getText().trim());
+			commandCurl.setUrl(jTextFieldURL.getText().trim());
 		} else {
-			commandWget.setUrl("");
+			commandCurl.setUrl("");
 		}
-
-		updateCommand();
 	}
 
 	@Override
 	public void doAction3() {
+		Logging.warning(this, "execute");
 		if (jTextFieldURL.getText()
 				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))
 				|| jTextFieldURL.getText().isEmpty()) {
@@ -236,30 +229,30 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			return;
 		}
 
-		commandWget.setDir((String) jComboBoxDir.getSelectedItem());
-		if (((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-			commandWget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
-					+ wgetAuthPanel.getPw() + " ");
+		Logging.devel(this, "sselected item " + (String) jComboBoxDir.getSelectedItem());
+		commandCurl.setDir((String) jComboBoxDir.getSelectedItem());
+		if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+			commandCurl
+					.setAuthentication(" --insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPw() + " ");
 		} else {
-			commandWget.setAuthentication(" ");
+			commandCurl.setAuthentication(" ");
 		}
 
-		updateCommand();
-
-		if (commandWget.checkCommand()) {
+		if (commandCurl.checkCommand()) {
 			new Thread() {
 				@Override
 				public void run() {
 					Logging.info(this, "doAction3 wget ");
-					new SSHConnectExec(commandWget, jButtonExecute);
+					TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+					executor.execute(commandCurl);
 				}
 			}.start();
 		}
 	}
 
 	private void doActionHelp() {
-		SSHConnectionExecDialog dia = commandWget.startHelpDialog();
-		dia.setVisible(true);
+		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+		executor.execute(new TerminalCommandHelp(commandCurl));
 	}
 
 	private void cancel() {
@@ -280,7 +273,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(
-												wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
+												curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
@@ -297,12 +290,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
 												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-										.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
+										.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
 												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												Short.MAX_VALUE)))
-						.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
@@ -325,12 +318,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
+						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
+						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
 								GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				.addGap(Globals.GAP_SIZE)

@@ -64,7 +64,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected GroupLayout.Group verticalParallelGroup;
 	protected GroupLayout inputPanelLayout;
 
-	private SSHWgetAuthenticationPanel wgetAuthPanel;
+	private CurlAuthenticationPanel wgetAuthPanel;
 	protected CommandSFTPUpload command;
 
 	public SSHFileUploadDialog(String title, CommandSFTPUpload com) {
@@ -104,7 +104,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		addListener(jRadioButtonLocal);
 
 		jLabelURL = new JLabel();
-		wgetAuthPanel = new SSHWgetAuthenticationPanel();
+		wgetAuthPanel = new CurlAuthenticationPanel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 90, Globals.BUTTON_HEIGHT);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
@@ -191,7 +191,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		/* To be implemented in subclass(es) */}
 
 	private void enableComponents(boolean isSelected) {
-		((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setEnabled(isSelected);
+		((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setEnabled(isSelected);
 		jTextFieldURL.setEnabled(isSelected);
 		jTextFieldLocalPath.setEnabled(!isSelected);
 		jButtonFileChooser.setEnabled(!isSelected);
@@ -246,14 +246,14 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 								.addGroup(inputPanelLayout.createParallelGroup()
 										.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+										.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.GAP_SIZE)
 								.addGroup(inputPanelLayout.createParallelGroup()
 										.addComponent(jTextFieldURL, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												Short.MAX_VALUE)
-										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+										.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)))
 						.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
@@ -288,10 +288,10 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 								.addGap(Globals.GAP_SIZE * 3))
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addGap(Globals.GAP_SIZE * 3)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+						.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE * 3))
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 
@@ -344,7 +344,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 			wget.setUrl(jTextFieldURL.getText());
 
-			if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+			if (((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 				wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 						+ wgetAuthPanel.getPw() + " ");
 			} else {

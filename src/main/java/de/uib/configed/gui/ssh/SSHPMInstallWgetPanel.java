@@ -39,7 +39,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	private JLabel jLabelCompareMD5Sum = new JLabel();
 	private JCheckBox jCheckBoxCompareMD5;
 
-	private SSHWgetAuthenticationPanel wgetAuthPanel;
+	private CurlAuthenticationPanel wgetAuthPanel;
 
 	private String mainProduct;
 	private String mainDir;
@@ -85,7 +85,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		});
 
 		// perfekt für PMInstall
-		wgetAuthPanel = new SSHWgetAuthenticationPanel();
+		wgetAuthPanel = new CurlAuthenticationPanel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH * 2, Globals.BUTTON_HEIGHT);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
@@ -118,7 +118,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		CommandWget wget = getWgetCommand();
 		if (wget != null) {
-			if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+			if (((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 				wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 						+ wgetAuthPanel.getPw() + " ");
 			} else {
@@ -220,9 +220,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 								.addComponent(jCheckBoxCompareMD5, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+								.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+								.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
 										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(wgetAuthPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -239,7 +239,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelCompareMD5Sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+						.addComponent(wgetAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
@@ -258,7 +258,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxCompareMD5,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createSequentialGroup().addComponent(
-								wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
+								wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,

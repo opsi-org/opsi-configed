@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 
-public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
+public class CurlAuthenticationPanel extends SSHPMInstallPanel {
 	public static final String LBLUSER = "lbl_user";
 	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
 	public static final String CBNEEDAUTH = "cb_needAuthentication";
@@ -31,7 +31,7 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	private JTextField jTextFieldPassword;
 	private JLabel jLabelPassword;
 
-	public SSHWgetAuthenticationPanel() {
+	public CurlAuthenticationPanel() {
 		super();
 		initComponents();
 		initLayout();
