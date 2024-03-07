@@ -437,13 +437,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
+		tableModel.setData(new ArrayList<>());
+
 		this.hwInfo = hwInfo;
 
 		if (hwInfo == null || hwInfo.isEmpty()) {
 			treeRootTitle = Configed.getResourceValue("MainFrame.NoHardwareConfiguration");
 			createRoot(treeRootTitle);
-			tableModel.setData(new ArrayList<>());
-
 			return;
 		}
 
@@ -455,7 +455,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		createRoot(treeRootTitle);
-		tableModel.setData(new ArrayList<>());
 
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
@@ -481,8 +480,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			}
 
 			IconNode classNode = new IconNode(hwClassUI);
-			Icon classIcon;
-			classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
+			Icon classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
 			if (classIcon == null) {
 				classIcon = createImageIcon("hwinfo_images/DEVICE.png");
 			}

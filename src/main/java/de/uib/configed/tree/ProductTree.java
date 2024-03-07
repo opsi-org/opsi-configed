@@ -155,7 +155,6 @@ public class ProductTree extends AbstractGroupTree {
 	public Set<String> getSelectedObjectsInTable() {
 		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
 		selectedProducts.addAll(netbootPanel.getSelectedIDs());
-
 		return selectedProducts;
 	}
 
