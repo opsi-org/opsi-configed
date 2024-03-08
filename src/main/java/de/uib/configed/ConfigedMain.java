@@ -2088,8 +2088,8 @@ public class ConfigedMain implements MessagebusListener {
 			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
 		}
 
-		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(), this,
-				changedProductStates, productNames, statesAndActions, possibleActions,
+		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(this, changedProductStates,
+				productNames, statesAndActions, possibleActions,
 				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
@@ -3616,7 +3616,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		FTextArea fAskCopyClient = new FTextArea(getMainFrame(), Configed.getResourceValue("MainFrame.jMenuCopyClient"),
 				true, new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
-				null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
 
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));

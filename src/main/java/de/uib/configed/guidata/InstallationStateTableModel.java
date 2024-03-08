@@ -125,7 +125,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(List<String> selectedClients, ConfigedMain configedMain,
+	public InstallationStateTableModel(ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
@@ -139,7 +139,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		this.configedMain = configedMain;
 
 		this.collectChangedStates = collectChangedStates;
-		this.selectedClients = selectedClients;
+		this.selectedClients = configedMain.getSelectedClients();
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;
