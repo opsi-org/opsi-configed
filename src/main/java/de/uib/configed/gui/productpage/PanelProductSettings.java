@@ -452,12 +452,8 @@ public class PanelProductSettings extends JSplitPane {
 	public void setSelection(Set<String> selectedIDs) {
 		tableProducts.clearSelection();
 
-		if (selectedIDs == null) {
-			Logging.info("selectedIds is null");
-		} else if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
-			tableProducts.addRowSelectionInterval(0, 0);
-			// show first product if no product given
-			Logging.info(this, "setSelection 0");
+		if (selectedIDs == null || selectedIDs.isEmpty()) {
+			Logging.info("selectedIds is null or empty");
 		} else {
 			for (int row = 0; row < tableProducts.getRowCount(); row++) {
 				Object productId = tableProducts.getValueAt(row, 0);
@@ -523,7 +519,7 @@ public class PanelProductSettings extends JSplitPane {
 		setSelection(selection);
 	}
 
-	public void valueChanged(TreePath[] selectionPaths) {
+	public void valueChanged(TreePath[] selectionPaths, boolean doSelection) {
 		if (selectionPaths == null) {
 			setFilter(null);
 		} else if (selectionPaths.length == 1) {
@@ -537,7 +533,10 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 			setFilter(productIds);
-			setSelection(productIds);
+
+			if (doSelection) {
+				setSelection(productIds);
+			}
 		}
 	}
 
@@ -558,7 +557,8 @@ public class PanelProductSettings extends JSplitPane {
 		tableProducts.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
 
-		valueChanged(productTree.getSelectionPaths());
+		// We don't want to call setSelection here, since it will be called after this method
+		valueChanged(productTree.getSelectionPaths(), false);
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();

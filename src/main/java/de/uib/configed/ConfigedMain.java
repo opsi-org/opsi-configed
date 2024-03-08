@@ -226,10 +226,6 @@ public class ConfigedMain implements MessagebusListener {
 	private Set<String> depotsOfSelectedClients;
 	private Set<String> allowedClients;
 
-	// marker variables for requests for reload when clientlist changes
-	private boolean localbootStatesAndActionsUpdate = true;
-	private boolean netbootStatesAndActionsUpdate = true;
-
 	// collection of retrieved software audit and hardware maps
 
 	private String myServer;
@@ -1451,8 +1447,6 @@ public class ConfigedMain implements MessagebusListener {
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-		localbootStatesAndActionsUpdate = true;
-		netbootStatesAndActionsUpdate = true;
 	}
 
 	public List<String> getSelectedClients() {
@@ -2045,30 +2039,27 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private boolean setLocalbootProductsPage() {
-		return setProductsPage(localbootStatesAndActionsUpdate, collectChangedLocalbootStates,
-				getLocalbootStateAndActionsAttributes(), OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
+		return setProductsPage(collectChangedLocalbootStates, getLocalbootStateAndActionsAttributes(),
+				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
 				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
 				getLocalbootProductDisplayFieldsList());
 	}
 
 	private boolean setNetbootProductsPage() {
-		return setProductsPage(netbootStatesAndActionsUpdate, collectChangedNetbootStates, Collections.emptyList(),
+		return setProductsPage(collectChangedNetbootStates, Collections.emptyList(),
 				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
 				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(),
 				getNetbootProductDisplayFieldsList());
 	}
 
-	private boolean setProductsPage(boolean updateStatesAndActions,
-			Map<String, Map<String, Map<String, String>>> changedProductStates, List<String> attributes,
-			String productServerString, PanelProductSettings panelProductSettings, List<String> displayFields) {
+	private boolean setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
+			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
+			List<String> displayFields) {
 		if (!setDepotRepresentative()) {
 			return false;
 		}
-		Map<String, List<Map<String, String>>> statesAndActions = null;
-		if (updateStatesAndActions) {
-			statesAndActions = persistenceController.getProductDataService()
-					.getMapOfProductStatesAndActions(getSelectedClients(), attributes, productServerString);
-		}
+		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
+				.getMapOfProductStatesAndActions(getSelectedClients(), attributes, productServerString);
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		panelProductSettings.initAllProperties();
@@ -2097,17 +2088,14 @@ public class ConfigedMain implements MessagebusListener {
 			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
 		}
 
-		if (updateStatesAndActions) {
-			InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(),
-					this, changedProductStates, productNames, statesAndActions, possibleActions,
-					persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
-					displayFields);
-			panelProductSettings.setTableModel(istmForSelectedClients);
-		}
+		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(getSelectedClients(), this,
+				changedProductStates, productNames, statesAndActions, possibleActions,
+				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
+				displayFields);
+		panelProductSettings.setTableModel(istmForSelectedClients);
 
 		panelProductSettings.setSortKeys(currentSortKeysProducts);
 
-		Logging.info(this, "setProductsPage oldProductSelection: " + oldProductSelection);
 		panelProductSettings.setSelection(oldProductSelection);
 		if (panelProductSettings.isFilteredMode()) {
 			panelProductSettings.reduceToSelected();

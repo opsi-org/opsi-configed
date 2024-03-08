@@ -208,8 +208,8 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
-		localbootPanel.valueChanged(getSelectionPaths());
-		netbootPanel.valueChanged(getSelectionPaths());
+		localbootPanel.valueChanged(getSelectionPaths(), true);
+		netbootPanel.valueChanged(getSelectionPaths(), true);
 	}
 
 	@Override
