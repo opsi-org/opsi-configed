@@ -9,7 +9,6 @@ package de.uib.configed.clientselection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.clientselection.elements.SoftwareNameElement;
@@ -59,11 +58,6 @@ public class SelectionManager {
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
 		return new SoftwareNameElement(persistenceController.getProductDataService().getProductIdsPD());
-	}
-
-	/** Get the localized hardware list from the backend */
-	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
-		return backend.getLocalizedHardwareList();
 	}
 
 	public OpsiDataBackend getBackend() {

@@ -338,7 +338,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
-		List<String> hardwareList = new LinkedList<>(manager.getLocalizedHardwareList().keySet());
+		List<String> hardwareList = new LinkedList<>(manager.getBackend().getLocalizedHardwareList().keySet());
 		Collections.sort(hardwareList);
 		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
@@ -563,7 +563,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.type = GroupType.HARDWARE_GROUP;
 		result.topLabel.setText(hardware);
 
-		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
+		List<AbstractSelectElement> elements = manager.getBackend().getLocalizedHardwareList().get(hardware);
 		if (elements == null) {
 			Logging.warning(this, hardware + " not found in localized hardware list");
 		} else {

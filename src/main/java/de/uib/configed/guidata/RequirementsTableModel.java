@@ -56,7 +56,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private void init() {
 		// we assume that the productId determines the requirements since we are on a
 		// preselected depot
-		setActualProduct(null, "");
+		setActualProduct(null, null);
 	}
 
 	public void setActualProduct(String depotId, String product) {
@@ -66,7 +66,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		requDeinstallMap = null;
 		keyArray = zeroArray;
 
-		if (product != null && !product.isBlank()) {
+		if (product != null) {
 			retrieveRequirements(depotId, product);
 
 			Set<String> keySet = new TreeSet<>();
@@ -130,25 +130,9 @@ public class RequirementsTableModel extends AbstractTableModel {
 		int rowTypeIndex = row % NO_OF_ROW_TYPES;
 
 		Object result = null;
-		String indent = "     ";
 
 		if (col == 0) {
-			switch (rowTypeIndex) {
-			case 0:
-				result = myKey;
-				break;
-			case 1:
-				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-						+ " setup";
-				break;
-			case 2:
-				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-						+ " uninstall";
-				break;
-			default:
-				Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
-				break;
-			}
+			result = getValueAtFirstColumn(rowTypeIndex, myKey);
 		} else {
 			switch (col) {
 			case 1:
@@ -176,6 +160,30 @@ public class RequirementsTableModel extends AbstractTableModel {
 			if (result != null) {
 				result = "(" + result + ")";
 			}
+		}
+
+		return result;
+	}
+
+	private String getValueAtFirstColumn(int rowTypeIndex, String myKey) {
+		String result = null;
+		final String IDENT = "     ";
+
+		switch (rowTypeIndex) {
+		case 0:
+			result = myKey;
+			break;
+		case 1:
+			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+					+ " setup";
+			break;
+		case 2:
+			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+					+ " uninstall";
+			break;
+		default:
+			Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
+			break;
 		}
 
 		return result;
