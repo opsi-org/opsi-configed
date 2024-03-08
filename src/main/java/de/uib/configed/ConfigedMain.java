@@ -1794,6 +1794,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (selectedNode.getAllowsChildren()) {
 			activateGroupByTree(false, selectedNode);
+			clientTree.updateSelectedObjectsInTable();
 		} else {
 			setClientByTree(selectedNode, newSelectedPath);
 		}
