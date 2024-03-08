@@ -59,6 +59,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
+import de.uib.opsicommand.terminalcommand.TerminalCommandDeployClientAgent;
 import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
@@ -477,6 +478,14 @@ public class MainFrame extends JFrame {
 		opsiPackageManagerUninstallCommandMenuItem.addActionListener(
 				(ActionEvent e) -> opsiPackageManagerUninstallCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(opsiPackageManagerUninstallCommandMenuItem);
+
+		TerminalCommandDeployClientAgent deployClientAgentCommand = new TerminalCommandDeployClientAgent();
+		JMenuItem deployClientAgentCommandMenuItem = new JMenuItem();
+		deployClientAgentCommandMenuItem.setText(deployClientAgentCommand.getMenuText());
+		deployClientAgentCommandMenuItem.setToolTipText(deployClientAgentCommand.getToolTipText());
+		deployClientAgentCommandMenuItem
+				.addActionListener((ActionEvent e) -> deployClientAgentCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(deployClientAgentCommandMenuItem);
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {
