@@ -4,19 +4,22 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand.sshcommand;
+package de.uib.opsicommand.terminalcommand;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
+import de.uib.opsicommand.sshcommand.SSHCommand;
+import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
  * This class represent a ssh-command
  **/
-public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemplate>, SSHMultiCommand {
+public class TerminalMultiCommand implements TerminalCommand, Comparable<TerminalMultiCommand> {
 	private static final String CONFIDENTIAL_INFORMATION = null;
 
 	/** boolean needParameter = false **/
@@ -28,10 +31,8 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	/** String unique menu text **/
 	private String menuText;
 	/** LinkedList<SSHCommand> ssh_command **/
-	private List<SSHCommand> sshCommands = new LinkedList<>();
-	private List<SSHCommand> sshCommandOriginal = new LinkedList<>();
-	/** boolean needSudo state **/
-	private boolean needSudo;
+	private List<TerminalCommand> commands = new LinkedList<>();
+	private List<TerminalCommand> sshCommandOriginal = new LinkedList<>();
 	/** String parent menu text **/
 	private String parentMenuText;
 	/** String tooltip text **/
@@ -48,7 +49,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * 
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommandTemplate() {
+	public TerminalMultiCommand() {
 		position = SSHCommandFactory.POSITION_DEFAULT;
 	}
 
@@ -64,26 +65,25 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @param p   (position): int
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommandTemplate(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
+	public TerminalMultiCommand(String id, List<String> c, String mt, String pmt, String ttt, int p) {
 		position = SSHCommandFactory.POSITION_DEFAULT;
 
-		initValues(id, c, mt, ns, pmt, ttt, p);
+		initValues(id, c, mt, pmt, ttt, p);
 	}
 
-	public SSHCommandTemplate(SSHCommand orig, List<String> commandlist) {
-		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
-				orig.getToolTipText(), orig.getPriority());
+	public TerminalMultiCommand(SSHCommand orig, List<String> commandlist) {
+		this(orig.getId(), commandlist, orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
+				orig.getPriority());
 	}
 
-	public SSHCommandTemplate(SSHCommandTemplate orig) {
-		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
-				orig.getToolTipText(), orig.getPriority());
+	public TerminalMultiCommand(TerminalMultiCommand orig) {
+		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
+				orig.getPriority());
 	}
 
-	private void initValues(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
+	private void initValues(String id, List<String> c, String mt, String pmt, String ttt, int p) {
 		setId(id);
 		setMenuText(mt);
-		setNeedSudo(ns);
 		setParentMenuText(pmt);
 		setTooltipText(ttt);
 		setPriority(p);
@@ -92,15 +92,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
-	@Override
-	/**
-	 * Sets the command specific error text
-	 **/
-	public String getErrorText() {
-		return "ERROR";
-	}
-
-	@Override
 	public String getMainName() {
 		return mainName;
 	}
@@ -125,10 +116,10 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	public void setCommands(List<String> cList) {
 		if (cList != null) {
-			sshCommands.clear();
+			commands.clear();
 			for (String c : cList) {
-				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
-				sshCommands.add(sshc);
+				TerminalCommand sshc = new TerminalEmptyCommand(getId(), c, getMenuText());
+				commands.add(sshc);
 				if (firstInitCommands) {
 					sshCommandOriginal.add(sshc);
 				}
@@ -151,8 +142,8 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * 
 	 * @param sshc: SSHCommand
 	 **/
-	public void addCommand(SSHCommand sshc) {
-		sshCommands.add(sshc);
+	public void addCommand(TerminalCommand sshc) {
+		commands.add(sshc);
 		sshCommandOriginal.add(sshc);
 	}
 
@@ -195,15 +186,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	public void setTooltipText(String ttt) {
 		tooltipText = ttt;
-	}
-
-	/**
-	 * Sets the need sudo state
-	 * 
-	 * @param ns (needSudo): boolean
-	 **/
-	public void setNeedSudo(boolean ns) {
-		needSudo = ns;
 	}
 
 	/**
@@ -266,7 +248,16 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	@Override
 	public String getCommand() {
-		return "";
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < commands.size(); i++) {
+			TerminalCommand command = commands.get(i);
+			sb.append(command.getCommand());
+			if (commands.size() != i + 1) {
+				sb.append(" && ");
+			}
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -274,12 +265,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * 
 	 * @return List of SSHCommand
 	 **/
-	@Override
-	public List<SSHCommand> getCommands() {
-		return sshCommands;
+	public List<TerminalCommand> getCommands() {
+		return commands;
 	}
 
-	public List<SSHCommand> getOriginalCommands() {
+	public List<TerminalCommand> getOriginalCommands() {
 		return sshCommandOriginal;
 	}
 
@@ -291,14 +281,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	@Override
 	public String getCommandRaw() {
 		return "";
-	}
-
-	/**
-	 * @return True if the commands needs sudo
-	 **/
-	@Override
-	public boolean needSudo() {
-		return needSudo;
 	}
 
 	/**
@@ -314,10 +296,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * 
 	 * @return LinkedList<String> with the commands
 	 **/
-	@Override
 	public List<String> getCommandsRaw() {
 		List<String> commandsStringList = new LinkedList<>();
-		for (SSHCommand c : sshCommands) {
+		for (TerminalCommand c : commands) {
 			String comstr = c.getCommandRaw();
 			if (!(comstr == null || comstr.isBlank())) {
 				commandsStringList.add(c.getCommandRaw());
@@ -361,7 +342,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		com.append(SSHCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
 		com.append(SSHCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
 		com.append(SSHCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
-		com.append(SSHCommandFactory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
 		com.append(SSHCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
 		com.append(SSHCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
@@ -399,7 +379,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @return difference
 	 */
 	@Override
-	public int compareTo(SSHCommandTemplate compareCom) {
+	public int compareTo(TerminalMultiCommand compareCom) {
 		int dif = this.position - compareCom.getPriority();
 		if (dif == 0) {
 			return this.menuText.compareTo(compareCom.getMenuText());
@@ -413,12 +393,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @param TerminalMultiCommand com
 	 * @return the updated command (this)
 	 */
-	public SSHCommandTemplate update(SSHCommandTemplate com) {
+	public TerminalMultiCommand update(TerminalMultiCommand com) {
 		if (this.id.equals(com.getId())) {
 			Logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
 			setCommands(com.getCommandsRaw());
 			setMenuText(com.getMenuText());
-			setNeedSudo(com.needSudo());
 			setParentMenuText(com.getParentMenuText());
 			setTooltipText(com.getToolTipText());
 			setPriority(com.getPriority());
@@ -429,9 +408,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 
 	@Override
 	public boolean equals(Object o) {
-		SSHCommandTemplate com = null;
-		if (o instanceof SSHCommandTemplate) {
-			com = (SSHCommandTemplate) o;
+		TerminalMultiCommand com = null;
+		if (o instanceof TerminalMultiCommand) {
+			com = (TerminalMultiCommand) o;
 		} else {
 			Logging.debug(this, "equals object is not instance of SSHCommandTemplate");
 			return false;
@@ -460,10 +439,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		}
 		if (this.getPriority() != com.getPriority()) {
 			Logging.debug(this, "equals different priorities " + this.getPriority() + " != " + com.getPriority() + "");
-			return false;
-		}
-		if (this.needSudo() != com.needSudo()) {
-			Logging.debug(this, "equals different needSudo " + this.needSudo() + " != " + com.needSudo() + "");
 			return false;
 		}
 		if (this.getCommandsRaw().size() != com.getCommandsRaw().size()) {

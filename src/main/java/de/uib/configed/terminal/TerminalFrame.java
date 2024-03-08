@@ -318,6 +318,15 @@ public final class TerminalFrame implements MessagebusListener {
 		widget.getTerminalPanel().getTerminalOutputStream().sendString(command + "\r", true);
 	}
 
+	public void uploadFile(File file) {
+		FileUploadQueue queue = new FileUploadQueue();
+		queue.add(file);
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		BackgroundFileUploader fileUploader = new BackgroundFileUploader(this, widget, queue);
+		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
+		fileUploader.execute();
+	}
+
 	public void display() {
 		if (frame == null) {
 			createAndShowGUI();

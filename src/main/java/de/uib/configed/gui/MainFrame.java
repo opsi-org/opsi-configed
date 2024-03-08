@@ -59,6 +59,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
+import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -459,6 +460,15 @@ public class MainFrame extends JFrame {
 		curlCommandMenuItem.setToolTipText(curlCommand.getToolTipText());
 		curlCommandMenuItem.addActionListener((ActionEvent e) -> curlCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(curlCommandMenuItem);
+
+		TerminalCommandModulesUpload modulesUploadCommand = new TerminalCommandModulesUpload();
+		JMenuItem modulesUploadCommandMenuItem = new JMenuItem();
+		modulesUploadCommandMenuItem.setText(modulesUploadCommand.getMenuText());
+		modulesUploadCommandMenuItem.setToolTipText(modulesUploadCommand.getToolTipText());
+		modulesUploadCommandMenuItem
+				.addActionListener((ActionEvent e) -> modulesUploadCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(modulesUploadCommandMenuItem);
+
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {

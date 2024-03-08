@@ -30,7 +30,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.ssh.CurlAuthenticationPanel;
 import de.uib.configed.gui.ssh.SSHCompletionComboButton;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;

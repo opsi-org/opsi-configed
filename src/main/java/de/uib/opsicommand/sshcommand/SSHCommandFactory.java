@@ -396,7 +396,7 @@ public final class SSHCommandFactory {
 	/**
 	 * Build an Map of key-value-pairs from a SSHCommand_Template
 	 * 
-	 * @param SSHCommandTemplate
+	 * @param TerminalMultiCommand
 	 * @return Map<String,Object> command
 	 **/
 	private static Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
@@ -413,7 +413,7 @@ public final class SSHCommandFactory {
 	/**
 	 * Create or update an command (update local lists)
 	 * 
-	 * @param SSHCommandTemplate command
+	 * @param TerminalMultiCommand command
 	 **/
 	public boolean saveSSHCommand(SSHCommandTemplate command) {
 		Logging.info(this, "saveSSHCommand command " + command.toString());
