@@ -33,6 +33,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -50,7 +52,7 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.TableSearchPane;
 import utils.Utils;
 
-public class ClientTable extends JPanel implements KeyListener {
+public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -126,13 +128,13 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public void activateListSelectionListener() {
 		// We want to prevent, that the listSelectionListener is added more than once
-		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(configedMain)) {
-			selectionModel.addListSelectionListener(configedMain);
+		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(this)) {
+			selectionModel.addListSelectionListener(this);
 		}
 	}
 
 	public void deactivateListSelectionListener() {
-		selectionModel.removeListSelectionListener(configedMain);
+		selectionModel.removeListSelectionListener(this);
 	}
 
 	public void setFilterMark(boolean b) {
@@ -141,6 +143,14 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public JTable getTable() {
 		return table;
+	}
+
+	// ListSelectionListener for client list
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+			configedMain.actOnListSelection();
+		}
 	}
 
 	public void setDataPanel() {

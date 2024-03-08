@@ -65,6 +65,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	protected ConfigedMain configedMain;
 
+	private Collection<String> selectedObjectsInTable = new HashSet<>();
+
 	protected AbstractGroupTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		init();
@@ -142,6 +144,14 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 			recursivelyCollectParentIDs(allNodes, child, nodeIds);
 		}
+	}
+
+	public void updateSelectedObjectsInTable() {
+		selectedObjectsInTable = getSelectedObjectsInTable();
+	}
+
+	public boolean isSelectedInTable(String objectId) {
+		return selectedObjectsInTable.contains(objectId);
 	}
 
 	public Set<String> getActiveParents() {

@@ -66,7 +66,7 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 
 		if (!node.getAllowsChildren()) {
 			// client
-			if (sel) {
+			if (abstractGroupTree.isSelectedInTable(text)) {
 				setIcon(objectSelectedIcon);
 			} else {
 				setIcon(objectIcon);

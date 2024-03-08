@@ -131,7 +131,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import utils.Utils;
 
-public class ConfigedMain implements ListSelectionListener, MessagebusListener {
+public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final int VIEW_CLIENTS = 0;
@@ -931,6 +931,8 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 			requestRefreshDataForClientSelection();
 		}
+
+		clientTree.updateSelectedObjectsInTable();
 	}
 
 	private void updateHostInfo() {
@@ -951,14 +953,6 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 				secondInfo.setBy(pcinfos.get(getSelectedClients().get(i)).getMap());
 				hostInfo.combineWith(secondInfo);
 			}
-		}
-	}
-
-	// ListSelectionListener for client list
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			actOnListSelection();
 		}
 	}
 

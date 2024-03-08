@@ -350,6 +350,8 @@ public class PanelProductSettings extends JSplitPane {
 		}
 
 		productTree.produceActiveParents();
+
+		productTree.updateSelectedObjectsInTable();
 	}
 
 	private JTable strippTable(JTable jTable) {

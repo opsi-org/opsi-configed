@@ -3,6 +3,7 @@
 ## Changed
 - Remove config states usage in `TableSearchPane`
 - Remove usage of icons in narrow layout of `TableSearchPane` (use checkboxes instead)
+- Make product/client icon filled when object is selected in table
 
 ## Added
 - New option for searching multiple words in `TableSearchPane`
