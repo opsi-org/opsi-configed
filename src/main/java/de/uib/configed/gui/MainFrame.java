@@ -60,6 +60,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
+import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -469,6 +470,13 @@ public class MainFrame extends JFrame {
 				.addActionListener((ActionEvent e) -> modulesUploadCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(modulesUploadCommandMenuItem);
 
+		TerminalCommandOpsiPackageManagerUninstall opsiPackageManagerUninstallCommand = new TerminalCommandOpsiPackageManagerUninstall();
+		JMenuItem opsiPackageManagerUninstallCommandMenuItem = new JMenuItem();
+		opsiPackageManagerUninstallCommandMenuItem.setText(opsiPackageManagerUninstallCommand.getMenuText());
+		opsiPackageManagerUninstallCommandMenuItem.setToolTipText(opsiPackageManagerUninstallCommand.getToolTipText());
+		opsiPackageManagerUninstallCommandMenuItem.addActionListener(
+				(ActionEvent e) -> opsiPackageManagerUninstallCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(opsiPackageManagerUninstallCommandMenuItem);
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {
