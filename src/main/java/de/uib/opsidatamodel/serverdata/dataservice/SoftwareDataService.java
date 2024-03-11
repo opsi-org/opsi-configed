@@ -852,9 +852,8 @@ public class SoftwareDataService {
 
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
-		if (!moduleDataService.isWithLicenseManagementPD()
-				|| (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null
-						&& cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) != null)) {
+		if (!moduleDataService.isWithLicenseManagementPD() || cacheManager.isDataCached(Arrays
+				.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}
 

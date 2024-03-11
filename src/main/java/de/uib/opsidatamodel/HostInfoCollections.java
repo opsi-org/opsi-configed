@@ -116,7 +116,7 @@ public class HostInfoCollections {
 		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null "
 				+ (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) == null));
 
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HOST_NAMES)) {
 			return;
 		}
 
@@ -353,7 +353,7 @@ public class HostInfoCollections {
 	}
 
 	public void retrieveFNode2TreeparentsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.FNODE_TO_TREE_PARENTS)) {
 			return;
 		}
 

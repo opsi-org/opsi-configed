@@ -71,7 +71,7 @@ public class HealthDataService {
 	}
 
 	public boolean isHealthDataAlreadyLoaded() {
-		return cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) != null;
+		return cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA);
 	}
 
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {

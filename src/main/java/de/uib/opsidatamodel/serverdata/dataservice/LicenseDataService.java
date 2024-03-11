@@ -6,6 +6,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -385,9 +386,8 @@ public class LicenseDataService {
 	}
 
 	private void retrieveLicensesUsagePD() {
-		if (moduleDataService.isWithLicenseManagementPD()
-				&& (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class) != null && cacheManager
-						.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class) != null)) {
+		if (moduleDataService.isWithLicenseManagementPD() && cacheManager.isDataCached(
+				Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 

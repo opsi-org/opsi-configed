@@ -160,7 +160,7 @@ public class GroupDataService {
 	// returns the function that yields for a given groupId all objects which belong
 	// to the group
 	public void retrieveFGroup2Members(String groupType, String memberIdName, CacheIdentifier cacheId) {
-		if (cacheManager.getCachedData(cacheId, Map.class) != null) {
+		if (cacheManager.isDataCached(cacheId)) {
 			return;
 		}
 		String[] callAttributes = new String[] {};
@@ -181,7 +181,7 @@ public class GroupDataService {
 	}
 
 	public void retrieveFObject2GroupsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.FOBJECT_TO_GROUPS)) {
 			return;
 		}
 

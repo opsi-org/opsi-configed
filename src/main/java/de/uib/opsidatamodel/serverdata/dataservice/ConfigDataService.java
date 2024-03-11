@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -95,7 +96,7 @@ public class ConfigDataService {
 	 * retrieves default domain from service
 	 */
 	public void retrieveOpsiDefaultDomainPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_DEFAULT_DOMAIN)) {
 			return;
 		}
 		Object[] params = new Object[] {};
@@ -129,9 +130,8 @@ public class ConfigDataService {
 	}
 
 	public void retrieveConfigOptionsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS,
+				CacheIdentifier.CONFIG_OPTIONS, CacheIdentifier.CONFIG_DEFAULT_VALUES))) {
 			return;
 		}
 

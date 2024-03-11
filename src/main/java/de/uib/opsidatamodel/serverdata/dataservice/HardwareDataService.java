@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -458,9 +459,8 @@ public class HardwareDataService {
 		configDataService.retrieveConfigOptionsPD();
 		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null " + (CacheManager
 				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.HOST_COLUMN_NAMES,
+				CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, CacheIdentifier.HW_INFO_CLASS_NAMES))) {
 			return;
 		}
 
