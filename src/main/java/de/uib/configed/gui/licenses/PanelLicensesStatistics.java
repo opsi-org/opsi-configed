@@ -62,7 +62,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		if (CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_STATISTICS)) {
+		if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_STATISTICS)) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
 			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {

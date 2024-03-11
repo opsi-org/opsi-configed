@@ -60,7 +60,7 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		if (CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
+		if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
 			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {

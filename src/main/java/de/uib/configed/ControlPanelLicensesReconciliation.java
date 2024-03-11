@@ -123,7 +123,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
-						if (CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
+						if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 							return new HashMap<>();
 						}
 						return !configedMain.isInitialLicenseDataLoading()
