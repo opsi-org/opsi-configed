@@ -121,10 +121,7 @@ public class ModuleDataService {
 	}
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN)) {
-			return;
-		}
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) == null
+		if (!cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)
 				&& isOpsiLicensingAvailablePD()) {
 			Object[] callParameters = {};
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters,

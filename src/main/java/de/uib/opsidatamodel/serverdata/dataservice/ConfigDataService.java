@@ -715,7 +715,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDisabledClientMenuEntries() {
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
 		Map<String, List<Object>> configDefaultValues = cacheManager
@@ -726,7 +726,7 @@ public class ConfigDataService {
 	public List<String> getOpsiclientdExtraEvents() {
 		Logging.debug(this, "getOpsiclientdExtraEvents");
 
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
 

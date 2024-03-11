@@ -1053,17 +1053,8 @@ public class UserRolesConfigDataService {
 			return true;
 		}
 
-		boolean result = false;
+		Set<String> depotsPermitted = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 
-		Set<String> depotsPermitted = getDepotsPermittedPD();
-		if (depotsPermitted != null) {
-			result = depotsPermitted.contains(depotId);
-		}
-
-		return result;
-	}
-
-	private Set<String> getDepotsPermittedPD() {
-		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
+		return depotsPermitted != null && depotsPermitted.contains(depotId);
 	}
 }

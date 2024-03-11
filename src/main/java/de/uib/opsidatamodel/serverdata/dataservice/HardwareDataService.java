@@ -457,8 +457,8 @@ public class HardwareDataService {
 
 	public void retrieveClient2HwRowsColumnNamesPD() {
 		configDataService.retrieveConfigOptionsPD();
-		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null " + (CacheManager
-				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
+		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
+				+ (!cacheManager.isDataCached(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES)));
 		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.HOST_COLUMN_NAMES,
 				CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, CacheIdentifier.HW_INFO_CLASS_NAMES))) {
 			return;

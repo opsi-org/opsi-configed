@@ -210,8 +210,7 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveAuditSoftwareXLicensePoolPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
-				AuditSoftwareXLicensePool.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL)) {
 			return;
 		}
 

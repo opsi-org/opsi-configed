@@ -74,8 +74,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
-						if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
-								Map.class) == null) {
+						if (CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 							return new HashMap<>();
 						}
 						return !configedMain.isInitialLicenseDataLoading()
