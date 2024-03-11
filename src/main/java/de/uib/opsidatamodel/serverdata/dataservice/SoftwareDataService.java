@@ -910,25 +910,30 @@ public class SoftwareDataService {
 
 			Set<String> listOfUsingClients = pool2opsiUsages.get(licensePoolId);
 
-			Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
-
-			if (listOfUsingClients != null) {
-				for (String client : listOfUsingClients) {
-					String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
-
-					if (rowsLicensesReconciliation.get(pseudokey) == null) {
-						Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
-					} else {
-						rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
-					}
-				}
-			}
+			setUsedByOpsiToTrue(licensePoolId, listOfUsingClients, rowsLicensesReconciliation);
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
 
 		Logging.debug(this, "rowsLicenseStatistics " + rowsLicenseStatistics);
+	}
+
+	private void setUsedByOpsiToTrue(String licensePoolId, Set<String> listOfUsingClients,
+			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
+		Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+
+		if (listOfUsingClients != null) {
+			for (String client : listOfUsingClients) {
+				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+
+				if (rowsLicensesReconciliation.get(pseudokey) == null) {
+					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+				} else {
+					rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
+				}
+			}
+		}
 	}
 
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
