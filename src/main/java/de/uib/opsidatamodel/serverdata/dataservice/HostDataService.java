@@ -604,7 +604,7 @@ public class HostDataService {
 	}
 
 	public void retrieveHostDisplayFields() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_DISPLAY_FIELDS)) {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();

@@ -77,8 +77,8 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicensePoolsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class) != null || cacheManager
-				.getCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT, LicensePoolXOpsiProduct.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_POOLS)
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT)) {
 			return;
 		}
 
@@ -109,8 +109,8 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicenseContractsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class) != null || cacheManager
-				.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS)
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY)) {
 			return;
 		}
 
@@ -145,7 +145,7 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicensesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSES)) {
 			return;
 		}
 		Map<String, LicenseEntry> licenses = new HashMap<>();
@@ -172,8 +172,8 @@ public class LicenseDataService {
 
 	public void retrieveSoftwareLicense2LicensePoolPD() {
 		if (!moduleDataService.isWithLicenseManagementPD()
-				|| cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, List.class) != null) {
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_USABILITIES)
+				|| cacheManager.isDataCached(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL)) {
 			return;
 		}
 		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
@@ -344,8 +344,7 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicenseUsagesPD() {
-		if (moduleDataService.isWithLicenseManagementPD()
-				&& cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class) != null) {
+		if (moduleDataService.isWithLicenseManagementPD() && cacheManager.isDataCached(CacheIdentifier.LICENSE_USAGE)) {
 			return;
 		}
 		Logging.info(this, "retrieveLicenseUsages");

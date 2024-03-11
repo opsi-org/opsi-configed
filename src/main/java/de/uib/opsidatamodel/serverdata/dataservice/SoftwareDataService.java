@@ -928,7 +928,7 @@ public class SoftwareDataService {
 	}
 
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
-		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 			return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 		}
 

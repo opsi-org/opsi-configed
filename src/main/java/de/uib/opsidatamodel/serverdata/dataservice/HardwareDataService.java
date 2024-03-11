@@ -85,7 +85,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveHardwareOnClientPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
 			return;
 		}
 		Map<String, String> filterMap = new HashMap<>();
@@ -101,7 +101,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveHwAuditDeviceClassesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES)) {
 			return;
 		}
 
@@ -202,7 +202,7 @@ public class HardwareDataService {
 
 	// partial version of produceHwAuditDeviceClasses()
 	public List<String> retrieveHwClassesPD(Iterable<Map<String, List<Map<String, Object>>>> hwAuditConf) {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HW_CLASS_NAMES)) {
 			return new ArrayList<>();
 		}
 
@@ -232,7 +232,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveOpsiHWAuditConfPD(String locale) {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class) != null
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)
 				&& cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class).get(locale) != null) {
 			return;
 		}

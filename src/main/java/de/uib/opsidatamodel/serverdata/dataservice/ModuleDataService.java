@@ -102,7 +102,7 @@ public class ModuleDataService {
 	}
 
 	public final void retrieveOpsiLicensingInfoOpsiAdminPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
 			return;
 		}
 
@@ -121,7 +121,7 @@ public class ModuleDataService {
 	}
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN)) {
 			return;
 		}
 		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) == null
@@ -777,7 +777,7 @@ public class ModuleDataService {
 	}
 
 	public void retrieveMethodSignaturesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.MAP_OF_METHOD_SIGNATURES)) {
 			return;
 		}
 

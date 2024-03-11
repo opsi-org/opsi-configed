@@ -64,7 +64,7 @@ public class GroupDataService {
 	}
 
 	public void retrieveProductGroupsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.PRODUCT_GROUPS)) {
 			return;
 		}
 		String[] callAttributes = new String[] {};
@@ -83,7 +83,7 @@ public class GroupDataService {
 	}
 
 	public void retrieveHostGroupsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_GROUPS)) {
 			return;
 		}
 		String[] callAttributes = new String[] {};
@@ -104,8 +104,8 @@ public class GroupDataService {
 	public void retrieveAllGroupsPD() {
 		// Don't load when one of the two is not null
 		// We only want to load, when both are not yet loaded
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS, Map.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.PRODUCT_GROUPS)
+				|| cacheManager.isDataCached(CacheIdentifier.HOST_GROUPS)) {
 			return;
 		}
 
@@ -200,8 +200,8 @@ public class GroupDataService {
 	public void retrieveAllObject2GroupsPD() {
 		// Don't load when one of the two is not null
 		// We only want to load, when both are not yet loaded
-		if (cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.FOBJECT_TO_GROUPS)
+				|| cacheManager.isDataCached(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS)) {
 			return;
 		}
 

@@ -298,7 +298,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductInfosPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS)) {
 			return;
 		}
 
@@ -413,7 +413,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveAllProductDependenciesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS)) {
 			return;
 		}
 		retrieveProductsAllDepotsPD();
@@ -841,7 +841,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveDepotProductPropertiesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES)) {
 			return;
 		}
 
@@ -1504,7 +1504,7 @@ public class ProductDataService {
 	}
 
 	private void retrieveProductOnClientsDisplayFields(CacheIdentifier cacheId, String key) {
-		if (cacheManager.getCachedData(cacheId, Map.class) != null) {
+		if (cacheManager.isDataCached(cacheId)) {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();

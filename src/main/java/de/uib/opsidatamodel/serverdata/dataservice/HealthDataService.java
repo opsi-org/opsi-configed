@@ -48,7 +48,7 @@ public class HealthDataService {
 	}
 
 	public void retrieveHealthDataPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA)) {
 			return;
 		}
 
@@ -62,7 +62,7 @@ public class HealthDataService {
 	}
 
 	public void retrieveDiagnosticDataPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DIAGNOSTIC_DATA)) {
 			return;
 		}
 

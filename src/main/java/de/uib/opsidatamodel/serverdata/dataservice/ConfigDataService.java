@@ -288,7 +288,7 @@ public class ConfigDataService {
 	}
 
 	private void retrieveHostConfigsPDOpsi42Lower() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}
 
@@ -331,7 +331,7 @@ public class ConfigDataService {
 	}
 
 	private void retrieveHostConfigsPDOpsi43() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}
 
