@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -186,10 +187,9 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductsAllDepotsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS,
+				CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS,
+				CacheIdentifier.DEPOT_TO_PACKAGES))) {
 			return;
 		}
 
@@ -358,7 +358,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveAllProductPropertyDefinitionsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS)) {
 			return;
 		}
 		retrieveProductsAllDepotsPD();
@@ -534,8 +534,8 @@ public class ProductDataService {
 	}
 
 	public void checkProductGlobalInfosPD(String depotId) {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS, Map.class) != null
+		if (cacheManager
+				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_GLOBAL_INFOS, CacheIdentifier.POSSIBLE_ACTIONS))
 				&& depotDataService.getDepot() != null && depotDataService.getDepot().equals(depotId)) {
 			return;
 		}
@@ -641,8 +641,8 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductIdsAndDefaultStatesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, NavigableSet.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES, Map.class) != null) {
+		if (cacheManager
+				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_IDS, CacheIdentifier.PRODUCT_DEFAULT_STATES))) {
 			return;
 		}
 

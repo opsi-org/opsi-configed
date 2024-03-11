@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -142,11 +143,9 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveRelationsAuditSoftwareToLicensePoolsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
-				NavigableSet.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+				CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
+				CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL))) {
 			return;
 		}
 
@@ -294,15 +293,10 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
-						NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
-						NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
-						NavigableMap.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.SOFTWARE_TO_NUMBER,
+				CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+				CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
+				CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
 			return;
 		}
 
