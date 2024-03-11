@@ -61,26 +61,26 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 			return rData.equals(data);
 		} else if (dataSplitted.length == 0) {
 			// the only chars are '*'
-
-			return realData.length() > 0;
+			return rData.length() > 0;
 		} else {
-			if (!startsWith && !rData.startsWith(dataSplitted[0])) {
-				return false;
-			}
-
-			int index = 0;
-			int i = 0;
-			while (i < dataSplitted.length && index >= 0) {
-				if (!dataSplitted[i].isEmpty()) {
-					index = rData.indexOf(dataSplitted[i], index);
-					if (index >= 0) {
-						index += dataSplitted[i].length();
-					}
-				}
-
-				i++;
-			}
-			return index >= 0 && (endsWith || rData.endsWith(dataSplitted[dataSplitted.length - 1]));
+			return checkDataSplitted(rData);
 		}
+	}
+
+	private boolean checkDataSplitted(String rData) {
+		if (!startsWith && !rData.startsWith(dataSplitted[0])) {
+			return false;
+		}
+
+		int index = 0;
+		for (int i = 0; i < dataSplitted.length && index >= 0; i++) {
+			if (!dataSplitted[i].isEmpty()) {
+				index = rData.indexOf(dataSplitted[i], index);
+				if (index >= 0) {
+					index += dataSplitted[i].length();
+				}
+			}
+		}
+		return index >= 0 && (endsWith || rData.endsWith(dataSplitted[dataSplitted.length - 1]));
 	}
 }
