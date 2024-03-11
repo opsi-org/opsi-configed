@@ -395,8 +395,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
 		}
 
-		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries,
-				this instanceof ClientTree);
+		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+
+		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries, groupType);
 	}
 
 	protected GroupNode produceGroupNode(String groupId, String description) {

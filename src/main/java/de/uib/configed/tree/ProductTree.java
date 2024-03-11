@@ -23,6 +23,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.type.Object2GroupEntry;
 
 public class ProductTree extends AbstractGroupTree {
 	private PanelProductSettings localbootPanel;
@@ -143,7 +144,8 @@ public class ProductTree extends AbstractGroupTree {
 		if (getChildWithUserObjectString(objectID, newParentNode) == null) {
 			newParentNode.add(new DefaultMutableTreeNode(objectID, false));
 
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID,
+					Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 
 			model.nodeStructureChanged(newParentNode);
 

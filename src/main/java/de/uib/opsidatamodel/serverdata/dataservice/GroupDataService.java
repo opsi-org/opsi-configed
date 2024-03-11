@@ -304,7 +304,7 @@ public class GroupDataService {
 		return exec.doCall(omc);
 	}
 
-	public boolean addObject2Group(String objectId, String groupId, boolean isHostGroup) {
+	public boolean addObject2Group(String objectId, String groupId, String groupType) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
@@ -312,8 +312,6 @@ public class GroupDataService {
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
 
-		String groupType = isHostGroup ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
-				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
 				new String[] { groupType, persistentGroupId, objectId });
 
@@ -325,18 +323,15 @@ public class GroupDataService {
 		return result;
 	}
 
-	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries, boolean isHostGroup) {
+	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries, String groupType) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
-		String productType = isHostGroup ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
-				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
-
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
 			Map<String, Object> deleteItem = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, productType);
+			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, groupType);
 			deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
 			deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());
 
