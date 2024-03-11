@@ -44,16 +44,14 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	@Override
 	public @NotNull TerminalActionPresentation getCopyActionPresentation() {
-		KeyStroke keyStroke = Platform.current() == Platform.Mac
-				? KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK)
+		KeyStroke keyStroke = Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK)
 				: KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.copy"), keyStroke);
 	}
 
 	@Override
 	public @NotNull TerminalActionPresentation getPasteActionPresentation() {
-		KeyStroke keyStroke = Platform.current() == Platform.Mac
-				? KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.META_DOWN_MASK)
+		KeyStroke keyStroke = Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.META_DOWN_MASK)
 				: KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.paste"), keyStroke);
 	}
@@ -61,7 +59,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	@Override
 	public @NotNull TerminalActionPresentation getClearBufferActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.clearBuffer"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
 	}
 
@@ -80,21 +78,21 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	@Override
 	public @NotNull TerminalActionPresentation getLineUpActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineUp"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
 	}
 
 	@Override
 	public @NotNull TerminalActionPresentation getLineDownActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.lineDown"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
 	}
 
 	@Override
 	public @NotNull TerminalActionPresentation getFindActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.find"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
 	}
 
@@ -106,21 +104,21 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	public @NotNull TerminalActionPresentation getNewWindowActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewWindow"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_N,
 								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 	}
 
 	public @NotNull TerminalActionPresentation getNewSessionActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.openNewSession"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_T,
 								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 	}
 
 	public @NotNull TerminalActionPresentation getChangeSessionActionPresentation() {
 		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"),
-				Platform.current() == Platform.Mac ? KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK)
+				Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK)
 						: KeyStroke.getKeyStroke(KeyEvent.VK_S,
 								InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 	}
