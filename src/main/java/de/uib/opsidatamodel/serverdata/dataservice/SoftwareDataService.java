@@ -774,8 +774,6 @@ public class SoftwareDataService {
 			return "";
 		}
 
-		String result = "";
-
 		boolean ok = false;
 		Logging.info(this, "editPool2AuditSoftware ");
 
@@ -842,7 +840,7 @@ public class SoftwareDataService {
 				cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
 			}
 
-			return result;
+			return "";
 		}
 
 		return "???";
