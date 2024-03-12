@@ -1526,6 +1526,7 @@ public class ProductDataService {
 			configuredByService = produceProductOnClientDisplayfields(key);
 		}
 
+		// We have a LinkedHashMap here so that fields will appear in this order
 		Map<String, Boolean> productOnClientsDisplayFields = new LinkedHashMap<>();
 
 		// key names from ProductState

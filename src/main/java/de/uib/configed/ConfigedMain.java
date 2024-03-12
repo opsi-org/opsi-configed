@@ -21,7 +21,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -220,9 +219,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<String, ListMerger> mergedProductProperties;
 
-	private Map<String, Boolean> displayFieldsLocalbootProducts;
-	private Map<String, Boolean> displayFieldsNetbootProducts;
-
 	private Set<String> depotsOfSelectedClients;
 	private Set<String> allowedClients;
 
@@ -239,7 +235,6 @@ public class ConfigedMain implements MessagebusListener {
 	private Map<String, Map<String, Object>> depots;
 	private List<String> depotNamesLinked;
 	private String depotRepresentative;
-	private ListSelectionListener depotsListSelectionListener;
 
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
@@ -356,12 +351,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	protected void initGui() {
 		Logging.info(this, "initGui");
-
-		displayFieldsLocalbootProducts = new LinkedHashMap<>(
-				persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts());
-		displayFieldsNetbootProducts = new LinkedHashMap<>(
-				persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts());
-		// initialization by defaults, it can be edited afterwards
 
 		initTree();
 
@@ -971,22 +960,20 @@ public class ConfigedMain implements MessagebusListener {
 		// create depotsList
 		depotsList = new DepotsList();
 
-		if (depotsListSelectionListener == null) {
-			Logging.info(this, "create depotsListSelectionListener");
-			depotsListSelectionListener = new ListSelectionListener() {
-				private int counter;
+		Logging.info(this, "create depotsListSelectionListener");
+		ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
+			private int counter;
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					counter++;
-					Logging.info(this, "depotSelection event count  " + counter);
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				counter++;
+				Logging.info(this, "depotSelection event count  " + counter);
 
-					if (!e.getValueIsAdjusting()) {
-						depotsListValueChanged();
-					}
+				if (!e.getValueIsAdjusting()) {
+					depotsListValueChanged();
 				}
-			};
-		}
+			}
+		};
 
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 
@@ -2003,7 +1990,8 @@ public class ConfigedMain implements MessagebusListener {
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : displayFieldsLocalbootProducts.entrySet()) {
+		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
 			}
@@ -2015,21 +2003,14 @@ public class ConfigedMain implements MessagebusListener {
 	private List<String> getNetbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
 
-		for (Entry<String, Boolean> productDisplay : displayFieldsNetbootProducts.entrySet()) {
+		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
 			}
 		}
 
 		return result;
-	}
-
-	public Map<String, Boolean> getDisplayFieldsNetbootProducts() {
-		return displayFieldsNetbootProducts;
-	}
-
-	public Map<String, Boolean> getDisplayFieldsLocalbootProducts() {
-		return displayFieldsLocalbootProducts;
 	}
 
 	// enables and disables tabs depending if they make sense in other cases
