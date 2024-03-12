@@ -236,8 +236,6 @@ public class ConfigedMain implements MessagebusListener {
 	private List<String> depotNamesLinked;
 	private String depotRepresentative;
 
-	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
-
 	private List<JFrame> allFrames;
 
 	private FGroupActions groupActionFrame;
@@ -387,7 +385,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, "initialTreeActivation");
 
-		reachableUpdater.setInterval(Configed.getRefreshMinutes());
+		ReachableUpdater.startUpdater(Configed.getRefreshMinutes(), this);
 
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
 		mainFrame.enableAfterLoading();
@@ -2898,52 +2896,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private class ReachableUpdater extends Thread {
-		private int interval;
-
-		ReachableUpdater(Integer interval) {
-			super();
-			setInterval(interval);
-		}
-
-		public final void setInterval(Integer interval) {
-			int oldInterval = this.interval;
-
-			if (interval == null) {
-				this.interval = 0;
-			} else {
-				this.interval = interval;
-			}
-
-			if (oldInterval == 0 && this.interval > 0) {
-				start();
-			}
-		}
-
-		@Override
-		public void run() {
-			while (!isInterrupted()) {
-				Logging.debug(this, " editingTarget, viewIndex " + editingTarget + ", " + viewIndex);
-
-				if (viewIndex == VIEW_CLIENTS && Boolean.TRUE.equals(
-						persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
-					reachableInfo = persistenceController.getHostDataService().reachableInfo(null);
-
-					setReachableInfo();
-				}
-
-				try {
-					int millisecs = interval * 60 * 1000;
-					Logging.debug(this, "Thread going to sleep for ms " + millisecs);
-					sleep(millisecs);
-				} catch (InterruptedException ex) {
-					Logging.info(this, "Thread interrupted ");
-					Thread.currentThread().interrupt();
-				}
-			}
-		}
-	}
-
 	public void getReachableInfo() {
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
@@ -2956,17 +2908,15 @@ public class ConfigedMain implements MessagebusListener {
 
 				if (selectedClients != null && !selectedClients.isEmpty()) {
 					Logging.info(this, "we have sel clients " + selectedClients.size());
-					reachableInfo = persistenceController.getHostDataService().reachableInfo(getSelectedClients());
+					setReachableInfo(selectedClients);
 				} else {
 					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
-					reachableInfo = persistenceController.getHostDataService().reachableInfo(null);
+					setReachableInfo(null);
 				}
 
 				fShowReachableInfo.setVisible(false);
 
 				mainFrame.getIconBarPanel().getIconButtonReachableInfo().setEnabled(true);
-
-				setReachableInfo();
 			}
 		}.start();
 	}
@@ -3022,7 +2972,9 @@ public class ConfigedMain implements MessagebusListener {
 				"could not update connectionStatus for client " + clientName + ": not in list of shown table");
 	}
 
-	private void setReachableInfo() {
+	public void setReachableInfo(List<String> clientsToUpdate) {
+		this.reachableInfo = persistenceController.getHostDataService().reachableInfo(clientsToUpdate);
+
 		// update column
 		if (Boolean.TRUE
 				.equals(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
