@@ -86,10 +86,6 @@ public class PanelProductProperties extends JSplitPane {
 		setRightComponent(infoPane);
 	}
 
-	private void updateModel() {
-		paneProducts.setTableModel(createTableModel());
-	}
-
 	private GenTableModel createTableModel() {
 		List<String> columnNames = new ArrayList<>();
 
@@ -109,7 +105,7 @@ public class PanelProductProperties extends JSplitPane {
 	}
 
 	public void setProductProperties() {
-		updateModel();
+		paneProducts.setTableModel(createTableModel());
 		int saveSelectedRow = paneProducts.getSelectedRow();
 		paneProducts.reset();
 
@@ -179,9 +175,7 @@ public class PanelProductProperties extends JSplitPane {
 			} else {
 				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
-				String depotId = "";
-
-				Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
+				Logging.info(this, "selected  product: " + productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
 						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
