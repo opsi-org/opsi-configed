@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.TerminalFrame;
-import utils.Utils;
 
 public class TerminalCommandExecutor {
 	private ConfigedMain configedMain;
@@ -32,16 +31,15 @@ public class TerminalCommandExecutor {
 		}
 	}
 
-	private void executeMultiCommand(TerminalFrame terminalFrame, TerminalMultiCommand multiCommand) {
+	private static void executeMultiCommand(TerminalFrame terminalFrame, TerminalMultiCommand multiCommand) {
 		List<TerminalCommand> commands = multiCommand.getCommands();
 		StringBuilder multiCommandsCombined = new StringBuilder();
 		for (int i = 0; i < commands.size(); i++) {
 			TerminalCommand currentCommand = commands.get(i);
 			if (currentCommand instanceof TerminalCommandFileUpload) {
 				TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
-				terminalFrame.execute("cd " + fileUploadCommand.getTargetPath());
-				Utils.threadSleep(this, 300);
-				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()));
+				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
+						fileUploadCommand.getTargetPath());
 			} else {
 				multiCommandsCombined.append(currentCommand.getCommand());
 				if (commands.size() != i + 1) {

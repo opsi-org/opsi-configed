@@ -39,15 +39,22 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private FileUploadQueue queue;
 	private TerminalFrame terminal;
 	private TerminalWidget terminalWidget;
+	private String destinationDir;
 
 	private File currentFile;
 	private int totalFilesToUpload;
 	private int uploadedFiles;
 
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue) {
+		this(terminal, terminalWidget, queue, null);
+	}
+
+	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
+			String destinationDir) {
 		this.terminal = terminal;
 		this.terminalWidget = terminalWidget;
 		this.queue = queue;
+		this.destinationDir = destinationDir;
 	}
 
 	@Override
@@ -179,6 +186,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			data.put("file_id", fileId);
 			data.put("content_type", "application/octet-stream");
 			data.put("name", file.getName());
+			if (destinationDir != null || !destinationDir.isEmpty()) {
+				data.put("destination_dir", destinationDir);
+			}
 			data.put("size", Files.size(file.toPath()));
 			data.put("terminal_id", terminalWidget.getTerminalId());
 
