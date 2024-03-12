@@ -94,6 +94,10 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
+	MainFrame mainFrame = ConfigedMain.getMainFrame();
+
+	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
+
 	public HostInfo() {
 		initialize();
 		increaseInstancesCount();
@@ -391,17 +395,7 @@ public class HostInfo {
 		return this;
 	}
 
-	private static int findCol(ClientTable selectionPanel, String colName) {
-		return selectionPanel.getTableModel().findColumn(colName);
-	}
-
-	private static int findRow(ClientTable selectionPanel, String client) {
-		return selectionPanel.findModelRowFromValue(client);
-	}
-
 	public void resetGui() {
-		MainFrame mainFrame = ConfigedMain.getMainFrame();
-
 		Logging.info(this, "resetGui for " + toString());
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientDescriptionText(clientDescription);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
@@ -417,29 +411,11 @@ public class HostInfo {
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setOpsiHostKey(hostKey);
 	}
 
-	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
-		if (client == null || client.isEmpty()) {
-			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
-			return;
-		}
-
-		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
-
-		if (sourceOfChanges == null) {
-			return;
-		}
-
-		MainFrame mainFrame = ConfigedMain.getMainFrame();
-
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		int row = findRow(selectionPanel, client);
-
+	private void setClientDescription(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
 			clientDescription = (String) sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
-			int col = findCol(selectionPanel,
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+			int col = selectionPanel.getTableModel()
+					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
 			if (col > -1) {
 				selectionPanel.getTableModel().setValueAt(clientDescription, row, col);
 			}
@@ -451,12 +427,15 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
 					clientDescription);
 		}
+	}
 
+	private void setClientInventoryNumber(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges,
+			int row) {
 		if (sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY) != null) {
 			clientInventoryNumber = (String) sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY);
 
-			int col = findCol(selectionPanel,
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
+			int col = selectionPanel.getTableModel()
+					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
 			if (col > -1) {
 				selectionPanel.getTableModel().setValueAt(clientInventoryNumber, row, col);
 			}
@@ -468,7 +447,9 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
 					clientInventoryNumber);
 		}
+	}
 
+	private void setOneTimePassword(String client, Map<?, ?> sourceOfChanges) {
 		if (sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY) != null) {
 			clientOneTimePassword = (String) sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 
@@ -479,7 +460,9 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
 					clientOneTimePassword);
 		}
+	}
 
+	private void setClientNotes(String client, Map<?, ?> sourceOfChanges) {
 		if (sourceOfChanges.get(CLIENT_NOTES_KEY) != null) {
 			clientNotes = (String) sourceOfChanges.get(CLIENT_NOTES_KEY);
 
@@ -489,12 +472,14 @@ public class HostInfo {
 			persistenceController.getHostDataService().setHostNotes(client, clientNotes);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
+	}
 
+	private void setClientSystemUUID(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null) {
 			clientSystemUUID = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
-			int col = findCol(selectionPanel,
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
+			int col = selectionPanel.getTableModel()
+					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
 			if (col > -1) {
 				selectionPanel.getTableModel().setValueAt(clientMacAddress, row, col);
 			}
@@ -506,12 +491,14 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
 					clientSystemUUID);
 		}
+	}
 
+	private void setClientMACAddress(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
 			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
-			int col = findCol(selectionPanel,
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+			int col = selectionPanel.getTableModel()
+					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 			if (col > -1) {
 				selectionPanel.getTableModel().setValueAt(clientMacAddress, row, col);
 			}
@@ -523,12 +510,14 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
 					clientMacAddress);
 		}
+	}
 
+	private void setClientIPAddress(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
 			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
-			int col = findCol(selectionPanel,
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+			int col = selectionPanel.getTableModel()
+					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
 			if (col > -1) {
 				selectionPanel.getTableModel().setValueAt(clientIpAddress, row, col);
 			}
@@ -540,7 +529,10 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
 					clientIpAddress);
 		}
+	}
 
+	private void setClientShutdownInstall(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges,
+			int row) {
 		if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY) != null) {
 			boolean shutdownInstall = false;
 
@@ -548,7 +540,7 @@ public class HostInfo {
 				shutdownInstall = true;
 			}
 
-			int col = findCol(selectionPanel, Configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 			if (col > -1) {
@@ -560,7 +552,9 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
 					shutdownInstall);
 		}
+	}
 
+	private void setClientUEFIBoot(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY) != null) {
 			boolean uefiboot = false;
 
@@ -568,7 +562,7 @@ public class HostInfo {
 				uefiboot = true;
 			}
 
-			int col = findCol(selectionPanel, Configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
 			if (col > -1) {
@@ -579,7 +573,9 @@ public class HostInfo {
 			persistenceController.getConfigDataService().configureUefiBoot(client, uefiboot);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_UEFI_BOOT_KEY, uefiboot);
 		}
+	}
 
+	private void setClientWANConfig(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
 		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
 			boolean wanStandard = false;
 
@@ -587,7 +583,7 @@ public class HostInfo {
 				wanStandard = true;
 			}
 
-			int col = findCol(selectionPanel, Configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 			Logging.info(this, "showAndSave found col " + col);
@@ -604,6 +600,41 @@ public class HostInfo {
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
 					wanStandard);
 		}
+	}
+
+	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
+		if (client == null || client.isEmpty()) {
+			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
+			return;
+		}
+
+		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
+
+		if (sourceOfChanges == null) {
+			return;
+		}
+
+		int row = selectionPanel.findModelRowFromValue(client);
+
+		setClientDescription(selectionPanel, client, sourceOfChanges, row);
+
+		setClientInventoryNumber(selectionPanel, client, sourceOfChanges, row);
+
+		setOneTimePassword(client, sourceOfChanges);
+
+		setClientNotes(client, sourceOfChanges);
+
+		setClientSystemUUID(selectionPanel, client, sourceOfChanges, row);
+
+		setClientMACAddress(selectionPanel, client, sourceOfChanges, row);
+
+		setClientIPAddress(selectionPanel, client, sourceOfChanges, row);
+
+		setClientShutdownInstall(selectionPanel, client, sourceOfChanges, row);
+
+		setClientUEFIBoot(selectionPanel, client, sourceOfChanges, row);
+
+		setClientWANConfig(selectionPanel, client, sourceOfChanges, row);
 	}
 
 	@Override
