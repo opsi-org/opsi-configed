@@ -3036,12 +3036,14 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.activateLoadingCursor();
 
 		if (resetLocalbootProducts) {
-			persistenceController.getProductDataService().resetLocalbootProducts(getSelectedClients(),
-					withDependencies);
+			persistenceController.getProductDataService().resetProducts(preSaveSelectedClients, withDependencies,
+					OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		}
 
 		if (resetNetbootProducts) {
-			persistenceController.getProductDataService().resetNetbootProducts(getSelectedClients(), withDependencies);
+			persistenceController.getProductDataService().resetProducts(preSaveSelectedClients, withDependencies,
+					OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+
 		}
 
 		requestReloadStatesAndActions();

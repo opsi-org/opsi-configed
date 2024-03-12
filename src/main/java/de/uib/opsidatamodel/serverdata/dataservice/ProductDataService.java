@@ -1087,29 +1087,16 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetLocalbootProducts(List<String> selectedClients, boolean withDependencies) {
+	public boolean resetProducts(List<String> selectedClients, boolean withDependencies, String productType) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
-		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		Logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients, productType);
+		Logging.info(this,
+				"resetProducts deleteProductItems.size " + deleteProductItems.size() + " type" + productType);
 		boolean result = resetProducts(deleteProductItems, withDependencies);
-		Logging.debug(this, "resetLocalbootProducts result " + result);
-		return result;
-	}
-
-	public boolean resetNetbootProducts(List<String> selectedClients, boolean withDependencies) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
-			return false;
-		}
-
-		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
-		boolean result = resetProducts(deleteProductItems, withDependencies);
-		Logging.debug(this, "resetNetbootProducts result " + result);
+		Logging.debug(this, "resetProducts result " + result);
 		return result;
 	}
 
@@ -1458,15 +1445,7 @@ public class ProductDataService {
 			} else {
 				Logging.debug(this, " dependency map : ");
 
-				boolean hasRequirementType = requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
-						|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
-						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER);
-				boolean hasActionRequest = aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
-
-				if (hasRequirementType && hasActionRequest
+				if (hasRequirementType(requirementType) && hasActionRequest(aDependency)
 						&& aDependency.get("requirementType").equals(requirementType)) {
 					result.put(aDependency.get("requiredProductId"),
 							aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
@@ -1479,6 +1458,19 @@ public class ProductDataService {
 		Logging.info(this, "getProductRequirements " + result);
 
 		return result;
+	}
+
+	private static boolean hasRequirementType(String requirementType) {
+		return requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
+				|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
+				|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER);
+	}
+
+	private static boolean hasActionRequest(Map<String, String> aDependency) {
+		return aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {
