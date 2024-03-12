@@ -262,20 +262,12 @@ public class HostInfo {
 		return clientDescription;
 	}
 
-	public String getNotes() {
-		return clientNotes;
-	}
-
 	public String getInventoryNumber() {
 		return clientInventoryNumber;
 	}
 
 	public String getMacAddress() {
 		return clientMacAddress;
-	}
-
-	public String getSystemUUID() {
-		return clientSystemUUID;
 	}
 
 	public String getLastSeen() {
