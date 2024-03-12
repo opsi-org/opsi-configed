@@ -88,7 +88,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 
 	@Override
 	public void write(byte[] bytes) {
-		if (terminalWidget.ignoreKeyEvent()) {
+		if (terminalWidget.ignoreKeyEvent() || terminalWidget.disableUserInput()) {
 			return;
 		}
 

@@ -107,7 +107,6 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	@Override
 	public String getCommand() {
-		Logging.devel(this, "dir " + dir);
 		if (!freeInput.isEmpty()) {
 			command = BASE_NAME + " " + authentication + fileName + freeInput + verbosity + dir + " -O " + url + " -O "
 					+ additionalURL;
@@ -203,7 +202,6 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 	}
 
 	public boolean checkCommand() {
-		Logging.devel(this, "dir " + dir + " url " + url);
 		return !dir.isEmpty() && !url.isEmpty();
 	}
 

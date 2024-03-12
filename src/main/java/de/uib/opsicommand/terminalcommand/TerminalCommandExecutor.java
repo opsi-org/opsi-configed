@@ -21,9 +21,10 @@ public class TerminalCommandExecutor {
 	}
 
 	public void execute(TerminalCommand command) {
-		TerminalFrame terminalFrame = new TerminalFrame();
+		TerminalFrame terminalFrame = new TerminalFrame(true);
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		terminalFrame.display();
+		terminalFrame.disableUserInputForSelectedWidget();
 		if (command instanceof TerminalMultiCommand) {
 			executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
 		} else {

@@ -228,7 +228,6 @@ public class CurlParameterDialog extends FGeneralDialog {
 			return;
 		}
 
-		Logging.devel(this, "sselected item " + (String) jComboBoxDir.getSelectedItem());
 		commandCurl.setDir((String) jComboBoxDir.getSelectedItem());
 		if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 			commandCurl

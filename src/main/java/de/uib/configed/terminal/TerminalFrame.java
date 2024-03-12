@@ -8,6 +8,7 @@ package de.uib.configed.terminal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -57,6 +58,16 @@ public final class TerminalFrame implements MessagebusListener {
 	private Messagebus messagebus;
 
 	private TerminalTabbedPane tabbedPane;
+
+	private boolean restrictView;
+
+	public TerminalFrame() {
+		this(false);
+	}
+
+	public TerminalFrame(boolean restrictView) {
+		this.restrictView = restrictView;
+	}
 
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
@@ -147,6 +158,7 @@ public final class TerminalFrame implements MessagebusListener {
 		}
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
+		menuFile.setEnabled(!restrictView);
 		menuFile.add(jMenuItemNewWindow);
 		menuFile.add(jMenuItemNewSession);
 		menuFile.add(jMenuItemChangeSession);
@@ -155,17 +167,29 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	public void openNewWindow() {
+		if (restrictView) {
+			return;
+		}
+
 		TerminalFrame terminalFrame = new TerminalFrame();
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.display();
 	}
 
 	public void openNewSession() {
+		if (restrictView) {
+			return;
+		}
+
 		tabbedPane.addTerminalTab();
 		displaySessionsDialog();
 	}
 
 	public void displaySessionsDialog() {
+		if (restrictView) {
+			return;
+		}
+
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
 				500, 300, "sessionlist");
@@ -316,6 +340,24 @@ public final class TerminalFrame implements MessagebusListener {
 	public void execute(String command) {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		widget.getTerminalPanel().getTerminalOutputStream().sendString(command + "\r", true);
+	}
+
+	public void disableUserInputForSelectedWidget() {
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		widget.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				widget.setDisableUserInput(true);
+				event.consume();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent event) {
+				widget.setDisableUserInput(false);
+				event.consume();
+			}
+		});
+		widget.setViewRestricted(true);
 	}
 
 	public void uploadFile(File file) {

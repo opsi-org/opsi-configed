@@ -371,7 +371,6 @@ public class FileUploadDialog extends FGeneralDialog {
 	}
 
 	protected TerminalCommandCurl doAction1AdditionalSetWget(TerminalCommandCurl c, String path) {
-		Logging.devel(this, "dir " + Paths.get(path).getParent().toString());
 		c.setDir(Paths.get(path).getParent().toString());
 		return c;
 	}

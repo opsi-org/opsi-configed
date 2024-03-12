@@ -24,8 +24,11 @@ import org.java_websocket.handshake.ServerHandshake;
 import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
+import com.jediterm.terminal.model.StyleState;
+import com.jediterm.terminal.model.TerminalTextBuffer;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.TerminalAction;
+import com.jediterm.terminal.ui.TerminalPanel;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
 
 import de.uib.messagebus.Messagebus;
@@ -55,6 +58,8 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	private WebSocketInputStream webSocketInputStream;
 
 	private boolean ignoreKeyEvent;
+	private boolean disableUserInput;
+	private boolean isViewRestricted;
 
 	public TerminalWidget(TerminalFrame terminal, SettingsProvider settingsProvider) {
 		this(terminal, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
@@ -106,6 +111,22 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 	public void setIgnoreKeyEvent(boolean ignoreKeyEvent) {
 		this.ignoreKeyEvent = ignoreKeyEvent;
+	}
+
+	public boolean disableUserInput() {
+		return disableUserInput;
+	}
+
+	public void setDisableUserInput(boolean disableUserInput) {
+		this.disableUserInput = disableUserInput;
+	}
+
+	public boolean isViewRestricted() {
+		return isViewRestricted;
+	}
+
+	public void setViewRestricted(boolean isViewRestricted) {
+		this.isViewRestricted = isViewRestricted;
 	}
 
 	public void init() {
@@ -222,25 +243,42 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	}
 
 	@Override
+	protected TerminalPanel createTerminalPanel(SettingsProvider settingsProvider, StyleState styleState,
+			TerminalTextBuffer terminalTextBuffer) {
+		return new TerminalPanel(settingsProvider, terminalTextBuffer, styleState) {
+			@Override
+			public List<TerminalAction> getActions() {
+				List<TerminalAction> actions = super.getActions();
+				for (TerminalAction action : actions) {
+					if (action.getName().equals(settingsProvider.getPasteActionPresentation().getName())) {
+						action.withEnabledSupplier(() -> !isViewRestricted);
+					}
+				}
+				return actions;
+			}
+		};
+	}
+
+	@Override
 	public List<TerminalAction> getActions() {
 		return List
 				.of(new TerminalAction(((TerminalSettingsProvider) settingsProvider).getNewWindowActionPresentation(),
 						(KeyEvent input) -> {
 							terminalFrame.openNewWindow();
 							return true;
-						}).withMnemonicKey(KeyEvent.VK_N),
+						}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_N),
 						new TerminalAction(
 								((TerminalSettingsProvider) settingsProvider).getNewSessionActionPresentation(),
 								(KeyEvent input) -> {
 									terminalFrame.openNewSession();
 									return true;
-								}).withMnemonicKey(KeyEvent.VK_T),
+								}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_T),
 						new TerminalAction(
 								((TerminalSettingsProvider) settingsProvider).getChangeSessionActionPresentation(),
 								(KeyEvent input) -> {
 									terminalFrame.displaySessionsDialog();
 									return true;
-								}).withMnemonicKey(KeyEvent.VK_S));
+								}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_S));
 	}
 
 	@Override
