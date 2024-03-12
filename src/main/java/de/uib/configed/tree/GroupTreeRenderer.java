@@ -55,7 +55,6 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
-
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
 		if (node instanceof GroupNode) {

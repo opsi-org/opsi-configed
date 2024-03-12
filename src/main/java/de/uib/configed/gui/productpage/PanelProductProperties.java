@@ -160,15 +160,14 @@ public class PanelProductProperties extends JSplitPane {
 
 			ListSelectionModel lsm = getListSelectionModel();
 
-			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+			if (lsm.getSelectedItemsCount() == 1) {
+				int row = lsm.getMinSelectionIndex();
+				updateInfoPane(row);
+			} else {
 				Logging.info(this, "selected not a unique row ");
 				infoPane.clearEditing();
 				propertiesPanel.init();
 				panelEditProperties.clearDepotListData();
-			} else {
-				int row = lsm.getMinSelectionIndex();
-
-				updateInfoPane(row);
 			}
 		}
 
