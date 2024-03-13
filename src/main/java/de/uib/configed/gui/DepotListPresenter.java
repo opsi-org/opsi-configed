@@ -48,9 +48,9 @@ public class DepotListPresenter extends JPanel {
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList, boolean multidepot) {
+	public DepotListPresenter(DepotsList depotsList) {
 		this.depotslist = depotsList;
-		this.multidepot = multidepot;
+		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();

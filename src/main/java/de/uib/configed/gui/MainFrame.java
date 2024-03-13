@@ -99,8 +99,6 @@ public class MainFrame extends JFrame {
 
 	private GlassPane glassPane;
 
-	private boolean multidepot;
-
 	private DepotListPresenter depotListPresenter;
 
 	private ClientTree clientTree;
@@ -116,14 +114,12 @@ public class MainFrame extends JFrame {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
-
 		this.clientTable = panelClientlist;
 
 		this.clientTree = clientTree;
 		this.productTree = productTree;
 
-		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
+		depotListPresenter = new DepotListPresenter(depotsList);
 
 		this.configedMain = configedMain;
 
@@ -139,10 +135,6 @@ public class MainFrame extends JFrame {
 
 	private void initData() {
 		statusPane.updateValues(0, null, null, null);
-	}
-
-	public boolean isMultiDepot() {
-		return multidepot;
 	}
 
 	public ClientTable getClientTable() {

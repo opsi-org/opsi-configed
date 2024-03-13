@@ -207,7 +207,9 @@ public final class ClientMenuManager {
 
 		jMenu.add(jMenuFreeLicenses);
 		jMenu.add(jMenuChangeClientID);
-		if (mainFrame.isMultiDepot()) {
+
+		// is multiDepot
+		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
 			jMenu.add(jMenuChangeDepot);
 		}
 		jMenu.addSeparator();
