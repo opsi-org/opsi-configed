@@ -74,6 +74,9 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	protected void createTopNodes() {
+		Set<String> productIds = new TreeSet<>(persistenceController.getProductDataService()
+				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
+
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
 		// Create groups
@@ -109,7 +112,9 @@ public class ProductTree extends AbstractGroupTree {
 			DefaultMutableTreeNode groupNode = nodeMap.get(groupMembers.getKey());
 
 			for (String productId : groupMembers.getValue()) {
-				groupNode.add(new DefaultMutableTreeNode(productId, false));
+				if (productIds.contains(productId)) {
+					groupNode.add(new DefaultMutableTreeNode(productId, false));
+				}
 			}
 		}
 
