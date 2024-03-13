@@ -94,8 +94,6 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
-	MainFrame mainFrame = ConfigedMain.getMainFrame();
-
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
 
 	public HostInfo() {
@@ -397,6 +395,9 @@ public class HostInfo {
 
 	public void resetGui() {
 		Logging.info(this, "resetGui for " + toString());
+
+		MainFrame mainFrame = ConfigedMain.getMainFrame();
+
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientDescriptionText(clientDescription);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
@@ -421,7 +422,8 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientDescriptionText(clientDescription);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+					.setClientDescriptionText(clientDescription);
 
 			persistenceController.getHostDataService().setHostDescription(client, clientDescription);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
@@ -441,7 +443,8 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+					.setClientInventoryNumberText(clientInventoryNumber);
 
 			persistenceController.getHostDataService().setClientInventoryNumber(client, clientInventoryNumber);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
@@ -454,7 +457,8 @@ public class HostInfo {
 			clientOneTimePassword = (String) sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+					.setClientOneTimePasswordText(clientOneTimePassword);
 
 			persistenceController.getHostDataService().setClientOneTimePassword(client, clientOneTimePassword);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
@@ -467,7 +471,7 @@ public class HostInfo {
 			clientNotes = (String) sourceOfChanges.get(CLIENT_NOTES_KEY);
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
 
 			persistenceController.getHostDataService().setHostNotes(client, clientNotes);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
@@ -485,7 +489,8 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+					.setClientSystemUUID(clientSystemUUID);
 
 			persistenceController.getHostDataService().setSystemUUID(client, clientSystemUUID);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
@@ -504,7 +509,8 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientMacAddress(clientMacAddress);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+					.setClientMacAddress(clientMacAddress);
 
 			persistenceController.getHostDataService().setMacAddress(client, clientMacAddress);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
@@ -523,7 +529,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
+			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 
 			persistenceController.getHostDataService().setIpAddress(client, clientIpAddress);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
