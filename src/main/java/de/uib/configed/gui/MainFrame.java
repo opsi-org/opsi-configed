@@ -775,29 +775,27 @@ public class MainFrame extends JFrame {
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsWithFailedProduct(products);
 	}
 
-	private String getProduct(List<String> completeList) {
+	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
 				F_WIDTH / 2, 600);
-		fProductSelectionList.setListData(completeList);
+		fProductSelectionList.setListData(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}
