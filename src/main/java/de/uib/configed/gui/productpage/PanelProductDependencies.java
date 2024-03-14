@@ -71,10 +71,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 						2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
 	}
 
-	public void clearEditing() {
-		dependenciesModel.setActualProduct("");
-	}
-
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {
 		this.dependenciesModel = dependenciesModel;
 
