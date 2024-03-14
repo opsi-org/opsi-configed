@@ -185,8 +185,6 @@ public class PanelProductSettings extends JSplitPane {
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
-		propertiesPanel.registerDataChangedObserver(infoPane);
-
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
