@@ -194,7 +194,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	// the properties for one product and all selected clients
 	private Collection<Map<String, Object>> productProperties;
-	private UpdateCollection updateCollection = new UpdateCollection(new ArrayList<>());
+	private UpdateCollection updateCollection = new UpdateCollection();
 	private Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:

@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.datachanges;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	private boolean masterConfig;
 
 	public AdditionalconfigurationUpdateCollection(List<String> objectIds) {
-		super(new ArrayList<>(0));
+		super();
 		this.objectIds = objectIds;
 	}
 

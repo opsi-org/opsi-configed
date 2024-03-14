@@ -25,7 +25,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			.getPersistenceController();
 
 	public ProductpropertiesUpdateCollection(List<String> clients, String productname) {
-		super(new ArrayList<>(0));
+		super();
 		if (clients == null) {
 			this.clients = new ArrayList<>();
 		} else {
