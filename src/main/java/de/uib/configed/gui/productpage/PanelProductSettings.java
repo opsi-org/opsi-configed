@@ -443,6 +443,8 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void setSelection(Set<String> selectedIDs) {
+		tableProducts.getSelectionModel().setValueIsAdjusting(true);
+
 		tableProducts.clearSelection();
 
 		if (selectedIDs == null || selectedIDs.isEmpty()) {
@@ -455,6 +457,8 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 		}
+
+		tableProducts.getSelectionModel().setValueIsAdjusting(false);
 	}
 
 	public Set<String> getSelectedIDs() {
@@ -546,7 +550,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
-
 		tableProducts.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
 
