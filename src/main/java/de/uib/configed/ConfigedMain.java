@@ -2041,7 +2041,7 @@ public class ConfigedMain implements MessagebusListener {
 				.getMapOfProductStatesAndActions(getSelectedClients(), attributes, productServerString);
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
-		panelProductSettings.initAllProperties();
+		panelProductSettings.clearEditing();
 
 		Logging.debug(this, "setProductsPage,  depotRepresentative:" + depotRepresentative);
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);

@@ -203,12 +203,6 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
-	public void initAllProperties() {
-		propertiesPanel.init();
-		infoPane.setProductInfo("");
-		infoPane.setProductAdvice("");
-	}
-
 	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu();
 
@@ -570,6 +564,7 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
 			Map editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
+		Logging.devel("initEditing " + type);
 		infoPane.setProductId(productID);
 		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
@@ -590,7 +585,8 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.cancelOldCellEditing();
 	}
 
-	private void clearEditing() {
+	public void clearEditing() {
+		Logging.devel("clearEditing " + type);
 		propertiesPanel.setEditableMap(null, null);
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
