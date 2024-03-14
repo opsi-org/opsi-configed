@@ -328,7 +328,7 @@ public class PanelProductSettings extends JSplitPane {
 		}
 
 		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-		if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+		if (lsm.getSelectedItemsCount() != 1) {
 			Logging.debug(this, "no or several rows selected");
 			clearEditing();
 		} else {
@@ -338,7 +338,8 @@ public class PanelProductSettings extends JSplitPane {
 			Logging.debug(this, "selected  value at "
 					+ tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
 			configedMain.setProductEdited(
-					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
+					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
+					this);
 		}
 
 		productTree.produceActiveParents();

@@ -1721,7 +1721,7 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().clearListEditors();
 	}
 
-	public void setProductEdited(String productname) {
+	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
 		// called from ProductSettings
 
 		Logging.debug(this, "setProductEdited " + productname);
@@ -1754,11 +1754,8 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
-		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().initEditing(productname, productProperties,
-				mergedProductProperties, clientProductpropertiesUpdateCollection);
-
-		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().initEditing(productname, productProperties,
-				mergedProductProperties, clientProductpropertiesUpdateCollection);
+		sourcePanel.initEditing(productname, productProperties, mergedProductProperties,
+				clientProductpropertiesUpdateCollection);
 	}
 
 	public int getViewIndex() {
