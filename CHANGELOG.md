@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.2.X] - XXXX-XX-XX
+## [4.3.2.7] - 2024-03-14
 ## Changed
 - Remove config states usage in `TableSearchPane`
 - Remove usage of icons in narrow layout of `TableSearchPane` (use checkboxes instead)
@@ -7,6 +7,7 @@
 
 ## Added
 - New option for searching multiple words in `TableSearchPane`
+- Show product description in tooltip in tree
 
 ## [4.3.2.6] - 2024-03-06
 ## Fixed
