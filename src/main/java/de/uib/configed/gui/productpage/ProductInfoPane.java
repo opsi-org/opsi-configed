@@ -7,7 +7,6 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Font;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -25,11 +24,9 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.logging.Logging;
 
-public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
+public class ProductInfoPane extends JSplitPane {
 	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
 
 	private JTextField jLabelProductID;
@@ -52,9 +49,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 	private JScrollPane jScrollPaneProductAdvice;
 	private TextMarkdownPane jTextAreaProductInfo;
-
-	private String productName = "";
-	private Map<String, Boolean> specificPropertiesExisting;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -262,7 +256,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 	public void setProductId(String s) {
 		jLabelProductID.setText(s);
-		productName = s;
 	}
 
 	public void setProductVersion(String s) {
@@ -298,14 +291,5 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		setProductInfo("");
 		setProductAdvice("");
 		panelProductDependencies.setEditValues("", "");
-	}
-
-	//
-	// DataChangedObserver
-	@Override
-	public void dataHaveChanged(Object source) {
-		if (source instanceof EditMapPanelX) {
-			specificPropertiesExisting.put(productName, true);
-		}
 	}
 }
