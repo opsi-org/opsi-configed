@@ -28,6 +28,8 @@ public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 		this.allowingString = allowingString;
 		this.trueIcon = trueIcon;
 		this.falseIcon = falseIcon;
+
+		super.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	@Override
@@ -46,8 +48,7 @@ public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 			return this;
 		}
 
-		setText("");
-		setHorizontalAlignment(SwingConstants.CENTER);
+		super.setText(null);
 
 		if (objAsBoolean(value).booleanValue()) {
 			setIcon(trueIcon);

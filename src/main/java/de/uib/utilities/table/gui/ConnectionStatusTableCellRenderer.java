@@ -10,6 +10,7 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
@@ -22,16 +23,14 @@ public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 	public static final String NOT_REACHABLE = "unreachable";
 	public static final String UNKNOWN = "unverified";
 
-	private Icon messagebusIcon;
-	private Icon trueIcon;
-	private Icon falseIcon;
+	private static final Icon messagebusIcon = Utils.createImageIcon("images/ok22.png", "");
+	private static final Icon trueIcon = Utils.createImageIcon("images/new_network-connect2.png", "");
+	private static final Icon falseIcon = Utils.createImageIcon("images/new_network-disconnect.png", "");
 
 	public ConnectionStatusTableCellRenderer() {
 		super();
 
-		trueIcon = Utils.createImageIcon("images/new_network-connect2.png", "");
-		falseIcon = Utils.createImageIcon("images/new_network-disconnect.png", "");
-		messagebusIcon = Utils.createImageIcon("images/ok22.png", "");
+		super.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 			int row, int column) {
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		setText("");
+		setText(null);
 
 		if (value instanceof String) {
 			switch ((String) value) {

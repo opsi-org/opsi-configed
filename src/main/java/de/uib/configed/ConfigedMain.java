@@ -1582,7 +1582,7 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.createImageIcon("images/checked_withoutbox.png", ""), null));
+					new BooleanIconTableCellRenderer(Utils.getThemeIconPNG("bootstrap/check", ""), null));
 		}
 	}
 

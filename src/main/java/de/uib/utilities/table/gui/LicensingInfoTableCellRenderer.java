@@ -21,7 +21,7 @@ import utils.Utils;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	private static final String DISPLAY_INFINITE = "\u221E";
-	private static final ImageIcon availableIcon = Utils.createImageIcon("images/checked_withoutbox.png", "");
+	private static final ImageIcon availableIcon = Utils.getThemeIconPNG("bootstrap/check", "");
 
 	protected LicensingInfoMap licensingInfoMap;
 
