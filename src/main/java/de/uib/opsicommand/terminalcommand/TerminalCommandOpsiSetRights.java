@@ -82,7 +82,7 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 	@Override
 	public String getCommand() {
 		if (dir != null) {
-			command = "opsi-set-rights " + dir;
+			command = "opsi-set-rights" + dir;
 		}
 
 		return command + " 2>&1";

@@ -242,6 +242,22 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		start();
 	}
 
+	public void connectPipedTty() {
+		TtyConnector connector = new PipedTtyConnector(this);
+		setTtyConnector(connector);
+		start();
+	}
+
+	public void write(byte[] message) {
+		try {
+			if (getTtyConnector() != null) {
+				getTtyConnector().write(message);
+			}
+		} catch (IOException e) {
+			Logging.error("failed to write message: ", e);
+		}
+	}
+
 	@Override
 	protected TerminalPanel createTerminalPanel(SettingsProvider settingsProvider, StyleState styleState,
 			TerminalTextBuffer terminalTextBuffer) {

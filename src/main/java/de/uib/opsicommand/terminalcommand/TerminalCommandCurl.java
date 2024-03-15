@@ -17,21 +17,21 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeedParameter {
-	private static final String BASE_NAME = "curl ";
+	private static final String BASE_NAME = "curl";
 	private static final boolean IS_MULTI_COMMAND = false;
 	private static final int PRIORITY = 110;
 
 	private String command = "curl ";
 	private boolean needParameter = true;
 
-	private String url = " ";
-	private String authentication = " ";
-	private String additionalURL = " ";
-	private String dir = " ";
-	private String product = " ";
-	private String fileName = " ";
-	private String verbosity = " ";
-	private String freeInput = " ";
+	private String url = "";
+	private String authentication = "";
+	private String additionalURL = "";
+	private String dir = "";
+	private String product = "";
+	private String fileName = "";
+	private String verbosity = "";
+	private String freeInput = "";
 
 	private FGeneralDialog dialog;
 
@@ -65,7 +65,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	public void setFileName(String newFilename) {
 		if (newFilename != null && !newFilename.isBlank()) {
-			fileName = " --output-document=" + newFilename + " ";
+			fileName = "--output-document=" + newFilename;
 		}
 	}
 
@@ -108,13 +108,13 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 	@Override
 	public String getCommand() {
 		if (!freeInput.isEmpty()) {
-			command = BASE_NAME + " " + authentication + fileName + freeInput + verbosity + dir + " -O " + url + " -O "
-					+ additionalURL;
+			command = BASE_NAME + " " + authentication + " " + fileName + " " + freeInput + " " + verbosity + " " + dir
+					+ " -O " + url + " -O " + additionalURL;
 		} else {
-			command = BASE_NAME + " " + authentication + fileName + verbosity + dir + " -O " + url + " -O "
+			command = BASE_NAME + " " + authentication + " " + fileName + " " + verbosity + dir + " -O " + url + " -O "
 					+ additionalURL;
 		}
-		return command + " 2>&1";
+		return (command + " 2>&1").replaceAll("\\s{2,}", " ");
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	public void setDir(String d) {
 		if (!d.isEmpty()) {
-			dir = " --output-dir " + d;
+			dir = "--output-dir " + d;
 		} else {
 			dir = "";
 		}
@@ -166,7 +166,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	public void setUrl(String u) {
 		if (!u.isEmpty()) {
-			url = " " + u;
+			url = u;
 		} else {
 			url = "";
 		}
@@ -178,18 +178,18 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 			v.append("v");
 		}
 
-		verbosity = " -" + v + " ";
+		verbosity = "-" + v;
 		if (vSum == 0) {
 			verbosity = "";
 		}
 	}
 
 	public void setFreeInput(String fI) {
-		freeInput = " " + fI + " ";
+		freeInput = fI;
 	}
 
 	public void setProduct(String pr) {
-		product = " " + pr;
+		product = pr;
 	}
 
 	public String getProduct() {

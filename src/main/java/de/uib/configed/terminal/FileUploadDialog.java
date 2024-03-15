@@ -350,10 +350,9 @@ public class FileUploadDialog extends FGeneralDialog {
 			curlCommand.setUrl(jTextFieldURL.getText());
 
 			if (((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-				curlCommand.setAuthentication(
-						" --insecure -u " + wgetAuthPanel.getUser() + ":" + wgetAuthPanel.getPw() + " ");
+				curlCommand.setAuthentication("--insecure -u " + wgetAuthPanel.getUser() + ":" + wgetAuthPanel.getPw());
 			} else {
-				curlCommand.setAuthentication(" ");
+				curlCommand.setAuthentication("");
 			}
 
 			fullcommand.addCommand(curlCommand);

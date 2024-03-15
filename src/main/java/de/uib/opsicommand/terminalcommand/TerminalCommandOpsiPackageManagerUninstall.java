@@ -20,9 +20,9 @@ public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandO
 
 	private String opsiproduct;
 	private String depots;
-	private String verbosity = " -vvv ";
-	private String keepFiles = " ";
-	private String freeInput = " ";
+	private String verbosity = " -vvv";
+	private String keepFiles = "";
+	private String freeInput = "";
 
 	public TerminalCommandOpsiPackageManagerUninstall() {
 		command = "opsi-package-manager";
@@ -70,7 +70,7 @@ public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandO
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
+		command = "opsi-package-manager -q" + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		return command + " 2>&1";
 	}
 
@@ -81,7 +81,7 @@ public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandO
 
 	public void setKeepFiles(boolean kF) {
 		if (kF) {
-			keepFiles = "  --keep-files ";
+			keepFiles = "  --keep-files";
 		} else {
 			keepFiles = "";
 		}

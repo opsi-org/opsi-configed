@@ -245,7 +245,11 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		tabbedPane.openSessionOnSelectedTab("Configserver");
+		if (!restrictView) {
+			tabbedPane.openSessionOnSelectedTab("Configserver");
+		} else {
+			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
+		}
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
@@ -337,9 +341,11 @@ public final class TerminalFrame implements MessagebusListener {
 		southPanel.setVisible(show);
 	}
 
-	public void execute(String command) {
+	public void writeToWidget(byte[] message) {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-		widget.getTerminalPanel().getTerminalOutputStream().sendString(command + "\r", true);
+		if (widget != null) {
+			widget.write(message);
+		}
 	}
 
 	public void disableUserInputForSelectedWidget() {
