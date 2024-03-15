@@ -63,6 +63,7 @@ import de.uib.opsicommand.terminalcommand.TerminalCommandDeployClientAgent;
 import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
+import de.uib.opsicommand.terminalcommand.TerminalCommandPackageUpdater;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -486,6 +487,14 @@ public class MainFrame extends JFrame {
 		deployClientAgentCommandMenuItem
 				.addActionListener((ActionEvent e) -> deployClientAgentCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(deployClientAgentCommandMenuItem);
+
+		TerminalCommandPackageUpdater packageUpdaterCommand = new TerminalCommandPackageUpdater();
+		JMenuItem packageUpdaterCommandMenuItem = new JMenuItem();
+		packageUpdaterCommandMenuItem.setText(packageUpdaterCommand.getMenuText());
+		packageUpdaterCommandMenuItem.setToolTipText(packageUpdaterCommand.getToolTipText());
+		packageUpdaterCommandMenuItem
+				.addActionListener((ActionEvent e) -> packageUpdaterCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(packageUpdaterCommandMenuItem);
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {

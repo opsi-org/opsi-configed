@@ -45,20 +45,31 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private int totalFilesToUpload;
 	private int uploadedFiles;
 
+	private boolean visualizeProgress;
+
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue) {
-		this(terminal, terminalWidget, queue, null);
+		this(terminal, terminalWidget, queue, null, false);
 	}
 
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
 			String destinationDir) {
+		this(terminal, terminalWidget, queue, destinationDir, false);
+	}
+
+	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
+			String destinationDir, boolean visualizeProgress) {
 		this.terminal = terminal;
 		this.terminalWidget = terminalWidget;
 		this.queue = queue;
 		this.destinationDir = destinationDir;
+		this.visualizeProgress = visualizeProgress;
 	}
 
 	@Override
 	protected void process(List<Integer> chunkSizes) {
+		if (!visualizeProgress) {
+			return;
+		}
 		for (Integer chunkSize : chunkSizes) {
 			if (currentFile == null) {
 				return;
@@ -80,7 +91,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			currentFile = file;
 
 			uploadedFiles += 1;
-			updateTotalFilesToUpload();
+			if (visualizeProgress) {
+				updateTotalFilesToUpload();
+			}
 
 			String fileId = UUID.randomUUID().toString();
 			sendFileUploadRequest(file, fileId);
@@ -186,7 +199,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			data.put("file_id", fileId);
 			data.put("content_type", "application/octet-stream");
 			data.put("name", file.getName());
-			if (destinationDir != null || !destinationDir.isEmpty()) {
+			if (destinationDir != null && !destinationDir.isEmpty()) {
 				data.put("destination_dir", destinationDir);
 			}
 			data.put("size", Files.size(file.toPath()));
@@ -215,7 +228,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 	@Override
 	protected void done() {
-		terminal.showFileUploadProgress(false);
+		if (visualizeProgress) {
+			terminal.showFileUploadProgress(false);
+		}
 		totalFilesToUpload = 0;
 		uploadedFiles = 0;
 	}
