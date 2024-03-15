@@ -94,8 +94,6 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
-	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
-
 	public HostInfo() {
 		initialize();
 		increaseInstancesCount();
@@ -425,6 +423,8 @@ public class HostInfo {
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
 					.setClientDescriptionText(clientDescription);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setHostDescription(client, clientDescription);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
 					clientDescription);
@@ -446,6 +446,8 @@ public class HostInfo {
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
 					.setClientInventoryNumberText(clientInventoryNumber);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setClientInventoryNumber(client, clientInventoryNumber);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
 					clientInventoryNumber);
@@ -460,6 +462,8 @@ public class HostInfo {
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
 					.setClientOneTimePasswordText(clientOneTimePassword);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setClientOneTimePassword(client, clientOneTimePassword);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
 					clientOneTimePassword);
@@ -473,6 +477,8 @@ public class HostInfo {
 			// restoring old value
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setHostNotes(client, clientNotes);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
@@ -492,6 +498,8 @@ public class HostInfo {
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
 					.setClientSystemUUID(clientSystemUUID);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setSystemUUID(client, clientSystemUUID);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
 					clientSystemUUID);
@@ -512,6 +520,8 @@ public class HostInfo {
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
 					.setClientMacAddress(clientMacAddress);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setMacAddress(client, clientMacAddress);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
 					clientMacAddress);
@@ -531,13 +541,15 @@ public class HostInfo {
 			// restoring old value
 			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getHostDataService().setIpAddress(client, clientIpAddress);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
 					clientIpAddress);
 		}
 	}
 
-	private void setClientShutdownInstall(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges,
+	private static void setClientShutdownInstall(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY) != null) {
 			boolean shutdownInstall = false;
@@ -554,13 +566,16 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(shutdownInstall, row, col);
 			}
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getConfigDataService().configureInstallByShutdown(client, shutdownInstall);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
 					shutdownInstall);
 		}
 	}
 
-	private void setClientUEFIBoot(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
+	private static void setClientUEFIBoot(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges,
+			int row) {
 		if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY) != null) {
 			boolean uefiboot = false;
 
@@ -576,6 +591,8 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(uefiboot, row, col);
 			}
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			persistenceController.getConfigDataService().configureUefiBoot(client, uefiboot);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_UEFI_BOOT_KEY, uefiboot);
 		}
@@ -599,6 +616,8 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(wanStandard, row, col);
 			}
 
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
 			if (!(persistenceController.getConfigDataService().setWANConfigs(client, wanStandard))) {
 				Logging.error(this, "wan settings could not be set");
 			}
