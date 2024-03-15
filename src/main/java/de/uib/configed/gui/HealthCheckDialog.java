@@ -342,16 +342,14 @@ public class HealthCheckDialog extends FGeneralDialog {
 		jButtonDownloadDiagnosticData
 				.setToolTipText(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData.tooltip"));
 
-		centerPanelLayout
-				.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonCollapseAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonDownloadDiagnosticData, 10, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE));
+		centerPanelLayout.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jButtonCollapseAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(jButtonDownloadDiagnosticData, 10, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 		centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup()
 				.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
