@@ -94,6 +94,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("command", commandToExecute.split(" "));
+		data.put("shell", true);
 		configedMain.getMessagebus().sendMessage(data);
 		lock();
 	}
@@ -134,6 +135,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
 		String type = (String) message.get("type");
+		Logging.devel(this, "type " + type);
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {
 			if (withGUI) {
@@ -166,6 +168,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			String currentProcessId = (String) message.get("process_id");
 			if (currentProcessId.equals(processId)) {
 				result.append(new String(data));
+				Logging.devel(this, "result " + result);
 			}
 		}
 	}

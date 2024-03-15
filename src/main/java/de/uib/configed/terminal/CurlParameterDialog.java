@@ -30,7 +30,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.ssh.SSHCompletionComboButton;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;
 import de.uib.opsicommand.terminalcommand.TerminalCommandHelp;
@@ -57,7 +56,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldFreeInput;
 
 	private TerminalCommandCurl commandCurl = new TerminalCommandCurl();
-	private SSHCompletionComboButton completion = new SSHCompletionComboButton();
+	private CompletionComboButton completion;
 	private CurlAuthenticationPanel curlAuthPanel;
 
 	private ConfigedMain configedMain;
@@ -65,6 +64,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	public CurlParameterDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("CurlParameterDialog.title"), false);
 		this.configedMain = configedMain;
+		this.completion = new CompletionComboButton(configedMain);
 
 		init();
 		initLayout();

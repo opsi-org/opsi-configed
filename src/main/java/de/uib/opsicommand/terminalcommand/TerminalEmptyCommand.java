@@ -264,16 +264,9 @@ public class TerminalEmptyCommand implements TerminalCommand {
 	 * @return command
 	 **/
 	@Override
+	@SuppressWarnings({ "java:S4144" })
 	public String getCommand() {
-		String result = "";
-
-		if (command.contains("2>&1")) {
-			result = command;
-		} else {
-			result = command + "  2>&1";
-		}
-
-		return result;
+		return command;
 	}
 
 	/**
