@@ -597,8 +597,21 @@ public final class NewClientDialog extends FGeneralDialog {
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
 			final boolean wanConfig, final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
-			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
+			Logging.debug(this,
+					"createClient " + hostname + ", " + selectedDomain + ", " + depotID + ", " + description + ", "
+							+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiboot + ", " + wanConfig
+							+ ", " + Arrays.toString(groups) + ", " + netbootProduct);
+
+			String newClientID = hostname + "." + selectedDomain;
+
+			persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
+			if (persistenceController.getHostDataService().createClient(hostname, selectedDomain, depotID, description,
+					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig,
+					groups, netbootProduct)) {
+				configedMain.createClient(newClientID, groups);
+			} else {
+				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
+			}
 
 			treatSelectedDomainForNewClient(selectedDomain);
 		}

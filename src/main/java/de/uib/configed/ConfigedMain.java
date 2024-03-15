@@ -3241,36 +3241,19 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	public void createClient(final String hostname, final String domainname, final String depotID,
-			final String description, final String inventorynumber, final String notes, final String ipaddress,
-			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
-			final boolean wanConfig, final String[] groups, final String productNetboot) {
-		Logging.debug(this,
-				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
-						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
-						+ Arrays.toString(groups) + ", " + productNetboot);
+	public void createClient(String newClientID, final String[] groups) {
 
-		String newClientID = hostname + "." + domainname;
+		checkErrorList();
+		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-		persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
+		setRebuiltClientListTableModel(true);
 
-		if (persistenceController.getHostDataService().createClient(hostname, domainname, depotID, description,
-				inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, groups,
-				productNetboot)) {
-			checkErrorList();
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
-
-			setRebuiltClientListTableModel(true);
-
-			if (groups.length == 0 || groups.length > 1 || !activateGroup(false, groups[0])) {
-				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-			}
-
-			// Sets the client on the table
-			setClient(newClientID);
-		} else {
-			persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
+		if (groups.length == 0 || groups.length > 1 || !activateGroup(false, groups[0])) {
+			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 		}
+
+		// Sets the client on the table
+		setClient(newClientID);
 	}
 
 	public void wakeUp(final List<String> clients, String startInfo) {
