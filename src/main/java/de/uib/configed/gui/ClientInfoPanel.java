@@ -121,9 +121,9 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				"", 24);
 		ipAddressField.addKeyListener(this);
 
-		final Icon unselectedIcon = Utils.createImageIcon("images/checked_not.png", "");
-		final Icon selectedIcon = Utils.createImageIcon("images/checked.png", "");
-		final Icon nullIcon = Utils.createImageIcon("images/checked_box_mixed.png", "");
+		final Icon unselectedIcon = Utils.getThemeIconPNG("bootstrap/square", "");
+		final Icon selectedIcon = Utils.getThemeIconPNG("bootstrap/check-square", "");
+		final Icon nullIcon = Utils.getThemeIconPNG("bootstrap/slash-square", "");
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);

@@ -111,9 +111,7 @@ public final class Utils {
 	}
 
 	public static ImageIcon getSaveIcon() {
-		String saveIconPath = FlatLaf.isLafDark() ? "images/save_invert.png" : "images/save.png";
-
-		return createImageIcon(saveIconPath, "");
+		return getThemeIconPNG("images/save", "");
 	}
 
 	public static ImageIcon getThemeIconPNG(String pathName, String description) {
