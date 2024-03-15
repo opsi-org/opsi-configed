@@ -197,8 +197,8 @@ public class CheckedLabel extends JPanel {
 
 	public void setSelected(Boolean b) {
 		nullLabel.setVisible(b == null);
-		selectedLabel.setVisible(b != null && b);
-		unselectedLabel.setVisible(b != null && !b);
+		selectedLabel.setVisible(Boolean.TRUE.equals(b));
+		unselectedLabel.setVisible(Boolean.FALSE.equals(b));
 		selected = b;
 	}
 

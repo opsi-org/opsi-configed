@@ -54,7 +54,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
-import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 import utils.Utils;
 
@@ -74,9 +73,9 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextArea jTextNotes;
-	private LabelChecked labelShutdownDefault;
-	private LabelChecked labelUefiDefault;
-	private LabelChecked labelWanDefault;
+	private JCheckBox labelShutdownDefault;
+	private JCheckBox labelUefiDefault;
+	private JCheckBox labelWanDefault;
 	private JCheckBox jCheckUefi;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
@@ -131,9 +130,9 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		labelUefiDefault.setValue(uefiIsDefault);
-		labelWanDefault.setValue(wanIsDefault);
-		labelShutdownDefault.setValue(shutdownINSTALLIsDefault);
+		labelUefiDefault.setSelected(uefiIsDefault);
+		labelWanDefault.setSelected(wanIsDefault);
+		labelShutdownDefault.setSelected(shutdownINSTALLIsDefault);
 
 		jCheckUefi.setVisible(!uefiIsDefault);
 		jCheckWan.setVisible(!wanIsDefault);
@@ -247,22 +246,19 @@ public final class NewClientDialog extends FGeneralDialog {
 				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
 				"", 24);
 
-		labelShutdownDefault = new LabelChecked();
-		labelShutdownDefault.setText(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
+		labelShutdownDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelShutdownDefault.setEnabled(false);
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
-		labelUefiDefault = new LabelChecked();
-		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
+		labelUefiDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelUefiDefault.setEnabled(false);
 
 		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
 			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			labelUefiDefault.setEnabled(false);
 		}
-
-		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
 		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
@@ -272,9 +268,9 @@ public final class NewClientDialog extends FGeneralDialog {
 			jCheckUefi.setEnabled(false);
 		}
 
-		labelWanDefault = new LabelChecked();
-		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
+		labelWanDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelWanDefault.setEnabled(false);
 
 		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
