@@ -85,7 +85,7 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 			command = "opsi-set-rights" + dir;
 		}
 
-		return command + " 2>&1";
+		return command;
 	}
 
 	@Override

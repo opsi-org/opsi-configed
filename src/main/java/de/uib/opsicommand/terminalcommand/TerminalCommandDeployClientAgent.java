@@ -121,7 +121,7 @@ public class TerminalCommandDeployClientAgent implements TerminalCommand, Termin
 	@Override
 	public String getCommand() {
 		command = getBasicName() + " " + verbosity + user + passw + finishAction + getPingOption() + client;
-		return command + " 2>&1";
+		return command;
 	}
 
 	/**

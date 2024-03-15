@@ -36,17 +36,26 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private String processId;
 	private TerminalCommand commandToExecute;
 
+	private boolean withGUI;
+
 	public TerminalCommandExecutor(ConfigedMain configedMain) {
+		this(configedMain, true);
+	}
+
+	public TerminalCommandExecutor(ConfigedMain configedMain, boolean withGUI) {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
+		this.withGUI = withGUI;
 		configedMain.getMessagebus().getWebSocket().registerListener(TerminalCommandExecutor.this);
 		result = new StringBuilder();
 	}
 
 	public String execute(TerminalCommand command) {
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
-		terminalFrame.display();
-		terminalFrame.disableUserInputForSelectedWidget();
+		if (withGUI) {
+			terminalFrame.display();
+			terminalFrame.disableUserInputForSelectedWidget();
+		}
 
 		if (command instanceof TerminalMultiCommand) {
 			executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
@@ -65,7 +74,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			if (currentCommand instanceof TerminalCommandFileUpload) {
 				TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
 				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
-						fileUploadCommand.getTargetPath());
+						fileUploadCommand.getTargetPath(), withGUI);
 			} else {
 				commandToExecute = currentCommand;
 				sendProcessStartRequest();
@@ -82,7 +91,6 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("command", commandToExecute.getCommand().split(" "));
-		data.put("timeout", 1.0);
 		configedMain.getMessagebus().sendMessage(data);
 		lock();
 	}
@@ -125,7 +133,10 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		String type = (String) message.get("type");
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {
-			terminalFrame.writeToWidget(("Executing command: " + commandToExecute.getCommand() + "\r\n").getBytes());
+			if (withGUI) {
+				terminalFrame
+						.writeToWidget(("Executing command: " + commandToExecute.getCommand() + "\r\n").getBytes());
+			}
 			processId = (String) message.get("process_id");
 			Float processTimeout = ((String) message.get("timeout")) != null
 					? Float.parseFloat((String) message.get("timeout"))
@@ -147,7 +158,9 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		if (WebSocketEvent.PROCESS_DATA_READ.toString().equals(type)) {
 			String streamToReadFrom = determineStreamFromWhichToRead(message);
 			byte[] data = (byte[]) message.get(streamToReadFrom);
-			terminalFrame.writeToWidget(new String(data).replace("\n", "\r\n").getBytes());
+			if (withGUI) {
+				terminalFrame.writeToWidget(new String(data).replace("\n", "\r\n").getBytes());
+			}
 			String currentProcessId = (String) message.get("process_id");
 			if (currentProcessId.equals(processId)) {
 				result.append(new String(data));

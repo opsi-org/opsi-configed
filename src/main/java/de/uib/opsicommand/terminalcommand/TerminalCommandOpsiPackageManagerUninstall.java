@@ -71,7 +71,7 @@ public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandO
 	@Override
 	public String getCommand() {
 		command = "opsi-package-manager -q" + verbosity + keepFiles + depots + freeInput + opsiproduct;
-		return command + " 2>&1";
+		return command;
 	}
 
 	@Override
