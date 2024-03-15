@@ -1,4 +1,14 @@
 # Changelog
+## [4.3.2.8] - 2024-03-15
+## Changed
+- Use better icons for Checkboxes and some other cases
+
+## Added
+- Add button to download diagnostic data in Health Check dialogue
+
+## Fixed
+- Updating Host Info Data
+
 ## [4.3.2.7] - 2024-03-14
 ## Changed
 - Remove config states usage in `TableSearchPane`
