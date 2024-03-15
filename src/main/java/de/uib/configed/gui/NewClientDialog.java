@@ -839,7 +839,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		String systemUUID = systemUUIDField.getText();
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
-		String[] groups = null;
+		String[] groups;
 		if (!jTextGroupsSelection.getText().isEmpty()) {
 			groups = jTextGroupsSelection.getText().replace("; ", ";").split(";");
 		} else {
