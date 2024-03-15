@@ -27,7 +27,8 @@ import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandExecutor implements MessagebusListener {
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
-	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}");
+	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",
+			Pattern.UNICODE_CHARACTER_CLASS);
 
 	private ConfigedMain configedMain;
 	private TerminalFrame terminalFrame;
