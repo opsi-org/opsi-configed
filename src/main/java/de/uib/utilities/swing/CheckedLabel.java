@@ -53,10 +53,6 @@ public class CheckedLabel extends JPanel {
 		}
 	}
 
-	public CheckedLabel(String text, Icon selectedIcon, Icon unselectedIcon, boolean selected) {
-		this(text, selectedIcon, unselectedIcon, (Icon) null, selected);
-	}
-
 	public CheckedLabel(Icon selectedIcon, Icon unselectedIcon, boolean selected) {
 		this("", selectedIcon, unselectedIcon, (Icon) null, selected);
 	}

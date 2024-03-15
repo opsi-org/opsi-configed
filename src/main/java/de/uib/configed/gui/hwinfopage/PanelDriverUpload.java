@@ -17,6 +17,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -42,7 +43,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -72,9 +72,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private String driverDirectory = "";
 
 	private boolean stateDriverPath;
-	private CheckedLabel driverPathChecked;
+	private JCheckBox driverPathChecked;
 	private boolean stateServerPath;
-	private CheckedLabel serverPathChecked;
+	private JCheckBox serverPathChecked;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
@@ -428,13 +428,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 												.addGap(Globals.MIN_GAP_SIZE)))
 								.addGap(Globals.MIN_GAP_SIZE));
 
-		driverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				Utils.createImageIcon("images/checked_withoutbox.png", ""),
-				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
+		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
+				stateDriverPath);
 
-		serverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
-				Utils.createImageIcon("images/checked_withoutbox.png", "Z"),
-				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
+		serverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"), true);
 
 		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);
