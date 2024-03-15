@@ -944,9 +944,29 @@ public class ConfigDataService {
 		}
 	}
 
-	public Boolean isInstallByShutdownConfigured(String host) {
-		return getHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host,
-				true, false);
+	public Boolean isInstallByShutdownConfigured(String hostId) {
+		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
+		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "'");
+		Boolean value = null;
+
+		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
+		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
+			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
+			Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', value: " + value);
+			if (value != null) {
+				return value;
+			}
+		}
+
+		value = getGlobalBooleanConfigValue(key, null);
+		if (value != null) {
+			Logging.debug(this,
+					"getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', global value: " + value);
+			return value;
+		}
+		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId
+				+ "', returning default value: " + false);
+		return false;
 	}
 
 	public Boolean isWanConfigured(String host) {
@@ -1141,34 +1161,6 @@ public class ConfigDataService {
 				new Object[] { jsonObjects });
 
 		return exec.doCall(omc);
-	}
-
-	private Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
-			Boolean defaultVal) {
-		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
-		Boolean value = null;
-
-		Map<String, Object> hostConfig = getHostConfigsPD().get(hostName);
-		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
-			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
-			Logging.debug(this,
-					"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', value: " + value);
-			if (value != null) {
-				return value;
-			}
-		}
-
-		if (useGlobalFallback) {
-			value = getGlobalBooleanConfigValue(key, null);
-			if (value != null) {
-				Logging.debug(this,
-						"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', global value: " + value);
-				return value;
-			}
-		}
-		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName
-				+ "', returning default value: " + defaultVal);
-		return defaultVal;
 	}
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {

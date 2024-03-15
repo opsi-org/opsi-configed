@@ -302,12 +302,13 @@ public class PanelProductSettings extends JSplitPane {
 
 		metaData.put("header", title);
 		metaData.put("subject", title);
+
 		title = "";
 		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots().length() != 0) {
-			title = title + "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
+			title += "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
 		}
 		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames().length() != 0) {
-			title = title + "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
+			title += "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
