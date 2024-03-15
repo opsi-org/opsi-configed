@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import de.uib.configed.Configed;
@@ -20,6 +21,7 @@ import utils.Utils;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	private static final String DISPLAY_INFINITE = "\u221E";
+	private static final ImageIcon availableIcon = Utils.createImageIcon("images/checked_withoutbox.png", "");
 
 	protected LicensingInfoMap licensingInfoMap;
 
@@ -77,10 +79,10 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	}
 
 	private void setAvailabilityIcon(Object value) {
-		if (value.equals(true)) {
-			setIcon(Utils.createImageIcon("images/checked_withoutbox.png", ""));
+		if (Boolean.TRUE.equals(value)) {
+			setIcon(availableIcon);
 		} else {
-			setIcon(Utils.createImageIcon("images/checked_void.png", ""));
+			setIcon(null);
 		}
 	}
 
