@@ -114,7 +114,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 			command = BASE_NAME + " " + authentication + " " + fileName + " " + verbosity + dir + " -O " + url + " -O "
 					+ additionalURL;
 		}
-		return (command + " 2>&1").replaceAll("\\s{2,}", " ");
+		return command;
 	}
 
 	@Override

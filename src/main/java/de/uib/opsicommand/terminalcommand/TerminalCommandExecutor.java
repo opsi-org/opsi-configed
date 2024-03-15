@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -26,6 +27,7 @@ import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandExecutor implements MessagebusListener {
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
+	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}");
 
 	private ConfigedMain configedMain;
 	private TerminalFrame terminalFrame;
@@ -34,7 +36,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private StringBuilder result;
 
 	private String processId;
-	private TerminalCommand commandToExecute;
+	private String commandToExecute;
 
 	private boolean withGUI;
 
@@ -60,7 +62,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		if (command instanceof TerminalMultiCommand) {
 			executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
 		} else {
-			commandToExecute = command;
+			commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
 			sendProcessStartRequest();
 		}
 
@@ -76,7 +78,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
 						fileUploadCommand.getTargetPath(), withGUI);
 			} else {
-				commandToExecute = currentCommand;
+				commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand()).replaceAll(" ");
 				sendProcessStartRequest();
 			}
 		}
@@ -90,7 +92,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		data.put("channel", "service:config:process");
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("command", commandToExecute.getCommand().split(" "));
+		data.put("command", commandToExecute.split(" "));
 		configedMain.getMessagebus().sendMessage(data);
 		lock();
 	}
@@ -134,8 +136,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {
 			if (withGUI) {
-				terminalFrame
-						.writeToWidget(("Executing command: " + commandToExecute.getCommand() + "\r\n").getBytes());
+				terminalFrame.writeToWidget(("Executing command: " + commandToExecute + "\r\n").getBytes());
 			}
 			processId = (String) message.get("process_id");
 			Float processTimeout = ((String) message.get("timeout")) != null
