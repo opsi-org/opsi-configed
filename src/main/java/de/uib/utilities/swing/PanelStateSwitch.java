@@ -7,8 +7,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -18,7 +16,6 @@ import java.util.function.Consumer;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -28,7 +25,6 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 /*
 *	PanelStateSwitch.java
@@ -117,14 +113,8 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<>();
 
-		ImageIcon activatedIcon = Utils.createImageIcon("images/checked_withoutbox.png", "");
-		ImageIcon deactivatedIcon = Utils.createImageIcon("images/checked_empty_withoutbox.png", "");
-
 		for (Enum<E> val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
-
-			button.setIcon(deactivatedIcon);
-			button.setSelectedIcon(activatedIcon);
 			button.setHorizontalTextPosition(SwingConstants.RIGHT);
 
 			buttonGroup.add(button);
@@ -138,26 +128,6 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 				Logging.debug(this, "actionEvent with result " + val);
 				notifyChangeListeners(new ChangeEvent(this));
-			});
-
-			// hack to get the icons behaving as expected
-			button.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					if (!button.isSelected()) {
-						button.setSelectedIcon(deactivatedIcon);
-					}
-				}
-
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					button.setSelectedIcon(activatedIcon);
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					button.setSelectedIcon(activatedIcon);
-				}
 			});
 		}
 
