@@ -11,8 +11,6 @@ import java.util.Map;
 
 import javax.swing.JList;
 
-import utils.Utils;
-
 public class ListCellRendererByIndex extends StandardListCellRenderer {
 	private Map<String, String> mapOfTooltips;
 
@@ -29,7 +27,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 
 		String tooltip = mapOfTooltips.get(value);
 		if (tooltip != null && !tooltip.isEmpty()) {
-			setToolTipText(Utils.fillStringToLength(tooltip, FILL_LENGTH));
+			setToolTipText(tooltip);
 		} else {
 			setToolTipText(null);
 		}

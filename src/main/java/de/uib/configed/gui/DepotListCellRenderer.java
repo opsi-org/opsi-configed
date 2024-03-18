@@ -20,8 +20,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class DepotListCellRenderer extends DefaultListCellRenderer {
-	private static final int FILL_LENGTH = 30;
-
 	Map<String, Map<String, Object>> extendedInfo;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -48,7 +46,6 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		if (extendedInfo != null && extendedInfo.get(key) != null && extendedInfo.get(key).get("description") != null
 				&& !("" + extendedInfo.get(key).get("description")).isEmpty()) {
 			tooltipText = "" + extendedInfo.get(value).get("description");
-			tooltipText = Utils.fillStringToLength(tooltipText + " ", FILL_LENGTH);
 		}
 
 		String depot = (String) value;

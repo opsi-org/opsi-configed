@@ -98,18 +98,6 @@ public final class Utils {
 		return osName.toLowerCase(Locale.ROOT).startsWith("windows");
 	}
 
-	public static String fillStringToLength(String s, int len) {
-		if (s.length() > len) {
-			return s;
-		}
-
-		StringBuilder result = new StringBuilder(s);
-		for (int i = s.length(); i < len; i++) {
-			result.append(' ');
-		}
-		return result.toString();
-	}
-
 	public static ImageIcon getSaveIcon() {
 		return getThemeIconPNG("images/save", "");
 	}
