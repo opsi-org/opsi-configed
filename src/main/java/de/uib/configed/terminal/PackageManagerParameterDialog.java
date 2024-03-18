@@ -70,7 +70,7 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 				.isGlobalReadOnly()) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
-				configedMain.reload();
+				consolidate();
 			});
 		}
 
@@ -84,6 +84,10 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 
 		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
+	}
+
+	protected void consolidate() {
+		configedMain.reload();
 	}
 
 	private void cancel() {
