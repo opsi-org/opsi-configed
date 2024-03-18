@@ -19,19 +19,19 @@ import de.uib.utilities.logging.Logging;
 public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 110;
 
-	private String baseName = "opsi-makepackage ";
-	private String commandName = "opsi-makepackage ";
+	private String baseName = "opsi-makepackage";
+	private String commandName = "opsi-makepackage";
 
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
 
-	private String dir = " ";
-	private String keepVersions = " ";
-	private String packageVersion = " ";
-	private String productVersion = " ";
-	private String md5sum = " -m ";
-	private String zsync = " -z ";
+	private String dir = "";
+	private String keepVersions = "";
+	private String packageVersion = "";
+	private String productVersion = "";
+	private String md5sum = "-m";
+	private String zsync = "-z";
 
 	public TerminalCommandOpsiMakeProductFile(String d, String pav, String prv, boolean m, boolean z) {
 		setDir(d);
@@ -84,9 +84,9 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, Term
 
 	private void setKeepVersions(boolean o) {
 		if (o) {
-			keepVersions = " --keep-versions ";
+			keepVersions = "--keep-versions";
 		} else {
-			keepVersions = " ";
+			keepVersions = "";
 		}
 	}
 
@@ -123,12 +123,12 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, Term
 	@Override
 	public String getCommand() {
 		if (!packageVersion.isEmpty() || !productVersion.isEmpty()) {
-			keepVersions = "--keep-versions ";
+			keepVersions = "--keep-versions";
 		}
 
 		commandName = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
-		return commandName + " 2>&1";
+		return commandName;
 	}
 
 	/**
