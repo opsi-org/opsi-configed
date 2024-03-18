@@ -395,49 +395,7 @@ public final class LicensingInfoMap {
 
 			// also warning state should be none
 			for (String currentModule : shownModules) {
-				Map<String, Object> moduleInfo;
-				boolean available = availableModules.contains(currentModule);
-
-				if (moduleToDate.containsKey(currentModule)) {
-					moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule),
-							new TypeReference<Map<String, Object>>() {
-							});
-					if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
-						moduleInfo.put(STATE, STATE_IGNORE_WARNING);
-					}
-				} else {
-					moduleInfo = new HashMap<>();
-					moduleInfo.put(CLIENT_NUMBER, "0");
-					moduleInfo.put(LICENSE_IDS, "[]");
-					moduleInfo.put(STATE, "unlicensed");
-				}
-
-				moduleInfo.put(AVAILABLE, available);
-				if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
-					if (key.equals(latestDateString)) {
-						currentCloseToLimitModuleList.add(currentModule);
-					}
-				} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
-					if (key.equals(latestDateString)) {
-						currentOverLimitModuleList.add(currentModule);
-					}
-				} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
-					moduleInfo.put(STATE, STATE_DAYS_WARNING);
-					currentTimeWarningModuleList.add(currentModule);
-				} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
-					moduleInfo.put(STATE, STATE_DAYS_OVER);
-					currentTimeOverModuleList.add(currentModule);
-				} else {
-					// no warnings to add
-				}
-
-				String futureCheck = checkFuture(moduleInfo, currentModule, key);
-				if (futureCheck != null && moduleInfo.get(STATE) != null
-						&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-					moduleInfo.put(FUTURE_STATE, futureCheck);
-				} else {
-					moduleInfo.put(FUTURE_STATE, "null");
-				}
+				Map<String, Object> moduleInfo = createModuleInfo(key, currentModule, moduleToDate);
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
@@ -445,6 +403,53 @@ public final class LicensingInfoMap {
 		}
 
 		return new TreeMap<>(checkTimeWarning(resultMap));
+	}
+
+	private Map<String, Object> createModuleInfo(String key, String currentModule, Map<String, Object> moduleToDate) {
+		Map<String, Object> moduleInfo;
+		boolean available = availableModules.contains(currentModule);
+
+		if (moduleToDate.containsKey(currentModule)) {
+			moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule), new TypeReference<Map<String, Object>>() {
+			});
+			if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
+				moduleInfo.put(STATE, STATE_IGNORE_WARNING);
+			}
+		} else {
+			moduleInfo = new HashMap<>();
+			moduleInfo.put(CLIENT_NUMBER, "0");
+			moduleInfo.put(LICENSE_IDS, "[]");
+			moduleInfo.put(STATE, "unlicensed");
+		}
+
+		moduleInfo.put(AVAILABLE, available);
+		if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
+			if (key.equals(latestDateString)) {
+				currentCloseToLimitModuleList.add(currentModule);
+			}
+		} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
+			if (key.equals(latestDateString)) {
+				currentOverLimitModuleList.add(currentModule);
+			}
+		} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
+			moduleInfo.put(STATE, STATE_DAYS_WARNING);
+			currentTimeWarningModuleList.add(currentModule);
+		} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
+			moduleInfo.put(STATE, STATE_DAYS_OVER);
+			currentTimeOverModuleList.add(currentModule);
+		} else {
+			// no warnings to add
+		}
+
+		String futureCheck = checkFuture(moduleInfo, currentModule, key);
+		if (futureCheck != null && moduleInfo.get(STATE) != null
+				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
+			moduleInfo.put(FUTURE_STATE, futureCheck);
+		} else {
+			moduleInfo.put(FUTURE_STATE, "null");
+		}
+
+		return moduleInfo;
 	}
 
 	/**
