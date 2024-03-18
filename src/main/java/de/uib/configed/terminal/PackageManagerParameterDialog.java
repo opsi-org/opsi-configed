@@ -70,7 +70,7 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 				.isGlobalReadOnly()) {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
-				consolidate();
+				reload();
 			});
 		}
 
@@ -86,7 +86,7 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 				.isGlobalReadOnly());
 	}
 
-	protected void consolidate() {
+	protected void reload() {
 		configedMain.reload();
 	}
 

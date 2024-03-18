@@ -270,8 +270,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	@Override
-	protected void consolidate() {
-		super.consolidate();
+	protected void reload() {
+		super.reload();
 		resetProducts();
 	}
 
