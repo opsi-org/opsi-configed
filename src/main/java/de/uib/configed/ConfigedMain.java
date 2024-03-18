@@ -257,8 +257,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<String, String> logfiles = new HashMap<>();
 
-	private Map<String, Boolean> hostDisplayFields;
-
 	public enum LicensesTabStatus {
 		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
@@ -605,7 +603,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
 
-		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
 		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsLocalbootProducts();
 
@@ -1301,15 +1298,15 @@ public class ConfigedMain implements MessagebusListener {
 
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
-		hostDisplayFields = persistenceController.getHostDataService().getHostDisplayFields();
-
-		for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
+		for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
+				.entrySet()) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
 				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
 			}
 		}
 
-		Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
+		Logging.info(this, "buildPclistTableModel host_displayFields "
+				+ persistenceController.getHostDataService().getHostDisplayFields());
 
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.get(clientId);
@@ -1329,7 +1326,8 @@ public class ConfigedMain implements MessagebusListener {
 
 			List<Object> rowItems = new ArrayList<>();
 
-			for (Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
+			for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
+					.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
 					rowItems.add(rowmap.get(entry.getKey()));
 				}
@@ -3815,10 +3813,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public static LicensesFrame getLicensesFrame() {
 		return licensesFrame;
-	}
-
-	public Map<String, Boolean> getHostDisplayFields() {
-		return hostDisplayFields;
 	}
 
 	public static String getHost() {
