@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -26,7 +25,6 @@ import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandExecutor implements MessagebusListener {
-	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
 	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -60,12 +58,17 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		if (command instanceof TerminalMultiCommand) {
-			executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
-		} else {
-			commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
-			sendProcessStartRequest();
-		}
+		new Thread() {
+			@Override
+			public void run() {
+				if (command instanceof TerminalMultiCommand) {
+					executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
+				} else {
+					commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
+					sendProcessStartRequest();
+				}
+			}
+		}.start();
 
 		return result.toString();
 	}
@@ -77,7 +80,8 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			if (currentCommand instanceof TerminalCommandFileUpload) {
 				TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
 				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
-						fileUploadCommand.getTargetPath(), withGUI);
+						fileUploadCommand.getTargetPath(), withGUI, this::unlock);
+				lock();
 			} else {
 				commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand()).replaceAll(" ");
 				sendProcessStartRequest();
@@ -102,11 +106,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private void lock() {
 		try {
 			locker = new CountDownLatch(1);
-			if (locker.await(DEFAULT_TIME_TO_BLOCK_IN_MS, TimeUnit.MILLISECONDS)) {
-				Logging.info(this, "thread was unblocked");
-			} else {
-				Logging.info(this, "time ellapsed");
-			}
+			locker.await();
 		} catch (InterruptedException ie) {
 			Logging.warning(this, "thread was interrupted");
 			Thread.currentThread().interrupt();

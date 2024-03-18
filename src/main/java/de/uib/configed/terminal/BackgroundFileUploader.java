@@ -47,22 +47,25 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 	private boolean visualizeProgress;
 
+	private Runnable callback;
+
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue) {
-		this(terminal, terminalWidget, queue, null, false);
+		this(terminal, terminalWidget, queue, null, false, null);
 	}
 
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
-			String destinationDir) {
-		this(terminal, terminalWidget, queue, destinationDir, false);
+			String destinationDir, Runnable callback) {
+		this(terminal, terminalWidget, queue, destinationDir, false, callback);
 	}
 
 	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
-			String destinationDir, boolean visualizeProgress) {
+			String destinationDir, boolean visualizeProgress, Runnable callback) {
 		this.terminal = terminal;
 		this.terminalWidget = terminalWidget;
 		this.queue = queue;
 		this.destinationDir = destinationDir;
 		this.visualizeProgress = visualizeProgress;
+		this.callback = callback;
 	}
 
 	@Override
@@ -233,6 +236,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 		}
 		totalFilesToUpload = 0;
 		uploadedFiles = 0;
+		callback.run();
 	}
 
 	public int getTotalFilesToUpload() {
