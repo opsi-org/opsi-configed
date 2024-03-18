@@ -176,7 +176,6 @@ public class BackendMySQL {
 			}
 		} else if ("GroupWithSubgroups".equals(jsonObject.getJSONArray("elementPath").getString(0))) {
 			// Group with subgroups
-
 			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));
 		} else {
 			MySQL mySQL = new MySQL(hwConfig);
@@ -205,7 +204,8 @@ public class BackendMySQL {
 		 * are ok
 		 */
 		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT d WHERE ( " + whereClause2
-				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
 
 		List<String> list1 = getListFromSQL(query);
 		List<String> list2 = getListFromSQL(query2);
@@ -219,8 +219,8 @@ public class BackendMySQL {
 
 		// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
 		whereClause = whereClause.replace("d.productId", "h.productId");
-		String query = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE "
-				+ whereClause + ";";
+		String query = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE " + whereClause + ";";
 
 		// Query 2 with standard values
 		String whereClause2 = getWhereClauseDefaultProductProperty(whereClause);
@@ -229,9 +229,10 @@ public class BackendMySQL {
 		whereClause2 = whereClause2.replace("\"%", "");
 		whereClause2 = whereClause2.replace("h.productId", "v.productId");
 
-		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v WHERE v.isDefault LIKE '1' AND ("
-				+ whereClause2
-				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v"
+				+ " WHERE v.isDefault LIKE '1' AND (" + whereClause2
+				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
 		// queries
 
@@ -258,9 +259,12 @@ public class BackendMySQL {
 		 * PRODUCT_ON_CLIENT, but a 'fitting' property in
 		 * PRODUCT_PROPERTY_STATE. Therefore asking for standard values
 		 */
-		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE ("
-				+ whereClause2
-				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId)"
+				+ " INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE (" + whereClause2
+				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion"
+				+ " AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
 
 		/**
 		 * This query gives all hostIds with a 'fitting' product-property, that
@@ -269,9 +273,11 @@ public class BackendMySQL {
 		 */
 		whereClause3 = whereClause3.replace("%\"", "");
 		whereClause3 = whereClause3.replace("\"%", "");
-		String query3 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId) INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
-				+ whereClause3
-				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+		String query3 = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId)"
+				+ " INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
+				+ whereClause3 + ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
 		/**
 		 * This query gives all hostIds that have a 'fitting' product that is
@@ -281,9 +287,13 @@ public class BackendMySQL {
 		whereClause4 = whereClause4.replace("%\"", "");
 		whereClause4 = whereClause4.replace("\"%", "");
 
-		String query4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( "
-				+ whereClause4
-				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId) AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+		String query4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v"
+				+ " INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND"
+				+ " d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( " + whereClause4
+				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId)"
+				+ " AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
 		// queries
 
