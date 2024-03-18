@@ -673,40 +673,29 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
 		Object data = null;
-		String text = null;
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
-		// Do the same for all three cases
+		// Do the same for all four cases
 		case DOUBLE_TYPE:
 		case TEXT_TYPE:
 		case DATE_TYPE:
-			text = ((TextInputField) (group.dataComponent)).getText();
-			if (text.isEmpty()) {
+		case ENUM_TYPE:
+			data = ((TextInputField) group.dataComponent).getText();
+			if (((String) data).isEmpty()) {
 				return null;
 			}
-			data = text;
 			break;
 		case INTEGER_TYPE:
-			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
-			if (value == 0) {
+			data = ((JSpinner) group.dataComponent).getValue();
+			if (((Integer) data) == 0) {
 				return null;
 			}
-			data = value;
 			break;
 		case BIG_INTEGER_TYPE:
-			Long value2 = ((SpinnerWithExtension) group.dataComponent).getValue();
-			if (value2 == 0) {
+			data = ((SpinnerWithExtension) group.dataComponent).getValue();
+			if (((Long) data) == 0) {
 				return null;
 			}
-			data = value2;
-			break;
-		case ENUM_TYPE:
-
-			String textEnum = ((TextInputField) group.dataComponent).getText();
-			if (textEnum.isEmpty()) {
-				return null;
-			}
-			data = textEnum;
 			break;
 		case NONE_TYPE:
 		default:
