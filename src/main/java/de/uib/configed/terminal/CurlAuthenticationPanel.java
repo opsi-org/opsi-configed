@@ -18,9 +18,8 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.ssh.SSHPMInstallPanel;
 
-public class CurlAuthenticationPanel extends SSHPMInstallPanel {
+public class CurlAuthenticationPanel extends PMInstallPanel {
 	public static final String LBLUSER = "lbl_user";
 	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
 	public static final String CBNEEDAUTH = "cb_needAuthentication";

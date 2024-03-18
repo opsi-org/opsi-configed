@@ -61,6 +61,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandDeployClientAgent;
 import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
+import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsicommand.terminalcommand.TerminalCommandPackageUpdater;
@@ -471,6 +472,14 @@ public class MainFrame extends JFrame {
 		modulesUploadCommandMenuItem
 				.addActionListener((ActionEvent e) -> modulesUploadCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(modulesUploadCommandMenuItem);
+
+		TerminalCommandOpsiPackageManagerInstall opsiPackageManagerInstallCommand = new TerminalCommandOpsiPackageManagerInstall();
+		JMenuItem opsiPackageManagerInstallCommandMenuItem = new JMenuItem();
+		opsiPackageManagerInstallCommandMenuItem.setText(opsiPackageManagerInstallCommand.getMenuText());
+		opsiPackageManagerInstallCommandMenuItem.setToolTipText(opsiPackageManagerInstallCommand.getToolTipText());
+		opsiPackageManagerInstallCommandMenuItem
+				.addActionListener((ActionEvent e) -> opsiPackageManagerInstallCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(opsiPackageManagerInstallCommandMenuItem);
 
 		TerminalCommandOpsiPackageManagerUninstall opsiPackageManagerUninstallCommand = new TerminalCommandOpsiPackageManagerUninstall();
 		JMenuItem opsiPackageManagerUninstallCommandMenuItem = new JMenuItem();

@@ -45,7 +45,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	public TerminalCommandCurl(String d, String u, String au) {
 		this(d, u);
-		additionalURL = au;
+		additionalURL = "-O " + au;
 	}
 
 	public TerminalCommandCurl(String d, String u) {
@@ -109,9 +109,9 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 	public String getCommand() {
 		if (!freeInput.isEmpty()) {
 			command = BASE_NAME + " " + authentication + " " + fileName + " " + freeInput + " " + verbosity + " " + dir
-					+ " -O " + url + " -O " + additionalURL;
+					+ " " + url + " " + additionalURL;
 		} else {
-			command = BASE_NAME + " " + authentication + " " + fileName + " " + verbosity + dir + " -O " + url + " -O "
+			command = BASE_NAME + " " + authentication + " " + fileName + " " + verbosity + " " + dir + " " + url + " "
 					+ additionalURL;
 		}
 		return command;
@@ -166,7 +166,7 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 
 	public void setUrl(String u) {
 		if (!u.isEmpty()) {
-			url = u;
+			url = "-O " + u;
 		} else {
 			url = "";
 		}

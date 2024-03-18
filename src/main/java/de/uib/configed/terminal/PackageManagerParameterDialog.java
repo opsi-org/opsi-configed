@@ -21,7 +21,6 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class PackageManagerParameterDialog extends FGeneralDialog {
-
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
 
@@ -56,6 +55,8 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof PackageManagerUninstallParameterDialog) {
 					((PackageManagerUninstallParameterDialog) caller).doAction3();
+				} else if (caller instanceof PackageManagerInstallParameterDialog) {
+					((PackageManagerInstallParameterDialog) caller).doAction3();
 				} else {
 					Logging.warning(this, "caller has unexpected class " + caller.getClass());
 				}
@@ -70,7 +71,6 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				configedMain.reload();
-				consolidate();
 			});
 		}
 
@@ -84,10 +84,6 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 
 		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
-	}
-
-	protected void consolidate() {
-		configedMain.reload();
 	}
 
 	private void cancel() {
