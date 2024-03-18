@@ -22,7 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -169,22 +168,8 @@ public abstract class AbstractExportTable {
 
 				Logging.debug(this, "filename " + filename);
 
-				file = new File(filename);
-
-				try {
-					if (file.exists() && askForOverwrite) {
-						int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
-								Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-								Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
-								JOptionPane.OK_CANCEL_OPTION);
-
-						if (option == JOptionPane.CANCEL_OPTION) {
-							filename = null;
-						}
-					}
-				} catch (HeadlessException exception) {
-					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
-							exception);
+				if (askForOverwrite) {
+					filename = askForOverride(filename);
 				}
 			}
 		} else {
@@ -192,6 +177,26 @@ public abstract class AbstractExportTable {
 		}
 
 		Logging.debug(this, "export to " + filename);
+
+		return filename;
+	}
+
+	private static String askForOverride(String filename) {
+		try {
+			File file = new File(filename);
+			if (file.exists()) {
+				int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
+						Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
+						Configed.getResourceValue("DocumentExport.question"), JOptionPane.OK_CANCEL_OPTION);
+
+				if (option == JOptionPane.CANCEL_OPTION) {
+					return null;
+				}
+			}
+		} catch (HeadlessException exception) {
+			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
+					exception);
+		}
 
 		return filename;
 	}

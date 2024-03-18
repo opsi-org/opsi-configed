@@ -326,26 +326,7 @@ public class SoftwareDataService {
 			String swIdent = entry.getIdent();
 			installedSoftwareInformation.put(swIdent, entry);
 
-			boolean showForLicensing = true;
-			for (String marker : linuxSWnameMarkers) {
-				String version = entry.get(SWAuditEntry.VERSION);
-				if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
-					showForLicensing = false;
-					break;
-				}
-			}
-
-			if (showForLicensing && !linuxSubversionMarkers.isEmpty()) {
-				String subversion = entry.get(SWAuditEntry.SUB_VERSION);
-				for (String marker : linuxSubversionMarkers) {
-					if (subversion.startsWith(marker)) {
-						showForLicensing = false;
-						break;
-					}
-				}
-			}
-
-			if (showForLicensing) {
+			if (showForLicensing(entry, swName)) {
 				installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
 				Set<String> nameSWIdents = name2SWIdents.computeIfAbsent(swName, s -> new TreeSet<>());
@@ -394,6 +375,24 @@ public class SoftwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, installedSoftwareName2SWinfo);
 		cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
 		persistenceController.notifyPanelCompleteWinProducts();
+	}
+
+	private static boolean showForLicensing(SWAuditEntry entry, String swName) {
+		for (String marker : linuxSWnameMarkers) {
+			String version = entry.get(SWAuditEntry.VERSION);
+			if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
+				return false;
+			}
+		}
+
+		String subversion = entry.get(SWAuditEntry.SUB_VERSION);
+		for (String marker : linuxSubversionMarkers) {
+			if (subversion.startsWith(marker)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {
@@ -483,57 +482,60 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())
+				|| !Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
 			return "";
 		}
 
-		String result = "";
-
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			RPCMethodName methodName = null;
-			switch (licenseType) {
-			case LicenseEntry.VOLUME:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
-				break;
-			case LicenseEntry.OEM:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
-				break;
-			case LicenseEntry.CONCURRENT:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
-				break;
-			case LicenseEntry.RETAIL:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
-				break;
-			default:
-				Logging.notice(this, "encountered UNKNOWN license type");
-				break;
-			}
-
-			// The jsonRPC-calls would fail sometimes if we use empty / blank Strings...
-			if (maxInstallations != null && maxInstallations.isBlank()) {
-				maxInstallations = null;
-			}
-
-			if (boundToHost != null && boundToHost.isBlank()) {
-				boundToHost = null;
-			}
-
-			if (expirationDate != null && expirationDate.isBlank()) {
-				expirationDate = null;
-			}
-
-			OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] { softwareLicenseId, licenseContractId,
-					maxInstallations, boundToHost, expirationDate });
-
-			if (exec.doCall(omc)) {
-				result = softwareLicenseId;
-			} else {
-				Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
-						+ " and licenseContractId " + licenseContractId);
-			}
+		// The jsonRPC-calls would fail sometimes if we use empty / blank Strings...
+		if (maxInstallations != null && maxInstallations.isBlank()) {
+			maxInstallations = null;
 		}
 
-		return result;
+		if (boundToHost != null && boundToHost.isBlank()) {
+			boundToHost = null;
+		}
+
+		if (expirationDate != null && expirationDate.isBlank()) {
+			expirationDate = null;
+		}
+
+		RPCMethodName methodName = getMethodNameForLicenseType(licenseType);
+
+		OpsiMethodCall omc = new OpsiMethodCall(methodName,
+				new String[] { softwareLicenseId, licenseContractId, maxInstallations, boundToHost, expirationDate });
+
+		if (exec.doCall(omc)) {
+			return softwareLicenseId;
+		} else {
+			Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
+					+ " and licenseContractId " + licenseContractId);
+
+			return "";
+		}
+	}
+
+	private RPCMethodName getMethodNameForLicenseType(String licenseType) {
+		RPCMethodName methodName = null;
+		switch (licenseType) {
+		case LicenseEntry.VOLUME:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
+			break;
+		case LicenseEntry.OEM:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
+			break;
+		case LicenseEntry.CONCURRENT:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
+			break;
+		case LicenseEntry.RETAIL:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
+			break;
+		default:
+			Logging.notice(this, "encountered UNKNOWN license type");
+			break;
+		}
+
+		return methodName;
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {

@@ -17,7 +17,6 @@ import de.uib.configed.Configed;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class DepotListCellRenderer extends DefaultListCellRenderer {
 	Map<String, Map<String, Object>> extendedInfo;

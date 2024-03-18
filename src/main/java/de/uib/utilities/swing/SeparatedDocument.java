@@ -33,15 +33,13 @@ public class SeparatedDocument extends CheckedDocument {
 		StringBuilder textBuf = new StringBuilder();
 
 		for (char startchar : s.toCharArray()) {
-			if (appendCharIfAllowed(textBuf, startchar)) {
-				try {
-					if (checkMask && getText(offset, 1).equals(separator)) {
-						// remove old separators
-						remove(offset, 1);
-					}
-				} catch (BadLocationException ex) {
-					Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
+			try {
+				if (appendCharIfAllowed(textBuf, startchar) && checkMask && getText(offset, 1).equals(separator)) {
+					// remove old separators
+					remove(offset, 1);
 				}
+			} catch (BadLocationException ex) {
+				Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
 			}
 		}
 
