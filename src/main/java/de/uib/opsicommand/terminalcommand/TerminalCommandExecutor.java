@@ -165,7 +165,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 				terminalFrame.writeToWidget(new String(data).replace("\n", "\r\n").getBytes());
 			}
 			String currentProcessId = (String) message.get("process_id");
-			if (currentProcessId.equals(processId)) {
+			if (currentProcessId.equals(processId) && !"stderr".equals(streamToReadFrom)) {
 				result.append(new String(data));
 			}
 		}

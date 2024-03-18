@@ -61,6 +61,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
 import de.uib.opsicommand.terminalcommand.TerminalCommandDeployClientAgent;
 import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
+import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiMakeProductFile;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
@@ -488,6 +489,14 @@ public class MainFrame extends JFrame {
 		opsiPackageManagerUninstallCommandMenuItem.addActionListener(
 				(ActionEvent e) -> opsiPackageManagerUninstallCommand.startParameterGui(configedMain));
 		jMenuTerminal.add(opsiPackageManagerUninstallCommandMenuItem);
+
+		TerminalCommandOpsiMakeProductFile opsiMakeProductFileCommand = new TerminalCommandOpsiMakeProductFile();
+		JMenuItem opsiMakeProductFileCommandMenuItem = new JMenuItem();
+		opsiMakeProductFileCommandMenuItem.setText(opsiMakeProductFileCommand.getMenuText());
+		opsiMakeProductFileCommandMenuItem.setToolTipText(opsiMakeProductFileCommand.getToolTipText());
+		opsiMakeProductFileCommandMenuItem
+				.addActionListener((ActionEvent e) -> opsiMakeProductFileCommand.startParameterGui(configedMain));
+		jMenuTerminal.add(opsiMakeProductFileCommandMenuItem);
 
 		TerminalCommandDeployClientAgent deployClientAgentCommand = new TerminalCommandDeployClientAgent();
 		JMenuItem deployClientAgentCommandMenuItem = new JMenuItem();
