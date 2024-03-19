@@ -25,10 +25,9 @@ import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class ProductInfoPane extends JSplitPane {
-	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
-
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -97,16 +96,14 @@ public class ProductInfoPane extends JSplitPane {
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		dependenciesActivateButton = new JButton("▶");
-		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
+		dependenciesActivateButton = new JButton();
+		dependenciesActivateButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
-
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
-		propertiesActivateButton = new JButton("▼");
-		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
+		propertiesActivateButton = new JButton();
+		propertiesActivateButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
-
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 	}
 
@@ -228,9 +225,9 @@ public class ProductInfoPane extends JSplitPane {
 
 	private static void setActivatedButton(JButton jButton, boolean isPropertiesVisible) {
 		if (isPropertiesVisible) {
-			jButton.setText("▼");
+			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		} else {
-			jButton.setText("▶");
+			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
 		}
 	}
 
