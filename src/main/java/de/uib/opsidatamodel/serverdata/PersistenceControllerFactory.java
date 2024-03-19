@@ -26,11 +26,11 @@ public final class PersistenceControllerFactory {
 	 * method getPersistenceController - or construct a new one
 	 */
 	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
-			String password) {
+			String password, String otp) {
 		Logging.info("getNewPersistenceController");
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
-				user, password);
+				user, password, otp);
 		Logging.info(
 				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
 

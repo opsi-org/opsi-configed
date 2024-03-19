@@ -62,6 +62,7 @@ public final class Configed {
 	private static String host;
 	private static String user;
 	private static String password;
+	private static String otp;
 
 	private static String sshKey;
 	private static String sshKeyPass;
@@ -88,14 +89,15 @@ public final class Configed {
 	private static String paramHost;
 	private static String paramUser;
 	private static String paramPassword;
+	private static String paramOTP;
 	private static String paramClient;
 	private static String paramClientgroup;
 	private static Integer paramTab;
 
 	/** construct the application */
-	private Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
-			final String paramClientgroup, final Integer paramTab) {
-		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP,
+			final String paramClient, final String paramClientgroup, final Integer paramTab) {
+		setParamValues(paramHost, paramUser, paramPassword, paramOTP, paramTab, paramClient, paramClientgroup);
 
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
@@ -155,11 +157,12 @@ public final class Configed {
 		}
 	}
 
-	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
-			String paramClient, String paramClientgroup) {
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
+			Integer paramTab, String paramClient, String paramClientgroup) {
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
+		Configed.paramOTP = paramOTP;
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
@@ -440,7 +443,7 @@ public final class Configed {
 			addMissingArgs();
 			initSavedStates();
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
@@ -449,7 +452,7 @@ public final class Configed {
 			initSavedStates();
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
 
 			List<String> newGroupMembers = query.runSearch(false);
 
@@ -458,7 +461,7 @@ public final class Configed {
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
 			SwPdfExporter exporter = new SwPdfExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -466,7 +469,7 @@ public final class Configed {
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
 			SWcsvExporter exporter = new SWcsvExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -478,7 +481,7 @@ public final class Configed {
 			initSavedStates();
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getNewPersistenceController(host, user, password);
+					.getNewPersistenceController(host, user, password, otp);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
 					persistenceController.getHostInfoCollections().getDepotNamesList(),
@@ -495,7 +498,7 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		new Configed(host, user, password, client, clientgroup, tab);
+		new Configed(host, user, password, otp, client, clientgroup, tab);
 	}
 
 	public static void initSavedStates() {

@@ -26,11 +26,12 @@ public class SavedSearchQuery {
 	private String host;
 	private String user;
 	private String password;
+	private String otp;
 	private String searchName;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public SavedSearchQuery(String host, String user, String password, String searchName) {
+	public SavedSearchQuery(String host, String user, String password, String otp, String searchName) {
 		setArgs(host, user, password, searchName);
 		initConnection();
 	}
@@ -44,7 +45,7 @@ public class SavedSearchQuery {
 	}
 
 	private void initConnection() {
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp);
 
 		if (persistenceController == null
 				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {

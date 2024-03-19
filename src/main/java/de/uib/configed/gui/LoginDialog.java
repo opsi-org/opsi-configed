@@ -6,8 +6,10 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -44,6 +46,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
+import de.uib.utilities.swing.SeparatedDocument;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 import utils.Utils;
@@ -73,11 +76,16 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JPasswordField passwordField = new JPasswordField();
 	private JLabel jLabelPassword;
 
+	private JLabel jLabelOTP;
+	private JTextField fieldOTP = new JTextField(new SeparatedDocument(
+			new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6, Character.MIN_VALUE, 6, true), "", 6);
+
 	private JLabel jLabelHost;
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
 	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
+	private JCheckBox checkUseOTP;
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
@@ -155,6 +163,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldUser.setEnabled(active);
 		passwordField.setEnabled(active);
 		checkTrySSH.setEnabled(active);
+		checkUseOTP.setEnabled(active);
 		jButtonCommit.setEnabled(active);
 	}
 
@@ -193,18 +202,45 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
+		jLabelOTP = new JLabel(Configed.getResourceValue("DPassword.jLabelOTP"));
+		jLabelOTP.setVisible(false);
+		jLabelOTP.setPreferredSize(new Dimension(0, 0));
+		fieldOTP.setVisible(false);
+		fieldOTP.setPreferredSize(new Dimension(0, 0));
+
 		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
 				Configed.isSSHConnectionOnStart());
-		Logging.info(this, "checkTrySSH  " + Configed.isSSHConnectionOnStart());
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
-		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
+		checkUseOTP = new JCheckBox(Configed.getResourceValue("DPassword.checkUseOTP"),
+				Configed.isSSHConnectionOnStart());
+		checkUseOTP.setToolTipText(Configed.getResourceValue("DPassword.checkUseOTP.toolTip"));
+		checkUseOTP.setSelected(false);
+		checkUseOTP.addItemListener(event -> showOTPField(event.getStateChange() == ItemEvent.SELECTED));
+
+		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH, checkUseOTP });
 
 		jButtonCancel = new JButton(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit = new JButton(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
+	}
+
+	private void showOTPField(boolean show) {
+		if (show) {
+			jLabelOTP.setVisible(true);
+			fieldOTP.setVisible(true);
+			jLabelOTP.setPreferredSize(new Dimension(200, 20));
+			fieldOTP.setPreferredSize(new Dimension(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
+			setSize(new Dimension(getWidth(), 467));
+		} else {
+			jLabelOTP.setVisible(false);
+			fieldOTP.setVisible(false);
+			jLabelOTP.setPreferredSize(new Dimension(0, 0));
+			fieldOTP.setPreferredSize(new Dimension(0, 0));
+			setSize(new Dimension(getWidth(), 420));
+		}
 	}
 
 	private void setupLayout() {
@@ -241,6 +277,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2).addComponent(passwordField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(2)
+				.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(2)
+				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
@@ -270,18 +312,19 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelHost,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
 				.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelUser,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
 				.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelPassword,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
 				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelOTP,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -424,7 +467,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			public void run() {
 				Logging.info(this, "get persis");
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()));
+						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
+						fieldOTP.getText());
 
 				Logging.info(this, "got persis, == null " + (persistenceController == null));
 
@@ -434,7 +478,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		}.start();
 
 		SSHConnectionInfo.getInstance().setUser(user);
-
 		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
 		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
