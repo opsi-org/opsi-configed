@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
@@ -46,9 +47,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SSHPMInstallSettingsPanel(JDialog dia) {
+	public SSHPMInstallSettingsPanel(JDialog dia, ConfigedMain configedMain) {
 		if (dia != null) {
-			setFDepotList(dia);
+			setFDepotList(dia, configedMain);
 		}
 
 		initComponents();
@@ -91,8 +92,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		jCheckBoxSetupInstalled = new JCheckBox();
 	}
 
-	private void setFDepotList(JDialog dia) {
-		fDepotList = new FDepotselectionList(dia) {
+	private void setFDepotList(JDialog dia, ConfigedMain configedMain) {
+		fDepotList = new FDepotselectionList(dia, configedMain) {
 			@Override
 			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {

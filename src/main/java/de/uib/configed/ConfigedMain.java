@@ -542,6 +542,10 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
+	public Set<String> getConnectedClientsByMessagebus() {
+		return connectedHostsByMessagebus;
+	}
+
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
 		updateConnectionStatusInTable(clientId);
@@ -953,7 +957,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void initDepots() {
 		// create depotsList
-		depotsList = new DepotsList();
+		depotsList = new DepotsList(this);
 
 		Logging.info(this, "create depotsListSelectionListener");
 		ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {

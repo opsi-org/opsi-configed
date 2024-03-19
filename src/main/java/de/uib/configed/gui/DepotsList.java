@@ -16,17 +16,19 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 	private DepotListCellRenderer myListCellRenderer;
 	private List<String> saveV;
-
 	private Map<String, Map<String, Object>> depotInfo;
 
-	public DepotsList() {
+	private ConfigedMain configedMain;
+
+	public DepotsList(ConfigedMain configedMain) {
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		myListCellRenderer = new DepotListCellRenderer();
+		myListCellRenderer = new DepotListCellRenderer(configedMain);
 		super.setCellRenderer(myListCellRenderer);
 		super.setSelectionModel(new DepotListSelectionModel());
 	}

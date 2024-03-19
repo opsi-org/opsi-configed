@@ -75,7 +75,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installLocalPanel = new SSHPMInstallLocalPanel();
 		installServerPanel = new SSHPMInstallServerPanel(fromMakeProductfile);
 		installWgetPanel = new SSHPMInstallWgetPanel();
-		installSettingsPanel = new SSHPMInstallSettingsPanel(this);
+		installSettingsPanel = new SSHPMInstallSettingsPanel(this, configedMain);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
 			jRadioButtonServer.setSelected(true);

@@ -8,21 +8,38 @@ package de.uib.configed.gui;
 
 import java.awt.Component;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.UIManager;
 
+import org.jdesktop.swingx.icon.EmptyIcon;
+
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class DepotListCellRenderer extends DefaultListCellRenderer {
 	Map<String, Map<String, Object>> extendedInfo;
 
+	private ConfigedMain configedMain;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+
+	private ImageIcon connectedIcon = Utils.createImageIcon("images/ok22.png", "");
+	private Set<String> clientsConnectedByMessagebus = persistenceController.getHostDataService()
+			.getMessagebusConnectedClients();
+
+	public DepotListCellRenderer(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+	}
 
 	public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
 		Logging.debug(this, "setInfo " + extendedInfo);
@@ -45,6 +62,14 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		if (extendedInfo != null && extendedInfo.get(key) != null && extendedInfo.get(key).get("description") != null
 				&& !("" + extendedInfo.get(key).get("description")).isEmpty()) {
 			tooltipText = "" + extendedInfo.get(value).get("description");
+		}
+
+		if (ServerFacade.isOpsi43()) {
+			if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
+				setIcon(connectedIcon);
+			} else {
+				setIcon(new EmptyIcon(connectedIcon.getIconWidth(), 0));
+			}
 		}
 
 		String depot = (String) value;
