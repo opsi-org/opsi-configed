@@ -158,7 +158,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_CONFIGED, ""));
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 		JPanel mdPanel = new JPanel();

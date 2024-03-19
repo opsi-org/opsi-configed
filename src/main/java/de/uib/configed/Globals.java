@@ -32,7 +32,8 @@ public final class Globals {
 	public static final String APPNAME = "opsi-configed";
 	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
 
-	public static final String ICON_OPSI = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_nur_Biene_quer.png";
+	public static final String ICON_CONFIGED = "opsilogos/opsi-configed.png";
+	public static final String ICON_LOGVIEWER = "opsilogos/opsi-logviewer.png";
 
 	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
 	public static final String OPSI_SUPPORT_PAGE = "http://opsi.org/support";
