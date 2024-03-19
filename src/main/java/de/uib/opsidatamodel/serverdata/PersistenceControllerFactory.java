@@ -32,7 +32,7 @@ public final class PersistenceControllerFactory {
 			String password, String otp) {
 		Logging.info("getNewPersistenceController");
 
-		if (!OTP_PATTERN.matcher(otp).matches()) {
+		if (!otp.isEmpty() && !OTP_PATTERN.matcher(otp).matches()) {
 			Logging.error("One Time Password (OTP) should only contain digits and be 6 characters long.");
 			return null;
 		}
