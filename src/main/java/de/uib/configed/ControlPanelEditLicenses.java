@@ -301,7 +301,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		a[2] = LicenseEntry.LICENSE_TYPES.get(0);
 		a[3] = "1";
 		a[4] = "";
-		a[5] = Globals.ZERODATE;
+		a[5] = "";
 
 		modelSoftwarelicenses.addRow(a);
 		thePanel.getPanelSoftwarelicenses().moveToValue("" + a[0], 0);
@@ -349,8 +349,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
 		a[2] = Utils.getDate();
-		a[3] = Globals.ZERODATE;
-		a[4] = Globals.ZERODATE;
+		a[3] = "";
+		a[4] = "";
 		a[5] = "";
 
 		modelLicensecontracts.addRow(a);
