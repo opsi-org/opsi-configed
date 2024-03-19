@@ -47,8 +47,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
-	private static Document document;
-
 	private static final String FILE_EXTENSION = ".pdf";
 
 	private static final float M_LEFT = 36;
@@ -59,6 +57,8 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+
+	private final Document document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 
 	private OpenSaveDialog dialog;
 	private Boolean saveAction;
@@ -72,7 +72,6 @@ public class ExporterToPDF extends AbstractExportTable {
 		super(table);
 		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-		document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 	}
 
 	public ExporterToPDF(PanelGenEditTable table) {
@@ -182,7 +181,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 	}
 
-	private static void addMetaData(Map<String, String> metaData) {
+	private void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
