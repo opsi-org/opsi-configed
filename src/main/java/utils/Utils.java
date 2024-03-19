@@ -64,7 +64,7 @@ public final class Utils {
 
 		StringBuilder message = new StringBuilder();
 		message.append(Globals.APPNAME + "  " + Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION
-				+ " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+				+ " (" + Globals.VERDATE + ")");
 		message.append("\n");
 		message.append("The opsi-logviewer is part of the " + Globals.APPNAME + " since version 4.2.22.1\n");
 		message.append("______________________________________________________________________\n");

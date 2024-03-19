@@ -122,7 +122,7 @@ public class Main {
 	}
 
 	public static void showHelp() {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setWidth(Integer.MAX_VALUE);
@@ -159,8 +159,7 @@ public class Main {
 		}
 
 		if (cmd.hasOption("version")) {
-			Logging.essential(
-					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+			Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 			endApp(0);
 		}
 

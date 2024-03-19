@@ -175,7 +175,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
-				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
+				+ Globals.VERDATE + ")");
 
 		jLabelHost = new JLabel(Configed.getResourceValue("DPassword.jLabelHost"));
 

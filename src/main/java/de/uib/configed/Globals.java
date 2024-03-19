@@ -22,8 +22,6 @@ public final class Globals {
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
 	public static final String VERDATE = "2024-03-15";
 
-	public static final String VERHASHTAG = "";
-
 	public static final String ZERODATE = "";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2023 (www.uib.de)";
