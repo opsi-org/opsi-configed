@@ -11,6 +11,7 @@ import java.util.prefs.Preferences;
 public final class UserPreferences {
 	public static final String THEME = "theme";
 	public static final String LANGUAGE = "language";
+	public static final String OTP = "otp";
 
 	private static Preferences prefs = Preferences.userNodeForPackage(UserPreferences.class);
 
@@ -23,6 +24,14 @@ public final class UserPreferences {
 
 	public static String get(String key) {
 		return prefs.get(key, "");
+	}
+
+	public static void setBoolean(String key, Boolean value) {
+		prefs.putBoolean(key, value);
+	}
+
+	public static Boolean getBoolean(String key) {
+		return prefs.getBoolean(key, false);
 	}
 
 	public static void remove(String key) {

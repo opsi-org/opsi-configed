@@ -45,6 +45,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.SeparatedDocument;
 import de.uib.utilities.thread.WaitingSleeper;
@@ -215,8 +216,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("DPassword.checkUseOTP"),
 				Configed.isSSHConnectionOnStart());
 		checkUseOTP.setToolTipText(Configed.getResourceValue("DPassword.checkUseOTP.toolTip"));
-		checkUseOTP.setSelected(false);
-		checkUseOTP.addItemListener(event -> showOTPField(event.getStateChange() == ItemEvent.SELECTED));
+		checkUseOTP.addItemListener((ItemEvent event) -> {
+			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
+			showOTPField(selected);
+			UserPreferences.setBoolean(UserPreferences.OTP, selected);
+		});
+		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH, checkUseOTP });
 
