@@ -195,12 +195,12 @@ public abstract class AbstractSWExporter {
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
-						if (tableData == null || tableData.keySet().isEmpty()) {
+						if (tableData == null || tableData.isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
 
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
-							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.size());
 							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}

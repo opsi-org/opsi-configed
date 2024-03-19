@@ -398,7 +398,8 @@ public class IconBarPanel extends JPanel {
 
 		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
-				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
+				"images/new_networkconnection.png",
+				persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
 		iconButtonReachableInfo.setFocusable(false);
 		iconButtonReachableInfo.addActionListener((ActionEvent e) -> {
 			iconButtonReachableInfo.setEnabled(false);
@@ -407,8 +408,8 @@ public class IconBarPanel extends JPanel {
 
 		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
-				"images/system-users-query_over.png",
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+				"images/system-users-query_over.png", persistenceController.getHostDataService().getHostDisplayFields()
+						.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setFocusable(false);
 		iconButtonSessionInfo.setEnabled(true);
 		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {

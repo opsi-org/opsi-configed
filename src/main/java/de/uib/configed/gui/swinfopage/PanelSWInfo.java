@@ -180,11 +180,11 @@ public class PanelSWInfo extends JPanel {
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
-						if (tableData == null || tableData.keySet().isEmpty()) {
+						if (tableData == null || tableData.isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
-							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.size());
 							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;

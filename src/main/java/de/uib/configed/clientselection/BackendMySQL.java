@@ -144,114 +144,18 @@ public class BackendMySQL {
 				return not(children);
 
 			case "SoftwareOperation": // PRODUCT
-
-				String whereClause = doJSONObject(mySQLRecursion, jsonObject);
-				String innerJoins = mySQLRecursion.getMySQLInnerJoins();
-
-				// This query gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
-				String query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause
-						+ ";";
-
-				String whereClause2 = getWhereClauseDefaultProduct(whereClause);
-
-				/**
-				 * This query gives all hostIds that have a 'fitting' product,
-				 * that is not in PRODUCT_ON_CLIENT. So it will be asked if the
-				 * default values are ok
-				 */
-				String query2 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT d WHERE ( " + whereClause2
-						+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
-
-				List<String> list1 = getListFromSQL(query);
-				List<String> list2 = getListFromSQL(query2);
-
-				return union(list1, list2);
+				return getSoftwareOperation(mySQLRecursion, jsonObject);
 
 			case "PropertiesOperation":
-
-				whereClause = doJSONObject(mySQLRecursion, jsonObject);
-
-				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
-				whereClause = whereClause.replace("d.productId", "h.productId");
-				query = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE "
-						+ whereClause + ";";
-
-				// Query 2 with standard values
-				whereClause2 = getWhereClauseDefaultProductProperty(whereClause);
-
-				whereClause2 = whereClause2.replace("%\"", "");
-				whereClause2 = whereClause2.replace("\"%", "");
-				whereClause2 = whereClause2.replace("h.productId", "v.productId");
-
-				query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v WHERE v.isDefault LIKE '1' AND ("
-						+ whereClause2
-						+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
-
-				// queries
-
-				list1 = getListFromSQL(query);
-				list2 = getListFromSQL(query2);
-
-				return union(list1, list2);
+				return getPropertiesOperation(mySQLRecursion, jsonObject);
 
 			case "SoftwareWithPropertiesOperation":
-
-				whereClause = doJSONObject(mySQLRecursion, jsonObject);
-				innerJoins = mySQLRecursion.getMySQLInnerJoins();
-
-				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
-				query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause + ";";
-
-				whereClause2 = getWhereClauseDefaultProduct(whereClause);
-				String whereClause3 = getWhereClauseDefaultProductProperty(whereClause);
-				String whereClause4 = getWhereClauseDefaultProductProperty(whereClause2);
-
-				/**
-				 * This query gives all hostIds that have a 'fitting' product in
-				 * PRODUCT_ON_CLIENT, but a 'fitting' property in
-				 * PRODUCT_PROPERTY_STATE. Therefore asking for standard values
-				 */
-				query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE ("
-						+ whereClause2
-						+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
-
-				/**
-				 * This query gives all hostIds with a 'fitting'
-				 * product-property, that is not in PRODUCT_PROPERTY_STATE, but
-				 * has a 'fitting' product in PRODUCT_ON_CLIENT
-				 */
-				whereClause3 = whereClause3.replace("%\"", "");
-				whereClause3 = whereClause3.replace("\"%", "");
-				String query3 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId) INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
-						+ whereClause3
-						+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
-
-				/**
-				 * This query gives all hostIds that have a 'fitting' product
-				 * that is not in PRODUCT_ON_CLIENT and a 'fitting'
-				 * PRODUCT_PROPERTY that is not in PRODUCT_PROPERTY_STATE
-				 */
-				whereClause4 = whereClause4.replace("%\"", "");
-				whereClause4 = whereClause4.replace("\"%", "");
-
-				String query4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( "
-						+ whereClause4
-						+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId) AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
-
-				// queries
-
-				list1 = getListFromSQL(query);
-				list2 = getListFromSQL(query2);
-				List<String> list3 = getListFromSQL(query3);
-				List<String> list4 = getListFromSQL(query4);
-
-				// union of all lists
-				return union(union(list1, list2), union(list3, list4));
+				return getSoftwareWithPropertiesOperation(mySQLRecursion, jsonObject);
 
 			case "HardwareOperation":
-				query = doJSONObject(mySQLRecursion, jsonObject);
+				String query = doJSONObject(mySQLRecursion, jsonObject);
 
-				innerJoins = mySQLRecursion.getMySQLInnerJoins();
+				String innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + " WHERE i.state LIKE 1 AND (" + query + ")";
 
@@ -272,7 +176,6 @@ public class BackendMySQL {
 			}
 		} else if ("GroupWithSubgroups".equals(jsonObject.getJSONArray("elementPath").getString(0))) {
 			// Group with subgroups
-
 			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));
 		} else {
 			MySQL mySQL = new MySQL(hwConfig);
@@ -284,6 +187,124 @@ public class BackendMySQL {
 
 			return getListFromSQL(query);
 		}
+	}
+
+	private List<String> getSoftwareOperation(MySQL mySQLRecursion, JSONObject jsonObject) {
+		String whereClause = doJSONObject(mySQLRecursion, jsonObject);
+		String innerJoins = mySQLRecursion.getMySQLInnerJoins();
+
+		// This query gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
+		String query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause + ";";
+
+		String whereClause2 = getWhereClauseDefaultProduct(whereClause);
+
+		/**
+		 * This query gives all hostIds that have a 'fitting' product, that is
+		 * not in PRODUCT_ON_CLIENT. So it will be asked if the default values
+		 * are ok
+		 */
+		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT d WHERE ( " + whereClause2
+				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+
+		List<String> list1 = getListFromSQL(query);
+		List<String> list2 = getListFromSQL(query2);
+
+		return union(list1, list2);
+
+	}
+
+	private List<String> getPropertiesOperation(MySQL mySQLRecursion, JSONObject jsonObject) {
+		String whereClause = doJSONObject(mySQLRecursion, jsonObject);
+
+		// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
+		whereClause = whereClause.replace("d.productId", "h.productId");
+		String query = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE " + whereClause + ";";
+
+		// Query 2 with standard values
+		String whereClause2 = getWhereClauseDefaultProductProperty(whereClause);
+
+		whereClause2 = whereClause2.replace("%\"", "");
+		whereClause2 = whereClause2.replace("\"%", "");
+		whereClause2 = whereClause2.replace("h.productId", "v.productId");
+
+		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v"
+				+ " WHERE v.isDefault LIKE '1' AND (" + whereClause2
+				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+
+		// queries
+
+		List<String> list1 = getListFromSQL(query);
+		List<String> list2 = getListFromSQL(query2);
+
+		return union(list1, list2);
+
+	}
+
+	private List<String> getSoftwareWithPropertiesOperation(MySQL mySQLRecursion, JSONObject jsonObject) {
+		String whereClause = doJSONObject(mySQLRecursion, jsonObject);
+		String innerJoins = mySQLRecursion.getMySQLInnerJoins();
+
+		// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
+		String query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause + ";";
+
+		String whereClause2 = getWhereClauseDefaultProduct(whereClause);
+		String whereClause3 = getWhereClauseDefaultProductProperty(whereClause);
+		String whereClause4 = getWhereClauseDefaultProductProperty(whereClause2);
+
+		/**
+		 * This query gives all hostIds that have a 'fitting' product in
+		 * PRODUCT_ON_CLIENT, but a 'fitting' property in
+		 * PRODUCT_PROPERTY_STATE. Therefore asking for standard values
+		 */
+		String query2 = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId)"
+				+ " INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE (" + whereClause2
+				+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion"
+				+ " AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+
+		/**
+		 * This query gives all hostIds with a 'fitting' product-property, that
+		 * is not in PRODUCT_PROPERTY_STATE, but has a 'fitting' product in
+		 * PRODUCT_ON_CLIENT
+		 */
+		whereClause3 = whereClause3.replace("%\"", "");
+		whereClause3 = whereClause3.replace("\"%", "");
+		String query3 = "SELECT DISTINCT HOST.hostId FROM HOST"
+				+ " INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId)"
+				+ " INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
+				+ whereClause3 + ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+
+		/**
+		 * This query gives all hostIds that have a 'fitting' product that is
+		 * not in PRODUCT_ON_CLIENT and a 'fitting' PRODUCT_PROPERTY that is not
+		 * in PRODUCT_PROPERTY_STATE
+		 */
+		whereClause4 = whereClause4.replace("%\"", "");
+		whereClause4 = whereClause4.replace("\"%", "");
+
+		String query4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v"
+				+ " INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND"
+				+ " d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( " + whereClause4
+				+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT"
+				+ " WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId)"
+				+ " AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE"
+				+ " WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+
+		// queries
+
+		List<String> list1 = getListFromSQL(query);
+		List<String> list2 = getListFromSQL(query2);
+		List<String> list3 = getListFromSQL(query3);
+		List<String> list4 = getListFromSQL(query4);
+
+		// union of all lists
+		return union(union(list1, list2), union(list3, list4));
+
 	}
 
 	private List<String> getGroupWithSubgroup(String groupname) {

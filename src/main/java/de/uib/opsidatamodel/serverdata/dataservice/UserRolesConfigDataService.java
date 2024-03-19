@@ -841,8 +841,9 @@ public class UserRolesConfigDataService {
 			val.append(" \"element\" : null, ");
 			val.append(" \"elementPath\" : null,");
 			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
-			val.append(
-					" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
+			val.append(" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : ");
+			val.append("[ \\\"Product\\\", \\\"Action Result\\\" ], \"operation\" : \"StringEqualsOperation\",");
+			val.append(" \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
 			val.append("} }");
 
 			String value = val.toString();

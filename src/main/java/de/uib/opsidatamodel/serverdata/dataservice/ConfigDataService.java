@@ -376,13 +376,11 @@ public class ConfigDataService {
 
 		Logging.debug(this,
 				"addWANConfigState  wanConfiguration " + wanConfiguration + "\n " + wanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet() + "\n "
-				+ wanConfiguration.keySet().size());
+		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet());
 
 		Logging.debug(this,
 				"addWANConfigState  notWanConfiguration " + notWanConfiguration + "\n " + notWanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
-				+ notWanConfiguration.keySet().size());
+		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet());
 
 		setConfig(notWanConfiguration);
 		Logging.info(this, "set notWanConfiguration members where no entry exists");
