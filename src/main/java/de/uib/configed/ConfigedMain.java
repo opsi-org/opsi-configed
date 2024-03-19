@@ -154,6 +154,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static String host;
 	private static String user;
 	private static String password;
+	private static String otp;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -291,7 +292,7 @@ public class ConfigedMain implements MessagebusListener {
 	private InitialDataLoader initialDataLoader;
 	private LicenseDisplayer licenseDisplayer;
 
-	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
+	public ConfigedMain(String host, String user, String password, String otp, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
 		}
@@ -300,6 +301,9 @@ public class ConfigedMain implements MessagebusListener {
 		}
 		if (ConfigedMain.password == null) {
 			setPassword(password);
+		}
+		if (ConfigedMain.otp == null) {
+			setOTP(otp);
 		}
 
 		SSHConnectionInfo.getInstance().setHost(host);
@@ -1183,6 +1187,10 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (password != null) {
 			loginDialog.setPassword(password);
+		}
+
+		if (otp != null) {
+			loginDialog.setOTP(otp);
 		}
 
 		Logging.info(this, "become interactive");
@@ -3837,6 +3845,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public static void setPassword(String password) {
 		ConfigedMain.password = password;
+	}
+
+	public static void setOTP(String otp) {
+		ConfigedMain.otp = otp;
 	}
 
 	@Override

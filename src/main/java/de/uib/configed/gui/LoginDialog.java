@@ -149,6 +149,14 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		passwordField.setText(password);
 	}
 
+	public void setOTP(String otp) {
+		if (otp == null) {
+			otp = "";
+		}
+		checkUseOTP.setSelected(!otp.isEmpty());
+		fieldOTP.setText(otp);
+	}
+
 	private void setActivated(boolean active) {
 		Logging.info(this, "activate");
 

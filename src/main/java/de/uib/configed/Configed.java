@@ -125,7 +125,7 @@ public final class Configed {
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, sshKey, sshKeyPass);
 
 		SwingUtilities.invokeLater(configedMain::init);
 
@@ -217,6 +217,9 @@ public final class Configed {
 		if (password == null) {
 			password = Utils.getCLIPasswordParam("Password: ");
 		}
+		if (otp == null) {
+			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+		}
 	}
 
 	private static void processLoginOptions(CommandLine cmd) {
@@ -230,6 +233,10 @@ public final class Configed {
 
 		if (cmd.hasOption("p")) {
 			password = cmd.getOptionValue("p");
+		}
+
+		if (cmd.hasOption("o")) {
+			otp = cmd.getOptionValue("o");
 		}
 	}
 

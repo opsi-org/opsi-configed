@@ -89,6 +89,10 @@ public abstract class AbstractSWExporter {
 			password = Utils.getCLIPasswordParam("Password: ");
 		}
 
+		if (otp == null) {
+			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+		}
+
 		if (clientsFile == null) {
 			clientsFile = Utils.getCLIParam("File with client names: ");
 		}

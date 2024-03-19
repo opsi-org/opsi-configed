@@ -32,15 +32,16 @@ public class SavedSearchQuery {
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	public SavedSearchQuery(String host, String user, String password, String otp, String searchName) {
-		setArgs(host, user, password, searchName);
+		setArgs(host, user, password, otp, searchName);
 		initConnection();
 	}
 
-	private void setArgs(String host, String user, String password, String searchName) {
+	private void setArgs(String host, String user, String password, String otp, String searchName) {
 		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
+		this.otp = otp;
 		this.searchName = searchName;
 	}
 

@@ -66,15 +66,17 @@ public class Main {
 		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
 		options.addOption("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
 				+ "dependent on system and user privileges, see /help/logfile");
-		options.addOption(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
+		options.addOption(null, "loglevel", true, "Set logging level N, N is a number >= " + Logging.LEVEL_NONE
 				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole());
 		options.addOption(null, "help", false, "Give this help");
 		options.addOption("v", "version", false, "Tell configed version");
 
 		// Configed specific options
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
-		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
-		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
+		options.addOption("u", "user", true, "User for authentication. DEFAULT: give interactive");
+		options.addOption("p", "password", true, "Password for authentication. DEFAULT: give interactive");
+		options.addOption("o", "otp", true, "One time password for authentication. DEFAULT: give interactive\n"
+				+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
 		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
 		options.addOption("g", "clientgroup", true,
 				"clientgroup to preselect. DEFAULT: last selected group reselected");
@@ -83,11 +85,11 @@ public class Main {
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("r", "refreshminutes", true,
-				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0");
+				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never). DEFAULT: 0");
 		options.addOption("qs", "querysavedsearch", true,
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
-				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+				"On command line: populate existing group GROUP_NAME with clients resulting from search SAVEDSEARCH_NAME");
 		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
