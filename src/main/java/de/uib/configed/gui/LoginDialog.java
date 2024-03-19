@@ -165,7 +165,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		if (active) {
 			glassPane.setInfoText(null);
 		} else {
-			glassPane.setInfoText(Configed.getResourceValue("DPassword.WaitInfo.label"));
+			glassPane.setInfoText(Configed.getResourceValue("LoginDialog.WaitInfo.label"));
 		}
 
 		fieldHost.setEnabled(active);
@@ -177,7 +177,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void initGuiElements() {
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("DPassword.title"));
+		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("LoginDialog.title"));
 
 		setIconImage(Utils.getMainIcon());
 
@@ -192,38 +192,38 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
-		jLabelVersion = new JLabel(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
-		jLabelHost = new JLabel(Configed.getResourceValue("DPassword.jLabelHost"));
+		jLabelHost = new JLabel(Configed.getResourceValue("LoginDialog.jLabelHost"));
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		jLabelUser = new JLabel(Configed.getResourceValue("DPassword.jLabelUser"));
+		jLabelUser = new JLabel(Configed.getResourceValue("LoginDialog.jLabelUser"));
 
 		fieldUser.addKeyListener(newKeyListener);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelPassword = new JLabel(Configed.getResourceValue("DPassword.jLabelPassword"));
+		jLabelPassword = new JLabel(Configed.getResourceValue("LoginDialog.jLabelPassword"));
 
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelOTP = new JLabel(Configed.getResourceValue("DPassword.jLabelOTP"));
+		jLabelOTP = new JLabel(Configed.getResourceValue("LoginDialog.jLabelOTP"));
 		jLabelOTP.setVisible(false);
 		jLabelOTP.setPreferredSize(new Dimension(0, 0));
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
-		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
+		checkTrySSH = new JCheckBox(Configed.getResourceValue("LoginDialog.checkTrySSH"),
 				Configed.isSSHConnectionOnStart());
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
-		checkUseOTP = new JCheckBox(Configed.getResourceValue("DPassword.checkUseOTP"),
+		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"),
 				Configed.isSSHConnectionOnStart());
-		checkUseOTP.setToolTipText(Configed.getResourceValue("DPassword.checkUseOTP.toolTip"));
+		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
 		checkUseOTP.addItemListener((ItemEvent event) -> {
 			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
 			showOTPField(selected);
@@ -233,10 +233,10 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH, checkUseOTP });
 
-		jButtonCancel = new JButton(Configed.getResourceValue("DPassword.jButtonCancel"));
+		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
-		jButtonCommit = new JButton(Configed.getResourceValue("DPassword.jButtonCommit"));
+		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
 	}
 
@@ -388,7 +388,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				Logging.info(this, "not connected, timeout or not authorized");
 
 				MessageFormat messageFormatDialogContent = new MessageFormat(
-						Configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
+						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"));
 
 				if (waitingWorker != null && waitingWorker.isTimeoutReached()) {
 					messageFormatDialogContent = new MessageFormat("Timeout in connecting");
@@ -397,7 +397,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				JOptionPane.showMessageDialog(this,
 						messageFormatDialogContent.format(
 								new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() }),
-						Configed.getResourceValue("DPassword.noConnectionMessageDialog.title"),
+						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
