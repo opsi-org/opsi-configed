@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.2.22.29] - 2024-03-19
+## Fixed
+- SWAudit command line options
+
 ## [4.2.22.28] - 2024-02-13
 ## Fixed
 - All products are included in PDF export, when exporting Localboot or Netboot products
