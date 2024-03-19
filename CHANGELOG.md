@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.X.X] - XXXX-XX-XX
+## Added
+- OTP field to login dialog
+- OTP option to command line
+
 ## [4.3.2.8] - 2024-03-15
 ## Changed
 - Use better icons for Checkboxes and some other cases
