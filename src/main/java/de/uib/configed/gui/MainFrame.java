@@ -355,8 +355,7 @@ public class MainFrame extends JFrame {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		List<SSHCommand> commands = factory.getSSHCommandParameterList();
 		for (final SSHCommand command : commands) {
-			JMenuItem jMenuOpsiCommand = new JMenuItem();
-			jMenuOpsiCommand.setText(command.getMenuText());
+			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
 			menuOpsi.add(jMenuOpsiCommand);
@@ -400,8 +399,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		for (final SSHCommandTemplate com : listCom) {
-			JMenuItem jMenuItem = new JMenuItem();
-			jMenuItem.setText(com.getMenuText());
+			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
 			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> jMenuItemAction(factory, com));

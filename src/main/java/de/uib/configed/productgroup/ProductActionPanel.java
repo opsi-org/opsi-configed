@@ -139,24 +139,22 @@ public class ProductActionPanel extends JPanel {
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
 
-		layoutMain
-				.setVerticalGroup(
-						layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(
+						searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
-										.addGroup(layoutMain.createSequentialGroup()
-												.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)))
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+						.addGroup(layoutMain.createSequentialGroup()
+								.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)))
+				.addGap(Globals.GAP_SIZE));
 
 		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
 

@@ -96,13 +96,11 @@ public class ProductInfoPane extends JSplitPane {
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		dependenciesActivateButton = new JButton();
-		dependenciesActivateButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
+		dependenciesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
-		propertiesActivateButton = new JButton();
-		propertiesActivateButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
+		propertiesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 	}

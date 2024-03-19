@@ -355,8 +355,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		showFilterIcon(filtering);
 
-		buttonShowHideExtraOptions = new JButton();
-		buttonShowHideExtraOptions.setIcon(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
+		buttonShowHideExtraOptions = new JButton(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
 		buttonShowHideExtraOptions
 				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
 		buttonShowHideExtraOptions.setVisible(false);
@@ -422,7 +421,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelFilterMarkGap, 10, 10, 10)
 						.addComponent(buttonShowHideExtraOptions, 10, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -434,7 +433,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		this.setLayout(layoutTablesearchPane);
 
-		int checkedLabelWidth = 18;
 		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -444,8 +442,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(filtermark, 18, 18, 18)
 				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(buttonShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 						Globals.MIN_GAP_SIZE)
