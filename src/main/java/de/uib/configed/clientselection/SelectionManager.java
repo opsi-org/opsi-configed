@@ -22,6 +22,7 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
+import de.uib.configed.gui.ClientSelectionDialog.GroupType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -65,56 +66,44 @@ public class SelectionManager {
 	}
 
 	/** Save this group operation in the manager for a later build. */
-	public void addGroupOperation(String name, OperationWithStatus groupStatus,
+	public void addGroupOperation(GroupType groupType, OperationWithStatus groupStatus,
 			List<OperationWithStatus> operationsWithStatuses) {
-		Logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
+		Logging.debug(this, "Adding group operation " + groupType + " with " + operationsWithStatuses.toString());
 
 		List<AbstractSelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
-		Logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
+		Logging.debug(this, "addGroupOperation: " + groupType + " " + tmpList.size() + " " + tmpList.get(0));
 
-		switch (name) {
-		case "Software":
+		switch (groupType) {
+		case SOFTWARE_GROUP:
 			groupStatus.setOperation(new SoftwareOperation(tmpList));
+			hasSoftware = true;
 			break;
 
-		case "Properties":
+		case PROPERTIES_GROUP:
 			groupStatus.setOperation(new PropertiesOperation(tmpList));
 			break;
 
-		case "SoftwareWithProperties":
+		case SOFTWARE_WITH_PROPERTIES_GROUP:
 			groupStatus.setOperation(new SoftwareWithPropertiesOperation(tmpList));
 			break;
 
-		case "Hardware":
+		case HARDWARE_GROUP:
 			groupStatus.setOperation(new HardwareOperation(tmpList));
+			hasHardware = true;
 			break;
 
-		case "SwAudit":
+		case SW_AUDIT_GROUP:
 			groupStatus.setOperation(new SwAuditOperation(tmpList));
+			hasSwAudit = true;
 			break;
 
-		case "Host":
+		case HOST_GROUP:
 			groupStatus.setOperation(new HostOperation(tmpList));
 			break;
-
-		default:
-			throw new IllegalArgumentException(name + " is no valid group operation.");
 		}
 
 		groupWithStatusList.add(groupStatus);
-
-		if ("Software".equals(name)) {
-			hasSoftware = true;
-		}
-
-		if ("Hardware".equals(name)) {
-			hasHardware = true;
-		}
-
-		if ("SwAudit".equals(name)) {
-			hasSwAudit = true;
-		}
 	}
 
 	/**

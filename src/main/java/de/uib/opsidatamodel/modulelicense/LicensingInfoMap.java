@@ -113,7 +113,6 @@ public final class LicensingInfoMap {
 
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(getClass(), "generate with reducedView " + reduced + " at the moment ignored, we set false");
-		reducedView = reduced;
 
 		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
 		});
@@ -133,8 +132,6 @@ public final class LicensingInfoMap {
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap(datesMap);
 		customerNames = produceCustomerNameSet();
-
-		instance = this;
 	}
 
 	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,

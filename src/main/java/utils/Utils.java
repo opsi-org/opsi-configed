@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 
 import com.formdev.flatlaf.FlatLaf;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -63,7 +64,7 @@ public final class Utils {
 
 		StringBuilder message = new StringBuilder();
 		message.append(Globals.APPNAME + "  " + Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION
-				+ " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+				+ " (" + Globals.VERDATE + ")");
 		message.append("\n");
 		message.append("The opsi-logviewer is part of the " + Globals.APPNAME + " since version 4.2.22.1\n");
 		message.append("______________________________________________________________________\n");
@@ -264,7 +265,7 @@ public final class Utils {
 
 		String iconPath;
 
-		iconPath = "gui/" + Globals.ICON_OPSI;
+		iconPath = "gui/" + (Main.isLogviewer() ? Globals.ICON_LOGVIEWER : Globals.ICON_CONFIGED);
 
 		URL resource = Globals.class.getResource(iconPath);
 		if (resource == null) {

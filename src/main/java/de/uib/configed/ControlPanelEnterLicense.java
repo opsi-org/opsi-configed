@@ -242,8 +242,8 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
 		a[2] = Utils.getDate();
-		a[3] = Globals.ZERODATE;
-		a[4] = Globals.ZERODATE;
+		a[3] = "";
+		a[4] = "";
 		a[5] = "";
 
 		modelLicensecontracts.addRow(a);
