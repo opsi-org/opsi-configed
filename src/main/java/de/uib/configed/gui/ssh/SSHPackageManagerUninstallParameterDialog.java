@@ -67,7 +67,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		this.configedMain = configedMain;
 
-		fDepotList = new FDepotselectionList(this) {
+		fDepotList = new FDepotselectionList(this, configedMain) {
 			@Override
 			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {

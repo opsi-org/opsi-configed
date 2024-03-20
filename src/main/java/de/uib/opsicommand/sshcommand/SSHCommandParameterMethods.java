@@ -454,8 +454,8 @@ public final class SSHCommandParameterMethods {
 		return depotIPs;
 	}
 
-	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList();
+	private ValueSelectorList fillValueSelectorList(final List<String> values) {
+		final DepotsList valueList = new DepotsList(configedMain);
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();

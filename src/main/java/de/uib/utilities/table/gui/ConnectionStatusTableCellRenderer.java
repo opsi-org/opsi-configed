@@ -23,7 +23,7 @@ public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 	public static final String NOT_REACHABLE = "unreachable";
 	public static final String UNKNOWN = "unverified";
 
-	private static final Icon messagebusIcon = Utils.createImageIcon("images/ok22.png", "");
+	private static final Icon messagebusIcon = Utils.createImageIcon("bootstrap/check_green.png", "");
 	private static final Icon trueIcon = Utils.createImageIcon("images/new_network-connect2.png", "");
 	private static final Icon falseIcon = Utils.createImageIcon("images/new_network-disconnect.png", "");
 

@@ -1,6 +1,7 @@
 # Changelog
 ## [4.3.X.X] - XXXX-XX-XX
 ## Added
+- Connectivity status of depots
 - OTP field to login dialog
 - OTP option to command line
 

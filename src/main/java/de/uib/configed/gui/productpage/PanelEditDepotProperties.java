@@ -75,7 +75,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.addMouseListener(this);
 		listDepots.addKeyListener(this);
 
-		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer();
+		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer(configedMain);
 		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
 		listDepots.setCellRenderer(myListCellRenderer);
 
