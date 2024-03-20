@@ -171,6 +171,7 @@ public class OpsiServiceNOMPersistenceController {
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	private String user;
+	private String otp;
 
 	private AbstractExecutioner exec;
 
@@ -194,16 +195,17 @@ public class OpsiServiceNOMPersistenceController {
 	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password) {
+	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.connectionServer = server;
 		this.user = user;
+		this.otp = otp;
 
 		Logging.debug(this.getClass(), "create");
 
 		init();
 
-		exec = new ServerFacade(server, user, password);
+		exec = new ServerFacade(server, user, password, otp);
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
@@ -476,7 +478,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
-		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password);
+		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password, otp);
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);

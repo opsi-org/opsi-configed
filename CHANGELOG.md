@@ -1,5 +1,9 @@
 # Changelog
 ## [4.3.X.X] - XXXX-XX-XX
+## Added
+- OTP field to login dialog
+- OTP option to command line
+
 ## Fixed
 - SWAudit command line options
 

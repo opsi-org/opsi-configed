@@ -6,6 +6,8 @@
 
 package de.uib.opsidatamodel.serverdata;
 
+import java.util.regex.Pattern;
+
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
@@ -13,6 +15,7 @@ import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public final class PersistenceControllerFactory {
+	private static final Pattern OTP_PATTERN = Pattern.compile("^[\\d]{6}$");
 	private static OpsiServiceNOMPersistenceController staticPersistControl;
 
 	// private constructor to hide the implicit public one
@@ -26,11 +29,16 @@ public final class PersistenceControllerFactory {
 	 * method getPersistenceController - or construct a new one
 	 */
 	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
-			String password) {
+			String password, String otp) {
 		Logging.info("getNewPersistenceController");
 
+		if (!otp.isEmpty() && !OTP_PATTERN.matcher(otp).matches()) {
+			Logging.error("One Time Password (OTP) should only contain digits and be 6 characters long.");
+			return null;
+		}
+
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
-				user, password);
+				user, password, otp);
 		Logging.info(
 				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
 

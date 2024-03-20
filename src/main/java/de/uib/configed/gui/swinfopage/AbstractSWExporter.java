@@ -51,6 +51,7 @@ public abstract class AbstractSWExporter {
 	private String server;
 	private String user;
 	private String password;
+	private String otp;
 	private String clientsFile;
 	private String outDir;
 
@@ -58,10 +59,11 @@ public abstract class AbstractSWExporter {
 	protected AbstractSWExporter() {
 	}
 
-	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {
+	public void setArgs(String server, String user, String password, String otp, String clientsFile, String outDir) {
 		this.server = server;
 		this.user = user;
 		this.password = password;
+		this.otp = otp;
 		this.clientsFile = clientsFile;
 		this.outDir = outDir;
 	}
@@ -85,6 +87,10 @@ public abstract class AbstractSWExporter {
 
 		if (password == null) {
 			password = Utils.getCLIPasswordParam("Password: ");
+		}
+
+		if (otp == null) {
+			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
 		}
 
 		if (clientsFile == null) {
@@ -115,7 +121,7 @@ public abstract class AbstractSWExporter {
 
 	public void run() {
 		Messages.setLocale("en");
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password, otp);
 		if (persistenceController == null) {
 			finish(ErrorCode.INITIALIZATION_ERROR);
 		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
