@@ -235,8 +235,8 @@ public final class Configed {
 			password = cmd.getOptionValue("p");
 		}
 
-		if (cmd.hasOption("o")) {
-			otp = cmd.getOptionValue("o");
+		if (cmd.hasOption("otp")) {
+			otp = cmd.getOptionValue("otp");
 		}
 	}
 

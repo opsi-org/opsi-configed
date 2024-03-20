@@ -167,13 +167,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		} else {
 			glassPane.setInfoText(Configed.getResourceValue("LoginDialog.WaitInfo.label"));
 		}
-
-		fieldHost.setEnabled(active);
-		fieldUser.setEnabled(active);
-		passwordField.setEnabled(active);
-		checkTrySSH.setEnabled(active);
-		checkUseOTP.setEnabled(active);
-		jButtonCommit.setEnabled(active);
 	}
 
 	private void initGuiElements() {
