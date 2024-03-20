@@ -152,7 +152,7 @@ public final class ConnectionErrorReporter {
 		Map<String, String> groupData = new LinkedHashMap<>();
 		groupData.put("password", "");
 		Map<String, String> labels = new HashMap<>();
-		labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
+		labels.put("password", Configed.getResourceValue("LoginDialog.jLabelPassword"));
 		Map<String, Boolean> editable = new HashMap<>();
 		editable.put("password", true);
 		Map<String, Boolean> secrets = new HashMap<>();
