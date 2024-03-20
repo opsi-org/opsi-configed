@@ -60,9 +60,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	private final Document document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 
-	private OpenSaveDialog dialog;
-	private Boolean saveAction;
-
 	private String defaultFilename = "report.pdf";
 
 	private float xHeaderTop = 803;
@@ -82,102 +79,94 @@ public class ExporterToPDF extends AbstractExportTable {
 	public void execute(String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
-		if (fileName != null) {
-			saveAction = true;
+		Boolean saveAction = true;
+
+		defaultFilename = "report_" + client + extension;
+
+		if (fileName == null) {
+			OpenSaveDialog dialog = new OpenSaveDialog(Configed.getResourceValue("OpenSaveDialog.title"));
+
+			saveAction = dialog.getSaveAction();
+			Logging.info(this, "fileName was null, saveAction now has value " + saveAction);
+		}
+
+		if (saveAction == null) {
+			return;
 		}
 
 		String filePath = null;
 		File temp = null;
 
-		defaultFilename = "report_" + client + extension;
-
-		if (saveAction == null) {
-			if (dialog == null) {
-				dialog = new OpenSaveDialog(Configed.getResourceValue("OpenSaveDialog.title"));
-			} else {
-				dialog.setVisible();
+		if (Boolean.TRUE.equals(saveAction)) {
+			if (fileName == null) {
+				fileName = getFileLocation();
 			}
 
-			saveAction = dialog.getSaveAction();
-			Logging.info(this, "saveAction was null, now has value " + saveAction);
+			// FileName is null if nothing chosen, then we do nothing
+			if (fileName == null) {
+				return;
+			} else {
+				Logging.info(this, "filename for saving PDF: " + fileName);
+				File file = new File(fileName);
+				if (file.isDirectory()) {
+					Logging.error("no valid filename " + fileName);
+				} else {
+					filePath = file.getAbsolutePath();
+				}
+
+				Logging.notice(this, "selected fileName is: " + fileName);
+				fileName = checkExtension(fileName);
+				Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
+				fileName = checkFile(fileName, extensionFilter);
+			}
+		} else {
+			try {
+				temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
+						.toFile();
+				Utils.restrictAccessToFile(temp);
+				filePath = temp.getAbsolutePath();
+			} catch (IOException e) {
+				Logging.error("Failed to create temp file", e);
+			}
 		}
 
-		if (saveAction != null) {
-			if (Boolean.TRUE.equals(saveAction)) {
-				if (fileName == null) {
-					fileName = getFileLocation();
-				}
+		writeFile(filePath, fileName);
+		openFile(saveAction, temp);
+	}
 
-				// FileName is null if nothing chosen, then we do nothing
-				if (fileName == null) {
-					return;
-				} else {
-					Logging.info(this, "filename for saving PDF: " + fileName);
-					File file = new File(fileName);
-					if (file.isDirectory()) {
-						Logging.error("no valid filename " + fileName);
-					} else {
-						filePath = file.getAbsolutePath();
-					}
-
-					Logging.notice(this, "selected fileName is: " + fileName);
-					fileName = checkExtension(fileName);
-					Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
-					fileName = checkFile(fileName, extensionFilter);
-				}
+	private void writeFile(String filePath, String fileName) {
+		// Write file now
+		try {
+			PdfWriter writer;
+			if (filePath == null) {
+				writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
 			} else {
-				try {
-					temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
-							.toFile();
-					Utils.restrictAccessToFile(temp);
-					filePath = temp.getAbsolutePath();
-				} catch (IOException e) {
-					Logging.error("Failed to create temp file", e);
-				}
+				writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 			}
 
-			// Write file now
-			try {
-				PdfWriter writer;
-				if (filePath == null) {
-					writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
-				} else {
-					writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
-				}
-
-				TableHeader event = new TableHeader();
-				if (metaData.containsKey("header")) {
-					event.setHeader(metaData.get("header"));
-				} else if (metaData.containsKey("title")) {
-					event.setHeader(metaData.get("title"));
-				} else {
-					Logging.warning(this, "metadata contain neither header nor title");
-				}
-
-				writer.setPageEvent(event);
-
-				document.open();
-				addMetaData(metaData);
-				document.add(addTitleLines(metaData));
-
-				// table data
-				document.add(createTableDataElement(theTable));
-
-				document.close();
-			} catch (FileNotFoundException ex) {
-				Logging.error("file not found: " + fileName, ex);
-			} catch (DocumentException dex) {
-				Logging.error("document exception, cannot get instance for " + document, dex);
+			TableHeader event = new TableHeader();
+			if (metaData.containsKey("header")) {
+				event.setHeader(metaData.get("header"));
+			} else if (metaData.containsKey("title")) {
+				event.setHeader(metaData.get("title"));
+			} else {
+				Logging.warning(this, "metadata contain neither header nor title");
 			}
 
-			// saveAction is not null here, open PDF if created only temp file
-			if (Boolean.FALSE.equals(saveAction) && temp != null && temp.getAbsolutePath() != null) {
-				try {
-					Desktop.getDesktop().open(temp);
-				} catch (IOException e) {
-					Logging.error("cannot show: " + temp.getAbsolutePath(), e);
-				}
-			}
+			writer.setPageEvent(event);
+
+			document.open();
+			addMetaData(metaData);
+			document.add(addTitleLines(metaData));
+
+			// table data
+			document.add(createTableDataElement(theTable));
+
+			document.close();
+		} catch (FileNotFoundException ex) {
+			Logging.error("file not found: " + fileName, ex);
+		} catch (DocumentException dex) {
+			Logging.error("document exception, cannot get instance for " + document, dex);
 		}
 	}
 
@@ -199,6 +188,17 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 		document.addAuthor(System.getProperty("user.name"));
 		document.addCreator(Globals.APPNAME);
+	}
+
+	private static void openFile(boolean saveAction, File temp) {
+		// saveAction is not null here, open PDF if created only temp file
+		if (!saveAction && temp != null && temp.getAbsolutePath() != null) {
+			try {
+				Desktop.getDesktop().open(temp);
+			} catch (IOException e) {
+				Logging.error("cannot show: " + temp.getAbsolutePath(), e);
+			}
+		}
 	}
 
 	public void setPageSizeA4() {
