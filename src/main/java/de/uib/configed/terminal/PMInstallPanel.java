@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
+import de.uib.opsicommand.terminalcommand.TerminalCommandFactory;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class PMInstallPanel extends JPanel {
@@ -22,7 +22,7 @@ public class PMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public PMInstallPanel() {
-		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
+		additionalDefaultPaths.add(TerminalCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 
 		workbench = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
 				.getConfigedWorkbenchDefaultValuePD();

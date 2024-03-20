@@ -23,8 +23,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;
+import de.uib.opsicommand.terminalcommand.TerminalCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -53,7 +53,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_DEPOT);
+		additionalDefaultPaths.add(TerminalCommandFactory.OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(configedMain, additionalDefaultPaths);
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);

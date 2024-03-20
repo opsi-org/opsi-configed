@@ -28,8 +28,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.CompletionComboBox;
 import de.uib.configed.gui.ssh.SSHPackageManagerInstallParameterDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;
+import de.uib.opsicommand.terminalcommand.TerminalCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiMakeProductFile;
 import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
 import de.uib.opsicommand.terminalcommand.TerminalEmptyCommand;
@@ -393,8 +393,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String doActionGetVersions() {
 		String dir = jComboBoxMainDir.getEditor().getItem() + "/OPSI/control";
 		Logging.info(this, "doActionGetVersions, dir " + dir);
-		TerminalEmptyCommand getVersions = new TerminalEmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_VERSIONS
-				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+		TerminalEmptyCommand getVersions = new TerminalEmptyCommand(TerminalCommandFactory.STRING_COMMAND_GET_VERSIONS
+				.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
 		String result = executor.execute(getVersions);
@@ -527,8 +527,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String getPackageID(String dir) {
-		TerminalEmptyCommand getPackageId = new TerminalEmptyCommand(SSHCommandFactory.STRING_COMMAND_CAT_DIRECTORY
-				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+		TerminalEmptyCommand getPackageId = new TerminalEmptyCommand(TerminalCommandFactory.STRING_COMMAND_CAT_DIRECTORY
+				.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
 		String result = executor.execute(getPackageId);
 		Logging.debug(this, "getPackageID result " + result);

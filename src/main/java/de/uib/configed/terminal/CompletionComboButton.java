@@ -23,8 +23,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.CompletionComboBox;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalCommandExecutor;
+import de.uib.opsicommand.terminalcommand.TerminalCommandFactory;
 import de.uib.opsicommand.terminalcommand.TerminalEmptyCommand;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -249,15 +249,16 @@ public class CompletionComboButton {
 
 	private String getDirectories(String curdir) {
 		TerminalEmptyCommand getDirectoriesCommand = new TerminalEmptyCommand(
-				SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY,
-						curdir));
+				TerminalCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
 		return executor.execute(getDirectoriesCommand);
 	}
 
 	private String getFiles(String curdir) {
-		TerminalEmptyCommand getFilesCommand = new TerminalEmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
-				.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
+		TerminalEmptyCommand getFilesCommand = new TerminalEmptyCommand(
+				TerminalCommandFactory.STRING_COMMAND_GET_OPSI_FILES
+						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 
 		////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 		// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch

@@ -34,9 +34,6 @@ public final class TerminalCommandFactory {
 	public static final String COMMAND_MAP_POSITION = "position";
 	public static final String COMMAND_MAP_COMMANDS = "commands";
 
-	public static final String SSH_USER = "<<!sshuser!>>";
-	public static final String SSH_HOST = "<<!sshhost!>>";
-
 	public static final String CONFIDENTIAL = "***confidential***";
 
 	private static TerminalCommandFactory instance;
