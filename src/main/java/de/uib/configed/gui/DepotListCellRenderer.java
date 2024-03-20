@@ -32,8 +32,8 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ImageIcon configServerConnectedIcon = Utils.createImageIcon("bootstrap/check_blue.png", "");
-	private ImageIcon configServerDisconnectedIcon = Utils.createImageIcon("bootstrap/circle_red.png", "");
+	private ImageIcon configServerConnectedIcon = Utils.createImageIcon("bootstrap/check_circle_blue.png", "");
+	private ImageIcon configServerDisconnectedIcon = Utils.createImageIcon("bootstrap/circle_blue.png", "");
 	private ImageIcon connectedIcon = Utils.createImageIcon("bootstrap/check_green.png", "");
 
 	public DepotListCellRenderer(ConfigedMain configedMain) {
