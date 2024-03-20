@@ -33,7 +33,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ImageIcon connectedIcon = Utils.createImageIcon("images/ok22.png", "");
+	private ImageIcon connectedIcon = Utils.createImageIcon("bootstrap/check_green.png", "");
 	private Set<String> clientsConnectedByMessagebus = persistenceController.getHostDataService()
 			.getMessagebusConnectedClients();
 
