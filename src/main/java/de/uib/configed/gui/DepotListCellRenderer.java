@@ -7,14 +7,13 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.UIManager;
-
-import org.jdesktop.swingx.icon.EmptyIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -81,6 +80,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	}
 
 	private void setConnectionIcon(Object value) {
+		Logging.devel(this, "setting icon " + value);
 		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
 			setIcon(connectedIcon);
 		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
@@ -90,7 +90,8 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 				setIcon(configServerDisconnectedIcon);
 			}
 		} else {
-			setIcon(new EmptyIcon(connectedIcon.getIconWidth(), 0));
+			BufferedImage emptyImage = new BufferedImage(connectedIcon.getIconWidth(), 1, BufferedImage.TYPE_INT_ARGB);
+			setIcon(new ImageIcon(emptyImage));
 		}
 	}
 }
