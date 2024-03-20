@@ -300,7 +300,7 @@ public final class Configed {
 
 		if (cmd.hasOption("swaudit-csv")) {
 			optionCLISwAuditCSV = true;
-			String[] values = cmd.getOptionValues("swaudit-pdf");
+			String[] values = cmd.getOptionValues("swaudit-csv");
 			clientsFile = values[0];
 			outDir = values[1];
 		}

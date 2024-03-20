@@ -102,10 +102,10 @@ public class Main {
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", false,
 				"For translation work, show internal labels together with the strings of selected localization");
-		options.addOption(null, "swaudit-pdf", true,
-				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption(null, "swaudit-csv", true,
-				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption(null, "swaudit-pdf", true, "export pdf swaudit reports for given clients");
+		options.getOption("swaudit-pdf").setArgs(2);
+		options.addOption(null, "swaudit-csv", true, "export csv swaudit reports for given clients");
+		options.getOption("swaudit-csv").setArgs(2);
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
