@@ -113,7 +113,6 @@ public final class LicensingInfoMap {
 
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(getClass(), "generate with reducedView " + reduced + " at the moment ignored, we set false");
-		reducedView = reduced;
 
 		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
 		});
@@ -133,8 +132,6 @@ public final class LicensingInfoMap {
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap(datesMap);
 		customerNames = produceCustomerNameSet();
-
-		instance = this;
 	}
 
 	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
@@ -385,17 +382,17 @@ public final class LicensingInfoMap {
 				});
 
 		for (String key : datesKeys) {
-			Map<String, Object> moduleToDate;
 			Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 			// iterate over date entries
-			moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES), new TypeReference<Map<String, Object>>() {
-			});
+			Map<String, Object> moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES),
+					new TypeReference<Map<String, Object>>() {
+					});
 			// iterate over module entries to every date entry
 
 			// also warning state should be none
 			for (String currentModule : shownModules) {
-				Map<String, Object> moduleInfo = createModuleInfo(key, currentModule, moduleToDate);
+				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key);
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
@@ -405,7 +402,7 @@ public final class LicensingInfoMap {
 		return new TreeMap<>(checkTimeWarning(resultMap));
 	}
 
-	private Map<String, Object> createModuleInfo(String key, String currentModule, Map<String, Object> moduleToDate) {
+	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, String key) {
 		Map<String, Object> moduleInfo;
 		boolean available = availableModules.contains(currentModule);
 
@@ -423,22 +420,20 @@ public final class LicensingInfoMap {
 		}
 
 		moduleInfo.put(AVAILABLE, available);
-		if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
-			if (key.equals(latestDateString)) {
+		if (key.equals(latestDateString)) {
+			if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
 				currentCloseToLimitModuleList.add(currentModule);
-			}
-		} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
-			if (key.equals(latestDateString)) {
+			} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
 				currentOverLimitModuleList.add(currentModule);
+			} else if (checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
+				moduleInfo.put(STATE, STATE_DAYS_WARNING);
+				currentTimeWarningModuleList.add(currentModule);
+			} else if (checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
+				moduleInfo.put(STATE, STATE_DAYS_OVER);
+				currentTimeOverModuleList.add(currentModule);
+			} else {
+				// no warnings to add
 			}
-		} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
-			moduleInfo.put(STATE, STATE_DAYS_WARNING);
-			currentTimeWarningModuleList.add(currentModule);
-		} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
-			moduleInfo.put(STATE, STATE_DAYS_OVER);
-			currentTimeOverModuleList.add(currentModule);
-		} else {
-			// no warnings to add
 		}
 
 		String futureCheck = checkFuture(moduleInfo, currentModule, key);

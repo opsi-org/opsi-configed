@@ -223,8 +223,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		settingsPanel.setBorder(
 				BorderFactory.createTitledBorder(Configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
 
-		JLabel jLabelHost = new JLabel();
-		jLabelHost.setText(Configed.getResourceValue("SSHConnection.Config.jLabelHost"));
+		JLabel jLabelHost = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
 		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
@@ -250,8 +249,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		jComboBoxHost.addItemListener(itemEvent -> checkComponentStates());
 
-		JLabel jLabelPort = new JLabel();
-		jLabelPort.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPort"));
+		JLabel jLabelPort = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelPort"));
 		jTextFieldPort = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
 		jTextFieldPort.getDocument().addDocumentListener(new DocumentListener() {
@@ -271,10 +269,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		JLabel jLabelUser = new JLabel();
-		jLabelUser.setText(Configed.getResourceValue("SSHConnection.Config.jLabelUser"));
-		jTextFieldUser = new JTextField();
-		jTextFieldUser.setText(connectionInfo.getUser());
+		JLabel jLabelUser = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelUser"));
+		jTextFieldUser = new JTextField(connectionInfo.getUser());
 		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -292,11 +288,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		JLabel jLabelPassword = new JLabel();
-		jLabelPassword.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
+		JLabel jLabelPassword = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 
-		jTextFieldPassword = new JPasswordField();
-		jTextFieldPassword.setText(connectionInfo.getPassw());
+		jTextFieldPassword = new JPasswordField(connectionInfo.getPassw());
 
 		jTextFieldPassword.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -360,10 +354,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				.addComponent(jButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
-		JLabel jLabelKeyFile = new JLabel();
-		jLabelKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
-		jTextFieldKeyFile = new JTextField();
-		jTextFieldKeyFile.setText(connectionInfo.getKeyfilePath());
+		JLabel jLabelKeyFile = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
+		jTextFieldKeyFile = new JTextField(connectionInfo.getKeyfilePath());
 		jTextFieldKeyFile.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -381,11 +373,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		JLabel jLabelPassphrase = new JLabel();
-		jLabelPassphrase.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
-		jTextFieldPassphrase = new JPasswordField();
+		JLabel jLabelPassphrase = new JLabel(Configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
+		jTextFieldPassphrase = new JPasswordField(connectionInfo.getKeyfilePassphrase());
 		jTextFieldPassphrase.setEnabled(false);
-		jTextFieldPassphrase.setText(connectionInfo.getKeyfilePassphrase());
 		jTextFieldPassphrase.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
