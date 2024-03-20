@@ -24,8 +24,6 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	private List<String> saveV;
 	private Map<String, Map<String, Object>> depotInfo;
 
-	private ConfigedMain configedMain;
-
 	public DepotsList(ConfigedMain configedMain) {
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new DepotListCellRenderer(configedMain);

@@ -85,7 +85,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
 	private JPanel jPanelParameters;
-	private JCheckBox checkTrySSH;
 	private JCheckBox checkUseOTP;
 
 	private JButton jButtonCancel;
@@ -210,7 +209,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
-		checkTrySSH = new JCheckBox(Configed.getResourceValue("LoginDialog.checkTrySSH"),
+		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("LoginDialog.checkTrySSH"),
 				Configed.isSSHConnectionOnStart());
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
